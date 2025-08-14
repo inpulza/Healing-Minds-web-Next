@@ -322,7 +322,7 @@ const BipolarTreatment = () => {
                           <h3 className="text-xl sm:text-2xl font-display font-bold mb-1 text-green-800">
                             {symptomGroup.type}
                           </h3>
-                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium text-green-800 bg-[#16a34a]">
+                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-[#16a34a] text-[#ffffff]">
                             {groupIndex === 0 
                               ? <TrendingUp className="w-3 h-3" />
                               : <TrendingDown className="w-3 h-3" />
