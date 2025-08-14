@@ -91,6 +91,9 @@ const Hero = () => {
                     <IconHeart />
                   </WellnessIcon>
                   Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span>
+                  <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
+                    <IconLeaf />
+                  </WellnessIcon>
                 </h1>
                 
                 <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
