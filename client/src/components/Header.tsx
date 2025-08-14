@@ -3,6 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ReactCountryFlag from 'react-country-flag';
 
 const Header = () => {
   const [location] = useLocation();
@@ -84,29 +85,15 @@ const Header = () => {
               data-testid="language-toggle"
             >
               <span>{language === 'en' ? 'ES' : 'EN'}</span>
-              <div className="w-5 h-3 rounded-sm border border-gray-300 relative overflow-hidden">
-                {language === 'en' ? (
-                  /* Spanish Flag */
-                  <div className="w-full h-full relative">
-                    <div className="absolute top-0 w-full h-1/4 bg-red-500"></div>
-                    <div className="absolute top-1/4 w-full h-2/4 bg-yellow-400"></div>
-                    <div className="absolute bottom-0 w-full h-1/4 bg-red-500"></div>
-                  </div>
-                ) : (
-                  /* US Flag */
-                  <div className="w-full h-full relative">
-                    <div className="absolute top-0 left-0 w-2/5 h-full bg-blue-600"></div>
-                    <div className="absolute top-0 right-0 w-3/5 h-full">
-                      <div className="w-full h-1/6 bg-red-500"></div>
-                      <div className="w-full h-1/6 bg-white"></div>
-                      <div className="w-full h-1/6 bg-red-500"></div>
-                      <div className="w-full h-1/6 bg-white"></div>
-                      <div className="w-full h-1/6 bg-red-500"></div>
-                      <div className="w-full h-1/6 bg-white"></div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <ReactCountryFlag
+                countryCode={language === 'en' ? 'ES' : 'US'}
+                svg
+                style={{
+                  width: '20px',
+                  height: '15px',
+                  borderRadius: '2px',
+                }}
+              />
             </Button>
             <Link href="/contact">
               <Button
@@ -168,29 +155,15 @@ const Header = () => {
                 data-testid="mobile-language-toggle"
               >
                 <span>{language === 'en' ? 'Español' : 'English'}</span>
-                <div className="w-5 h-3 rounded-sm border border-gray-300 relative overflow-hidden">
-                  {language === 'en' ? (
-                    /* Spanish Flag */
-                    <div className="w-full h-full relative">
-                      <div className="absolute top-0 w-full h-1/4 bg-red-500"></div>
-                      <div className="absolute top-1/4 w-full h-2/4 bg-yellow-400"></div>
-                      <div className="absolute bottom-0 w-full h-1/4 bg-red-500"></div>
-                    </div>
-                  ) : (
-                    /* US Flag */
-                    <div className="w-full h-full relative">
-                      <div className="absolute top-0 left-0 w-2/5 h-full bg-blue-600"></div>
-                      <div className="absolute top-0 right-0 w-3/5 h-full">
-                        <div className="w-full h-1/6 bg-red-500"></div>
-                        <div className="w-full h-1/6 bg-white"></div>
-                        <div className="w-full h-1/6 bg-red-500"></div>
-                        <div className="w-full h-1/6 bg-white"></div>
-                        <div className="w-full h-1/6 bg-red-500"></div>
-                        <div className="w-full h-1/6 bg-white"></div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <ReactCountryFlag
+                  countryCode={language === 'en' ? 'ES' : 'US'}
+                  svg
+                  style={{
+                    width: '20px',
+                    height: '15px',
+                    borderRadius: '2px',
+                  }}
+                />
               </Button>
               <Link href="/contact">
                 <Button
