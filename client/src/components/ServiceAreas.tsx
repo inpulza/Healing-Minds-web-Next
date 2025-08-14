@@ -76,7 +76,24 @@ const ServiceAreas: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 items-center">
+        {/* Stats - Above Map */}
+        <div className="mb-8 sm:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            {stats.map((stat, index) => (
+              <div key={index} className="flex items-center gap-4 p-4 bg-green-50 rounded-xl border border-green-100">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <stat.icon className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-800">{stat.value}</div>
+                  <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 items-start">
           {/* Real Google Maps Background */}
           <div className="relative order-2 lg:order-1 lg:col-span-2">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg border border-green-100">
@@ -183,23 +200,8 @@ const ServiceAreas: React.FC = () => {
             </div>
           </div>
 
-          {/* Service Areas List & Stats */}
-          <div className="order-1 lg:order-2 lg:col-span-1">
-            {/* Stats */}
-            <div className="grid grid-cols-1 gap-4 mb-8 sm:mb-10">
-              {stats.map((stat, index) => (
-                <div key={index} className="flex items-center gap-4 p-3 bg-green-50 rounded-xl">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <stat.icon className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <div className="text-xl font-bold text-green-800">{stat.value}</div>
-                    <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
+          {/* Service Areas List & Contact */}
+          <div className="order-1 lg:order-2 lg:col-span-1 space-y-6">
             {/* Service Areas List */}
             <div className="space-y-4" data-testid="service-areas-list">
               {serviceAreas.map((area, index) => (
@@ -226,7 +228,7 @@ const ServiceAreas: React.FC = () => {
             </div>
 
             {/* Contact Info */}
-            <div className="mt-8 sm:mt-10 p-4 sm:p-6 bg-green-50 rounded-xl sm:rounded-2xl border border-green-100">
+            <div className="p-4 sm:p-6 bg-green-50 rounded-xl sm:rounded-2xl border border-green-100">
               <div className="flex items-start gap-3 sm:gap-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
