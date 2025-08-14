@@ -93,13 +93,13 @@ const Header = () => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 overflow-hidden mb-8 ${
+    <header className={`sticky top-0 z-50 transition-all duration-500 overflow-hidden mb-4 ${
       isScrolled 
         ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
         : 'bg-transparent'
-    } ${isServicesOpen ? 'h-auto' : 'h-20'}`}>
+    } ${isServicesOpen ? 'h-auto' : 'h-32'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-32">
           {/* Logo */}
           <Link href="/" data-testid="logo-link">
             <div className="flex items-center">
