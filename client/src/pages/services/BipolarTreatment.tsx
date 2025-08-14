@@ -309,22 +309,15 @@ const BipolarTreatment = () => {
                     key={groupIndex}
                     className={`group relative overflow-hidden rounded-2xl sm:rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${
                       groupIndex === 0 
-                        ? 'bg-gradient-to-br from-green-700 via-green-800 to-green-900' 
-                        : 'bg-gradient-to-br from-green-600 via-green-700 to-green-800'
+                        ? 'bg-green-50' 
+                        : 'bg-blue-50'
                     }`}
                   >
-                    {/* Animated Background Pattern */}
-                    <div className="absolute inset-0 opacity-10">
-                      <div className={`absolute inset-0 bg-gradient-to-tr ${
-                        groupIndex === 0 
-                          ? 'from-green-200 via-transparent to-green-300' 
-                          : 'from-green-100 via-transparent to-green-200'
-                      }`}></div>
-                      <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-white opacity-20 -mr-16 -mt-16"></div>
-                      <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full bg-white opacity-15 -ml-12 -mb-12"></div>
-                    </div>
-
-                    <div className="relative p-6 sm:p-8 text-white">
+                    <div className={`relative p-6 sm:p-8 border-2 rounded-2xl sm:rounded-3xl ${
+                      groupIndex === 0 
+                        ? 'border-green-200 text-green-800' 
+                        : 'border-blue-200 text-green-800'
+                    }`}>
                       {/* Header with Icon and Title */}
                       <div className="flex items-center gap-4 mb-6">
                         <div className={`relative p-3 rounded-2xl ${
