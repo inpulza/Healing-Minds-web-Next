@@ -10,27 +10,34 @@ const ServiceAreas: React.FC = () => {
       name: 'Naples, FL',
       population: '22,088',
       distance: language === 'en' ? 'Main Office' : 'Oficina Principal',
-      coordinates: { lat: 26.1420, lng: -81.7948 }
+      coordinates: [26.1420, -81.7948] as [number, number],
+      isMainOffice: true
     },
     {
       name: 'Marco Island, FL', 
       population: '17,963',
       distance: language === 'en' ? '20 min drive' : '20 min en auto',
-      coordinates: { lat: 25.9412, lng: -81.7273 }
+      coordinates: [25.9412, -81.7273] as [number, number],
+      isMainOffice: false
     },
     {
       name: 'Bonita Springs, FL',
       population: '57,755', 
       distance: language === 'en' ? '25 min drive' : '25 min en auto',
-      coordinates: { lat: 26.3398, lng: -81.7787 }
+      coordinates: [26.3398, -81.7787] as [number, number],
+      isMainOffice: false
     },
     {
       name: 'Estero, FL',
       population: '36,939',
       distance: language === 'en' ? '30 min drive' : '30 min en auto',
-      coordinates: { lat: 26.4376, lng: -81.8067 }
+      coordinates: [26.4376, -81.8067] as [number, number],
+      isMainOffice: false
     }
   ];
+
+  // Center coordinates for Southwest Florida view
+  const mapCenter: [number, number] = [26.1420, -81.7948]; // Naples center
 
   const stats = [
     {
@@ -69,84 +76,116 @@ const ServiceAreas: React.FC = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-          {/* Map Visualization */}
+          {/* Enhanced Visual Map */}
           <div className="relative order-2 lg:order-1">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg border border-green-100">
-              <div className="relative bg-gradient-to-br from-blue-50 to-green-50 rounded-xl sm:rounded-2xl overflow-hidden aspect-[4/3]">
-                {/* Map Background Pattern */}
-                <div className="absolute inset-0 opacity-10">
+              <div className="relative bg-gradient-to-br from-blue-50 via-green-50 to-blue-50 rounded-xl sm:rounded-2xl overflow-hidden aspect-[4/3]">
+                
+                {/* Enhanced Map Background with Coastline */}
+                <div className="absolute inset-0">
                   <svg viewBox="0 0 400 300" className="w-full h-full">
+                    {/* Grid Pattern */}
                     <defs>
-                      <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#16a34a" strokeWidth="0.5"/>
+                      <pattern id="mapGrid" width="15" height="15" patternUnits="userSpaceOnUse">
+                        <path d="M 15 0 L 0 0 0 15" fill="none" stroke="#16a34a" strokeWidth="0.3" opacity="0.2"/>
                       </pattern>
+                      <linearGradient id="waterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style={{stopColor:'#dbeafe', stopOpacity:0.6}}/>
+                        <stop offset="100%" style={{stopColor:'#3b82f6', stopOpacity:0.1}}/>
+                      </linearGradient>
                     </defs>
-                    <rect width="100%" height="100%" fill="url(#grid)" />
+                    
+                    {/* Water/Gulf Background */}
+                    <rect width="100%" height="100%" fill="url(#waterGradient)" />
+                    <rect width="100%" height="100%" fill="url(#mapGrid)" />
+                    
+                    {/* Simplified Florida Coastline Shape */}
+                    <path d="M50,50 Q120,40 180,80 Q220,120 200,180 Q180,220 140,240 Q100,250 60,220 Q40,180 50,120 Q45,80 50,50Z" 
+                          fill="#dcfce7" stroke="#16a34a" strokeWidth="1" opacity="0.3"/>
+                    
+                    {/* Road/Highway indication */}
+                    <path d="M80,150 Q150,140 220,160" stroke="#6b7280" strokeWidth="2" opacity="0.3" strokeDasharray="5,5"/>
                   </svg>
                 </div>
 
-                {/* Service Area Markers */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-full h-full max-w-[320px] max-h-[240px]">
-                    {/* Naples - Center */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <div className="relative">
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-green-600 rounded-full shadow-lg animate-pulse"></div>
-                        <div className="absolute -top-8 -left-4 whitespace-nowrap">
-                          <span className="text-xs font-bold text-green-800 bg-white px-2 py-1 rounded-md shadow-sm">Naples</span>
-                        </div>
+                {/* Positioned Cities with exact visual design */}
+                <div className="absolute inset-0">
+                  {/* Naples - Center (Main Office) */}
+                  <div className="absolute" style={{top: '50%', left: '45%', transform: 'translate(-50%, -50%)'}}>
+                    <div className="relative">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 bg-green-600 rounded-full shadow-lg animate-pulse border-2 border-white"></div>
+                      <div className="absolute -top-8 -left-8 whitespace-nowrap">
+                        <span className="text-xs font-bold text-green-800 bg-green-100 px-2 py-1 rounded-md shadow-sm border border-green-200">
+                          Naples ⭐
+                        </span>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Marco Island - Southwest */}
-                    <div className="absolute bottom-1/4 left-1/4">
-                      <div className="relative">
-                        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg"></div>
-                        <div className="absolute -top-8 -left-6 whitespace-nowrap">
-                          <span className="text-xs font-medium text-blue-700 bg-white px-2 py-1 rounded-md shadow-sm">Marco Island</span>
-                        </div>
+                  {/* Marco Island - Southwest */}
+                  <div className="absolute" style={{top: '75%', left: '25%', transform: 'translate(-50%, -50%)'}}>
+                    <div className="relative">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
+                      <div className="absolute -top-8 -left-12 whitespace-nowrap">
+                        <span className="text-xs font-medium text-blue-700 bg-white px-2 py-1 rounded-md shadow-sm border border-blue-200">
+                          Marco Island
+                        </span>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Bonita Springs - North */}
-                    <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2">
-                      <div className="relative">
-                        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg"></div>
-                        <div className="absolute -top-8 -left-8 whitespace-nowrap">
-                          <span className="text-xs font-medium text-blue-700 bg-white px-2 py-1 rounded-md shadow-sm">Bonita Springs</span>
-                        </div>
+                  {/* Bonita Springs - North */}
+                  <div className="absolute" style={{top: '25%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                    <div className="relative">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
+                      <div className="absolute -top-8 -left-10 whitespace-nowrap">
+                        <span className="text-xs font-medium text-blue-700 bg-white px-2 py-1 rounded-md shadow-sm border border-blue-200">
+                          Bonita Springs
+                        </span>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Estero - Northeast */}
-                    <div className="absolute top-1/3 right-1/4">
-                      <div className="relative">
-                        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg"></div>
-                        <div className="absolute -top-8 -left-4 whitespace-nowrap">
-                          <span className="text-xs font-medium text-blue-700 bg-white px-2 py-1 rounded-md shadow-sm">Estero</span>
-                        </div>
+                  {/* Estero - Northeast */}
+                  <div className="absolute" style={{top: '30%', left: '70%', transform: 'translate(-50%, -50%)'}}>
+                    <div className="relative">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
+                      <div className="absolute -top-8 -left-6 whitespace-nowrap">
+                        <span className="text-xs font-medium text-blue-700 bg-white px-2 py-1 rounded-md shadow-sm border border-blue-200">
+                          Estero
+                        </span>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Service Area Coverage Circle */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <div className="w-48 h-48 sm:w-56 sm:h-56 border-2 border-green-300 rounded-full opacity-30"></div>
-                    </div>
+                  {/* Service Coverage Area Circle */}
+                  <div className="absolute" style={{top: '50%', left: '45%', transform: 'translate(-50%, -50%)'}}>
+                    <div className="w-56 h-56 sm:w-64 sm:h-64 border-2 border-green-400 rounded-full opacity-20 bg-green-100 animate-pulse"></div>
                   </div>
                 </div>
 
-                {/* Compass */}
+                {/* Enhanced Compass */}
                 <div className="absolute top-4 right-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-lg flex items-center justify-center">
-                    <Navigation className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-200">
+                    <Navigation className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 transform rotate-0" />
+                  </div>
+                </div>
+
+                {/* Distance Scale */}
+                <div className="absolute bottom-4 left-4">
+                  <div className="bg-white rounded-lg shadow-sm px-3 py-2 border border-gray-200">
+                    <div className="flex items-center gap-2 text-xs text-gray-600">
+                      <div className="w-8 h-0.5 bg-gray-400"></div>
+                      <span>30mi</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Map Legend */}
+              {/* Enhanced Map Legend */}
               <div className="mt-4 sm:mt-6 grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-600 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse"></div>
                   <span className="text-sm font-medium text-gray-700">
                     {language === 'en' ? 'Main Office' : 'Oficina Principal'}
                   </span>
