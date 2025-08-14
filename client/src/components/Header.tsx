@@ -57,7 +57,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center bg-gray-50 rounded-full p-2" data-testid="desktop-nav">
+          <nav className="hidden md:flex items-center bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50" data-testid="desktop-nav">
             {navigationItems.map((item) => (
               <Link
                 key={item.href}
