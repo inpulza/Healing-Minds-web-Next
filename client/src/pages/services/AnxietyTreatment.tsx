@@ -72,7 +72,7 @@ const AnxietyTreatment = () => {
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-20">
+      <main>
         {/* Hero Section with Masonry Layout */}
         <ServiceHeroMasonry
           tagline={{

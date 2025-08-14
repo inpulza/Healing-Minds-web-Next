@@ -176,7 +176,7 @@ const DepressionTreatment = () => {
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-20">
+      <main>
         {/* Hero Section with Masonry Design */}
         <ServiceHeroMasonry {...heroData} />
 
