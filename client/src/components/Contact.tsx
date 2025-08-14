@@ -321,7 +321,7 @@ const Contact = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-primary-green text-white hover:bg-primary-green-hover font-medium"
+                className="w-full bg-green-600 text-white hover:bg-green-700 font-medium rounded-full px-8 py-6"
                 disabled={isSubmitting}
                 data-testid="button-submit"
               >
