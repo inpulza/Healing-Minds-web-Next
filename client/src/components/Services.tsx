@@ -106,19 +106,19 @@ const Services = () => {
 
                 <Link href="/contact">
                   <Button
-                    className={`group inline-flex items-center justify-center gap-3 rounded-full text-sm font-semibold transition-all duration-300 px-6 py-5 ${
+                    className={`group inline-flex items-center justify-center gap-3 rounded-full text-sm font-semibold transition-all duration-300 px-6 py-3 ${
                       service.featured
                         ? 'bg-white text-green-800 hover:bg-green-50'
                         : 'bg-green-800 text-white hover:bg-green-700'
                     }`}
                     data-testid={`service-button-${service.id}`}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                       service.featured
                         ? 'bg-green-100'
                         : 'bg-green-700'
                     }`}>
-                      <ArrowRight className={`w-4 h-4 ${
+                      <ArrowRight className={`w-5 h-5 ${
                         service.featured ? 'text-green-800' : 'text-white'
                       }`} />
                     </div>
