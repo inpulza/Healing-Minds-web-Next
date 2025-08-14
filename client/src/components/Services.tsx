@@ -108,7 +108,7 @@ const Services = () => {
                 data-testid={`service-${service.id}`}
               >
 
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 ${
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 min-w-[2.5rem] min-h-[2.5rem] sm:min-w-[3rem] sm:min-h-[3rem] rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 flex-shrink-0 ${
                   service.featured ? 'bg-green-700' : 'bg-green-100'
                 }`}>
                   <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${

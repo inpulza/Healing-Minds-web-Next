@@ -14,9 +14,9 @@ const WellnessIcon = ({
   className = '' 
 }: WellnessIconProps) => {
   const sizeClasses = {
-    sm: 'w-8 h-8',
-    md: 'w-12 h-12', 
-    lg: 'w-16 h-16'
+    sm: 'w-8 h-8 min-w-[2rem] min-h-[2rem]',
+    md: 'w-12 h-12 min-w-[3rem] min-h-[3rem]', 
+    lg: 'w-16 h-16 min-w-[4rem] min-h-[4rem]'
   };
 
   const iconSizes = {
@@ -33,7 +33,7 @@ const WellnessIcon = ({
   };
 
   return (
-    <div className={`${sizeClasses[size]} rounded-full flex items-center justify-center ${colorClasses[color]} ${className}`}>
+    <div className={`${sizeClasses[size]} rounded-full flex items-center justify-center ${colorClasses[color]} ${className} flex-shrink-0`}>
       <div className={`${iconSizes[size]} flex items-center justify-center`}>
         {children}
       </div>

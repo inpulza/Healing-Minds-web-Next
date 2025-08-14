@@ -103,7 +103,7 @@ const Header = () => {
           {/* Logo */}
           <Link href="/" data-testid="logo-link">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-green-600 rounded-full mr-3 flex items-center justify-center">
+              <div className="w-8 h-8 min-w-[2rem] min-h-[2rem] bg-green-600 rounded-full mr-3 flex items-center justify-center flex-shrink-0">
                 <div className="text-white font-display font-bold text-sm">O</div>
               </div>
               <div className="text-2xl font-body font-bold text-green-800">
@@ -179,7 +179,7 @@ const Header = () => {
                 className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-6"
                 data-testid="book-now-button"
               >
-                <div className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                <div className="w-6 h-6 min-w-[1.5rem] min-h-[1.5rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
                   <ArrowRight className="w-3 h-3 text-white" />
                 </div>
                 <span>Book Now</span>
@@ -226,7 +226,7 @@ const Header = () => {
                       className="group w-full p-4 h-auto rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
                     >
                       <div className="flex items-start gap-3">
-                        <div className="w-3 h-3 rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700"></div>
+                        <div className="w-3 h-3 min-w-[0.75rem] min-h-[0.75rem] rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700 flex-shrink-0"></div>
                         <div>
                           <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
                             {service.label}
