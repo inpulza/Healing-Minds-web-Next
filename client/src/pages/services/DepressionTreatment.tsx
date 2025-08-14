@@ -310,9 +310,9 @@ const DepressionTreatment = () => {
                     </div>
                   ))}
                   
-                  {/* Photo Placeholder */}
+                  {/* Photo Placeholder - Portrait Format (3:4 ratio) */}
                   <div className="mt-8">
-                    <div className="w-full h-48 bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
+                    <div className="w-full aspect-[3/4] bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
                       <div className="text-center">
                         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                           <span className="text-green-600 font-bold">📸</span>
