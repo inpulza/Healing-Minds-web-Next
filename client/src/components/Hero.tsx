@@ -51,11 +51,11 @@ const Hero = () => {
             
             <Link href="/services">
               <Button
-                className="group inline-flex items-center justify-center gap-2 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-5 sm:py-6 shadow-lg"
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-xl font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-6 sm:py-7 shadow-lg"
                 data-testid="hero-book-consultation"
               >
-                <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
-                  <ArrowRight className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                  <ArrowRight className="w-5 h-5 text-white" />
                 </div>
                 <span>Our Services</span>
               </Button>
@@ -104,11 +104,11 @@ const Hero = () => {
                 
                 <Link href="/services">
                   <Button
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-5 sm:py-6 shadow-lg"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-6 sm:py-7 shadow-lg"
                     data-testid="hero-book-consultation"
                   >
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                      <ArrowRight className="w-4 h-4 text-green-800" />
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                      <ArrowRight className="w-5 h-5 text-green-800" />
                     </div>
                     <span>Our Services</span>
                   </Button>
