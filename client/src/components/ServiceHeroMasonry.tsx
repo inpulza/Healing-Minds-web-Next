@@ -62,7 +62,7 @@ export const ServiceHeroMasonry = ({
   const { language } = useLanguage();
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-blue-50 to-purple-50">
+    <section className="py-8 sm:py-12 lg:py-16 bg-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Column - Content */}
@@ -147,7 +147,7 @@ export const ServiceHeroMasonry = ({
           
           {/* Right Column - True Masonry Style Layout */}
           <div className="relative">
-            <div className="grid grid-cols-2 grid-rows-3 gap-4 max-w-lg mx-auto lg:max-w-none h-96 lg:h-[32rem]">
+            <div className="grid grid-cols-2 grid-rows-3 gap-4 max-w-lg mx-auto lg:max-w-none h-[28rem] lg:h-[36rem]">
               {/* Top Left - Doctor Photo (Large - spans 2 rows) */}
               <div className="row-span-2 col-start-1 row-start-1">
                 <div className="h-full rounded-2xl shadow-lg overflow-hidden">
