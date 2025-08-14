@@ -116,8 +116,8 @@ const Header = () => {
           <div className="hidden md:flex relative" ref={servicesRef}>
             <nav className={`flex items-center transition-all duration-500 ${
               isServicesOpen 
-                ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
-                : 'bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50'
+                ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 pb-6 shadow-lg border border-gray-200/70' 
+                : 'bg-gray-100/80 backdrop-blur-sm rounded-full p-2 pb-4 shadow-sm border border-gray-200/50'
             }`} data-testid="desktop-nav">
               {navigationItems.map((item) => (
                 <div key={item.href} className="relative">
