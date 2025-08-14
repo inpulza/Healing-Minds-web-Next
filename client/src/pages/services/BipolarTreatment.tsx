@@ -316,14 +316,14 @@ const BipolarTreatment = () => {
                     <div className="p-6 sm:p-8 text-green-800">
                       {/* Header with Icon and Title */}
                       <div className="flex items-center gap-4 mb-6">
-                        <div className="p-3 rounded-2xl bg-white">
+                        <div className="p-3 rounded-2xl">
                           <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-green-800" />
                         </div>
                         <div>
                           <h3 className="text-xl sm:text-2xl font-display font-bold mb-1 text-green-800">
                             {symptomGroup.type}
                           </h3>
-                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-white text-green-800">
+                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium text-green-800">
                             {groupIndex === 0 
                               ? <TrendingUp className="w-3 h-3" />
                               : <TrendingDown className="w-3 h-3" />
@@ -341,7 +341,7 @@ const BipolarTreatment = () => {
                         {symptomGroup.items.map((item, index) => (
                           <div 
                             key={index} 
-                            className="flex items-start gap-3 p-3 rounded-xl bg-white"
+                            className="flex items-start gap-3 p-3 rounded-xl"
                           >
                             <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2 bg-green-500"></div>
                             <span className="text-sm sm:text-base font-body leading-relaxed text-green-800">
@@ -352,7 +352,7 @@ const BipolarTreatment = () => {
                       </div>
 
                       {/* Bottom Action Area */}
-                      <div className="p-4 rounded-xl bg-white">
+                      <div className="p-4 rounded-xl">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {groupIndex === 0 ? (
@@ -456,11 +456,11 @@ const BipolarTreatment = () => {
                     <div className="p-6 sm:p-8 text-green-800 flex flex-col h-full">
                       {/* Header */}
                       <div className="text-center mb-6">
-                        <div className="inline-flex p-4 rounded-2xl bg-white mb-4">
+                        <div className="inline-flex p-4 rounded-2xl mb-4">
                           <Activity className="w-8 h-8 text-green-800" />
                         </div>
                         
-                        <div className="px-3 py-1 rounded-full text-xs font-bold bg-white text-green-800 inline-block mb-3">
+                        <div className="px-3 py-1 rounded-full text-xs font-bold text-green-800 inline-block mb-3">
                           {type.severity}
                         </div>
                         
@@ -479,7 +479,7 @@ const BipolarTreatment = () => {
                           {type.features.map((feature, featureIndex) => (
                             <div 
                               key={featureIndex}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-white"
+                              className="flex items-center gap-3 p-3 rounded-xl"
                             >
                               <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
                               <span className="text-sm font-body text-green-800">
@@ -492,7 +492,7 @@ const BipolarTreatment = () => {
 
                       {/* Footer */}
                       <div className="mt-auto">
-                        <div className="p-4 rounded-xl bg-white">
+                        <div className="p-4 rounded-xl">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-green-800">
                               {language === 'en' ? 'Treatment Focus' : 'Enfoque de Tratamiento'}
