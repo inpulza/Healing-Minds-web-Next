@@ -162,23 +162,23 @@ export const ServiceHeroMasonry = ({
 
               {/* Top Right - Facts Card (Extended - 1.5 rows) */}
               <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.4'}}>
-                <div className="bg-gradient-to-br from-purple-100 to-purple-50 border border-purple-200 rounded-2xl shadow-lg p-6 h-full flex flex-col">
+                <div className="bg-white border border-purple-200 rounded-2xl shadow-lg p-6 h-full flex flex-col overflow-hidden">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-purple-200 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
                       <IconHeart className="w-4.5 h-4.5 text-purple-700" />
                     </div>
-                    <h3 className="text-base font-body font-bold text-purple-800">
+                    <h3 className="text-base font-body font-bold text-purple-800 truncate">
                       {language === 'en' ? facts.title.en : facts.title.es}
                     </h3>
                   </div>
-                  <div className="space-y-4 flex-1 flex flex-col justify-center">
+                  <div className="space-y-4 flex-1 flex flex-col justify-center overflow-hidden">
                     {facts.items.slice(0, 2).map((fact, index) => (
-                      <div key={index} className="flex items-start gap-4">
-                        <div className="w-6 h-6 bg-purple-200/60 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                      <div key={index} className="flex items-start gap-4 min-h-0">
+                        <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                           <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
                         </div>
-                        <div className="flex-1">
-                          <span className="text-base text-purple-800 font-body font-medium leading-relaxed">
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm text-purple-800 font-body font-medium leading-relaxed line-clamp-2 break-words">
                             {language === 'en' ? fact.en : fact.es}
                           </span>
                         </div>
@@ -196,34 +196,34 @@ export const ServiceHeroMasonry = ({
 
               {/* Bottom Left - Quick Stats Card (Extended - 1.5 rows) */}
               <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.6', gridRowEnd: 'span 1.4'}}>
-                <div className="bg-gradient-to-br from-green-800 to-green-700 text-white rounded-2xl shadow-lg p-6 h-full flex flex-col">
+                <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6 h-full flex flex-col overflow-hidden">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-4.5 h-4.5 text-white" />
+                    <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-4.5 h-4.5 text-green-700" />
                     </div>
-                    <h3 className="text-base font-body font-bold text-white/95">
+                    <h3 className="text-base font-body font-bold text-green-800 truncate">
                       {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
                     </h3>
                   </div>
-                  <div className="space-y-4 flex-1 flex flex-col justify-center">
+                  <div className="space-y-4 flex-1 flex flex-col justify-center overflow-hidden">
                     {quickStats.items.slice(0, 3).map((stat, index) => (
-                      <div key={index} className="flex items-start gap-4">
-                        <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                          <div className="w-2 h-2 bg-white rounded-full opacity-90"></div>
+                      <div key={index} className="flex items-start gap-4 min-h-0">
+                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                          <div className="w-2 h-2 bg-green-600 rounded-full"></div>
                         </div>
-                        <div className="flex-1">
-                          <p className="text-base text-white/95 font-body font-medium leading-relaxed">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-green-800 font-body font-medium leading-relaxed line-clamp-2 break-words">
                             {language === 'en' ? stat.en : stat.es}
                           </p>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4 pt-4 border-t border-white/20">
+                  <div className="mt-4 pt-4 border-t border-green-200">
                     <div className="flex items-center justify-center gap-2">
-                      <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-green-200 rounded-full animate-pulse delay-75"></div>
-                      <div className="w-2 h-2 bg-green-100 rounded-full animate-pulse delay-150"></div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse delay-75"></div>
+                      <div className="w-2 h-2 bg-green-200 rounded-full animate-pulse delay-150"></div>
                     </div>
                   </div>
                 </div>
