@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import bilingualImage from '@assets/bilingual-consultation.png';
 
 const BilingualCare = () => {
   const { language } = useLanguage();
@@ -67,7 +68,7 @@ const BilingualCare = () => {
           
           <div>
             <img
-              src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80"
+              src={bilingualImage}
               alt="Bilingual psychiatric care - diverse community support"
               className="rounded-xl shadow-lg w-full h-auto"
               data-testid="bilingual-image"
