@@ -36,7 +36,7 @@ const BilingualCare = () => {
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
           <div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-green-800 leading-tight" data-testid="bilingual-title">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-green-800 leading-tight" data-testid="bilingual-title">
                 <span className="font-body italic">Guided</span> by passion.
                 <WellnessIcon size="md" color="orange" className="inline-flex mx-2 sm:mx-3 mb-1 sm:mb-2">
                   <IconHeart />
@@ -45,7 +45,7 @@ const BilingualCare = () => {
               </h2>
             </div>
             
-            <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed font-body" data-testid="bilingual-description">
+            <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed font-body" data-testid="bilingual-description">
               {language === 'en' 
                 ? 'Dr. Reve understands that mental health care is most effective when provided in your native language. As a fluent Spanish speaker, she offers comprehensive psychiatric services to the Hispanic community in Naples with cultural sensitivity and understanding.'
                 : 'La Dra. Reve entiende que la atención de salud mental es más efectiva cuando se proporciona en su idioma nativo. Como hablante fluida de español, ofrece servicios psiquiátricos integrales a la comunidad hispana en Naples con sensibilidad y comprensión cultural.'
@@ -66,10 +66,10 @@ const BilingualCare = () => {
             
             <Link href="/contact">
               <Button
-                className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-5 sm:py-6"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-4 sm:py-5"
                 data-testid="bilingual-schedule-consultation"
               >
-                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
                   <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                 </div>
                 <span>{language === 'en' ? 'Schedule your Consultation' : 'Programe su Consulta'}</span>

@@ -114,11 +114,11 @@ const About = () => {
 
               <Link href="/contact">
                 <Button
-                  className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 lg:px-10 py-6 sm:py-8"
+                  className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-4 sm:py-5"
                   data-testid="about-book-now"
                 >
                   <span>{language === 'en' ? 'Book now' : 'Reservar ahora'}</span>
-                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
                     <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   </div>
                 </Button>

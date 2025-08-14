@@ -55,7 +55,7 @@ const Services = () => {
             <WellnessIcon size="md" color="green" className="opacity-70">
               <IconBrain />
             </WellnessIcon>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold text-green-800 text-center" data-testid="services-title">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-green-800 text-center" data-testid="services-title">
               Mental Health for <span className="font-body italic">every</span> mind
             </h2>
             <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -92,7 +92,7 @@ const Services = () => {
                   }`} />
                 </div>
                 
-                <h3 className={`text-lg sm:text-xl font-display font-bold mb-3 sm:mb-4 ${
+                <h3 className={`text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 ${
                   service.featured ? 'text-white' : 'text-green-800'
                 }`} data-testid={`service-title-${service.id}`}>
                   {service.title}
@@ -106,14 +106,14 @@ const Services = () => {
 
                 <Link href="/contact">
                   <Button
-                    className={`group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 px-4 sm:px-6 py-4 sm:py-6 ${
+                    className={`group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 px-5 sm:px-7 py-4 sm:py-5 ${
                       service.featured
                         ? 'bg-white text-green-800 hover:bg-green-50'
                         : 'bg-green-800 text-white hover:bg-green-700'
                     }`}
                     data-testid={`service-button-${service.id}`}
                   >
-                    <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
                       service.featured
                         ? 'bg-green-100'
                         : 'bg-green-700'
