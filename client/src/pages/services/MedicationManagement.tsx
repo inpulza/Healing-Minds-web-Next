@@ -309,15 +309,7 @@ const MedicationManagement = () => {
                       />
                     </div>
                   </div>
-                  
-                  {/* Additional benefits if any */}
-                  {benefits.length > 4 && (
-                    <div className="mt-4 text-center">
-                      <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-green-50 rounded-full px-4 py-2 border border-green-200">
-                        <span>{language === 'en' ? '+' : '+'}{benefits.length - 4} {language === 'en' ? 'more benefits' : 'beneficios más'}</span>
-                      </div>
-                    </div>
-                  )}
+
                 </div>
               </div>
             </div>
