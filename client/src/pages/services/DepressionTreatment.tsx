@@ -295,7 +295,7 @@ const DepressionTreatment = () => {
 
                   {/* Photo Placeholder - Smaller Portrait Format */}
                   <div className="mt-8">
-                    <div className="w-3/4 aspect-[16/9] mx-auto bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
+                    <div className="w-full aspect-[16/9] bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
                       <div className="text-center">
                         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                           <span className="text-green-600 font-bold">📸</span>
