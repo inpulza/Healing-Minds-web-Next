@@ -273,6 +273,126 @@ const BipolarTreatment = () => {
           }}
         /> 
 
+        {/* Modern Treatment Approach Section */}
+        <section className="py-16 sm:py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* Content Side */}
+                <div className="lg:col-span-2">
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Comprehensive Care' : 'Atención Integral'}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Our <span className="font-display italic text-green-700">Comprehensive</span> Treatment Approach</>
+                    ) : (
+                      <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Integral</span></>
+                    )}
+                  </h2>
+                  
+                  <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Bipolar disorder requires specialized expertise and a multifaceted treatment approach addressing both manic and depressive episodes for long-term stability.'
+                      : 'El trastorno bipolar requiere experiencia especializada y un enfoque de tratamiento multifacético que aborde tanto episodios maníacos como depresivos para estabilidad a largo plazo.'
+                    }
+                  </p>
+
+                  {/* Treatment List */}
+                  <div className="grid gap-4 mb-8">
+                    {(language === 'en' ? [
+                      {
+                        title: 'Mood Stabilization',
+                        description: 'Evidence-based medications including lithium, anticonvulsants, and atypical antipsychotics.'
+                      },
+                      {
+                        title: 'Comprehensive Assessment',
+                        description: 'Thorough evaluation of mood patterns, triggers, and medical history.'
+                      },
+                      {
+                        title: 'Medication Monitoring',
+                        description: 'Regular blood work and careful monitoring to ensure therapeutic levels.'
+                      },
+                      {
+                        title: 'Episode Prevention',
+                        description: 'Strategies to prevent manic and depressive episodes through lifestyle management.'
+                      }
+                    ] : [
+                      {
+                        title: 'Estabilización del Ánimo',
+                        description: 'Medicamentos basados en evidencia incluyendo litio, anticonvulsivos y antipsicóticos atípicos.'
+                      },
+                      {
+                        title: 'Evaluación Integral',
+                        description: 'Evaluación completa de patrones del ánimo, desencadenantes e historial médico.'
+                      },
+                      {
+                        title: 'Monitoreo de Medicamentos',
+                        description: 'Análisis de sangre regulares y monitoreo cuidadoso para asegurar niveles terapéuticos.'
+                      },
+                      {
+                        title: 'Prevención de Episodios',
+                        description: 'Estrategias para prevenir episodios maníacos y depresivos a través del manejo del estilo de vida.'
+                      }
+                    ]).map((treatment, index) => (
+                      <div key={index} className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-green-600 font-bold text-sm">{index + 1}</span>
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-body font-bold text-green-800 mb-1">{treatment.title}</h3>
+                            <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link href="/contact">
+                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                      <span>{language === 'en' ? 'Get Specialized Care' : 'Obtener Atención Especializada'}</span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Sidebar with Stats and Photo */}
+                <div className="flex flex-col h-full">
+                  {/* Stats Cards */}
+                  <div className="space-y-4 mb-6">
+                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                      <div className="text-3xl font-bold text-green-600 mb-2">85%</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Achieve mood stability' : 'Logran estabilidad del ánimo'}
+                      </div>
+                    </div>
+                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Crisis support available' : 'Apoyo de crisis disponible'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dr. Melva Office Photo - Fills remaining space */}
+                  <div className="flex-1 w-full overflow-hidden rounded-xl shadow-md">
+                    <img 
+                      src={drMelvaOfficeImage}
+                      alt="Dr. Melva Reve in her professional psychiatric office - Naples, FL"
+                      className="w-full h-full object-cover object-[65%_35%] scale-125"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Symptoms Section */}
         <section className="py-16 sm:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -509,126 +629,6 @@ const BipolarTreatment = () => {
                   </div>
                 );
               })}
-            </div>
-          </div>
-        </section>
-
-        {/* Modern Treatment Approach Section */}
-        <section className="py-16 sm:py-20 bg-green-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid lg:grid-cols-3 gap-8">
-                {/* Content Side */}
-                <div className="lg:col-span-2">
-                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Comprehensive Care' : 'Atención Integral'}
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Our <span className="font-display italic text-green-700">Comprehensive</span> Treatment Approach</>
-                    ) : (
-                      <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Integral</span></>
-                    )}
-                  </h2>
-                  
-                  <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Bipolar disorder requires specialized expertise and a multifaceted treatment approach addressing both manic and depressive episodes for long-term stability.'
-                      : 'El trastorno bipolar requiere experiencia especializada y un enfoque de tratamiento multifacético que aborde tanto episodios maníacos como depresivos para estabilidad a largo plazo.'
-                    }
-                  </p>
-
-                  {/* Treatment List */}
-                  <div className="grid gap-4 mb-8">
-                    {(language === 'en' ? [
-                      {
-                        title: 'Mood Stabilization',
-                        description: 'Evidence-based medications including lithium, anticonvulsants, and atypical antipsychotics.'
-                      },
-                      {
-                        title: 'Comprehensive Assessment',
-                        description: 'Thorough evaluation of mood patterns, triggers, and medical history.'
-                      },
-                      {
-                        title: 'Medication Monitoring',
-                        description: 'Regular blood work and careful monitoring to ensure therapeutic levels.'
-                      },
-                      {
-                        title: 'Episode Prevention',
-                        description: 'Strategies to prevent manic and depressive episodes through lifestyle management.'
-                      }
-                    ] : [
-                      {
-                        title: 'Estabilización del Ánimo',
-                        description: 'Medicamentos basados en evidencia incluyendo litio, anticonvulsivos y antipsicóticos atípicos.'
-                      },
-                      {
-                        title: 'Evaluación Integral',
-                        description: 'Evaluación completa de patrones del ánimo, desencadenantes e historial médico.'
-                      },
-                      {
-                        title: 'Monitoreo de Medicamentos',
-                        description: 'Análisis de sangre regulares y monitoreo cuidadoso para asegurar niveles terapéuticos.'
-                      },
-                      {
-                        title: 'Prevención de Episodios',
-                        description: 'Estrategias para prevenir episodios maníacos y depresivos a través del manejo del estilo de vida.'
-                      }
-                    ]).map((treatment, index) => (
-                      <div key={index} className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span className="text-green-600 font-bold text-sm">{index + 1}</span>
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-body font-bold text-green-800 mb-1">{treatment.title}</h3>
-                            <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link href="/contact">
-                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Get Specialized Care' : 'Obtener Atención Especializada'}</span>
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
-                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      </div>
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* Sidebar with Stats and Photo */}
-                <div className="flex flex-col h-full">
-                  {/* Stats Cards */}
-                  <div className="space-y-4 mb-6">
-                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                      <div className="text-3xl font-bold text-green-600 mb-2">85%</div>
-                      <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Achieve mood stability' : 'Logran estabilidad del ánimo'}
-                      </div>
-                    </div>
-                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
-                      <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Crisis support available' : 'Apoyo de crisis disponible'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Dr. Melva Office Photo - Fills remaining space */}
-                  <div className="flex-1 w-full overflow-hidden rounded-xl shadow-md">
-                    <img 
-                      src={drMelvaOfficeImage}
-                      alt="Dr. Melva Reve in her professional psychiatric office - Naples, FL"
-                      className="w-full h-full object-cover object-[65%_35%] scale-125"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>
