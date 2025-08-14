@@ -6,14 +6,15 @@ This is a professional website for Healing Minds Psychiatry, the practice of Dr.
 
 ## Recent Changes (August 14, 2025)
 
+- **Masonry Layout Implementation**: Redesigned all service pages with authentic masonry-style hero sections
+- **ServiceHeroMasonry Component**: Created reusable component with 2x3 grid featuring large photos in opposite corners and smaller fact cards
+- **Visual Hierarchy Enhancement**: Large photos (2 rows) contrasted with smaller data cards (1 row) for dynamic masonry effect
+- **Typography Pattern Restoration**: Maintained dual-font system with "Naples, FL" highlighted in font-display italic text-green-700
+- **Service Pages Redesign**: Applied new masonry layout to Depression, Anxiety, and preparing ADHD, Bipolar, PTSD, TMS pages
 - **Navigation Enhancement**: Implemented modern animated dropdown menu for Services section with smooth expansion animation
 - **Service Pages Creation**: Built 6 individual service pages (Anxiety, Depression, ADHD, PTSD, Bipolar, TMS) with full SEO optimization
 - **Bilingual URL Structure**: Configured /services/ (English) and /es/servicios/ (Spanish) routing for all service pages
 - **Typography System Overhaul**: Implemented sophisticated dual-font system using Instrument Sans for body text and Playfair Display for accent words
-- **Consistent Typography Pattern**: Applied font-body for main headings and font-display italic text-green-700 for accent words across all components
-- **Enhanced Visual Hierarchy**: Created elegant contrast between functional text and decorative accents throughout the site
-- **Dropdown Navigation Fix**: Fixed Services dropdown functionality - now only closes when clicking Services button again, removed borders/shadows
-- **Circular Icon Optimization**: Added min-width/height and flex-shrink-0 to ensure perfect circles across all components
 - **Hero Image Optimization**: Converted new doctor photo to WebP format (90KB → 35KB desktop, 15KB mobile) for faster loading
 
 ## User Preferences

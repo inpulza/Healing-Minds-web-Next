@@ -81,7 +81,7 @@ export const ServiceHeroMasonry = ({
                 <>
                   {title.en.includes('Naples, FL') ? (
                     <>
-                      {title.en.replace(' in Naples, FL', '')} in{' '}
+                      {title.en.split(' in Naples, FL')[0]} in{' '}
                       <span className="font-display italic text-green-700">Naples, FL</span>
                     </>
                   ) : (
@@ -92,7 +92,7 @@ export const ServiceHeroMasonry = ({
                 <>
                   {title.es.includes('Naples, FL') ? (
                     <>
-                      {title.es.replace(' en Naples, FL', '')} en{' '}
+                      {title.es.split(' en Naples, FL')[0]} en{' '}
                       <span className="font-display italic text-green-700">Naples, FL</span>
                     </>
                   ) : (
