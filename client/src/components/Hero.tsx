@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { IconBrain, IconHeart, IconLeaf } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
-import heroImage from '@assets/hero-doctor-new.webp';
-import mobileHeroImage from '@assets/hero-doctor-mobile-new.webp';
+import heroImage from '@assets/hero-doctor-hq.webp';
+import mobileHeroImage from '@assets/hero-doctor-mobile-hq.webp';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -20,7 +20,7 @@ const Hero = () => {
             <img 
               src={mobileHeroImage}
               alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover object-center-right"
               loading="eager"
             />
           </div>
@@ -69,7 +69,7 @@ const Hero = () => {
             <img 
               src={heroImage}
               alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover object-right"
               loading="eager"
             />
             
