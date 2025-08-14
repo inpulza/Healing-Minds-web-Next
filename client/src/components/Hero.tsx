@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -36,9 +37,10 @@ const Hero = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/contact">
                   <Button
-                    className="bg-white text-teal-700 hover:bg-gray-50 font-body font-semibold px-8 py-4 rounded-full text-lg shadow-lg"
+                    className="bg-white text-teal-700 hover:bg-gray-50 font-body font-semibold px-8 py-4 rounded-full text-lg shadow-lg flex items-center gap-3"
                     data-testid="hero-book-consultation"
                   >
+                    <ArrowRight className="w-5 h-5 text-teal-600" />
                     Book a Consultation
                   </Button>
                 </Link>
