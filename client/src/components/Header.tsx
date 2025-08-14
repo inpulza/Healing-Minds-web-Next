@@ -72,7 +72,7 @@ const Header = () => {
             </Button>
             <Link href="/contact">
               <Button
-                className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 py-3"
+                className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-6"
                 data-testid="book-now-button"
               >
                 <div className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">

@@ -37,7 +37,7 @@ const Hero = () => {
               <div className="flex justify-center">
                 <Link href="/services">
                   <Button
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-5 shadow-lg"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-8 shadow-lg"
                     data-testid="hero-book-consultation"
                   >
                     <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
