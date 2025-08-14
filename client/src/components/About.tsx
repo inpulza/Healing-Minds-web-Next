@@ -19,7 +19,7 @@ const About = () => {
                 <img
                   src={doctorProfileImage}
                   alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
-                  className="w-full h-[600px] object-cover"
+                  className="w-full h-[600px] object-cover object-bottom"
                   data-testid="about-doctor-image"
                 />
               </div>
