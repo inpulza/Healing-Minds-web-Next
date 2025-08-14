@@ -76,9 +76,9 @@ const ServiceAreas: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+        <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 items-center">
           {/* Real Google Maps Background */}
-          <div className="relative order-2 lg:order-1">
+          <div className="relative order-2 lg:order-1 lg:col-span-2">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg border border-green-100">
               <div className="relative rounded-xl sm:rounded-2xl overflow-hidden aspect-[4/3]">
                 
@@ -184,16 +184,18 @@ const ServiceAreas: React.FC = () => {
           </div>
 
           {/* Service Areas List & Stats */}
-          <div className="order-1 lg:order-2">
+          <div className="order-1 lg:order-2 lg:col-span-1">
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
+            <div className="grid grid-cols-1 gap-4 mb-8 sm:mb-10">
               {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-green-100 rounded-xl flex items-center justify-center mb-2 sm:mb-3 mx-auto">
-                    <stat.icon className="w-6 h-6 sm:w-7 sm:h-7 text-green-600" />
+                <div key={index} className="flex items-center gap-4 p-3 bg-green-50 rounded-xl">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <stat.icon className="w-5 h-5 text-green-600" />
                   </div>
-                  <div className="text-2xl sm:text-3xl font-bold text-green-800 mb-1">{stat.value}</div>
-                  <div className="text-sm sm:text-base text-gray-600 font-medium">{stat.label}</div>
+                  <div>
+                    <div className="text-xl font-bold text-green-800">{stat.value}</div>
+                    <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+                  </div>
                 </div>
               ))}
             </div>
