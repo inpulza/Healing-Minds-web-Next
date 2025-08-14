@@ -15,6 +15,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
 import medicationImage from "@assets/generated_images/Medical_assessment_tools_78e50118.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
+import medicationCapsules from "@assets/e4031136-1b10-4229-8e1d-2c74e4186617_1755210913815.png";
 
 const MedicationManagement = () => {
   const { language } = useLanguage();
@@ -297,16 +298,15 @@ const MedicationManagement = () => {
                     ))}
                   </div>
                   
-                  {/* Photo Placeholder */}
+                  {/* Photo */}
                   <div className="mt-6">
-                    <div className="w-full h-44 bg-green-50 rounded-xl border-2 border-dashed border-green-200 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <span className="text-green-600 font-bold">💊</span>
-                        </div>
-                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                        <p className="text-green-500 font-body text-xs">Medicamentos/farmacia</p>
-                      </div>
+                    <div className="w-full h-44 rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
+                      <img 
+                        src={medicationCapsules} 
+                        alt="Medication capsules on green background representing pharmaceutical care"
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
                     </div>
                   </div>
                   
@@ -443,7 +443,7 @@ const MedicationManagement = () => {
                   {/* Photo - Fills remaining space */}
                   <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <img 
-                      src="/attached_assets/e4031136-1b10-4229-8e1d-2c74e4186617_1755210913815.png" 
+                      src={medicationCapsules} 
                       alt="Medication capsules on green background representing pharmaceutical care"
                       className="w-full h-full object-cover"
                       loading="lazy"
