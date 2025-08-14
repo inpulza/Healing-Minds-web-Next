@@ -285,22 +285,11 @@ const MedicationManagement = () => {
                   </Link>
                 </div>
 
-                {/* Benefits Grid Side */}
+                {/* Photo and Benefits Side */}
                 <div className="order-1 lg:order-2">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {benefits.slice(0, 4).map((benefit, index) => (
-                      <div key={index} className="bg-blue-50 rounded-xl p-6 border border-blue-200 hover:bg-blue-100 transition-all duration-300">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4 border border-blue-300">
-                          <Zap className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <h3 className="text-lg font-body font-semibold text-green-800">{benefit}</h3>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Photo */}
-                  <div className="mt-6">
-                    <div className="w-full h-44 rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
+                  {/* Photo on top */}
+                  <div className="mb-6">
+                    <div className="w-full h-48 rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                       <img 
                         src={medicationCapsules} 
                         alt="Medication capsules on green background representing pharmaceutical care"
@@ -308,6 +297,18 @@ const MedicationManagement = () => {
                         loading="lazy"
                       />
                     </div>
+                  </div>
+                  
+                  {/* Benefits Grid below */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {benefits.slice(0, 4).map((benefit, index) => (
+                      <div key={index} className="p-4 hover:bg-green-50 transition-all duration-300 rounded-lg">
+                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mb-3">
+                          <Zap className="w-4 h-4 text-green-600" />
+                        </div>
+                        <h3 className="text-base font-body font-semibold text-green-800">{benefit}</h3>
+                      </div>
+                    ))}
                   </div>
 
                 </div>
@@ -317,13 +318,13 @@ const MedicationManagement = () => {
         </section>
 
         {/* Modern Medication Management Benefits Section */}
-        <section className="py-16 sm:py-20 bg-blue-50">
+        <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-blue-100">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
               <div className="grid lg:grid-cols-3 gap-8">
                 {/* Content Side */}
                 <div className="lg:col-span-2">
-                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                  <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                     {language === 'en' ? 'Personalized Care' : 'Atención Personalizada'}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
@@ -376,8 +377,8 @@ const MedicationManagement = () => {
                     {/* Important Notes */}
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <Info className="w-6 h-6 text-blue-600" />
+                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                          <Info className="w-6 h-6 text-green-600" />
                         </div>
                         <h3 className="text-xl font-body font-bold text-green-800">
                           {language === 'en' ? 'Key Considerations' : 'Consideraciones Clave'}
@@ -396,7 +397,7 @@ const MedicationManagement = () => {
                           'Citas de seguimiento necesarias'
                         ]).map((item, index) => (
                           <div key={index} className="flex items-start gap-2">
-                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                             <span className="text-gray-600 font-body text-sm">{item}</span>
                           </div>
                         ))}
@@ -424,8 +425,8 @@ const MedicationManagement = () => {
                         {language === 'en' ? 'Medication adherence improvement' : 'Mejora en adherencia a medicación'}
                       </div>
                     </div>
-                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
+                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                      <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
                       <div className="text-sm text-gray-600 font-body">
                         {language === 'en' ? 'Emergency consultation available' : 'Consulta de emergencia disponible'}
                       </div>
@@ -464,8 +465,8 @@ const MedicationManagement = () => {
               {treatmentProcess.map((process, index) => (
                 <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardContent className="p-8 text-center">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-blue-600 font-bold text-2xl">{process.step}</span>
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-green-600 font-bold text-2xl">{process.step}</span>
                     </div>
                     <h3 className="text-xl font-body font-bold text-green-800 mb-4">{process.title}</h3>
                     <p className="text-gray-600 font-body leading-relaxed">{process.description}</p>
