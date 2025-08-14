@@ -85,11 +85,11 @@ const Header = () => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+    <header className={`sticky top-0 z-50 transition-all duration-500 overflow-hidden ${
       isScrolled 
         ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
         : 'bg-white/95 backdrop-blur-md border-b border-gray-100'
-    }`}>
+    } ${isServicesOpen ? 'h-auto' : 'h-20'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
@@ -106,7 +106,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex relative" ref={servicesRef}>
-            <nav className={`flex items-center transition-all duration-300 ${
+            <nav className={`flex items-center transition-all duration-500 ${
               isServicesOpen 
                 ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
                 : 'bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50'
@@ -116,7 +116,7 @@ const Header = () => {
                   {item.hasDropdown ? (
                     <button
                       onClick={() => setIsServicesOpen(!isServicesOpen)}
-                      className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-300 flex items-center gap-2 ${
+                      className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-500 flex items-center gap-2 ${
                         isActive(item.href) || isServicesOpen
                           ? 'bg-white text-primary shadow-sm'
                           : 'text-gray-700 hover:text-primary hover:bg-white/50'
@@ -124,14 +124,14 @@ const Header = () => {
                       data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
                     >
                       {item.label}
-                      <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${
                         isServicesOpen ? 'rotate-180' : ''
                       }`} />
                     </button>
                   ) : (
                     <Link
                       href={item.href}
-                      className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-300 ${
+                      className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-500 ${
                         isActive(item.href)
                           ? 'bg-white text-primary shadow-sm'
                           : 'text-gray-700 hover:text-primary hover:bg-white/50'
@@ -144,45 +144,6 @@ const Header = () => {
                 </div>
               ))}
             </nav>
-
-            {/* Services Dropdown */}
-            {isServicesOpen && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/70 p-6 transition-all duration-300 animate-in slide-in-from-top-2 fade-in-0">
-                <div className="grid grid-cols-2 gap-4">
-                  {serviceItems.map((service, index) => (
-                    <Link
-                      key={service.href}
-                      href={service.href}
-                      onClick={() => setIsServicesOpen(false)}
-                      className="group p-4 rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100"
-                      data-testid={`dropdown-service-${index}`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700"></div>
-                        <div>
-                          <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300">
-                            {service.label}
-                          </h3>
-                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1">
-                            {service.description}
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-                <div className="mt-4 pt-4 border-t border-gray-200/60">
-                  <Link
-                    href="/services"
-                    onClick={() => setIsServicesOpen(false)}
-                    className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300"
-                  >
-                    {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Language Toggle & CTA */}
@@ -233,6 +194,51 @@ const Header = () => {
                 <Menu className="h-6 w-6" />
               )}
             </Button>
+          </div>
+        </div>
+
+        {/* Expanded Services Menu - Now inside header */}
+        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${
+          isServicesOpen 
+            ? 'max-h-[500px] opacity-100 py-8' 
+            : 'max-h-0 opacity-0 py-0'
+        }`}>
+          <div className="hidden md:block">
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/70 p-8 mx-4">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                {serviceItems.map((service, index) => (
+                  <Link
+                    key={service.href}
+                    href={service.href}
+                    onClick={() => setIsServicesOpen(false)}
+                    className="group p-4 rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100"
+                    data-testid={`dropdown-service-${index}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-3 h-3 rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700"></div>
+                      <div>
+                        <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
+                          {service.label}
+                        </h3>
+                        <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1 leading-relaxed">
+                          {service.description}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-6 pt-6 border-t border-gray-200/60 text-center">
+                <Link
+                  href="/services"
+                  onClick={() => setIsServicesOpen(false)}
+                  className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300 text-lg"
+                >
+                  {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
