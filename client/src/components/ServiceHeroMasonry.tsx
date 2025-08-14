@@ -123,45 +123,37 @@ export const ServiceHeroMasonry = ({
             </div>
           </div>
           
-          {/* Right Column - Masonry Layout */}
+          {/* Right Column - True Masonry Style Layout */}
           <div className="relative">
-            <div className="masonry-container columns-1 sm:columns-2 gap-4 space-y-4">
-              {/* Large Doctor Photo */}
-              <div className="break-inside-avoid mb-4">
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="grid grid-cols-2 grid-rows-3 gap-4 max-w-lg mx-auto lg:max-w-none h-96 lg:h-[32rem]">
+              {/* Top Left - Doctor Photo (Large - spans 2 rows) */}
+              <div className="row-span-2 col-start-1 row-start-1">
+                <div className="h-full rounded-2xl shadow-lg overflow-hidden">
                   <img 
                     src={images.doctorImage}
                     alt="Dr. Melva Reve - Mental Health Specialist"
-                    className="w-full h-48 sm:h-64 object-cover"
+                    className="w-full h-full object-cover"
                     data-testid="img-doctor-portrait"
                   />
-                  <div className="p-4">
-                    <h3 className="text-lg font-body font-bold text-green-800 mb-2">
-                      {language === 'en' ? 'Dr. Melva Reve' : 'Dra. Melva Reve'}
-                    </h3>
-                    <p className="text-sm text-gray-600 font-body">
-                      {language === 'en' ? 'Board-Certified Psychiatrist' : 'Psiquiatra Certificada'}
-                    </p>
-                  </div>
                 </div>
               </div>
 
-              {/* Facts Card */}
-              <div className="break-inside-avoid mb-4">
-                <div className="bg-white rounded-2xl shadow-lg p-6">
-                  <div className="flex items-center gap-3 mb-4">
+              {/* Top Right - Facts Card (Small - 1 row) */}
+              <div className="row-span-1 col-start-2 row-start-1">
+                <div className="bg-white rounded-2xl shadow-lg p-4 h-full flex flex-col">
+                  <div className="flex items-center gap-2 mb-3">
                     <WellnessIcon size="sm" color="purple">
                       <IconHeart />
                     </WellnessIcon>
-                    <h3 className="text-lg font-body font-bold text-green-800">
+                    <h3 className="text-sm font-body font-bold text-green-800">
                       {language === 'en' ? facts.title.en : facts.title.es}
                     </h3>
                   </div>
-                  <div className="space-y-3">
-                    {facts.items.map((fact, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                        <span className="text-sm text-gray-700 font-body">
+                  <div className="space-y-2 flex-1 flex flex-col justify-center">
+                    {facts.items.slice(0, 2).map((fact, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-green-600 rounded-full mt-1.5 flex-shrink-0"></div>
+                        <span className="text-xs text-gray-700 font-body leading-relaxed">
                           {language === 'en' ? fact.en : fact.es}
                         </span>
                       </div>
@@ -170,74 +162,37 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Therapy Room Image */}
-              <div className="break-inside-avoid mb-4">
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                  <img 
-                    src={images.therapyRoomImage}
-                    alt="Comfortable therapy environment"
-                    className="w-full h-32 object-cover"
-                    data-testid="img-therapy-room"
-                  />
-                  <div className="p-4">
-                    <p className="text-sm text-gray-600 font-body">
-                      {language === 'en' ? 'Comfortable & Safe Environment' : 'Ambiente Cómodo y Seguro'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Stats */}
-              <div className="break-inside-avoid mb-4">
-                <div className="bg-gradient-to-br from-green-800 to-green-700 text-white rounded-2xl shadow-lg p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Clock className="w-6 h-6" />
-                    <h3 className="text-lg font-body font-bold">
+              {/* Bottom Left - Quick Stats Card (Small - 1 row) */}
+              <div className="row-span-1 col-start-1 row-start-3">
+                <div className="bg-gradient-to-br from-green-800 to-green-700 text-white rounded-2xl shadow-lg p-4 h-full flex flex-col">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Clock className="w-4 h-4" />
+                    <h3 className="text-sm font-body font-bold">
                       {language === 'en' ? 'Quick Access' : 'Acceso Rápido'}
                     </h3>
                   </div>
-                  <div className="space-y-2">
-                    {quickStats.items.map((stat, index) => (
-                      <p key={index} className="text-sm opacity-90 font-body">
-                        {language === 'en' ? stat.en : stat.es}
-                      </p>
+                  <div className="space-y-2 flex-1 flex flex-col justify-center">
+                    {quickStats.items.slice(0, 3).map((stat, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0 opacity-80"></div>
+                        <p className="text-xs opacity-90 font-body leading-relaxed">
+                          {language === 'en' ? stat.en : stat.es}
+                        </p>
+                      </div>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* Symbol Image */}
-              <div className="break-inside-avoid mb-4">
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              {/* Bottom Right - Therapy Room Photo (Large - spans 2 rows) */}
+              <div className="row-span-2 col-start-2 row-start-2">
+                <div className="h-full rounded-2xl shadow-lg overflow-hidden">
                   <img 
-                    src={images.symbolImage}
-                    alt="Treatment success symbol"
-                    className="w-full h-32 object-cover"
-                    data-testid="img-treatment-symbol"
+                    src={images.therapyRoomImage}
+                    alt="Comfortable therapy environment"
+                    className="w-full h-full object-cover"
+                    data-testid="img-therapy-room"
                   />
-                  <div className="p-4">
-                    <p className="text-sm text-gray-600 font-body">
-                      {language === 'en' ? 'Evidence-based treatment approaches' : 'Enfoques de tratamiento basados en evidencia'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Info */}
-              <div className="break-inside-avoid mb-4">
-                <div className="bg-blue-50 rounded-2xl shadow-lg p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <MapPin className="w-5 h-5 text-blue-600" />
-                    <h3 className="text-lg font-body font-bold text-blue-800">
-                      {language === 'en' ? 'Location' : 'Ubicación'}
-                    </h3>
-                  </div>
-                  <p className="text-sm text-blue-700 font-body mb-2">
-                    Naples, FL & Surrounding Areas
-                  </p>
-                  <p className="text-xs text-blue-600 font-body">
-                    {language === 'en' ? 'Serving Southwest Florida' : 'Sirviendo al Suroeste de Florida'}
-                  </p>
                 </div>
               </div>
             </div>
