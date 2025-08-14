@@ -15,6 +15,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
 import hopeSymbolImage from "@assets/generated_images/Hope_and_growth_symbolism_978bb907.png";
+import consultationImage from "../../assets/consultation-image.png";
 
 const DepressionTreatment = () => {
   const { language } = useLanguage();
@@ -297,7 +298,7 @@ const DepressionTreatment = () => {
                   <div className="mt-8">
                     <div className="w-full aspect-[16/9] overflow-hidden rounded-xl shadow-md">
                       <img 
-                        src={import.meta.resolve('@assets/eb82b50d-ef6c-4b8d-886b-cb7a40513eb1_1755212789212.png')}
+                        src={consultationImage}
                         alt="Professional consultation - Dr. Melva Reve writing notes during patient consultation"
                         className="w-full h-full object-cover object-center"
                         loading="lazy"
