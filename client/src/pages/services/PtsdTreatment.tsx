@@ -237,6 +237,127 @@ const PtsdTreatment = () => {
           }}
         />
 
+        {/* Modern Treatment Approach Section */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* Content Side */}
+                <div className="lg:col-span-2">
+                  <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Trauma-Informed Care' : 'Atención Informada por Trauma'}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Our <span className="font-display italic text-green-700">Trauma-Informed</span> Treatment Approach</>
+                    ) : (
+                      <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Informado en Trauma</span></>
+                    )}
+                  </h2>
+                  
+                  <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'PTSD treatment requires specialized expertise addressing trauma, symptoms, and recovery with evidence-based approaches and cultural sensitivity.'
+                      : 'El tratamiento de PTSD requiere experiencia especializada que aborde el trauma, síntomas y recuperación con enfoques basados en evidencia y sensibilidad cultural.'
+                    }
+                  </p>
+
+                  {/* Treatment List */}
+                  <div className="grid gap-4 mb-8">
+                    {(language === 'en' ? [
+                      {
+                        title: 'Comprehensive Assessment',
+                        description: 'Thorough evaluation of trauma history and personalized treatment plans.'
+                      },
+                      {
+                        title: 'Medication Management',
+                        description: 'Evidence-based medications for PTSD symptoms and sleep disturbances.'
+                      },
+                      {
+                        title: 'Therapy Coordination',
+                        description: 'Collaborative care with specialized trauma therapists for EMDR and CPT.'
+                      },
+                      {
+                        title: 'Crisis Safety Planning',
+                        description: 'Personalized safety plans for managing flashbacks and panic attacks.'
+                      }
+                    ] : [
+                      {
+                        title: 'Evaluación Integral',
+                        description: 'Evaluación completa del historial de trauma y planes personalizados.'
+                      },
+                      {
+                        title: 'Manejo de Medicamentos',
+                        description: 'Medicamentos basados en evidencia para síntomas de TEPT y sueño.'
+                      },
+                      {
+                        title: 'Coordinación de Terapia',
+                        description: 'Atención colaborativa con terapeutas especializados en EMDR y TCC.'
+                      },
+                      {
+                        title: 'Planificación de Seguridad',
+                        description: 'Planes personalizados para manejar flashbacks y ataques de pánico.'
+                      }
+                    ]).map((treatment, index) => (
+                      <div key={index} className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-green-600 font-bold text-sm">{index + 1}</span>
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-body font-bold text-green-800 mb-1">{treatment.title}</h3>
+                            <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link href="/contact">
+                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                      <span>{language === 'en' ? 'Get PTSD Care' : 'Obtener Atención PTSD'}</span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Sidebar with Stats and Photo */}
+                <div className="flex flex-col h-full">
+                  {/* Stats Cards */}
+                  <div className="space-y-4 mb-6">
+                    <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
+                      <div className="text-3xl font-bold text-green-600 mb-2">90%</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Recovery with treatment' : 'Recuperación con tratamiento'}
+                      </div>
+                    </div>
+                    <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
+                      <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Crisis support available' : 'Apoyo de crisis disponible'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Photo - Fills remaining space */}
+                  <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
+                    <img 
+                      src={consultationImage} 
+                      alt="Professional psychiatrist Dr. Melva Reve conducting PTSD consultation in modern medical office"
+                      className="w-full h-full object-cover object-center"
+                      loading="lazy"
+                      decoding="async"
+                      style={{ objectPosition: 'center center' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Symptoms Section */}
         <section className="py-16 sm:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -403,127 +524,6 @@ const PtsdTreatment = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Modern Treatment Approach Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid lg:grid-cols-3 gap-8">
-                {/* Content Side */}
-                <div className="lg:col-span-2">
-                  <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Trauma-Informed Care' : 'Atención Informada por Trauma'}
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Our <span className="font-display italic text-green-700">Trauma-Informed</span> Treatment Approach</>
-                    ) : (
-                      <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Informado en Trauma</span></>
-                    )}
-                  </h2>
-                  
-                  <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'PTSD treatment requires specialized expertise addressing trauma, symptoms, and recovery with evidence-based approaches and cultural sensitivity.'
-                      : 'El tratamiento de PTSD requiere experiencia especializada que aborde el trauma, síntomas y recuperación con enfoques basados en evidencia y sensibilidad cultural.'
-                    }
-                  </p>
-
-                  {/* Treatment List */}
-                  <div className="grid gap-4 mb-8">
-                    {(language === 'en' ? [
-                      {
-                        title: 'Comprehensive Assessment',
-                        description: 'Thorough evaluation of trauma history and personalized treatment plans.'
-                      },
-                      {
-                        title: 'Medication Management',
-                        description: 'Evidence-based medications for PTSD symptoms and sleep disturbances.'
-                      },
-                      {
-                        title: 'Therapy Coordination',
-                        description: 'Collaborative care with specialized trauma therapists for EMDR and CPT.'
-                      },
-                      {
-                        title: 'Crisis Safety Planning',
-                        description: 'Personalized safety plans for managing flashbacks and panic attacks.'
-                      }
-                    ] : [
-                      {
-                        title: 'Evaluación Integral',
-                        description: 'Evaluación completa del historial de trauma y planes personalizados.'
-                      },
-                      {
-                        title: 'Manejo de Medicamentos',
-                        description: 'Medicamentos basados en evidencia para síntomas de TEPT y sueño.'
-                      },
-                      {
-                        title: 'Coordinación de Terapia',
-                        description: 'Atención colaborativa con terapeutas especializados en EMDR y TCC.'
-                      },
-                      {
-                        title: 'Planificación de Seguridad',
-                        description: 'Planes personalizados para manejar flashbacks y ataques de pánico.'
-                      }
-                    ]).map((treatment, index) => (
-                      <div key={index} className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span className="text-green-600 font-bold text-sm">{index + 1}</span>
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-body font-bold text-green-800 mb-1">{treatment.title}</h3>
-                            <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link href="/contact">
-                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Get PTSD Care' : 'Obtener Atención PTSD'}</span>
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
-                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      </div>
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* Sidebar with Stats and Photo */}
-                <div className="flex flex-col h-full">
-                  {/* Stats Cards */}
-                  <div className="space-y-4 mb-6">
-                    <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
-                      <div className="text-3xl font-bold text-green-600 mb-2">90%</div>
-                      <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Recovery with treatment' : 'Recuperación con tratamiento'}
-                      </div>
-                    </div>
-                    <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
-                      <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
-                      <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Crisis support available' : 'Apoyo de crisis disponible'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Photo - Fills remaining space */}
-                  <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
-                    <img 
-                      src={consultationImage} 
-                      alt="Professional psychiatrist Dr. Melva Reve conducting PTSD consultation in modern medical office"
-                      className="w-full h-full object-cover object-center"
-                      loading="lazy"
-                      decoding="async"
-                      style={{ objectPosition: 'center center' }}
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
