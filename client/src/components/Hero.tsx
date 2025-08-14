@@ -81,16 +81,16 @@ const Hero = () => {
             <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
               <div className="max-w-3xl ml-4">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
-                  Find Your Path to Mental 
+                  Find Your Path to 
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 mb-1">
                     <IconBrain />
                   </WellnessIcon>
-                  <span className="font-display italic text-green-700">Clarity</span><br />
+                  <span className="font-display italic text-green-700">Mental Clarity</span><br />
                   with Compassionate Care from 
                   <WellnessIcon size="md" color="blue" className="inline-flex mx-2 mb-1">
                     <IconHeart />
                   </WellnessIcon>
-                  <span className="font-display italic text-green-700">Dr. Reve</span>
+                  <span className="font-display italic text-white">Dr. Melva Reve</span>
                 </h1>
                 
                 <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
