@@ -64,12 +64,12 @@ const Hero = () => {
 
         {/* Desktop: Original single container layout */}
         <div className="hidden sm:block">
-          <div className="relative rounded-3xl overflow-hidden h-[500px] sm:h-[600px] flex items-center justify-center w-full">
+          <div className="relative rounded-3xl overflow-hidden h-[500px] sm:h-[600px] flex items-center justify-center">
             {/* Background Image */}
             <img 
               src={heroImage}
               alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
-              className="absolute inset-0 w-full h-full object-cover object-center scale-110"
+              className="absolute inset-0 w-full h-full object-cover object-center"
               loading="eager"
             />
             
