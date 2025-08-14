@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
 
 const About = () => {
   const { language } = useLanguage();
@@ -46,17 +47,29 @@ const About = () => {
                 }
               </p>
 
-              {/* Social icons placeholder */}
+              {/* Social Media Icons */}
               <div className="flex justify-center lg:justify-start gap-4 mb-8">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <div className="w-5 h-5 bg-blue-500 rounded"></div>
-                </div>
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <div className="w-5 h-5 bg-blue-600 rounded"></div>
-                </div>
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <div className="w-5 h-5 bg-blue-700 rounded"></div>
-                </div>
+                <a 
+                  href="https://linkedin.com/in/dr-melva-reve" 
+                  className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
+                  data-testid="linkedin-link"
+                >
+                  <FaLinkedin className="w-5 h-5 text-blue-600" />
+                </a>
+                <a 
+                  href="https://facebook.com/healingmindspsychiatry" 
+                  className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
+                  data-testid="facebook-link"
+                >
+                  <FaFacebook className="w-5 h-5 text-blue-700" />
+                </a>
+                <a 
+                  href="https://instagram.com/healingmindspsychiatry" 
+                  className="w-10 h-10 bg-pink-50 hover:bg-pink-100 rounded-lg flex items-center justify-center transition-colors duration-300"
+                  data-testid="instagram-link"
+                >
+                  <FaInstagram className="w-5 h-5 text-pink-600" />
+                </a>
               </div>
 
               <Link href="/contact">
