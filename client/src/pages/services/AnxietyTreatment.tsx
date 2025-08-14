@@ -188,7 +188,7 @@ const AnxietyTreatment = () => {
                 <div className="order-1 lg:order-2">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {symptoms.slice(0, 6).map((symptom, index) => (
-                      <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                      <div key={index} className="bg-green-50 rounded-xl p-4 border border-green-200 hover:bg-green-100 transition-all duration-300">
                         <div className="flex items-center gap-3">
                           <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
                           <span className="text-gray-700 font-body text-sm">{symptom}</span>
@@ -197,10 +197,23 @@ const AnxietyTreatment = () => {
                     ))}
                   </div>
                   
+                  {/* Photo Placeholder */}
+                  <div className="mt-6">
+                    <div className="w-full h-40 bg-blue-50 rounded-xl border-2 border-dashed border-blue-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                          <span className="text-blue-600 font-bold">📸</span>
+                        </div>
+                        <p className="text-blue-600 font-body text-sm">Aquí va una foto</p>
+                        <p className="text-blue-500 font-body text-xs">Relajación/meditación</p>
+                      </div>
+                    </div>
+                  </div>
+                  
                   {/* Additional symptoms if any */}
                   {symptoms.length > 6 && (
                     <div className="mt-4 text-center">
-                      <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-full px-4 py-2">
+                      <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-green-50 rounded-full px-4 py-2 border border-green-200">
                         <span>{language === 'en' ? '+' : '+'}{symptoms.length - 6} {language === 'en' ? 'more symptoms treated' : 'síntomas más tratados'}</span>
                       </div>
                     </div>

@@ -284,9 +284,9 @@ const AdhdTreatment = () => {
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {ageGroups.map((group, index) => (
-                  <div key={index} className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-8 shadow-sm border border-orange-200 hover:shadow-md transition-all duration-300">
+                  <div key={index} className="bg-orange-50 rounded-xl p-8 border border-orange-300 hover:bg-orange-100 transition-all duration-300">
                     <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 bg-orange-200 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0 border border-orange-400">
                         <span className="text-orange-600 font-bold text-lg">{index + 1}</span>
                       </div>
                       <div>
@@ -305,6 +305,19 @@ const AdhdTreatment = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+              
+              {/* Photo Placeholder */}
+              <div className="mt-8">
+                <div className="w-full h-48 bg-purple-50 rounded-xl border-2 border-dashed border-purple-200 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-purple-600 font-bold">🎯</span>
+                    </div>
+                    <p className="text-purple-600 font-body text-sm">Aquí va una foto</p>
+                    <p className="text-purple-500 font-body text-xs">Enfoque/concentración</p>
+                  </div>
+                </div>
               </div>
 
               {/* Action Section */}

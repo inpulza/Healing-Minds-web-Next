@@ -297,9 +297,9 @@ const DepressionTreatment = () => {
                 {/* Treatment Options Grid Side */}
                 <div className="space-y-4">
                   {treatments.map((treatment, index) => (
-                    <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                    <div key={index} className="bg-blue-50 rounded-xl p-6 border border-blue-200 hover:bg-blue-100 transition-all duration-300">
                       <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 border border-blue-300">
                           <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
                         </div>
                         <div>
@@ -309,6 +309,19 @@ const DepressionTreatment = () => {
                       </div>
                     </div>
                   ))}
+                  
+                  {/* Photo Placeholder */}
+                  <div className="mt-8">
+                    <div className="w-full h-48 bg-green-50 rounded-xl border-2 border-dashed border-green-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-green-600 font-bold">📸</span>
+                        </div>
+                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                        <p className="text-green-500 font-body text-xs">Imagen de terapia/consultorio</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -287,9 +287,9 @@ const MedicationManagement = () => {
                 {/* Benefits Grid Side */}
                 <div className="order-1 lg:order-2">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {benefits.slice(0, 6).map((benefit, index) => (
-                      <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                    {benefits.slice(0, 4).map((benefit, index) => (
+                      <div key={index} className="bg-blue-50 rounded-xl p-6 border border-blue-200 hover:bg-blue-100 transition-all duration-300">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4 border border-blue-300">
                           <Zap className="w-5 h-5 text-blue-600" />
                         </div>
                         <h3 className="text-lg font-body font-semibold text-green-800">{benefit}</h3>
@@ -297,11 +297,24 @@ const MedicationManagement = () => {
                     ))}
                   </div>
                   
+                  {/* Photo Placeholder */}
+                  <div className="mt-6">
+                    <div className="w-full h-44 bg-green-50 rounded-xl border-2 border-dashed border-green-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-green-600 font-bold">💊</span>
+                        </div>
+                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                        <p className="text-green-500 font-body text-xs">Medicamentos/farmacia</p>
+                      </div>
+                    </div>
+                  </div>
+                  
                   {/* Additional benefits if any */}
-                  {benefits.length > 6 && (
+                  {benefits.length > 4 && (
                     <div className="mt-4 text-center">
-                      <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-full px-4 py-2">
-                        <span>{language === 'en' ? '+' : '+'}{benefits.length - 6} {language === 'en' ? 'more benefits' : 'beneficios más'}</span>
+                      <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-green-50 rounded-full px-4 py-2 border border-green-200">
+                        <span>{language === 'en' ? '+' : '+'}{benefits.length - 4} {language === 'en' ? 'more benefits' : 'beneficios más'}</span>
                       </div>
                     </div>
                   )}
