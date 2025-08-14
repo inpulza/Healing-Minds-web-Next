@@ -78,40 +78,42 @@ const Hero = () => {
 
             
             {/* Left-Aligned Content */}
-            <div className="relative z-10 w-full px-8 lg:px-12 py-16 text-left">
-              <div className="max-w-2xl">
+            <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
+              <div className="max-w-3xl ml-4">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
-                  Find Your Path to 
-                  <WellnessIcon size="md" color="green" className="inline-flex mx-3 mb-2">
+                  Find Your Path to Mental 
+                  <WellnessIcon size="md" color="green" className="inline-flex mx-2 mb-1">
                     <IconBrain />
                   </WellnessIcon>
                   <span className="font-display italic text-green-700">Clarity</span><br />
-                  with 
+                  with Compassionate Care from 
                   <WellnessIcon size="md" color="blue" className="inline-flex mx-2 mb-1">
                     <IconHeart />
                   </WellnessIcon>
                   <span className="font-display italic text-green-700">Dr. Reve</span>
                 </h1>
                 
-                <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b] flex flex-wrap items-center justify-start gap-2" data-testid="hero-description">
-                  <span>Compassionate and expert psychiatric care in Naples, FL, designed to help you navigate life's challenges</span>
-                  <WellnessIcon size="md" color="orange" className="inline-flex mx-1">
+                <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
+                  <span>Expert psychiatric care in Naples, FL, designed to help you navigate life's challenges and foster lasting 
+                  <WellnessIcon size="md" color="orange" className="inline-flex mx-2 mb-1">
                     <IconLeaf />
                   </WellnessIcon>
-                  <span>and foster lasting well-being.</span>
+                  well-being through personalized treatment.</span>
                 </div>
                 
-                <Link href="/services">
-                  <Button
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-6 sm:py-7 shadow-lg"
-                    data-testid="hero-book-consultation"
-                  >
+                <div className="ml-0">
+                  <Link href="/services">
+                    <Button
+                      className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-6 sm:py-7 shadow-lg"
+                      data-testid="hero-book-consultation"
+                    >
                     <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
                       <ArrowRight className="w-5 h-5 text-green-800" />
                     </div>
-                    <span>Our Services</span>
-                  </Button>
-                </Link>
+                      <span>Our Services</span>
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
