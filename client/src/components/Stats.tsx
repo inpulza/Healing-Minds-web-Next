@@ -1,46 +1,69 @@
 import { useLanguage } from '@/hooks/useLanguage';
-import { Card } from '@/components/ui/card';
 
 const Stats = () => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
 
-  const stats = [
-    { 
-      value: '15+', 
-      label: t('stats.experience'),
-      testId: 'stat-experience',
-      color: 'bg-soft-mint'
-    },
-    { 
-      value: '98%', 
-      label: t('stats.successRate'),
-      testId: 'stat-success-rate',
-      color: 'bg-warm-pink'
-    },
-    { 
-      value: '4.9/5', 
-      label: t('stats.rating'),
-      testId: 'stat-rating',
-      color: 'bg-soft-purple'
-    }
+  const services = [
+    'Anxiety Disorders',
+    'Depression Treatment',
+    'ADHD Assessment',
+    'PTSD Therapy',
+    'Bipolar Disorder',
+    'OCD Treatment',
+    'Panic Disorders',
+    'Social Anxiety',
+    'Mood Stabilization',
+    'Trauma-Informed Care',
+    'Medication Management',
+    'Psychoeducation',
+    'Crisis Intervention',
+    'Stress Management'
   ];
 
+  const servicesSpanish = [
+    'Trastornos de Ansiedad',
+    'Tratamiento de Depresión',
+    'Evaluación de TDAH',
+    'Terapia para TEPT',
+    'Trastorno Bipolar',
+    'Tratamiento TOC',
+    'Trastornos de Pánico',
+    'Ansiedad Social',
+    'Estabilización del Estado de Ánimo',
+    'Atención Informada por Trauma',
+    'Manejo de Medicamentos',
+    'Psicoeducación',
+    'Intervención de Crisis',
+    'Manejo del Estrés'
+  ];
+
+  const displayServices = language === 'en' ? services : servicesSpanish;
+
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center" data-testid={stat.testId}>
-              <div className={`inline-flex items-center justify-center w-24 h-24 ${stat.color} rounded-full mb-6`}>
-                <div className="text-3xl font-display font-bold text-primary">
-                  {stat.value}
+    <section className="py-16 bg-white overflow-hidden">
+      <div className="max-w-[95%] mx-auto">
+        <div className="bg-green-600 rounded-3xl py-6 relative overflow-hidden">
+          {/* Continuous sliding animation */}
+          <div className="flex animate-scroll whitespace-nowrap">
+            {/* First set */}
+            <div className="flex items-center space-x-8 text-white font-body font-medium text-lg px-4">
+              {displayServices.map((service, index) => (
+                <div key={index} className="flex items-center space-x-8">
+                  <span className="whitespace-nowrap">{service}</span>
+                  <span className="text-green-200">•</span>
                 </div>
-              </div>
-              <div className="text-lg font-body font-medium text-warm">
-                {stat.label}
-              </div>
+              ))}
             </div>
-          ))}
+            {/* Duplicate for seamless loop */}
+            <div className="flex items-center space-x-8 text-white font-body font-medium text-lg px-4">
+              {displayServices.map((service, index) => (
+                <div key={`duplicate-${index}`} className="flex items-center space-x-8">
+                  <span className="whitespace-nowrap">{service}</span>
+                  <span className="text-green-200">•</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -115,4 +115,17 @@
   .hero-modern {
     background: linear-gradient(135deg, rgba(255, 243, 230, 0.9), rgba(255, 235, 238, 0.9));
   }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll {
+    animation: scroll 30s linear infinite;
+  }
 }
