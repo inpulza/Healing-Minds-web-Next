@@ -10,7 +10,7 @@ const About = () => {
 
   return (
     <section id="about" className="py-20 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="bg-white rounded-3xl p-12 lg:p-16 shadow-lg">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Doctor Image */}
