@@ -1,0 +1,101 @@
+1. Overview
+This document outlines the functional and technical requirements for the website of Healing Minds Psychiatry, the practice of Dr. Melva Reve. The primary goal is to create a professional, serene, and welcoming online presence that effectively attracts new patients in Naples, FL, and surrounding areas. The site must be bilingual (English and Spanish), aesthetically pleasing with a modern and clean design, and optimized for local search engine optimization (SEO) based on provided research.
+Target Audience:
+English-speaking residents of Naples, FL, Marco Island, FL, and Collier County seeking psychiatric care.
+Spanish-speaking residents of the same areas, a key growth market.
+Individuals seeking help for specific conditions like anxiety, depression, ADHD, PTSD, and more.
+Family members researching mental health services for loved ones.
+2. Core Technology and Project Setup
+The application is a client-side rendered Single Page Application (SPA) built with React and TypeScript. It is designed to be simple, with no complex build steps.
+Framework: React (v19+), TypeScript.
+Module System: ES6 Modules loaded directly in the browser via an importmap in index.html. This avoids the need for a bundler like Webpack or Vite.
+Styling: Tailwind CSS (v3) loaded via CDN. All styling is achieved through utility classes in the JSX.
+Fonts: Inter (sans-serif) for body text and Arapey (serif) for headings and display text, loaded from Google Fonts.
+Routing: A custom, state-based routing system managed in App.tsx. The currentPage state variable determines which page component to render.
+Project Files:
+index.html: The main HTML entry point.
+index.tsx: Mounts the React application to the DOM.
+App.tsx: The root component, handles routing and page composition.
+types.ts: Contains all shared TypeScript interfaces.
+metadata.json: Contains application metadata.
+components/: Directory containing all React components, organized by page or commonality.
+3. Global Design System & Components
+These elements define the consistent look and feel of the entire website.
+3.1. Color Palette
+Primary Green: #16a34a (Tailwind green-600) - Used for primary buttons, active links, and major accents.
+Hover Green: #15803d (Tailwind green-700) - Hover state for primary buttons.
+Light Green Background: #f0fdf4 (Tailwind green-50) - Used for section backgrounds.
+Light Green Accent: #dcfce7 (Tailwind green-100) - Used for icon backgrounds, secondary buttons.
+Primary Text: #1f2937 (Tailwind gray-800).
+Secondary Text: #4b5563 (Tailwind gray-600).
+Muted Text: #6b7280 (Tailwind gray-500).
+White: #ffffff.
+3.2. Typography
+Headings (h1, h2, etc.): Use the font-serif class ('Arapey'). They are typically large and have a mix of regular and italic styling.
+Body Text (p, li, etc.): Use the default font-sans ('Inter').
+Font Smoothing: antialiased is applied to the body for cleaner text rendering.
+3.3. Common Components
+Header.tsx
+Behavior: Sticky to the top of the viewport, with a semi-transparent white, blurred background (sticky top-0 z-50 bg-white/80 backdrop-blur-lg).
+Logo: A LeafIcon with the text "Healing Minds". Clicking navigates to the 'home' page.
+Navigation: A horizontal list of links: Home, About, Services, For Patients, Contact, Español. The link corresponding to currentPage is styled with the primary green color and bold font weight.
+CTA: A "Book Now" button that navigates to the 'contact' page.
+Footer.tsx
+Layout: A multi-column responsive grid.
+Content:
+Column 1: Logo, practice name, and physical address.
+Column 2: Navigation links.
+Column 3: "For Patients" links.
+Column 4: "Service Areas" (Naples, Marco Island, etc.) for local SEO.
+Column 5: Contact details (phone, link to contact page).
+Bottom Bar: A full-width bar with the copyright notice.
+Button.tsx (components/common/Button.tsx)
+A reusable button component with three variants (styleType prop):
+primary: Green background, white text.
+secondary: Light green background, dark green text.
+inverted: White background, dark green text.
+Includes a circular container on the left with an animated ArrowRightIcon.
+AccordionItem.tsx (components/common/AccordionItem.tsx)
+A component for displaying FAQ items.
+Consists of a clickable question area and a collapsible answer area.
+The state (open/closed) is managed by the parent component.
+A ChevronUpIcon rotates 180 degrees based on the open state.
+
+A composite page built from several sections.
+Hero.tsx: A full-screen section with a background image and a semi-transparent green overlay. Content is centered and includes a large font-serif headline, a descriptive paragraph mentioning "Naples, FL" for SEO, and an "inverted" style CTA button.
+Stats.tsx: A simple, three-column layout on a light green background showcasing key practice metrics (e.g., "15+ Years Experience").
+About.tsx (Summary): A two-column section. The left contains a headline and a brief bio of Dr. Reve, linking to the full 'About' page. The right features a masonry-style photo grid of Dr. Reve and the office.
+BilingualSection.tsx: A key section for the bilingual strategy. It features an image alongside text in both Spanish and English, highlighting culturally competent care and linking to the 'Servicios en Español' page.
+Services.tsx (Summary): A section with a centered headline and a three-column grid of ServiceCard components. Each card has an icon, title, and short description. A CTA button links to the full 'Services' page.
+Benefits.tsx: An engaging two-column layout where the left column (headline) is sticky, and the right column contains a scrollable list of benefit cards.
+Testimonials.tsx: A section showcasing patient stories in a three-column grid. Each card contains a photo, a quote, and the author's name.
+4.3. About Page (page === 'about', AboutPage.tsx)
+Hero: A two-column introduction with a large font-serif headline and a professional portrait of Dr. Reve.
+Philosophy Section: Details the practice's core values (Empathy, Collaboration, etc.) in a three-column card layout. Each card has an icon, title, and description.
+Bio Section: An in-depth look at Dr. Reve. Features an image grid on one side and a detailed biography on the other. Crucially, this bio must include credentials like board certifications, residency details, and professional affiliations to satisfy SEO E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) criteria.
+CTA: A final section encouraging users to book a consultation.
+4.4. Services Page (page === 'services', ServicePage.tsx)
+Introduction: A visually rich header with a two-column layout featuring a headline, text, and a photo collage.
+Specializations: The main content area. It features a centered headline and then maps over a list of services. Each service is rendered in a ServiceDetail component which uses an alternating layout (image left/text right, then text left/image right) to create visual rhythm. This section must cover all key service keywords from the SEO research (Anxiety, Depression, ADHD, PTSD, Bipolar Disorder, OCD).
+4.5. For Patients Page (page === 'new-patients', NewPatientsPage.tsx)
+This page consolidates all information a new patient would need.
+Introduction: A welcoming message.
+Fees & Insurance Section:
+Displays service fees using FeeCard components, with one highlighted as "featured."
+Contains a dedicated block explaining the out-of-network insurance policy. It clarifies how patients can use a "superbill" for reimbursement and includes logos of major insurance carriers as a visual aid.
+FAQ Section: Uses the AccordionItem component to answer common questions. This must include the question "What is the difference between a psychiatrist and a psychologist?" as specified by SEO research. A final CTA prompts users to contact the practice with further questions.
+4.6. Contact Page (page === 'contact', ContactPage.tsx)
+Layout: A single, contained section with a background image and overlay to focus the user.
+Content: A two-column grid. The left column displays contact information (phone, email) with icons. The right column contains the ContactForm.tsx component.
+ContactForm.tsx: A standard, fully functional contact form. On submit, it should hide the form and display a "Thank You" message.
+4.7. Servicios en Español Page (page === 'servicios-espanol', SpanishServicePage.tsx)
+This page is critical for the bilingual SEO strategy.
+Content: All text must be in professional, culturally aware Spanish.
+Structure: Mirrors the English ServicePage, with an introduction and an alternating layout for service details.
+Keywords: The content must be optimized with Spanish-language keywords identified in the SEO research (e.g., "psiquiatra en Naples," "terapia en español," "ayuda para ansiedad").
+CTA: Includes a final call-to-action in Spanish, directing users to the contact page.
+5. Final Implementation Notes
+State Management: All navigation is handled by lifting state (setCurrentPage). When a nav link is clicked, it should call this function and scroll the window to the top.
+Image Placeholders: The project currently uses picsum.photos for images. In a production build, these must be replaced with high-quality, professional photographs of the doctor, the office, and appropriate stock imagery.
+Accessibility: Ensure all images have descriptive alt tags and that the site is navigable via keyboard. Use semantic HTML where appropriate.
+Responsiveness: All components and pages must be fully responsive and tested on mobile, tablet, and desktop screen sizes using Tailwind's responsive prefixes (sm:, md:, lg:).
