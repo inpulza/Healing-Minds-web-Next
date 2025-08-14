@@ -39,42 +39,49 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-20 bg-light-green-secondary">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-soft-mint">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6" data-testid="testimonials-title">
-            {language === 'en' ? 'What Our Patients Say' : 'Lo Que Dicen Nuestros Pacientes'}
+          <h2 className="text-4xl md:text-6xl font-display font-bold text-warm mb-6" data-testid="testimonials-title">
+            What our <span className="font-body italic">happy</span> patients say
           </h2>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto" data-testid="testimonials-description">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="testimonials-description">
             {language === 'en'
-              ? 'Read testimonials from patients who have found hope and healing through Dr. Reve\'s compassionate care.'
-              : 'Lea testimonios de pacientes que han encontrado esperanza y sanación a través del cuidado compasivo de la Dra. Reve.'
+              ? 'Real stories from patients who have found hope and healing through Dr. Reve\'s compassionate care.'
+              : 'Historias reales de pacientes que han encontrado esperanza y sanación a través del cuidado compasivo de la Dra. Reve.'
             }
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="bg-white p-8 shadow-sm" data-testid={`testimonial-${index}`}>
-              <div className="flex items-center mb-6">
-                <div className="flex">
+            <div key={index} className="card-modern hover:shadow-xl transition-all duration-300 group" data-testid={`testimonial-${index}`}>
+              <div className="flex items-center justify-center mb-8">
+                <div className="flex space-x-1">
                   {renderStars(testimonial.rating)}
                 </div>
               </div>
               
-              <p className="text-gray-700 mb-6 italic" data-testid={`testimonial-quote-${index}`}>
+              <p className="text-gray-700 mb-8 text-lg leading-relaxed font-body" data-testid={`testimonial-quote-${index}`}>
                 "{testimonial.quote}"
               </p>
               
-              <div className="text-sm text-gray-600">
-                <div className="font-semibold" data-testid={`testimonial-name-${index}`}>
-                  {testimonial.name}
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4">
+                  <div className="text-white font-display font-bold text-sm">
+                    {testimonial.name.split('.')[0]}
+                  </div>
                 </div>
-                <div data-testid={`testimonial-location-${index}`}>
-                  {testimonial.location}
+                <div>
+                  <div className="font-body font-semibold text-warm" data-testid={`testimonial-name-${index}`}>
+                    {testimonial.name}
+                  </div>
+                  <div className="text-sm text-gray-500 font-body" data-testid={`testimonial-location-${index}`}>
+                    {testimonial.location}
+                  </div>
                 </div>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </div>

@@ -8,7 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Phone, Mail, MapPin, AlertTriangle } from 'lucide-react';
-import { trackEvent } from '@/lib/analytics';
+// Analytics will be imported once the module is available
+// import { trackEvent } from '@/lib/analytics';
 
 interface FormData {
   firstName: string;
@@ -79,8 +80,8 @@ const Contact = () => {
         throw new Error('Failed to send message');
       }
 
-      // Track successful form submission
-      trackEvent('form_submit', 'contact', 'contact_form');
+      // Track successful form submission (analytics disabled for now)
+      // trackEvent('form_submit', 'contact', 'contact_form');
 
       toast({
         title: language === 'en' ? 'Success!' : '¡Éxito!',
@@ -138,13 +139,13 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 bg-light-green">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-20 bg-warm-beige">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6" data-testid="contact-title">
-            {t('contact.title')}
+          <h2 className="text-4xl md:text-6xl font-display font-bold text-warm mb-6" data-testid="contact-title">
+            Get in <span className="font-body italic">touch</span>
           </h2>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto" data-testid="contact-description">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="contact-description">
             {t('contact.description')}
           </p>
         </div>

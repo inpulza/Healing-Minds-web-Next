@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { 
   Heart, 
   Sun, 
@@ -89,48 +90,60 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-20 bg-light-green">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="services" className="py-20 bg-warm-beige">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6" data-testid="services-title">
-            {t('services.title')}
+          <h2 className="text-4xl md:text-6xl font-display font-bold text-warm mb-6" data-testid="services-title">
+            Mental Health for <span className="font-body italic">every</span> mind
           </h2>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto" data-testid="services-description">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="services-description">
             {t('services.description')}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service) => {
+        <div className="grid md:grid-cols-3 gap-8">
+          {services.slice(0, 3).map((service) => {
             const IconComponent = service.icon;
             return (
-              <Card key={service.id} className="bg-white p-8 hover:shadow-md transition-shadow duration-200" data-testid={`service-${service.id}`}>
-                <div className="w-12 h-12 bg-primary-green/10 rounded-lg flex items-center justify-center mb-6">
-                  <IconComponent className="w-6 h-6 text-primary-green" />
+              <div key={service.id} className="card-modern group hover:shadow-xl transition-all duration-300" data-testid={`service-${service.id}`}>
+                <div className="mb-6">
+                  <div className="w-full h-48 bg-gradient-to-br from-warm-pink to-soft-mint rounded-2xl mb-6 flex items-center justify-center">
+                    <IconComponent className="h-16 w-16 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-display font-bold text-warm mb-3">
+                    {service.title}
+                  </h3>
                 </div>
                 
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  {service.title}
-                </h3>
-                
-                <p className="text-gray-700 mb-4">
+                <p className="text-gray-600 mb-6 leading-relaxed font-body">
                   {service.description}
                 </p>
                 
-                <ul className="text-sm text-gray-600 space-y-1 mb-6">
-                  {service.items.map((item, index) => (
-                    <li key={index}>• {item}</li>
+                <ul className="space-y-3 mb-8">
+                  {service.items.slice(0, 3).map((item, index) => (
+                    <li key={index} className="text-gray-700 font-body flex items-center">
+                      <div className="w-2 h-2 bg-primary rounded-full mr-4 flex-shrink-0" />
+                      {item}
+                    </li>
                   ))}
                 </ul>
                 
                 <Link href="/contact">
-                  <span className="text-primary-green font-medium hover:text-primary-green-hover cursor-pointer">
-                    Learn More →
-                  </span>
+                  <Button className="pill-button w-full">
+                    Learn More
+                  </Button>
                 </Link>
-              </Card>
+              </div>
             );
           })}
+        </div>
+
+        <div className="mt-16 text-center">
+          <Link href="/services">
+            <Button className="pill-button text-lg px-12 py-5">
+              View All Services
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

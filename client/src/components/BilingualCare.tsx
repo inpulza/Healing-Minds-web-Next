@@ -28,28 +28,28 @@ const BilingualCare = () => {
   ];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <section className="py-20 bg-soft-purple">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6" data-testid="bilingual-title">
-              {language === 'en' ? 'Bilingual Psychiatric Care' : 'Atención Psiquiátrica Bilingüe'}
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-warm mb-8" data-testid="bilingual-title">
+              <span className="font-body italic">Guided</span> by passion. <span className="font-display italic">Driven</span> by purpose.
             </h2>
             
-            <p className="text-lg text-gray-700 mb-6 leading-relaxed" data-testid="bilingual-description">
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed font-body" data-testid="bilingual-description">
               {language === 'en' 
                 ? 'Dr. Reve understands that mental health care is most effective when provided in your native language. As a fluent Spanish speaker, she offers comprehensive psychiatric services to the Hispanic community in Naples with cultural sensitivity and understanding.'
                 : 'La Dra. Reve entiende que la atención de salud mental es más efectiva cuando se proporciona en su idioma nativo. Como hablante fluida de español, ofrece servicios psiquiátricos integrales a la comunidad hispana en Naples con sensibilidad y comprensión cultural.'
               }
             </p>
             
-            <div className="space-y-4 mb-8" data-testid="bilingual-features">
+            <div className="grid md:grid-cols-1 gap-6 mb-8" data-testid="bilingual-features">
               {features.map((feature, index) => (
-                <div key={index} className="flex items-start">
-                  <Check className="w-6 h-6 text-primary-green mr-3 mt-1 flex-shrink-0" />
+                <div key={index} className="flex items-start bg-white rounded-2xl p-6 shadow-sm">
+                  <div className="w-3 h-3 bg-primary rounded-full mr-4 mt-2 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">{feature.title}</h4>
-                    <p className="text-gray-700">{feature.description}</p>
+                    <h4 className="font-display font-bold text-warm mb-2">{feature.title}</h4>
+                    <p className="text-gray-600 font-body leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
               ))}
@@ -57,7 +57,7 @@ const BilingualCare = () => {
             
             <Link href="/contact">
               <Button
-                className="bg-primary-green text-white hover:bg-primary-green-hover font-medium px-8 py-3"
+                className="pill-button text-lg px-10 py-5"
                 data-testid="bilingual-schedule-consultation"
               >
                 {language === 'en' ? 'Schedule your Consultation' : 'Programe su Consulta'}

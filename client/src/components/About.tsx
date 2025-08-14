@@ -15,42 +15,52 @@ const About = () => {
 
   return (
     <section id="about" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <img
-              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80"
-              alt="Dr. Melva Reve, MD - Board Certified Psychiatrist in Naples, FL"
-              className="rounded-xl shadow-lg w-full h-auto"
-              data-testid="about-doctor-image"
-            />
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="relative">
+            <div className="rounded-3xl overflow-hidden shadow-2xl">
+              <img
+                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700&q=80"
+                alt="Dr. Melva Reve, MD - Board Certified Psychiatrist in Naples, FL"
+                className="w-full h-[500px] object-cover"
+                data-testid="about-doctor-image"
+              />
+            </div>
+            
+            {/* Floating certification badge */}
+            <div className="absolute -bottom-8 -right-8 bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+              <div className="text-center">
+                <div className="text-2xl font-display font-bold text-primary mb-2">Board</div>
+                <div className="text-sm font-body text-gray-600">Certified</div>
+              </div>
+            </div>
           </div>
           
           <div>
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6" data-testid="about-title">
-              {t('about.title')}
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-warm mb-8" data-testid="about-title">
+              Where <span className="font-body italic">wellness</span> meets <span className="font-display italic">community</span>
             </h2>
             
-            <p className="text-lg text-gray-700 mb-6 leading-relaxed" data-testid="about-description-1">
+            <p className="text-xl text-gray-600 mb-6 leading-relaxed font-body" data-testid="about-description-1">
               {t('about.description1')}
             </p>
             
-            <p className="text-lg text-gray-700 mb-6 leading-relaxed" data-testid="about-description-2">
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed font-body" data-testid="about-description-2">
               {t('about.description2')}
             </p>
             
-            <div className="space-y-3 mb-8" data-testid="about-credentials">
+            <div className="grid md:grid-cols-2 gap-6 mb-8" data-testid="about-credentials">
               {credentials.map((credential, index) => (
-                <div key={index} className="flex items-center text-gray-700">
-                  <Check className="w-5 h-5 text-primary-green mr-3 flex-shrink-0" />
-                  <span>{credential}</span>
+                <div key={index} className="flex items-start text-gray-700">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-3 mr-4 flex-shrink-0" />
+                  <span className="font-body">{credential}</span>
                 </div>
               ))}
             </div>
 
             <Link href="/contact">
               <Button
-                className="bg-primary-green text-white hover:bg-primary-green-hover font-medium px-8 py-3"
+                className="pill-button text-lg px-10 py-5"
                 data-testid="about-schedule-consultation"
               >
                 {t('about.scheduleConsultation')}

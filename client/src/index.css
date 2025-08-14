@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -11,30 +11,34 @@
   --card-foreground: hsl(222.2, 84%, 4.9%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(222.2, 84%, 4.9%);
-  --primary: hsl(142, 69%, 32%);
+  --primary: hsl(328, 72%, 65%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --primary-hover: hsl(142, 69%, 28%);
-  --secondary: hsl(210, 40%, 96%);
-  --secondary-foreground: hsl(222.2, 84%, 4.9%);
+  --primary-hover: hsl(328, 72%, 60%);
+  --secondary: hsl(43, 100%, 97%);
+  --secondary-foreground: hsl(60, 4%, 23%);
+  --tertiary: hsl(24, 74%, 92%);
+  --tertiary-foreground: hsl(60, 4%, 23%);
+  --accent: hsl(158, 22%, 90%);
+  --accent-foreground: hsl(60, 4%, 23%);
   --muted: hsl(210, 40%, 96%);
   --muted-foreground: hsl(215.4, 16.3%, 46.9%);
-  --accent: hsl(210, 40%, 96%);
-  --accent-foreground: hsl(222.2, 84%, 4.9%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --border: hsl(214.3, 31.8%, 91.4%);
-  --input: hsl(214.3, 31.8%, 91.4%);
-  --ring: hsl(142, 69%, 32%);
-  --radius: 0.5rem;
-  --light-green: hsl(120, 60%, 97%);
-  --light-green-secondary: hsl(120, 45%, 93%);
+  --border: hsl(210, 20%, 93%);
+  --input: hsl(210, 20%, 93%);
+  --ring: hsl(328, 72%, 65%);
+  --radius: 1.5rem;
+  --warm-beige: hsl(43, 100%, 97%);
+  --warm-pink: hsl(24, 74%, 92%);
+  --soft-mint: hsl(158, 22%, 90%);
+  --soft-purple: hsl(266, 24%, 93%);
   --chart-1: hsl(12, 76%, 61%);
   --chart-2: hsl(173, 58%, 39%);
   --chart-3: hsl(197, 37%, 24%);
   --chart-4: hsl(43, 74%, 66%);
   --chart-5: hsl(27, 87%, 67%);
-  --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Arapey', serif;
+  --font-sans: 'Instrument Sans', sans-serif;
+  --font-serif: 'Playfair Display', serif;
 }
 
 .dark {
@@ -72,31 +76,43 @@
 }
 
 @layer components {
-  .primary-green {
-    color: hsl(142, 69%, 32%);
+  .font-display {
+    font-family: 'Playfair Display', serif;
   }
   
-  .primary-green-hover {
-    color: hsl(142, 69%, 28%);
+  .font-body {
+    font-family: 'Instrument Sans', sans-serif;
   }
   
-  .bg-primary-green {
-    background-color: hsl(142, 69%, 32%);
+  .bg-warm-beige {
+    background-color: hsl(43, 100%, 97%);
   }
   
-  .bg-primary-green-hover {
-    background-color: hsl(142, 69%, 28%);
+  .bg-warm-pink {
+    background-color: hsl(24, 74%, 92%);
   }
   
-  .bg-light-green {
-    background-color: hsl(120, 60%, 97%);
+  .bg-soft-mint {
+    background-color: hsl(158, 22%, 90%);
   }
   
-  .bg-light-green-secondary {
-    background-color: hsl(120, 45%, 93%);
+  .bg-soft-purple {
+    background-color: hsl(266, 24%, 93%);
   }
   
-  .hero-overlay {
-    background: linear-gradient(to right, rgba(22, 163, 74, 0.9), rgba(21, 128, 61, 0.9));
+  .text-warm {
+    color: hsl(60, 4%, 23%);
+  }
+  
+  .pill-button {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover transition-all duration-300 rounded-full px-8 py-4 font-medium font-body;
+  }
+  
+  .card-modern {
+    @apply bg-white rounded-3xl shadow-sm border border-border p-8;
+  }
+  
+  .hero-modern {
+    background: linear-gradient(135deg, rgba(255, 243, 230, 0.9), rgba(255, 235, 238, 0.9));
   }
 }
