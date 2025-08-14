@@ -15,6 +15,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
 import bipolarImage from "@assets/generated_images/Wellness_meditation_space_ae6f4d77.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
+import drMelvaOfficeImage from "../../assets/dr-melva-office.jpg";
 
 const BipolarTreatment = () => {
   const { language } = useLanguage();
@@ -482,15 +483,15 @@ const BipolarTreatment = () => {
                     </div>
                   </div>
 
-                  {/* Photo Placeholder - Fills remaining space */}
-                  <div className="flex-1 w-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-green-600 font-bold">⚖️</span>
-                      </div>
-                      <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                      <p className="text-green-500 font-body text-xs">Equilibrio/estabilidad</p>
-                    </div>
+                  {/* Dr. Melva Office Photo - Fills remaining space */}
+                  <div className="flex-1 w-full overflow-hidden rounded-xl shadow-md">
+                    <img 
+                      src={drMelvaOfficeImage}
+                      alt="Dr. Melva Reve in her professional psychiatric office - Naples, FL"
+                      className="w-full h-full object-cover object-[75%_center]"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                 </div>
               </div>
