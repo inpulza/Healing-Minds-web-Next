@@ -11,6 +11,7 @@ import FAQ from '@/components/FAQ';
 import Testimonials from '@/components/Testimonials';
 import ForPatients from '@/components/ForPatients';
 import Contact from '@/components/Contact';
+import ServiceAreas from '@/components/ServiceAreas';
 import Footer from '@/components/Footer';
 import { updateSEO } from '@/utils/seo';
 
@@ -45,6 +46,7 @@ const Home = () => {
         <About />
         <BilingualCare />
         <FAQ />
+        <ServiceAreas />
         <Testimonials />
         <ForPatients />
         <Contact />
