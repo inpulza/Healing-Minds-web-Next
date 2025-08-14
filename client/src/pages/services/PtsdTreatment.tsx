@@ -265,48 +265,101 @@ const PtsdTreatment = () => {
           </div>
         </section>
 
-        {/* Trauma Types Section */}
+        {/* Modern Trauma Types Section */}
         <section className="py-16 sm:py-20 bg-blue-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Types of <span className="font-display italic text-green-700">Trauma</span> We Treat</>
-                ) : (
-                  <>Tipos de <span className="font-display italic text-green-700">Trauma</span> que Tratamos</>
-                )}
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {(language === 'en' ? [
-                'Combat & Military Trauma',
-                'Childhood Abuse',
-                'Sexual Assault',
-                'Motor Vehicle Accidents',
-                'Natural Disasters',
-                'Workplace Violence',
-                'Medical Trauma',
-                'Community Violence'
-              ] : [
-                'Trauma de Combate y Militar',
-                'Abuso Infantil',
-                'Agresión Sexual',
-                'Accidentes Automovilísticos',
-                'Desastres Naturales',
-                'Violencia Laboral',
-                'Trauma Médico',
-                'Violencia Comunitaria'
-              ]).map((type, index) => (
-                <Card key={index} className="bg-white border-0 shadow-lg">
-                  <CardContent className="p-6 text-center">
-                    <WellnessIcon size="md" color="blue" className="mx-auto mb-3">
-                      <IconShield />
-                    </WellnessIcon>
-                    <h3 className="text-lg font-body font-semibold text-green-800">{type}</h3>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-blue-100">
+              <div className="text-center mb-12">
+                <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                  {language === 'en' ? 'Trauma Specialties' : 'Especialidades en Trauma'}
+                </div>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                  {language === 'en' ? (
+                    <>Types of <span className="font-display italic text-green-700">Trauma</span> We Treat</>
+                  ) : (
+                    <>Tipos de <span className="font-display italic text-green-700">Trauma</span> que Tratamos</>
+                  )}
+                </h2>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'We provide specialized care for various forms of trauma, using evidence-based approaches tailored to each individual experience.'
+                    : 'Proporcionamos atención especializada para varias formas de trauma, usando enfoques basados en evidencia adaptados a cada experiencia individual.'
+                  }
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(language === 'en' ? [
+                  {
+                    title: 'Combat & Military Trauma',
+                    description: 'Specialized care for veterans and military personnel dealing with combat-related PTSD.'
+                  },
+                  {
+                    title: 'Childhood Abuse',
+                    description: 'Compassionate treatment addressing the long-term effects of childhood trauma.'
+                  },
+                  {
+                    title: 'Sexual Assault',
+                    description: 'Sensitive, trauma-informed care for survivors of sexual violence.'
+                  },
+                  {
+                    title: 'Motor Vehicle Accidents',
+                    description: 'Support for trauma resulting from car accidents and traffic incidents.'
+                  },
+                  {
+                    title: 'Natural Disasters',
+                    description: 'Recovery assistance for trauma caused by hurricanes, floods, and disasters.'
+                  },
+                  {
+                    title: 'Medical Trauma',
+                    description: 'Treatment for PTSD resulting from medical procedures or hospital experiences.'
+                  }
+                ] : [
+                  {
+                    title: 'Trauma de Combate y Militar',
+                    description: 'Atención especializada para veteranos y personal militar con PTSD relacionado al combate.'
+                  },
+                  {
+                    title: 'Abuso Infantil',
+                    description: 'Tratamiento compasivo que aborda los efectos a largo plazo del trauma infantil.'
+                  },
+                  {
+                    title: 'Agresión Sexual',
+                    description: 'Atención sensible e informada por trauma para sobrevivientes de violencia sexual.'
+                  },
+                  {
+                    title: 'Accidentes Automovilísticos',
+                    description: 'Apoyo para trauma resultante de accidentes automovilísticos e incidentes de tráfico.'
+                  },
+                  {
+                    title: 'Desastres Naturales',
+                    description: 'Asistencia de recuperación para trauma causado por huracanes, inundaciones y desastres.'
+                  },
+                  {
+                    title: 'Trauma Médico',
+                    description: 'Tratamiento para PTSD resultante de procedimientos médicos o experiencias hospitalarias.'
+                  }
+                ]).map((trauma, index) => (
+                  <div key={index} className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300">
+                    {/* Photo Placeholder - Top */}
+                    <div className="h-48 bg-blue-50 border-b-2 border-dashed border-blue-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-blue-600 font-bold">🛡️</span>
+                        </div>
+                        <p className="text-blue-600 font-body text-sm">Aquí va una foto</p>
+                        <p className="text-blue-500 font-body text-xs">Imagen temática</p>
+                      </div>
+                    </div>
+                    
+                    {/* Content - Bottom */}
+                    <div className="p-6">
+                      <h3 className="text-lg font-body font-bold text-green-800 mb-3">{trauma.title}</h3>
+                      <p className="text-gray-600 font-body text-sm leading-relaxed">{trauma.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
