@@ -63,8 +63,8 @@ export const ServiceHeroMasonry = ({
 
   return (
     <section className="pt-20 pb-8 sm:pb-12 lg:pb-16 bg-green-50">
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Column - Content */}
           <div className="lg:sticky lg:top-8">
             <div className="flex items-center gap-3 mb-6">
@@ -145,100 +145,84 @@ export const ServiceHeroMasonry = ({
             </div>
           </div>
           
-          {/* Right Column - True Masonry Style Layout */}
-          <div className="relative">
-            <div className="grid grid-cols-2 grid-rows-3 gap-8 max-w-2xl mx-auto lg:max-w-none h-[36rem] lg:h-[48rem] w-full">
-              {/* Top Left - Doctor Photo (Reduced height) */}
-              <div className="row-span-2 col-start-1 row-start-1" style={{gridRowEnd: 'span 1.8'}}>
-                <div className="h-full rounded-2xl shadow-lg overflow-hidden">
-                  <img 
-                    src={images.doctorImage}
-                    alt="Dr. Melva Reve - Mental Health Specialist"
-                    className="w-full h-full object-cover"
-                    data-testid="img-doctor-portrait"
-                  />
-                </div>
+          {/* Right Column - Clean Layout */}
+          <div className="space-y-8">
+            {/* Doctor Photo - Large and prominent */}
+            <div className="w-full">
+              <div className="aspect-[4/3] rounded-2xl shadow-lg overflow-hidden">
+                <img 
+                  src={images.doctorImage}
+                  alt="Dr. Melva Reve - Mental Health Specialist"
+                  className="w-full h-full object-cover"
+                  data-testid="img-doctor-portrait"
+                />
               </div>
+            </div>
 
-              {/* Top Right - Facts Card (Reduced height, soft green design) */}
-              <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.6'}}>
-                <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-5 h-full flex flex-col overflow-hidden">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <IconHeart className="w-4.5 h-4.5 text-green-700" />
-                    </div>
-                    <h3 className="text-base font-body font-bold text-green-800 truncate">
-                      {language === 'en' ? facts.title.en : facts.title.es}
-                    </h3>
+            {/* Stats Cards Row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Facts Card */}
+              <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <IconHeart className="w-4.5 h-4.5 text-green-700" />
                   </div>
-                  <div className="space-y-3 flex-1 flex flex-col justify-center overflow-hidden">
-                    {facts.items.slice(0, 2).map((fact, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <span className="text-sm text-green-800 font-body font-medium leading-snug break-words">
-                            {language === 'en' ? fact.en : fact.es}
-                          </span>
-                        </div>
+                  <h3 className="text-lg font-body font-bold text-green-800">
+                    {language === 'en' ? facts.title.en : facts.title.es}
+                  </h3>
+                </div>
+                <div className="space-y-3">
+                  {facts.items.slice(0, 2).map((fact, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
                       </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-green-200">
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse delay-75"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Left - Quick Stats Card (Reduced height, matching green design) */}
-              <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.4', gridRowEnd: 'span 1.6'}}>
-                <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-5 h-full flex flex-col overflow-hidden">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-4.5 h-4.5 text-green-700" />
-                    </div>
-                    <h3 className="text-base font-body font-bold text-green-800 truncate">
-                      {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
-                    </h3>
-                  </div>
-                  <div className="space-y-3 flex-1 flex flex-col justify-center overflow-hidden">
-                    {quickStats.items.slice(0, 3).map((stat, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-green-800 font-body font-medium leading-snug break-words">
-                            {language === 'en' ? stat.en : stat.es}
-                          </p>
-                        </div>
+                      <div className="flex-1">
+                        <span className="text-sm text-green-800 font-body font-medium leading-relaxed">
+                          {language === 'en' ? fact.en : fact.es}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-green-200">
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse delay-75"></div>
-                      <div className="w-2 h-2 bg-green-200 rounded-full animate-pulse delay-150"></div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Bottom Right - Therapy Room Photo (Adjusted positioning) */}
-              <div className="row-span-2 col-start-2" style={{gridRowStart: '2.6', gridRowEnd: 'span 1.4'}}>
-                <div className="h-full rounded-2xl shadow-lg overflow-hidden">
-                  <img 
-                    src={images.therapyRoomImage}
-                    alt="Comfortable therapy environment"
-                    className="w-full h-full object-cover"
-                    data-testid="img-therapy-room"
-                  />
+              {/* Quick Facts Card */}
+              <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-4.5 h-4.5 text-green-700" />
+                  </div>
+                  <h3 className="text-lg font-body font-bold text-green-800">
+                    {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
+                  </h3>
                 </div>
+                <div className="space-y-3">
+                  {quickStats.items.slice(0, 3).map((stat, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-green-800 font-body font-medium leading-relaxed">
+                          {language === 'en' ? stat.en : stat.es}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Therapy Room Photo - Secondary */}
+            <div className="w-full">
+              <div className="aspect-[16/9] rounded-2xl shadow-lg overflow-hidden">
+                <img 
+                  src={images.therapyRoomImage}
+                  alt="Comfortable therapy environment"
+                  className="w-full h-full object-cover"
+                  data-testid="img-therapy-room"
+                />
               </div>
             </div>
           </div>
