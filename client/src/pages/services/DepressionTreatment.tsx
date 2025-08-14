@@ -3,12 +3,18 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Heart } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconSun } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
+
+// Import generated images
+import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
+import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
+import hopeSymbolImage from "@assets/generated_images/Hope_and_growth_symbolism_978bb907.png";
 
 const DepressionTreatment = () => {
   const { language } = useLanguage();
@@ -102,114 +108,77 @@ const DepressionTreatment = () => {
     }
   ];
 
+  // Data for the ServiceHeroMasonry component
+  const heroData = {
+    tagline: {
+      en: 'Hope & Healing',
+      es: 'Esperanza y Sanación'
+    },
+    title: {
+      en: 'Depression Treatment in <span className="font-display italic text-green-700">Naples, FL</span>',
+      es: 'Tratamiento para la Depresión en <span className="font-display italic text-green-700">Naples, FL</span>'
+    },
+    description: {
+      en: 'Find hope and healing with expert depression treatment. Dr. Melva Reve provides compassionate, evidence-based psychiatric care to help you reclaim your life and rediscover joy.',
+      es: 'Encuentre esperanza y sanación con tratamiento experto para la depresión. La Dra. Melva Reve brinda atención psiquiátrica compasiva basada en evidencia para ayudarle a reclamar su vida y redescubrir la alegría.'
+    },
+    facts: {
+      title: {
+        en: 'Depression Facts',
+        es: 'Datos sobre Depresión'
+      },
+      items: [
+        {
+          en: '8.3% of adults experience major depression',
+          es: '8.3% de adultos experimentan depresión mayor'
+        },
+        {
+          en: 'Depression is highly treatable',
+          es: 'La depresión es altamente tratable'
+        },
+        {
+          en: 'Recovery is possible with proper care',
+          es: 'La recuperación es posible con atención adecuada'
+        },
+        {
+          en: 'Available in Spanish and English',
+          es: 'Disponible en español e inglés'
+        }
+      ]
+    },
+    images: {
+      doctorImage,
+      therapyRoomImage,
+      symbolImage: hopeSymbolImage
+    },
+    specialNote: {
+      es: '<strong>La depresión no es una falla personal.</strong> Es una condición médica tratable. Ofrecemos un ambiente seguro y sin juicio donde puede encontrar el apoyo que necesita para sanar.'
+    },
+    quickStats: {
+      items: [
+        {
+          en: 'Same-week appointments',
+          es: 'Citas en la misma semana'
+        },
+        {
+          en: 'Insurance accepted',
+          es: 'Se acepta seguro'
+        },
+        {
+          en: 'Bilingual services',
+          es: 'Servicios bilingües'
+        }
+      ]
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <Header />
       
       <main className="pt-20">
-        {/* Hero Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-blue-50 to-purple-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <WellnessIcon size="sm" color="blue">
-                    <IconSun />
-                  </WellnessIcon>
-                  <span className="text-blue-700 font-body font-semibold text-lg">
-                    {language === 'en' ? 'Hope & Healing' : 'Esperanza y Sanación'}
-                  </span>
-                </div>
-                
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Depression Treatment in <span className="font-display italic text-green-700">Naples, FL</span></>
-                  ) : (
-                    <>Tratamiento para la Depresión en <span className="font-display italic text-green-700">Naples, FL</span></>
-                  )}
-                </h1>
-                
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Find hope and healing with expert depression treatment. Dr. Melva Reve provides compassionate, evidence-based psychiatric care to help you reclaim your life and rediscover joy.'
-                    : 'Encuentre esperanza y sanación con tratamiento experto para la depresión. La Dra. Melva Reve brinda atención psiquiátrica compasiva basada en evidencia para ayudarle a reclamar su vida y redescubrir la alegría.'
-                  }
-                </p>
-
-                {language === 'es' && (
-                  <div className="bg-blue-100 border-l-4 border-blue-500 p-4 mb-8">
-                    <p className="text-blue-800 font-body">
-                      <strong>La depresión no es una falla personal.</strong> Es una condición médica tratable. 
-                      Ofrecemos un ambiente seguro y sin juicio donde puede encontrar el apoyo que necesita para sanar.
-                    </p>
-                  </div>
-                )}
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/contact">
-                    <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300">
-                      <Calendar className="w-5 h-5" />
-                      {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                      <ArrowRight className="w-5 h-5" />
-                    </Button>
-                  </Link>
-                  
-                  <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3">
-                    <Phone className="w-5 h-5" />
-                    <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
-                      {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
-                    </a>
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-10">
-                  <div className="flex items-center gap-4 mb-6">
-                    <WellnessIcon size="md" color="purple">
-                      <IconHeart />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800">
-                        {language === 'en' ? 'Depression Facts' : 'Datos sobre Depresión'}
-                      </h3>
-                      <p className="text-gray-600 font-body">
-                        {language === 'en' ? 'Understanding depression' : 'Entendiendo la depresión'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? '8.3% of adults experience major depression' : '8.3% de adultos experimentan depresión mayor'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Depression is highly treatable' : 'La depresión es altamente tratable'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Recovery is possible with proper care' : 'La recuperación es posible con atención adecuada'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Available in Spanish and English' : 'Disponible en español e inglés'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Hero Section with Masonry Design */}
+        <ServiceHeroMasonry {...heroData} />
 
         {/* Crisis Support Banner */}
         {language === 'en' && (
