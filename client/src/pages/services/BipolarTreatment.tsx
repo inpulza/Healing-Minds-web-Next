@@ -295,81 +295,58 @@ const BipolarTreatment = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {symptoms.map((symptomGroup, groupIndex) => (
-                <div key={groupIndex} className={`relative overflow-hidden rounded-2xl shadow-xl transition-all duration-500 hover:scale-105 ${
-                  groupIndex === 0 
-                    ? 'bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 border border-orange-200' 
-                    : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border border-blue-200'
-                }`}>
-                  {/* Decorative background elements */}
-                  <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 ${
-                    groupIndex === 0 ? 'bg-orange-400' : 'bg-blue-400'
-                  }`}></div>
-                  <div className={`absolute bottom-0 left-0 w-24 h-24 rounded-full blur-2xl opacity-15 ${
-                    groupIndex === 0 ? 'bg-red-400' : 'bg-indigo-400'
-                  }`}></div>
-                  
-                  <div className="relative p-8">
-                    {/* Header with large icon */}
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${
-                          groupIndex === 0 
-                            ? 'bg-gradient-to-br from-orange-400 to-red-500 shadow-lg shadow-orange-200' 
-                            : 'bg-gradient-to-br from-blue-400 to-indigo-600 shadow-lg shadow-blue-200'
-                        }`}>
-                          <symptomGroup.icon className="w-8 h-8 text-white" />
+                <div key={groupIndex} className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-all duration-300">
+                  {groupIndex === 0 ? (
+                    // Manic Episodes - Icon on right layout
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      <div className="sm:col-span-2 order-2 sm:order-1">
+                        <div className="inline-block bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                          {language === 'en' ? 'High Energy State' : 'Estado de Alta Energía'}
                         </div>
-                        <div>
-                          <h3 className={`text-2xl font-body font-bold ${
-                            groupIndex === 0 ? 'text-orange-800' : 'text-blue-800'
-                          }`}>
-                            {symptomGroup.type}
-                          </h3>
-                          <div className={`w-20 h-1 rounded-full mt-2 ${
-                            groupIndex === 0 
-                              ? 'bg-gradient-to-r from-orange-400 to-red-500' 
-                              : 'bg-gradient-to-r from-blue-400 to-indigo-600'
-                          }`}></div>
+                        <h3 className="text-2xl font-body font-bold text-green-800 mb-6">
+                          {symptomGroup.type}
+                        </h3>
+                        <div className="space-y-4">
+                          {symptomGroup.items.map((item, index) => (
+                            <div key={index} className="flex items-start gap-3">
+                              <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"></div>
+                              <span className="text-gray-700 font-body leading-relaxed">{item}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                      
-                      {/* Episode indicator */}
-                      <div className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                        groupIndex === 0 
-                          ? 'bg-orange-100 text-orange-700 border border-orange-200' 
-                          : 'bg-blue-100 text-blue-700 border border-blue-200'
-                      }`}>
-                        {groupIndex === 0 ? '↗️ High' : '↘️ Low'}
+                      <div className="flex justify-center sm:justify-end items-start order-1 sm:order-2">
+                        <div className="w-24 h-24 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center shadow-lg">
+                          <symptomGroup.icon className="w-12 h-12 text-orange-600" />
+                        </div>
                       </div>
                     </div>
-
-                    {/* Symptoms grid */}
-                    <div className="grid gap-3">
-                      {symptomGroup.items.map((item, index) => (
-                        <div key={index} className={`group flex items-start gap-3 p-3 rounded-xl transition-all duration-300 hover:scale-102 ${
-                          groupIndex === 0 
-                            ? 'bg-white/70 hover:bg-white/90 hover:shadow-md border border-orange-100/50' 
-                            : 'bg-white/70 hover:bg-white/90 hover:shadow-md border border-blue-100/50'
-                        }`}>
-                          <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-2 ${
-                            groupIndex === 0 
-                              ? 'bg-gradient-to-r from-orange-400 to-red-500' 
-                              : 'bg-gradient-to-r from-blue-400 to-indigo-600'
-                          }`}></div>
-                          <span className="text-gray-700 font-body leading-relaxed group-hover:text-gray-800 transition-colors duration-300">
-                            {item}
-                          </span>
+                  ) : (
+                    // Depressive Episodes - Icon on left layout
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      <div className="flex justify-center sm:justify-start items-start">
+                        <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center shadow-lg">
+                          <symptomGroup.icon className="w-12 h-12 text-blue-600" />
                         </div>
-                      ))}
+                      </div>
+                      <div className="sm:col-span-2">
+                        <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                          {language === 'en' ? 'Low Energy State' : 'Estado de Baja Energía'}
+                        </div>
+                        <h3 className="text-2xl font-body font-bold text-green-800 mb-6">
+                          {symptomGroup.type}
+                        </h3>
+                        <div className="space-y-4">
+                          {symptomGroup.items.map((item, index) => (
+                            <div key={index} className="flex items-start gap-3">
+                              <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"></div>
+                              <span className="text-gray-700 font-body leading-relaxed">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-
-                    {/* Bottom accent */}
-                    <div className={`mt-6 h-1 rounded-full ${
-                      groupIndex === 0 
-                        ? 'bg-gradient-to-r from-orange-200 via-red-300 to-pink-200' 
-                        : 'bg-gradient-to-r from-blue-200 via-indigo-300 to-purple-200'
-                    }`}></div>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>
