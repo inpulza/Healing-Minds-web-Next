@@ -32,7 +32,7 @@ const Hero = () => {
                 with <span className="font-display italic">Dr. Reve</span>
               </h1>
               
-              <p className="text-xl text-white/90 leading-relaxed font-body mb-8" data-testid="hero-description">
+              <p className="text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
                 Compassionate and expert psychiatric care in Naples, FL, designed to help you navigate life's challenges and foster lasting well-being.
               </p>
               
