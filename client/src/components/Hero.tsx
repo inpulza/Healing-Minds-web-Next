@@ -75,8 +75,8 @@ const Hero = () => {
               }}
             />
             
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 via-green-500/15 to-transparent" />
+            {/* Enhanced Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-green-700/40 via-emerald-600/25 via-green-500/15 to-transparent" />
             
             {/* Centered Content */}
             <div className="relative z-10 w-full px-8 lg:px-12 py-16 text-center">
