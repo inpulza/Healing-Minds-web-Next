@@ -247,9 +247,9 @@ const DepressionTreatment = () => {
         <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid lg:grid-cols-2 gap-12 items-start">
+              <div className="grid lg:grid-cols-2 gap-12 items-end">
                 {/* Content Side */}
-                <div>
+                <div className="flex flex-col justify-end">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                     {language === 'en' ? 'Evidence-Based Care' : 'Atención Basada en Evidencia'}
                   </div>
@@ -308,7 +308,7 @@ const DepressionTreatment = () => {
                 </div>
 
                 {/* Treatment Options Grid Side */}
-                <div className="space-y-4">
+                <div className="space-y-4 flex flex-col justify-end">
                   {treatments.map((treatment, index) => (
                     <div key={index} className="p-6">
                       <div className="flex items-start gap-4">
