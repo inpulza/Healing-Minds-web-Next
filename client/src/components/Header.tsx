@@ -93,11 +93,11 @@ const Header = () => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 overflow-hidden mb-4 ${
+    <header className={`sticky top-0 z-50 transition-all duration-500 mb-4 ${
       isScrolled 
         ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
         : 'bg-transparent'
-    } ${isServicesOpen ? 'h-auto' : 'h-32'}`}>
+    } ${isServicesOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-32'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-32">
           {/* Logo */}
@@ -256,8 +256,8 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100" data-testid="mobile-menu">
-          <div className="px-6 pt-4 pb-6 space-y-3">
+        <div className="md:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 shadow-lg relative z-60" data-testid="mobile-menu">
+          <div className="px-6 pt-4 pb-6 space-y-3 max-h-[80vh] overflow-y-auto">
             {navigationItems.map((item) => (
               <div key={item.href}>
                 {item.hasDropdown ? (
@@ -286,6 +286,7 @@ const Header = () => {
                             href={service.href}
                             className="block py-2 px-3 rounded-lg text-sm font-body text-gray-600 hover:text-green-700 hover:bg-green-50/80 transition-all duration-200"
                             data-testid={`mobile-dropdown-service-${index}`}
+                            onClick={handleMobileServiceClick}
                           >
                             {service.label}
                           </Link>
@@ -293,6 +294,7 @@ const Header = () => {
                         <Link
                           href={language === 'en' ? '/services' : '/servicios-espanol'}
                           className="block py-2 px-3 rounded-lg text-sm font-body text-green-700 hover:text-green-800 hover:bg-green-50/80 transition-all duration-200 border-t border-gray-200/60 mt-2 pt-3"
+                          onClick={handleMobileServiceClick}
                         >
                           {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
                         </Link>
