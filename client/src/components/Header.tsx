@@ -80,10 +80,13 @@ const Header = () => {
               variant="ghost"
               size="sm"
               onClick={toggleLanguage}
-              className="text-sm text-gray-600 hover:text-primary transition-colors duration-200 rounded-full px-4 py-2 font-body"
+              className="text-sm text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-4 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-2"
               data-testid="language-toggle"
             >
-              {language === 'en' ? 'ES' : 'EN'}
+              <span>{language === 'en' ? 'ES' : 'EN'}</span>
+              <span className="text-base">
+                {language === 'en' ? '🇪🇸' : '🇺🇸'}
+              </span>
             </Button>
             <Link href="/contact">
               <Button
@@ -141,10 +144,13 @@ const Header = () => {
                 variant="ghost"
                 size="sm"
                 onClick={toggleLanguage}
-                className="text-sm text-gray-600 hover:text-primary rounded-full px-4 py-2 font-body"
+                className="text-sm text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-4 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-2"
                 data-testid="mobile-language-toggle"
               >
-                {language === 'en' ? 'Español' : 'English'}
+                <span>{language === 'en' ? 'Español' : 'English'}</span>
+                <span className="text-base">
+                  {language === 'en' ? '🇪🇸' : '🇺🇸'}
+                </span>
               </Button>
               <Link href="/contact">
                 <Button
