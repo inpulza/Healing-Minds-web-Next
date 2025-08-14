@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { IconSun, IconHeart, IconBrain } from '@tabler/icons-react';
 import { useLanguage } from "@/hooks/useLanguage";
-import heroBackgroundImage from "@assets/7174605c-2d15-412a-808b-90c7364fbc2e_1755208270536.png";
 
 interface ServiceHeroMasonryProps {
   tagline: {
@@ -145,80 +144,33 @@ export const ServiceHeroMasonry = ({
           </div>
         </div>
 
-        {/* Hero Image with Overlaid Content */}
-        <div className="relative rounded-3xl overflow-hidden h-[500px] lg:h-[600px] flex items-center justify-center">
-          {/* Background Image with Blur */}
-          <img 
-            src={heroBackgroundImage}
-            alt="Dr. Melva Reve - Mental Health Specialist"
-            className="absolute inset-0 w-full h-full object-cover blur-sm"
-            data-testid="img-doctor-portrait"
-          />
-          
-          {/* Content Overlay */}
-          <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
-            <div className="max-w-6xl ml-4">
-              {/* Large Text with Icons - Similar to Home Hero */}
-              <div className="mb-8">
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-body font-bold leading-tight text-white mb-6">
-                  <WellnessIcon size="lg" color="green" className="inline-flex mx-2 align-middle">
-                    <IconHeart />
-                  </WellnessIcon>
-                  {language === 'en' ? 'Comprehensive' : 'Atención Integral'}
-                  <br />
-                  {language === 'en' ? 'Mental Health Care' : 'de Salud Mental'}
-                  <WellnessIcon size="lg" color="blue" className="inline-flex mx-2 align-middle">
-                    <IconBrain />
-                  </WellnessIcon>
-                </h2>
-              </div>
+        {/* Stats Carousel - Perpetual Motion */}
+        <div className="mt-16">
+          <div className="relative overflow-hidden py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl">
+            <div className="flex animate-scroll space-x-8">
+              {/* Facts Items */}
+              {facts.items.concat(facts.items).map((fact, index) => (
+                <div key={`fact-${index}`} className="flex items-center gap-4 bg-white rounded-full px-6 py-3 shadow-lg min-w-max">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <IconHeart className="w-4 h-4 text-green-600" />
+                  </div>
+                  <span className="text-gray-800 font-body font-medium">
+                    {language === 'en' ? fact.en : fact.es}
+                  </span>
+                </div>
+              ))}
               
-              {/* Facts and Quick Stats - No visible containers */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                {/* Facts Section */}
-                <div className="text-white">
-                  <div className="flex items-center gap-3 mb-6">
-                    <WellnessIcon size="md" color="orange">
-                      <IconHeart />
-                    </WellnessIcon>
-                    <h3 className="text-2xl font-body font-bold text-white">
-                      {language === 'en' ? facts.title.en : facts.title.es}
-                    </h3>
+              {/* Quick Stats Items */}
+              {quickStats.items.concat(quickStats.items).map((stat, index) => (
+                <div key={`stat-${index}`} className="flex items-center gap-4 bg-white rounded-full px-6 py-3 shadow-lg min-w-max">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Clock className="w-4 h-4 text-blue-600" />
                   </div>
-                  <div className="space-y-4">
-                    {facts.items.slice(0, 2).map((fact, index) => (
-                      <div key={index} className="flex items-start gap-4">
-                        <div className="w-3 h-3 bg-green-400 rounded-full flex-shrink-0 mt-2"></div>
-                        <span className="text-lg text-white font-body leading-relaxed">
-                          {language === 'en' ? fact.en : fact.es}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                  <span className="text-gray-800 font-body font-medium">
+                    {language === 'en' ? stat.en : stat.es}
+                  </span>
                 </div>
-
-                {/* Quick Facts Section */}
-                <div className="text-white">
-                  <div className="flex items-center gap-3 mb-6">
-                    <WellnessIcon size="md" color="blue">
-                      <Clock />
-                    </WellnessIcon>
-                    <h3 className="text-2xl font-body font-bold text-white">
-                      {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
-                    </h3>
-                  </div>
-                  <div className="space-y-4">
-                    {quickStats.items.slice(0, 3).map((stat, index) => (
-                      <div key={index} className="flex items-start gap-4">
-                        <div className="w-3 h-3 bg-blue-400 rounded-full flex-shrink-0 mt-2"></div>
-                        <p className="text-lg text-white font-body leading-relaxed">
-                          {language === 'en' ? stat.en : stat.es}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
