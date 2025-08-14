@@ -3,12 +3,18 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconMoodUp, IconMoodSad } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
+
+// Import generated images
+import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
+import bipolarImage from "@assets/generated_images/Bipolar_mood_balance_c4e8f6d2.png";
+import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
 
 const BipolarTreatment = () => {
   const { language } = useLanguage();

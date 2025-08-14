@@ -73,109 +73,74 @@ const AnxietyTreatment = () => {
       <Header />
       
       <main className="pt-20">
-        {/* Hero Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-green-50 to-blue-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <WellnessIcon size="sm" color="green">
-                    <IconBrain />
-                  </WellnessIcon>
-                  <span className="text-green-700 font-body font-semibold text-lg">
-                    {language === 'en' ? 'Expert Anxiety Care' : 'Atención Experta para la Ansiedad'}
-                  </span>
-                </div>
-                
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Anxiety Treatment in <span className="font-display italic text-green-700">Naples, FL</span></>
-                  ) : (
-                    <>Tratamiento para la Ansiedad en <span className="font-display italic text-green-700">Naples, FL</span></>
-                  )}
-                </h1>
-                
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Find relief from anxiety with compassionate, evidence-based psychiatric care. Dr. Melva Reve specializes in treating panic attacks, social anxiety, and generalized anxiety disorder with personalized treatment plans.'
-                    : 'Encuentre alivio de la ansiedad con atención psiquiátrica compasiva basada en evidencia. La Dra. Melva Reve se especializa en tratar ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con planes de tratamiento personalizados.'
-                  }
-                </p>
-
-                {language === 'es' && (
-                  <div className="bg-green-100 border-l-4 border-green-500 p-4 mb-8">
-                    <p className="text-green-800 font-body">
-                      <strong>Comprenda que buscar ayuda es valentía, no debilidad.</strong> La salud mental es salud. 
-                      Nuestra clínica ofrece un espacio seguro y culturalmente competente para la comunidad hispana.
-                    </p>
-                  </div>
-                )}
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/contact">
-                    <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300">
-                      <Calendar className="w-5 h-5" />
-                      {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                      <ArrowRight className="w-5 h-5" />
-                    </Button>
-                  </Link>
-                  
-                  <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3">
-                    <Phone className="w-5 h-5" />
-                    <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
-                      {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
-                    </a>
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-10">
-                  <div className="flex items-center gap-4 mb-6">
-                    <WellnessIcon size="md" color="blue">
-                      <IconHeart />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800">
-                        {language === 'en' ? 'Quick Facts' : 'Datos Importantes'}
-                      </h3>
-                      <p className="text-gray-600 font-body">
-                        {language === 'en' ? 'About anxiety treatment' : 'Sobre el tratamiento de ansiedad'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? '19.1% of adults experience anxiety disorders' : '19.1% de adultos experimentan trastornos de ansiedad'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Highly treatable with proper care' : 'Altamente tratable con atención adecuada'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Insurance coverage available' : 'Cobertura de seguro disponible'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Bilingual care in Spanish/English' : 'Atención bilingüe en español/inglés'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Hero Section with Masonry Layout */}
+        <ServiceHeroMasonry
+          tagline={{
+            en: 'Expert Anxiety Care',
+            es: 'Atención Experta para la Ansiedad'
+          }}
+          title={{
+            en: 'Anxiety Treatment in Naples, FL',
+            es: 'Tratamiento para la Ansiedad en Naples, FL'
+          }}
+          description={{
+            en: 'Find relief from anxiety with compassionate, evidence-based psychiatric care. Dr. Melva Reve specializes in treating panic attacks, social anxiety, and generalized anxiety disorder with personalized treatment plans.',
+            es: 'Encuentre alivio de la ansiedad con atención psiquiátrica compasiva basada en evidencia. La Dra. Melva Reve se especializa en tratar ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con planes de tratamiento personalizados.'
+          }}
+          specialNote={{
+            es: '<strong>Comprenda que buscar ayuda es valentía, no debilidad.</strong> La salud mental es salud. Nuestra clínica ofrece un espacio seguro y culturalmente competente para la comunidad hispana.'
+          }}
+          facts={{
+            title: {
+              en: 'Anxiety Facts',
+              es: 'Datos sobre Ansiedad'
+            },
+            items: [
+              {
+                en: '19.1% of adults experience anxiety disorders',
+                es: '19.1% de adultos experimentan trastornos de ansiedad'
+              },
+              {
+                en: 'Highly treatable with proper care',
+                es: 'Altamente tratable con atención adecuada'
+              },
+              {
+                en: 'Insurance coverage available',
+                es: 'Cobertura de seguro disponible'
+              },
+              {
+                en: 'Bilingual care in Spanish/English',
+                es: 'Atención bilingüe en español/inglés'
+              }
+            ]
+          }}
+          quickStats={{
+            items: [
+              {
+                en: 'Same-week appointments',
+                es: 'Citas la misma semana'
+              },
+              {
+                en: 'Insurance accepted',
+                es: 'Se acepta seguro'
+              },
+              {
+                en: 'Bilingual services',
+                es: 'Servicios bilingües'
+              },
+              {
+                en: 'Evidence-based treatment',
+                es: 'Tratamiento basado en evidencia'
+              }
+            ]
+          }}
+          images={{
+            doctorImage,
+            therapyRoomImage: anxietyImage,
+            symbolImage: therapyRoomImage
+          }}
+          icon={IconBrain}
+        />
 
         {/* Symptoms Section */}
         <section className="py-16 sm:py-20 bg-white">

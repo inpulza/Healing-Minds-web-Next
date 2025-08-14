@@ -78,9 +78,27 @@ export const ServiceHeroMasonry = ({
             
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
               {language === 'en' ? (
-                <span dangerouslySetInnerHTML={{ __html: title.en }} />
+                <>
+                  {title.en.includes('Naples, FL') ? (
+                    <>
+                      {title.en.replace(' in Naples, FL', '')} in{' '}
+                      <span className="font-display italic text-green-700">Naples, FL</span>
+                    </>
+                  ) : (
+                    <span dangerouslySetInnerHTML={{ __html: title.en }} />
+                  )}
+                </>
               ) : (
-                <span dangerouslySetInnerHTML={{ __html: title.es }} />
+                <>
+                  {title.es.includes('Naples, FL') ? (
+                    <>
+                      {title.es.replace(' en Naples, FL', '')} en{' '}
+                      <span className="font-display italic text-green-700">Naples, FL</span>
+                    </>
+                  ) : (
+                    <span dangerouslySetInnerHTML={{ __html: title.es }} />
+                  )}
+                </>
               )}
             </h1>
             

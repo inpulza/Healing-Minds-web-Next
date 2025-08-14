@@ -3,12 +3,18 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Zap, Info } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconBolt, IconTarget } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
+
+// Import generated images
+import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
+import tmsImage from "@assets/generated_images/TMS_magnetic_therapy_9f4e2a1b.png";
+import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
 
 const TmsTherapy = () => {
   const { language } = useLanguage();
