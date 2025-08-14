@@ -440,15 +440,14 @@ const MedicationManagement = () => {
                     </div>
                   </div>
 
-                  {/* Photo Placeholder - Fills remaining space */}
-                  <div className="flex-1 w-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-green-600 font-bold">💊</span>
-                      </div>
-                      <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                      <p className="text-green-500 font-body text-xs">Medicación/tratamiento</p>
-                    </div>
+                  {/* Photo - Fills remaining space */}
+                  <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
+                    <img 
+                      src="/attached_assets/e4031136-1b10-4229-8e1d-2c74e4186617_1755210913815.png" 
+                      alt="Medication capsules on green background representing pharmaceutical care"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
                 </div>
               </div>
