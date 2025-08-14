@@ -7,7 +7,7 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown } from 'lucide-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconMoodUp, IconMoodSad } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
@@ -301,57 +301,119 @@ const BipolarTreatment = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
               {symptoms.map((symptomGroup, groupIndex) => {
                 const IconComponent = symptomGroup.icon;
                 return (
                   <div
                     key={groupIndex}
-                    className={`rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full ${
+                    className={`group relative overflow-hidden rounded-2xl sm:rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${
                       groupIndex === 0 
-                        ? 'bg-green-800 text-white' 
-                        : 'bg-white text-green-800 border border-green-100'
+                        ? 'bg-gradient-to-br from-green-700 via-green-800 to-green-900' 
+                        : 'bg-gradient-to-br from-green-600 via-green-700 to-green-800'
                     }`}
                   >
-
-                    <div className={`w-10 h-10 sm:w-12 sm:h-12 min-w-[2.5rem] min-h-[2.5rem] sm:min-w-[3rem] sm:min-h-[3rem] rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 flex-shrink-0 ${
-                      groupIndex === 0 ? 'bg-green-700' : 'bg-green-100'
-                    }`}>
-                      <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${
-                        groupIndex === 0 ? 'text-white' : 'text-green-800'
-                      }`} />
+                    {/* Animated Background Pattern */}
+                    <div className="absolute inset-0 opacity-10">
+                      <div className={`absolute inset-0 bg-gradient-to-tr ${
+                        groupIndex === 0 
+                          ? 'from-green-200 via-transparent to-green-300' 
+                          : 'from-green-100 via-transparent to-green-200'
+                      }`}></div>
+                      <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-white opacity-20 -mr-16 -mt-16"></div>
+                      <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full bg-white opacity-15 -ml-12 -mb-12"></div>
                     </div>
-                    
-                    <h3 className={`text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 ${
-                      groupIndex === 0 ? 'text-white' : 'text-green-800'
-                    }`}>
-                      {symptomGroup.type}
-                    </h3>
-                    
-                    <div className="flex-grow space-y-2 mb-4 sm:mb-5">
-                      {symptomGroup.items.map((item, index) => (
-                        <div key={index} className="flex items-start gap-2">
-                          <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-2 ${
-                            groupIndex === 0 ? 'bg-green-300' : 'bg-green-500'
-                          }`}></div>
-                          <span className={`text-sm sm:text-base font-body leading-relaxed ${
-                            groupIndex === 0 ? 'text-green-100' : 'text-gray-600'
-                          }`}>
-                            {item}
-                          </span>
+
+                    <div className="relative p-6 sm:p-8 text-white">
+                      {/* Header with Icon and Title */}
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className={`relative p-3 rounded-2xl ${
+                          groupIndex === 0 
+                            ? 'bg-white/20 backdrop-blur-sm border border-white/30' 
+                            : 'bg-white/20 backdrop-blur-sm border border-white/30'
+                        }`}>
+                          <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                          <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
+                            groupIndex === 0 ? 'bg-green-400' : 'bg-green-300'
+                          } animate-pulse`}></div>
                         </div>
-                      ))}
-                    </div>
+                        <div>
+                          <h3 className="text-xl sm:text-2xl font-display font-bold mb-1">
+                            {symptomGroup.type}
+                          </h3>
+                          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${
+                            groupIndex === 0 
+                              ? 'bg-green-400/20 text-green-100 border border-green-300/30' 
+                              : 'bg-green-300/20 text-green-100 border border-green-200/30'
+                          }`}>
+                            {groupIndex === 0 
+                              ? <TrendingUp className="w-3 h-3" />
+                              : <TrendingDown className="w-3 h-3" />
+                            }
+                            {groupIndex === 0 
+                              ? (language === 'en' ? 'Elevated Mood' : 'Ánimo Elevado')
+                              : (language === 'en' ? 'Depressed Mood' : 'Ánimo Deprimido')
+                            }
+                          </div>
+                        </div>
+                      </div>
 
-                    <div className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold text-center ${
-                      groupIndex === 0 
-                        ? 'bg-green-600 text-white' 
-                        : 'bg-green-100 text-green-800'
-                    }`}>
-                      {groupIndex === 0 
-                        ? (language === 'en' ? 'Elevated Mood Episodes' : 'Episodios de Ánimo Elevado')
-                        : (language === 'en' ? 'Depressed Mood Episodes' : 'Episodios de Ánimo Deprimido')
-                      }
+                      {/* Symptoms Grid */}
+                      <div className="grid gap-3 mb-6">
+                        {symptomGroup.items.map((item, index) => (
+                          <div 
+                            key={index} 
+                            className="group/item flex items-start gap-3 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all duration-300"
+                          >
+                            <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-2 ${
+                              groupIndex === 0 ? 'bg-green-300' : 'bg-green-200'
+                            } group-hover/item:scale-125 transition-transform duration-300`}></div>
+                            <span className="text-sm sm:text-base font-body leading-relaxed text-white/90 group-hover/item:text-white transition-colors duration-300">
+                              {item}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Bottom Action Area */}
+                      <div className={`relative p-4 rounded-xl ${
+                        groupIndex === 0 
+                          ? 'bg-gradient-to-r from-green-400/20 to-green-500/20' 
+                          : 'bg-gradient-to-r from-green-300/20 to-green-400/20'
+                      } backdrop-blur-sm border border-white/20`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            {groupIndex === 0 ? (
+                              <Zap className="w-4 h-4 text-green-300" />
+                            ) : (
+                              <Brain className="w-4 h-4 text-green-200" />
+                            )}
+                            <span className="text-sm font-medium text-white/90">
+                              {groupIndex === 0 
+                                ? (language === 'en' ? 'High Energy Phase' : 'Fase de Alta Energía')
+                                : (language === 'en' ? 'Low Energy Phase' : 'Fase de Baja Energía')
+                              }
+                            </span>
+                          </div>
+                          <div className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            groupIndex === 0 
+                              ? 'bg-green-400 text-green-900' 
+                              : 'bg-green-300 text-green-800'
+                          }`}>
+                            {groupIndex === 0 
+                              ? (language === 'en' ? 'MANIC' : 'MANÍACO')
+                              : (language === 'en' ? 'DEPRESSIVE' : 'DEPRESIVO')
+                            }
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Floating Decoration */}
+                      <div className={`absolute top-4 right-4 opacity-30 ${
+                        groupIndex === 0 ? 'text-yellow-200' : 'text-blue-200'
+                      }`}>
+                        <Sparkles className="w-5 h-5 animate-pulse" />
+                      </div>
                     </div>
                   </div>
                 );
@@ -373,44 +435,146 @@ const BipolarTreatment = () => {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {(language === 'en' ? [
                 {
                   type: 'Bipolar I Disorder',
-                  description: 'At least one manic episode lasting 7+ days or requiring hospitalization. May include depressive episodes.'
+                  description: 'At least one manic episode lasting 7+ days or requiring hospitalization. May include depressive episodes.',
+                  severity: 'High',
+                  features: ['Full manic episodes', 'Severe impairment', 'May require hospitalization'],
+                  color: 'purple'
                 },
                 {
                   type: 'Bipolar II Disorder',
-                  description: 'At least one hypomanic episode and one major depressive episode. No full manic episodes.'
+                  description: 'At least one hypomanic episode and one major depressive episode. No full manic episodes.',
+                  severity: 'Moderate',
+                  features: ['Hypomanic episodes', 'Major depression', 'Often misdiagnosed'],
+                  color: 'blue'
                 },
                 {
                   type: 'Cyclothymic Disorder',
-                  description: 'Numerous periods of hypomanic and depressive symptoms for at least 2 years (1 year in children).'
+                  description: 'Numerous periods of hypomanic and depressive symptoms for at least 2 years (1 year in children).',
+                  severity: 'Mild',
+                  features: ['Chronic symptoms', 'Milder episodes', 'Long-term pattern'],
+                  color: 'green'
                 }
               ] : [
                 {
                   type: 'Trastorno Bipolar I',
-                  description: 'Al menos un episodio maníaco que dura 7+ días o requiere hospitalización. Puede incluir episodios depresivos.'
+                  description: 'Al menos un episodio maníaco que dura 7+ días o requiere hospitalización. Puede incluir episodios depresivos.',
+                  severity: 'Alto',
+                  features: ['Episodios maníacos completos', 'Deterioro severo', 'Puede requerir hospitalización'],
+                  color: 'purple'
                 },
                 {
                   type: 'Trastorno Bipolar II',
-                  description: 'Al menos un episodio hipomaníaco y un episodio depresivo mayor. Sin episodios maníacos completos.'
+                  description: 'Al menos un episodio hipomaníaco y un episodio depresivo mayor. Sin episodios maníacos completos.',
+                  severity: 'Moderado',
+                  features: ['Episodios hipomaníacos', 'Depresión mayor', 'A menudo mal diagnosticado'],
+                  color: 'blue'
                 },
                 {
                   type: 'Trastorno Ciclotímico',
-                  description: 'Numerosos períodos de síntomas hipomaníacos y depresivos durante al menos 2 años (1 año en niños).'
+                  description: 'Numerosos períodos de síntomas hipomaníacos y depresivos durante al menos 2 años (1 año en niños).',
+                  severity: 'Leve',
+                  features: ['Síntomas crónicos', 'Episodios más leves', 'Patrón a largo plazo'],
+                  color: 'green'
                 }
-              ]).map((type, index) => (
-                <Card key={index} className="bg-white border-0 shadow-lg">
-                  <CardContent className="p-8">
-                    <WellnessIcon size="lg" color="blue" className="mx-auto mb-4">
-                      <Activity />
-                    </WellnessIcon>
-                    <h3 className="text-xl font-body font-bold text-green-800 mb-4 text-center">{type.type}</h3>
-                    <p className="text-gray-600 font-body leading-relaxed text-center">{type.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
+              ]).map((type, index) => {
+                const gradientClasses: Record<string, string> = {
+                  purple: 'bg-gradient-to-br from-green-800 via-green-900 to-green-950',
+                  blue: 'bg-gradient-to-br from-green-600 via-green-700 to-green-800',
+                  green: 'bg-gradient-to-br from-green-500 via-green-600 to-green-700'
+                };
+                
+                const accentClasses: Record<string, string> = {
+                  purple: 'from-green-200 via-transparent to-green-300',
+                  blue: 'from-green-100 via-transparent to-green-200',
+                  green: 'from-green-50 via-transparent to-green-100'
+                };
+
+                const severityColors: Record<string, string> = {
+                  purple: 'bg-green-400 text-green-900',
+                  blue: 'bg-green-300 text-green-800',
+                  green: 'bg-green-200 text-green-700'
+                };
+
+                return (
+                  <div
+                    key={index}
+                    className={`group relative overflow-hidden rounded-2xl sm:rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl ${gradientClasses[type.color]} min-h-[400px] flex flex-col`}
+                  >
+                    {/* Animated Background Pattern */}
+                    <div className="absolute inset-0 opacity-10">
+                      <div className={`absolute inset-0 bg-gradient-to-tr ${accentClasses[type.color]}`}></div>
+                      <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-white opacity-20 -mr-10 -mt-10"></div>
+                      <div className="absolute bottom-0 left-0 w-16 h-16 rounded-full bg-white opacity-15 -ml-8 -mb-8"></div>
+                      <div className="absolute top-1/2 left-1/2 w-32 h-32 rounded-full bg-white opacity-5 transform -translate-x-1/2 -translate-y-1/2"></div>
+                    </div>
+
+                    <div className="relative p-6 sm:p-8 text-white flex flex-col h-full">
+                      {/* Header */}
+                      <div className="text-center mb-6">
+                        <div className="relative inline-flex p-4 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 mb-4">
+                          <Activity className="w-8 h-8 text-white" />
+                          <div className="absolute -top-2 -right-2 flex items-center justify-center">
+                            <div className={`px-2 py-1 rounded-full text-xs font-bold ${severityColors[type.color]}`}>
+                              {type.severity}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <h3 className="text-xl sm:text-2xl font-display font-bold mb-3">
+                          {type.type}
+                        </h3>
+                        
+                        <p className="text-white/90 font-body leading-relaxed text-sm sm:text-base">
+                          {type.description}
+                        </p>
+                      </div>
+
+                      {/* Features List */}
+                      <div className="flex-grow">
+                        <div className="space-y-3 mb-6">
+                          {type.features.map((feature, featureIndex) => (
+                            <div 
+                              key={featureIndex}
+                              className="flex items-center gap-3 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all duration-300"
+                            >
+                              <div className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0"></div>
+                              <span className="text-sm font-body text-white/90">
+                                {feature}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Footer */}
+                      <div className="mt-auto">
+                        <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-white/90">
+                              {language === 'en' ? 'Treatment Focus' : 'Enfoque de Tratamiento'}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <Sparkles className="w-4 h-4 text-white/70" />
+                              <span className="text-xs font-medium text-white/70">
+                                {language === 'en' ? 'Specialized Care' : 'Atención Especializada'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Floating Decoration */}
+                      <div className="absolute top-4 right-4 opacity-30 text-white">
+                        <Brain className="w-5 h-5 animate-pulse" />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
