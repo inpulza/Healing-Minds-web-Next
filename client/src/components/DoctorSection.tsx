@@ -36,7 +36,7 @@ const DoctorSection = () => {
 
               <Link href="/services">
                 <Button
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-6"
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-10 py-8"
                   data-testid="explore-services-button"
                 >
                   <span>{language === 'en' ? 'Explore services' : 'Explorar servicios'}</span>
