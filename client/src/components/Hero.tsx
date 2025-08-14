@@ -27,7 +27,7 @@ const Hero = () => {
           {/* Centered Content */}
           <div className="relative z-10 w-full px-12 py-16 text-center">
             <div className="max-w-2xl mx-auto">
-              <h1 className="text-5xl lg:text-6xl font-display font-bold leading-tight mb-6 text-[#16a34a]" data-testid="hero-title">
+              <h1 className="text-5xl lg:text-6xl font-display font-bold leading-tight mb-6 text-[#1e6b3b]" data-testid="hero-title">
                 Find Your Path to Clarity<br />
                 with <span className="font-display italic">Dr. Reve</span>
               </h1>
