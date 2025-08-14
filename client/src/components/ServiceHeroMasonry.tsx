@@ -8,7 +8,7 @@ import {
   Clock, 
   MapPin
 } from "lucide-react";
-import { IconSun, IconHeart } from '@tabler/icons-react';
+import { IconSun, IconHeart, IconBrain } from '@tabler/icons-react';
 import { useLanguage } from "@/hooks/useLanguage";
 
 interface ServiceHeroMasonryProps {
