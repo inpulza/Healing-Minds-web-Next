@@ -247,7 +247,7 @@ const DepressionTreatment = () => {
         <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid lg:grid-cols-2 gap-12 items-start">
+              <div className="grid lg:grid-cols-2 gap-12 items-end">
                 {/* Content Side */}
                 <div>
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
@@ -295,7 +295,7 @@ const DepressionTreatment = () => {
 
                   {/* Photo Placeholder - Smaller Portrait Format */}
                   <div className="mt-8">
-                    <div className="w-3/4 aspect-[1/1] mx-auto bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
+                    <div className="w-3/4 aspect-[16/9] mx-auto bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
                       <div className="text-center">
                         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                           <span className="text-green-600 font-bold">📸</span>
