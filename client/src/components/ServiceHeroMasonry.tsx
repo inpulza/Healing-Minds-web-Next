@@ -63,8 +63,8 @@ export const ServiceHeroMasonry = ({
 
   return (
     <section className="pt-20 pb-8 sm:pb-12 lg:pb-16 bg-green-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start">
           {/* Left Column - Content */}
           <div className="lg:sticky lg:top-8">
             <div className="flex items-center gap-3 mb-6">
@@ -147,7 +147,7 @@ export const ServiceHeroMasonry = ({
           
           {/* Right Column - True Masonry Style Layout */}
           <div className="relative">
-            <div className="grid grid-cols-2 grid-rows-3 gap-6 max-w-xl mx-auto lg:max-w-none h-[36rem] lg:h-[48rem]">
+            <div className="grid grid-cols-2 grid-rows-3 gap-8 max-w-2xl mx-auto lg:max-w-none h-[36rem] lg:h-[48rem] w-full">
               {/* Top Left - Doctor Photo (Reduced height) */}
               <div className="row-span-2 col-start-1 row-start-1" style={{gridRowEnd: 'span 1.8'}}>
                 <div className="h-full rounded-2xl shadow-lg overflow-hidden">
