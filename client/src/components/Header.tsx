@@ -84,15 +84,23 @@ const Header = () => {
     return location === href || (href !== '/' && location.startsWith(href));
   };
 
-  const handleServiceClick = () => {
-    console.log('Service clicked - closing modal');
+  const handleServiceClick = (e: React.MouseEvent, href: string) => {
+    console.log('Service clicked:', href);
+    e.preventDefault();
     setIsServicesOpen(false);
+    setTimeout(() => {
+      navigate(href);
+    }, 50);
   };
 
-  const handleMobileServiceClick = () => {
-    console.log('Mobile service clicked - closing menus');
+  const handleMobileServiceClick = (e: React.MouseEvent, href: string) => {
+    console.log('Mobile service clicked:', href);
+    e.preventDefault();
     setIsMobileMenuOpen(false);
     setIsMobileServicesOpen(false);
+    setTimeout(() => {
+      navigate(href);
+    }, 50);
   };
 
   return (
@@ -221,7 +229,7 @@ const Header = () => {
                   <Link
                     key={service.href}
                     href={service.href}
-                    onClick={handleServiceClick}
+                    onClick={(e) => handleServiceClick(e, service.href)}
                     className="group block p-4 rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer"
                     data-testid={`dropdown-service-${index}`}
                   >
@@ -242,7 +250,7 @@ const Header = () => {
               <div className="mt-6 pt-6 border-t border-gray-200/60 text-center">
                 <Link
                   href={language === 'en' ? '/services' : '/servicios-espanol'}
-                  onClick={handleServiceClick}
+                  onClick={(e) => handleServiceClick(e, language === 'en' ? '/services' : '/servicios-espanol')}
                   className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300 text-lg"
                 >
                   {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
@@ -284,7 +292,7 @@ const Header = () => {
                           <Link
                             key={service.href}
                             href={service.href}
-                            onClick={handleMobileServiceClick}
+                            onClick={(e) => handleMobileServiceClick(e, service.href)}
                             className="block py-2 px-3 rounded-lg text-sm font-body text-gray-600 hover:text-green-700 hover:bg-green-50/80 transition-all duration-200"
                             data-testid={`mobile-dropdown-service-${index}`}
                           >
@@ -293,7 +301,7 @@ const Header = () => {
                         ))}
                         <Link
                           href={language === 'en' ? '/services' : '/servicios-espanol'}
-                          onClick={handleMobileServiceClick}
+                          onClick={(e) => handleMobileServiceClick(e, language === 'en' ? '/services' : '/servicios-espanol')}
                           className="block py-2 px-3 rounded-lg text-sm font-body text-green-700 hover:text-green-800 hover:bg-green-50/80 transition-all duration-200 border-t border-gray-200/60 mt-2 pt-3"
                         >
                           {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
