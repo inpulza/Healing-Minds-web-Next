@@ -64,7 +64,7 @@ const Hero = () => {
 
         {/* Desktop: Original single container layout */}
         <div className="hidden sm:block">
-          <div className="relative rounded-3xl overflow-hidden h-[500px] sm:h-[600px] flex items-center justify-center">
+          <div className="relative rounded-3xl overflow-hidden h-[600px] sm:h-[700px] flex items-center justify-center">
             {/* Background Image */}
             <img 
               src={heroImage}
