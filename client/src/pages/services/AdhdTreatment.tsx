@@ -307,9 +307,9 @@ const AdhdTreatment = () => {
                 ))}
               </div>
               
-              {/* Photo Placeholder - Full Width */}
-              <div className="mt-8 -mx-8 sm:-mx-10 lg:-mx-12">
-                <div className="w-full h-48 bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center">
+              {/* Photo Placeholder */}
+              <div className="mt-8">
+                <div className="w-full h-48 bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
                   <div className="text-center">
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                       <span className="text-green-600 font-bold">🎯</span>
@@ -336,7 +336,7 @@ const AdhdTreatment = () => {
         </section>
 
         {/* Symptoms Section */}
-        <section className="py-16 sm:py-20 bg-orange-50">
+        <section className="py-16 sm:py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
@@ -359,8 +359,8 @@ const AdhdTreatment = () => {
                 <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardHeader>
                     <CardTitle className="text-xl font-body font-bold text-green-800 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                        <span className="text-orange-600 font-bold text-sm">{index + 1}</span>
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
                       </div>
                       {category.category}
                     </CardTitle>
@@ -369,7 +369,7 @@ const AdhdTreatment = () => {
                     <div className="space-y-3">
                       {category.items.map((item, itemIndex) => (
                         <div key={itemIndex} className="flex items-center gap-3">
-                          <CheckCircle className="w-4 h-4 text-orange-600 flex-shrink-0" />
+                          <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
                           <span className="text-gray-700 font-body text-sm">{item}</span>
                         </div>
                       ))}
@@ -402,11 +402,11 @@ const AdhdTreatment = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {treatments.map((treatment, index) => (
-                <Card key={index} className="border-orange-100 hover:shadow-lg transition-all duration-300">
+                <Card key={index} className="border-blue-100 hover:shadow-lg transition-all duration-300">
                   <CardContent className="p-8">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-orange-600 font-bold text-lg">{index + 1}</span>
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-blue-600 font-bold text-lg">{index + 1}</span>
                       </div>
                       <div>
                         <h3 className="text-xl font-body font-bold text-green-800 mb-3">{treatment.title}</h3>

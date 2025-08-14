@@ -197,9 +197,9 @@ const AnxietyTreatment = () => {
                     ))}
                   </div>
                   
-                  {/* Photo Placeholder - Full Width */}
-                  <div className="mt-6 -mx-8 sm:-mx-10 lg:-mx-12">
-                    <div className="w-full h-40 bg-blue-50 border-2 border-dashed border-blue-200 flex items-center justify-center">
+                  {/* Photo Placeholder */}
+                  <div className="mt-6">
+                    <div className="w-full h-40 bg-blue-50 border-2 border-dashed border-blue-200 flex items-center justify-center rounded-xl">
                       <div className="text-center">
                         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
                           <span className="text-blue-600 font-bold">📸</span>
