@@ -97,11 +97,7 @@ const Hero = () => {
                 </h1>
                 
                 <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
-                  <span>Expert psychiatric care in Naples, FL, designed to help you navigate life's challenges and foster lasting 
-                  <WellnessIcon size="md" color="orange" className="inline-flex mx-2 mb-1">
-                    <IconLeaf />
-                  </WellnessIcon>
-                  well-being through personalized treatment.</span>
+                  <span>Expert psychiatric care in Naples, FL, designed to help you navigate life's challenges and foster lasting well-being through personalized treatment.</span>
                 </div>
                 
                 <div className="ml-0">
