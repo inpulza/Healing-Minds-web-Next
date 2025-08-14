@@ -75,13 +75,12 @@ const Hero = () => {
               }}
             />
             
-            {/* Enhanced Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-green-700/40 via-emerald-600/25 via-green-500/15 to-transparent" />
+
             
-            {/* Centered Content */}
-            <div className="relative z-10 w-full px-8 lg:px-12 py-16 text-center">
-              <div className="max-w-2xl mx-auto">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-center mb-6" data-testid="hero-title">
+            {/* Left-Aligned Content */}
+            <div className="relative z-10 w-full px-8 lg:px-12 py-16 text-left">
+              <div className="max-w-2xl">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
                   Find Your Path to 
                   <WellnessIcon size="md" color="green" className="inline-flex mx-3 mb-2">
                     <IconBrain />
@@ -94,7 +93,7 @@ const Hero = () => {
                   <span className="font-display italic text-green-700">Dr. Reve</span>
                 </h1>
                 
-                <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b] flex flex-wrap items-center justify-center gap-2" data-testid="hero-description">
+                <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b] flex flex-wrap items-center justify-start gap-2" data-testid="hero-description">
                   <span>Compassionate and expert psychiatric care in Naples, FL, designed to help you navigate life's challenges</span>
                   <WellnessIcon size="md" color="orange" className="inline-flex mx-1">
                     <IconLeaf />
