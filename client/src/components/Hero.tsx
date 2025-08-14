@@ -51,7 +51,7 @@ const Hero = () => {
             
             <Link href="/services">
               <Button
-                className="group inline-flex items-center justify-center gap-2 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-4 shadow-lg"
+                className="group inline-flex items-center justify-center gap-2 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-5 sm:py-6 shadow-lg"
                 data-testid="hero-book-consultation"
               >
                 <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
@@ -104,7 +104,7 @@ const Hero = () => {
                 
                 <Link href="/services">
                   <Button
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-8 shadow-lg"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-5 sm:py-6 shadow-lg"
                     data-testid="hero-book-consultation"
                   >
                     <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">

@@ -83,7 +83,7 @@ const Footer = () => {
                     />
                     <Button
                       type="submit"
-                      className="px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-colors duration-200"
+                      className="px-6 py-5 sm:py-6 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-colors duration-200"
                       data-testid="newsletter-submit-button"
                     >
                       {language === 'en' ? 'Subscribe' : 'Suscribirse'}
