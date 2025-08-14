@@ -35,15 +35,15 @@ const Hero = () => {
               </p>
               
               <div className="flex justify-center">
-                <Link href="/contact">
+                <Link href="/services">
                   <Button
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-8 py-4 shadow-lg"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-5 shadow-lg"
                     data-testid="hero-book-consultation"
                   >
                     <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
                       <ArrowRight className="w-4 h-4 text-green-800" />
                     </div>
-                    <span>Book a Consultation</span>
+                    <span>Our Services</span>
                   </Button>
                 </Link>
               </div>
