@@ -207,30 +207,31 @@ const Header = () => {
             <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/70 p-8 mx-4">
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                 {serviceItems.map((service, index) => (
-                  <Link
-                    key={service.href}
-                    href={service.href}
-                    onClick={() => setIsServicesOpen(false)}
-                    className="group p-4 rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100"
-                    data-testid={`dropdown-service-${index}`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-3 h-3 rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700"></div>
-                      <div>
-                        <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
-                          {service.label}
-                        </h3>
-                        <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1 leading-relaxed">
-                          {service.description}
-                        </p>
+                  <div key={service.href} className="group p-4 rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100">
+                    <Link
+                      href={service.href}
+                      onClick={() => setIsServicesOpen(false)}
+                      className="block w-full h-full text-left cursor-pointer"
+                      data-testid={`dropdown-service-${index}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="w-3 h-3 rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700"></div>
+                        <div>
+                          <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
+                            {service.label}
+                          </h3>
+                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1 leading-relaxed">
+                            {service.description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 ))}
               </div>
               <div className="mt-6 pt-6 border-t border-gray-200/60 text-center">
                 <Link
-                  href="/services"
+                  href={language === 'en' ? '/services' : '/servicios-espanol'}
                   onClick={() => setIsServicesOpen(false)}
                   className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300 text-lg"
                 >
