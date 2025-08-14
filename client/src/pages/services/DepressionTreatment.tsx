@@ -292,6 +292,19 @@ const DepressionTreatment = () => {
                       </div>
                     </Button>
                   </Link>
+
+                  {/* Photo Placeholder - Portrait Format (3:4 ratio) */}
+                  <div className="mt-8">
+                    <div className="w-full aspect-[3/4] bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-green-600 font-bold">📸</span>
+                        </div>
+                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                        <p className="text-green-500 font-body text-xs">Imagen de terapia/consultorio</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Treatment Options Grid Side */}
@@ -309,19 +322,6 @@ const DepressionTreatment = () => {
                       </div>
                     </div>
                   ))}
-                  
-                  {/* Photo Placeholder - Portrait Format (3:4 ratio) */}
-                  <div className="mt-8">
-                    <div className="w-full aspect-[3/4] bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <span className="text-green-600 font-bold">📸</span>
-                        </div>
-                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                        <p className="text-green-500 font-body text-xs">Imagen de terapia/consultorio</p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
