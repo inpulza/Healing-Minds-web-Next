@@ -64,7 +64,7 @@ const FAQ = () => {
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <WellnessIcon size="sm" color="green" className="opacity-80">
+            <WellnessIcon size="md" color="green" className="opacity-80">
               <IconHelp />
             </WellnessIcon>
             <h2 className="text-4xl md:text-5xl font-display font-bold text-green-800" data-testid="faq-title">

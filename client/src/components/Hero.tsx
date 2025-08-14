@@ -37,7 +37,7 @@ const Hero = () => {
                   </WellnessIcon>
                   Clarity<br />
                   with 
-                  <WellnessIcon size="sm" color="blue" className="inline-flex mx-2 mb-1">
+                  <WellnessIcon size="md" color="blue" className="inline-flex mx-2 mb-1">
                     <IconHeart />
                   </WellnessIcon>
                   <span className="font-display italic">Dr. Reve</span>
@@ -46,7 +46,7 @@ const Hero = () => {
               
               <div className="text-xl leading-relaxed font-body mb-8 text-[#1e6b3b] flex flex-wrap items-center justify-center gap-2" data-testid="hero-description">
                 <span>Compassionate and expert psychiatric care in Naples, FL, designed to help you navigate life's challenges</span>
-                <WellnessIcon size="sm" color="orange" className="inline-flex mx-1">
+                <WellnessIcon size="md" color="orange" className="inline-flex mx-1">
                   <IconLeaf />
                 </WellnessIcon>
                 <span>and foster lasting well-being.</span>

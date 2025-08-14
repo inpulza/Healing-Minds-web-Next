@@ -52,13 +52,13 @@ const Services = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <WellnessIcon size="sm" color="green" className="opacity-70">
+            <WellnessIcon size="md" color="green" className="opacity-70">
               <IconBrain />
             </WellnessIcon>
             <h2 className="text-4xl md:text-6xl font-display font-bold text-green-800 text-center" data-testid="services-title">
               Mental Health for <span className="font-body italic">every</span> mind
             </h2>
-            <WellnessIcon size="sm" color="blue" className="opacity-70">
+            <WellnessIcon size="md" color="blue" className="opacity-70">
               <IconHeart />
             </WellnessIcon>
           </div>

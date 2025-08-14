@@ -42,7 +42,7 @@ const About = () => {
               </div>
 
               <div className="flex items-center justify-center lg:justify-start gap-3 mb-6">
-                <WellnessIcon size="sm" color="blue" className="opacity-80">
+                <WellnessIcon size="md" color="blue" className="opacity-80">
                   <IconUserHeart />
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900" data-testid="about-title">
