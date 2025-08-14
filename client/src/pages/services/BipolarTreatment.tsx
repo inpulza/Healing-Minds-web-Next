@@ -7,7 +7,7 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity } from 'lucide-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconMoodUp, IconMoodSad } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
@@ -275,96 +275,87 @@ const BipolarTreatment = () => {
         /> 
 
         {/* Symptoms Section */}
-        <section className="py-16 sm:py-20 bg-green-50">
+        <section className="py-16 sm:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid lg:grid-cols-3 gap-8">
-                {/* Content Side */}
-                <div className="lg:col-span-2">
-                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Symptom Recognition' : 'Reconocimiento de Síntomas'}
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Understanding <span className="font-display italic text-green-700">Bipolar</span> Symptoms</>
-                    ) : (
-                      <>Entendiendo Síntomas del <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
-                    )}
-                  </h2>
-                  
-                  <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Bipolar disorder involves distinct episodes of mania/hypomania and depression. Understanding these patterns is key to effective treatment.'
-                      : 'El trastorno bipolar involucra episodios distintos de manía/hipomanía y depresión. Entender estos patrones es clave para un tratamiento efectivo.'
-                    }
-                  </p>
-
-                  {/* Symptoms List */}
-                  <div className="grid gap-4 mb-8">
-                    {symptoms.map((symptomGroup, groupIndex) => (
-                      <div key={groupIndex} className="p-6 border-l-4 border-green-200 bg-gray-50 rounded-lg">
-                        <div className="flex items-start gap-4">
-                          <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <symptomGroup.icon className="w-6 h-6 text-green-600" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-xl font-body font-bold text-green-800 mb-3">{symptomGroup.type}</h3>
-                            <div className="grid gap-2">
-                              {symptomGroup.items.map((item, index) => (
-                                <div key={index} className="flex items-start gap-2">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"></div>
-                                  <span className="text-gray-700 font-body text-sm leading-relaxed">{item}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link href="/contact">
-                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Get Professional Assessment' : 'Obtener Evaluación Profesional'}</span>
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
-                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      </div>
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* Sidebar with Stats */}
-                <div className="flex flex-col h-full">
-                  {/* Stats Cards */}
-                  <div className="space-y-4 mb-6">
-                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                      <div className="text-3xl font-bold text-green-600 mb-2">2.8%</div>
-                      <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'US adults affected' : 'Adultos en EEUU afectados'}
-                      </div>
-                    </div>
-                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">80%</div>
-                      <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Show improvement with treatment' : 'Mejoran con tratamiento'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Additional Info Card */}
-                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 flex-1">
-                    <h4 className="text-lg font-body font-bold text-green-800 mb-3">
-                      {language === 'en' ? 'Early Recognition Matters' : 'El Reconocimiento Temprano Importa'}
-                    </h4>
-                    <p className="text-gray-600 font-body text-sm leading-relaxed">
-                      {language === 'en'
-                        ? 'Early identification and treatment of bipolar symptoms leads to better long-term outcomes and quality of life.'
-                        : 'La identificación temprana y el tratamiento de síntomas bipolares resulta en mejores resultados a largo plazo y calidad de vida.'
-                      }
-                    </p>
-                  </div>
-                </div>
+            <div className="text-center mb-12 sm:mb-16">
+              <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-6">
+                <WellnessIcon size="md" color="orange" className="opacity-70">
+                  <TrendingUp />
+                </WellnessIcon>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center">
+                  {language === 'en' ? (
+                    <>Understanding <span className="font-display italic text-green-700">Bipolar</span> Symptoms</>
+                  ) : (
+                    <>Entendiendo Síntomas del <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <TrendingDown />
+                </WellnessIcon>
               </div>
+              <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed px-4 sm:px-0">
+                {language === 'en'
+                  ? 'Bipolar disorder involves distinct episodes of mania/hypomania and depression. Understanding these patterns is key to effective treatment.'
+                  : 'El trastorno bipolar involucra episodios distintos de manía/hipomanía y depresión. Entender estos patrones es clave para un tratamiento efectivo.'
+                }
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              {symptoms.map((symptomGroup, groupIndex) => {
+                const IconComponent = symptomGroup.icon;
+                return (
+                  <div
+                    key={groupIndex}
+                    className={`rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full ${
+                      groupIndex === 0 
+                        ? 'bg-orange-50 text-orange-900 border border-orange-200' 
+                        : 'bg-blue-50 text-blue-900 border border-blue-200'
+                    }`}
+                  >
+
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 min-w-[2.5rem] min-h-[2.5rem] sm:min-w-[3rem] sm:min-h-[3rem] rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 flex-shrink-0 ${
+                      groupIndex === 0 ? 'bg-orange-200' : 'bg-blue-200'
+                    }`}>
+                      <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${
+                        groupIndex === 0 ? 'text-orange-700' : 'text-blue-700'
+                      }`} />
+                    </div>
+                    
+                    <h3 className={`text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 ${
+                      groupIndex === 0 ? 'text-orange-800' : 'text-blue-800'
+                    }`}>
+                      {symptomGroup.type}
+                    </h3>
+                    
+                    <div className="flex-grow space-y-2 mb-4 sm:mb-5">
+                      {symptomGroup.items.map((item, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-2 ${
+                            groupIndex === 0 ? 'bg-orange-500' : 'bg-blue-500'
+                          }`}></div>
+                          <span className={`text-sm sm:text-base font-body leading-relaxed ${
+                            groupIndex === 0 ? 'text-orange-700' : 'text-blue-700'
+                          }`}>
+                            {item}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold text-center ${
+                      groupIndex === 0 
+                        ? 'bg-orange-200 text-orange-800' 
+                        : 'bg-blue-200 text-blue-800'
+                    }`}>
+                      {groupIndex === 0 
+                        ? (language === 'en' ? 'Elevated Mood Episodes' : 'Episodios de Ánimo Elevado')
+                        : (language === 'en' ? 'Depressed Mood Episodes' : 'Episodios de Ánimo Deprimido')
+                      }
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
