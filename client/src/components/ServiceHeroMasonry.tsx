@@ -144,29 +144,29 @@ export const ServiceHeroMasonry = ({
           </div>
         </div>
 
-        {/* Stats Carousel - Perpetual Motion */}
+        {/* Stats Tags - Masonry Style */}
         <div className="mt-16">
-          <div className="relative overflow-hidden py-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl">
-            <div className="flex animate-scroll space-x-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-wrap gap-4 justify-center">
               {/* Facts Items */}
-              {facts.items.concat(facts.items).map((fact, index) => (
-                <div key={`fact-${index}`} className="flex items-center gap-4 bg-white rounded-full px-6 py-3 shadow-lg min-w-max">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <IconHeart className="w-4 h-4 text-green-600" />
+              {facts.items.map((fact, index) => (
+                <div key={`fact-${index}`} className="flex items-center gap-3 bg-white rounded-full px-5 py-2.5 shadow-md hover:shadow-lg transition-shadow duration-200 border border-green-100">
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <IconHeart className="w-3.5 h-3.5 text-green-600" />
                   </div>
-                  <span className="text-gray-800 font-body font-medium">
+                  <span className="text-gray-700 font-body font-medium text-sm">
                     {language === 'en' ? fact.en : fact.es}
                   </span>
                 </div>
               ))}
               
               {/* Quick Stats Items */}
-              {quickStats.items.concat(quickStats.items).map((stat, index) => (
-                <div key={`stat-${index}`} className="flex items-center gap-4 bg-white rounded-full px-6 py-3 shadow-lg min-w-max">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Clock className="w-4 h-4 text-blue-600" />
+              {quickStats.items.map((stat, index) => (
+                <div key={`stat-${index}`} className="flex items-center gap-3 bg-white rounded-full px-5 py-2.5 shadow-md hover:shadow-lg transition-shadow duration-200 border border-blue-100">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-3.5 h-3.5 text-blue-600" />
                   </div>
-                  <span className="text-gray-800 font-body font-medium">
+                  <span className="text-gray-700 font-body font-medium text-sm">
                     {language === 'en' ? stat.en : stat.es}
                   </span>
                 </div>
