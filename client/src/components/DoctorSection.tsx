@@ -7,12 +7,12 @@ const DoctorSection = () => {
   const { language } = useLanguage();
 
   return (
-    <section className="py-20 bg-gradient-to-br from-green-600 to-green-800">
+    <section className="py-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="bg-green-700 rounded-3xl p-12 lg:p-16">
+        <div className="bg-white rounded-3xl p-12 lg:p-16 shadow-lg border border-green-100">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Content */}
-            <div className="text-white">
+            <div className="text-green-800">
               <h2 className="text-3xl lg:text-5xl font-display font-bold mb-6" data-testid="doctor-section-title">
                 {language === 'en' 
                   ? 'Dedicated to your mental health, every day'
@@ -21,13 +21,13 @@ const DoctorSection = () => {
               </h2>
               
               <div className="mb-8">
-                <div className="text-4xl font-bold mb-2" data-testid="patient-count">15+</div>
-                <div className="text-green-100 font-body" data-testid="patient-label">
+                <div className="text-4xl font-bold mb-2 text-green-600" data-testid="patient-count">15+</div>
+                <div className="text-gray-600 font-body" data-testid="patient-label">
                   {language === 'en' ? 'Years of experience' : 'Años de experiencia'}
                 </div>
               </div>
 
-              <p className="text-xl text-green-100 mb-8 font-body leading-relaxed" data-testid="doctor-section-description">
+              <p className="text-xl text-gray-600 mb-8 font-body leading-relaxed" data-testid="doctor-section-description">
                 {language === 'en'
                   ? 'We provide compassionate care and advanced treatments tailored to your needs. Experience convenient access to mental healthcare.'
                   : 'Brindamos atención compasiva y tratamientos avanzados adaptados a sus necesidades. Experimente un acceso conveniente a la atención de salud mental.'
@@ -36,12 +36,12 @@ const DoctorSection = () => {
 
               <Link href="/services">
                 <Button
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-green-50 px-8 py-4"
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-4"
                   data-testid="explore-services-button"
                 >
                   <span>{language === 'en' ? 'Explore services' : 'Explorar servicios'}</span>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                    <ArrowRight className="w-4 h-4 text-green-800" />
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                    <ArrowRight className="w-4 h-4 text-white" />
                   </div>
                 </Button>
               </Link>
