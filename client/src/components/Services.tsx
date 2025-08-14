@@ -68,23 +68,14 @@ const Services = () => {
             return (
               <div
                 key={service.id}
-                className={`relative rounded-3xl p-8 transition-all duration-300 hover:shadow-lg ${
+                className={`rounded-3xl p-8 transition-all duration-300 hover:shadow-lg ${
                   service.featured 
                     ? 'bg-green-800 text-white' 
                     : 'bg-white text-green-800 border border-green-100'
                 }`}
                 data-testid={`service-${service.id}`}
               >
-                {/* Corner Wellness Icon */}
-                <div className="absolute top-4 right-4">
-                  <WellnessIcon 
-                    size="sm" 
-                    color={service.featured ? 'green' : 'blue'} 
-                    className="opacity-20"
-                  >
-                    <IconLeaf />
-                  </WellnessIcon>
-                </div>
+
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${
                   service.featured ? 'bg-green-700' : 'bg-green-100'
                 }`}>

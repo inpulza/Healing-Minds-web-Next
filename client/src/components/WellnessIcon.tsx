@@ -34,7 +34,7 @@ const WellnessIcon = ({
 
   return (
     <div className={`${sizeClasses[size]} rounded-full flex items-center justify-center ${colorClasses[color]} ${className}`}>
-      <div className={iconSizes[size]}>
+      <div className={`${iconSizes[size]} flex items-center justify-center`}>
         {children}
       </div>
     </div>
