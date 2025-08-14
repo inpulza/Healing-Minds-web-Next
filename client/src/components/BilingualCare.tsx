@@ -31,34 +31,34 @@ const BilingualCare = () => {
   ];
 
   return (
-    <section className="py-20 bg-green-50">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+    <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
           <div>
-            <div className="flex flex-wrap items-center gap-3 mb-8">
-              <h2 className="text-4xl md:text-5xl font-display font-bold text-green-800 leading-tight" data-testid="bilingual-title">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-green-800 leading-tight" data-testid="bilingual-title">
                 <span className="font-body italic">Guided</span> by passion.
-                <WellnessIcon size="md" color="orange" className="inline-flex mx-3 mb-2">
+                <WellnessIcon size="md" color="orange" className="inline-flex mx-2 sm:mx-3 mb-1 sm:mb-2">
                   <IconHeart />
                 </WellnessIcon>
                 <span className="font-display italic">Driven</span> by purpose.
               </h2>
             </div>
             
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed font-body" data-testid="bilingual-description">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed font-body" data-testid="bilingual-description">
               {language === 'en' 
                 ? 'Dr. Reve understands that mental health care is most effective when provided in your native language. As a fluent Spanish speaker, she offers comprehensive psychiatric services to the Hispanic community in Naples with cultural sensitivity and understanding.'
                 : 'La Dra. Reve entiende que la atención de salud mental es más efectiva cuando se proporciona en su idioma nativo. Como hablante fluida de español, ofrece servicios psiquiátricos integrales a la comunidad hispana en Naples con sensibilidad y comprensión cultural.'
               }
             </p>
             
-            <div className="grid md:grid-cols-1 gap-6 mb-8" data-testid="bilingual-features">
+            <div className="grid md:grid-cols-1 gap-4 sm:gap-6 mb-6 sm:mb-8" data-testid="bilingual-features">
               {features.map((feature, index) => (
-                <div key={index} className="flex items-start bg-white rounded-2xl p-6 shadow-sm">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mr-4 mt-2 flex-shrink-0" />
+                <div key={index} className="flex items-start bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-3 sm:mr-4 mt-2 flex-shrink-0" />
                   <div>
-                    <h4 className="font-display font-bold text-green-800 mb-2">{feature.title}</h4>
-                    <p className="text-gray-600 font-body leading-relaxed">{feature.description}</p>
+                    <h4 className="font-display font-bold text-green-800 mb-1 sm:mb-2 text-sm sm:text-base">{feature.title}</h4>
+                    <p className="text-gray-600 font-body leading-relaxed text-sm sm:text-base">{feature.description}</p>
                   </div>
                 </div>
               ))}
@@ -66,11 +66,11 @@ const BilingualCare = () => {
             
             <Link href="/contact">
               <Button
-                className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-6"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-5 sm:py-6"
                 data-testid="bilingual-schedule-consultation"
               >
-                <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
-                  <Check className="w-4 h-4 text-white" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                  <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                 </div>
                 <span>{language === 'en' ? 'Schedule your Consultation' : 'Programe su Consulta'}</span>
               </Button>
@@ -81,7 +81,7 @@ const BilingualCare = () => {
             <img
               src={bilingualImage}
               alt="Bilingual psychiatric care - diverse community support"
-              className="rounded-xl shadow-lg w-full h-auto"
+              className="rounded-lg sm:rounded-xl shadow-lg w-full h-auto"
               data-testid="bilingual-image"
             />
           </div>

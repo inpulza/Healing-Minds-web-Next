@@ -48,21 +48,21 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-4 mb-6">
+    <section id="services" className="py-12 sm:py-16 lg:py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-6">
             <WellnessIcon size="md" color="green" className="opacity-70">
               <IconBrain />
             </WellnessIcon>
-            <h2 className="text-4xl md:text-6xl font-display font-bold text-green-800 text-center" data-testid="services-title">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold text-green-800 text-center" data-testid="services-title">
               Mental Health for <span className="font-body italic">every</span> mind
             </h2>
             <WellnessIcon size="md" color="blue" className="opacity-70">
               <IconHeart />
             </WellnessIcon>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="services-description">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed px-4 sm:px-0" data-testid="services-description">
             {language === 'en'
               ? 'Comprehensive psychiatric care tailored to your individual needs, helping you navigate life\'s challenges with confidence and resilience.'
               : 'Atención psiquiátrica integral adaptada a sus necesidades individuales, ayudándole a navegar los desafíos de la vida con confianza y resistencia.'
@@ -70,13 +70,13 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
               <div
                 key={service.id}
-                className={`rounded-3xl p-8 transition-all duration-300 hover:shadow-lg ${
+                className={`rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:shadow-lg ${
                   service.featured 
                     ? 'bg-green-800 text-white' 
                     : 'bg-white text-green-800 border border-green-100'
@@ -84,21 +84,21 @@ const Services = () => {
                 data-testid={`service-${service.id}`}
               >
 
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 ${
                   service.featured ? 'bg-green-700' : 'bg-green-100'
                 }`}>
-                  <IconComponent className={`w-6 h-6 ${
+                  <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${
                     service.featured ? 'text-white' : 'text-green-800'
                   }`} />
                 </div>
                 
-                <h3 className={`text-xl font-display font-bold mb-4 ${
+                <h3 className={`text-lg sm:text-xl font-display font-bold mb-3 sm:mb-4 ${
                   service.featured ? 'text-white' : 'text-green-800'
                 }`} data-testid={`service-title-${service.id}`}>
                   {service.title}
                 </h3>
                 
-                <p className={`font-body leading-relaxed mb-6 ${
+                <p className={`text-sm sm:text-base font-body leading-relaxed mb-4 sm:mb-6 ${
                   service.featured ? 'text-green-100' : 'text-gray-600'
                 }`} data-testid={`service-description-${service.id}`}>
                   {service.description}
@@ -106,19 +106,19 @@ const Services = () => {
 
                 <Link href="/contact">
                   <Button
-                    className={`group inline-flex items-center justify-center gap-3 rounded-full text-sm font-semibold transition-all duration-300 px-6 py-6 ${
+                    className={`group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 px-4 sm:px-6 py-4 sm:py-6 ${
                       service.featured
                         ? 'bg-white text-green-800 hover:bg-green-50'
                         : 'bg-green-800 text-white hover:bg-green-700'
                     }`}
                     data-testid={`service-button-${service.id}`}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
                       service.featured
                         ? 'bg-green-100'
                         : 'bg-green-700'
                     }`}>
-                      <ArrowRight className={`w-4 h-4 ${
+                      <ArrowRight className={`w-3 h-3 sm:w-4 sm:h-4 ${
                         service.featured ? 'text-green-800' : 'text-white'
                       }`} />
                     </div>
