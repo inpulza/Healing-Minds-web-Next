@@ -113,7 +113,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex relative mt-8 mb-4" ref={servicesRef}>
+          <div className="hidden md:flex relative mt-8 mb-8" ref={servicesRef}>
             <nav className={`flex items-center transition-all duration-500 ${
               isServicesOpen 
                 ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
