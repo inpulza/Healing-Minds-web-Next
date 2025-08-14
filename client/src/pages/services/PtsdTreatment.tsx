@@ -21,6 +21,7 @@ import childhoodImage from "@assets/e8202da4-08bf-45d6-b0b6-392795b53874_1755211
 import vehicleImage from "@assets/f01c7d7e-f4d9-4a02-b3e0-d02f5f47a354_1755211669105.png";
 import naturalDisasterImage from "@assets/f9744cdb-4b98-4681-9f74-b6f4692a2ced (1)_1755211836264.png";
 import assaultImage from "@assets/6180c64d-fa53-4c88-8339-6aa0b06bdc93_1755211836265.png";
+import medicalImage from "@assets/4142165d-97e6-4e50-8313-f705c8e6e93f_1755212013126.png";
 
 const PtsdTreatment = () => {
   const { language } = useLanguage();
@@ -328,7 +329,9 @@ const PtsdTreatment = () => {
                   },
                   {
                     title: 'Medical Trauma',
-                    description: 'Treatment for PTSD resulting from medical procedures or hospital experiences.'
+                    description: 'Treatment for PTSD resulting from medical procedures or hospital experiences.',
+                    image: medicalImage,
+                    alt: 'White hospital bracelet representing medical trauma and healthcare-related PTSD treatment'
                   }
                 ] : [
                   {
@@ -363,7 +366,9 @@ const PtsdTreatment = () => {
                   },
                   {
                     title: 'Trauma Médico',
-                    description: 'Tratamiento para PTSD resultante de procedimientos médicos o experiencias hospitalarias.'
+                    description: 'Tratamiento para PTSD resultante de procedimientos médicos o experiencias hospitalarias.',
+                    image: medicalImage,
+                    alt: 'Pulsera hospitalaria blanca representando trauma médico y tratamiento de TEPT relacionado con atención médica'
                   }
                 ]).map((trauma, index) => (
                   <div key={index} className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300">
