@@ -208,7 +208,6 @@ const BipolarTreatment = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      
       <main>
         {/* Hero Section with Masonry Layout */}
         <ServiceHeroMasonry
@@ -492,7 +491,7 @@ const BipolarTreatment = () => {
 
                       {/* Footer */}
                       <div className="mt-auto">
-                        <div className="p-4 rounded-xl">
+                        <div className="p-4 rounded-xl bg-[#ffffff]">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-green-800">
                               {language === 'en' ? 'Treatment Focus' : 'Enfoque de Tratamiento'}
@@ -721,7 +720,6 @@ const BipolarTreatment = () => {
         </section>
 
       </main>
-      
       <Footer />
     </div>
   );
