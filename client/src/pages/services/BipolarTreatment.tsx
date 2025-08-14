@@ -279,8 +279,8 @@ const BipolarTreatment = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
               <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-6">
-                <WellnessIcon size="md" color="orange" className="opacity-70">
-                  <TrendingUp />
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <IconBrain />
                 </WellnessIcon>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center">
                   {language === 'en' ? (
@@ -289,8 +289,8 @@ const BipolarTreatment = () => {
                     <>Entendiendo Síntomas del <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
                   )}
                 </h2>
-                <WellnessIcon size="md" color="blue" className="opacity-70">
-                  <TrendingDown />
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <IconHeart />
                 </WellnessIcon>
               </div>
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed px-4 sm:px-0">
@@ -309,21 +309,21 @@ const BipolarTreatment = () => {
                     key={groupIndex}
                     className={`rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full ${
                       groupIndex === 0 
-                        ? 'bg-orange-50 text-orange-900 border border-orange-200' 
-                        : 'bg-blue-50 text-blue-900 border border-blue-200'
+                        ? 'bg-green-800 text-white' 
+                        : 'bg-white text-green-800 border border-green-100'
                     }`}
                   >
 
                     <div className={`w-10 h-10 sm:w-12 sm:h-12 min-w-[2.5rem] min-h-[2.5rem] sm:min-w-[3rem] sm:min-h-[3rem] rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 flex-shrink-0 ${
-                      groupIndex === 0 ? 'bg-orange-200' : 'bg-blue-200'
+                      groupIndex === 0 ? 'bg-green-700' : 'bg-green-100'
                     }`}>
                       <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${
-                        groupIndex === 0 ? 'text-orange-700' : 'text-blue-700'
+                        groupIndex === 0 ? 'text-white' : 'text-green-800'
                       }`} />
                     </div>
                     
                     <h3 className={`text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 ${
-                      groupIndex === 0 ? 'text-orange-800' : 'text-blue-800'
+                      groupIndex === 0 ? 'text-white' : 'text-green-800'
                     }`}>
                       {symptomGroup.type}
                     </h3>
@@ -332,10 +332,10 @@ const BipolarTreatment = () => {
                       {symptomGroup.items.map((item, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-2 ${
-                            groupIndex === 0 ? 'bg-orange-500' : 'bg-blue-500'
+                            groupIndex === 0 ? 'bg-green-300' : 'bg-green-500'
                           }`}></div>
                           <span className={`text-sm sm:text-base font-body leading-relaxed ${
-                            groupIndex === 0 ? 'text-orange-700' : 'text-blue-700'
+                            groupIndex === 0 ? 'text-green-100' : 'text-gray-600'
                           }`}>
                             {item}
                           </span>
@@ -345,8 +345,8 @@ const BipolarTreatment = () => {
 
                     <div className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold text-center ${
                       groupIndex === 0 
-                        ? 'bg-orange-200 text-orange-800' 
-                        : 'bg-blue-200 text-blue-800'
+                        ? 'bg-green-600 text-white' 
+                        : 'bg-green-100 text-green-800'
                     }`}>
                       {groupIndex === 0 
                         ? (language === 'en' ? 'Elevated Mood Episodes' : 'Episodios de Ánimo Elevado')
