@@ -11,7 +11,7 @@ const Hero = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="py-8 bg-white">
+    <section className="pt-8 pb-16 bg-white">
       <div className="max-w-[85%] lg:max-w-[90%] mx-auto px-2">
         {/* Mobile: Separate containers, Desktop: Single container */}
         <div className="block sm:hidden">
