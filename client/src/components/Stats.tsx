@@ -42,24 +42,24 @@ const Stats = () => {
   return (
     <section className="py-16 bg-white overflow-hidden">
       <div className="max-w-[95%] mx-auto">
-        <div className="bg-green-600 rounded-3xl py-6 relative overflow-hidden">
+        <div className="bg-gray-100 rounded-3xl py-6 relative overflow-hidden">
           {/* Continuous sliding animation */}
           <div className="flex animate-scroll whitespace-nowrap">
             {/* First set */}
-            <div className="flex items-center space-x-8 text-white font-body font-medium text-lg px-4">
+            <div className="flex items-center space-x-8 text-green-700 font-body font-medium text-lg px-4">
               {displayServices.map((service, index) => (
                 <div key={index} className="flex items-center space-x-8">
                   <span className="whitespace-nowrap">{service}</span>
-                  <span className="text-green-200">•</span>
+                  <span className="text-green-400">•</span>
                 </div>
               ))}
             </div>
             {/* Duplicate for seamless loop */}
-            <div className="flex items-center space-x-8 text-white font-body font-medium text-lg px-4">
+            <div className="flex items-center space-x-8 text-green-700 font-body font-medium text-lg px-4">
               {displayServices.map((service, index) => (
                 <div key={`duplicate-${index}`} className="flex items-center space-x-8">
                   <span className="whitespace-nowrap">{service}</span>
-                  <span className="text-green-200">•</span>
+                  <span className="text-green-400">•</span>
                 </div>
               ))}
             </div>
