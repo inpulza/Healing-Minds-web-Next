@@ -15,6 +15,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
 import anxietyImage from "@assets/generated_images/Anxiety_representation_efc2b954.png";
 import therapyRoomImage from "@assets/generated_images/Wellness_meditation_space_ae6f4d77.png";
+import zenStonesImage from "@assets/2b5aedce-1c8b-495c-a402-1c0a19a1633b_1755211366855.png";
 
 const AnxietyTreatment = () => {
   const { language } = useLanguage();
@@ -199,14 +200,14 @@ const AnxietyTreatment = () => {
                   
                   {/* Photo - Fills remaining space */}
                   <div className="flex-1">
-                    <div className="w-full h-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl min-h-[10rem]">
-                      <div className="text-center">
-                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <span className="text-green-600 font-bold">📸</span>
-                        </div>
-                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                        <p className="text-green-500 font-body text-xs">Relajación/meditación</p>
-                      </div>
+                    <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[10rem]">
+                      <img 
+                        src={zenStonesImage} 
+                        alt="Zen stones stacked on green background representing meditation and relaxation for anxiety treatment"
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                   </div>
                   
