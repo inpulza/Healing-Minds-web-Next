@@ -45,10 +45,10 @@ const Home = () => {
         <Services />
         <About />
         <BilingualCare />
-        <FAQ />
         <ServiceAreas />
         <Testimonials />
         <ForPatients />
+        <FAQ />
         <Contact />
       </main>
       <Footer />
