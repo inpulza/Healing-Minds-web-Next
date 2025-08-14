@@ -6,13 +6,15 @@ This is a professional website for Healing Minds Psychiatry, the practice of Dr.
 
 ## Recent Changes (August 14, 2025)
 
+- **Service Page Content Completion**: Completed missing content for PTSD Treatment, Bipolar Treatment pages with full symptom descriptions, treatment approaches, and "Why Choose Dr. Reve" sections
+- **TMS to Medication Management Conversion**: Replaced TMS Therapy service page with Medication Management to better reflect the practice's actual services. Updated all routing, navigation, and content.
+- **Service Page Structure Standardization**: All 6 service pages now have consistent complete structure with symptoms, treatment approaches, and specialized sections
 - **Masonry Layout Implementation**: Redesigned all service pages with authentic masonry-style hero sections
 - **ServiceHeroMasonry Component**: Created reusable component with 2x3 grid featuring large photos in opposite corners and smaller fact cards
 - **Visual Hierarchy Enhancement**: Large photos (2 rows) contrasted with smaller data cards (1 row) for dynamic masonry effect
 - **Typography Pattern Restoration**: Maintained dual-font system with "Naples, FL" highlighted in font-display italic text-green-700
-- **Service Pages Redesign**: Applied new masonry layout to Depression, Anxiety, and preparing ADHD, Bipolar, PTSD, TMS pages
 - **Navigation Enhancement**: Implemented modern animated dropdown menu for Services section with smooth expansion animation
-- **Service Pages Creation**: Built 6 individual service pages (Anxiety, Depression, ADHD, PTSD, Bipolar, TMS) with full SEO optimization
+- **Service Pages Creation**: Built 6 individual service pages (Anxiety, Depression, ADHD, PTSD, Bipolar, Medication Management) with full SEO optimization
 - **Bilingual URL Structure**: Configured /services/ (English) and /es/servicios/ (Spanish) routing for all service pages
 - **Typography System Overhaul**: Implemented sophisticated dual-font system using Instrument Sans for body text and Playfair Display for accent words
 - **Hero Image Optimization**: Converted new doctor photo to WebP format (90KB → 35KB desktop, 15KB mobile) for faster loading

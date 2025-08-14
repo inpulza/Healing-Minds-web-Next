@@ -22,7 +22,7 @@ import DepressionTreatment from '@/pages/services/DepressionTreatment';
 import AdhdTreatment from '@/pages/services/AdhdTreatment';
 import PtsdTreatment from '@/pages/services/PtsdTreatment';
 import BipolarTreatment from '@/pages/services/BipolarTreatment';
-import TmsTherapy from '@/pages/services/TmsTherapy';
+import MedicationManagement from '@/pages/services/MedicationManagement';
 
 function Router() {
   // Track page views when routes change
@@ -43,7 +43,7 @@ function Router() {
       <Route path="/services/adhd-treatment" component={AdhdTreatment} />
       <Route path="/services/ptsd-treatment" component={PtsdTreatment} />
       <Route path="/services/bipolar-treatment" component={BipolarTreatment} />
-      <Route path="/services/tms-therapy" component={TmsTherapy} />
+      <Route path="/services/medication-management" component={MedicationManagement} />
       
       {/* Spanish Service Pages */}
       <Route path="/es/servicios/tratamiento-ansiedad" component={AnxietyTreatment} />
@@ -51,7 +51,7 @@ function Router() {
       <Route path="/es/servicios/tratamiento-tdah" component={AdhdTreatment} />
       <Route path="/es/servicios/tratamiento-tept" component={PtsdTreatment} />
       <Route path="/es/servicios/tratamiento-bipolar" component={BipolarTreatment} />
-      <Route path="/es/servicios/terapia-tms" component={TmsTherapy} />
+      <Route path="/es/servicios/manejo-medicamentos" component={MedicationManagement} />
       
       <Route component={NotFound} />
     </Switch>

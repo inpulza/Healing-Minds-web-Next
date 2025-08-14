@@ -60,14 +60,14 @@ const Services = () => {
       link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
     },
     {
-      id: 'tms',
-      title: language === 'en' ? 'TMS Therapy' : 'Terapia TMS',
+      id: 'medication-management',
+      title: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos',
       description: language === 'en'
-        ? 'Revolutionary FDA-approved treatment for treatment-resistant depression. Non-invasive brain stimulation therapy when medications haven\'t worked.'
-        : 'Tratamiento revolucionario aprobado por FDA para depresión resistente. Terapia de estimulación cerebral no invasiva cuando los medicamentos no han funcionado.',
+        ? 'Expert psychiatric medication evaluation, monitoring, and adjustment. Personalized medication plans with comprehensive safety assessments and ongoing care.'
+        : 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos. Planes de medicación personalizados con evaluaciones de seguridad integrales y atención continua.',
       icon: IconUser,
       featured: false,
-      link: language === 'en' ? '/services/tms-therapy' : '/es/servicios/terapia-tms'
+      link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
     }
   ];
 

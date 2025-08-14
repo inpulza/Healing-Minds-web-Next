@@ -72,9 +72,9 @@ const Header = () => {
       description: language === 'en' ? 'Expert mood stabilization' : 'Estabilización experta del ánimo'
     },
     {
-      href: language === 'en' ? '/services/tms-therapy' : '/es/servicios/terapia-tms',
-      label: language === 'en' ? 'TMS Therapy' : 'Terapia TMS',
-      description: language === 'en' ? 'Advanced brain stimulation therapy' : 'Terapia avanzada de estimulación cerebral'
+      href: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos',
+      label: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos',
+      description: language === 'en' ? 'Expert psychiatric medication care' : 'Cuidado experto de medicación psiquiátrica'
     }
   ];
 

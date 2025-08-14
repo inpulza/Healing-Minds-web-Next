@@ -13,162 +13,162 @@ import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
-import tmsImage from "@assets/generated_images/TMS_therapy_equipment_38dd31e3.png";
+import medicationImage from "@assets/generated_images/Medical_assessment_tools_78e50118.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
 
-const TmsTherapy = () => {
+const MedicationManagement = () => {
   const { language } = useLanguage();
 
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'TMS Therapy Naples FL - Transcranial Magnetic Stimulation | Dr. Melva Reve'
-        : 'Terapia TMS Naples FL - Estimulación Magnética Transcraneal | Dra. Melva Reve',
+        ? 'Medication Management Naples FL - Psychiatric Medications | Dr. Melva Reve'
+        : 'Manejo de Medicamentos Naples FL - Medicamentos Psiquiátricos | Dra. Melva Reve',
       description: language === 'en'
-        ? 'Advanced TMS therapy in Naples, FL for treatment-resistant depression. Dr. Melva Reve offers transcranial magnetic stimulation as FDA-approved, non-invasive treatment option. Insurance covered.'
-        : 'Terapia TMS avanzada en Naples, FL para depresión resistente al tratamiento. La Dra. Melva Reve ofrece estimulación magnética transcraneal como opción de tratamiento no invasiva aprobada por FDA. Cubierto por seguro.',
+        ? 'Expert psychiatric medication management in Naples, FL. Dr. Melva Reve provides comprehensive medication evaluation, monitoring, and adjustment for mental health conditions. Bilingual services.'
+        : 'Manejo experto de medicamentos psiquiátricos en Naples, FL. La Dra. Melva Reve brinda evaluación, monitoreo y ajuste integral de medicamentos para condiciones de salud mental. Servicios bilingües.',
       keywords: language === 'en'
-        ? 'TMS therapy Naples FL, transcranial magnetic stimulation Naples, treatment resistant depression Naples, TMS psychiatrist Naples, magnetic therapy Naples, non-invasive depression treatment Naples'
-        : 'terapia TMS Naples FL, estimulación magnética transcraneal Naples, depresión resistente tratamiento Naples, psiquiatra TMS Naples, terapia magnética Naples, tratamiento depresión no invasivo Naples',
+        ? 'medication management Naples FL, psychiatric medications Naples, antidepressants Naples, mood stabilizers Naples, psychiatrist medication Naples, medication monitoring Naples'
+        : 'manejo medicamentos Naples FL, medicamentos psiquiátricos Naples, antidepresivos Naples, estabilizadores ánimo Naples, psiquiatra medicamentos Naples, monitoreo medicamentos Naples',
       lang: language,
-      canonical: language === 'en' ? '/services/tms-therapy' : '/es/servicios/terapia-tms'
+      canonical: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
     };
     updateSEO(seoData);
   }, [language]);
 
   const benefits = language === 'en' ? [
-    'FDA-approved for treatment-resistant depression',
-    'Non-invasive, no anesthesia required',
-    'Outpatient procedure with no downtime',
-    'Minimal side effects compared to medications',
-    'No memory or cognitive effects',
-    'Can be combined with other treatments',
-    'Insurance coverage often available',
-    'Proven effective in clinical studies'
+    'Expert evaluation and monitoring',
+    'Personalized medication plans',
+    'Regular safety assessments',
+    'Side effect management',
+    'Medication interactions review',
+    'Dosage optimization',
+    'Insurance accepted',
+    'Evidence-based prescribing'
   ] : [
-    'Aprobado por FDA para depresión resistente al tratamiento',
-    'No invasivo, no requiere anestesia',
-    'Procedimiento ambulatorio sin tiempo de inactividad',
-    'Efectos secundarios mínimos comparado con medicamentos',
-    'No hay efectos en memoria o cognición',
-    'Puede combinarse con otros tratamientos',
-    'Cobertura de seguro a menudo disponible',
-    'Efectividad comprobada en estudios clínicos'
+    'Evaluación y monitoreo experto',
+    'Planes de medicación personalizados',
+    'Evaluaciones regulares de seguridad',
+    'Manejo de efectos secundarios',
+    'Revisión de interacciones medicamentosas',
+    'Optimización de dosis',
+    'Se acepta seguro',
+    'Prescripción basada en evidencia'
   ];
 
   const candidatesCriteria = language === 'en' ? [
     {
-      title: 'Treatment-Resistant Depression',
-      description: 'Have tried multiple antidepressant medications without sufficient improvement.'
+      title: 'New Diagnosis',
+      description: 'Recently diagnosed with depression, anxiety, bipolar disorder, or other mental health conditions.'
     },
     {
-      title: 'Major Depressive Disorder',
-      description: 'Diagnosed with major depression and experiencing significant symptoms.'
+      title: 'Medication Adjustment',
+      description: 'Current medications aren\'t working effectively or are causing unwanted side effects.'
     },
     {
-      title: 'Unable to Tolerate Medications',
-      description: 'Experience severe side effects from antidepressant medications.'
+      title: 'Multiple Medications',
+      description: 'Taking several psychiatric medications that need careful coordination and monitoring.'
     },
     {
-      title: 'Seeking Non-Drug Options',
-      description: 'Prefer to avoid or reduce psychiatric medications while maintaining treatment.'
+      title: 'Complex Medical History',
+      description: 'Have other medical conditions that may interact with psychiatric medications.'
     },
     {
-      title: 'Adolescent Depression',
-      description: 'FDA-approved for teens (13+) with treatment-resistant depression.'
+      title: 'Treatment Compliance',
+      description: 'Need support and guidance to maintain consistent medication routines.'
     },
     {
-      title: 'Other Conditions',
-      description: 'May be considered for certain anxiety disorders and other psychiatric conditions.'
+      title: 'Ongoing Monitoring',
+      description: 'Require regular assessment of medication effectiveness and side effects.'
     }
   ] : [
     {
-      title: 'Depresión Resistente al Tratamiento',
-      description: 'Ha probado múltiples medicamentos antidepresivos sin mejoría suficiente.'
+      title: 'Nuevo Diagnóstico',
+      description: 'Recientemente diagnosticado con depresión, ansiedad, trastorno bipolar u otras condiciones de salud mental.'
     },
     {
-      title: 'Trastorno Depresivo Mayor',
-      description: 'Diagnosticado con depresión mayor y experimentando síntomas significativos.'
+      title: 'Ajuste de Medicación',
+      description: 'Los medicamentos actuales no funcionan efectivamente o están causando efectos secundarios no deseados.'
     },
     {
-      title: 'No Puede Tolerar Medicamentos',
-      description: 'Experimenta efectos secundarios severos de medicamentos antidepresivos.'
+      title: 'Múltiples Medicamentos',
+      description: 'Tomando varios medicamentos psiquiátricos que necesitan coordinación y monitoreo cuidadosos.'
     },
     {
-      title: 'Busca Opciones Sin Medicamentos',
-      description: 'Prefiere evitar o reducir medicamentos psiquiátricos mientras mantiene tratamiento.'
+      title: 'Historia Médica Compleja',
+      description: 'Tiene otras condiciones médicas que pueden interactuar con medicamentos psiquiátricos.'
     },
     {
-      title: 'Depresión Adolescente',
-      description: 'Aprobado por FDA para adolescentes (13+) con depresión resistente al tratamiento.'
+      title: 'Cumplimiento del Tratamiento',
+      description: 'Necesita apoyo y orientación para mantener rutinas de medicación consistentes.'
     },
     {
-      title: 'Otras Condiciones',
-      description: 'Puede considerarse para ciertos trastornos de ansiedad y otras condiciones psiquiátricas.'
+      title: 'Monitoreo Continuo',
+      description: 'Requiere evaluación regular de efectividad de medicamentos y efectos secundarios.'
     }
   ];
 
   const treatmentProcess = language === 'en' ? [
     {
       step: '1',
-      title: 'Initial Consultation',
-      description: 'Comprehensive evaluation to determine if TMS is appropriate for your specific condition and history.'
+      title: 'Initial Assessment',
+      description: 'Comprehensive psychiatric evaluation including medical history, current symptoms, and previous medication experiences.'
     },
     {
       step: '2',
-      title: 'Treatment Planning',
-      description: 'Brain mapping and personalized treatment protocol development based on your individual needs.'
+      title: 'Medication Selection',
+      description: 'Evidence-based medication choice considering your specific diagnosis, medical history, and treatment goals.'
     },
     {
       step: '3',
-      title: 'TMS Sessions',
-      description: 'Daily 20-minute sessions for 4-6 weeks, typically 5 days per week in our comfortable setting.'
+      title: 'Treatment Initiation',
+      description: 'Starting medication with careful dosing strategy, clear instructions, and side effect monitoring plan.'
     },
     {
       step: '4',
-      title: 'Progress Monitoring',
-      description: 'Regular assessment of symptoms and treatment response with adjustments as needed.'
+      title: 'Regular Monitoring',
+      description: 'Scheduled follow-up appointments to assess effectiveness, monitor side effects, and adjust dosages as needed.'
     },
     {
       step: '5',
-      title: 'Maintenance Care',
-      description: 'Follow-up sessions as needed to maintain treatment benefits and prevent relapse.'
+      title: 'Optimization',
+      description: 'Fine-tuning medication regimen based on your response, lifestyle factors, and treatment goals.'
     },
     {
       step: '6',
-      title: 'Ongoing Support',
-      description: 'Continued psychiatric care and coordination with other treatments for optimal outcomes.'
+      title: 'Long-term Management',
+      description: 'Ongoing medication management with regular reviews, preventive care, and coordination with other providers.'
     }
   ] : [
     {
       step: '1',
-      title: 'Consulta Inicial',
-      description: 'Evaluación integral para determinar si TMS es apropiado para su condición específica e historia.'
+      title: 'Evaluación Inicial',
+      description: 'Evaluación psiquiátrica integral incluyendo historia médica, síntomas actuales y experiencias previas con medicamentos.'
     },
     {
       step: '2',
-      title: 'Planificación del Tratamiento',
-      description: 'Mapeo cerebral y desarrollo de protocolo de tratamiento personalizado basado en sus necesidades individuales.'
+      title: 'Selección de Medicación',
+      description: 'Elección de medicamento basada en evidencia considerando su diagnóstico específico, historia médica y objetivos de tratamiento.'
     },
     {
       step: '3',
-      title: 'Sesiones de TMS',
-      description: 'Sesiones diarias de 20 minutos por 4-6 semanas, típicamente 5 días por semana en nuestro ambiente cómodo.'
+      title: 'Inicio del Tratamiento',
+      description: 'Inicio de medicación con estrategia de dosis cuidadosa, instrucciones claras y plan de monitoreo de efectos secundarios.'
     },
     {
       step: '4',
-      title: 'Monitoreo del Progreso',
-      description: 'Evaluación regular de síntomas y respuesta al tratamiento con ajustes según sea necesario.'
+      title: 'Monitoreo Regular',
+      description: 'Citas de seguimiento programadas para evaluar efectividad, monitorear efectos secundarios y ajustar dosis según sea necesario.'
     },
     {
       step: '5',
-      title: 'Cuidado de Mantenimiento',
-      description: 'Sesiones de seguimiento según sea necesario para mantener beneficios del tratamiento y prevenir recaída.'
+      title: 'Optimización',
+      description: 'Ajuste fino del régimen de medicación basado en su respuesta, factores de estilo de vida y objetivos de tratamiento.'
     },
     {
       step: '6',
-      title: 'Apoyo Continuo',
-      description: 'Atención psiquiátrica continua y coordinación con otros tratamientos para resultados óptimos.'
+      title: 'Manejo a Largo Plazo',
+      description: 'Manejo continuo de medicación con revisiones regulares, atención preventiva y coordinación con otros proveedores.'
     }
   ];
 
@@ -180,63 +180,63 @@ const TmsTherapy = () => {
         {/* Hero Section with Masonry Layout */}
         <ServiceHeroMasonry
           tagline={{
-            en: 'Advanced Brain Therapy',
-            es: 'Terapia Cerebral Avanzada'
+            en: 'Expert Medication Care',
+            es: 'Cuidado Experto de Medicación'
           }}
           title={{
-            en: 'TMS Therapy in Naples, FL',
-            es: 'Terapia TMS en Naples, FL'
+            en: 'Medication Management in Naples, FL',
+            es: 'Manejo de Medicamentos en Naples, FL'
           }}
           description={{
-            en: 'Break through treatment-resistant depression with TMS therapy. Dr. Melva Reve offers FDA-approved transcranial magnetic stimulation - a revolutionary, non-invasive treatment that helps when medications haven\'t worked.',
-            es: 'Supere la depresión resistente al tratamiento con terapia TMS. La Dra. Melva Reve ofrece estimulación magnética transcraneal aprobada por FDA - un tratamiento revolucionario, no invasivo que ayuda cuando los medicamentos no han funcionado.'
+            en: 'Expert psychiatric medication management for optimal mental health outcomes. Dr. Melva Reve provides comprehensive medication evaluation, monitoring, and adjustment to ensure safe, effective treatment tailored to your individual needs.',
+            es: 'Manejo experto de medicación psiquiátrica para resultados óptimos de salud mental. La Dra. Melva Reve brinda evaluación, monitoreo y ajuste integral de medicamentos para asegurar tratamiento seguro y efectivo adaptado a sus necesidades individuales.'
           }}
           specialNote={{
-            es: '<strong>TMS es una opción esperanzadora cuando otros tratamientos no han funcionado.</strong> Esta tecnología avanzada ofrece nueva esperanza para la recuperación sin los efectos secundarios de medicamentos adicionales. Es seguro, efectivo y respaldado por investigación científica.'
+            es: '<strong>El manejo adecuado de medicamentos es fundamental para el éxito del tratamiento.</strong> Nuestra experiencia garantiza que reciba la medicación correcta, en la dosis adecuada, con monitoreo continuo para optimizar su bienestar y minimizar efectos secundarios.'
           }}
           facts={{
             title: {
-              en: 'TMS Facts',
-              es: 'Datos sobre TMS'
+              en: 'Medication Management',
+              es: 'Manejo de Medicamentos'
             },
             items: [
               {
-                en: 'FDA-approved for treatment-resistant depression',
-                es: 'Aprobado por FDA para depresión resistente'
+                en: 'Evidence-based prescribing practices',
+                es: 'Prácticas de prescripción basadas en evidencia'
               },
               {
-                en: 'Non-invasive, no anesthesia required',
-                es: 'No invasivo, no requiere anestesia'
+                en: 'Comprehensive safety monitoring',
+                es: 'Monitoreo integral de seguridad'
               },
               {
-                en: '50-60% response rate in clinical trials',
-                es: '50-60% tasa de respuesta en ensayos clínicos'
+                en: 'Personalized treatment plans',
+                es: 'Planes de tratamiento personalizados'
               },
               {
-                en: 'Insurance coverage often available',
-                es: 'Cobertura de seguro frecuentemente disponible'
+                en: 'Regular medication reviews',
+                es: 'Revisiones regulares de medicación'
               }
             ]
           }}
           quickStats={{
             items: [
               {
-                en: '20-minute daily sessions',
-                es: 'Sesiones diarias de 20 minutos'
+                en: 'Expert evaluation and monitoring',
+                es: 'Evaluación y monitoreo experto'
               },
               {
-                en: '4-6 week treatment course',
-                es: 'Curso de tratamiento de 4-6 semanas'
+                en: 'Insurance accepted',
+                es: 'Se acepta seguro'
               },
               {
-                en: 'Minimal side effects',
-                es: 'Efectos secundarios mínimos'
+                en: 'Bilingual consultations',
+                es: 'Consultas bilingües'
               }
             ]
           }}
           images={{
             doctorImage,
-            therapyRoomImage: tmsImage,
+            therapyRoomImage: medicationImage,
             symbolImage: therapyRoomImage
           }}
         />
@@ -247,15 +247,15 @@ const TmsTherapy = () => {
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
-                  <>Benefits of <span className="font-display italic text-green-700">TMS</span> Therapy</>
+                  <>Benefits of Expert <span className="font-display italic text-green-700">Medication Management</span></>
                 ) : (
-                  <>Beneficios de la <span className="font-display italic text-green-700">Terapia TMS</span></>
+                  <>Beneficios del <span className="font-display italic text-green-700">Manejo Experto</span> de Medicamentos</>
                 )}
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'TMS therapy offers a revolutionary approach to treating depression without the side effects of traditional medications.'
-                  : 'La terapia TMS ofrece un enfoque revolucionario para tratar la depresión sin los efectos secundarios de los medicamentos tradicionales.'
+                  ? 'Professional medication management ensures safe, effective treatment with personalized care and ongoing monitoring for optimal mental health outcomes.'
+                  : 'El manejo profesional de medicamentos asegura tratamiento seguro y efectivo con atención personalizada y monitoreo continuo para resultados óptimos de salud mental.'
                 }
               </p>
             </div>
@@ -281,9 +281,9 @@ const TmsTherapy = () => {
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
-                  <>Who is a <span className="font-display italic text-green-700">Good Candidate</span> for TMS?</>
+                  <>Who Benefits from <span className="font-display italic text-green-700">Medication Management</span>?</>
                 ) : (
-                  <>¿Quién es un <span className="font-display italic text-green-700">Buen Candidato</span> para TMS?</>
+                  <>¿Quién se Beneficia del <span className="font-display italic text-green-700">Manejo de Medicamentos</span>?</>
                 )}
               </h2>
             </div>
@@ -368,57 +368,15 @@ const TmsTherapy = () => {
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
-                  <>The <span className="font-display italic text-green-700">TMS Treatment</span> Process</>
+                  <>Our <span className="font-display italic text-green-700">Medication Management</span> Process</>
                 ) : (
-                  <>El Proceso de <span className="font-display italic text-green-700">Tratamiento TMS</span></>
+                  <>Nuestro Proceso de <span className="font-display italic text-green-700">Manejo de Medicamentos</span></>
                 )}
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {(language === 'en' ? [
-                {
-                  step: '1',
-                  title: 'Initial Consultation',
-                  description: 'Comprehensive evaluation to determine if TMS is right for you, including medical history and depression assessment.'
-                },
-                {
-                  step: '2',
-                  title: 'Motor Threshold Mapping',
-                  description: 'Personalized calibration to determine the exact magnetic field strength needed for your treatment.'
-                },
-                {
-                  step: '3',
-                  title: 'Treatment Sessions',
-                  description: '5 days per week for 4-6 weeks. Each session lasts about 19-37 minutes with no anesthesia required.'
-                },
-                {
-                  step: '4',
-                  title: 'Progress Monitoring',
-                  description: 'Regular assessment of symptoms and adjustment of treatment plan as needed throughout the course.'
-                }
-              ] : [
-                {
-                  step: '1',
-                  title: 'Consulta Inicial',
-                  description: 'Evaluación integral para determinar si TMS es adecuado para usted, incluyendo historial médico y evaluación de depresión.'
-                },
-                {
-                  step: '2',
-                  title: 'Mapeo del Umbral Motor',
-                  description: 'Calibración personalizada para determinar la intensidad exacta del campo magnético necesaria para su tratamiento.'
-                },
-                {
-                  step: '3',
-                  title: 'Sesiones de Tratamiento',
-                  description: '5 días por semana durante 4-6 semanas. Cada sesión dura aproximadamente 19-37 minutos sin necesidad de anestesia.'
-                },
-                {
-                  step: '4',
-                  title: 'Monitoreo del Progreso',
-                  description: 'Evaluación regular de síntomas y ajuste del plan de tratamiento según sea necesario durante el curso.'
-                }
-              ]).map((process, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {treatmentProcess.map((process, index) => (
                 <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardContent className="p-8 text-center">
                     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -439,9 +397,9 @@ const TmsTherapy = () => {
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
-                  <>Why Choose Dr. Reve for <span className="font-display italic text-green-700">TMS Therapy</span></>
+                  <>Why Choose Dr. Reve for <span className="font-display italic text-green-700">Medication Management</span></>
                 ) : (
-                  <>Por Qué Elegir a la Dra. Reve para <span className="font-display italic text-green-700">Terapia TMS</span></>
+                  <>Por Qué Elegir a la Dra. Reve para <span className="font-display italic text-green-700">Manejo de Medicamentos</span></>
                 )}
               </h2>
             </div>
@@ -526,4 +484,4 @@ const TmsTherapy = () => {
   );
 };
 
-export default TmsTherapy;
+export default MedicationManagement;
