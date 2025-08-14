@@ -307,38 +307,23 @@ const BipolarTreatment = () => {
                 return (
                   <div
                     key={groupIndex}
-                    className={`group relative overflow-hidden rounded-2xl sm:rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl ${
+                    className={`rounded-2xl sm:rounded-3xl ${
                       groupIndex === 0 
                         ? 'bg-green-50' 
                         : 'bg-blue-50'
                     }`}
                   >
-                    <div className={`relative p-6 sm:p-8 border-2 rounded-2xl sm:rounded-3xl ${
-                      groupIndex === 0 
-                        ? 'border-green-200 text-green-800' 
-                        : 'border-blue-200 text-green-800'
-                    }`}>
+                    <div className="p-6 sm:p-8 text-green-800">
                       {/* Header with Icon and Title */}
                       <div className="flex items-center gap-4 mb-6">
-                        <div className={`relative p-3 rounded-2xl ${
-                          groupIndex === 0 
-                            ? 'bg-white/20 backdrop-blur-sm border border-white/30' 
-                            : 'bg-white/20 backdrop-blur-sm border border-white/30'
-                        }`}>
-                          <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-                          <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
-                            groupIndex === 0 ? 'bg-green-400' : 'bg-green-300'
-                          } animate-pulse`}></div>
+                        <div className="p-3 rounded-2xl bg-white">
+                          <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-green-800" />
                         </div>
                         <div>
-                          <h3 className="text-xl sm:text-2xl font-display font-bold mb-1">
+                          <h3 className="text-xl sm:text-2xl font-display font-bold mb-1 text-green-800">
                             {symptomGroup.type}
                           </h3>
-                          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${
-                            groupIndex === 0 
-                              ? 'bg-green-400/20 text-green-100 border border-green-300/30' 
-                              : 'bg-green-300/20 text-green-100 border border-green-200/30'
-                          }`}>
+                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-white text-green-800">
                             {groupIndex === 0 
                               ? <TrendingUp className="w-3 h-3" />
                               : <TrendingDown className="w-3 h-3" />
@@ -356,12 +341,10 @@ const BipolarTreatment = () => {
                         {symptomGroup.items.map((item, index) => (
                           <div 
                             key={index} 
-                            className="group/item flex items-start gap-3 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all duration-300"
+                            className="flex items-start gap-3 p-3 rounded-xl bg-white"
                           >
-                            <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-2 ${
-                              groupIndex === 0 ? 'bg-green-300' : 'bg-green-200'
-                            } group-hover/item:scale-125 transition-transform duration-300`}></div>
-                            <span className="text-sm sm:text-base font-body leading-relaxed text-white/90 group-hover/item:text-white transition-colors duration-300">
+                            <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2 bg-green-500"></div>
+                            <span className="text-sm sm:text-base font-body leading-relaxed text-green-800">
                               {item}
                             </span>
                           </div>
@@ -369,43 +352,28 @@ const BipolarTreatment = () => {
                       </div>
 
                       {/* Bottom Action Area */}
-                      <div className={`relative p-4 rounded-xl ${
-                        groupIndex === 0 
-                          ? 'bg-gradient-to-r from-green-400/20 to-green-500/20' 
-                          : 'bg-gradient-to-r from-green-300/20 to-green-400/20'
-                      } backdrop-blur-sm border border-white/20`}>
+                      <div className="p-4 rounded-xl bg-white">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {groupIndex === 0 ? (
-                              <Zap className="w-4 h-4 text-green-300" />
+                              <Zap className="w-4 h-4 text-green-800" />
                             ) : (
-                              <Brain className="w-4 h-4 text-green-200" />
+                              <Brain className="w-4 h-4 text-green-800" />
                             )}
-                            <span className="text-sm font-medium text-white/90">
+                            <span className="text-sm font-medium text-green-800">
                               {groupIndex === 0 
                                 ? (language === 'en' ? 'High Energy Phase' : 'Fase de Alta Energía')
                                 : (language === 'en' ? 'Low Energy Phase' : 'Fase de Baja Energía')
                               }
                             </span>
                           </div>
-                          <div className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            groupIndex === 0 
-                              ? 'bg-green-400 text-green-900' 
-                              : 'bg-green-300 text-green-800'
-                          }`}>
+                          <div className="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
                             {groupIndex === 0 
                               ? (language === 'en' ? 'MANIC' : 'MANÍACO')
                               : (language === 'en' ? 'DEPRESSIVE' : 'DEPRESIVO')
                             }
                           </div>
                         </div>
-                      </div>
-
-                      {/* Floating Decoration */}
-                      <div className={`absolute top-4 right-4 opacity-30 ${
-                        groupIndex === 0 ? 'text-yellow-200' : 'text-blue-200'
-                      }`}>
-                        <Sparkles className="w-5 h-5 animate-pulse" />
                       </div>
                     </div>
                   </div>
@@ -474,54 +442,33 @@ const BipolarTreatment = () => {
                   color: 'green'
                 }
               ]).map((type, index) => {
-                const gradientClasses: Record<string, string> = {
-                  purple: 'bg-gradient-to-br from-green-800 via-green-900 to-green-950',
-                  blue: 'bg-gradient-to-br from-green-600 via-green-700 to-green-800',
-                  green: 'bg-gradient-to-br from-green-500 via-green-600 to-green-700'
-                };
-                
-                const accentClasses: Record<string, string> = {
-                  purple: 'from-green-200 via-transparent to-green-300',
-                  blue: 'from-green-100 via-transparent to-green-200',
-                  green: 'from-green-50 via-transparent to-green-100'
-                };
-
-                const severityColors: Record<string, string> = {
-                  purple: 'bg-green-400 text-green-900',
-                  blue: 'bg-green-300 text-green-800',
-                  green: 'bg-green-200 text-green-700'
+                const backgroundClasses: Record<string, string> = {
+                  purple: 'bg-green-50',
+                  blue: 'bg-blue-50',
+                  green: 'bg-purple-50'
                 };
 
                 return (
                   <div
                     key={index}
-                    className={`group relative overflow-hidden rounded-2xl sm:rounded-3xl transition-all duration-500 hover:scale-105 hover:shadow-2xl ${gradientClasses[type.color]} min-h-[400px] flex flex-col`}
+                    className={`rounded-2xl sm:rounded-3xl ${backgroundClasses[type.color]} min-h-[400px] flex flex-col`}
                   >
-                    {/* Animated Background Pattern */}
-                    <div className="absolute inset-0 opacity-10">
-                      <div className={`absolute inset-0 bg-gradient-to-tr ${accentClasses[type.color]}`}></div>
-                      <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-white opacity-20 -mr-10 -mt-10"></div>
-                      <div className="absolute bottom-0 left-0 w-16 h-16 rounded-full bg-white opacity-15 -ml-8 -mb-8"></div>
-                      <div className="absolute top-1/2 left-1/2 w-32 h-32 rounded-full bg-white opacity-5 transform -translate-x-1/2 -translate-y-1/2"></div>
-                    </div>
-
-                    <div className="relative p-6 sm:p-8 text-white flex flex-col h-full">
+                    <div className="p-6 sm:p-8 text-green-800 flex flex-col h-full">
                       {/* Header */}
                       <div className="text-center mb-6">
-                        <div className="relative inline-flex p-4 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 mb-4">
-                          <Activity className="w-8 h-8 text-white" />
-                          <div className="absolute -top-2 -right-2 flex items-center justify-center">
-                            <div className={`px-2 py-1 rounded-full text-xs font-bold ${severityColors[type.color]}`}>
-                              {type.severity}
-                            </div>
-                          </div>
+                        <div className="inline-flex p-4 rounded-2xl bg-white mb-4">
+                          <Activity className="w-8 h-8 text-green-800" />
                         </div>
                         
-                        <h3 className="text-xl sm:text-2xl font-display font-bold mb-3">
+                        <div className="px-3 py-1 rounded-full text-xs font-bold bg-white text-green-800 inline-block mb-3">
+                          {type.severity}
+                        </div>
+                        
+                        <h3 className="text-xl sm:text-2xl font-display font-bold mb-3 text-green-800">
                           {type.type}
                         </h3>
                         
-                        <p className="text-white/90 font-body leading-relaxed text-sm sm:text-base">
+                        <p className="text-green-800 font-body leading-relaxed text-sm sm:text-base">
                           {type.description}
                         </p>
                       </div>
@@ -532,10 +479,10 @@ const BipolarTreatment = () => {
                           {type.features.map((feature, featureIndex) => (
                             <div 
                               key={featureIndex}
-                              className="flex items-center gap-3 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/15 transition-all duration-300"
+                              className="flex items-center gap-3 p-3 rounded-xl bg-white"
                             >
-                              <div className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0"></div>
-                              <span className="text-sm font-body text-white/90">
+                              <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
+                              <span className="text-sm font-body text-green-800">
                                 {feature}
                               </span>
                             </div>
@@ -545,24 +492,19 @@ const BipolarTreatment = () => {
 
                       {/* Footer */}
                       <div className="mt-auto">
-                        <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
+                        <div className="p-4 rounded-xl bg-white">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-white/90">
+                            <span className="text-sm font-medium text-green-800">
                               {language === 'en' ? 'Treatment Focus' : 'Enfoque de Tratamiento'}
                             </span>
                             <div className="flex items-center gap-1">
-                              <Sparkles className="w-4 h-4 text-white/70" />
-                              <span className="text-xs font-medium text-white/70">
+                              <Sparkles className="w-4 h-4 text-green-800" />
+                              <span className="text-xs font-medium text-green-800">
                                 {language === 'en' ? 'Specialized Care' : 'Atención Especializada'}
                               </span>
                             </div>
                           </div>
                         </div>
-                      </div>
-
-                      {/* Floating Decoration */}
-                      <div className="absolute top-4 right-4 opacity-30 text-white">
-                        <Brain className="w-5 h-5 animate-pulse" />
                       </div>
                     </div>
                   </div>
