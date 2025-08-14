@@ -79,7 +79,7 @@ const Hero = () => {
             
             {/* Left-Aligned Content */}
             <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
-              <div className="max-w-3xl ml-4">
+              <div className="max-w-4xl ml-4">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
                   Find Your Path to<br />
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
@@ -90,8 +90,7 @@ const Hero = () => {
                   <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
                     <IconHeart />
                   </WellnessIcon>
-                  Compassionate Care<br />
-                  from <span className="font-display italic text-green-700">Dr. Melva Reve</span>
+                  Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span>
                 </h1>
                 
                 <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
