@@ -12,7 +12,7 @@ const Hero = () => {
 
   return (
     <section className="py-8 bg-white">
-      <div className="max-w-[95%] mx-auto px-2">
+      <div className="max-w-full mx-auto px-2">
         {/* Mobile: Separate containers, Desktop: Single container */}
         <div className="block sm:hidden">
           {/* Mobile: Doctor image container */}
@@ -64,12 +64,12 @@ const Hero = () => {
 
         {/* Desktop: Original single container layout */}
         <div className="hidden sm:block">
-          <div className="relative rounded-3xl overflow-hidden h-[500px] sm:h-[600px] flex items-center justify-center">
+          <div className="relative rounded-3xl overflow-hidden h-[500px] sm:h-[600px] flex items-center justify-center w-full">
             {/* Background Image */}
             <img 
               src={heroImage}
               alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover object-center scale-110"
               loading="eager"
             />
             
