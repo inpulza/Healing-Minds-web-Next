@@ -52,7 +52,7 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-20 bg-green-50">
+    <section id="services" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-display font-bold text-green-800 mb-6" data-testid="services-title">

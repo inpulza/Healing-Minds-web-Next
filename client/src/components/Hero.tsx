@@ -7,10 +7,10 @@ const Hero = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="py-8 bg-green-50">
+    <section className="py-8 bg-white">
       <div className="max-w-[95%] mx-auto px-2">
         {/* Wider Rounded Hero Container */}
-        <div className="relative rounded-3xl overflow-hidden shadow-2xl min-h-[600px] flex items-center justify-center">
+        <div className="relative rounded-3xl overflow-hidden min-h-[600px] flex items-center justify-center">
           {/* Background Image */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
