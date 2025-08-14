@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { IconSun, IconHeart, IconBrain } from '@tabler/icons-react';
 import { useLanguage } from "@/hooks/useLanguage";
+import heroBackgroundImage from "@assets/7174605c-2d15-412a-808b-90c7364fbc2e_1755208270536.png";
 
 interface ServiceHeroMasonryProps {
   tagline: {
@@ -148,7 +149,7 @@ export const ServiceHeroMasonry = ({
         <div className="relative rounded-3xl overflow-hidden h-[500px] lg:h-[600px] flex items-center justify-center">
           {/* Background Image with Blur */}
           <img 
-            src="@assets/7174605c-2d15-412a-808b-90c7364fbc2e_1755208270536.png"
+            src={heroBackgroundImage}
             alt="Dr. Melva Reve - Mental Health Specialist"
             className="absolute inset-0 w-full h-full object-cover blur-sm"
             data-testid="img-doctor-portrait"
