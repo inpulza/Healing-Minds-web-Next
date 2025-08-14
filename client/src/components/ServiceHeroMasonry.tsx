@@ -147,7 +147,7 @@ export const ServiceHeroMasonry = ({
           
           {/* Right Column - True Masonry Style Layout */}
           <div className="relative">
-            <div className="grid grid-cols-2 grid-rows-3 gap-6 max-w-xl mx-auto lg:max-w-none h-[32rem] lg:h-[42rem]">
+            <div className="grid grid-cols-2 grid-rows-3 gap-6 max-w-xl mx-auto lg:max-w-none h-[36rem] lg:h-[48rem]">
               {/* Top Left - Doctor Photo (Large - spans 2 rows) */}
               <div className="row-span-2 col-start-1 row-start-1">
                 <div className="h-full rounded-2xl shadow-lg overflow-hidden">
@@ -160,9 +160,9 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Top Right - Facts Card (Extended - 1.5 rows) */}
-              <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.4'}}>
-                <div className="bg-white border border-purple-200 rounded-2xl shadow-lg p-6 h-full flex flex-col overflow-hidden">
+              {/* Top Right - Facts Card (Extended - 1.6 rows) */}
+              <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.6'}}>
+                <div className="bg-white border border-purple-200 rounded-2xl shadow-lg p-6 h-full flex flex-col">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
                       <IconHeart className="w-4.5 h-4.5 text-purple-700" />
@@ -171,14 +171,14 @@ export const ServiceHeroMasonry = ({
                       {language === 'en' ? facts.title.en : facts.title.es}
                     </h3>
                   </div>
-                  <div className="space-y-4 flex-1 flex flex-col justify-center overflow-hidden">
+                  <div className="space-y-4 flex-1 flex flex-col justify-center">
                     {facts.items.slice(0, 2).map((fact, index) => (
-                      <div key={index} className="flex items-start gap-4 min-h-0">
+                      <div key={index} className="flex items-start gap-4">
                         <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                           <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <span className="text-sm text-purple-800 font-body font-medium leading-relaxed line-clamp-2 break-words">
+                        <div className="flex-1">
+                          <span className="text-sm text-purple-800 font-body font-medium leading-relaxed break-words">
                             {language === 'en' ? fact.en : fact.es}
                           </span>
                         </div>
@@ -194,9 +194,9 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Bottom Left - Quick Stats Card (Extended - 1.5 rows) */}
-              <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.6', gridRowEnd: 'span 1.4'}}>
-                <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6 h-full flex flex-col overflow-hidden">
+              {/* Bottom Left - Quick Stats Card (Extended - 1.6 rows) */}
+              <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.4', gridRowEnd: 'span 1.6'}}>
+                <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6 h-full flex flex-col">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
                       <Clock className="w-4.5 h-4.5 text-green-700" />
@@ -205,14 +205,14 @@ export const ServiceHeroMasonry = ({
                       {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
                     </h3>
                   </div>
-                  <div className="space-y-4 flex-1 flex flex-col justify-center overflow-hidden">
+                  <div className="space-y-4 flex-1 flex flex-col justify-center">
                     {quickStats.items.slice(0, 3).map((stat, index) => (
-                      <div key={index} className="flex items-start gap-4 min-h-0">
+                      <div key={index} className="flex items-start gap-4">
                         <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                           <div className="w-2 h-2 bg-green-600 rounded-full"></div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-green-800 font-body font-medium leading-relaxed line-clamp-2 break-words">
+                        <div className="flex-1">
+                          <p className="text-sm text-green-800 font-body font-medium leading-relaxed break-words">
                             {language === 'en' ? stat.en : stat.es}
                           </p>
                         </div>
@@ -230,7 +230,7 @@ export const ServiceHeroMasonry = ({
               </div>
 
               {/* Bottom Right - Therapy Room Photo (Adjusted - spans remaining space) */}
-              <div className="row-span-2 col-start-2" style={{gridRowStart: '1.9', gridRowEnd: 'span 1.6'}}>
+              <div className="row-span-2 col-start-2" style={{gridRowStart: '2.1', gridRowEnd: 'span 1.4'}}>
                 <div className="h-full rounded-2xl shadow-lg overflow-hidden">
                   <img 
                     src={images.therapyRoomImage}
