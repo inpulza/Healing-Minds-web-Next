@@ -324,89 +324,134 @@ const MedicationManagement = () => {
           </div>
         </section>
 
-        {/* Candidate Criteria Section */}
+        {/* Modern Medication Management Benefits Section */}
         <section className="py-16 sm:py-20 bg-blue-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Who Benefits from <span className="font-display italic text-green-700">Medication Management</span>?</>
-                ) : (
-                  <>¿Quién se Beneficia del <span className="font-display italic text-green-700">Manejo de Medicamentos</span>?</>
-                )}
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <Card className="bg-white border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-xl font-body font-bold text-green-800 flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
-                    {language === 'en' ? 'Good Candidates' : 'Buenos Candidatos'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {(language === 'en' ? [
-                      'Treatment-resistant depression',
-                      'Unable to tolerate antidepressant side effects',
-                      'Seeking medication-free treatment option',
-                      'Adults 18 years and older',
-                      'Stable medical conditions',
-                      'Committed to full treatment course'
-                    ] : [
-                      'Depresión resistente al tratamiento',
-                      'Incapaz de tolerar efectos secundarios de antidepresivos',
-                      'Buscando opción de tratamiento sin medicamentos',
-                      'Adultos de 18 años en adelante',
-                      'Condiciones médicas estables',
-                      'Comprometido con el curso completo de tratamiento'
-                    ]).map((criteria, index) => (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <CheckCircle className="w-4 h-4 text-green-600" />
-                        </div>
-                        <span className="text-gray-700 font-body">{criteria}</span>
-                      </div>
-                    ))}
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-blue-100">
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* Content Side */}
+                <div className="lg:col-span-2">
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Personalized Care' : 'Atención Personalizada'}
                   </div>
-                </CardContent>
-              </Card>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Who Benefits from <span className="font-display italic text-green-700">Medication Management</span>?</>
+                    ) : (
+                      <>¿Quién se Beneficia del <span className="font-display italic text-green-700">Manejo de Medicamentos</span>?</>
+                    )}
+                  </h2>
+                  
+                  <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Our comprehensive medication management ensures optimal treatment outcomes through careful monitoring, adjustment, and personalized care for each patient.'
+                      : 'Nuestro manejo integral de medicamentos asegura resultados óptimos de tratamiento a través de monitoreo cuidadoso, ajustes y atención personalizada para cada paciente.'
+                    }
+                  </p>
 
-              <Card className="bg-white border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-xl font-body font-bold text-red-800 flex items-center gap-3">
-                    <Info className="w-6 h-6 text-red-600" />
-                    {language === 'en' ? 'Important Considerations' : 'Consideraciones Importantes'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {(language === 'en' ? [
-                      'Metal implants near the head',
-                      'History of seizures or epilepsy',
-                      'Certain medications that lower seizure threshold',
-                      'Pregnancy (safety not established)',
-                      'Active substance abuse',
-                      'Severe cognitive impairment'
-                    ] : [
-                      'Implantes metálicos cerca de la cabeza',
-                      'Historial de convulsiones o epilepsia',
-                      'Ciertos medicamentos que reducen el umbral de convulsiones',
-                      'Embarazo (seguridad no establecida)',
-                      'Abuso activo de sustancias',
-                      'Deterioro cognitivo severo'
-                    ]).map((consideration, index) => (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <Info className="w-4 h-4 text-red-600" />
+                  {/* Benefits Grid */}
+                  <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    {/* Good Candidates */}
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                          <CheckCircle className="w-6 h-6 text-green-600" />
                         </div>
-                        <span className="text-gray-700 font-body">{consideration}</span>
+                        <h3 className="text-xl font-body font-bold text-green-800">
+                          {language === 'en' ? 'Ideal Candidates' : 'Candidatos Ideales'}
+                        </h3>
                       </div>
-                    ))}
+                      <div className="space-y-2">
+                        {(language === 'en' ? [
+                          'Multiple psychiatric medications',
+                          'Complex medication interactions',
+                          'Side effect management needed',
+                          'Treatment optimization required'
+                        ] : [
+                          'Múltiples medicamentos psiquiátricos',
+                          'Interacciones medicamentosas complejas',
+                          'Necesita manejo de efectos secundarios',
+                          'Requiere optimización del tratamiento'
+                        ]).map((item, index) => (
+                          <div key={index} className="flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-gray-600 font-body text-sm">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Important Notes */}
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <Info className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <h3 className="text-xl font-body font-bold text-green-800">
+                          {language === 'en' ? 'Key Considerations' : 'Consideraciones Clave'}
+                        </h3>
+                      </div>
+                      <div className="space-y-2">
+                        {(language === 'en' ? [
+                          'Regular monitoring required',
+                          'Lab work may be necessary',
+                          'Medication compliance essential',
+                          'Follow-up appointments needed'
+                        ] : [
+                          'Monitoreo regular requerido',
+                          'Trabajo de laboratorio puede ser necesario',
+                          'Cumplimiento de medicación esencial',
+                          'Citas de seguimiento necesarias'
+                        ]).map((item, index) => (
+                          <div key={index} className="flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                            <span className="text-gray-600 font-body text-sm">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+
+                  <Link href="/contact">
+                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                      <span>{language === 'en' ? 'Start Medication Management' : 'Iniciar Manejo de Medicamentos'}</span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Sidebar with Stats and Photo */}
+                <div className="flex flex-col h-full">
+                  {/* Stats Cards */}
+                  <div className="space-y-4 mb-6">
+                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                      <div className="text-3xl font-bold text-green-600 mb-2">95%</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Medication adherence improvement' : 'Mejora en adherencia a medicación'}
+                      </div>
+                    </div>
+                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Emergency consultation available' : 'Consulta de emergencia disponible'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Photo Placeholder - Fills remaining space */}
+                  <div className="flex-1 w-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-green-600 font-bold">💊</span>
+                      </div>
+                      <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                      <p className="text-green-500 font-body text-xs">Medicación/tratamiento</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -457,18 +502,18 @@ const MedicationManagement = () => {
               <div>
                 <div className="space-y-6">
                   {(language === 'en' ? [
-                    'Board-certified psychiatrist with TMS expertise',
-                    'Latest FDA-approved TMS technology',
+                    'Board-certified psychiatrist with medication expertise',
+                    'Comprehensive medication monitoring and adjustments',
                     'Bilingual services in English and Spanish',
                     'Insurance coverage assistance',
-                    'Comprehensive pre and post-treatment care',
-                    'Convenient scheduling and location'
+                    'Regular follow-up and safety monitoring',
+                    'Convenient scheduling and accessible location'
                   ] : [
-                    'Psiquiatra certificada con experiencia en TMS',
-                    'Tecnología TMS más reciente aprobada por FDA',
+                    'Psiquiatra certificada con experiencia en medicamentos',
+                    'Monitoreo integral y ajustes de medicación',
                     'Servicios bilingües en inglés y español',
                     'Asistencia con cobertura de seguro',
-                    'Atención integral pre y post-tratamiento',
+                    'Seguimiento regular y monitoreo de seguridad',
                     'Horarios convenientes y ubicación accesible'
                   ]).map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
@@ -487,12 +532,12 @@ const MedicationManagement = () => {
                     <IconBolt />
                   </WellnessIcon>
                   <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
-                    {language === 'en' ? 'Ready to Try TMS Therapy?' : '¿Listo para Probar la Terapia TMS?'}
+                    {language === 'en' ? 'Ready to Optimize Your Medications?' : '¿Listo para Optimizar sus Medicamentos?'}
                   </h3>
                   <p className="text-gray-600 font-body leading-relaxed mb-6">
                     {language === 'en'
-                      ? 'Discover if TMS therapy is right for you. Schedule a consultation to learn more about this innovative treatment option.'
-                      : 'Descubre si la terapia TMS es adecuada para ti. Programa una consulta para aprender más sobre esta opción de tratamiento innovadora.'
+                      ? 'Take control of your mental health with expert medication management. Schedule a consultation to review your current medications.'
+                      : 'Toma control de tu salud mental con manejo experto de medicamentos. Programa una consulta para revisar tus medicamentos actuales.'
                     }
                   </p>
                   <div className="space-y-4">
