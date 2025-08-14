@@ -295,30 +295,82 @@ const BipolarTreatment = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {symptoms.map((symptomGroup, groupIndex) => (
-                <Card key={groupIndex} className="border-blue-100 hover:shadow-lg transition-all duration-300">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3">
-                      <WellnessIcon size="md" color={groupIndex === 0 ? "orange" : "blue"}>
-                        <symptomGroup.icon />
-                      </WellnessIcon>
-                      <CardTitle className="text-xl font-body font-bold text-green-800">
-                        {symptomGroup.type}
-                      </CardTitle>
+                <div key={groupIndex} className={`relative overflow-hidden rounded-2xl shadow-xl transition-all duration-500 hover:scale-105 ${
+                  groupIndex === 0 
+                    ? 'bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 border border-orange-200' 
+                    : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border border-blue-200'
+                }`}>
+                  {/* Decorative background elements */}
+                  <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 ${
+                    groupIndex === 0 ? 'bg-orange-400' : 'bg-blue-400'
+                  }`}></div>
+                  <div className={`absolute bottom-0 left-0 w-24 h-24 rounded-full blur-2xl opacity-15 ${
+                    groupIndex === 0 ? 'bg-red-400' : 'bg-indigo-400'
+                  }`}></div>
+                  
+                  <div className="relative p-8">
+                    {/* Header with large icon */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${
+                          groupIndex === 0 
+                            ? 'bg-gradient-to-br from-orange-400 to-red-500 shadow-lg shadow-orange-200' 
+                            : 'bg-gradient-to-br from-blue-400 to-indigo-600 shadow-lg shadow-blue-200'
+                        }`}>
+                          <symptomGroup.icon className="w-8 h-8 text-white" />
+                        </div>
+                        <div>
+                          <h3 className={`text-2xl font-body font-bold ${
+                            groupIndex === 0 ? 'text-orange-800' : 'text-blue-800'
+                          }`}>
+                            {symptomGroup.type}
+                          </h3>
+                          <div className={`w-20 h-1 rounded-full mt-2 ${
+                            groupIndex === 0 
+                              ? 'bg-gradient-to-r from-orange-400 to-red-500' 
+                              : 'bg-gradient-to-r from-blue-400 to-indigo-600'
+                          }`}></div>
+                        </div>
+                      </div>
+                      
+                      {/* Episode indicator */}
+                      <div className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                        groupIndex === 0 
+                          ? 'bg-orange-100 text-orange-700 border border-orange-200' 
+                          : 'bg-blue-100 text-blue-700 border border-blue-200'
+                      }`}>
+                        {groupIndex === 0 ? '↗️ High' : '↘️ Low'}
+                      </div>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
+
+                    {/* Symptoms grid */}
+                    <div className="grid gap-3">
                       {symptomGroup.items.map((item, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                          <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-4 h-4 text-blue-600" />
-                          </div>
-                          <span className="text-gray-700 font-body">{item}</span>
+                        <div key={index} className={`group flex items-start gap-3 p-3 rounded-xl transition-all duration-300 hover:scale-102 ${
+                          groupIndex === 0 
+                            ? 'bg-white/70 hover:bg-white/90 hover:shadow-md border border-orange-100/50' 
+                            : 'bg-white/70 hover:bg-white/90 hover:shadow-md border border-blue-100/50'
+                        }`}>
+                          <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-2 ${
+                            groupIndex === 0 
+                              ? 'bg-gradient-to-r from-orange-400 to-red-500' 
+                              : 'bg-gradient-to-r from-blue-400 to-indigo-600'
+                          }`}></div>
+                          <span className="text-gray-700 font-body leading-relaxed group-hover:text-gray-800 transition-colors duration-300">
+                            {item}
+                          </span>
                         </div>
                       ))}
                     </div>
-                  </CardContent>
-                </Card>
+
+                    {/* Bottom accent */}
+                    <div className={`mt-6 h-1 rounded-full ${
+                      groupIndex === 0 
+                        ? 'bg-gradient-to-r from-orange-200 via-red-300 to-pink-200' 
+                        : 'bg-gradient-to-r from-blue-200 via-indigo-300 to-purple-200'
+                    }`}></div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
