@@ -2,7 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
-import bilingualImage from '@assets/bilingual-consultation.png';
+import bilingualImage from '@assets/bilingual-consultation-updated.png';
 
 const BilingualCare = () => {
   const { language } = useLanguage();
