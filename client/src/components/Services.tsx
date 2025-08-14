@@ -55,8 +55,8 @@ const Services = () => {
             <WellnessIcon size="md" color="green" className="opacity-70">
               <IconBrain />
             </WellnessIcon>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-green-800 text-center" data-testid="services-title">
-              Mental Health for <span className="font-body italic">every</span> mind
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center" data-testid="services-title">
+              Mental Health for <span className="font-display italic text-green-700">every</span> mind
             </h2>
             <WellnessIcon size="md" color="blue" className="opacity-70">
               <IconHeart />

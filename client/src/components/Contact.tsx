@@ -142,8 +142,8 @@ const Contact = () => {
     <section id="contact" className="py-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-green-800 mb-6" data-testid="contact-title">
-            Get in <span className="font-body italic">touch</span>
+          <h2 className="text-4xl md:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
+            Get in <span className="font-display italic text-green-700">touch</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="contact-description">
             {t('contact.description')}
@@ -153,8 +153,8 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Information */}
           <div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-6" data-testid="contact-info-title">
-              {language === 'en' ? 'Contact Information' : 'Información de Contacto'}
+            <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-info-title">
+              {language === 'en' ? <>Contact <span className="font-display italic text-green-700">Information</span></> : <>Información de <span className="font-display italic text-green-700">Contacto</span></>}
             </h3>
             
             <div className="space-y-6 mb-8">
@@ -210,8 +210,8 @@ const Contact = () => {
 
           {/* Contact Form */}
           <Card className="bg-white p-8 shadow-sm" data-testid="contact-form-card">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-6" data-testid="contact-form-title">
-              {t('contact.form.title')}
+            <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-form-title">
+              {language === 'en' ? <>Send us a <span className="font-display italic text-green-700">message</span></> : <>Envíanos un <span className="font-display italic text-green-700">mensaje</span></>}
             </h3>
             
             <form onSubmit={handleSubmit} className="space-y-6" data-testid="contact-form">

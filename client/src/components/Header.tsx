@@ -51,8 +51,8 @@ const Header = () => {
               <div className="w-8 h-8 bg-green-600 rounded-full mr-3 flex items-center justify-center">
                 <div className="text-white font-display font-bold text-sm">O</div>
               </div>
-              <div className="text-2xl font-display font-bold text-green-800">
-                Healing Minds
+              <div className="text-2xl font-body font-bold text-green-800">
+                Healing <span className="font-display italic text-green-700">Minds</span>
               </div>
             </div>
           </Link>

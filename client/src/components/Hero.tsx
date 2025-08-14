@@ -81,17 +81,17 @@ const Hero = () => {
             {/* Centered Content */}
             <div className="relative z-10 w-full px-8 lg:px-12 py-16 text-center">
               <div className="max-w-2xl mx-auto">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight text-[#1e6b3b] text-center mb-6" data-testid="hero-title">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-center mb-6" data-testid="hero-title">
                   Find Your Path to 
                   <WellnessIcon size="md" color="green" className="inline-flex mx-3 mb-2">
                     <IconBrain />
                   </WellnessIcon>
-                  Clarity<br />
+                  <span className="font-display italic text-green-700">Clarity</span><br />
                   with 
                   <WellnessIcon size="md" color="blue" className="inline-flex mx-2 mb-1">
                     <IconHeart />
                   </WellnessIcon>
-                  <span className="font-display italic">Dr. Reve</span>
+                  <span className="font-display italic text-green-700">Dr. Reve</span>
                 </h1>
                 
                 <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b] flex flex-wrap items-center justify-center gap-2" data-testid="hero-description">

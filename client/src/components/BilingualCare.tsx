@@ -36,12 +36,12 @@ const BilingualCare = () => {
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
           <div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-green-800 leading-tight" data-testid="bilingual-title">
-                <span className="font-body italic">Guided</span> by passion.
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-green-800 leading-tight" data-testid="bilingual-title">
+                <span className="font-display italic text-green-700">Guided</span> by passion.
                 <WellnessIcon size="md" color="orange" className="inline-flex mx-2 sm:mx-3 mb-1 sm:mb-2">
                   <IconHeart />
                 </WellnessIcon>
-                <span className="font-display italic">Driven</span> by purpose.
+                <span className="font-display italic text-green-700">Driven</span> by purpose.
               </h2>
             </div>
             

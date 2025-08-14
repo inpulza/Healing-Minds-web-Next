@@ -60,6 +60,8 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         serif: ["var(--font-serif)", "Georgia", "serif"],
+        'body': ['"Instrument Sans"', 'sans-serif'],
+        'display': ['"Playfair Display"', 'serif'],
       },
       keyframes: {
         "accordion-down": {

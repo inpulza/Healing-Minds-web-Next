@@ -67,8 +67,8 @@ const FAQ = () => {
             <WellnessIcon size="md" color="green" className="opacity-80">
               <IconHelp />
             </WellnessIcon>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-green-800" data-testid="faq-title">
-              {language === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-green-800" data-testid="faq-title">
+              {language === 'en' ? <>Frequently <span className="font-display italic text-green-700">Asked</span> Questions</> : <>Preguntas <span className="font-display italic text-green-700">Frecuentes</span></>}
             </h2>
           </div>
           <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto font-body leading-relaxed" data-testid="faq-description">

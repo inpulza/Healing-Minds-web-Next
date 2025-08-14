@@ -104,8 +104,8 @@ const Footer = () => {
           <div className="lg:col-span-7 grid md:grid-cols-3 gap-8">
             {/* Our Services */}
             <div>
-              <h4 className="text-lg font-bold text-white mb-6" data-testid="footer-services-title">
-                {language === 'en' ? 'Our Services' : 'Nuestros Servicios'}
+              <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-services-title">
+                {language === 'en' ? <>Our <span className="font-display italic text-green-200">Services</span></> : <>Nuestros <span className="font-display italic text-green-200">Servicios</span></>}
               </h4>
               <ul className="space-y-3" data-testid="footer-services-list">
                 {services.map((service, index) => (
@@ -125,8 +125,8 @@ const Footer = () => {
 
             {/* Service Areas */}
             <div>
-              <h4 className="text-lg font-bold text-white mb-6" data-testid="footer-areas-title">
-                {language === 'en' ? 'Service Areas' : 'Áreas de Servicio'}
+              <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-areas-title">
+                {language === 'en' ? <>Service <span className="font-display italic text-green-200">Areas</span></> : <><span className="font-display italic text-green-200">Áreas</span> de Servicio</>}
               </h4>
               <ul className="space-y-3" data-testid="footer-areas-list">
                 <li className="text-green-200 text-base flex items-center">
@@ -150,8 +150,8 @@ const Footer = () => {
 
             {/* Quick Links & Social */}
             <div>
-              <h4 className="text-lg font-bold text-white mb-6" data-testid="footer-quick-links-title">
-                {language === 'en' ? 'Quick Links' : 'Enlaces Rápidos'}
+              <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
+                {language === 'en' ? <>Quick <span className="font-display italic text-green-200">Links</span></> : <>Enlaces <span className="font-display italic text-green-200">Rápidos</span></>}
               </h4>
               <ul className="space-y-3 mb-8" data-testid="footer-quick-links-list">
                 {quickLinks.map((link, index) => (
@@ -170,8 +170,8 @@ const Footer = () => {
 
               {/* Social Media */}
               <div>
-                <h5 className="text-lg font-bold text-white mb-4" data-testid="footer-social-title">
-                  {language === 'en' ? 'Follow Us' : 'Síguenos'}
+                <h5 className="text-lg font-body font-bold text-white mb-4" data-testid="footer-social-title">
+                  {language === 'en' ? <>Follow <span className="font-display italic text-green-200">Us</span></> : <><span className="font-display italic text-green-200">Síguenos</span></>}
                 </h5>
                 <div className="flex gap-4" data-testid="footer-social-links">
                   {socialLinks.map((social, index) => {

@@ -45,8 +45,8 @@ const About = () => {
                 <WellnessIcon size="md" color="blue" className="opacity-80">
                   <IconUserHeart />
                 </WellnessIcon>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-gray-900" data-testid="about-title">
-                  Dr. Melva Reve
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-gray-900" data-testid="about-title">
+                  <span className="font-display italic text-green-700">Dr. Melva</span> Reve
                 </h2>
               </div>
               

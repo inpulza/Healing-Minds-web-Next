@@ -4,6 +4,12 @@
 
 This is a professional website for Healing Minds Psychiatry, the practice of Dr. Melva Reve, a board-certified psychiatrist serving Naples, FL and surrounding areas. The website provides bilingual (English/Spanish) psychiatric care information, services, and patient resources. It features a modern, accessible design built with React and TypeScript, focusing on mental health services including anxiety, depression, ADHD, PTSD, and other psychiatric conditions.
 
+## Recent Changes (August 14, 2025)
+
+- **Typography System Overhaul**: Implemented sophisticated dual-font system using Instrument Sans for body text and Playfair Display for accent words
+- **Consistent Typography Pattern**: Applied font-body for main headings and font-display italic text-green-700 for accent words across all components
+- **Enhanced Visual Hierarchy**: Created elegant contrast between functional text and decorative accents throughout the site
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -24,7 +30,8 @@ Preferred communication style: Simple, everyday language.
 - **API Design**: RESTful endpoints for contact form submissions and message retrieval
 
 ### Design System
-- **Typography**: Inter font for body text, Arapey serif font for headings
+- **Typography**: Instrument Sans for primary text, Playfair Display for elegant accent words and emphasis
+- **Typography Pattern**: Main headings use font-body, accent words use font-display italic with text-green-700 color
 - **Color Scheme**: Primary green (#16a34a) with light green accents, professional gray text
 - **Responsive Design**: Mobile-first approach with responsive breakpoints
 - **Component Library**: shadcn/ui components for consistent UI patterns

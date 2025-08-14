@@ -14,10 +14,10 @@ const DoctorSection = () => {
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             {/* Content */}
             <div className="text-green-800 order-2 lg:order-1">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-4 sm:mb-6" data-testid="doctor-section-title">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold mb-4 sm:mb-6" data-testid="doctor-section-title">
                 {language === 'en' 
-                  ? 'Dedicated to your mental health, every day'
-                  : 'Dedicados a su salud mental, todos los días'
+                  ? <>Dedicated to your <span className="font-display italic text-green-700">mental health</span>, every day</>
+                  : <>Dedicados a su <span className="font-display italic text-green-700">salud mental</span>, todos los días</>
                 }
               </h2>
               

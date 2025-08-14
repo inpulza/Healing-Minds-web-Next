@@ -62,10 +62,10 @@ const ServiceAreas: React.FC = () => {
     <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-green-50" data-testid="service-areas">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-green-800 mb-4 sm:mb-6" data-testid="service-areas-title">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4 sm:mb-6" data-testid="service-areas-title">
             {language === 'en' 
-              ? 'Serving Southwest Florida'
-              : 'Sirviendo el Suroeste de Florida'
+              ? <>Serving <span className="font-display italic text-green-700">Southwest</span> Florida</>
+              : <>Sirviendo el <span className="font-display italic text-green-700">Suroeste</span> de Florida</>
             }
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="service-areas-description">

@@ -42,8 +42,8 @@ const Testimonials = () => {
     <section className="py-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-green-800 mb-6" data-testid="testimonials-title">
-            What our <span className="font-body italic">happy</span> patients say
+          <h2 className="text-4xl md:text-6xl font-body font-bold text-green-800 mb-6" data-testid="testimonials-title">
+            What our <span className="font-display italic text-green-700">happy</span> patients say
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="testimonials-description">
             {language === 'en'
