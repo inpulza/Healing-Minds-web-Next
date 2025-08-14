@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Header = () => {
@@ -72,9 +72,10 @@ const Header = () => {
             </Button>
             <Link href="/contact">
               <Button
-                className="bg-primary text-white hover:bg-primary-hover font-body font-semibold px-6 py-3 rounded-full text-sm shadow-sm"
+                className="bg-primary text-white hover:bg-primary-hover font-body font-semibold px-6 py-3 rounded-full text-sm shadow-sm flex items-center gap-2"
                 data-testid="book-now-button"
               >
+                <ArrowRight className="w-4 h-4" />
                 Book Now
               </Button>
             </Link>
