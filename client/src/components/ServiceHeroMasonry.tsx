@@ -144,81 +144,69 @@ export const ServiceHeroMasonry = ({
           </div>
         </div>
 
-        {/* Masonry Visual Section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {/* Doctor Photo - Spans 2 columns */}
-          <div className="col-span-2 lg:col-span-2">
-            <div className="aspect-[4/3] rounded-2xl shadow-lg overflow-hidden">
-              <img 
-                src={images.doctorImage}
-                alt="Dr. Melva Reve - Mental Health Specialist"
-                className="w-full h-full object-cover"
-                data-testid="img-doctor-portrait"
-              />
-            </div>
+        {/* Hero Image with Overlaid Cards */}
+        <div className="relative">
+          <div className="aspect-[16/9] lg:aspect-[21/9] rounded-2xl shadow-lg overflow-hidden">
+            <img 
+              src={images.doctorImage}
+              alt="Dr. Melva Reve - Mental Health Specialist"
+              className="w-full h-full object-cover"
+              data-testid="img-doctor-portrait"
+            />
+            {/* Overlay gradient for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20"></div>
           </div>
 
-          {/* Facts Card */}
-          <div className="col-span-1 lg:col-span-1">
-            <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-5 h-full">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <IconHeart className="w-4 h-4 text-green-700" />
-                </div>
-                <h3 className="text-sm font-body font-bold text-green-800">
-                  {language === 'en' ? facts.title.en : facts.title.es}
-                </h3>
-              </div>
-              <div className="space-y-3">
-                {facts.items.slice(0, 2).map((fact, index) => (
-                  <div key={index} className="flex items-start gap-2">
-                    <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
-                    </div>
-                    <span className="text-xs text-green-800 font-body font-medium leading-relaxed">
-                      {language === 'en' ? fact.en : fact.es}
-                    </span>
+          {/* Overlaid Cards */}
+          <div className="absolute inset-0 flex items-end justify-start p-6 lg:p-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl w-full">
+              {/* Facts Card */}
+              <div className="bg-white/95 backdrop-blur-sm border border-green-200 rounded-2xl shadow-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <IconHeart className="w-5 h-5 text-green-700" />
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Facts Card */}
-          <div className="col-span-1 lg:col-span-1">
-            <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-5 h-full">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-4 h-4 text-green-700" />
+                  <h3 className="text-lg font-body font-bold text-green-800">
+                    {language === 'en' ? facts.title.en : facts.title.es}
+                  </h3>
                 </div>
-                <h3 className="text-sm font-body font-bold text-green-800">
-                  {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
-                </h3>
-              </div>
-              <div className="space-y-3">
-                {quickStats.items.slice(0, 2).map((stat, index) => (
-                  <div key={index} className="flex items-start gap-2">
-                    <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
+                <div className="space-y-3">
+                  {facts.items.slice(0, 2).map((fact, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                      </div>
+                      <span className="text-sm text-green-800 font-body font-medium leading-relaxed">
+                        {language === 'en' ? fact.en : fact.es}
+                      </span>
                     </div>
-                    <p className="text-xs text-green-800 font-body font-medium leading-relaxed">
-                      {language === 'en' ? stat.en : stat.es}
-                    </p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Therapy Room Photo - Spans full width */}
-          <div className="col-span-2 lg:col-span-4">
-            <div className="aspect-[16/9] lg:aspect-[21/9] rounded-2xl shadow-lg overflow-hidden">
-              <img 
-                src={images.therapyRoomImage}
-                alt="Comfortable therapy environment"
-                className="w-full h-full object-cover"
-                data-testid="img-therapy-room"
-              />
+              {/* Quick Facts Card */}
+              <div className="bg-white/95 backdrop-blur-sm border border-green-200 rounded-2xl shadow-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-5 h-5 text-green-700" />
+                  </div>
+                  <h3 className="text-lg font-body font-bold text-green-800">
+                    {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
+                  </h3>
+                </div>
+                <div className="space-y-3">
+                  {quickStats.items.slice(0, 3).map((stat, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                      </div>
+                      <p className="text-sm text-green-800 font-body font-medium leading-relaxed">
+                        {language === 'en' ? stat.en : stat.es}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
