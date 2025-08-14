@@ -148,8 +148,8 @@ export const ServiceHeroMasonry = ({
           {/* Right Column - True Masonry Style Layout */}
           <div className="relative">
             <div className="grid grid-cols-2 grid-rows-3 gap-6 max-w-xl mx-auto lg:max-w-none h-[36rem] lg:h-[48rem]">
-              {/* Top Left - Doctor Photo (Large - spans 2 rows) */}
-              <div className="row-span-2 col-start-1 row-start-1">
+              {/* Top Left - Doctor Photo (Reduced height) */}
+              <div className="row-span-2 col-start-1 row-start-1" style={{gridRowEnd: 'span 1.8'}}>
                 <div className="h-full rounded-2xl shadow-lg overflow-hidden">
                   <img 
                     src={images.doctorImage}
@@ -160,8 +160,8 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Top Right - Facts Card (Extended - 1.6 rows) */}
-              <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.6'}}>
+              {/* Top Right - Facts Card (Extended - more space) */}
+              <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.8'}}>
                 <div className="bg-white border border-purple-200 rounded-2xl shadow-lg p-6 h-full flex flex-col">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -194,8 +194,8 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Bottom Left - Quick Stats Card (Extended - 1.6 rows) */}
-              <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.4', gridRowEnd: 'span 1.6'}}>
+              {/* Bottom Left - Quick Stats Card (Extended - more space) */}
+              <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.2', gridRowEnd: 'span 1.8'}}>
                 <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6 h-full flex flex-col">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -229,8 +229,8 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Bottom Right - Therapy Room Photo (Adjusted - spans remaining space) */}
-              <div className="row-span-2 col-start-2" style={{gridRowStart: '2.1', gridRowEnd: 'span 1.4'}}>
+              {/* Bottom Right - Therapy Room Photo (Reduced height) */}
+              <div className="row-span-2 col-start-2" style={{gridRowStart: '2.2', gridRowEnd: 'span 1.2'}}>
                 <div className="h-full rounded-2xl shadow-lg overflow-hidden">
                   <img 
                     src={images.therapyRoomImage}
