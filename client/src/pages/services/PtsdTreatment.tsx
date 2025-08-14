@@ -22,6 +22,7 @@ import vehicleImage from "@assets/f01c7d7e-f4d9-4a02-b3e0-d02f5f47a354_175521166
 import naturalDisasterImage from "@assets/f9744cdb-4b98-4681-9f74-b6f4692a2ced (1)_1755211836264.png";
 import assaultImage from "@assets/6180c64d-fa53-4c88-8339-6aa0b06bdc93_1755211836265.png";
 import medicalImage from "@assets/4142165d-97e6-4e50-8313-f705c8e6e93f_1755212013126.png";
+import consultationImage from "@assets/d7b136b4-35bd-482a-b24a-98a1c5bb1abf_1755212133166.png";
 
 const PtsdTreatment = () => {
   const { language } = useLanguage();
@@ -514,11 +515,12 @@ const PtsdTreatment = () => {
                   {/* Photo - Fills remaining space */}
                   <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <img 
-                      src={therapyRoomImage} 
-                      alt="Professional therapy room environment for PTSD treatment and recovery"
-                      className="w-full h-full object-cover"
+                      src={consultationImage} 
+                      alt="Professional psychiatrist Dr. Melva Reve conducting PTSD consultation in modern medical office"
+                      className="w-full h-full object-cover object-center"
                       loading="lazy"
                       decoding="async"
+                      style={{ objectPosition: 'center center' }}
                     />
                   </div>
                 </div>
