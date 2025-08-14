@@ -85,14 +85,22 @@ const Header = () => {
   };
 
   const handleServiceNavigation = (href: string) => {
+    console.log('Navigating to:', href);
     setIsServicesOpen(false);
-    navigate(href);
+    // Use window.location.href for more reliable navigation
+    setTimeout(() => {
+      window.location.href = href;
+    }, 100);
   };
 
   const handleMobileServiceNavigation = (href: string) => {
+    console.log('Mobile navigating to:', href);
     setIsMobileMenuOpen(false);
     setIsMobileServicesOpen(false);
-    navigate(href);
+    // Use window.location.href for more reliable navigation
+    setTimeout(() => {
+      window.location.href = href;
+    }, 100);
   };
 
   return (
