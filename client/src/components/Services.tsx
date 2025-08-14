@@ -106,7 +106,7 @@ const Services = () => {
 
                 <Link href="/contact">
                   <Button
-                    className={`group inline-flex items-center justify-center gap-3 rounded-full text-sm font-semibold transition-all duration-300 px-6 py-3 ${
+                    className={`group inline-flex items-center justify-center gap-3 rounded-full text-sm font-semibold transition-all duration-300 px-6 py-6 ${
                       service.featured
                         ? 'bg-white text-green-800 hover:bg-green-50'
                         : 'bg-green-800 text-white hover:bg-green-700'
