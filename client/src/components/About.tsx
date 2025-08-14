@@ -17,13 +17,15 @@ const About = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Doctor Image */}
             <div className="relative">
-              <div className="bg-gray-100 rounded-3xl overflow-hidden">
+              <div className="relative bg-gray-100 rounded-3xl overflow-hidden">
                 <img
                   src={doctorProfileImage}
                   alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
                   className="w-full h-[600px] object-cover object-top"
                   data-testid="about-doctor-image"
                 />
+                {/* Subtle Green Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-green-600/10" />
               </div>
             </div>
             
