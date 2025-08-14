@@ -101,7 +101,7 @@ const Footer = () => {
           </div>
 
           {/* Right Section - Links */}
-          <div className="lg:col-span-7 grid md:grid-cols-2 gap-8">
+          <div className="lg:col-span-7 grid md:grid-cols-3 gap-8">
             {/* Our Services */}
             <div>
               <h4 className="text-base font-bold text-white mb-6" data-testid="footer-services-title">
@@ -123,7 +123,32 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Quick Links & Contact */}
+            {/* Service Areas */}
+            <div>
+              <h4 className="text-base font-bold text-white mb-6" data-testid="footer-areas-title">
+                {language === 'en' ? 'Service Areas' : 'Áreas de Servicio'}
+              </h4>
+              <ul className="space-y-3" data-testid="footer-areas-list">
+                <li className="text-green-200 text-sm flex items-center">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
+                  Naples, FL
+                </li>
+                <li className="text-green-200 text-sm flex items-center">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
+                  Marco Island, FL
+                </li>
+                <li className="text-green-200 text-sm flex items-center">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
+                  Bonita Springs, FL
+                </li>
+                <li className="text-green-200 text-sm flex items-center">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
+                  Collier County
+                </li>
+              </ul>
+            </div>
+
+            {/* Quick Links & Social */}
             <div>
               <h4 className="text-base font-bold text-white mb-6" data-testid="footer-quick-links-title">
                 {language === 'en' ? 'Quick Links' : 'Enlaces Rápidos'}
