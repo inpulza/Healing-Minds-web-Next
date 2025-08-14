@@ -39,10 +39,10 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-20 bg-soft-mint">
+    <section className="py-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-warm mb-6" data-testid="testimonials-title">
+          <h2 className="text-4xl md:text-6xl font-display font-bold text-green-800 mb-6" data-testid="testimonials-title">
             What our <span className="font-body italic">happy</span> patients say
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="testimonials-description">
@@ -67,13 +67,13 @@ const Testimonials = () => {
               </p>
               
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mr-4">
                   <div className="text-white font-display font-bold text-sm">
                     {testimonial.name.split('.')[0]}
                   </div>
                 </div>
                 <div>
-                  <div className="font-body font-semibold text-warm" data-testid={`testimonial-name-${index}`}>
+                  <div className="font-body font-semibold text-green-800" data-testid={`testimonial-name-${index}`}>
                     {testimonial.name}
                   </div>
                   <div className="text-sm text-gray-500 font-body" data-testid={`testimonial-location-${index}`}>

@@ -11,9 +11,9 @@
   --card-foreground: hsl(222.2, 84%, 4.9%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(222.2, 84%, 4.9%);
-  --primary: hsl(328, 72%, 65%);
+  --primary: hsl(142, 69%, 32%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --primary-hover: hsl(328, 72%, 60%);
+  --primary-hover: hsl(142, 69%, 28%);
   --secondary: hsl(43, 100%, 97%);
   --secondary-foreground: hsl(60, 4%, 23%);
   --tertiary: hsl(24, 74%, 92%);
@@ -26,12 +26,12 @@
   --destructive-foreground: hsl(0, 0%, 100%);
   --border: hsl(210, 20%, 93%);
   --input: hsl(210, 20%, 93%);
-  --ring: hsl(328, 72%, 65%);
+  --ring: hsl(142, 69%, 32%);
   --radius: 1.5rem;
-  --warm-beige: hsl(43, 100%, 97%);
-  --warm-pink: hsl(24, 74%, 92%);
+  --warm-beige: hsl(120, 60%, 97%);
+  --warm-green: hsl(120, 40%, 90%);
   --soft-mint: hsl(158, 22%, 90%);
-  --soft-purple: hsl(266, 24%, 93%);
+  --soft-green: hsl(120, 30%, 95%);
   --chart-1: hsl(12, 76%, 61%);
   --chart-2: hsl(173, 58%, 39%);
   --chart-3: hsl(197, 37%, 24%);
@@ -85,19 +85,19 @@
   }
   
   .bg-warm-beige {
-    background-color: hsl(43, 100%, 97%);
+    background-color: hsl(120, 60%, 97%);
   }
   
-  .bg-warm-pink {
-    background-color: hsl(24, 74%, 92%);
+  .bg-warm-green {
+    background-color: hsl(120, 40%, 90%);
   }
   
   .bg-soft-mint {
     background-color: hsl(158, 22%, 90%);
   }
   
-  .bg-soft-purple {
-    background-color: hsl(266, 24%, 93%);
+  .bg-soft-green {
+    background-color: hsl(120, 30%, 95%);
   }
   
   .text-warm {

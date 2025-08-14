@@ -32,10 +32,10 @@ const Header = () => {
           {/* Logo */}
           <Link href="/" data-testid="logo-link">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-primary rounded-full mr-3 flex items-center justify-center">
+              <div className="w-8 h-8 bg-green-600 rounded-full mr-3 flex items-center justify-center">
                 <div className="text-white font-display font-bold text-sm">O</div>
               </div>
-              <div className="text-2xl font-display font-bold text-warm">
+              <div className="text-2xl font-display font-bold text-green-800">
                 Healing Minds
               </div>
             </div>
@@ -72,7 +72,7 @@ const Header = () => {
             </Button>
             <Link href="/contact">
               <Button
-                className="bg-primary text-white hover:bg-primary-hover font-body font-semibold px-6 py-3 rounded-full text-sm shadow-sm flex items-center gap-2"
+                className="bg-green-600 text-white hover:bg-green-700 font-body font-semibold px-6 py-3 rounded-full text-sm shadow-sm flex items-center gap-2"
                 data-testid="book-now-button"
               >
                 <ArrowRight className="w-4 h-4" />

@@ -28,11 +28,11 @@ const BilingualCare = () => {
   ];
 
   return (
-    <section className="py-20 bg-soft-purple">
+    <section className="py-20 bg-soft-mint">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-warm mb-8" data-testid="bilingual-title">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-green-800 mb-8" data-testid="bilingual-title">
               <span className="font-body italic">Guided</span> by passion. <span className="font-display italic">Driven</span> by purpose.
             </h2>
             
@@ -46,9 +46,9 @@ const BilingualCare = () => {
             <div className="grid md:grid-cols-1 gap-6 mb-8" data-testid="bilingual-features">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start bg-white rounded-2xl p-6 shadow-sm">
-                  <div className="w-3 h-3 bg-primary rounded-full mr-4 mt-2 flex-shrink-0" />
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-4 mt-2 flex-shrink-0" />
                   <div>
-                    <h4 className="font-display font-bold text-warm mb-2">{feature.title}</h4>
+                    <h4 className="font-display font-bold text-green-800 mb-2">{feature.title}</h4>
                     <p className="text-gray-600 font-body leading-relaxed">{feature.description}</p>
                   </div>
                 </div>

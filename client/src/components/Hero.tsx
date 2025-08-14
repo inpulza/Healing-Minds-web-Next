@@ -7,7 +7,7 @@ const Hero = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="py-8 bg-warm-beige">
+    <section className="py-8 bg-green-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Rounded Hero Container */}
         <div className="relative rounded-3xl overflow-hidden shadow-2xl min-h-[600px] flex items-center">

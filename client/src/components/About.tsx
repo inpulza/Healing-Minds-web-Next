@@ -30,14 +30,14 @@ const About = () => {
             {/* Floating certification badge */}
             <div className="absolute -bottom-8 -right-8 bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
               <div className="text-center">
-                <div className="text-2xl font-display font-bold text-primary mb-2">Board</div>
+                <div className="text-2xl font-display font-bold text-green-600 mb-2">Board</div>
                 <div className="text-sm font-body text-gray-600">Certified</div>
               </div>
             </div>
           </div>
           
           <div>
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-warm mb-8" data-testid="about-title">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-green-800 mb-8" data-testid="about-title">
               Where <span className="font-body italic">wellness</span> meets <span className="font-display italic">community</span>
             </h2>
             
@@ -52,7 +52,7 @@ const About = () => {
             <div className="grid md:grid-cols-2 gap-6 mb-8" data-testid="about-credentials">
               {credentials.map((credential, index) => (
                 <div key={index} className="flex items-start text-gray-700">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-3 mr-4 flex-shrink-0" />
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-3 mr-4 flex-shrink-0" />
                   <span className="font-body">{credential}</span>
                 </div>
               ))}
