@@ -488,7 +488,7 @@ const BipolarTreatment = () => {
                     <img 
                       src={drMelvaOfficeImage}
                       alt="Dr. Melva Reve in her professional psychiatric office - Naples, FL"
-                      className="w-full h-full object-cover object-[75%_center]"
+                      className="w-full h-full object-cover object-[85%_35%] scale-125"
                       loading="lazy"
                       decoding="async"
                     />
