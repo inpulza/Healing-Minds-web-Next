@@ -84,9 +84,11 @@ const Header = () => {
               data-testid="language-toggle"
             >
               <span>{language === 'en' ? 'ES' : 'EN'}</span>
-              <span className="text-base">
-                {language === 'en' ? '🇪🇸' : '🇺🇸'}
-              </span>
+              <div className={`w-5 h-3 rounded-sm border border-gray-300 ${
+                language === 'en' 
+                  ? 'bg-gradient-to-b from-red-500 via-yellow-400 to-red-500' 
+                  : 'bg-gradient-to-b from-red-500 via-white to-blue-500'
+              }`} />
             </Button>
             <Link href="/contact">
               <Button
@@ -148,9 +150,11 @@ const Header = () => {
                 data-testid="mobile-language-toggle"
               >
                 <span>{language === 'en' ? 'Español' : 'English'}</span>
-                <span className="text-base">
-                  {language === 'en' ? '🇪🇸' : '🇺🇸'}
-                </span>
+                <div className={`w-5 h-3 rounded-sm border border-gray-300 ${
+                  language === 'en' 
+                    ? 'bg-gradient-to-b from-red-500 via-yellow-400 to-red-500' 
+                    : 'bg-gradient-to-b from-red-500 via-white to-blue-500'
+                }`} />
               </Button>
               <Link href="/contact">
                 <Button
