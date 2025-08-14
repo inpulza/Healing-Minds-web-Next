@@ -1,92 +1,224 @@
-import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { Link } from 'wouter';
+import { Button } from '@/components/ui/button';
+import { FaLinkedin, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
 
 const Footer = () => {
   const { language } = useLanguage();
+  const [email, setEmail] = useState('');
 
   const services = [
-    language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad',
-    language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión',
-    language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
-    language === 'en' ? 'PTSD & Trauma' : 'TEPT y Trauma',
-    language === 'en' ? 'Bipolar Disorder' : 'Trastorno Bipolar',
-    language === 'en' ? 'OCD Treatment' : 'Tratamiento de TOC'
+    { href: '/services', label: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad' },
+    { href: '/services', label: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión' },
+    { href: '/services', label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH' },
+    { href: '/services', label: language === 'en' ? 'PTSD & Trauma' : 'TEPT y Trauma' }
   ];
 
-  const areas = [
-    'Naples, FL',
-    'Marco Island, FL',
-    'Bonita Springs, FL',
-    'Collier County'
-  ];
-
-  const footerLinks = [
-    { href: '/privacy', label: language === 'en' ? 'Privacy Policy' : 'Política de Privacidad' },
-    { href: '/terms', label: language === 'en' ? 'Terms of Service' : 'Términos de Servicio' },
+  const quickLinks = [
+    { href: '/about', label: language === 'en' ? 'About Dr. Reve' : 'Sobre la Dra. Reve' },
+    { href: '/for-patients', label: language === 'en' ? 'For Patients' : 'Para Pacientes' },
+    { href: '/contact', label: language === 'en' ? 'Contact Us' : 'Contáctanos' },
     { href: '/patient-portal', label: language === 'en' ? 'Patient Portal' : 'Portal del Paciente' }
   ];
 
+  const socialLinks = [
+    { href: 'https://linkedin.com/in/dr-melva-reve', icon: FaLinkedin, label: 'LinkedIn' },
+    { href: 'https://facebook.com/healingmindspsychiatry', icon: FaFacebook, label: 'Facebook' },
+    { href: 'https://instagram.com/healingmindspsychiatry', icon: FaInstagram, label: 'Instagram' },
+    { href: 'https://twitter.com/healingmindsfl', icon: FaTwitter, label: 'Twitter' }
+  ];
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Newsletter signup logic would go here
+    console.log('Newsletter signup:', email);
+    setEmail('');
+  };
+
   return (
-    <footer className="bg-gray-900 text-white py-12" data-testid="footer">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8">
-          {/* Practice Info */}
-          <div className="md:col-span-2">
-            <div className="text-2xl font-serif font-bold text-primary-green mb-4">
-              Healing Minds Psychiatry
+    <footer className="bg-green-900 text-white py-16" data-testid="footer">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="grid lg:grid-cols-12 gap-12">
+          {/* Left Section - Brand & Newsletter */}
+          <div className="lg:col-span-5">
+            {/* Brand */}
+            <div className="mb-8">
+              <Link href="/" className="inline-block">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-green-500 rounded-full mr-3 flex items-center justify-center">
+                    <div className="text-white font-display font-bold text-lg">H</div>
+                  </div>
+                  <div className="text-2xl font-display font-bold text-white">
+                    Healing Minds
+                  </div>
+                </div>
+              </Link>
+              <p className="text-green-200 mt-4 max-w-md text-base leading-relaxed">
+                {language === 'en'
+                  ? 'Join our newsletter to stay up to date on mental health resources and practice updates.'
+                  : 'Únase a nuestro boletín para mantenerse al día sobre recursos de salud mental y actualizaciones de la práctica.'
+                }
+              </p>
             </div>
-            <p className="text-gray-300 mb-4 max-w-md">
-              {language === 'en'
-                ? 'Your partner in mental wellness. Board-certified psychiatrist providing compassionate, bilingual mental health care to adults in Naples, Florida and surrounding areas.'
-                : 'Su socio en bienestar mental. Psiquiatra certificada que brinda atención compasiva y bilingüe de salud mental a adultos en Naples, Florida y áreas circundantes.'
-              }
-            </p>
-            <div className="space-y-2 text-sm text-gray-300">
-              <div data-testid="footer-address">📍 4760 Tamiami Trl N #25, Naples, FL 34103</div>
-              <div data-testid="footer-phone">📞 <a href="tel:+12394230272" className="hover:text-primary-green">(239) 423-0272</a></div>
-              <div data-testid="footer-email">✉️ <a href="mailto:info@healingmindsnaples.com" className="hover:text-primary-green">info@healingmindsnaples.com</a></div>
+
+            {/* Newsletter Form */}
+            <div className="mb-8">
+              <form onSubmit={handleNewsletterSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="footer-email" className="block text-sm font-medium text-green-200 mb-2">
+                    {language === 'en' ? 'Enter your email' : 'Ingresa tu email'}
+                  </label>
+                  <div className="flex gap-3">
+                    <input
+                      type="email"
+                      id="footer-email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder={language === 'en' ? 'your@email.com' : 'tu@email.com'}
+                      className="flex-1 px-4 py-3 bg-green-800/50 border border-green-700 rounded-lg text-white placeholder-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      required
+                      data-testid="newsletter-email-input"
+                    />
+                    <Button
+                      type="submit"
+                      className="px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-lg font-semibold transition-colors duration-200"
+                      data-testid="newsletter-submit-button"
+                    >
+                      {language === 'en' ? 'Subscribe' : 'Suscribirse'}
+                    </Button>
+                  </div>
+                </div>
+                <p className="text-xs text-green-300">
+                  {language === 'en'
+                    ? 'By subscribing you agree to our Privacy Policy and provide consent to receive updates from our practice.'
+                    : 'Al suscribirse, acepta nuestra Política de Privacidad y da su consentimiento para recibir actualizaciones de nuestra práctica.'
+                  }
+                </p>
+              </form>
             </div>
           </div>
 
-          {/* Services */}
-          <div>
-            <h4 className="font-semibold text-lg mb-4" data-testid="footer-services-title">
-              {language === 'en' ? 'Services' : 'Servicios'}
-            </h4>
-            <ul className="space-y-2 text-sm text-gray-300" data-testid="footer-services-list">
-              {services.map((service, index) => (
-                <li key={index}>
-                  <Link href="/services" className="hover:text-primary-green">
-                    {service}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Right Section - Links */}
+          <div className="lg:col-span-7 grid md:grid-cols-2 gap-8">
+            {/* Our Services */}
+            <div>
+              <h4 className="text-base font-bold text-white mb-6" data-testid="footer-services-title">
+                {language === 'en' ? 'Our Services' : 'Nuestros Servicios'}
+              </h4>
+              <ul className="space-y-3" data-testid="footer-services-list">
+                {services.map((service, index) => (
+                  <li key={index}>
+                    <Link 
+                      href={service.href}
+                      className="text-green-200 hover:text-white transition-colors duration-200 text-sm flex items-center group"
+                      data-testid={`footer-service-${index}`}
+                    >
+                      <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      {service.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Areas Served */}
-          <div>
-            <h4 className="font-semibold text-lg mb-4" data-testid="footer-areas-title">
-              {language === 'en' ? 'Service Areas' : 'Áreas de Servicio'}
-            </h4>
-            <ul className="space-y-2 text-sm text-gray-300" data-testid="footer-areas-list">
-              {areas.map((area, index) => (
-                <li key={index}>{area}</li>
-              ))}
-            </ul>
+            {/* Quick Links & Contact */}
+            <div>
+              <h4 className="text-base font-bold text-white mb-6" data-testid="footer-quick-links-title">
+                {language === 'en' ? 'Quick Links' : 'Enlaces Rápidos'}
+              </h4>
+              <ul className="space-y-3 mb-8" data-testid="footer-quick-links-list">
+                {quickLinks.map((link, index) => (
+                  <li key={index}>
+                    <Link 
+                      href={link.href}
+                      className="text-green-200 hover:text-white transition-colors duration-200 text-sm flex items-center group"
+                      data-testid={`footer-quick-link-${index}`}
+                    >
+                      <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Social Media */}
+              <div>
+                <h5 className="text-base font-bold text-white mb-4" data-testid="footer-social-title">
+                  {language === 'en' ? 'Follow Us' : 'Síguenos'}
+                </h5>
+                <div className="flex gap-4" data-testid="footer-social-links">
+                  {socialLinks.map((social, index) => {
+                    const IconComponent = social.icon;
+                    return (
+                      <a
+                        key={index}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 bg-green-800/50 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-200 group"
+                        data-testid={`footer-social-${social.label.toLowerCase()}`}
+                      >
+                        <IconComponent className="w-5 h-5 text-green-200 group-hover:text-white" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <div className="text-sm text-gray-400" data-testid="footer-copyright">
-            © 2025 Healing Minds Psychiatry. {language === 'en' ? 'All rights reserved.' : 'Todos los derechos reservados.'}
-          </div>
-          <div className="flex space-x-6 mt-4 md:mt-0 text-sm text-gray-400" data-testid="footer-links">
-            {footerLinks.map((link, index) => (
-              <Link key={index} href={link.href} className="hover:text-primary-green">
-                {link.label}
-              </Link>
-            ))}
+        {/* Bottom Section */}
+        <div className="border-t border-green-700 pt-8 mt-12">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            {/* Contact Info */}
+            <div className="space-y-2" data-testid="footer-contact-info">
+              <div className="flex items-center text-green-200 text-sm">
+                <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
+                <span data-testid="footer-address">4760 Tamiami Trl N #25, Naples, FL 34103</span>
+              </div>
+              <div className="flex items-center text-green-200 text-sm">
+                <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
+                <a 
+                  href="tel:+12394230272" 
+                  className="hover:text-white transition-colors"
+                  data-testid="footer-phone"
+                >
+                  (239) 423-0272
+                </a>
+              </div>
+              <div className="flex items-center text-green-200 text-sm">
+                <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
+                <a 
+                  href="mailto:info@healingmindsnaples.com" 
+                  className="hover:text-white transition-colors"
+                  data-testid="footer-email"
+                >
+                  info@healingmindsnaples.com
+                </a>
+              </div>
+            </div>
+
+            {/* Legal Links & Copyright */}
+            <div className="text-right">
+              <div className="flex flex-wrap gap-6 text-sm text-green-300 mb-2" data-testid="footer-legal-links">
+                <Link href="/privacy" className="hover:text-white transition-colors">
+                  {language === 'en' ? 'Privacy Policy' : 'Política de Privacidad'}
+                </Link>
+                <Link href="/terms" className="hover:text-white transition-colors">
+                  {language === 'en' ? 'Terms of Service' : 'Términos de Servicio'}
+                </Link>
+                <a href="#" className="hover:text-white transition-colors">
+                  {language === 'en' ? 'Back to top' : 'Volver arriba'}
+                </a>
+              </div>
+              <div className="text-sm text-green-300" data-testid="footer-copyright">
+                © {new Date().getFullYear()} Healing Minds Psychiatry. 
+                {language === 'en' ? ' All rights reserved.' : ' Todos los derechos reservados.'}
+              </div>
+            </div>
           </div>
         </div>
       </div>
