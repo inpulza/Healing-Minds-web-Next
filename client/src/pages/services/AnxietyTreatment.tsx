@@ -141,36 +141,72 @@ const AnxietyTreatment = () => {
           }}
         />
 
-        {/* Symptoms Section */}
-        <section className="py-16 sm:py-20 bg-white">
+        {/* Modern Symptoms Section */}
+        <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Recognizing <span className="font-display italic text-green-700">Anxiety</span> Symptoms</>
-                ) : (
-                  <>Reconociendo Síntomas de <span className="font-display italic text-green-700">Ansiedad</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Anxiety affects everyone differently. If you\'re experiencing any of these symptoms persistently, professional help can provide significant relief.'
-                  : 'La ansiedad afecta a cada persona de manera diferente. Si está experimentando cualquiera de estos síntomas persistentemente, la ayuda profesional puede proporcionar alivio significativo.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {symptoms.map((symptom, index) => (
-                <Card key={index} className="border-green-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
-                      <span className="text-gray-700 font-body text-lg">{symptom}</span>
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                {/* Content Side */}
+                <div className="order-2 lg:order-1">
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Symptom Recognition' : 'Reconocimiento de Síntomas'}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Recognizing <span className="font-display italic text-green-700">Anxiety</span> Symptoms</>
+                    ) : (
+                      <>Reconociendo Síntomas de <span className="font-display italic text-green-700">Ansiedad</span></>
+                    )}
+                  </h2>
+                  
+                  {/* Key Stats */}
+                  <div className="mb-6 sm:mb-8">
+                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">40M+</div>
+                    <div className="text-gray-600 font-body text-sm sm:text-base">
+                      {language === 'en' ? 'Adults affected by anxiety disorders annually' : 'Adultos afectados por trastornos de ansiedad anualmente'}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+
+                  <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Anxiety affects everyone differently. If you\'re experiencing any of these symptoms persistently, professional help can provide significant relief.'
+                      : 'La ansiedad afecta a cada persona de manera diferente. Si está experimentando cualquiera de estos síntomas persistentemente, la ayuda profesional puede proporcionar alivio significativo.'
+                    }
+                  </p>
+
+                  <Link href="/contact">
+                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                      <span>{language === 'en' ? 'Schedule Assessment' : 'Programar Evaluación'}</span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Symptoms Grid Side */}
+                <div className="order-1 lg:order-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {symptoms.slice(0, 6).map((symptom, index) => (
+                      <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                        <div className="flex items-center gap-3">
+                          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                          <span className="text-gray-700 font-body text-sm">{symptom}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Additional symptoms if any */}
+                  {symptoms.length > 6 && (
+                    <div className="mt-4 text-center">
+                      <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-full px-4 py-2">
+                        <span>{language === 'en' ? '+' : '+'}{symptoms.length - 6} {language === 'en' ? 'more symptoms treated' : 'síntomas más tratados'}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </section>

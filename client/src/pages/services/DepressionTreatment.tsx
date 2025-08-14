@@ -243,41 +243,74 @@ const DepressionTreatment = () => {
           </div>
         </section>
 
-        {/* Treatment Approach Section */}
-        <section className="py-16 sm:py-20 bg-blue-50">
+        {/* Modern Treatment Approach Section */}
+        <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Our <span className="font-display italic text-green-700">Evidence-Based</span> Treatment Approach</>
-                ) : (
-                  <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Basado en Evidencia</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Dr. Melva Reve uses proven treatment methods combined with cultural sensitivity to provide comprehensive depression care.'
-                  : 'La Dra. Melva Reve utiliza métodos de tratamiento comprobados combinados con sensibilidad cultural para brindar atención integral para la depresión.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {treatments.map((treatment, index) => (
-                <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardContent className="p-8">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-600 font-bold text-lg">{index + 1}</span>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-bold text-green-800 mb-3">{treatment.title}</h3>
-                        <p className="text-gray-600 font-body leading-relaxed">{treatment.description}</p>
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
+              <div className="grid lg:grid-cols-2 gap-12 items-start">
+                {/* Content Side */}
+                <div>
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Evidence-Based Care' : 'Atención Basada en Evidencia'}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Our <span className="font-display italic text-green-700">Evidence-Based</span> Treatment Approach</>
+                    ) : (
+                      <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Basado en Evidencia</span></>
+                    )}
+                  </h2>
+                  
+                  {/* Key Stats */}
+                  <div className="grid grid-cols-2 gap-6 mb-8">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">80%</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Treatment success rate' : 'Tasa de éxito del tratamiento'}
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
+                      <div className="text-3xl font-bold text-green-600 mb-2">15+</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Years experience' : 'Años de experiencia'}
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Dr. Melva Reve uses proven treatment methods combined with cultural sensitivity to provide comprehensive depression care.'
+                      : 'La Dra. Melva Reve utiliza métodos de tratamiento comprobados combinados con sensibilidad cultural para brindar atención integral para la depresión.'
+                    }
+                  </p>
+
+                  <Link href="/contact">
+                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                      <span>{language === 'en' ? 'Start Treatment' : 'Iniciar Tratamiento'}</span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Treatment Options Grid Side */}
+                <div className="space-y-4">
+                  {treatments.map((treatment, index) => (
+                    <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-body font-bold text-green-800 mb-2">{treatment.title}</h3>
+                          <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>

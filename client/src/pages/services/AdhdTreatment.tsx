@@ -259,33 +259,42 @@ const AdhdTreatment = () => {
           }}
         />
 
-        {/* Age Groups Section */}
-        <section className="py-16 sm:py-20 bg-white">
+        {/* Modern Age Groups Section */}
+        <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>ADHD Treatment for <span className="font-display italic text-green-700">All Ages</span></>
-                ) : (
-                  <>Tratamiento de TDAH para <span className="font-display italic text-green-700">Todas las Edades</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'We provide specialized ADHD care tailored to the unique needs of different age groups, from teens navigating school to adults managing careers.'
-                  : 'Brindamos atención especializada de TDAH adaptada a las necesidades únicas de diferentes grupos de edad, desde adolescentes navegando la escuela hasta adultos manejando carreras.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {ageGroups.map((group, index) => (
-                <Card key={index} className="border-orange-100 hover:shadow-lg transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-2xl font-body font-bold text-green-800">{group.title}</CardTitle>
-                    <CardDescription className="text-gray-600 font-body leading-relaxed">{group.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
+              <div className="text-center mb-12">
+                <div className="inline-block bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                  {language === 'en' ? 'Age-Specific Care' : 'Atención Específica por Edad'}
+                </div>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                  {language === 'en' ? (
+                    <>ADHD Treatment for <span className="font-display italic text-green-700">All Ages</span></>
+                  ) : (
+                    <>Tratamiento de TDAH para <span className="font-display italic text-green-700">Todas las Edades</span></>
+                  )}
+                </h2>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'We provide specialized ADHD care tailored to the unique needs of different age groups, from teens navigating school to adults managing careers.'
+                    : 'Brindamos atención especializada de TDAH adaptada a las necesidades únicas de diferentes grupos de edad, desde adolescentes navegando la escuela hasta adultos manejando carreras.'
+                  }
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {ageGroups.map((group, index) => (
+                  <div key={index} className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-8 shadow-sm border border-orange-200 hover:shadow-md transition-all duration-300">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-12 h-12 bg-orange-200 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span className="text-orange-600 font-bold text-lg">{index + 1}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-body font-bold text-green-800">{group.title}</h3>
+                        <p className="text-gray-600 font-body">{group.description}</p>
+                      </div>
+                    </div>
+                    
                     <div className="space-y-3">
                       {group.features.map((feature, featureIndex) => (
                         <div key={featureIndex} className="flex items-center gap-3">
@@ -294,9 +303,21 @@ const AdhdTreatment = () => {
                         </div>
                       ))}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+                ))}
+              </div>
+
+              {/* Action Section */}
+              <div className="text-center mt-12">
+                <Link href="/contact">
+                  <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                    <span>{language === 'en' ? 'Schedule ADHD Evaluation' : 'Programar Evaluación de TDAH'}</span>
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    </div>
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>

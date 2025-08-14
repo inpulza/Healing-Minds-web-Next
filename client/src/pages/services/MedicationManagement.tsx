@@ -241,36 +241,72 @@ const MedicationManagement = () => {
           }}
         />
 
-        {/* Benefits Section */}
-        <section className="py-16 sm:py-20 bg-white">
+        {/* Modern Benefits Section */}
+        <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Benefits of Expert <span className="font-display italic text-green-700">Medication Management</span></>
-                ) : (
-                  <>Beneficios del <span className="font-display italic text-green-700">Manejo Experto</span> de Medicamentos</>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Professional medication management ensures safe, effective treatment with personalized care and ongoing monitoring for optimal mental health outcomes.'
-                  : 'El manejo profesional de medicamentos asegura tratamiento seguro y efectivo con atención personalizada y monitoreo continuo para resultados óptimos de salud mental.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {benefits.map((benefit, index) => (
-                <Card key={index} className="border-blue-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Zap className="w-6 h-6 text-blue-600" />
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                {/* Content Side */}
+                <div className="order-2 lg:order-1">
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Expert Care' : 'Atención Experta'}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Benefits of Expert <span className="font-display italic text-green-700">Medication Management</span></>
+                    ) : (
+                      <>Beneficios del <span className="font-display italic text-green-700">Manejo Experto</span> de Medicamentos</>
+                    )}
+                  </h2>
+                  
+                  {/* Key Stats */}
+                  <div className="mb-6 sm:mb-8">
+                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">98%</div>
+                    <div className="text-gray-600 font-body text-sm sm:text-base">
+                      {language === 'en' ? 'Patient satisfaction with medication optimization' : 'Satisfacción del paciente con optimización de medicamentos'}
                     </div>
-                    <h3 className="text-lg font-body font-semibold text-green-800 mb-2">{benefit}</h3>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+
+                  <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Professional medication management ensures safe, effective treatment with personalized care and ongoing monitoring for optimal mental health outcomes.'
+                      : 'El manejo profesional de medicamentos asegura tratamiento seguro y efectivo con atención personalizada y monitoreo continuo para resultados óptimos de salud mental.'
+                    }
+                  </p>
+
+                  <Link href="/contact">
+                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                      <span>{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Benefits Grid Side */}
+                <div className="order-1 lg:order-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {benefits.slice(0, 6).map((benefit, index) => (
+                      <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                          <Zap className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <h3 className="text-lg font-body font-semibold text-green-800">{benefit}</h3>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Additional benefits if any */}
+                  {benefits.length > 6 && (
+                    <div className="mt-4 text-center">
+                      <div className="inline-flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-full px-4 py-2">
+                        <span>{language === 'en' ? '+' : '+'}{benefits.length - 6} {language === 'en' ? 'more benefits' : 'beneficios más'}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </section>
