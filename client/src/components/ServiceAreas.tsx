@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { MapPin, Navigation, Clock, Users } from 'lucide-react';
+import southwestFloridaMap from '../assets/southwest-florida-map.png';
 
 const ServiceAreas: React.FC = () => {
   const { language } = useLanguage();
@@ -84,7 +85,7 @@ const ServiceAreas: React.FC = () => {
                 {/* Google Maps Screenshot as Background */}
                 <div className="absolute inset-0">
                   <img 
-                    src="/attached_assets/Captura de pantalla 2025-08-14 204410_1755197073893.png" 
+                    src={southwestFloridaMap}
                     alt="Southwest Florida Map"
                     className="w-full h-full object-cover rounded-xl sm:rounded-2xl"
                   />
