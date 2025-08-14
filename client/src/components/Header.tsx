@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Menu, X, ArrowRight } from 'lucide-react';
@@ -8,6 +8,17 @@ const Header = () => {
   const [location] = useLocation();
   const { language, setLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 10;
+      setIsScrolled(scrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'es' : 'en');
@@ -26,7 +37,11 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white/95 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+      isScrolled 
+        ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
+        : 'bg-white/95 backdrop-blur-md border-b border-gray-100'
+    }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
