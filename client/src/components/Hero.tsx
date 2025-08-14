@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import heroImage from '@assets/hero-doctor-optimized.png';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -15,12 +16,13 @@ const Hero = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80')`
+              backgroundImage: `url(${heroImage})`,
+              backgroundSize: 'cover'
             }}
           />
           
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600/90 via-teal-500/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-green-600/85 via-green-700/75 to-green-800/60" />
           
           {/* Centered Content */}
           <div className="relative z-10 w-full px-12 py-16 text-center">
