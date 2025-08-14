@@ -58,10 +58,13 @@ const BilingualCare = () => {
             
             <Link href="/contact">
               <Button
-                className="pill-button text-lg px-10 py-5"
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-6"
                 data-testid="bilingual-schedule-consultation"
               >
-                {language === 'en' ? 'Schedule your Consultation' : 'Programe su Consulta'}
+                <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+                <span>{language === 'en' ? 'Schedule your Consultation' : 'Programe su Consulta'}</span>
               </Button>
             </Link>
           </div>
