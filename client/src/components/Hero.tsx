@@ -27,8 +27,8 @@ const Hero = () => {
           </div>
           
           {/* Mobile: Content container */}
-          <div className="bg-green-50 rounded-2xl px-6 py-8 text-center">
-            <h1 className="text-3xl font-display font-bold leading-tight text-[#1e6b3b] mb-4" data-testid="hero-title">
+          <div className="bg-[#1e6b3b] rounded-2xl px-6 py-8 text-center">
+            <h1 className="text-3xl font-display font-bold leading-tight text-white mb-4" data-testid="hero-title">
               Find Your Path to 
               <WellnessIcon size="md" color="green" className="inline-flex mx-2 mb-1">
                 <IconBrain />
@@ -41,7 +41,7 @@ const Hero = () => {
               <span className="font-display italic">Dr. Reve</span>
             </h1>
             
-            <div className="text-lg leading-relaxed font-body mb-6 text-[#1e6b3b]" data-testid="hero-description">
+            <div className="text-lg leading-relaxed font-body mb-6 text-white" data-testid="hero-description">
               <span>Compassionate and expert psychiatric care in Naples, FL, designed to help you navigate life's challenges</span>
               <WellnessIcon size="md" color="orange" className="inline-flex mx-1">
                 <IconLeaf />
@@ -51,11 +51,11 @@ const Hero = () => {
             
             <Link href="/services">
               <Button
-                className="group inline-flex items-center justify-center gap-3 rounded-full text-xl font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-6 sm:py-7 shadow-lg"
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-xl font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-green-50 px-8 py-6 sm:py-7 shadow-lg"
                 data-testid="hero-book-consultation"
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
-                  <ArrowRight className="w-5 h-5 text-white" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                  <ArrowRight className="w-5 h-5 text-green-800" />
                 </div>
                 <span>Our Services</span>
               </Button>
