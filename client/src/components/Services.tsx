@@ -113,12 +113,12 @@ const Services = () => {
                     }`}
                     data-testid={`service-button-${service.id}`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
                       service.featured
                         ? 'bg-green-100'
                         : 'bg-green-700'
                     }`}>
-                      <ArrowRight className={`w-5 h-5 ${
+                      <ArrowRight className={`w-4 h-4 ${
                         service.featured ? 'text-green-800' : 'text-white'
                       }`} />
                     </div>
