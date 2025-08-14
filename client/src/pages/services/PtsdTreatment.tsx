@@ -15,6 +15,10 @@ import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
 import ptsdImage from "@assets/generated_images/Hope_and_growth_symbolism_978bb907.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
+// Import trauma type images
+import militaryImage from "@assets/f91b2e9a-8ab0-4719-b4c9-15edc522f27f_1755211669104.png";
+import childhoodImage from "@assets/e8202da4-08bf-45d6-b0b6-392795b53874_1755211669105.png";
+import vehicleImage from "@assets/f01c7d7e-f4d9-4a02-b3e0-d02f5f47a354_1755211669105.png";
 
 const PtsdTreatment = () => {
   const { language } = useLanguage();
@@ -250,11 +254,11 @@ const PtsdTreatment = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {symptoms.map((symptom, index) => (
-                <Card key={index} className="border-blue-100 hover:shadow-lg transition-all duration-300">
+                <Card key={index} className="border-green-100 hover:shadow-lg transition-all duration-300">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <CheckCircle className="w-4 h-4 text-blue-600" />
+                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
                       </div>
                       <span className="text-gray-700 font-body">{symptom}</span>
                     </div>
@@ -266,11 +270,11 @@ const PtsdTreatment = () => {
         </section>
 
         {/* Modern Trauma Types Section */}
-        <section className="py-16 sm:py-20 bg-blue-50">
+        <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-blue-100">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
               <div className="text-center mb-12">
-                <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                   {language === 'en' ? 'Trauma Specialties' : 'Especialidades en Trauma'}
                 </div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
@@ -292,19 +296,25 @@ const PtsdTreatment = () => {
                 {(language === 'en' ? [
                   {
                     title: 'Combat & Military Trauma',
-                    description: 'Specialized care for veterans and military personnel dealing with combat-related PTSD.'
+                    description: 'Specialized care for veterans and military personnel dealing with combat-related PTSD.',
+                    image: militaryImage,
+                    alt: 'Military uniform with dog tags representing combat trauma and PTSD treatment'
                   },
                   {
                     title: 'Childhood Abuse',
-                    description: 'Compassionate treatment addressing the long-term effects of childhood trauma.'
+                    description: 'Compassionate treatment addressing the long-term effects of childhood trauma.',
+                    image: childhoodImage,
+                    alt: 'Teddy bear representing childhood trauma and therapeutic healing'
+                  },
+                  {
+                    title: 'Motor Vehicle Accidents',
+                    description: 'Support for trauma resulting from car accidents and traffic incidents.',
+                    image: vehicleImage,
+                    alt: 'Car steering wheel representing motor vehicle accident trauma treatment'
                   },
                   {
                     title: 'Sexual Assault',
                     description: 'Sensitive, trauma-informed care for survivors of sexual violence.'
-                  },
-                  {
-                    title: 'Motor Vehicle Accidents',
-                    description: 'Support for trauma resulting from car accidents and traffic incidents.'
                   },
                   {
                     title: 'Natural Disasters',
@@ -317,19 +327,25 @@ const PtsdTreatment = () => {
                 ] : [
                   {
                     title: 'Trauma de Combate y Militar',
-                    description: 'Atención especializada para veteranos y personal militar con PTSD relacionado al combate.'
+                    description: 'Atención especializada para veteranos y personal militar con PTSD relacionado al combate.',
+                    image: militaryImage,
+                    alt: 'Uniforme militar con placas de identificación representando trauma de combate y tratamiento TEPT'
                   },
                   {
                     title: 'Abuso Infantil',
-                    description: 'Tratamiento compasivo que aborda los efectos a largo plazo del trauma infantil.'
+                    description: 'Tratamiento compasivo que aborda los efectos a largo plazo del trauma infantil.',
+                    image: childhoodImage,
+                    alt: 'Osito de peluche representando trauma infantil y sanación terapéutica'
+                  },
+                  {
+                    title: 'Accidentes Automovilísticos',
+                    description: 'Apoyo para trauma resultante de accidentes automovilísticos e incidentes de tráfico.',
+                    image: vehicleImage,
+                    alt: 'Volante de automóvil representando tratamiento de trauma por accidente vehicular'
                   },
                   {
                     title: 'Agresión Sexual',
                     description: 'Atención sensible e informada por trauma para sobrevivientes de violencia sexual.'
-                  },
-                  {
-                    title: 'Accidentes Automovilísticos',
-                    description: 'Apoyo para trauma resultante de accidentes automovilísticos e incidentes de tráfico.'
                   },
                   {
                     title: 'Desastres Naturales',
@@ -341,15 +357,27 @@ const PtsdTreatment = () => {
                   }
                 ]).map((trauma, index) => (
                   <div key={index} className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300">
-                    {/* Photo Placeholder - Top */}
-                    <div className="h-48 bg-blue-50 border-b-2 border-dashed border-blue-200 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <span className="text-blue-600 font-bold">🛡️</span>
+                    {/* Photo - Top */}
+                    <div className="h-48 bg-gradient-to-br from-green-50 to-green-100 overflow-hidden">
+                      {trauma.image ? (
+                        <img 
+                          src={trauma.image} 
+                          alt={trauma.alt}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="text-center">
+                            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                              <span className="text-green-600 font-bold">🛡️</span>
+                            </div>
+                            <p className="text-green-600 font-body text-sm">Specialized Care</p>
+                            <p className="text-green-500 font-body text-xs">Professional Treatment</p>
+                          </div>
                         </div>
-                        <p className="text-blue-600 font-body text-sm">Aquí va una foto</p>
-                        <p className="text-blue-500 font-body text-xs">Imagen temática</p>
-                      </div>
+                      )}
                     </div>
                     
                     {/* Content - Bottom */}
@@ -365,13 +393,13 @@ const PtsdTreatment = () => {
         </section>
 
         {/* Modern Treatment Approach Section */}
-        <section className="py-16 sm:py-20 bg-blue-50">
+        <section className="py-16 sm:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-blue-100">
+            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
               <div className="grid lg:grid-cols-3 gap-8">
                 {/* Content Side */}
                 <div className="lg:col-span-2">
-                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                  <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                     {language === 'en' ? 'Trauma-Informed Care' : 'Atención Informada por Trauma'}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
@@ -428,8 +456,8 @@ const PtsdTreatment = () => {
                     ]).map((treatment, index) => (
                       <div key={index} className="p-4">
                         <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
+                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-green-600 font-bold text-sm">{index + 1}</span>
                           </div>
                           <div>
                             <h3 className="text-lg font-body font-bold text-green-800 mb-1">{treatment.title}</h3>
@@ -454,13 +482,13 @@ const PtsdTreatment = () => {
                 <div className="flex flex-col h-full">
                   {/* Stats Cards */}
                   <div className="space-y-4 mb-6">
-                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">90%</div>
+                    <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
+                      <div className="text-3xl font-bold text-green-600 mb-2">90%</div>
                       <div className="text-sm text-gray-600 font-body">
                         {language === 'en' ? 'Recovery with treatment' : 'Recuperación con tratamiento'}
                       </div>
                     </div>
-                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                    <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
                       <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
                       <div className="text-sm text-gray-600 font-body">
                         {language === 'en' ? 'Crisis support available' : 'Apoyo de crisis disponible'}
@@ -468,15 +496,15 @@ const PtsdTreatment = () => {
                     </div>
                   </div>
 
-                  {/* Photo Placeholder - Fills remaining space */}
-                  <div className="flex-1 w-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-green-600 font-bold">🛡️</span>
-                      </div>
-                      <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                      <p className="text-green-500 font-body text-xs">Sanación/recuperación</p>
-                    </div>
+                  {/* Photo - Fills remaining space */}
+                  <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
+                    <img 
+                      src={therapyRoomImage} 
+                      alt="Professional therapy room environment for PTSD treatment and recovery"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                 </div>
               </div>
