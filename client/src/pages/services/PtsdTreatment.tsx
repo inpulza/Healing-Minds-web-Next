@@ -19,6 +19,8 @@ import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5
 import militaryImage from "@assets/f91b2e9a-8ab0-4719-b4c9-15edc522f27f_1755211669104.png";
 import childhoodImage from "@assets/e8202da4-08bf-45d6-b0b6-392795b53874_1755211669105.png";
 import vehicleImage from "@assets/f01c7d7e-f4d9-4a02-b3e0-d02f5f47a354_1755211669105.png";
+import naturalDisasterImage from "@assets/f9744cdb-4b98-4681-9f74-b6f4692a2ced (1)_1755211836264.png";
+import assaultImage from "@assets/6180c64d-fa53-4c88-8339-6aa0b06bdc93_1755211836265.png";
 
 const PtsdTreatment = () => {
   const { language } = useLanguage();
@@ -314,11 +316,15 @@ const PtsdTreatment = () => {
                   },
                   {
                     title: 'Sexual Assault',
-                    description: 'Sensitive, trauma-informed care for survivors of sexual violence.'
+                    description: 'Sensitive, trauma-informed care for survivors of sexual violence.',
+                    image: assaultImage,
+                    alt: 'Soft pink fabric representing sensitivity and support for sexual assault survivors'
                   },
                   {
                     title: 'Natural Disasters',
-                    description: 'Recovery assistance for trauma caused by hurricanes, floods, and disasters.'
+                    description: 'Recovery assistance for trauma caused by hurricanes, floods, and disasters.',
+                    image: naturalDisasterImage,
+                    alt: 'Glass jar with seashell and sand representing recovery and resilience after natural disasters'
                   },
                   {
                     title: 'Medical Trauma',
@@ -345,11 +351,15 @@ const PtsdTreatment = () => {
                   },
                   {
                     title: 'Agresión Sexual',
-                    description: 'Atención sensible e informada por trauma para sobrevivientes de violencia sexual.'
+                    description: 'Atención sensible e informada por trauma para sobrevivientes de violencia sexual.',
+                    image: assaultImage,
+                    alt: 'Tela suave rosa representando sensibilidad y apoyo para sobrevivientes de agresión sexual'
                   },
                   {
                     title: 'Desastres Naturales',
-                    description: 'Asistencia de recuperación para trauma causado por huracanes, inundaciones y desastres.'
+                    description: 'Asistencia de recuperación para trauma causado por huracanes, inundaciones y desastres.',
+                    image: naturalDisasterImage,
+                    alt: 'Frasco de vidrio con concha marina y arena representando recuperación y resistencia después de desastres naturales'
                   },
                   {
                     title: 'Trauma Médico',
