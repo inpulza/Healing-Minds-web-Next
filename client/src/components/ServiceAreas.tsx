@@ -143,7 +143,7 @@ const ServiceAreas: React.FC = () => {
 
                   {/* Service Coverage Circle around Naples */}
                   <div className="absolute" style={{top: '68%', left: '37%', transform: 'translate(-50%, -50%)'}}>
-                    <div className="w-48 h-48 sm:w-56 sm:h-56 border-3 border-green-500 rounded-full opacity-30 bg-green-200 bg-opacity-20 animate-pulse"></div>
+                    <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-full bg-green-500 bg-opacity-10 border border-green-400 border-opacity-20"></div>
                   </div>
                 </div>
 
