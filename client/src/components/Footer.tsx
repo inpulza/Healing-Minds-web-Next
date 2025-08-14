@@ -55,7 +55,7 @@ const Footer = () => {
                   </div>
                 </div>
               </Link>
-              <p className="text-green-200 mt-4 max-w-md text-base leading-relaxed">
+              <p className="text-green-200 mt-4 max-w-md text-lg leading-relaxed">
                 {language === 'en'
                   ? 'Join our newsletter to stay up to date on mental health resources and practice updates.'
                   : 'Únase a nuestro boletín para mantenerse al día sobre recursos de salud mental y actualizaciones de la práctica.'
@@ -67,7 +67,7 @@ const Footer = () => {
             <div className="mb-8">
               <form onSubmit={handleNewsletterSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="footer-email" className="block text-sm font-medium text-green-200 mb-2">
+                  <label htmlFor="footer-email" className="block text-base font-medium text-green-200 mb-2">
                     {language === 'en' ? 'Enter your email' : 'Ingresa tu email'}
                   </label>
                   <div className="flex gap-3">
@@ -90,7 +90,7 @@ const Footer = () => {
                     </Button>
                   </div>
                 </div>
-                <p className="text-xs text-green-300">
+                <p className="text-sm text-green-300">
                   {language === 'en'
                     ? 'By subscribing you agree to our Privacy Policy and provide consent to receive updates from our practice.'
                     : 'Al suscribirse, acepta nuestra Política de Privacidad y da su consentimiento para recibir actualizaciones de nuestra práctica.'
@@ -104,7 +104,7 @@ const Footer = () => {
           <div className="lg:col-span-7 grid md:grid-cols-3 gap-8">
             {/* Our Services */}
             <div>
-              <h4 className="text-base font-bold text-white mb-6" data-testid="footer-services-title">
+              <h4 className="text-lg font-bold text-white mb-6" data-testid="footer-services-title">
                 {language === 'en' ? 'Our Services' : 'Nuestros Servicios'}
               </h4>
               <ul className="space-y-3" data-testid="footer-services-list">
@@ -112,7 +112,7 @@ const Footer = () => {
                   <li key={index}>
                     <Link 
                       href={service.href}
-                      className="text-green-200 hover:text-white transition-colors duration-200 text-sm flex items-center group"
+                      className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
                       data-testid={`footer-service-${index}`}
                     >
                       <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -125,23 +125,23 @@ const Footer = () => {
 
             {/* Service Areas */}
             <div>
-              <h4 className="text-base font-bold text-white mb-6" data-testid="footer-areas-title">
+              <h4 className="text-lg font-bold text-white mb-6" data-testid="footer-areas-title">
                 {language === 'en' ? 'Service Areas' : 'Áreas de Servicio'}
               </h4>
               <ul className="space-y-3" data-testid="footer-areas-list">
-                <li className="text-green-200 text-sm flex items-center">
+                <li className="text-green-200 text-base flex items-center">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
                   Naples, FL
                 </li>
-                <li className="text-green-200 text-sm flex items-center">
+                <li className="text-green-200 text-base flex items-center">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
                   Marco Island, FL
                 </li>
-                <li className="text-green-200 text-sm flex items-center">
+                <li className="text-green-200 text-base flex items-center">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
                   Bonita Springs, FL
                 </li>
-                <li className="text-green-200 text-sm flex items-center">
+                <li className="text-green-200 text-base flex items-center">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
                   Collier County
                 </li>
@@ -150,7 +150,7 @@ const Footer = () => {
 
             {/* Quick Links & Social */}
             <div>
-              <h4 className="text-base font-bold text-white mb-6" data-testid="footer-quick-links-title">
+              <h4 className="text-lg font-bold text-white mb-6" data-testid="footer-quick-links-title">
                 {language === 'en' ? 'Quick Links' : 'Enlaces Rápidos'}
               </h4>
               <ul className="space-y-3 mb-8" data-testid="footer-quick-links-list">
@@ -158,7 +158,7 @@ const Footer = () => {
                   <li key={index}>
                     <Link 
                       href={link.href}
-                      className="text-green-200 hover:text-white transition-colors duration-200 text-sm flex items-center group"
+                      className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
                       data-testid={`footer-quick-link-${index}`}
                     >
                       <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -170,7 +170,7 @@ const Footer = () => {
 
               {/* Social Media */}
               <div>
-                <h5 className="text-base font-bold text-white mb-4" data-testid="footer-social-title">
+                <h5 className="text-lg font-bold text-white mb-4" data-testid="footer-social-title">
                   {language === 'en' ? 'Follow Us' : 'Síguenos'}
                 </h5>
                 <div className="flex gap-4" data-testid="footer-social-links">

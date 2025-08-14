@@ -98,7 +98,7 @@ const Services = () => {
                   {service.title}
                 </h3>
                 
-                <p className={`text-sm sm:text-base font-body leading-relaxed mb-4 sm:mb-6 ${
+                <p className={`text-base sm:text-lg font-body leading-relaxed mb-4 sm:mb-6 ${
                   service.featured ? 'text-green-100' : 'text-gray-600'
                 }`} data-testid={`service-description-${service.id}`}>
                   {service.description}

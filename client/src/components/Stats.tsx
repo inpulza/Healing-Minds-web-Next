@@ -46,7 +46,7 @@ const Stats = () => {
           {/* Continuous sliding animation */}
           <div className="flex animate-scroll whitespace-nowrap">
             {/* First set */}
-            <div className="flex items-center space-x-6 sm:space-x-8 text-green-700 font-body font-medium text-sm sm:text-base lg:text-lg px-3 sm:px-4">
+            <div className="flex items-center space-x-6 sm:space-x-8 text-green-700 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
               {displayServices.map((service, index) => (
                 <div key={index} className="flex items-center space-x-6 sm:space-x-8">
                   <span className="whitespace-nowrap">{service}</span>
@@ -55,7 +55,7 @@ const Stats = () => {
               ))}
             </div>
             {/* Duplicate for seamless loop */}
-            <div className="flex items-center space-x-6 sm:space-x-8 text-green-700 font-body font-medium text-sm sm:text-base lg:text-lg px-3 sm:px-4">
+            <div className="flex items-center space-x-6 sm:space-x-8 text-green-700 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
               {displayServices.map((service, index) => (
                 <div key={`duplicate-${index}`} className="flex items-center space-x-6 sm:space-x-8">
                   <span className="whitespace-nowrap">{service}</span>

@@ -41,7 +41,7 @@ const Hero = () => {
               <span className="font-display italic">Dr. Reve</span>
             </h1>
             
-            <div className="text-base leading-relaxed font-body mb-6 text-[#1e6b3b]" data-testid="hero-description">
+            <div className="text-lg leading-relaxed font-body mb-6 text-[#1e6b3b]" data-testid="hero-description">
               <span>Compassionate and expert psychiatric care in Naples, FL, designed to help you navigate life's challenges</span>
               <WellnessIcon size="md" color="orange" className="inline-flex mx-1">
                 <IconLeaf />
@@ -51,7 +51,7 @@ const Hero = () => {
             
             <Link href="/services">
               <Button
-                className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-4 shadow-lg"
+                className="group inline-flex items-center justify-center gap-2 rounded-full text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-4 shadow-lg"
                 data-testid="hero-book-consultation"
               >
                 <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">

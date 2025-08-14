@@ -67,11 +67,11 @@ const FAQ = () => {
             <WellnessIcon size="md" color="green" className="opacity-80">
               <IconHelp />
             </WellnessIcon>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-green-800" data-testid="faq-title">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-green-800" data-testid="faq-title">
               {language === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
             </h2>
           </div>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto font-body leading-relaxed" data-testid="faq-description">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto font-body leading-relaxed" data-testid="faq-description">
             {language === 'en'
               ? 'Find answers to common questions about psychiatric care and our services.'
               : 'Encuentre respuestas a preguntas comunes sobre atención psiquiátrica y nuestros servicios.'
@@ -91,7 +91,7 @@ const FAQ = () => {
                 className="w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-left flex items-center justify-between hover:bg-green-50 transition-colors duration-200"
                 data-testid={`faq-question-${index}`}
               >
-                <h3 className="text-base sm:text-lg md:text-xl font-display font-semibold text-gray-900 pr-4 sm:pr-8">
+                <h3 className="text-lg sm:text-xl font-display font-semibold text-gray-900 pr-4 sm:pr-8">
                   {faq.question}
                 </h3>
                 <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
@@ -113,7 +113,7 @@ const FAQ = () => {
                 <div className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
                   <div className="pt-2 border-t border-green-100">
                     <p 
-                      className="text-gray-600 font-body leading-relaxed text-base"
+                      className="text-gray-600 font-body leading-relaxed text-lg"
                       data-testid={`faq-answer-${index}`}
                     >
                       {faq.answer}
