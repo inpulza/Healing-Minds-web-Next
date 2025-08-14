@@ -2,6 +2,8 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import { IconHeart, IconSun } from '@tabler/icons-react';
+import WellnessIcon from '@/components/WellnessIcon';
 import bilingualImage from '@assets/bilingual-consultation-updated.png';
 
 const BilingualCare = () => {
@@ -33,9 +35,15 @@ const BilingualCare = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-green-800 mb-8" data-testid="bilingual-title">
-              <span className="font-body italic">Guided</span> by passion. <span className="font-display italic">Driven</span> by purpose.
-            </h2>
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-green-800 leading-tight" data-testid="bilingual-title">
+                <span className="font-body italic">Guided</span> by passion.
+                <WellnessIcon size="md" color="orange" className="inline-flex mx-3 mb-2">
+                  <IconHeart />
+                </WellnessIcon>
+                <span className="font-display italic">Driven</span> by purpose.
+              </h2>
+            </div>
             
             <p className="text-xl text-gray-600 mb-8 leading-relaxed font-body" data-testid="bilingual-description">
               {language === 'en' 

@@ -1,13 +1,9 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { 
-  Calendar, 
-  FileText, 
-  Users, 
-  Heart,
-  ArrowRight
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { IconBrain, IconHeart, IconMoodHappy, IconUser, IconSun, IconLeaf } from '@tabler/icons-react';
+import WellnessIcon from '@/components/WellnessIcon';
 
 const Services = () => {
   const { language } = useLanguage();
@@ -19,7 +15,7 @@ const Services = () => {
       description: language === 'en' 
         ? 'Adapt your mental health care to your busy life with comprehensive scheduling options. Choose from morning, afternoon, or evening appointments to fit your lifestyle.'
         : 'Adapte su atención de salud mental a su vida ocupada con opciones de programación integrales. Elija citas matutinas, vespertinas o nocturnas para adaptarse a su estilo de vida.',
-      icon: Calendar,
+      icon: IconBrain,
       featured: true
     },
     {
@@ -28,7 +24,7 @@ const Services = () => {
       description: language === 'en'
         ? 'Achieve your goals with customized mental health programs tailored to your unique needs. Whether you\'re starting out or pushing your limits, we\'ll guide you every step of the way.'
         : 'Alcance sus metas con programas de salud mental personalizados adaptados a sus necesidades únicas. Ya sea que esté comenzando o superando sus límites, lo guiaremos en cada paso del camino.',
-      icon: FileText,
+      icon: IconMoodHappy,
       featured: false
     },
     {
@@ -37,7 +33,7 @@ const Services = () => {
       description: language === 'en'
         ? 'Our certified and experienced psychiatrist is here to support you. With expertise in anxiety, depression, and wellness, we\'re dedicated to helping you reach your mental health goals.'
         : 'Nuestra psiquiatra certificada y experimentada está aquí para apoyarlo. Con experiencia en ansiedad, depresión y bienestar, estamos dedicados a ayudarlo a alcanzar sus metas de salud mental.',
-      icon: Users,
+      icon: IconUser,
       featured: false
     },
     {
@@ -46,7 +42,7 @@ const Services = () => {
       description: language === 'en'
         ? 'Beyond just treatment, we provide holistic wellness services, including nutritional advice and stress management techniques, to help you achieve a balanced, healthy lifestyle.'
         : 'Más allá del tratamiento, brindamos servicios de bienestar holístico, incluyendo consejos nutricionales y técnicas de manejo del estrés, para ayudarlo a lograr un estilo de vida equilibrado y saludable.',
-      icon: Heart,
+      icon: IconHeart,
       featured: false
     }
   ];
@@ -72,13 +68,23 @@ const Services = () => {
             return (
               <div
                 key={service.id}
-                className={`rounded-3xl p-8 transition-all duration-300 hover:shadow-lg ${
+                className={`relative rounded-3xl p-8 transition-all duration-300 hover:shadow-lg ${
                   service.featured 
                     ? 'bg-green-800 text-white' 
                     : 'bg-white text-green-800 border border-green-100'
                 }`}
                 data-testid={`service-${service.id}`}
               >
+                {/* Corner Wellness Icon */}
+                <div className="absolute top-4 right-4">
+                  <WellnessIcon 
+                    size="sm" 
+                    color={service.featured ? 'green' : 'blue'} 
+                    className="opacity-20"
+                  >
+                    <IconLeaf />
+                  </WellnessIcon>
+                </div>
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${
                   service.featured ? 'bg-green-700' : 'bg-green-100'
                 }`}>
