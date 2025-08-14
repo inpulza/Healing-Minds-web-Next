@@ -351,7 +351,7 @@ const BipolarTreatment = () => {
                       </div>
 
                       {/* Bottom Action Area */}
-                      <div className="p-4 rounded-xl">
+                      <div className="p-4 rounded-xl bg-[#ffffff]">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {groupIndex === 0 ? (
