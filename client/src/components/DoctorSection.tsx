@@ -9,14 +9,8 @@ const DoctorSection = () => {
   return (
     <section className="py-20 bg-gradient-to-br from-green-600 to-green-800">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="bg-green-700 rounded-3xl p-12 lg:p-16 relative overflow-hidden">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-10 right-10 w-32 h-32 bg-white rounded-full"></div>
-            <div className="absolute bottom-10 left-10 w-24 h-24 bg-white rounded-full"></div>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="bg-green-700 rounded-3xl p-12 lg:p-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div className="text-white">
               <h2 className="text-3xl lg:text-5xl font-display font-bold mb-6" data-testid="doctor-section-title">
@@ -56,26 +50,13 @@ const DoctorSection = () => {
             {/* Doctor Image */}
             <div className="relative">
               <div className="bg-gradient-to-br from-white to-gray-100 rounded-3xl p-8 shadow-2xl">
-                <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-gray-200 relative">
+                <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-gray-200">
                   <img
                     src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=500&q=80"
                     alt="Dr. Melva Reve - Board Certified Psychiatrist"
                     className="w-full h-full object-cover"
                     data-testid="doctor-section-image"
                   />
-                  
-                  {/* Video call interface overlay */}
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-3">
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    </div>
-                    <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
-                      <div className="w-6 h-1 bg-white rounded-full"></div>
-                    </div>
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <div className="w-4 h-6 bg-gray-400 rounded-sm"></div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
