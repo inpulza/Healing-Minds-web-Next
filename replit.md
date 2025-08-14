@@ -12,6 +12,9 @@ This is a professional website for Healing Minds Psychiatry, the practice of Dr.
 - **Typography System Overhaul**: Implemented sophisticated dual-font system using Instrument Sans for body text and Playfair Display for accent words
 - **Consistent Typography Pattern**: Applied font-body for main headings and font-display italic text-green-700 for accent words across all components
 - **Enhanced Visual Hierarchy**: Created elegant contrast between functional text and decorative accents throughout the site
+- **Dropdown Navigation Fix**: Fixed Services dropdown functionality - now only closes when clicking Services button again, removed borders/shadows
+- **Circular Icon Optimization**: Added min-width/height and flex-shrink-0 to ensure perfect circles across all components
+- **Hero Image Optimization**: Converted new doctor photo to WebP format (90KB → 35KB desktop, 15KB mobile) for faster loading
 
 ## User Preferences
 

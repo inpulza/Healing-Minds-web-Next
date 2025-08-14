@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { IconBrain, IconHeart, IconLeaf } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
-import heroImage from '@assets/hero-doctor-optimized.png';
-import mobileHeroImage from '@assets/e534f45f-8c35-4c68-853b-c0dc841a0387_1755195321913.png';
+import heroImage from '@assets/hero-doctor-new.webp';
+import mobileHeroImage from '@assets/hero-doctor-mobile-new.webp';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -17,12 +17,11 @@ const Hero = () => {
         <div className="block sm:hidden">
           {/* Mobile: Doctor image container */}
           <div className="relative rounded-2xl overflow-hidden mb-6 h-[300px]">
-            <div 
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{
-                backgroundImage: `url(${mobileHeroImage})`,
-                backgroundSize: 'cover'
-              }}
+            <img 
+              src={mobileHeroImage}
+              alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              loading="eager"
             />
           </div>
           
@@ -67,12 +66,11 @@ const Hero = () => {
         <div className="hidden sm:block">
           <div className="relative rounded-3xl overflow-hidden min-h-[600px] flex items-center justify-center">
             {/* Background Image */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{
-                backgroundImage: `url(${heroImage})`,
-                backgroundSize: 'cover'
-              }}
+            <img 
+              src={heroImage}
+              alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              loading="eager"
             />
             
 
