@@ -10,7 +10,7 @@ const Header = () => {
   const { language, setLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(true);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
 
@@ -20,24 +20,15 @@ const Header = () => {
       setIsScrolled(scrolled);
     };
 
-    const handleClickOutside = (event: MouseEvent) => {
-      if (servicesRef.current && !servicesRef.current.contains(event.target as Node)) {
-        setIsServicesOpen(false);
-      }
-    };
-
     window.addEventListener('scroll', handleScroll);
-    document.addEventListener('mousedown', handleClickOutside);
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  // Close dropdown when navigation occurs
+  // Close mobile menu when navigation occurs (but keep services dropdown open)
   useEffect(() => {
-    setIsServicesOpen(false);
     setIsMobileMenuOpen(false);
     setIsMobileServicesOpen(false);
   }, [location]);
@@ -91,10 +82,7 @@ const Header = () => {
     return location === href || (href !== '/' && location.startsWith(href));
   };
 
-  const handleServiceClick = () => {
-    console.log('Service clicked - NOT closing modal to allow navigation');
-    // Removed immediate closing to allow navigation to happen first
-  };
+
 
   const handleMobileServiceClick = () => {
     console.log('Mobile service clicked - closing menus after navigation');
@@ -134,8 +122,7 @@ const Header = () => {
               {navigationItems.map((item) => (
                 <div key={item.href} className="relative">
                   {item.hasDropdown ? (
-                    <button
-                      onClick={() => setIsServicesOpen(!isServicesOpen)}
+                    <div
                       className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-500 flex items-center gap-2 ${
                         isActive(item.href) || isServicesOpen
                           ? 'bg-white text-primary shadow-sm'
@@ -147,7 +134,7 @@ const Header = () => {
                       <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${
                         isServicesOpen ? 'rotate-180' : ''
                       }`} />
-                    </button>
+                    </div>
                   ) : (
                     <Link
                       href={item.href}
@@ -235,7 +222,6 @@ const Header = () => {
                   >
                     <Button
                       variant="ghost"
-                      onClick={handleServiceClick}
                       className="group w-full p-4 h-auto rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
                     >
                       <div className="flex items-start gap-3">
