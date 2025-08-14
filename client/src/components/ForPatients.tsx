@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Check, AlertTriangle } from 'lucide-react';
 
 const ForPatients = () => {
@@ -42,39 +41,14 @@ const ForPatients = () => {
     }
   ];
 
-  const faqItems = [
-    {
-      question: language === 'en' ? 'How soon can I get an appointment?' : '¿Qué tan pronto puedo conseguir una cita?',
-      answer: language === 'en'
-        ? 'We typically offer new patient appointments within 1-2 weeks. Urgent cases can often be accommodated sooner. Call us to discuss your specific needs and timeline.'
-        : 'Típicamente ofrecemos citas para pacientes nuevos dentro de 1-2 semanas. Los casos urgentes a menudo pueden ser acomodados antes. Llámenos para discutir sus necesidades específicas y cronograma.'
-    },
-    {
-      question: language === 'en' ? 'Do you offer telehealth appointments?' : '¿Ofrecen citas de telesalud?',
-      answer: language === 'en'
-        ? 'Yes, we offer secure telehealth appointments for both new and existing patients. This is especially convenient for follow-up visits and medication management.'
-        : 'Sí, ofrecemos citas seguras de telesalud para pacientes nuevos y existentes. Esto es especialmente conveniente para visitas de seguimiento y manejo de medicamentos.'
-    },
-    {
-      question: language === 'en' ? 'What should I bring to my first appointment?' : '¿Qué debo traer a mi primera cita?',
-      answer: language === 'en'
-        ? 'Please bring your insurance card, a valid ID, a list of current medications, and any relevant medical records. We\'ll also send you intake forms to complete before your visit.'
-        : 'Por favor traiga su tarjeta de seguro, una identificación válida, una lista de medicamentos actuales, y cualquier registro médico relevante. También le enviaremos formularios de admisión para completar antes de su visita.'
-    },
-    {
-      question: language === 'en' ? 'Do you provide services in Spanish?' : '¿Proporcionan servicios en español?',
-      answer: language === 'en'
-        ? 'Absolutely. Dr. Reve is fluent in Spanish and provides comprehensive psychiatric services in Spanish, ensuring clear communication and cultural understanding throughout your care.'
-        : 'Absolutamente. La Dra. Reve habla español con fluidez y proporciona servicios psiquiátricos integrales en español, asegurando comunicación clara y comprensión cultural durante toda su atención.'
-    }
-  ];
+
 
   return (
     <section id="for-patients" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6" data-testid="for-patients-title">
-            {language === 'en' ? 'For Patients' : 'Para Pacientes'}
+          <h2 className="text-3xl md:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="for-patients-title">
+            {language === 'en' ? <>For <span className="font-display italic text-green-700">Patients</span></> : <>Para <span className="font-display italic text-green-700">Pacientes</span></>}
           </h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto" data-testid="for-patients-description">
             {language === 'en'
@@ -126,31 +100,7 @@ const ForPatients = () => {
           </Card>
         </div>
 
-        {/* FAQ Section */}
-        <div className="mt-16">
-          <h3 className="text-2xl font-semibold text-gray-900 mb-8 text-center" data-testid="faq-title">
-            {language === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
-          </h3>
-          <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="w-full space-y-4" data-testid="faq-accordion">
-              {faqItems.map((item, index) => (
-                <AccordionItem 
-                  key={index} 
-                  value={`item-${index}`}
-                  className="border border-gray-200 rounded-lg px-6"
-                  data-testid={`faq-item-${index}`}
-                >
-                  <AccordionTrigger className="text-left font-medium text-gray-900 hover:text-primary-green">
-                    {item.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-700 pb-4">
-                    {item.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </div>
+
       </div>
     </section>
   );
