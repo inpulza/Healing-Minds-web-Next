@@ -32,12 +32,12 @@ const Header = () => {
           {/* Logo */}
           <Link href="/" data-testid="logo-link">
             <div className="flex items-center">
+              <div className="w-8 h-8 bg-primary rounded-full mr-3 flex items-center justify-center">
+                <div className="text-white font-display font-bold text-sm">O</div>
+              </div>
               <div className="text-2xl font-display font-bold text-warm">
                 Healing Minds
               </div>
-              <span className="ml-3 text-sm text-gray-600 hidden sm:inline font-body">
-                Dr. Melva Reve, MD
-              </span>
             </div>
           </Link>
 
@@ -72,10 +72,10 @@ const Header = () => {
             </Button>
             <Link href="/contact">
               <Button
-                className="pill-button"
+                className="bg-primary text-white hover:bg-primary-hover font-body font-semibold px-6 py-3 rounded-full text-sm shadow-sm"
                 data-testid="book-now-button"
               >
-                {t('nav.bookNow')}
+                Book Now
               </Button>
             </Link>
           </div>
