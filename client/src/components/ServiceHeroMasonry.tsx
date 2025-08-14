@@ -64,166 +64,161 @@ export const ServiceHeroMasonry = ({
   return (
     <section className="pt-20 pb-8 sm:pb-12 lg:pb-16 bg-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Left Column - Content */}
-          <div className="lg:sticky lg:top-8">
-            <div className="flex items-center gap-3 mb-6">
-              <WellnessIcon size="sm" color="blue">
-                <IconSun />
-              </WellnessIcon>
-              <span className="text-blue-700 font-body font-semibold text-lg">
-                {language === 'en' ? tagline.en : tagline.es}
-              </span>
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-              {language === 'en' ? (
-                <>
-                  {title.en.includes('<span') ? (
-                    <span dangerouslySetInnerHTML={{ __html: title.en }} />
-                  ) : title.en.includes('Naples, FL') ? (
-                    <>
-                      {title.en.split(' in Naples, FL')[0]} in{' '}
-                      <span className="font-display italic text-green-700">Naples, FL</span>
-                    </>
-                  ) : (
-                    title.en
-                  )}
-                </>
-              ) : (
-                <>
-                  {title.es.includes('<span') ? (
-                    <span dangerouslySetInnerHTML={{ __html: title.es }} />
-                  ) : title.es.includes('Naples, FL') ? (
-                    <>
-                      {title.es.split(' en Naples, FL')[0]} en{' '}
-                      <span className="font-display italic text-green-700">Naples, FL</span>
-                    </>
-                  ) : (
-                    title.es
-                  )}
-                </>
-              )}
-            </h1>
-            
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-              {language === 'en' ? description.en : description.es}
-            </p>
-
-            {language === 'es' && specialNote?.es && (
-              <div className="bg-blue-100 border-l-4 border-blue-500 p-4 mb-8">
-                <p className="text-blue-800 font-body">
-                  <span dangerouslySetInnerHTML={{ __html: specialNote.es }} />
-                </p>
-              </div>
-            )}
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/contact">
-                <Button 
-                  size="lg" 
-                  className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
-                  data-testid="button-schedule-consultation"
-                >
-                  <Calendar className="w-5 h-5" />
-                  {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
-              
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
-                data-testid="button-call-now"
-              >
-                <Phone className="w-5 h-5" />
-                <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
-                  {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
-                </a>
-              </Button>
-            </div>
+        {/* Text Content Section - Full Width */}
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <WellnessIcon size="sm" color="blue">
+              <IconSun />
+            </WellnessIcon>
+            <span className="text-blue-700 font-body font-semibold text-lg">
+              {language === 'en' ? tagline.en : tagline.es}
+            </span>
           </div>
           
-          {/* Right Column - Clean Layout */}
-          <div className="space-y-8">
-            {/* Doctor Photo - Large and prominent */}
-            <div className="w-full">
-              <div className="aspect-[4/3] rounded-2xl shadow-lg overflow-hidden">
-                <img 
-                  src={images.doctorImage}
-                  alt="Dr. Melva Reve - Mental Health Specialist"
-                  className="w-full h-full object-cover"
-                  data-testid="img-doctor-portrait"
-                />
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+            {language === 'en' ? (
+              <>
+                {title.en.includes('<span') ? (
+                  <span dangerouslySetInnerHTML={{ __html: title.en }} />
+                ) : title.en.includes('Naples, FL') ? (
+                  <>
+                    {title.en.split(' in Naples, FL')[0]} in{' '}
+                    <span className="font-display italic text-green-700">Naples, FL</span>
+                  </>
+                ) : (
+                  title.en
+                )}
+              </>
+            ) : (
+              <>
+                {title.es.includes('<span') ? (
+                  <span dangerouslySetInnerHTML={{ __html: title.es }} />
+                ) : title.es.includes('Naples, FL') ? (
+                  <>
+                    {title.es.split(' en Naples, FL')[0]} en{' '}
+                    <span className="font-display italic text-green-700">Naples, FL</span>
+                  </>
+                ) : (
+                  title.es
+                )}
+              </>
+            )}
+          </h1>
+          
+          <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed max-w-4xl mx-auto">
+            {language === 'en' ? description.en : description.es}
+          </p>
+
+          {language === 'es' && specialNote?.es && (
+            <div className="bg-blue-100 border-l-4 border-blue-500 p-4 mb-8 max-w-4xl mx-auto">
+              <p className="text-blue-800 font-body">
+                <span dangerouslySetInnerHTML={{ __html: specialNote.es }} />
+              </p>
+            </div>
+          )}
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/contact">
+              <Button 
+                size="lg" 
+                className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
+                data-testid="button-schedule-consultation"
+              >
+                <Calendar className="w-5 h-5" />
+                {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </Link>
+            
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
+              data-testid="button-call-now"
+            >
+              <Phone className="w-5 h-5" />
+              <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
+                {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
+              </a>
+            </Button>
+          </div>
+        </div>
+
+        {/* Masonry Visual Section */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {/* Doctor Photo - Spans 2 columns */}
+          <div className="col-span-2 lg:col-span-2">
+            <div className="aspect-[4/3] rounded-2xl shadow-lg overflow-hidden">
+              <img 
+                src={images.doctorImage}
+                alt="Dr. Melva Reve - Mental Health Specialist"
+                className="w-full h-full object-cover"
+                data-testid="img-doctor-portrait"
+              />
+            </div>
+          </div>
+
+          {/* Facts Card */}
+          <div className="col-span-1 lg:col-span-1">
+            <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-5 h-full">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <IconHeart className="w-4 h-4 text-green-700" />
+                </div>
+                <h3 className="text-sm font-body font-bold text-green-800">
+                  {language === 'en' ? facts.title.en : facts.title.es}
+                </h3>
+              </div>
+              <div className="space-y-3">
+                {facts.items.slice(0, 2).map((fact, index) => (
+                  <div key={index} className="flex items-start gap-2">
+                    <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                      <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
+                    </div>
+                    <span className="text-xs text-green-800 font-body font-medium leading-relaxed">
+                      {language === 'en' ? fact.en : fact.es}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
+          </div>
 
-            {/* Stats Cards Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Facts Card */}
-              <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <IconHeart className="w-4.5 h-4.5 text-green-700" />
-                  </div>
-                  <h3 className="text-lg font-body font-bold text-green-800">
-                    {language === 'en' ? facts.title.en : facts.title.es}
-                  </h3>
+          {/* Quick Facts Card */}
+          <div className="col-span-1 lg:col-span-1">
+            <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-5 h-full">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-4 h-4 text-green-700" />
                 </div>
-                <div className="space-y-3">
-                  {facts.items.slice(0, 2).map((fact, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      </div>
-                      <div className="flex-1">
-                        <span className="text-sm text-green-800 font-body font-medium leading-relaxed">
-                          {language === 'en' ? fact.en : fact.es}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <h3 className="text-sm font-body font-bold text-green-800">
+                  {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
+                </h3>
               </div>
-
-              {/* Quick Facts Card */}
-              <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-4.5 h-4.5 text-green-700" />
-                  </div>
-                  <h3 className="text-lg font-body font-bold text-green-800">
-                    {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
-                  </h3>
-                </div>
-                <div className="space-y-3">
-                  {quickStats.items.slice(0, 3).map((stat, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm text-green-800 font-body font-medium leading-relaxed">
-                          {language === 'en' ? stat.en : stat.es}
-                        </p>
-                      </div>
+              <div className="space-y-3">
+                {quickStats.items.slice(0, 2).map((stat, index) => (
+                  <div key={index} className="flex items-start gap-2">
+                    <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                      <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
                     </div>
-                  ))}
-                </div>
+                    <p className="text-xs text-green-800 font-body font-medium leading-relaxed">
+                      {language === 'en' ? stat.en : stat.es}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
+          </div>
 
-            {/* Therapy Room Photo - Secondary */}
-            <div className="w-full">
-              <div className="aspect-[16/9] rounded-2xl shadow-lg overflow-hidden">
-                <img 
-                  src={images.therapyRoomImage}
-                  alt="Comfortable therapy environment"
-                  className="w-full h-full object-cover"
-                  data-testid="img-therapy-room"
-                />
-              </div>
+          {/* Therapy Room Photo - Spans full width */}
+          <div className="col-span-2 lg:col-span-4">
+            <div className="aspect-[16/9] lg:aspect-[21/9] rounded-2xl shadow-lg overflow-hidden">
+              <img 
+                src={images.therapyRoomImage}
+                alt="Comfortable therapy environment"
+                className="w-full h-full object-cover"
+                data-testid="img-therapy-room"
+              />
             </div>
           </div>
         </div>
