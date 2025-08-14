@@ -209,40 +209,51 @@ const Header = () => {
         </div>
 
         {/* Expanded Services Menu - Now inside header */}
-        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${
+        <div className={`transition-all duration-500 ease-in-out ${
           isServicesOpen 
             ? 'max-h-[500px] opacity-100 py-8' 
-            : 'max-h-0 opacity-0 py-0'
+            : 'max-h-0 opacity-0 py-0 pointer-events-none'
         }`}>
           <div className="hidden md:block">
-            <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/70 p-8 mx-4">
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/70 p-8 mx-4 relative z-50">
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                 {serviceItems.map((service, index) => (
                   <Link
                     key={service.href}
                     href={service.href}
-                    onClick={handleServiceClick}
-                    className="group block p-4 rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer"
+                    className="block"
                     data-testid={`dropdown-service-${index}`}
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="w-3 h-3 rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700"></div>
-                      <div>
-                        <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
-                          {service.label}
-                        </h3>
-                        <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1 leading-relaxed">
-                          {service.description}
-                        </p>
+                    <Button
+                      variant="ghost"
+                      onClick={() => console.log('HEADER DROPDOWN CLICK:', service.href)}
+                      className="group w-full p-4 h-auto rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="w-3 h-3 rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700"></div>
+                        <div>
+                          <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
+                            {service.label}
+                          </h3>
+                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1 leading-relaxed">
+                            {service.description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    </Button>
                   </Link>
                 ))}
               </div>
-              <div className="mt-6 pt-6 border-t border-gray-200/60 text-center">
+              <div className="mt-6 pt-6 border-t border-gray-200/60 text-center space-y-4">
+                {/* Test simple link */}
+                <div className="mb-4">
+                  <Link href="/services/anxiety-treatment" className="bg-red-500 text-white p-2 rounded block">
+                    TEST SIMPLE LINK (ANXIETY)
+                  </Link>
+                </div>
+                
                 <Link
                   href={language === 'en' ? '/services' : '/servicios-espanol'}
-                  onClick={handleServiceClick}
                   className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300 text-lg"
                 >
                   {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
@@ -284,7 +295,6 @@ const Header = () => {
                           <Link
                             key={service.href}
                             href={service.href}
-                            onClick={handleMobileServiceClick}
                             className="block py-2 px-3 rounded-lg text-sm font-body text-gray-600 hover:text-green-700 hover:bg-green-50/80 transition-all duration-200"
                             data-testid={`mobile-dropdown-service-${index}`}
                           >
@@ -293,7 +303,6 @@ const Header = () => {
                         ))}
                         <Link
                           href={language === 'en' ? '/services' : '/servicios-espanol'}
-                          onClick={handleMobileServiceClick}
                           className="block py-2 px-3 rounded-lg text-sm font-body text-green-700 hover:text-green-800 hover:bg-green-50/80 transition-all duration-200 border-t border-gray-200/60 mt-2 pt-3"
                         >
                           {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
