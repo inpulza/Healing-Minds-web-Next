@@ -76,7 +76,7 @@ const Services = () => {
             return (
               <div
                 key={service.id}
-                className={`rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:shadow-lg ${
+                className={`rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full ${
                   service.featured 
                     ? 'bg-green-800 text-white' 
                     : 'bg-white text-green-800 border border-green-100'
@@ -84,7 +84,7 @@ const Services = () => {
                 data-testid={`service-${service.id}`}
               >
 
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 ${
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 ${
                   service.featured ? 'bg-green-700' : 'bg-green-100'
                 }`}>
                   <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${
@@ -98,15 +98,15 @@ const Services = () => {
                   {service.title}
                 </h3>
                 
-                <p className={`text-base sm:text-lg font-body leading-relaxed mb-4 sm:mb-6 ${
+                <p className={`text-sm sm:text-base font-body leading-relaxed mb-4 sm:mb-5 flex-grow ${
                   service.featured ? 'text-green-100' : 'text-gray-600'
                 }`} data-testid={`service-description-${service.id}`}>
                   {service.description}
                 </p>
 
-                <Link href="/contact">
+                <Link href="/contact" className="mt-auto">
                   <Button
-                    className={`group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 px-6 sm:px-8 py-6 sm:py-7 ${
+                    className={`group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 px-6 sm:px-8 py-6 sm:py-7 w-full ${
                       service.featured
                         ? 'bg-white text-green-800 hover:bg-green-50'
                         : 'bg-green-800 text-white hover:bg-green-700'
