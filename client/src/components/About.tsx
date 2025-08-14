@@ -3,6 +3,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
+import doctorProfileImage from '@assets/doctor-profile.png';
 
 const About = () => {
   const { language } = useLanguage();
@@ -16,9 +17,9 @@ const About = () => {
             <div className="relative">
               <div className="bg-gray-100 rounded-3xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700&q=80"
+                  src={doctorProfileImage}
                   alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
-                  className="w-full h-[500px] object-cover"
+                  className="w-full h-[600px] object-cover"
                   data-testid="about-doctor-image"
                 />
               </div>
@@ -40,12 +41,42 @@ const About = () => {
                 Dr. Melva Reve
               </h2>
               
-              <p className="text-lg text-gray-600 mb-8 font-body leading-relaxed max-w-md mx-auto lg:mx-0" data-testid="about-description">
+              <p className="text-lg text-gray-600 mb-6 font-body leading-relaxed max-w-lg mx-auto lg:mx-0" data-testid="about-description">
                 {language === 'en'
-                  ? 'A dedicated psychiatrist focused on mental health and patient-centered care.'
-                  : 'Una psiquiatra dedicada enfocada en la salud mental y el cuidado centrado en el paciente.'
+                  ? 'Board-certified psychiatrist with over 15 years of experience in comprehensive mental health care. Dr. Reve specializes in anxiety disorders, depression, ADHD, and trauma-informed therapy, providing personalized treatment plans that integrate evidence-based medicine with compassionate care.'
+                  : 'Psiquiatra certificada por la junta con más de 15 años de experiencia en atención integral de salud mental. La Dra. Reve se especializa en trastornos de ansiedad, depresión, TDAH y terapia informada por trauma, brindando planes de tratamiento personalizados que integran medicina basada en evidencia con atención compasiva.'
                 }
               </p>
+
+              {/* Credentials */}
+              <div className="mb-8">
+                <div className="grid grid-cols-2 gap-4 text-sm text-gray-500 font-body">
+                  <div>
+                    <div className="font-semibold text-green-600">
+                      {language === 'en' ? 'Board Certified' : 'Certificada por la Junta'}
+                    </div>
+                    <div>{language === 'en' ? 'American Board of Psychiatry' : 'Junta Americana de Psiquiatría'}</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-green-600">
+                      {language === 'en' ? 'Education' : 'Educación'}
+                    </div>
+                    <div>{language === 'en' ? 'MD, Psychiatry Residency' : 'MD, Residencia en Psiquiatría'}</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-green-600">
+                      {language === 'en' ? 'Languages' : 'Idiomas'}
+                    </div>
+                    <div>{language === 'en' ? 'English, Spanish' : 'Inglés, Español'}</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-green-600">
+                      {language === 'en' ? 'Specialties' : 'Especialidades'}
+                    </div>
+                    <div>{language === 'en' ? 'Adult Psychiatry' : 'Psiquiatría de Adultos'}</div>
+                  </div>
+                </div>
+              </div>
 
               {/* Social Media Icons */}
               <div className="flex justify-center lg:justify-start gap-4 mb-8">
