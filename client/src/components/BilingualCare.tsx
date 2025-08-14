@@ -31,7 +31,7 @@ const BilingualCare = () => {
   ];
 
   return (
-    <section className="py-20 bg-soft-mint">
+    <section className="py-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
