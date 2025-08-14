@@ -80,13 +80,15 @@ const ServiceAreas: React.FC = () => {
         <div className="mb-8 sm:mb-12">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
             {stats.map((stat, index) => (
-              <div key={index} className="flex items-center gap-4 p-4 bg-green-50 rounded-xl border border-green-100">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <stat.icon className="w-6 h-6 text-green-600" />
+              <div key={index} className="flex items-center justify-between gap-4 p-5 bg-green-50 rounded-xl border border-green-100">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <stat.icon className="w-7 h-7 text-green-600" />
+                  </div>
+                  <div className="text-3xl font-bold text-green-800">{stat.value}</div>
                 </div>
-                <div>
-                  <div className="text-2xl font-bold text-green-800">{stat.value}</div>
-                  <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-right">
+                  <div className="text-base text-gray-600 font-medium">{stat.label}</div>
                 </div>
               </div>
             ))}
