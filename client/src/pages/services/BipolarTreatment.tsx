@@ -273,6 +273,280 @@ const BipolarTreatment = () => {
           }}
         /> 
 
+        {/* Symptoms Section */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Understanding <span className="font-display italic text-green-700">Bipolar</span> Symptoms</>
+                ) : (
+                  <>Entendiendo Síntomas del <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Bipolar disorder involves distinct episodes of mania/hypomania and depression. Understanding these patterns is key to effective treatment.'
+                  : 'El trastorno bipolar involucra episodios distintos de manía/hipomanía y depresión. Entender estos patrones es clave para un tratamiento efectivo.'
+                }
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {symptoms.map((symptomGroup, groupIndex) => (
+                <Card key={groupIndex} className="border-blue-100 hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center gap-3">
+                      <WellnessIcon size="md" color={groupIndex === 0 ? "orange" : "blue"}>
+                        <symptomGroup.icon />
+                      </WellnessIcon>
+                      <CardTitle className="text-xl font-body font-bold text-green-800">
+                        {symptomGroup.type}
+                      </CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {symptomGroup.items.map((item, index) => (
+                        <div key={index} className="flex items-center gap-3">
+                          <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <span className="text-gray-700 font-body">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Types of Bipolar Section */}
+        <section className="py-16 sm:py-20 bg-blue-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Types of <span className="font-display italic text-green-700">Bipolar Disorder</span></>
+                ) : (
+                  <>Tipos de <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {(language === 'en' ? [
+                {
+                  type: 'Bipolar I Disorder',
+                  description: 'At least one manic episode lasting 7+ days or requiring hospitalization. May include depressive episodes.'
+                },
+                {
+                  type: 'Bipolar II Disorder',
+                  description: 'At least one hypomanic episode and one major depressive episode. No full manic episodes.'
+                },
+                {
+                  type: 'Cyclothymic Disorder',
+                  description: 'Numerous periods of hypomanic and depressive symptoms for at least 2 years (1 year in children).'
+                }
+              ] : [
+                {
+                  type: 'Trastorno Bipolar I',
+                  description: 'Al menos un episodio maníaco que dura 7+ días o requiere hospitalización. Puede incluir episodios depresivos.'
+                },
+                {
+                  type: 'Trastorno Bipolar II',
+                  description: 'Al menos un episodio hipomaníaco y un episodio depresivo mayor. Sin episodios maníacos completos.'
+                },
+                {
+                  type: 'Trastorno Ciclotímico',
+                  description: 'Numerosos períodos de síntomas hipomaníacos y depresivos durante al menos 2 años (1 año en niños).'
+                }
+              ]).map((type, index) => (
+                <Card key={index} className="bg-white border-0 shadow-lg">
+                  <CardContent className="p-8">
+                    <WellnessIcon size="lg" color="blue" className="mx-auto mb-4">
+                      <Activity />
+                    </WellnessIcon>
+                    <h3 className="text-xl font-body font-bold text-green-800 mb-4 text-center">{type.type}</h3>
+                    <p className="text-gray-600 font-body leading-relaxed text-center">{type.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Treatment Approach Section */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Our <span className="font-display italic text-green-700">Comprehensive</span> Treatment Approach</>
+                ) : (
+                  <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Integral</span></>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {(language === 'en' ? [
+                {
+                  title: 'Mood Stabilization',
+                  description: 'Evidence-based medications including lithium, anticonvulsants, and atypical antipsychotics to prevent mood episodes.'
+                },
+                {
+                  title: 'Comprehensive Assessment',
+                  description: 'Thorough evaluation of mood patterns, triggers, and medical history to develop personalized treatment plans.'
+                },
+                {
+                  title: 'Medication Monitoring',
+                  description: 'Regular blood work and careful monitoring to ensure therapeutic levels and minimize side effects.'
+                },
+                {
+                  title: 'Episode Prevention',
+                  description: 'Strategies and planning to prevent manic and depressive episodes through lifestyle and medication management.'
+                },
+                {
+                  title: 'Crisis Intervention',
+                  description: 'Immediate support and intervention during acute manic or depressive episodes to ensure safety.'
+                },
+                {
+                  title: 'Family Education',
+                  description: 'Support and education for family members about bipolar disorder and how to assist in treatment.'
+                }
+              ] : [
+                {
+                  title: 'Estabilización del Ánimo',
+                  description: 'Medicamentos basados en evidencia incluyendo litio, anticonvulsivos y antipsicóticos atípicos para prevenir episodios del ánimo.'
+                },
+                {
+                  title: 'Evaluación Integral',
+                  description: 'Evaluación completa de patrones del ánimo, desencadenantes e historial médico para desarrollar planes de tratamiento personalizados.'
+                },
+                {
+                  title: 'Monitoreo de Medicamentos',
+                  description: 'Análisis de sangre regulares y monitoreo cuidadoso para asegurar niveles terapéuticos y minimizar efectos secundarios.'
+                },
+                {
+                  title: 'Prevención de Episodios',
+                  description: 'Estrategias y planificación para prevenir episodios maníacos y depresivos a través del manejo del estilo de vida y medicamentos.'
+                },
+                {
+                  title: 'Intervención de Crisis',
+                  description: 'Apoyo inmediato e intervención durante episodios agudos maníacos o depresivos para asegurar la seguridad.'
+                },
+                {
+                  title: 'Educación Familiar',
+                  description: 'Apoyo y educación para miembros de la familia sobre el trastorno bipolar y cómo ayudar en el tratamiento.'
+                }
+              ]).map((treatment, index) => (
+                <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <CardContent className="p-8">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-blue-600 font-bold text-lg">{index + 1}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-body font-bold text-green-800 mb-3">{treatment.title}</h3>
+                        <p className="text-gray-600 font-body leading-relaxed">{treatment.description}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose Section */}
+        <section className="py-16 sm:py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Why Choose Dr. Reve for <span className="font-display italic text-green-700">Bipolar Treatment</span></>
+                ) : (
+                  <>Por Qué Elegir a la Dra. Reve para <span className="font-display italic text-green-700">Tratamiento Bipolar</span></>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="space-y-6">
+                  {(language === 'en' ? [
+                    'Board-certified psychiatrist with mood disorder expertise',
+                    'Bilingual services in English and Spanish',
+                    'Evidence-based medication management',
+                    'Collaborative approach with therapists and support teams',
+                    'Regular monitoring and adjustment of treatment plans',
+                    'Insurance accepted and flexible scheduling'
+                  ] : [
+                    'Psiquiatra certificada con experiencia en trastornos del ánimo',
+                    'Servicios bilingües en inglés y español',
+                    'Manejo de medicamentos basado en evidencia',
+                    'Enfoque colaborativo con terapeutas y equipos de apoyo',
+                    'Monitoreo regular y ajuste de planes de tratamiento',
+                    'Se acepta seguro y horarios flexibles'
+                  ]).map((benefit, index) => (
+                    <div key={index} className="flex items-start gap-4">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                      </div>
+                      <span className="text-gray-700 font-body text-lg">{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="text-center lg:text-left">
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                  <WellnessIcon size="lg" color="green" className="mx-auto lg:mx-0 mb-6">
+                    <Activity />
+                  </WellnessIcon>
+                  <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
+                    {language === 'en' ? 'Ready to Stabilize Your Mood?' : '¿Listo para Estabilizar tu Ánimo?'}
+                  </h3>
+                  <p className="text-gray-600 font-body leading-relaxed mb-6">
+                    {language === 'en'
+                      ? 'Take control of your bipolar disorder with expert psychiatric care. Schedule your consultation today.'
+                      : 'Toma control de tu trastorno bipolar con atención psiquiátrica experta. Programa tu consulta hoy.'
+                    }
+                  </p>
+                  <div className="space-y-4">
+                    <Link href="/contact">
+                      <Button 
+                        size="lg" 
+                        className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 transition-all duration-300"
+                        data-testid="button-schedule-consultation"
+                      >
+                        <Calendar className="w-5 h-5" />
+                        {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                        <ArrowRight className="w-5 h-5" />
+                      </Button>
+                    </Link>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="lg" 
+                      className="w-full border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3"
+                      data-testid="button-call-now"
+                    >
+                      <Phone className="w-5 h-5" />
+                      <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
+                        {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
       
       <Footer />

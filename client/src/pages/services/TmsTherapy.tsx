@@ -241,6 +241,284 @@ const TmsTherapy = () => {
           }}
         />
 
+        {/* Benefits Section */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Benefits of <span className="font-display italic text-green-700">TMS</span> Therapy</>
+                ) : (
+                  <>Beneficios de la <span className="font-display italic text-green-700">Terapia TMS</span></>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'TMS therapy offers a revolutionary approach to treating depression without the side effects of traditional medications.'
+                  : 'La terapia TMS ofrece un enfoque revolucionario para tratar la depresión sin los efectos secundarios de los medicamentos tradicionales.'
+                }
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {benefits.map((benefit, index) => (
+                <Card key={index} className="border-blue-100 hover:shadow-lg transition-all duration-300">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Zap className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <h3 className="text-lg font-body font-semibold text-green-800 mb-2">{benefit}</h3>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Candidate Criteria Section */}
+        <section className="py-16 sm:py-20 bg-blue-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Who is a <span className="font-display italic text-green-700">Good Candidate</span> for TMS?</>
+                ) : (
+                  <>¿Quién es un <span className="font-display italic text-green-700">Buen Candidato</span> para TMS?</>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <Card className="bg-white border-0 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-xl font-body font-bold text-green-800 flex items-center gap-3">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                    {language === 'en' ? 'Good Candidates' : 'Buenos Candidatos'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {(language === 'en' ? [
+                      'Treatment-resistant depression',
+                      'Unable to tolerate antidepressant side effects',
+                      'Seeking medication-free treatment option',
+                      'Adults 18 years and older',
+                      'Stable medical conditions',
+                      'Committed to full treatment course'
+                    ] : [
+                      'Depresión resistente al tratamiento',
+                      'Incapaz de tolerar efectos secundarios de antidepresivos',
+                      'Buscando opción de tratamiento sin medicamentos',
+                      'Adultos de 18 años en adelante',
+                      'Condiciones médicas estables',
+                      'Comprometido con el curso completo de tratamiento'
+                    ]).map((criteria, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                        </div>
+                        <span className="text-gray-700 font-body">{criteria}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white border-0 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-xl font-body font-bold text-red-800 flex items-center gap-3">
+                    <Info className="w-6 h-6 text-red-600" />
+                    {language === 'en' ? 'Important Considerations' : 'Consideraciones Importantes'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {(language === 'en' ? [
+                      'Metal implants near the head',
+                      'History of seizures or epilepsy',
+                      'Certain medications that lower seizure threshold',
+                      'Pregnancy (safety not established)',
+                      'Active substance abuse',
+                      'Severe cognitive impairment'
+                    ] : [
+                      'Implantes metálicos cerca de la cabeza',
+                      'Historial de convulsiones o epilepsia',
+                      'Ciertos medicamentos que reducen el umbral de convulsiones',
+                      'Embarazo (seguridad no establecida)',
+                      'Abuso activo de sustancias',
+                      'Deterioro cognitivo severo'
+                    ]).map((consideration, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <Info className="w-4 h-4 text-red-600" />
+                        </div>
+                        <span className="text-gray-700 font-body">{consideration}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Treatment Process Section */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>The <span className="font-display italic text-green-700">TMS Treatment</span> Process</>
+                ) : (
+                  <>El Proceso de <span className="font-display italic text-green-700">Tratamiento TMS</span></>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {(language === 'en' ? [
+                {
+                  step: '1',
+                  title: 'Initial Consultation',
+                  description: 'Comprehensive evaluation to determine if TMS is right for you, including medical history and depression assessment.'
+                },
+                {
+                  step: '2',
+                  title: 'Motor Threshold Mapping',
+                  description: 'Personalized calibration to determine the exact magnetic field strength needed for your treatment.'
+                },
+                {
+                  step: '3',
+                  title: 'Treatment Sessions',
+                  description: '5 days per week for 4-6 weeks. Each session lasts about 19-37 minutes with no anesthesia required.'
+                },
+                {
+                  step: '4',
+                  title: 'Progress Monitoring',
+                  description: 'Regular assessment of symptoms and adjustment of treatment plan as needed throughout the course.'
+                }
+              ] : [
+                {
+                  step: '1',
+                  title: 'Consulta Inicial',
+                  description: 'Evaluación integral para determinar si TMS es adecuado para usted, incluyendo historial médico y evaluación de depresión.'
+                },
+                {
+                  step: '2',
+                  title: 'Mapeo del Umbral Motor',
+                  description: 'Calibración personalizada para determinar la intensidad exacta del campo magnético necesaria para su tratamiento.'
+                },
+                {
+                  step: '3',
+                  title: 'Sesiones de Tratamiento',
+                  description: '5 días por semana durante 4-6 semanas. Cada sesión dura aproximadamente 19-37 minutos sin necesidad de anestesia.'
+                },
+                {
+                  step: '4',
+                  title: 'Monitoreo del Progreso',
+                  description: 'Evaluación regular de síntomas y ajuste del plan de tratamiento según sea necesario durante el curso.'
+                }
+              ]).map((process, index) => (
+                <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <CardContent className="p-8 text-center">
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-blue-600 font-bold text-2xl">{process.step}</span>
+                    </div>
+                    <h3 className="text-xl font-body font-bold text-green-800 mb-4">{process.title}</h3>
+                    <p className="text-gray-600 font-body leading-relaxed">{process.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose Section */}
+        <section className="py-16 sm:py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Why Choose Dr. Reve for <span className="font-display italic text-green-700">TMS Therapy</span></>
+                ) : (
+                  <>Por Qué Elegir a la Dra. Reve para <span className="font-display italic text-green-700">Terapia TMS</span></>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="space-y-6">
+                  {(language === 'en' ? [
+                    'Board-certified psychiatrist with TMS expertise',
+                    'Latest FDA-approved TMS technology',
+                    'Bilingual services in English and Spanish',
+                    'Insurance coverage assistance',
+                    'Comprehensive pre and post-treatment care',
+                    'Convenient scheduling and location'
+                  ] : [
+                    'Psiquiatra certificada con experiencia en TMS',
+                    'Tecnología TMS más reciente aprobada por FDA',
+                    'Servicios bilingües en inglés y español',
+                    'Asistencia con cobertura de seguro',
+                    'Atención integral pre y post-tratamiento',
+                    'Horarios convenientes y ubicación accesible'
+                  ]).map((benefit, index) => (
+                    <div key={index} className="flex items-start gap-4">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                      </div>
+                      <span className="text-gray-700 font-body text-lg">{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="text-center lg:text-left">
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                  <WellnessIcon size="lg" color="green" className="mx-auto lg:mx-0 mb-6">
+                    <IconBolt />
+                  </WellnessIcon>
+                  <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
+                    {language === 'en' ? 'Ready to Try TMS Therapy?' : '¿Listo para Probar la Terapia TMS?'}
+                  </h3>
+                  <p className="text-gray-600 font-body leading-relaxed mb-6">
+                    {language === 'en'
+                      ? 'Discover if TMS therapy is right for you. Schedule a consultation to learn more about this innovative treatment option.'
+                      : 'Descubre si la terapia TMS es adecuada para ti. Programa una consulta para aprender más sobre esta opción de tratamiento innovadora.'
+                    }
+                  </p>
+                  <div className="space-y-4">
+                    <Link href="/contact">
+                      <Button 
+                        size="lg" 
+                        className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 transition-all duration-300"
+                        data-testid="button-schedule-consultation"
+                      >
+                        <Calendar className="w-5 h-5" />
+                        {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                        <ArrowRight className="w-5 h-5" />
+                      </Button>
+                    </Link>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="lg" 
+                      className="w-full border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3"
+                      data-testid="button-call-now"
+                    >
+                      <Phone className="w-5 h-5" />
+                      <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
+                        {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
       
       <Footer />

@@ -229,6 +229,257 @@ const PtsdTreatment = () => {
           }}
         />
 
+        {/* Symptoms Section */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Recognizing <span className="font-display italic text-green-700">PTSD</span> Symptoms</>
+                ) : (
+                  <>Reconociendo Síntomas de <span className="font-display italic text-green-700">TEPT</span></>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'PTSD can develop after experiencing or witnessing a traumatic event. These symptoms persist for more than a month and significantly impact daily functioning.'
+                  : 'El TEPT puede desarrollarse después de experimentar o presenciar un evento traumático. Estos síntomas persisten por más de un mes e impactan significativamente el funcionamiento diario.'
+                }
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {symptoms.map((symptom, index) => (
+                <Card key={index} className="border-blue-100 hover:shadow-lg transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <span className="text-gray-700 font-body">{symptom}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Trauma Types Section */}
+        <section className="py-16 sm:py-20 bg-blue-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Types of <span className="font-display italic text-green-700">Trauma</span> We Treat</>
+                ) : (
+                  <>Tipos de <span className="font-display italic text-green-700">Trauma</span> que Tratamos</>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {(language === 'en' ? [
+                'Combat & Military Trauma',
+                'Childhood Abuse',
+                'Sexual Assault',
+                'Motor Vehicle Accidents',
+                'Natural Disasters',
+                'Workplace Violence',
+                'Medical Trauma',
+                'Community Violence'
+              ] : [
+                'Trauma de Combate y Militar',
+                'Abuso Infantil',
+                'Agresión Sexual',
+                'Accidentes Automovilísticos',
+                'Desastres Naturales',
+                'Violencia Laboral',
+                'Trauma Médico',
+                'Violencia Comunitaria'
+              ]).map((type, index) => (
+                <Card key={index} className="bg-white border-0 shadow-lg">
+                  <CardContent className="p-6 text-center">
+                    <WellnessIcon size="md" color="blue" className="mx-auto mb-3">
+                      <IconShield />
+                    </WellnessIcon>
+                    <h3 className="text-lg font-body font-semibold text-green-800">{type}</h3>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Treatment Approach Section */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Our <span className="font-display italic text-green-700">Trauma-Informed</span> Treatment Approach</>
+                ) : (
+                  <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Informado en Trauma</span></>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {(language === 'en' ? [
+                {
+                  title: 'Comprehensive Assessment',
+                  description: 'Thorough evaluation of trauma history, symptoms, and current functioning to develop personalized treatment plans.'
+                },
+                {
+                  title: 'Medication Management',
+                  description: 'Evidence-based psychiatric medications to manage PTSD symptoms, including anxiety, depression, and sleep disturbances.'
+                },
+                {
+                  title: 'Therapy Coordination',
+                  description: 'Collaborative care with specialized trauma therapists for EMDR, CPT, and other evidence-based treatments.'
+                },
+                {
+                  title: 'Crisis Safety Planning',
+                  description: 'Developing personalized safety plans for managing flashbacks, panic attacks, and other crisis situations.'
+                },
+                {
+                  title: 'Family Support',
+                  description: 'Guidance and resources for family members to understand and support the healing process.'
+                },
+                {
+                  title: 'Cultural Considerations',
+                  description: 'Treatment approaches that honor cultural background and incorporate culturally relevant healing practices.'
+                }
+              ] : [
+                {
+                  title: 'Evaluación Integral',
+                  description: 'Evaluación completa del historial de trauma, síntomas y funcionamiento actual para desarrollar planes de tratamiento personalizados.'
+                },
+                {
+                  title: 'Manejo de Medicamentos',
+                  description: 'Medicamentos psiquiátricos basados en evidencia para manejar síntomas de TEPT, incluyendo ansiedad, depresión y trastornos del sueño.'
+                },
+                {
+                  title: 'Coordinación de Terapia',
+                  description: 'Atención colaborativa con terapeutas especializados en trauma para EMDR, CPT y otros tratamientos basados en evidencia.'
+                },
+                {
+                  title: 'Planificación de Seguridad en Crisis',
+                  description: 'Desarrollo de planes de seguridad personalizados para manejar flashbacks, ataques de pánico y otras situaciones de crisis.'
+                },
+                {
+                  title: 'Apoyo Familiar',
+                  description: 'Orientación y recursos para miembros de la familia para entender y apoyar el proceso de sanación.'
+                },
+                {
+                  title: 'Consideraciones Culturales',
+                  description: 'Enfoques de tratamiento que honran el trasfondo cultural e incorporan prácticas de sanación culturalmente relevantes.'
+                }
+              ]).map((treatment, index) => (
+                <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <CardContent className="p-8">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-blue-600 font-bold text-lg">{index + 1}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-body font-bold text-green-800 mb-3">{treatment.title}</h3>
+                        <p className="text-gray-600 font-body leading-relaxed">{treatment.description}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose Section */}
+        <section className="py-16 sm:py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Why Choose Dr. Reve for <span className="font-display italic text-green-700">PTSD Treatment</span></>
+                ) : (
+                  <>Por Qué Elegir a la Dra. Reve para <span className="font-display italic text-green-700">Tratamiento de TEPT</span></>
+                )}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="space-y-6">
+                  {(language === 'en' ? [
+                    'Board-certified psychiatrist with specialized trauma training',
+                    'Bilingual services in English and Spanish',
+                    'Trauma-informed care approach',
+                    'Collaborative treatment with specialized therapists',
+                    'Insurance accepted and affordable payment options',
+                    'Same-week appointment availability'
+                  ] : [
+                    'Psiquiatra certificada con entrenamiento especializado en trauma',
+                    'Servicios bilingües en inglés y español',
+                    'Enfoque de atención informada en trauma',
+                    'Tratamiento colaborativo con terapeutas especializados',
+                    'Se acepta seguro y opciones de pago accesibles',
+                    'Disponibilidad de citas en la misma semana'
+                  ]).map((benefit, index) => (
+                    <div key={index} className="flex items-start gap-4">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                      </div>
+                      <span className="text-gray-700 font-body text-lg">{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="text-center lg:text-left">
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                  <WellnessIcon size="lg" color="green" className="mx-auto lg:mx-0 mb-6">
+                    <IconBrain />
+                  </WellnessIcon>
+                  <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
+                    {language === 'en' ? 'Ready to Begin Healing?' : '¿Listo para Comenzar a Sanar?'}
+                  </h3>
+                  <p className="text-gray-600 font-body leading-relaxed mb-6">
+                    {language === 'en'
+                      ? 'Take the first step towards recovery. Contact us today to schedule your confidential consultation.'
+                      : 'Da el primer paso hacia la recuperación. Contáctanos hoy para programar tu consulta confidencial.'
+                    }
+                  </p>
+                  <div className="space-y-4">
+                    <Link href="/contact">
+                      <Button 
+                        size="lg" 
+                        className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 transition-all duration-300"
+                        data-testid="button-schedule-consultation"
+                      >
+                        <Calendar className="w-5 h-5" />
+                        {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                        <ArrowRight className="w-5 h-5" />
+                      </Button>
+                    </Link>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="lg" 
+                      className="w-full border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3"
+                      data-testid="button-call-now"
+                    >
+                      <Phone className="w-5 h-5" />
+                      <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
+                        {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
       
       <Footer />
