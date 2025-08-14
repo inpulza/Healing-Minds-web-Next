@@ -1,0 +1,78 @@
+# Healing Minds Psychiatry Website
+
+## Overview
+
+This is a professional website for Healing Minds Psychiatry, the practice of Dr. Melva Reve, a board-certified psychiatrist serving Naples, FL and surrounding areas. The website provides bilingual (English/Spanish) psychiatric care information, services, and patient resources. It features a modern, accessible design built with React and TypeScript, focusing on mental health services including anxiety, depression, ADHD, PTSD, and other psychiatric conditions.
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+### Frontend Architecture
+- **Framework**: React 19+ with TypeScript, using Vite as the build tool
+- **Routing**: Wouter for client-side routing with pages for Home, About, Services, For Patients, Contact, and Spanish services
+- **Styling**: Tailwind CSS with shadcn/ui component library for consistent UI components
+- **State Management**: React Context for language switching (English/Spanish) and React Query for server state
+- **Component Structure**: Page-based components with reusable UI components organized under `/components/ui/`
+
+### Backend Architecture
+- **Server**: Express.js with TypeScript for API endpoints
+- **Database Layer**: Drizzle ORM configured for PostgreSQL with type-safe schema definitions
+- **Storage Interface**: Abstract storage interface with in-memory implementation for development
+- **API Design**: RESTful endpoints for contact form submissions and message retrieval
+
+### Design System
+- **Typography**: Inter font for body text, Arapey serif font for headings
+- **Color Scheme**: Primary green (#16a34a) with light green accents, professional gray text
+- **Responsive Design**: Mobile-first approach with responsive breakpoints
+- **Component Library**: shadcn/ui components for consistent UI patterns
+
+### Data Layer
+- **Schema**: PostgreSQL tables for users and contact messages with Zod validation
+- **ORM**: Drizzle ORM for type-safe database operations
+- **Validation**: Zod schemas for runtime type checking and form validation
+
+### SEO and Analytics
+- **SEO Utilities**: Dynamic meta tag updates, structured data for medical business and physician
+- **Analytics**: Google Analytics integration with event tracking
+- **Multilingual SEO**: Language-specific meta tags and canonical URLs
+
+### Content Management
+- **Internationalization**: Context-based language switching with comprehensive translation system
+- **Content Structure**: Centralized content data for practice information, services, and testimonials
+- **Form Handling**: Contact form with validation, submission tracking, and toast notifications
+
+## External Dependencies
+
+### Core Dependencies
+- **@tanstack/react-query**: Server state management and caching
+- **wouter**: Lightweight client-side routing
+- **drizzle-orm**: Type-safe ORM for database operations
+- **@neondatabase/serverless**: PostgreSQL database driver for Neon
+
+### UI and Styling
+- **@radix-ui/react-***: Accessible headless UI components
+- **tailwindcss**: Utility-first CSS framework
+- **class-variance-authority**: Component variant management
+- **lucide-react**: Icon library
+
+### Form and Validation
+- **react-hook-form**: Form state management
+- **@hookform/resolvers**: Form validation resolvers
+- **zod**: Runtime type validation and schema definition
+
+### Development Tools
+- **vite**: Build tool and development server
+- **typescript**: Static type checking
+- **eslint**: Code linting and formatting
+
+### Database and Infrastructure
+- **drizzle-kit**: Database migration and schema management
+- **connect-pg-simple**: PostgreSQL session store
+- **Neon Database**: Serverless PostgreSQL hosting (configured via DATABASE_URL)
+
+### Analytics and Monitoring
+- **Google Analytics**: Website analytics and user behavior tracking
+- **Custom Analytics Module**: Event tracking for form submissions and user interactions
