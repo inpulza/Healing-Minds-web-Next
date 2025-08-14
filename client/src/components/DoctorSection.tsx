@@ -2,6 +2,8 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { IconStethoscope } from '@tabler/icons-react';
+import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from '@assets/doctor-consultation.jpg';
 
 const DoctorSection = () => {
@@ -14,12 +16,17 @@ const DoctorSection = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div className="text-green-800">
-              <h2 className="text-3xl lg:text-5xl font-display font-bold mb-6" data-testid="doctor-section-title">
-                {language === 'en' 
-                  ? 'Dedicated to your mental health, every day'
-                  : 'Dedicados a su salud mental, todos los días'
-                }
-              </h2>
+              <div className="flex items-start gap-3 mb-6">
+                <WellnessIcon size="sm" color="green" className="mt-1 opacity-80">
+                  <IconStethoscope />
+                </WellnessIcon>
+                <h2 className="text-3xl lg:text-5xl font-display font-bold" data-testid="doctor-section-title">
+                  {language === 'en' 
+                    ? 'Dedicated to your mental health, every day'
+                    : 'Dedicados a su salud mental, todos los días'
+                  }
+                </h2>
+              </div>
               
               <div className="mb-8">
                 <div className="text-4xl font-bold mb-2 text-green-600" data-testid="patient-count">15+</div>

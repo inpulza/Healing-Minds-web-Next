@@ -51,9 +51,17 @@ const Services = () => {
     <section id="services" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-green-800 mb-6" data-testid="services-title">
-            Mental Health for <span className="font-body italic">every</span> mind
-          </h2>
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <WellnessIcon size="sm" color="green" className="opacity-70">
+              <IconBrain />
+            </WellnessIcon>
+            <h2 className="text-4xl md:text-6xl font-display font-bold text-green-800 text-center" data-testid="services-title">
+              Mental Health for <span className="font-body italic">every</span> mind
+            </h2>
+            <WellnessIcon size="sm" color="blue" className="opacity-70">
+              <IconHeart />
+            </WellnessIcon>
+          </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="services-description">
             {language === 'en'
               ? 'Comprehensive psychiatric care tailored to your individual needs, helping you navigate life\'s challenges with confidence and resilience.'

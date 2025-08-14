@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { ChevronDown } from 'lucide-react';
+import { IconHelp } from '@tabler/icons-react';
+import WellnessIcon from '@/components/WellnessIcon';
 
 const FAQ = () => {
   const { language } = useLanguage();
@@ -61,9 +63,14 @@ const FAQ = () => {
     <section className="py-20 bg-green-50">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-green-800 mb-6" data-testid="faq-title">
-            {language === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
-          </h2>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <WellnessIcon size="sm" color="green" className="opacity-80">
+              <IconHelp />
+            </WellnessIcon>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-green-800" data-testid="faq-title">
+              {language === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
+            </h2>
+          </div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto font-body leading-relaxed" data-testid="faq-description">
             {language === 'en'
               ? 'Find answers to common questions about psychiatric care and our services.'

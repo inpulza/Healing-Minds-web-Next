@@ -3,6 +3,8 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
+import { IconUserHeart } from '@tabler/icons-react';
+import WellnessIcon from '@/components/WellnessIcon';
 import doctorProfileImage from '@assets/doctor-profile.png';
 
 const About = () => {
@@ -37,9 +39,14 @@ const About = () => {
                 </span>
               </div>
 
-              <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-6" data-testid="about-title">
-                Dr. Melva Reve
-              </h2>
+              <div className="flex items-center justify-center lg:justify-start gap-3 mb-6">
+                <WellnessIcon size="sm" color="blue" className="opacity-80">
+                  <IconUserHeart />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900" data-testid="about-title">
+                  Dr. Melva Reve
+                </h2>
+              </div>
               
               <p className="text-lg text-gray-600 mb-6 font-body leading-relaxed max-w-lg mx-auto lg:mx-0" data-testid="about-description">
                 {language === 'en'
