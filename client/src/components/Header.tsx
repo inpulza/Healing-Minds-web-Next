@@ -10,7 +10,7 @@ const Header = () => {
   const { language, setLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(true);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
 
@@ -122,7 +122,8 @@ const Header = () => {
               {navigationItems.map((item) => (
                 <div key={item.href} className="relative">
                   {item.hasDropdown ? (
-                    <div
+                    <button
+                      onClick={() => setIsServicesOpen(!isServicesOpen)}
                       className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-500 flex items-center gap-2 ${
                         isActive(item.href) || isServicesOpen
                           ? 'bg-white text-primary shadow-sm'
@@ -134,7 +135,7 @@ const Header = () => {
                       <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${
                         isServicesOpen ? 'rotate-180' : ''
                       }`} />
-                    </div>
+                    </button>
                   ) : (
                     <Link
                       href={item.href}
@@ -211,7 +212,7 @@ const Header = () => {
             : 'max-h-0 opacity-0 py-0 pointer-events-none'
         }`}>
           <div className="hidden md:block">
-            <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/70 p-8 mx-4 relative z-50">
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 mx-4 relative z-50">
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                 {serviceItems.map((service, index) => (
                   <Link
