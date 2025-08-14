@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import ReactCountryFlag from 'react-country-flag';
 
 const Header = () => {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const { language, setLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -82,6 +82,17 @@ const Header = () => {
 
   const isActive = (href: string) => {
     return location === href || (href !== '/' && location.startsWith(href));
+  };
+
+  const handleServiceNavigation = (href: string) => {
+    setIsServicesOpen(false);
+    navigate(href);
+  };
+
+  const handleMobileServiceNavigation = (href: string) => {
+    setIsMobileMenuOpen(false);
+    setIsMobileServicesOpen(false);
+    navigate(href);
   };
 
   return (
@@ -207,10 +218,9 @@ const Header = () => {
             <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/70 p-8 mx-4">
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                 {serviceItems.map((service, index) => (
-                  <Link
+                  <div
                     key={service.href}
-                    href={service.href}
-                    onClick={() => setIsServicesOpen(false)}
+                    onClick={() => handleServiceNavigation(service.href)}
                     className="group block p-4 rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer"
                     data-testid={`dropdown-service-${index}`}
                   >
@@ -225,18 +235,17 @@ const Header = () => {
                         </p>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
               <div className="mt-6 pt-6 border-t border-gray-200/60 text-center">
-                <Link
-                  href={language === 'en' ? '/services' : '/servicios-espanol'}
-                  onClick={() => setIsServicesOpen(false)}
-                  className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300 text-lg"
+                <div
+                  onClick={() => handleServiceNavigation(language === 'en' ? '/services' : '/servicios-espanol')}
+                  className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300 text-lg cursor-pointer"
                 >
                   {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
                   <ArrowRight className="w-5 h-5" />
-                </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -270,29 +279,21 @@ const Header = () => {
                     {isMobileServicesOpen && (
                       <div className="ml-4 mt-2 space-y-2 animate-in slide-in-from-top-2 fade-in-0">
                         {serviceItems.map((service, index) => (
-                          <Link
+                          <div
                             key={service.href}
-                            href={service.href}
-                            onClick={() => {
-                              setIsMobileMenuOpen(false);
-                              setIsMobileServicesOpen(false);
-                            }}
-                            className="block py-2 px-3 rounded-lg text-sm font-body text-gray-600 hover:text-green-700 hover:bg-green-50/80 transition-all duration-200"
+                            onClick={() => handleMobileServiceNavigation(service.href)}
+                            className="block py-2 px-3 rounded-lg text-sm font-body text-gray-600 hover:text-green-700 hover:bg-green-50/80 transition-all duration-200 cursor-pointer"
                             data-testid={`mobile-dropdown-service-${index}`}
                           >
                             {service.label}
-                          </Link>
+                          </div>
                         ))}
-                        <Link
-                          href={language === 'en' ? '/services' : '/servicios-espanol'}
-                          onClick={() => {
-                            setIsMobileMenuOpen(false);
-                            setIsMobileServicesOpen(false);
-                          }}
-                          className="block py-2 px-3 rounded-lg text-sm font-body text-green-700 hover:text-green-800 hover:bg-green-50/80 transition-all duration-200 border-t border-gray-200/60 mt-2 pt-3"
+                        <div
+                          onClick={() => handleMobileServiceNavigation(language === 'en' ? '/services' : '/servicios-espanol')}
+                          className="block py-2 px-3 rounded-lg text-sm font-body text-green-700 hover:text-green-800 hover:bg-green-50/80 transition-all duration-200 border-t border-gray-200/60 mt-2 pt-3 cursor-pointer"
                         >
                           {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
-                        </Link>
+                        </div>
                       </div>
                     )}
                   </>
