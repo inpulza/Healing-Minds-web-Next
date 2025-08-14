@@ -115,8 +115,8 @@ const DepressionTreatment = () => {
       es: 'Esperanza y Sanación'
     },
     title: {
-      en: 'Depression Treatment in <span className="font-display italic text-green-700">Naples, FL</span>',
-      es: 'Tratamiento para la Depresión en <span className="font-display italic text-green-700">Naples, FL</span>'
+      en: 'Depression Treatment in Naples, FL',
+      es: 'Tratamiento para la Depresión en Naples, FL'
     },
     description: {
       en: 'Find hope and healing with expert depression treatment. Dr. Melva Reve provides compassionate, evidence-based psychiatric care to help you reclaim your life and rediscover joy.',

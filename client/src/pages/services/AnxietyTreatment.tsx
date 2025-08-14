@@ -139,7 +139,6 @@ const AnxietyTreatment = () => {
             therapyRoomImage: anxietyImage,
             symbolImage: therapyRoomImage
           }}
-          icon={IconBrain}
         />
 
         {/* Symptoms Section */}
