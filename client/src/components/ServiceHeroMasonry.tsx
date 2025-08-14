@@ -160,44 +160,44 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Top Right - Facts Card (Extended - more space) */}
-              <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.8'}}>
-                <div className="bg-white border border-purple-200 rounded-2xl shadow-lg p-6 h-full flex flex-col">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <IconHeart className="w-4.5 h-4.5 text-purple-700" />
+              {/* Top Right - Facts Card (Reduced height, soft green design) */}
+              <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.6'}}>
+                <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-5 h-full flex flex-col overflow-hidden">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <IconHeart className="w-4.5 h-4.5 text-green-700" />
                     </div>
-                    <h3 className="text-base font-body font-bold text-purple-800 truncate">
+                    <h3 className="text-base font-body font-bold text-green-800 truncate">
                       {language === 'en' ? facts.title.en : facts.title.es}
                     </h3>
                   </div>
-                  <div className="space-y-4 flex-1 flex flex-col justify-center">
+                  <div className="space-y-3 flex-1 flex flex-col justify-center overflow-hidden">
                     {facts.items.slice(0, 2).map((fact, index) => (
-                      <div key={index} className="flex items-start gap-4">
-                        <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                          <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <div className="w-2 h-2 bg-green-600 rounded-full"></div>
                         </div>
-                        <div className="flex-1">
-                          <span className="text-sm text-purple-800 font-body font-medium leading-relaxed break-words">
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm text-green-800 font-body font-medium leading-snug break-words">
                             {language === 'en' ? fact.en : fact.es}
                           </span>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4 pt-4 border-t border-purple-200">
+                  <div className="mt-3 pt-3 border-t border-green-200">
                     <div className="flex items-center justify-center gap-2">
-                      <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-purple-300 rounded-full animate-pulse delay-75"></div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse delay-75"></div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Left - Quick Stats Card (Extended - more space) */}
-              <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.2', gridRowEnd: 'span 1.8'}}>
-                <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-6 h-full flex flex-col">
-                  <div className="flex items-center gap-3 mb-4">
+              {/* Bottom Left - Quick Stats Card (Reduced height, matching green design) */}
+              <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.4', gridRowEnd: 'span 1.6'}}>
+                <div className="bg-white border border-green-200 rounded-2xl shadow-lg p-5 h-full flex flex-col overflow-hidden">
+                  <div className="flex items-center gap-3 mb-3">
                     <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
                       <Clock className="w-4.5 h-4.5 text-green-700" />
                     </div>
@@ -205,21 +205,21 @@ export const ServiceHeroMasonry = ({
                       {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
                     </h3>
                   </div>
-                  <div className="space-y-4 flex-1 flex flex-col justify-center">
+                  <div className="space-y-3 flex-1 flex flex-col justify-center overflow-hidden">
                     {quickStats.items.slice(0, 3).map((stat, index) => (
-                      <div key={index} className="flex items-start gap-4">
-                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
                           <div className="w-2 h-2 bg-green-600 rounded-full"></div>
                         </div>
-                        <div className="flex-1">
-                          <p className="text-sm text-green-800 font-body font-medium leading-relaxed break-words">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-green-800 font-body font-medium leading-snug break-words">
                             {language === 'en' ? stat.en : stat.es}
                           </p>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4 pt-4 border-t border-green-200">
+                  <div className="mt-3 pt-3 border-t border-green-200">
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                       <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse delay-75"></div>
@@ -229,8 +229,8 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Bottom Right - Therapy Room Photo (Reduced height) */}
-              <div className="row-span-2 col-start-2" style={{gridRowStart: '2.2', gridRowEnd: 'span 1.2'}}>
+              {/* Bottom Right - Therapy Room Photo (Adjusted positioning) */}
+              <div className="row-span-2 col-start-2" style={{gridRowStart: '2.6', gridRowEnd: 'span 1.4'}}>
                 <div className="h-full rounded-2xl shadow-lg overflow-hidden">
                   <img 
                     src={images.therapyRoomImage}
