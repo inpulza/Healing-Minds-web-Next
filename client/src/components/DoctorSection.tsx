@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import doctorImage from '@assets/doctor-consultation.jpg';
 
 const DoctorSection = () => {
   const { language } = useLanguage();
@@ -49,15 +50,13 @@ const DoctorSection = () => {
 
             {/* Doctor Image */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-white to-gray-100 rounded-3xl p-8 shadow-2xl">
-                <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-gray-200">
-                  <img
-                    src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=500&q=80"
-                    alt="Dr. Melva Reve - Board Certified Psychiatrist"
-                    className="w-full h-full object-cover"
-                    data-testid="doctor-section-image"
-                  />
-                </div>
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden">
+                <img
+                  src={doctorImage}
+                  alt="Dr. Melva Reve - Board Certified Psychiatrist"
+                  className="w-full h-full object-cover"
+                  data-testid="doctor-section-image"
+                />
               </div>
             </div>
           </div>
