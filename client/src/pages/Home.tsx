@@ -7,6 +7,7 @@ import DoctorSection from '@/components/DoctorSection';
 import About from '@/components/About';
 import Services from '@/components/Services';
 import BilingualCare from '@/components/BilingualCare';
+import FAQ from '@/components/FAQ';
 import Testimonials from '@/components/Testimonials';
 import ForPatients from '@/components/ForPatients';
 import Contact from '@/components/Contact';
@@ -43,6 +44,7 @@ const Home = () => {
         <Services />
         <About />
         <BilingualCare />
+        <FAQ />
         <Testimonials />
         <ForPatients />
         <Contact />
