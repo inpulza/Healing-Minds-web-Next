@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { IconBrain, IconHeart, IconLeaf } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import heroImage from '@assets/hero-doctor-optimized.png';
+import mobileHeroImage from '@assets/e534f45f-8c35-4c68-853b-c0dc841a0387_1755195321913.png';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -19,11 +20,10 @@ const Hero = () => {
             <div 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{
-                backgroundImage: `url(${heroImage})`,
+                backgroundImage: `url(${mobileHeroImage})`,
                 backgroundSize: 'cover'
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-green-600/30" />
           </div>
           
           {/* Mobile: Content container */}
