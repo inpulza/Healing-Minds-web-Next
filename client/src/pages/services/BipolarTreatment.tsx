@@ -314,7 +314,7 @@ const BipolarTreatment = () => {
                   >
                     <div className="p-6 sm:p-8 text-green-800">
                       {/* Header with Icon and Title */}
-                      <div className="flex items-center gap-4 mb-6 bg-[#ffffff]">
+                      <div className="flex items-center gap-4 mb-6 bg-[#ffffff00]">
                         <div className="p-3 rounded-2xl">
                           <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-green-800" />
                         </div>
