@@ -12,7 +12,7 @@ const Hero = () => {
 
   return (
     <section className="py-8 bg-white">
-      <div className="max-w-full mx-auto px-2">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
         {/* Mobile: Separate containers, Desktop: Single container */}
         <div className="block sm:hidden">
           {/* Mobile: Doctor image container */}
@@ -64,7 +64,7 @@ const Hero = () => {
 
         {/* Desktop: Original single container layout */}
         <div className="hidden sm:block">
-          <div className="relative rounded-3xl overflow-hidden h-[600px] sm:h-[700px] flex items-center justify-center">
+          <div className="relative rounded-3xl overflow-hidden h-[600px] sm:h-[700px] lg:h-[800px] flex items-center justify-center">
             {/* Background Image */}
             <img 
               src={heroImage}
