@@ -35,6 +35,13 @@ const Header = () => {
     };
   }, []);
 
+  // Close dropdown when navigation occurs
+  useEffect(() => {
+    setIsServicesOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsMobileServicesOpen(false);
+  }, [location]);
+
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'es' : 'en');
   };
@@ -85,14 +92,16 @@ const Header = () => {
   };
 
   const handleServiceClick = () => {
-    console.log('Service clicked - closing modal');
-    setIsServicesOpen(false);
+    console.log('Service clicked - NOT closing modal to allow navigation');
+    // Removed immediate closing to allow navigation to happen first
   };
 
   const handleMobileServiceClick = () => {
-    console.log('Mobile service clicked - closing menus');
-    setIsMobileMenuOpen(false);
-    setIsMobileServicesOpen(false);
+    console.log('Mobile service clicked - closing menus after navigation');
+    setTimeout(() => {
+      setIsMobileMenuOpen(false);
+      setIsMobileServicesOpen(false);
+    }, 100); // Small delay to allow navigation
   };
 
   return (
@@ -226,7 +235,7 @@ const Header = () => {
                   >
                     <Button
                       variant="ghost"
-                      onClick={() => console.log('HEADER DROPDOWN CLICK:', service.href)}
+                      onClick={handleServiceClick}
                       className="group w-full p-4 h-auto rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
                     >
                       <div className="flex items-start gap-3">
@@ -244,14 +253,7 @@ const Header = () => {
                   </Link>
                 ))}
               </div>
-              <div className="mt-6 pt-6 border-t border-gray-200/60 text-center space-y-4">
-                {/* Test simple link */}
-                <div className="mb-4">
-                  <Link href="/services/anxiety-treatment" className="bg-red-500 text-white p-2 rounded block">
-                    TEST SIMPLE LINK (ANXIETY)
-                  </Link>
-                </div>
-                
+              <div className="mt-6 pt-6 border-t border-gray-200/60 text-center">
                 <Link
                   href={language === 'en' ? '/services' : '/servicios-espanol'}
                   className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300 text-lg"
