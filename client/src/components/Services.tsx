@@ -10,40 +10,64 @@ const Services = () => {
 
   const services = [
     {
-      id: 'scheduling',
-      title: language === 'en' ? 'Flexible Scheduling' : 'Horarios Flexibles',
+      id: 'anxiety',
+      title: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad',
       description: language === 'en' 
-        ? 'Adapt your mental health care to your busy life with comprehensive scheduling options. Choose from morning, afternoon, or evening appointments to fit your lifestyle.'
-        : 'Adapte su atención de salud mental a su vida ocupada con opciones de programación integrales. Elija citas matutinas, vespertinas o nocturnas para adaptarse a su estilo de vida.',
+        ? 'Expert care for panic attacks, social anxiety, and generalized anxiety disorder. Evidence-based treatment with compassionate support for lasting relief.'
+        : 'Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada. Tratamiento basado en evidencia con apoyo compasivo para alivio duradero.',
       icon: IconBrain,
-      featured: true
+      featured: true,
+      link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
     },
     {
-      id: 'programs',
-      title: language === 'en' ? 'Personalized Programs' : 'Programas Personalizados',
+      id: 'depression',
+      title: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión',
       description: language === 'en'
-        ? 'Achieve your goals with customized mental health programs tailored to your unique needs. Whether you\'re starting out or pushing your limits, we\'ll guide you every step of the way.'
-        : 'Alcance sus metas con programas de salud mental personalizados adaptados a sus necesidades únicas. Ya sea que esté comenzando o superando sus límites, lo guiaremos en cada paso del camino.',
+        ? 'Comprehensive care for major depression, including medication management and therapy coordination. Find hope and healing with personalized treatment plans.'
+        : 'Atención integral para depresión mayor, incluyendo manejo de medicamentos y coordinación de terapia. Encuentre esperanza y sanación con planes de tratamiento personalizados.',
+      icon: IconSun,
+      featured: false,
+      link: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
+    },
+    {
+      id: 'adhd',
+      title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
+      description: language === 'en'
+        ? 'Specialized evaluation and treatment for adults and teens with ADHD. Improve focus, organization, and daily functioning with expert psychiatric care.'
+        : 'Evaluación especializada y tratamiento para adultos y adolescentes con TDAH. Mejore el enfoque, organización y funcionamiento diario con atención psiquiátrica experta.',
       icon: IconMoodHappy,
-      featured: false
+      featured: false,
+      link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah'
     },
     {
-      id: 'experts',
-      title: language === 'en' ? 'Expert Care' : 'Atención Experta',
+      id: 'ptsd',
+      title: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT',
       description: language === 'en'
-        ? 'Our certified and experienced psychiatrist is here to support you. With expertise in anxiety, depression, and wellness, we\'re dedicated to helping you reach your mental health goals.'
-        : 'Nuestra psiquiatra certificada y experimentada está aquí para apoyarlo. Con experiencia en ansiedad, depresión y bienestar, estamos dedicados a ayudarlo a alcanzar sus metas de salud mental.',
-      icon: IconUser,
-      featured: false
+        ? 'Trauma-informed psychiatric care for post-traumatic stress disorder. Safe, culturally sensitive treatment to help you reclaim your life from trauma.'
+        : 'Atención psiquiátrica informada en trauma para trastorno de estrés postraumático. Tratamiento seguro y culturalmente sensible para ayudarle a reclamar su vida del trauma.',
+      icon: IconLeaf,
+      featured: false,
+      link: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'
     },
     {
-      id: 'wellness',
-      title: language === 'en' ? 'Holistic Wellness' : 'Bienestar Holístico',
+      id: 'bipolar',
+      title: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar',
       description: language === 'en'
-        ? 'Beyond just treatment, we provide holistic wellness services, including nutritional advice and stress management techniques, to help you achieve a balanced, healthy lifestyle.'
-        : 'Más allá del tratamiento, brindamos servicios de bienestar holístico, incluyendo consejos nutricionales y técnicas de manejo del estrés, para ayudarlo a lograr un estilo de vida equilibrado y saludable.',
+        ? 'Expert mood stabilization for bipolar I, II, and cyclothymia. Comprehensive care to help you achieve emotional balance and prevent future episodes.'
+        : 'Estabilización experta del ánimo para bipolar I, II y ciclotimia. Atención integral para ayudarle a lograr equilibrio emocional y prevenir episodios futuros.',
       icon: IconHeart,
-      featured: false
+      featured: false,
+      link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
+    },
+    {
+      id: 'tms',
+      title: language === 'en' ? 'TMS Therapy' : 'Terapia TMS',
+      description: language === 'en'
+        ? 'Revolutionary FDA-approved treatment for treatment-resistant depression. Non-invasive brain stimulation therapy when medications haven\'t worked.'
+        : 'Tratamiento revolucionario aprobado por FDA para depresión resistente. Terapia de estimulación cerebral no invasiva cuando los medicamentos no han funcionado.',
+      icon: IconUser,
+      featured: false,
+      link: language === 'en' ? '/services/tms-therapy' : '/es/servicios/terapia-tms'
     }
   ];
 
@@ -70,7 +94,7 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
@@ -104,7 +128,7 @@ const Services = () => {
                   {service.description}
                 </p>
 
-                <Link href="/contact" className="mt-auto">
+                <Link href={service.link} className="mt-auto">
                   <Button
                     className={`group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 px-6 sm:px-8 py-6 sm:py-7 w-full ${
                       service.featured
