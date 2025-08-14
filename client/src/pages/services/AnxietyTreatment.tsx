@@ -185,8 +185,8 @@ const AnxietyTreatment = () => {
                 </div>
 
                 {/* Symptoms Grid Side */}
-                <div className="order-1 lg:order-2">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="order-1 lg:order-2 flex flex-col h-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     {symptoms.slice(0, 6).map((symptom, index) => (
                       <div key={index} className="p-4">
                         <div className="flex items-center gap-3">
@@ -197,15 +197,15 @@ const AnxietyTreatment = () => {
                     ))}
                   </div>
                   
-                  {/* Photo Placeholder */}
-                  <div className="mt-6">
-                    <div className="w-full h-40 bg-blue-50 border-2 border-dashed border-blue-200 flex items-center justify-center rounded-xl">
+                  {/* Photo - Fills remaining space */}
+                  <div className="flex-1">
+                    <div className="w-full h-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl min-h-[10rem]">
                       <div className="text-center">
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <span className="text-blue-600 font-bold">📸</span>
+                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                          <span className="text-green-600 font-bold">📸</span>
                         </div>
-                        <p className="text-blue-600 font-body text-sm">Aquí va una foto</p>
-                        <p className="text-blue-500 font-body text-xs">Relajación/meditación</p>
+                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                        <p className="text-green-500 font-body text-xs">Relajación/meditación</p>
                       </div>
                     </div>
                   </div>
