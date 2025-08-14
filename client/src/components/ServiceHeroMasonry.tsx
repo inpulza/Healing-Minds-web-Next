@@ -186,22 +186,35 @@ export const ServiceHeroMasonry = ({
 
               {/* Bottom Left - Quick Stats Card (Small - 1 row) */}
               <div className="row-span-1 col-start-1 row-start-3">
-                <div className="bg-gradient-to-br from-green-800 to-green-700 text-white rounded-2xl shadow-lg p-4 h-full flex flex-col">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Clock className="w-4 h-4" />
-                    <h3 className="text-sm font-body font-bold">
-                      {language === 'en' ? 'Quick Access' : 'Acceso Rápido'}
+                <div className="bg-gradient-to-br from-green-800 to-green-700 text-white rounded-2xl shadow-lg p-3 h-full flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-3.5 h-3.5 text-white" />
+                    </div>
+                    <h3 className="text-xs font-body font-bold text-white/95">
+                      {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
                     </h3>
                   </div>
-                  <div className="space-y-2 flex-1 flex flex-col justify-center">
+                  <div className="space-y-1.5 flex-1 flex flex-col justify-center">
                     {quickStats.items.slice(0, 3).map((stat, index) => (
-                      <div key={index} className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full mt-1.5 flex-shrink-0 opacity-80"></div>
-                        <p className="text-xs opacity-90 font-body leading-relaxed">
-                          {language === 'en' ? stat.en : stat.es}
-                        </p>
+                      <div key={index} className="flex items-center gap-2">
+                        <div className="w-4 h-4 bg-white/10 rounded-md flex items-center justify-center flex-shrink-0">
+                          <div className="w-1 h-1 bg-white rounded-full opacity-90"></div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-white/95 font-body font-medium leading-tight truncate">
+                            {language === 'en' ? stat.en : stat.es}
+                          </p>
+                        </div>
                       </div>
                     ))}
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-white/20">
+                    <div className="flex items-center justify-center gap-1">
+                      <div className="w-1 h-1 bg-green-300 rounded-full animate-pulse"></div>
+                      <div className="w-1 h-1 bg-green-200 rounded-full animate-pulse delay-75"></div>
+                      <div className="w-1 h-1 bg-green-100 rounded-full animate-pulse delay-150"></div>
+                    </div>
                   </div>
                 </div>
               </div>
