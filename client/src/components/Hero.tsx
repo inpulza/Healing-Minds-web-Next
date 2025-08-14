@@ -37,11 +37,13 @@ const Hero = () => {
               <div className="flex justify-center">
                 <Link href="/contact">
                   <Button
-                    className="bg-white text-teal-700 hover:bg-gray-50 font-body font-semibold px-8 py-4 rounded-full text-lg shadow-lg flex items-center gap-3"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-8 py-4 shadow-lg"
                     data-testid="hero-book-consultation"
                   >
-                    <ArrowRight className="w-5 h-5 text-teal-600" />
-                    Book a Consultation
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                      <ArrowRight className="w-4 h-4 text-green-800" />
+                    </div>
+                    <span>Book a Consultation</span>
                   </Button>
                 </Link>
               </div>
