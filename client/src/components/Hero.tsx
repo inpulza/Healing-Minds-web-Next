@@ -16,11 +16,11 @@ const Hero = () => {
         {/* Mobile: Separate containers, Desktop: Single container */}
         <div className="block sm:hidden">
           {/* Mobile: Doctor image container */}
-          <div className="relative rounded-2xl overflow-hidden mb-6 h-[300px]">
+          <div className="relative rounded-2xl overflow-hidden mb-6 h-[250px]">
             <img 
               src={mobileHeroImage}
               alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
-              className="absolute inset-0 w-full h-full object-cover object-center-right"
+              className="absolute inset-0 w-full h-full object-cover object-center"
               loading="eager"
             />
           </div>
@@ -64,12 +64,12 @@ const Hero = () => {
 
         {/* Desktop: Original single container layout */}
         <div className="hidden sm:block">
-          <div className="relative rounded-3xl overflow-hidden min-h-[600px] flex items-center justify-center">
+          <div className="relative rounded-3xl overflow-hidden h-[500px] sm:h-[600px] flex items-center justify-center">
             {/* Background Image */}
             <img 
               src={heroImage}
               alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
-              className="absolute inset-0 w-full h-full object-cover object-right"
+              className="absolute inset-0 w-full h-full object-cover object-center"
               loading="eager"
             />
             
