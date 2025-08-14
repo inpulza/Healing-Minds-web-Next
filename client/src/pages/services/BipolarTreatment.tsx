@@ -13,7 +13,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
-import bipolarImage from "@assets/generated_images/Bipolar_mood_balance_c4e8f6d2.png";
+import bipolarImage from "@assets/generated_images/Wellness_meditation_space_ae6f4d77.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
 
 const BipolarTreatment = () => {
@@ -208,358 +208,71 @@ const BipolarTreatment = () => {
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-20">
-        {/* Hero Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-amber-50 to-orange-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <WellnessIcon size="sm" color="orange">
-                    <Activity />
-                  </WellnessIcon>
-                  <span className="text-amber-700 font-body font-semibold text-lg">
-                    {language === 'en' ? 'Mood Stability' : 'Estabilidad del Ánimo'}
-                  </span>
-                </div>
-                
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Bipolar Disorder Treatment in <span className="font-display italic text-green-700">Naples, FL</span></>
-                  ) : (
-                    <>Tratamiento de Trastorno Bipolar en <span className="font-display italic text-green-700">Naples, FL</span></>
-                  )}
-                </h1>
-                
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Find balance and stability with expert bipolar disorder treatment. Dr. Melva Reve provides comprehensive care for mood stabilization, helping you manage both manic and depressive episodes effectively.'
-                    : 'Encuentre equilibrio y estabilidad con tratamiento experto de trastorno bipolar. La Dra. Melva Reve brinda atención integral para estabilización del ánimo, ayudándole a manejar episodios maníacos y depresivos efectivamente.'
-                  }
-                </p>
+      <main>
+        {/* Hero Section with Masonry Layout */}
+        <ServiceHeroMasonry
+          tagline={{
+            en: 'Mood Stability',
+            es: 'Estabilidad del Ánimo'
+          }}
+          title={{
+            en: 'Bipolar Disorder Treatment in Naples, FL',
+            es: 'Tratamiento de Trastorno Bipolar en Naples, FL'
+          }}
+          description={{
+            en: 'Find balance and stability with expert bipolar disorder treatment. Dr. Melva Reve provides comprehensive care for mood stabilization, helping you manage both manic and depressive episodes effectively.',
+            es: 'Encuentre equilibrio y estabilidad con tratamiento experto de trastorno bipolar. La Dra. Melva Reve brinda atención integral para estabilización del ánimo, ayudándole a manejar episodios maníacos y depresivos efectivamente.'
+          }}
+          specialNote={{
+            es: '<strong>El trastorno bipolar es una condición médica tratable.</strong> Con el tratamiento adecuado, puede lograr estabilidad del ánimo y vivir una vida plena. Ofrecemos atención especializada que comprende su cultura y necesidades.'
+          }}
+          facts={{
+            title: {
+              en: 'Bipolar Facts',
+              es: 'Datos sobre Bipolar'
+            },
+            items: [
+              {
+                en: '2.8% of adults have bipolar disorder',
+                es: '2.8% de adultos tienen trastorno bipolar'
+              },
+              {
+                en: 'Mood stabilizers are highly effective',
+                es: 'Los estabilizadores del ánimo son muy efectivos'
+              },
+              {
+                en: 'Early treatment improves outcomes',
+                es: 'El tratamiento temprano mejora resultados'
+              },
+              {
+                en: 'Cultural sensitivity in treatment',
+                es: 'Sensibilidad cultural en el tratamiento'
+              }
+            ]
+          }}
+          quickStats={{
+            items: [
+              {
+                en: 'Mood stabilizer management',
+                es: 'Manejo de estabilizadores del ánimo'
+              },
+              {
+                en: 'Episode prevention planning',
+                es: 'Planificación de prevención de episodios'
+              },
+              {
+                en: 'Crisis intervention support',
+                es: 'Apoyo en intervención de crisis'
+              }
+            ]
+          }}
+          images={{
+            doctorImage,
+            therapyRoomImage: bipolarImage,
+            symbolImage: therapyRoomImage
+          }}
+        /> 
 
-                {language === 'es' && (
-                  <div className="bg-amber-100 border-l-4 border-amber-500 p-4 mb-8">
-                    <p className="text-amber-800 font-body">
-                      <strong>El trastorno bipolar es una condición médica tratable.</strong> Con el tratamiento adecuado, 
-                      puede lograr estabilidad del ánimo y vivir una vida plena. Ofrecemos atención especializada que 
-                      respeta sus experiencias culturales y valores familiares.
-                    </p>
-                  </div>
-                )}
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/contact">
-                    <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300">
-                      <Calendar className="w-5 h-5" />
-                      {language === 'en' ? 'Schedule Evaluation' : 'Programar Evaluación'}
-                      <ArrowRight className="w-5 h-5" />
-                    </Button>
-                  </Link>
-                  
-                  <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3">
-                    <Phone className="w-5 h-5" />
-                    <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
-                      {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
-                    </a>
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-10">
-                  <div className="flex items-center gap-4 mb-6">
-                    <WellnessIcon size="md" color="orange">
-                      <Activity />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800">
-                        {language === 'en' ? 'Bipolar Facts' : 'Datos sobre Bipolar'}
-                      </h3>
-                      <p className="text-gray-600 font-body">
-                        {language === 'en' ? 'Understanding mood disorders' : 'Entendiendo trastornos del ánimo'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? '2.8% of adults experience bipolar disorder' : '2.8% de adultos experimentan trastorno bipolar'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Highly manageable with proper treatment' : 'Altamente manejable con tratamiento adecuado'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Early intervention improves outcomes' : 'Intervención temprana mejora resultados'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Specialized bilingual care available' : 'Atención especializada bilingüe disponible'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Bipolar Types Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Types of <span className="font-display italic text-green-700">Bipolar</span> Disorder</>
-                ) : (
-                  <>Tipos de Trastorno <span className="font-display italic text-green-700">Bipolar</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Understanding the different types of bipolar disorder is essential for proper diagnosis and treatment planning.'
-                  : 'Entender los diferentes tipos de trastorno bipolar es esencial para un diagnóstico adecuado y planificación del tratamiento.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {bipolarTypes.map((type, index) => (
-                <Card key={index} className="border-amber-100 hover:shadow-lg transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-xl font-body font-bold text-green-800">{type.title}</CardTitle>
-                    <CardDescription className="text-gray-600 font-body leading-relaxed">{type.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {type.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center gap-3">
-                          <CheckCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                          <span className="text-gray-700 font-body text-sm">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Symptoms Section */}
-        <section className="py-16 sm:py-20 bg-amber-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Recognizing <span className="font-display italic text-green-700">Mood Episodes</span></>
-                ) : (
-                  <>Reconociendo <span className="font-display italic text-green-700">Episodios del Ánimo</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Bipolar disorder involves distinct mood episodes. Understanding these patterns is key to effective treatment.'
-                  : 'El trastorno bipolar involucra episodios distintos del ánimo. Entender estos patrones es clave para el tratamiento efectivo.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {symptoms.map((episode, index) => (
-                <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-2xl font-body font-bold text-green-800 flex items-center gap-3">
-                      <WellnessIcon size="sm" color={index === 0 ? 'orange' : 'blue'}>
-                        <episode.icon />
-                      </WellnessIcon>
-                      {episode.type}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {episode.items.map((item, itemIndex) => (
-                        <div key={itemIndex} className="flex items-center gap-3">
-                          <CheckCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                          <span className="text-gray-700 font-body">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Treatment Approach Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Our <span className="font-display italic text-green-700">Comprehensive</span> Treatment Approach</>
-                ) : (
-                  <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Integral</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Dr. Melva Reve specializes in mood stabilization using evidence-based treatments tailored to your specific type of bipolar disorder.'
-                  : 'La Dra. Melva Reve se especializa en estabilización del ánimo usando tratamientos basados en evidencia adaptados a su tipo específico de trastorno bipolar.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {treatments.map((treatment, index) => (
-                <Card key={index} className="border-amber-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-8">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-amber-600 font-bold text-lg">{index + 1}</span>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-bold text-green-800 mb-3">{treatment.title}</h3>
-                        <p className="text-gray-600 font-body leading-relaxed">{treatment.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Practice Information Section */}
-        <section className="py-16 sm:py-20 bg-amber-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Expert Bipolar Care in <span className="font-display italic text-green-700">Naples</span></>
-                  ) : (
-                    <>Atención Experta de Bipolar en <span className="font-display italic text-green-700">Naples</span></>
-                  )}
-                </h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="orange">
-                      <IconBrain />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Mood Stabilization Expertise' : 'Experiencia en Estabilización del Ánimo'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Dr. Melva Reve has extensive experience in managing bipolar disorder with the latest mood-stabilizing medications and treatment approaches.'
-                          : 'La Dra. Melva Reve tiene amplia experiencia en el manejo del trastorno bipolar con los últimos medicamentos estabilizadores del ánimo y enfoques de tratamiento.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="orange">
-                      <IconMoodHappy />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Personalized Treatment Plans' : 'Planes de Tratamiento Personalizados'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Every treatment plan is carefully tailored to your specific type of bipolar disorder, symptoms, and lifestyle factors.'
-                          : 'Cada plan de tratamiento está cuidadosamente adaptado a su tipo específico de trastorno bipolar, síntomas y factores de estilo de vida.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="green">
-                      <IconHeart />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Long-term Stability Focus' : 'Enfoque en Estabilidad a Largo Plazo'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Our approach emphasizes maintaining long-term mood stability and preventing future episodes through comprehensive care.'
-                          : 'Nuestro enfoque enfatiza mantener la estabilidad del ánimo a largo plazo y prevenir episodios futuros a través de atención integral.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <Card className="bg-green-800 text-white border-0">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-body font-bold text-white">
-                    {language === 'en' ? 'Achieve Mood Stability' : 'Logre Estabilidad del Ánimo'}
-                  </CardTitle>
-                  <CardDescription className="text-green-200 font-body">
-                    {language === 'en' 
-                      ? 'Take control of your bipolar disorder today'
-                      : 'Tome control de su trastorno bipolar hoy'
-                    }
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-green-300" />
-                      <span className="font-body">Naples, FL & Surrounding Areas</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Comprehensive Mood Evaluations' : 'Evaluaciones Integrales del Ánimo'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Mood Stabilizer Expertise' : 'Experiencia en Estabilizadores del Ánimo'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Bilingual Bipolar Specialist' : 'Especialista Bipolar Bilingüe'}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8">
-                    <Link href="/contact">
-                      <Button size="lg" variant="secondary" className="bg-white text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full w-full inline-flex items-center justify-center gap-3">
-                        <Calendar className="w-5 h-5" />
-                        {language === 'en' ? 'Schedule Bipolar Assessment' : 'Programar Evaluación Bipolar'}
-                        <ArrowRight className="w-5 h-5" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
       </main>
       
       <Footer />

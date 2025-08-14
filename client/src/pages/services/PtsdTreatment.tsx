@@ -13,7 +13,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
-import ptsdImage from "@assets/generated_images/PTSD_trauma_recovery_a8b3c7e9.png";
+import ptsdImage from "@assets/generated_images/Hope_and_growth_symbolism_978bb907.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
 
 const PtsdTreatment = () => {
@@ -164,372 +164,71 @@ const PtsdTreatment = () => {
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-20">
-        {/* Hero Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-indigo-50 to-purple-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <WellnessIcon size="sm" color="purple">
-                    <IconShield />
-                  </WellnessIcon>
-                  <span className="text-purple-700 font-body font-semibold text-lg">
-                    {language === 'en' ? 'Trauma Recovery' : 'Recuperación del Trauma'}
-                  </span>
-                </div>
-                
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>PTSD Treatment in <span className="font-display italic text-green-700">Naples, FL</span></>
-                  ) : (
-                    <>Tratamiento de TEPT en <span className="font-display italic text-green-700">Naples, FL</span></>
-                  )}
-                </h1>
-                
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Find healing and reclaim your life with expert PTSD treatment. Dr. Melva Reve provides trauma-informed psychiatric care with compassion, understanding, and evidence-based approaches.'
-                    : 'Encuentre sanación y reclame su vida con tratamiento experto de TEPT. La Dra. Melva Reve brinda atención psiquiátrica informada en trauma con compasión, comprensión y enfoques basados en evidencia.'
-                  }
-                </p>
+      <main>
+        {/* Hero Section with Masonry Layout */}
+        <ServiceHeroMasonry
+          tagline={{
+            en: 'Trauma Recovery',
+            es: 'Recuperación del Trauma'
+          }}
+          title={{
+            en: 'PTSD Treatment in Naples, FL',
+            es: 'Tratamiento de TEPT en Naples, FL'
+          }}
+          description={{
+            en: 'Find healing and reclaim your life with expert PTSD treatment. Dr. Melva Reve provides trauma-informed psychiatric care with compassion, understanding, and evidence-based approaches.',
+            es: 'Encuentre sanación y reclame su vida con tratamiento experto de TEPT. La Dra. Melva Reve brinda atención psiquiátrica informada en trauma con compasión, comprensión y enfoques basados en evidencia.'
+          }}
+          specialNote={{
+            es: '<strong>El trauma no define quién es usted.</strong> La recuperación es posible con el apoyo adecuado. Nuestro enfoque respeta su cultura y experiencias, ofreciendo un espacio seguro para sanar sin juicio ni estigma.'
+          }}
+          facts={{
+            title: {
+              en: 'PTSD Facts',
+              es: 'Datos sobre TEPT'
+            },
+            items: [
+              {
+                en: '3.5% of adults experience PTSD annually',
+                es: '3.5% de adultos experimentan TEPT anualmente'
+              },
+              {
+                en: 'Trauma-informed care is essential',
+                es: 'La atención informada en trauma es esencial'
+              },
+              {
+                en: 'Recovery is possible with treatment',
+                es: 'La recuperación es posible con tratamiento'
+              },
+              {
+                en: 'Cultural competency matters',
+                es: 'La competencia cultural importa'
+              }
+            ]
+          }}
+          quickStats={{
+            items: [
+              {
+                en: 'Trauma-informed assessment',
+                es: 'Evaluación informada en trauma'
+              },
+              {
+                en: 'Evidence-based therapy coordination',
+                es: 'Coordinación de terapia basada en evidencia'
+              },
+              {
+                en: 'Crisis safety planning',
+                es: 'Planificación de seguridad en crisis'
+              }
+            ]
+          }}
+          images={{
+            doctorImage,
+            therapyRoomImage: ptsdImage,
+            symbolImage: therapyRoomImage
+          }}
+        />
 
-                {language === 'es' && (
-                  <div className="bg-purple-100 border-l-4 border-purple-500 p-4 mb-8">
-                    <p className="text-purple-800 font-body">
-                      <strong>El trauma no define quién es usted.</strong> La recuperación es posible con el apoyo adecuado. 
-                      Nuestro enfoque respeta su cultura y experiencias, ofreciendo un espacio seguro para sanar 
-                      sin juicio ni estigma.
-                    </p>
-                  </div>
-                )}
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/contact">
-                    <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300">
-                      <Calendar className="w-5 h-5" />
-                      {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                      <ArrowRight className="w-5 h-5" />
-                    </Button>
-                  </Link>
-                  
-                  <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3">
-                    <Phone className="w-5 h-5" />
-                    <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
-                      {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
-                    </a>
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-10">
-                  <div className="flex items-center gap-4 mb-6">
-                    <WellnessIcon size="md" color="purple">
-                      <Shield />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800">
-                        {language === 'en' ? 'PTSD Facts' : 'Datos sobre TEPT'}
-                      </h3>
-                      <p className="text-gray-600 font-body">
-                        {language === 'en' ? 'Understanding trauma recovery' : 'Entendiendo la recuperación del trauma'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? '3.5% of adults experience PTSD annually' : '3.5% de adultos experimentan TEPT anualmente'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Recovery is possible with proper treatment' : 'La recuperación es posible con tratamiento adecuado'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Trauma-informed, culturally sensitive care' : 'Atención informada en trauma, culturalmente sensible'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Confidential, safe treatment environment' : 'Ambiente de tratamiento confidencial y seguro'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Crisis Support Banner */}
-        {language === 'en' && (
-          <section className="bg-red-600 text-white py-4">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-center gap-4 text-center">
-                <Shield className="w-6 h-6" />
-                <p className="font-body font-semibold">
-                  Crisis Support: Call 988 (Suicide & Crisis Lifeline) | Veterans Crisis Line: 1-800-273-8255
-                </p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {language === 'es' && (
-          <section className="bg-red-600 text-white py-4">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-center gap-4 text-center">
-                <Shield className="w-6 h-6" />
-                <p className="font-body font-semibold">
-                  Apoyo en Crisis: Llame al 988 | Línea de Crisis para Veteranos: 1-800-273-8255
-                </p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Trauma Types Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>We Treat <span className="font-display italic text-green-700">All Types</span> of Trauma</>
-                ) : (
-                  <>Tratamos <span className="font-display italic text-green-700">Todos los Tipos</span> de Trauma</>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'PTSD can develop from many different traumatic experiences. Our approach is tailored to your specific trauma history and cultural background.'
-                  : 'El TEPT puede desarrollarse a partir de muchas experiencias traumáticas diferentes. Nuestro enfoque está adaptado a su historia específica de trauma y trasfondo cultural.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {traumaTypes.map((type, index) => (
-                <Card key={index} className="border-purple-100 hover:shadow-lg transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-lg font-body font-bold text-green-800 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                        <span className="text-purple-600 font-bold text-sm">{index + 1}</span>
-                      </div>
-                      {type.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 font-body leading-relaxed">{type.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Symptoms Section */}
-        <section className="py-16 sm:py-20 bg-indigo-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Recognizing <span className="font-display italic text-green-700">PTSD</span> Symptoms</>
-                ) : (
-                  <>Reconociendo Síntomas del <span className="font-display italic text-green-700">TEPT</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'PTSD symptoms can appear immediately after trauma or may emerge months or years later. Professional help can provide significant relief.'
-                  : 'Los síntomas del TEPT pueden aparecer inmediatamente después del trauma o pueden surgir meses o años después. La ayuda profesional puede proporcionar alivio significativo.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {symptoms.map((symptom, index) => (
-                <Card key={index} className="bg-white border-purple-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-purple-600 font-bold text-sm">{index + 1}</span>
-                      </div>
-                      <span className="text-gray-700 font-body">{symptom}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Treatment Approach Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Our <span className="font-display italic text-green-700">Trauma-Informed</span> Treatment Approach</>
-                ) : (
-                  <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Informado en Trauma</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Dr. Melva Reve uses trauma-informed principles combined with evidence-based treatments to create a safe, supportive environment for healing.'
-                  : 'La Dra. Melva Reve utiliza principios informados en trauma combinados con tratamientos basados en evidencia para crear un ambiente seguro y de apoyo para la sanación.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {treatments.map((treatment, index) => (
-                <Card key={index} className="border-indigo-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-8">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-indigo-600 font-bold text-lg">{index + 1}</span>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-bold text-green-800 mb-3">{treatment.title}</h3>
-                        <p className="text-gray-600 font-body leading-relaxed">{treatment.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Practice Information Section */}
-        <section className="py-16 sm:py-20 bg-indigo-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Specialized PTSD Care in <span className="font-display italic text-green-700">Naples</span></>
-                  ) : (
-                    <>Atención Especializada de TEPT en <span className="font-display italic text-green-700">Naples</span></>
-                  )}
-                </h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="purple">
-                      <IconShield />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Trauma-Informed Expertise' : 'Experiencia Informada en Trauma'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Dr. Melva Reve has specialized training in trauma treatment and understands the complex nature of PTSD recovery.'
-                          : 'La Dra. Melva Reve tiene entrenamiento especializado en tratamiento de trauma y entiende la naturaleza compleja de la recuperación del TEPT.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="purple">
-                      <IconBrain />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Safe, Supportive Environment' : 'Ambiente Seguro y de Apoyo'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Our practice provides a confidential, judgment-free space where you can process trauma at your own pace.'
-                          : 'Nuestra práctica brinda un espacio confidencial, libre de juicio donde puede procesar el trauma a su propio ritmo.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="green">
-                      <IconHeart />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Culturally Sensitive Care' : 'Atención Culturalmente Sensible'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'We understand how cultural factors impact trauma and recovery, providing care that honors your background and values.'
-                          : 'Entendemos cómo los factores culturales impactan el trauma y la recuperación, brindando atención que honra su trasfondo y valores.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <Card className="bg-green-800 text-white border-0">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-body font-bold text-white">
-                    {language === 'en' ? 'Begin Your Healing Journey' : 'Comience Su Jornada de Sanación'}
-                  </CardTitle>
-                  <CardDescription className="text-green-200 font-body">
-                    {language === 'en' 
-                      ? 'Take the courageous step toward recovery today'
-                      : 'Dé el paso valiente hacia la recuperación hoy'
-                    }
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-green-300" />
-                      <span className="font-body">Naples, FL & Surrounding Areas</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Confidential Trauma Assessments' : 'Evaluaciones Confidenciales de Trauma'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Military & Veteran Friendly' : 'Amigable para Militares y Veteranos'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Bilingual Trauma-Informed Care' : 'Atención Bilingüe Informada en Trauma'}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8">
-                    <Link href="/contact">
-                      <Button size="lg" variant="secondary" className="bg-white text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full w-full inline-flex items-center justify-center gap-3">
-                        <Calendar className="w-5 h-5" />
-                        {language === 'en' ? 'Schedule Trauma Assessment' : 'Programar Evaluación de Trauma'}
-                        <ArrowRight className="w-5 h-5" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
       </main>
       
       <Footer />

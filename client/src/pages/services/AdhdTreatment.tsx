@@ -194,111 +194,70 @@ const AdhdTreatment = () => {
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-20">
-        {/* Hero Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-orange-50 to-yellow-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <WellnessIcon size="sm" color="orange">
-                    <IconTarget />
-                  </WellnessIcon>
-                  <span className="text-orange-700 font-body font-semibold text-lg">
-                    {language === 'en' ? 'Focus & Success' : 'Enfoque y Éxito'}
-                  </span>
-                </div>
-                
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>ADHD Treatment in <span className="font-display italic text-green-700">Naples, FL</span></>
-                  ) : (
-                    <>Tratamiento de TDAH en <span className="font-display italic text-green-700">Naples, FL</span></>
-                  )}
-                </h1>
-                
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Unlock your potential with expert ADHD treatment. Dr. Melva Reve provides comprehensive evaluation and personalized treatment for adults and teens with attention deficit hyperactivity disorder.'
-                    : 'Desbloquee su potencial con tratamiento experto de TDAH. La Dra. Melva Reve brinda evaluación integral y tratamiento personalizado para adultos y adolescentes con trastorno por déficit de atención e hiperactividad.'
-                  }
-                </p>
-
-                {language === 'es' && (
-                  <div className="bg-orange-100 border-l-4 border-orange-500 p-4 mb-8">
-                    <p className="text-orange-800 font-body">
-                      <strong>El TDAH no es falta de disciplina o pereza.</strong> Es una diferencia neurológica real que, 
-                      con el tratamiento adecuado, puede convertirse en una fortaleza. Ofrecemos evaluación sin prejuicios 
-                      y tratamiento culturalmente sensible.
-                    </p>
-                  </div>
-                )}
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/contact">
-                    <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300">
-                      <Calendar className="w-5 h-5" />
-                      {language === 'en' ? 'Schedule Evaluation' : 'Programar Evaluación'}
-                      <ArrowRight className="w-5 h-5" />
-                    </Button>
-                  </Link>
-                  
-                  <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3">
-                    <Phone className="w-5 h-5" />
-                    <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
-                      {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
-                    </a>
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-10">
-                  <div className="flex items-center gap-4 mb-6">
-                    <WellnessIcon size="md" color="blue">
-                      <Brain />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800">
-                        {language === 'en' ? 'ADHD Quick Facts' : 'Datos Rápidos sobre TDAH'}
-                      </h3>
-                      <p className="text-gray-600 font-body">
-                        {language === 'en' ? 'Understanding ADHD' : 'Entendiendo el TDAH'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Affects 4.4% of adults in the US' : 'Afecta al 4.4% de adultos en EEUU'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Often undiagnosed until adulthood' : 'A menudo no diagnosticado hasta la adultez'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Highly treatable with proper care' : 'Altamente tratable con atención adecuada'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Evaluation available in English/Spanish' : 'Evaluación disponible en inglés/español'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+      <main>
+        {/* Hero Section with Masonry Layout */}
+        <ServiceHeroMasonry
+          tagline={{
+            en: 'Focus & Success',
+            es: 'Enfoque y Éxito'
+          }}
+          title={{
+            en: 'ADHD Treatment in Naples, FL',
+            es: 'Tratamiento de TDAH en Naples, FL'
+          }}
+          description={{
+            en: 'Unlock your potential with expert ADHD treatment. Dr. Melva Reve provides comprehensive evaluation and personalized treatment for adults and teens with attention deficit hyperactivity disorder.',
+            es: 'Desbloquee su potencial con tratamiento experto de TDAH. La Dra. Melva Reve brinda evaluación integral y tratamiento personalizado para adultos y adolescentes con trastorno por déficit de atención e hiperactividad.'
+          }}
+          specialNote={{
+            es: '<strong>El TDAH no es una limitación, es una diferencia en el funcionamiento del cerebro.</strong> Con el tratamiento adecuado, puede aprovechar sus fortalezas únicas y alcanzar su máximo potencial. Ofrecemos evaluación y tratamiento especializado.'
+          }}
+          facts={{
+            title: {
+              en: 'ADHD Facts',
+              es: 'Datos sobre TDAH'
+            },
+            items: [
+              {
+                en: '4.4% of adults have ADHD',
+                es: '4.4% de adultos tienen TDAH'
+              },
+              {
+                en: 'Highly treatable with proper care',
+                es: 'Altamente tratable con atención adecuada'
+              },
+              {
+                en: 'Affects focus, organization, and impulse control',
+                es: 'Afecta enfoque, organización y control de impulsos'
+              },
+              {
+                en: 'Bilingual evaluation available',
+                es: 'Evaluación bilingüe disponible'
+              }
+            ]
+          }}
+          quickStats={{
+            items: [
+              {
+                en: 'Comprehensive ADHD evaluation',
+                es: 'Evaluación integral de TDAH'
+              },
+              {
+                en: 'Teen and adult treatment',
+                es: 'Tratamiento para adolescentes y adultos'
+              },
+              {
+                en: 'Medication management',
+                es: 'Manejo de medicamentos'
+              }
+            ]
+          }}
+          images={{
+            doctorImage,
+            therapyRoomImage: adhdImage,
+            symbolImage: therapyRoomImage
+          }}
+        />
 
         {/* Age Groups Section */}
         <section className="py-16 sm:py-20 bg-white">
@@ -423,126 +382,6 @@ const AdhdTreatment = () => {
                   </CardContent>
                 </Card>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Practice Information Section */}
-        <section className="py-16 sm:py-20 bg-orange-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Expert ADHD Care in <span className="font-display italic text-green-700">Naples</span></>
-                  ) : (
-                    <>Atención Experta de TDAH en <span className="font-display italic text-green-700">Naples</span></>
-                  )}
-                </h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="orange">
-                      <IconBrain />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Evidence-Based Treatment' : 'Tratamiento Basado en Evidencia'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Our ADHD treatment follows the latest research and clinical guidelines to ensure the most effective care for each individual.'
-                          : 'Nuestro tratamiento de TDAH sigue las últimas investigaciones y directrices clínicas para asegurar la atención más efectiva para cada individuo.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="blue">
-                      <IconMoodHappy />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Strength-Based Approach' : 'Enfoque Basado en Fortalezas'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'We focus on identifying and building upon your unique strengths while addressing challenges, helping you thrive with ADHD.'
-                          : 'Nos enfocamos en identificar y construir sobre sus fortalezas únicas mientras abordamos desafíos, ayudándole a prosperar con TDAH.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="green">
-                      <IconHeart />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Family-Centered Care' : 'Atención Centrada en la Familia'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'We involve families in the treatment process, providing education and strategies to support success at home and school.'
-                          : 'Involucramos a las familias en el proceso de tratamiento, brindando educación y estrategias para apoyar el éxito en casa y la escuela.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <Card className="bg-green-800 text-white border-0">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-body font-bold text-white">
-                    {language === 'en' ? 'Start Your ADHD Journey' : 'Comience Su Jornada con TDAH'}
-                  </CardTitle>
-                  <CardDescription className="text-green-200 font-body">
-                    {language === 'en' 
-                      ? 'Take the first step toward better focus and success'
-                      : 'Dé el primer paso hacia mejor enfoque y éxito'
-                    }
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-green-300" />
-                      <span className="font-body">Naples, FL & Surrounding Areas</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Comprehensive ADHD Evaluations' : 'Evaluaciones Integrales de TDAH'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Adult & Teen Specialization' : 'Especialización en Adultos y Adolescentes'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Bilingual Services Available' : 'Servicios Bilingües Disponibles'}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8">
-                    <Link href="/contact">
-                      <Button size="lg" variant="secondary" className="bg-white text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full w-full inline-flex items-center justify-center gap-3">
-                        <Calendar className="w-5 h-5" />
-                        {language === 'en' ? 'Schedule ADHD Evaluation' : 'Programar Evaluación de TDAH'}
-                        <ArrowRight className="w-5 h-5" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </section>

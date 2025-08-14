@@ -13,7 +13,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
-import tmsImage from "@assets/generated_images/TMS_magnetic_therapy_9f4e2a1b.png";
+import tmsImage from "@assets/generated_images/TMS_therapy_equipment_38dd31e3.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
 
 const TmsTherapy = () => {
@@ -176,358 +176,71 @@ const TmsTherapy = () => {
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-20">
-        {/* Hero Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-cyan-50 to-blue-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <WellnessIcon size="sm" color="blue">
-                    <IconBolt />
-                  </WellnessIcon>
-                  <span className="text-cyan-700 font-body font-semibold text-lg">
-                    {language === 'en' ? 'Advanced Brain Therapy' : 'Terapia Cerebral Avanzada'}
-                  </span>
-                </div>
-                
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>TMS Therapy in <span className="font-display italic text-green-700">Naples, FL</span></>
-                  ) : (
-                    <>Terapia TMS en <span className="font-display italic text-green-700">Naples, FL</span></>
-                  )}
-                </h1>
-                
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Break through treatment-resistant depression with TMS therapy. Dr. Melva Reve offers FDA-approved transcranial magnetic stimulation - a revolutionary, non-invasive treatment that helps when medications haven\'t worked.'
-                    : 'Supere la depresión resistente al tratamiento con terapia TMS. La Dra. Melva Reve ofrece estimulación magnética transcraneal aprobada por FDA - un tratamiento revolucionario, no invasivo que ayuda cuando los medicamentos no han funcionado.'
-                  }
-                </p>
+      <main>
+        {/* Hero Section with Masonry Layout */}
+        <ServiceHeroMasonry
+          tagline={{
+            en: 'Advanced Brain Therapy',
+            es: 'Terapia Cerebral Avanzada'
+          }}
+          title={{
+            en: 'TMS Therapy in Naples, FL',
+            es: 'Terapia TMS en Naples, FL'
+          }}
+          description={{
+            en: 'Break through treatment-resistant depression with TMS therapy. Dr. Melva Reve offers FDA-approved transcranial magnetic stimulation - a revolutionary, non-invasive treatment that helps when medications haven\'t worked.',
+            es: 'Supere la depresión resistente al tratamiento con terapia TMS. La Dra. Melva Reve ofrece estimulación magnética transcraneal aprobada por FDA - un tratamiento revolucionario, no invasivo que ayuda cuando los medicamentos no han funcionado.'
+          }}
+          specialNote={{
+            es: '<strong>TMS es una opción esperanzadora cuando otros tratamientos no han funcionado.</strong> Esta tecnología avanzada ofrece nueva esperanza para la recuperación sin los efectos secundarios de medicamentos adicionales. Es seguro, efectivo y respaldado por investigación científica.'
+          }}
+          facts={{
+            title: {
+              en: 'TMS Facts',
+              es: 'Datos sobre TMS'
+            },
+            items: [
+              {
+                en: 'FDA-approved for treatment-resistant depression',
+                es: 'Aprobado por FDA para depresión resistente'
+              },
+              {
+                en: 'Non-invasive, no anesthesia required',
+                es: 'No invasivo, no requiere anestesia'
+              },
+              {
+                en: '50-60% response rate in clinical trials',
+                es: '50-60% tasa de respuesta en ensayos clínicos'
+              },
+              {
+                en: 'Insurance coverage often available',
+                es: 'Cobertura de seguro frecuentemente disponible'
+              }
+            ]
+          }}
+          quickStats={{
+            items: [
+              {
+                en: '20-minute daily sessions',
+                es: 'Sesiones diarias de 20 minutos'
+              },
+              {
+                en: '4-6 week treatment course',
+                es: 'Curso de tratamiento de 4-6 semanas'
+              },
+              {
+                en: 'Minimal side effects',
+                es: 'Efectos secundarios mínimos'
+              }
+            ]
+          }}
+          images={{
+            doctorImage,
+            therapyRoomImage: tmsImage,
+            symbolImage: therapyRoomImage
+          }}
+        />
 
-                {language === 'es' && (
-                  <div className="bg-cyan-100 border-l-4 border-cyan-500 p-4 mb-8">
-                    <p className="text-cyan-800 font-body">
-                      <strong>TMS es una opción esperanzadora cuando otros tratamientos no han funcionado.</strong> 
-                      Esta tecnología avanzada ofrece nueva esperanza para la recuperación sin los efectos secundarios 
-                      de medicamentos adicionales. Es seguro, efectivo y respaldado por investigación científica.
-                    </p>
-                  </div>
-                )}
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/contact">
-                    <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300">
-                      <Calendar className="w-5 h-5" />
-                      {language === 'en' ? 'Schedule TMS Consultation' : 'Programar Consulta TMS'}
-                      <ArrowRight className="w-5 h-5" />
-                    </Button>
-                  </Link>
-                  
-                  <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3">
-                    <Phone className="w-5 h-5" />
-                    <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
-                      {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
-                    </a>
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-10">
-                  <div className="flex items-center gap-4 mb-6">
-                    <WellnessIcon size="md" color="blue">
-                      <Zap />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800">
-                        {language === 'en' ? 'TMS Quick Facts' : 'Datos Rápidos TMS'}
-                      </h3>
-                      <p className="text-gray-600 font-body">
-                        {language === 'en' ? 'Understanding TMS therapy' : 'Entendiendo la terapia TMS'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'FDA-approved since 2008' : 'Aprobado por FDA desde 2008'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? '70% response rate in clinical trials' : '70% tasa de respuesta en ensayos clínicos'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'No anesthesia or surgery required' : 'No requiere anestesia o cirugía'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700 font-body">
-                        {language === 'en' ? 'Often covered by insurance' : 'A menudo cubierto por seguro'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Benefits Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Benefits of <span className="font-display italic text-green-700">TMS</span> Therapy</>
-                ) : (
-                  <>Beneficios de la Terapia <span className="font-display italic text-green-700">TMS</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'TMS offers unique advantages for patients who haven\'t found success with traditional antidepressant medications.'
-                  : 'TMS ofrece ventajas únicas para pacientes que no han encontrado éxito con medicamentos antidepresivos tradicionales.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {benefits.map((benefit, index) => (
-                <Card key={index} className="border-cyan-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-6 h-6 text-cyan-600 flex-shrink-0" />
-                      <span className="text-gray-700 font-body">{benefit}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Candidates Section */}
-        <section className="py-16 sm:py-20 bg-cyan-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Who Can Benefit from <span className="font-display italic text-green-700">TMS</span>?</>
-                ) : (
-                  <>¿Quién Puede Beneficiarse de <span className="font-display italic text-green-700">TMS</span>?</>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'TMS therapy may be an excellent option if you fit any of these criteria. Dr. Melva Reve will evaluate your specific situation.'
-                  : 'La terapia TMS puede ser una excelente opción si cumple con cualquiera de estos criterios. La Dra. Melva Reve evaluará su situación específica.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {candidatesCriteria.map((criteria, index) => (
-                <Card key={index} className="bg-white border-cyan-100 hover:shadow-lg transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-lg font-body font-bold text-green-800 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center">
-                        <span className="text-cyan-600 font-bold text-sm">{index + 1}</span>
-                      </div>
-                      {criteria.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 font-body leading-relaxed">{criteria.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Treatment Process Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Your <span className="font-display italic text-green-700">TMS</span> Treatment Journey</>
-                ) : (
-                  <>Su Jornada de Tratamiento <span className="font-display italic text-green-700">TMS</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Understanding what to expect during your TMS treatment can help you feel confident and prepared for this innovative therapy.'
-                  : 'Entender qué esperar durante su tratamiento TMS puede ayudarle a sentirse confiado y preparado para esta terapia innovadora.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {treatmentProcess.map((process, index) => (
-                <Card key={index} className="border-blue-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-8">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-600 font-bold text-lg">{process.step}</span>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-bold text-green-800 mb-3">{process.title}</h3>
-                        <p className="text-gray-600 font-body leading-relaxed">{process.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Information Banner */}
-        <section className="py-8 bg-blue-600 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center gap-4 text-center">
-              <Info className="w-6 h-6" />
-              <p className="font-body font-semibold">
-                {language === 'en' 
-                  ? 'TMS therapy is often covered by insurance. We will help verify your coverage and benefits.'
-                  : 'La terapia TMS a menudo está cubierta por el seguro. Le ayudaremos a verificar su cobertura y beneficios.'
-                }
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Practice Information Section */}
-        <section className="py-16 sm:py-20 bg-cyan-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Advanced TMS Care in <span className="font-display italic text-green-700">Naples</span></>
-                  ) : (
-                    <>Atención TMS Avanzada en <span className="font-display italic text-green-700">Naples</span></>
-                  )}
-                </h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="blue">
-                      <IconBolt />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'State-of-the-Art Technology' : 'Tecnología de Vanguardia'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Dr. Melva Reve utilizes the latest FDA-approved TMS equipment to ensure safe, effective, and comfortable treatment sessions.'
-                          : 'La Dra. Melva Reve utiliza el equipo TMS más reciente aprobado por FDA para asegurar sesiones de tratamiento seguras, efectivas y cómodas.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="blue">
-                      <IconTarget />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Personalized Treatment Protocols' : 'Protocolos de Tratamiento Personalizados'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Each TMS treatment plan is customized based on your specific brain anatomy, depression severity, and treatment response.'
-                          : 'Cada plan de tratamiento TMS está personalizado basado en su anatomía cerebral específica, severidad de depresión y respuesta al tratamiento.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <WellnessIcon size="sm" color="green">
-                      <IconHeart />
-                    </WellnessIcon>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Comprehensive Support' : 'Apoyo Integral'}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'From insurance verification to ongoing monitoring, our team provides complete support throughout your TMS journey.'
-                          : 'Desde verificación de seguro hasta monitoreo continuo, nuestro equipo brinda apoyo completo durante su jornada TMS.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <Card className="bg-green-800 text-white border-0">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-body font-bold text-white">
-                    {language === 'en' ? 'Discover TMS Therapy' : 'Descubra la Terapia TMS'}
-                  </CardTitle>
-                  <CardDescription className="text-green-200 font-body">
-                    {language === 'en' 
-                      ? 'Revolutionary treatment for treatment-resistant depression'
-                      : 'Tratamiento revolucionario para depresión resistente al tratamiento'
-                    }
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-green-300" />
-                      <span className="font-body">Naples, FL & Surrounding Areas</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Convenient Outpatient Sessions' : 'Sesiones Ambulatorias Convenientes'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Insurance Coverage Assistance' : 'Asistencia con Cobertura de Seguro'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" />
-                      <span className="font-body">
-                        {language === 'en' ? 'Bilingual TMS Specialist' : 'Especialista TMS Bilingüe'}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8">
-                    <Link href="/contact">
-                      <Button size="lg" variant="secondary" className="bg-white text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full w-full inline-flex items-center justify-center gap-3">
-                        <Calendar className="w-5 h-5" />
-                        {language === 'en' ? 'Schedule TMS Consultation' : 'Programar Consulta TMS'}
-                        <ArrowRight className="w-5 h-5" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
       </main>
       
       <Footer />
