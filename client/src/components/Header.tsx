@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ReactCountryFlag from 'react-country-flag';
 
@@ -10,6 +10,9 @@ const Header = () => {
   const { language, setLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+  const servicesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,8 +20,19 @@ const Header = () => {
       setIsScrolled(scrolled);
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+      if (servicesRef.current && !servicesRef.current.contains(event.target as Node)) {
+        setIsServicesOpen(false);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const toggleLanguage = () => {
@@ -28,9 +42,42 @@ const Header = () => {
   const navigationItems = [
     { href: '/', label: t('nav.home') },
     { href: '/about', label: t('nav.about') },
-    { href: '/services', label: t('nav.services') },
+    { href: '/services', label: t('nav.services'), hasDropdown: true },
     { href: '/for-patients', label: t('nav.forPatients') },
     { href: '/contact', label: t('nav.contact') },
+  ];
+
+  const serviceItems = [
+    {
+      href: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad',
+      label: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad',
+      description: language === 'en' ? 'Expert care for anxiety disorders' : 'Atención experta para trastornos de ansiedad'
+    },
+    {
+      href: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion',
+      label: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión',
+      description: language === 'en' ? 'Comprehensive depression care' : 'Atención integral para depresión'
+    },
+    {
+      href: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah',
+      label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
+      description: language === 'en' ? 'Specialized ADHD evaluation & care' : 'Evaluación y atención especializada de TDAH'
+    },
+    {
+      href: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept',
+      label: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT',
+      description: language === 'en' ? 'Trauma-informed psychiatric care' : 'Atención psiquiátrica informada en trauma'
+    },
+    {
+      href: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar',
+      label: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar',
+      description: language === 'en' ? 'Expert mood stabilization' : 'Estabilización experta del ánimo'
+    },
+    {
+      href: language === 'en' ? '/services/tms-therapy' : '/es/servicios/terapia-tms',
+      label: language === 'en' ? 'TMS Therapy' : 'Terapia TMS',
+      description: language === 'en' ? 'Advanced brain stimulation therapy' : 'Terapia avanzada de estimulación cerebral'
+    }
   ];
 
   const isActive = (href: string) => {
@@ -58,22 +105,85 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50" data-testid="desktop-nav">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-300 ${
-                  isActive(item.href)
-                    ? 'bg-white text-primary shadow-sm'
-                    : 'text-gray-700 hover:text-primary hover:bg-white/50'
-                }`}
-                data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="hidden md:flex relative" ref={servicesRef}>
+            <nav className={`flex items-center transition-all duration-300 ${
+              isServicesOpen 
+                ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
+                : 'bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50'
+            }`} data-testid="desktop-nav">
+              {navigationItems.map((item) => (
+                <div key={item.href} className="relative">
+                  {item.hasDropdown ? (
+                    <button
+                      onClick={() => setIsServicesOpen(!isServicesOpen)}
+                      className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-300 flex items-center gap-2 ${
+                        isActive(item.href) || isServicesOpen
+                          ? 'bg-white text-primary shadow-sm'
+                          : 'text-gray-700 hover:text-primary hover:bg-white/50'
+                      }`}
+                      data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
+                    >
+                      {item.label}
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
+                        isServicesOpen ? 'rotate-180' : ''
+                      }`} />
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-300 ${
+                        isActive(item.href)
+                          ? 'bg-white text-primary shadow-sm'
+                          : 'text-gray-700 hover:text-primary hover:bg-white/50'
+                      }`}
+                      data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </nav>
+
+            {/* Services Dropdown */}
+            {isServicesOpen && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/70 p-6 transition-all duration-300 animate-in slide-in-from-top-2 fade-in-0">
+                <div className="grid grid-cols-2 gap-4">
+                  {serviceItems.map((service, index) => (
+                    <Link
+                      key={service.href}
+                      href={service.href}
+                      onClick={() => setIsServicesOpen(false)}
+                      className="group p-4 rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100"
+                      data-testid={`dropdown-service-${index}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700"></div>
+                        <div>
+                          <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300">
+                            {service.label}
+                          </h3>
+                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1">
+                            {service.description}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <div className="mt-4 pt-4 border-t border-gray-200/60">
+                  <Link
+                    href="/services"
+                    onClick={() => setIsServicesOpen(false)}
+                    className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300"
+                  >
+                    {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Language Toggle & CTA */}
           <div className="hidden md:flex items-center space-x-4">
@@ -132,19 +242,69 @@ const Header = () => {
         <div className="md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100" data-testid="mobile-menu">
           <div className="px-6 pt-4 pb-6 space-y-3">
             {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`block py-3 text-base font-body transition-colors duration-200 ${
-                  isActive(item.href)
-                    ? 'text-primary font-medium'
-                    : 'text-gray-700 hover:text-primary'
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-                data-testid={`mobile-nav-${item.href.replace('/', '') || 'home'}`}
-              >
-                {item.label}
-              </Link>
+              <div key={item.href}>
+                {item.hasDropdown ? (
+                  <>
+                    <button
+                      onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                      className={`flex items-center justify-between w-full py-3 text-base font-body transition-colors duration-200 ${
+                        isActive(item.href) || isMobileServicesOpen
+                          ? 'text-primary font-medium'
+                          : 'text-gray-700 hover:text-primary'
+                      }`}
+                      data-testid={`mobile-nav-${item.href.replace('/', '') || 'home'}`}
+                    >
+                      {item.label}
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
+                        isMobileServicesOpen ? 'rotate-180' : ''
+                      }`} />
+                    </button>
+                    
+                    {/* Mobile Services Submenu */}
+                    {isMobileServicesOpen && (
+                      <div className="ml-4 mt-2 space-y-2 animate-in slide-in-from-top-2 fade-in-0">
+                        {serviceItems.map((service, index) => (
+                          <Link
+                            key={service.href}
+                            href={service.href}
+                            onClick={() => {
+                              setIsMobileMenuOpen(false);
+                              setIsMobileServicesOpen(false);
+                            }}
+                            className="block py-2 px-3 rounded-lg text-sm font-body text-gray-600 hover:text-green-700 hover:bg-green-50/80 transition-all duration-200"
+                            data-testid={`mobile-dropdown-service-${index}`}
+                          >
+                            {service.label}
+                          </Link>
+                        ))}
+                        <Link
+                          href="/services"
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            setIsMobileServicesOpen(false);
+                          }}
+                          className="block py-2 px-3 rounded-lg text-sm font-body text-green-700 hover:text-green-800 hover:bg-green-50/80 transition-all duration-200 border-t border-gray-200/60 mt-2 pt-3"
+                        >
+                          {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
+                        </Link>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`block py-3 text-base font-body transition-colors duration-200 ${
+                      isActive(item.href)
+                        ? 'text-primary font-medium'
+                        : 'text-gray-700 hover:text-primary'
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    data-testid={`mobile-nav-${item.href.replace('/', '') || 'home'}`}
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </div>
             ))}
             <div className="flex items-center justify-between pt-6 border-t border-gray-100">
               <Button
