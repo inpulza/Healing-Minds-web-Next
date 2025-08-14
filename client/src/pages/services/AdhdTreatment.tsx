@@ -284,10 +284,10 @@ const AdhdTreatment = () => {
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {ageGroups.map((group, index) => (
-                  <div key={index} className="bg-orange-50 rounded-xl p-8 border border-orange-300 hover:bg-orange-100 transition-all duration-300">
+                  <div key={index} className="bg-blue-50 rounded-xl p-8 border border-blue-200 hover:bg-blue-100 transition-all duration-300">
                     <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0 border border-orange-400">
-                        <span className="text-orange-600 font-bold text-lg">{index + 1}</span>
+                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0 border border-blue-300">
+                        <span className="text-blue-600 font-bold text-lg">{index + 1}</span>
                       </div>
                       <div>
                         <h3 className="text-2xl font-body font-bold text-green-800">{group.title}</h3>
@@ -298,7 +298,7 @@ const AdhdTreatment = () => {
                     <div className="space-y-3">
                       {group.features.map((feature, featureIndex) => (
                         <div key={featureIndex} className="flex items-center gap-3">
-                          <CheckCircle className="w-5 h-5 text-orange-600 flex-shrink-0" />
+                          <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
                           <span className="text-gray-700 font-body">{feature}</span>
                         </div>
                       ))}
@@ -307,15 +307,15 @@ const AdhdTreatment = () => {
                 ))}
               </div>
               
-              {/* Photo Placeholder */}
-              <div className="mt-8">
-                <div className="w-full h-48 bg-purple-50 rounded-xl border-2 border-dashed border-purple-200 flex items-center justify-center">
+              {/* Photo Placeholder - Full Width */}
+              <div className="mt-8 -mx-8 sm:-mx-10 lg:-mx-12">
+                <div className="w-full h-48 bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <span className="text-purple-600 font-bold">🎯</span>
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-green-600 font-bold">🎯</span>
                     </div>
-                    <p className="text-purple-600 font-body text-sm">Aquí va una foto</p>
-                    <p className="text-purple-500 font-body text-xs">Enfoque/concentración</p>
+                    <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                    <p className="text-green-500 font-body text-xs">Enfoque/concentración</p>
                   </div>
                 </div>
               </div>

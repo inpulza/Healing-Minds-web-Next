@@ -379,13 +379,13 @@ const BipolarTreatment = () => {
         </section>
 
         {/* Modern Treatment Approach Section */}
-        <section className="py-16 sm:py-20 bg-purple-50">
+        <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-purple-100">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
               <div className="grid lg:grid-cols-3 gap-8">
                 {/* Content Side */}
                 <div className="lg:col-span-2">
-                  <div className="inline-block bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                     {language === 'en' ? 'Comprehensive Care' : 'Atención Integral'}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
@@ -440,10 +440,10 @@ const BipolarTreatment = () => {
                         description: 'Estrategias para prevenir episodios maníacos y depresivos a través del manejo del estilo de vida.'
                       }
                     ]).map((treatment, index) => (
-                      <div key={index} className="bg-purple-50 rounded-lg p-4 border border-purple-200 hover:bg-purple-100 transition-all duration-300">
+                      <div key={index} className="p-4">
                         <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 border border-purple-300">
-                            <span className="text-purple-600 font-bold text-sm">{index + 1}</span>
+                          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-green-600 font-bold text-sm">{index + 1}</span>
                           </div>
                           <div>
                             <h3 className="text-lg font-body font-bold text-green-800 mb-1">{treatment.title}</h3>
@@ -468,28 +468,28 @@ const BipolarTreatment = () => {
                 <div className="space-y-6">
                   {/* Stats Cards */}
                   <div className="space-y-4">
-                    <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
-                      <div className="text-3xl font-bold text-purple-600 mb-2">85%</div>
+                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                      <div className="text-3xl font-bold text-green-600 mb-2">85%</div>
                       <div className="text-sm text-gray-600 font-body">
                         {language === 'en' ? 'Achieve mood stability' : 'Logran estabilidad del ánimo'}
                       </div>
                     </div>
-                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                      <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
+                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
                       <div className="text-sm text-gray-600 font-body">
                         {language === 'en' ? 'Crisis support available' : 'Apoyo de crisis disponible'}
                       </div>
                     </div>
                   </div>
 
-                  {/* Photo Placeholder */}
-                  <div className="w-full h-56 bg-indigo-50 rounded-xl border-2 border-dashed border-indigo-200 flex items-center justify-center">
+                  {/* Photo Placeholder - Full Width */}
+                  <div className="w-full h-56 bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center -mx-6">
                     <div className="text-center">
-                      <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-indigo-600 font-bold">⚖️</span>
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-green-600 font-bold">⚖️</span>
                       </div>
-                      <p className="text-indigo-600 font-body text-sm">Aquí va una foto</p>
-                      <p className="text-indigo-500 font-body text-xs">Equilibrio/estabilidad</p>
+                      <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                      <p className="text-green-500 font-body text-xs">Equilibrio/estabilidad</p>
                     </div>
                   </div>
                 </div>
