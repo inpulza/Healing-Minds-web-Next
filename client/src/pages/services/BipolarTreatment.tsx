@@ -275,80 +275,96 @@ const BipolarTreatment = () => {
         /> 
 
         {/* Symptoms Section */}
-        <section className="py-16 sm:py-20 bg-white">
+        <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Understanding <span className="font-display italic text-green-700">Bipolar</span> Symptoms</>
-                ) : (
-                  <>Entendiendo Síntomas del <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Bipolar disorder involves distinct episodes of mania/hypomania and depression. Understanding these patterns is key to effective treatment.'
-                  : 'El trastorno bipolar involucra episodios distintos de manía/hipomanía y depresión. Entender estos patrones es clave para un tratamiento efectivo.'
-                }
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {symptoms.map((symptomGroup, groupIndex) => (
-                <div key={groupIndex} className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-all duration-300">
-                  {groupIndex === 0 ? (
-                    // Manic Episodes - Icon on right layout
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                      <div className="sm:col-span-2 order-2 sm:order-1">
-                        <div className="inline-block bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
-                          {language === 'en' ? 'High Energy State' : 'Estado de Alta Energía'}
-                        </div>
-                        <h3 className="text-2xl font-body font-bold text-green-800 mb-6">
-                          {symptomGroup.type}
-                        </h3>
-                        <div className="space-y-4">
-                          {symptomGroup.items.map((item, index) => (
-                            <div key={index} className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"></div>
-                              <span className="text-gray-700 font-body leading-relaxed">{item}</span>
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* Content Side */}
+                <div className="lg:col-span-2">
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Symptom Recognition' : 'Reconocimiento de Síntomas'}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Understanding <span className="font-display italic text-green-700">Bipolar</span> Symptoms</>
+                    ) : (
+                      <>Entendiendo Síntomas del <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
+                    )}
+                  </h2>
+                  
+                  <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Bipolar disorder involves distinct episodes of mania/hypomania and depression. Understanding these patterns is key to effective treatment.'
+                      : 'El trastorno bipolar involucra episodios distintos de manía/hipomanía y depresión. Entender estos patrones es clave para un tratamiento efectivo.'
+                    }
+                  </p>
+
+                  {/* Symptoms List */}
+                  <div className="grid gap-4 mb-8">
+                    {symptoms.map((symptomGroup, groupIndex) => (
+                      <div key={groupIndex} className="p-6 border-l-4 border-green-200 bg-gray-50 rounded-lg">
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <symptomGroup.icon className="w-6 h-6 text-green-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-body font-bold text-green-800 mb-3">{symptomGroup.type}</h3>
+                            <div className="grid gap-2">
+                              {symptomGroup.items.map((item, index) => (
+                                <div key={index} className="flex items-start gap-2">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"></div>
+                                  <span className="text-gray-700 font-body text-sm leading-relaxed">{item}</span>
+                                </div>
+                              ))}
                             </div>
-                          ))}
+                          </div>
                         </div>
                       </div>
-                      <div className="flex justify-center sm:justify-end items-start order-1 sm:order-2">
-                        <div className="w-24 h-24 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center shadow-lg">
-                          <symptomGroup.icon className="w-12 h-12 text-orange-600" />
-                        </div>
+                    ))}
+                  </div>
+
+                  <Link href="/contact">
+                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                      <span>{language === 'en' ? 'Get Professional Assessment' : 'Obtener Evaluación Profesional'}</span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                       </div>
-                    </div>
-                  ) : (
-                    // Depressive Episodes - Icon on left layout
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                      <div className="flex justify-center sm:justify-start items-start">
-                        <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center shadow-lg">
-                          <symptomGroup.icon className="w-12 h-12 text-blue-600" />
-                        </div>
-                      </div>
-                      <div className="sm:col-span-2">
-                        <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
-                          {language === 'en' ? 'Low Energy State' : 'Estado de Baja Energía'}
-                        </div>
-                        <h3 className="text-2xl font-body font-bold text-green-800 mb-6">
-                          {symptomGroup.type}
-                        </h3>
-                        <div className="space-y-4">
-                          {symptomGroup.items.map((item, index) => (
-                            <div key={index} className="flex items-start gap-3">
-                              <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"></div>
-                              <span className="text-gray-700 font-body leading-relaxed">{item}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                    </Button>
+                  </Link>
                 </div>
-              ))}
+
+                {/* Sidebar with Stats */}
+                <div className="flex flex-col h-full">
+                  {/* Stats Cards */}
+                  <div className="space-y-4 mb-6">
+                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                      <div className="text-3xl font-bold text-green-600 mb-2">2.8%</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'US adults affected' : 'Adultos en EEUU afectados'}
+                      </div>
+                    </div>
+                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">80%</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Show improvement with treatment' : 'Mejoran con tratamiento'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional Info Card */}
+                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 flex-1">
+                    <h4 className="text-lg font-body font-bold text-green-800 mb-3">
+                      {language === 'en' ? 'Early Recognition Matters' : 'El Reconocimiento Temprano Importa'}
+                    </h4>
+                    <p className="text-gray-600 font-body text-sm leading-relaxed">
+                      {language === 'en'
+                        ? 'Early identification and treatment of bipolar symptoms leads to better long-term outcomes and quality of life.'
+                        : 'La identificación temprana y el tratamiento de síntomas bipolares resulta en mejores resultados a largo plazo y calidad de vida.'
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
