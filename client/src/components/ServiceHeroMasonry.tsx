@@ -160,77 +160,77 @@ export const ServiceHeroMasonry = ({
                 </div>
               </div>
 
-              {/* Top Right - Facts Card (Small - 1 row) */}
-              <div className="row-span-1 col-start-2 row-start-1">
-                <div className="bg-gradient-to-br from-purple-100 to-purple-50 border border-purple-200 rounded-2xl shadow-lg p-3 h-full flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 bg-purple-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <IconHeart className="w-3.5 h-3.5 text-purple-700" />
+              {/* Top Right - Facts Card (Extended - 1.5 rows) */}
+              <div className="row-span-1 col-start-2 row-start-1" style={{gridRowEnd: 'span 1.4'}}>
+                <div className="bg-gradient-to-br from-purple-100 to-purple-50 border border-purple-200 rounded-2xl shadow-lg p-4 h-full flex flex-col">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-7 h-7 bg-purple-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <IconHeart className="w-4 h-4 text-purple-700" />
                     </div>
-                    <h3 className="text-xs font-body font-bold text-purple-800">
+                    <h3 className="text-sm font-body font-bold text-purple-800">
                       {language === 'en' ? facts.title.en : facts.title.es}
                     </h3>
                   </div>
-                  <div className="space-y-1.5 flex-1 flex flex-col justify-center">
+                  <div className="space-y-3 flex-1 flex flex-col justify-center">
                     {facts.items.slice(0, 2).map((fact, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-purple-200/60 rounded-md flex items-center justify-center flex-shrink-0">
-                          <div className="w-1 h-1 bg-purple-600 rounded-full"></div>
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="w-5 h-5 bg-purple-200/60 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <span className="text-xs text-purple-800 font-body font-medium leading-tight">
+                        <div className="flex-1">
+                          <span className="text-sm text-purple-800 font-body font-medium leading-relaxed">
                             {language === 'en' ? fact.en : fact.es}
                           </span>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-2 pt-2 border-t border-purple-200">
-                    <div className="flex items-center justify-center gap-1">
-                      <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"></div>
-                      <div className="w-1 h-1 bg-purple-300 rounded-full animate-pulse delay-75"></div>
+                  <div className="mt-3 pt-3 border-t border-purple-200">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <div className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></div>
+                      <div className="w-1.5 h-1.5 bg-purple-300 rounded-full animate-pulse delay-75"></div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Left - Quick Stats Card (Small - 1 row) */}
-              <div className="row-span-1 col-start-1 row-start-3">
-                <div className="bg-gradient-to-br from-green-800 to-green-700 text-white rounded-2xl shadow-lg p-3 h-full flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-3.5 h-3.5 text-white" />
+              {/* Bottom Left - Quick Stats Card (Extended - 1.5 rows) */}
+              <div className="row-span-1 col-start-1 row-start-3" style={{gridRowStart: '2.6', gridRowEnd: 'span 1.4'}}>
+                <div className="bg-gradient-to-br from-green-800 to-green-700 text-white rounded-2xl shadow-lg p-4 h-full flex flex-col">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-4 h-4 text-white" />
                     </div>
-                    <h3 className="text-xs font-body font-bold text-white/95">
+                    <h3 className="text-sm font-body font-bold text-white/95">
                       {language === 'en' ? 'Quick Facts' : 'Datos Rápidos'}
                     </h3>
                   </div>
-                  <div className="space-y-1.5 flex-1 flex flex-col justify-center">
+                  <div className="space-y-3 flex-1 flex flex-col justify-center">
                     {quickStats.items.slice(0, 3).map((stat, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-white/10 rounded-md flex items-center justify-center flex-shrink-0">
-                          <div className="w-1 h-1 bg-white rounded-full opacity-90"></div>
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="w-5 h-5 bg-white/10 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <div className="w-1.5 h-1.5 bg-white rounded-full opacity-90"></div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-white/95 font-body font-medium leading-tight truncate">
+                        <div className="flex-1">
+                          <p className="text-sm text-white/95 font-body font-medium leading-relaxed">
                             {language === 'en' ? stat.en : stat.es}
                           </p>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-2 pt-2 border-t border-white/20">
-                    <div className="flex items-center justify-center gap-1">
-                      <div className="w-1 h-1 bg-green-300 rounded-full animate-pulse"></div>
-                      <div className="w-1 h-1 bg-green-200 rounded-full animate-pulse delay-75"></div>
-                      <div className="w-1 h-1 bg-green-100 rounded-full animate-pulse delay-150"></div>
+                  <div className="mt-3 pt-3 border-t border-white/20">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <div className="w-1.5 h-1.5 bg-green-300 rounded-full animate-pulse"></div>
+                      <div className="w-1.5 h-1.5 bg-green-200 rounded-full animate-pulse delay-75"></div>
+                      <div className="w-1.5 h-1.5 bg-green-100 rounded-full animate-pulse delay-150"></div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Right - Therapy Room Photo (Large - spans 2 rows) */}
-              <div className="row-span-2 col-start-2 row-start-2">
+              {/* Bottom Right - Therapy Room Photo (Adjusted - spans remaining space) */}
+              <div className="row-span-2 col-start-2" style={{gridRowStart: '1.9', gridRowEnd: 'span 1.6'}}>
                 <div className="h-full rounded-2xl shadow-lg overflow-hidden">
                   <img 
                     src={images.therapyRoomImage}
