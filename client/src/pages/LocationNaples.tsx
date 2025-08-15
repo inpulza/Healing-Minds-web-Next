@@ -276,6 +276,92 @@ const LocationNaples = () => {
           </div>
         </section>
 
+        {/* Banner Image Section - Service Page Style */}
+        <section className="py-16 sm:py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                {/* Content Side */}
+                <div className="order-2 lg:order-1">
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Premium Location' : 'Ubicación Premium'}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Your Healing Journey Starts at Our <span className="font-display italic text-green-700">Naples</span> Office</>
+                    ) : (
+                      <>Su Viaje de Sanación Comienza en Nuestra Oficina de <span className="font-display italic text-green-700">Naples</span></>
+                    )}
+                  </h2>
+                  
+                  {/* Key Stats */}
+                  <div className="mb-6 sm:mb-8">
+                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">15+</div>
+                    <div className="text-gray-600 font-body text-sm sm:text-base">
+                      {language === 'en' ? 'Years serving the Naples community with excellence' : 'Años sirviendo a la comunidad de Naples con excelencia'}
+                    </div>
+                  </div>
+
+                  <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Located in the heart of Naples on Tamiami Trail, our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment in a setting that prioritizes your privacy and comfort.'
+                      : 'Ubicado en el corazón de Naples en Tamiami Trail, nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo en un entorno que prioriza su privacidad y comodidad.'}
+                  </p>
+
+                  <Button 
+                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7"
+                    onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
+                    data-testid="button-view-location"
+                  >
+                    <span>{language === 'en' ? 'View Our Location' : 'Ver Nuestra Ubicación'}</span>
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    </div>
+                  </Button>
+                </div>
+
+                {/* Features Grid Side */}
+                <div className="order-1 lg:order-2 flex flex-col h-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    {[
+                      { en: 'Easy Parking Available', es: 'Estacionamiento Fácil Disponible' },
+                      { en: 'Accessible Location', es: 'Ubicación Accesible' },
+                      { en: 'Private & Confidential', es: 'Privado y Confidencial' },
+                      { en: 'Modern Facilities', es: 'Instalaciones Modernas' },
+                      { en: 'Welcoming Environment', es: 'Ambiente Acogedor' },
+                      { en: 'Professional Care', es: 'Atención Profesional' }
+                    ].map((feature, index) => (
+                      <div key={index} className="p-4">
+                        <div className="flex items-center gap-3">
+                          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                          <span className="text-gray-700 font-body text-sm">{language === 'en' ? feature.en : feature.es}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Photo - Fills remaining space */}
+                  <div className="flex-1">
+                    <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[10rem]">
+                      <div className="w-full h-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                        {/* Placeholder for now - you can replace with actual office photo */}
+                        <div className="text-center p-8">
+                          <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <MapPin className="w-8 h-8 text-white" />
+                          </div>
+                          <p className="text-green-800 font-body font-semibold">
+                            {language === 'en' ? 'Naples Office Location' : 'Ubicación de la Oficina de Naples'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Location Features Carousel */}
         <section className="py-16 bg-soft-green">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -395,8 +481,8 @@ const LocationNaples = () => {
                 <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
                   {content.mapTitle}
                 </h2>
-                <Card className="card-modern flex-1">
-                  <div className="h-[600px] lg:h-[700px] rounded-2xl overflow-hidden">
+                <div className="bg-white rounded-3xl shadow-sm border border-gray-200 flex-1 overflow-hidden">
+                  <div className="h-[600px] lg:h-[700px]">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
                       width="100%"
@@ -409,7 +495,7 @@ const LocationNaples = () => {
                       data-testid="map-google"
                     ></iframe>
                   </div>
-                </Card>
+                </div>
               </div>
             </div>
           </div>
