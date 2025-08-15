@@ -100,7 +100,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 items-start">
+            <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 items-stretch">
               {/* Florida Map */}
               <div className="relative order-2 lg:order-1 lg:col-span-2">
                 <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg border border-blue-100">
@@ -158,9 +158,9 @@ const Home = () => {
               </div>
 
               {/* Telehealth Info & Booking */}
-              <div className="order-1 lg:order-2 lg:col-span-1 space-y-6">
+              <div className="order-1 lg:order-2 lg:col-span-1 flex flex-col h-full">
                 {/* Telehealth Features */}
-                <div className="space-y-4">
+                <div className="flex flex-col justify-between h-full space-y-2">
                   {[
                     {
                       title: language === 'en' ? 'Secure Video Sessions' : 'Sesiones de Video Seguras',
