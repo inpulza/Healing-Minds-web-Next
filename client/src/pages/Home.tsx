@@ -117,8 +117,8 @@ const Home = () => {
 
                     {/* State-wide coverage overlay */}
                     <div className="absolute inset-0">
-                      {/* Naples - Our Base */}
-                      <div className="absolute" style={{top: '78%', left: '22%', transform: 'translate(-50%, -50%)'}}>
+                      {/* Naples - Our Base (Southwest coast, middle-south) */}
+                      <div className="absolute" style={{top: '75%', left: '19%', transform: 'translate(-50%, -50%)'}}>
                         <div className="relative">
                           <div className="w-4 h-4 sm:w-5 sm:h-5 bg-green-600 rounded-full shadow-lg animate-pulse border-2 border-white"></div>
                           <div className="absolute -top-8 -left-8 whitespace-nowrap">
@@ -130,28 +130,32 @@ const Home = () => {
                       </div>
 
                       {/* Major cities covered via telehealth */}
-                      <div className="absolute" style={{top: '25%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                      {/* Orlando - Center of Florida */}
+                      <div className="absolute" style={{top: '48%', left: '58%', transform: 'translate(-50%, -50%)'}}>
                         <div className="w-3 h-3 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
                         <span className="absolute -top-8 -left-8 text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg whitespace-nowrap">
                           Orlando
                         </span>
                       </div>
 
-                      <div className="absolute" style={{top: '15%', left: '30%', transform: 'translate(-50%, -50%)'}}>
+                      {/* Jacksonville - Northeast corner */}
+                      <div className="absolute" style={{top: '15%', left: '65%', transform: 'translate(-50%, -50%)'}}>
                         <div className="w-3 h-3 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
                         <span className="absolute -top-8 -left-12 text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg whitespace-nowrap">
                           Jacksonville
                         </span>
                       </div>
 
-                      <div className="absolute" style={{top: '35%', left: '15%', transform: 'translate(-50%, -50%)'}}>
+                      {/* Tampa - West coast, center */}
+                      <div className="absolute" style={{top: '45%', left: '28%', transform: 'translate(-50%, -50%)'}}>
                         <div className="w-3 h-3 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
                         <span className="absolute -top-8 -left-6 text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg whitespace-nowrap">
                           Tampa
                         </span>
                       </div>
 
-                      <div className="absolute" style={{top: '88%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                      {/* Miami - Southeast corner */}
+                      <div className="absolute" style={{top: '85%', left: '78%', transform: 'translate(-50%, -50%)'}}>
                         <div className="w-3 h-3 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
                         <span className="absolute -top-8 -left-6 text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg whitespace-nowrap">
                           Miami
