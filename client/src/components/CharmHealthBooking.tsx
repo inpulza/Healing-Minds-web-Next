@@ -135,7 +135,7 @@ const CharmHealthBooking = ({
 
   // Default variant
   return (
-    <Card className={`bg-white border-blue-200 p-6 shadow-sm hover:shadow-md transition-shadow ${className}`}>
+    <Card className={`bg-white border-blue-200 p-6 shadow-sm hover:shadow-md transition-shadow mt-auto ${className}`}>
       <div className="flex items-start gap-4">
         <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
           <VideoIcon className="w-6 h-6 text-blue-600" />
