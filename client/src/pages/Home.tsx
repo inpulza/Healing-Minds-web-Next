@@ -15,7 +15,7 @@ import ServiceAreas from '@/components/ServiceAreas';
 import Footer from '@/components/Footer';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import { updateSEO } from '@/utils/seo';
-import { MapPin, Users, VideoIcon, Navigation, Monitor, CheckCircle, Clock } from 'lucide-react';
+import { MapPin, Users, VideoIcon, Navigation, Monitor, CheckCircle, Clock, Shield } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import floridaMap from '../assets/florida-map.png';
 
@@ -181,6 +181,11 @@ const Home = () => {
                       title: language === 'en' ? 'Bilingual Care' : 'Atención Bilingüe',
                       description: language === 'en' ? 'English & Spanish sessions' : 'Sesiones en inglés y español',
                       icon: Users
+                    },
+                    {
+                      title: language === 'en' ? 'Insurance Accepted' : 'Seguros Aceptados',
+                      description: language === 'en' ? 'Most major plans accepted' : 'Se aceptan la mayoría de planes principales',
+                      icon: Shield
                     }
                   ].map((feature, index) => {
                     const IconComponent = feature.icon;
