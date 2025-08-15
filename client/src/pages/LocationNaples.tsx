@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import { updateSEO } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
@@ -278,6 +279,9 @@ const LocationNaples = () => {
             </div>
           </div>
         </section>
+
+        {/* Insurance Logos Section */}
+        <LocationInsuranceLogos />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">
