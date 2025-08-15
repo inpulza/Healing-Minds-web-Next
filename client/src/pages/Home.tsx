@@ -176,6 +176,11 @@ const Home = () => {
                       title: language === 'en' ? 'Prescription Management' : 'Manejo de Prescripciones', 
                       description: language === 'en' ? 'Digital prescriptions sent directly' : 'Prescripciones digitales enviadas directamente',
                       icon: CheckCircle
+                    },
+                    {
+                      title: language === 'en' ? 'Bilingual Care' : 'Atención Bilingüe',
+                      description: language === 'en' ? 'English & Spanish sessions' : 'Sesiones en inglés y español',
+                      icon: Users
                     }
                   ].map((feature, index) => {
                     const IconComponent = feature.icon;
