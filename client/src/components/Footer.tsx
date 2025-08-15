@@ -10,10 +10,12 @@ const Footer = () => {
   const [email, setEmail] = useState('');
 
   const services = [
-    { href: '/services', label: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad' },
-    { href: '/services', label: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión' },
-    { href: '/services', label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH' },
-    { href: '/services', label: language === 'en' ? 'PTSD & Trauma' : 'TEPT y Trauma' }
+    { href: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad', label: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad' },
+    { href: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion', label: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión' },
+    { href: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah', label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH' },
+    { href: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept', label: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT' },
+    { href: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar', label: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar' },
+    { href: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos', label: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos' }
   ];
 
   const quickLinks = [
@@ -151,7 +153,7 @@ const Footer = () => {
                   </li>
                   <li className="text-green-200 text-base flex items-center">
                     <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                    Collier County
+                    Estero, FL
                   </li>
                 </ul>
               </div>
