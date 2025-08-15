@@ -195,23 +195,26 @@ const Home = () => {
                   })}
                 </div>
 
-                {/* Main Booking Card */}
-                <Card className="p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
-                  <div className="text-center">
-                    <VideoIcon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                    <h4 className="text-lg sm:text-xl font-bold text-blue-800 mb-2">
-                      {language === 'en' ? 'Book Your Telehealth Session' : 'Reserve su Sesión de Telesalud'}
-                    </h4>
-                    <p className="text-sm sm:text-base text-blue-700 mb-4">
-                      {language === 'en' 
-                        ? 'Schedule with Dr. Melva Reve from anywhere in Florida'
-                        : 'Programe con la Dra. Melva Reve desde cualquier lugar de Florida'
-                      }
-                    </p>
-                    <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
-                  </div>
-                </Card>
               </div>
+            </div>
+
+            {/* Main Booking Card - Full Width Below */}
+            <div className="mt-12">
+              <Card className="p-6 sm:p-8 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
+                <div className="text-center">
+                  <VideoIcon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+                  <h4 className="text-2xl sm:text-3xl font-bold text-blue-800 mb-3">
+                    {language === 'en' ? 'Book Your Telehealth Session' : 'Reserve su Sesión de Telesalud'}
+                  </h4>
+                  <p className="text-lg sm:text-xl text-blue-700 mb-6">
+                    {language === 'en' 
+                      ? 'Schedule with Dr. Melva Reve from anywhere in Florida'
+                      : 'Programe con la Dra. Melva Reve desde cualquier lugar de Florida'
+                    }
+                  </p>
+                  <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
+                </div>
+              </Card>
             </div>
           </div>
         </section>
