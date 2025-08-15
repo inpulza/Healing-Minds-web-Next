@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
+import InsuranceLogos from '@/components/InsuranceLogos';
 import DoctorSection from '@/components/DoctorSection';
 import About from '@/components/About';
 import Services from '@/components/Services';
@@ -39,6 +40,7 @@ const Home = () => {
       <Header />
       <main>
         <Hero />
+        <InsuranceLogos />
         <DoctorSection />
         <Services />
         <About />
