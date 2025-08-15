@@ -100,6 +100,29 @@ const Footer = () => {
                 </p>
               </form>
             </div>
+
+            {/* Telehealth Booking */}
+            <div className="p-4 bg-green-800/30 rounded-lg border border-green-700">
+              <h5 className="text-base font-body font-semibold text-white mb-2 flex items-center">
+                <Calendar className="w-4 h-4 mr-2" />
+                {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+              </h5>
+              <p className="text-green-200 text-sm mb-3">
+                {language === 'en' 
+                  ? 'Schedule secure online consultations with Dr. Melva Reve'
+                  : 'Programe consultas seguras en línea con la Dra. Melva Reve'
+                }
+              </p>
+              <Button
+                onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
+                variant="outline"
+                size="sm"
+                className="text-green-200 border-green-600 hover:bg-green-700 hover:text-white text-sm"
+                data-testid="footer-telehealth-button"
+              >
+                {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
+              </Button>
+            </div>
           </div>
 
           {/* Right Section - Links */}
@@ -198,28 +221,6 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Telehealth Booking - Full Width */}
-            <div className="p-4 bg-green-800/30 rounded-lg border border-green-700">
-              <h5 className="text-base font-body font-semibold text-white mb-2 flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
-                {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
-              </h5>
-              <p className="text-green-200 text-sm mb-3">
-                {language === 'en' 
-                  ? 'Schedule secure online consultations with Dr. Melva Reve'
-                  : 'Programe consultas seguras en línea con la Dra. Melva Reve'
-                }
-              </p>
-              <Button
-                onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
-                variant="outline"
-                size="sm"
-                className="text-green-200 border-green-600 hover:bg-green-700 hover:text-white text-sm"
-                data-testid="footer-telehealth-button"
-              >
-                {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
-              </Button>
-            </div>
           </div>
         </div>
 
