@@ -572,7 +572,7 @@ const BipolarTreatment = () => {
                     key={index}
                     className={`rounded-2xl sm:rounded-3xl ${backgroundClasses[type.color]} min-h-[400px] flex flex-col`}
                   >
-                    <div className="p-6 sm:p-8 text-green-800 flex flex-col h-full">
+                    <div className="p-6 sm:p-8 text-green-800 flex flex-col h-full bg-[#ffffff]">
                       {/* Header */}
                       <div className="text-center mb-6">
                         <div className="inline-flex p-4 rounded-2xl mb-4 bg-[#00ff5e5c]">
