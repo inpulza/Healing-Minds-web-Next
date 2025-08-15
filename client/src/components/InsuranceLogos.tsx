@@ -36,7 +36,15 @@ const InsuranceLogos = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-green-800 mb-4">
-            {language === 'en' ? 'Insurance Plans Accepted' : 'Planes de Seguro Aceptados'}
+            {language === 'en' ? (
+              <>
+                <span className="font-display italic text-green-700">Insurance</span> Plans Accepted
+              </>
+            ) : (
+              <>
+                Planes de <span className="font-display italic text-green-700">Seguro</span> Aceptados
+              </>
+            )}
           </h2>
           <p className="text-lg text-gray-600 font-body leading-relaxed max-w-3xl mx-auto">
             {language === 'en' 
