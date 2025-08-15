@@ -194,7 +194,7 @@ const LocationNaples = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Our Professional Practice Location in{' '}
+                    Our Professional Practice <span className="font-display italic text-green-700">Location</span> in{' '}
                     <span className="font-display italic text-green-700">Naples, FL</span>
                   </>
                 ) : (
@@ -368,143 +368,6 @@ const LocationNaples = () => {
           </div>
         </section>
 
-        {/* Location Features Carousel */}
-        <section className="py-16 bg-soft-green">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="overflow-hidden">
-              <div className="flex animate-scroll">
-                {[...content.features, ...content.features].map((feature, index) => (
-                  <div key={index} className="flex-shrink-0 w-80 mx-6">
-                    <Card className="card-modern text-center h-full">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <CheckCircle className="w-6 h-6 text-white" />
-                      </div>
-                      <h3 className="text-xl font-display font-semibold text-green-800 mb-3">
-                        {feature.title}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed">
-                        {feature.description}
-                      </p>
-                    </Card>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* NAP Information Section */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 lg:p-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* Contact Information */}
-                <div className="space-y-8">
-                  <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
-                    {content.contactTitle}
-                  </h2>
-                  
-                  {/* Address */}
-                  <Card className="card-modern mb-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <MapPin className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
-                          {content.addressTitle}
-                        </h3>
-                        <p className="text-gray-700 font-body text-lg leading-relaxed" data-testid="text-address">
-                          {practiceInfo.address.full}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Phone */}
-                  <Card className="card-modern mb-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Phone className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
-                          {language === 'en' ? 'Phone Number' : 'Número de Teléfono'}
-                        </h3>
-                        <a 
-                          href={`tel:${practiceInfo.phone}`}
-                          className="text-gray-700 font-body text-lg hover:text-green-700 transition-colors"
-                          data-testid="link-phone"
-                        >
-                          {practiceInfo.phone}
-                        </a>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Email */}
-                  <Card className="card-modern mb-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Mail className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
-                          {language === 'en' ? 'Email Address' : 'Dirección de Email'}
-                        </h3>
-                        <a 
-                          href={`mailto:${practiceInfo.email}`}
-                          className="text-gray-700 font-body text-lg hover:text-green-700 transition-colors"
-                          data-testid="link-email"
-                        >
-                          {practiceInfo.email}
-                        </a>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Hours */}
-                  <Card className="card-modern">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Clock className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
-                          {content.hoursTitle}
-                        </h3>
-                        <p className="text-gray-700 font-body text-lg" data-testid="text-hours">
-                          {practiceInfo.hours}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Google Map - Full Height */}
-                <div className="flex flex-col h-full">
-                  <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
-                    {content.mapTitle}
-                  </h2>
-                  <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Healing Minds Psychiatry Location Map"
-                      data-testid="map-google"
-                    ></iframe>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Services Section */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -619,15 +482,36 @@ const LocationNaples = () => {
               })}
             </div>
             
-            {/* Service Areas */}
+            {/* Service Areas - Enhanced with more features */}
             <div className="mt-16 text-center">
               <h3 className="text-2xl font-display font-bold text-green-800 mb-8">
                 {content.areaTitle}
               </h3>
               <div className="flex flex-wrap justify-center gap-4">
-                {serviceAreas.map((area, index) => (
+                {[
+                  ...serviceAreas,
+                  ...(language === 'en' ? [
+                    'Convenient Location',
+                    'Modern Facilities',
+                    'Bilingual Services',
+                    'Easy Parking',
+                    'Private & Confidential',
+                    'Professional Care',
+                    'Accessible Location',
+                    'Telehealth Available'
+                  ] : [
+                    'Ubicación Conveniente',
+                    'Instalaciones Modernas',
+                    'Servicios Bilingües',
+                    'Estacionamiento Fácil',
+                    'Privado y Confidencial',
+                    'Atención Profesional',
+                    'Ubicación Accesible',
+                    'Telesalud Disponible'
+                  ])
+                ].map((item, index) => (
                   <div key={index} className="bg-green-50 rounded-full px-4 py-2 border border-green-200">
-                    <span className="text-green-800 font-body text-sm font-medium">{area}</span>
+                    <span className="text-green-800 font-body text-sm font-medium">{item}</span>
                   </div>
                 ))}
               </div>
@@ -635,20 +519,141 @@ const LocationNaples = () => {
           </div>
         </section>
 
+        {/* NAP Information Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 lg:p-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {/* Contact Information */}
+                <div className="space-y-8">
+                  <h2 className="text-4xl font-body font-bold text-green-800 mb-8">
+                    <span className="font-display italic text-green-700">Contact</span> {language === 'en' ? 'Information' : 'Información'}
+                  </h2>
+                  
+                  {/* Address */}
+                  <Card className="card-modern mb-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
+                          {content.addressTitle}
+                        </h3>
+                        <p className="text-gray-700 font-body text-lg leading-relaxed" data-testid="text-address">
+                          {practiceInfo.address.full}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Phone */}
+                  <Card className="card-modern mb-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Phone className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
+                          {language === 'en' ? 'Phone Number' : 'Número de Teléfono'}
+                        </h3>
+                        <a 
+                          href={`tel:${practiceInfo.phone}`}
+                          className="text-gray-700 font-body text-lg hover:text-green-700 transition-colors"
+                          data-testid="link-phone"
+                        >
+                          {practiceInfo.phone}
+                        </a>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Email */}
+                  <Card className="card-modern mb-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Mail className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
+                          {language === 'en' ? 'Email Address' : 'Dirección de Email'}
+                        </h3>
+                        <a 
+                          href={`mailto:${practiceInfo.email}`}
+                          className="text-gray-700 font-body text-lg hover:text-green-700 transition-colors"
+                          data-testid="link-email"
+                        >
+                          {practiceInfo.email}
+                        </a>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Hours */}
+                  <Card className="card-modern">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Clock className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
+                          {content.hoursTitle}
+                        </h3>
+                        <p className="text-gray-700 font-body text-lg" data-testid="text-hours">
+                          {practiceInfo.hours}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Google Map - Full Height */}
+                <div className="flex flex-col h-full">
+                  <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
+                    {content.mapTitle}
+                  </h2>
+                  <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Healing Minds Psychiatry Location Map"
+                      data-testid="map-google"
+                    ></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
         {/* Call to Action */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-white">
           <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
-            <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-6">
-              {language === 'en' ? 'Ready to Begin Your Journey?' : '¿Listo para Comenzar su Viaje?'}
+            <h2 className="text-4xl lg:text-5xl font-body font-bold text-gray-900 mb-6">
+              {language === 'en' ? (
+                <>
+                  <span className="font-display italic text-green-700">Ready to Begin</span> Your <span className="font-display italic text-green-700">Journey?</span>
+                </>
+              ) : (
+                <>
+                  <span className="font-display italic text-green-700">¿Listo para Comenzar</span> su <span className="font-display italic text-green-700">Viaje?</span>
+                </>
+              )}
             </h2>
             <p className="text-xl text-gray-600 font-body mb-8 leading-relaxed">
               {language === 'en' 
                 ? 'Take the first step towards better mental health. Contact us today to schedule your consultation.'
                 : 'Dé el primer paso hacia una mejor salud mental. Contáctenos hoy para programar su consulta.'}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button 
-                className="bg-green-800 text-white hover:bg-green-700 text-lg px-8 py-6 rounded-full font-body font-semibold"
+                className="bg-green-800 text-white hover:bg-green-700 px-8 py-6 rounded-full font-body font-semibold text-lg min-w-[240px]"
                 onClick={() => window.location.href = '/contact'}
                 data-testid="button-schedule-consultation"
               >
@@ -657,13 +662,11 @@ const LocationNaples = () => {
               </Button>
               <Button 
                 variant="outline"
-                className="border-2 border-green-800 text-green-800 hover:bg-green-800 hover:text-white text-lg px-8 py-6 rounded-full font-body font-semibold"
+                className="border-2 border-green-800 text-green-800 hover:bg-green-800 hover:text-white px-8 py-6 rounded-full font-body font-semibold text-lg min-w-[240px]"
                 onClick={() => window.location.href = `tel:${practiceInfo.phone}`}
                 data-testid="button-call-now"
               >
-                <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100 mr-2">
-                  <Phone className="w-4 h-4 text-green-800" />
-                </div>
+                <Phone className="w-4 h-4 mr-2" />
                 {content.callNow}
               </Button>
             </div>
