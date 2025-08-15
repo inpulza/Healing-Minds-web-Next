@@ -390,10 +390,10 @@ const LocationNaples = () => {
         {/* NAP Information Section */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 h-auto lg:h-[800px]">
-              {/* Contact Information */}
-              <div className="space-y-8">
-                <div>
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 lg:p-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {/* Contact Information */}
+                <div className="space-y-8">
                   <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
                     {content.contactTitle}
                   </h2>
@@ -474,19 +474,17 @@ const LocationNaples = () => {
                     </div>
                   </Card>
                 </div>
-              </div>
 
-              {/* Google Map - Extended Height */}
-              <div className="h-full flex flex-col">
-                <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
-                  {content.mapTitle}
-                </h2>
-                <div className="bg-white rounded-3xl shadow-sm border border-gray-200 flex-1 overflow-hidden">
-                  <div className="h-[600px] lg:h-[700px]">
+                {/* Google Map - Matching Height */}
+                <div>
+                  <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
+                    {content.mapTitle}
+                  </h2>
+                  <div className="rounded-2xl overflow-hidden bg-gray-100">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
                       width="100%"
-                      height="100%"
+                      height="480px"
                       style={{ border: 0 }}
                       allowFullScreen
                       loading="lazy"
