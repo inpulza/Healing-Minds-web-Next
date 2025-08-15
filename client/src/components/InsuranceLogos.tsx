@@ -45,42 +45,24 @@ const InsuranceLogos = () => {
           </p>
         </div>
 
-        {/* True Masonry Layout - Irregular Arrangement */}
+        {/* Masonry Layout - Same Size Containers */}
         <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
           <div className="flex flex-wrap gap-4 sm:gap-6 justify-center items-start">
-            {insuranceLogos.map((logo, index) => {
-              // Create irregular sizes for true masonry effect
-              const sizeClasses = [
-                'w-32 h-20', // wide short
-                'w-28 h-24', // medium square-ish
-                'w-36 h-18', // extra wide short
-                'w-24 h-28', // narrow tall
-                'w-40 h-20', // very wide short
-                'w-32 h-22', // wide medium
-                'w-28 h-20', // medium short
-                'w-36 h-24', // wide tall
-                'w-30 h-26', // medium tall
-                'w-38 h-18', // extra wide short
-                'w-26 h-24'  // narrow medium
-              ];
-              const sizeClass = sizeClasses[index % sizeClasses.length];
-              
-              return (
-                <div 
-                  key={index} 
-                  className={`bg-white rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-center group ${sizeClass}`}
-                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <img
-                    src={logo.src}
-                    alt={logo.alt}
-                    className="max-w-full max-h-16 sm:max-h-20 lg:max-h-24 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              );
-            })}
+            {insuranceLogos.map((logo, index) => (
+              <div 
+                key={index} 
+                className="bg-white rounded-xl p-6 sm:p-8 w-32 h-24 sm:w-36 sm:h-28 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-center group"
+                data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="max-w-full max-h-16 sm:max-h-20 lg:max-h-24 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            ))}
           </div>
           
           {/* Bottom Note */}
