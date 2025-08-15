@@ -57,16 +57,38 @@ const Footer = () => {
                   </div>
                 </div>
               </Link>
-              <p className="text-green-200 mt-4 max-w-md text-lg leading-relaxed">
+            </div>
+
+            {/* Telehealth Booking */}
+            <div className="mb-8 p-4 bg-green-800/30 rounded-lg border border-green-700">
+              <h5 className="text-base font-body font-semibold text-white mb-2 flex items-center">
+                <Calendar className="w-4 h-4 mr-2" />
+                {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+              </h5>
+              <p className="text-green-200 text-sm mb-3">
+                {language === 'en' 
+                  ? 'Schedule secure online consultations with Dr. Melva Reve'
+                  : 'Programe consultas seguras en línea con la Dra. Melva Reve'
+                }
+              </p>
+              <Button
+                onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
+                size="sm"
+                className="bg-green-600 hover:bg-green-500 text-white text-sm font-semibold"
+                data-testid="footer-telehealth-button"
+              >
+                {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
+              </Button>
+            </div>
+
+            {/* Newsletter Section */}
+            <div>
+              <p className="text-green-200 mb-4 max-w-md text-lg leading-relaxed">
                 {language === 'en'
                   ? 'Join our newsletter to stay up to date on mental health resources and practice updates.'
                   : 'Únase a nuestro boletín para mantenerse al día sobre recursos de salud mental y actualizaciones de la práctica.'
                 }
               </p>
-            </div>
-
-            {/* Newsletter Form */}
-            <div className="mb-8">
               <form onSubmit={handleNewsletterSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="footer-email" className="block text-base font-medium text-green-200 mb-2">
@@ -99,29 +121,6 @@ const Footer = () => {
                   }
                 </p>
               </form>
-            </div>
-
-            {/* Telehealth Booking */}
-            <div className="p-4 bg-green-800/30 rounded-lg border border-green-700">
-              <h5 className="text-base font-body font-semibold text-white mb-2 flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
-                {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
-              </h5>
-              <p className="text-green-200 text-sm mb-3">
-                {language === 'en' 
-                  ? 'Schedule secure online consultations with Dr. Melva Reve'
-                  : 'Programe consultas seguras en línea con la Dra. Melva Reve'
-                }
-              </p>
-              <Button
-                onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
-                variant="outline"
-                size="sm"
-                className="text-green-200 border-green-600 hover:bg-green-700 hover:text-white text-sm"
-                data-testid="footer-telehealth-button"
-              >
-                {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
-              </Button>
             </div>
           </div>
 
