@@ -475,16 +475,16 @@ const LocationNaples = () => {
                   </Card>
                 </div>
 
-                {/* Google Map - Matching Height */}
-                <div>
+                {/* Google Map - Full Height */}
+                <div className="flex flex-col h-full">
                   <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
                     {content.mapTitle}
                   </h2>
-                  <div className="rounded-2xl overflow-hidden bg-gray-100">
+                  <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
                       width="100%"
-                      height="480px"
+                      height="100%"
                       style={{ border: 0 }}
                       allowFullScreen
                       loading="lazy"
