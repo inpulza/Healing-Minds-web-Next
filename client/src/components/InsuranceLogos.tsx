@@ -47,17 +47,17 @@ const InsuranceLogos = () => {
 
         {/* Masonry Grid Layout */}
         <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
             {insuranceLogos.map((logo, index) => (
               <div 
                 key={index} 
-                className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-center group"
+                className="bg-white rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-center group aspect-square"
                 data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="max-w-full max-h-12 sm:max-h-14 lg:max-h-16 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                  className="max-w-full max-h-16 sm:max-h-20 lg:max-h-24 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
                   loading="lazy"
                   decoding="async"
                 />
