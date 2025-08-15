@@ -377,7 +377,11 @@ const LocationNaples = () => {
                   <IconBrain />
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
-                  {content.servicesTitle}
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Services</span> at This Location</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Servicios</span> en Esta Ubicación</>
+                  )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
                   <IconHeart />
@@ -485,7 +489,11 @@ const LocationNaples = () => {
             {/* Service Areas - Enhanced with more features */}
             <div className="mt-16 text-center">
               <h3 className="text-2xl font-display font-bold text-green-800 mb-8">
-                {content.areaTitle}
+                {language === 'en' ? (
+                  <><span className="font-display italic text-green-700">Areas</span> We Serve</>
+                ) : (
+                  <><span className="font-display italic text-green-700">Áreas</span> que Servimos</>
+                )}
               </h3>
               <div className="flex flex-wrap justify-center gap-4">
                 {serviceAreas.map((area, index) => (
@@ -589,7 +597,11 @@ const LocationNaples = () => {
                 {/* Google Map - Full Height */}
                 <div className="flex flex-col h-full">
                   <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
-                    {content.mapTitle}
+                    {language === 'en' ? (
+                      <><span className="font-display italic text-green-700">Find</span> Us on the <span className="font-display italic text-green-700">Map</span></>
+                    ) : (
+                      <><span className="font-display italic text-green-700">Encuéntrenos</span> en el <span className="font-display italic text-green-700">Mapa</span></>
+                    )}
                   </h2>
                   <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100">
                     <iframe
