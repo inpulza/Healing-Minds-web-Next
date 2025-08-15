@@ -313,7 +313,7 @@ const AdhdTreatment = () => {
 
                 {/* Photo in Top Right Corner - Takes 1/2 */}
                 <div className="lg:col-span-2">
-                  <div className="w-full aspect-square overflow-hidden rounded-xl shadow-md">
+                  <div className="w-full aspect-[3/2] overflow-hidden rounded-xl shadow-md">
                     <div className="w-full h-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center">
                       <div className="text-center">
                         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
