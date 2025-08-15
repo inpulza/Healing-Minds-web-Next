@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Homepage - Máxima prioridad -->
+  <url>
+    <loc>https://healingmindsp.com/</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://healingmindsp.com/" />
+  </url>
+
+  <!-- About Page - Alta prioridad -->
+  <url>
+    <loc>https://healingmindsp.com/about</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Services Overview - Alta prioridad -->
+  <url>
+    <loc>https://healingmindsp.com/services</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/servicios-espanol" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services" />
+  </url>
+
+  <!-- Spanish Services Page -->
+  <url>
+    <loc>https://healingmindsp.com/servicios-espanol</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/servicios-espanol" />
+  </url>
+
+  <!-- Individual Service Pages - English -->
+  <url>
+    <loc>https://healingmindsp.com/services/anxiety-treatment</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-ansiedad" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/anxiety-treatment" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/services/depression-treatment</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-depresion" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/depression-treatment" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/services/adhd-treatment</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-tdah" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/adhd-treatment" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/services/ptsd-treatment</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-tept" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/ptsd-treatment" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/services/bipolar-treatment</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-bipolar" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/bipolar-treatment" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/services/medication-management</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/manejo-medicamentos" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/medication-management" />
+  </url>
+
+  <!-- Individual Service Pages - Spanish -->
+  <url>
+    <loc>https://healingmindsp.com/es/servicios/tratamiento-ansiedad</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/anxiety-treatment" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-ansiedad" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/es/servicios/tratamiento-depresion</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/depression-treatment" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-depresion" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/es/servicios/tratamiento-tdah</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/adhd-treatment" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-tdah" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/es/servicios/tratamiento-tept</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/ptsd-treatment" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-tept" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/es/servicios/tratamiento-bipolar</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/bipolar-treatment" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/tratamiento-bipolar" />
+  </url>
+
+  <url>
+    <loc>https://healingmindsp.com/es/servicios/manejo-medicamentos</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://healingmindsp.com/services/medication-management" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://healingmindsp.com/es/servicios/manejo-medicamentos" />
+  </url>
+
+  <!-- For Patients Page -->
+  <url>
+    <loc>https://healingmindsp.com/for-patients</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Location Page -->
+  <url>
+    <loc>https://healingmindsp.com/locations/naples</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Contact Page -->
+  <url>
+    <loc>https://healingmindsp.com/contact</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>
