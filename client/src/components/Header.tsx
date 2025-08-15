@@ -192,13 +192,13 @@ const Header = () => {
             <Button
               variant="ghost"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-700 hover:text-primary rounded-full p-2 min-w-[4rem] min-h-[4rem] flex items-center justify-center"
+              className="text-gray-700 hover:text-red-500 rounded-full p-1 min-w-[5rem] min-h-[5rem] flex items-center justify-center bg-red-100"
               data-testid="mobile-menu-toggle"
             >
               {isMobileMenuOpen ? (
-                <X className="h-12 w-12" />
+                <X className="h-16 w-16 stroke-2" />
               ) : (
-                <Menu className="h-12 w-12" />
+                <Menu className="h-16 w-16 stroke-2" />
               )}
             </Button>
           </div>
