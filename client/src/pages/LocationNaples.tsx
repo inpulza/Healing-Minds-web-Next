@@ -24,7 +24,7 @@ import {
 import { IconSun, IconMapPin, IconBrain } from '@tabler/icons-react';
 
 // Import office photo
-import officePhoto from '@assets/_MG_3635_1755254273937.JPG';
+import officePhoto from '@/assets/office-photo.jpg';
 
 const LocationNaples = () => {
   const { language } = useLanguage();
