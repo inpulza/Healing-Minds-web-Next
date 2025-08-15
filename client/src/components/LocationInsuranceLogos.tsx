@@ -31,7 +31,7 @@ const LocationInsuranceLogos = () => {
   ];
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 bg-white">
+    <section className="py-8 sm:py-12 lg:py-16 bg-[#f0fdf4]">
       <div className="max-w-[85%] lg:max-w-[90%] mx-auto px-2">
         {/* Section Header */}
         <div className="text-center mb-12">
