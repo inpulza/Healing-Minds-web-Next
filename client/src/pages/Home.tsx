@@ -118,7 +118,7 @@ const Home = () => {
                     {/* State-wide coverage overlay */}
                     <div className="absolute inset-0">
                       {/* Statewide coverage indication */}
-                      <div className="absolute inset-0 bg-blue-500 bg-opacity-8 border-2 border-blue-400 border-opacity-30 rounded-xl"></div>
+                      <div className="absolute inset-0 bg-blue-500 bg-opacity-5 border-2 border-blue-400 border-opacity-20 rounded-xl"></div>
                     </div>
 
                     {/* Compass */}
