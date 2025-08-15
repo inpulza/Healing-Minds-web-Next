@@ -124,9 +124,13 @@ export const ServiceHeroMasonry = ({
                 className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
                 data-testid="button-schedule-consultation"
               >
-                <Calendar className="w-5 h-5" />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                  <Calendar className="w-4 h-4 text-white" />
+                </div>
                 {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                <ArrowRight className="w-5 h-5" />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                  <ArrowRight className="w-4 h-4 text-white" />
+                </div>
               </Button>
             </Link>
             
@@ -136,7 +140,9 @@ export const ServiceHeroMasonry = ({
               className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
               data-testid="button-call-now"
             >
-              <Phone className="w-5 h-5" />
+              <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                <Phone className="w-4 h-4 text-green-800" />
+              </div>
               <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
                 {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
               </a>

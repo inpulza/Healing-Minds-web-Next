@@ -217,9 +217,13 @@ const LocationNaples = () => {
                   onClick={() => window.location.href = '/contact'}
                   data-testid="button-schedule-consultation"
                 >
-                  <Calendar className="w-5 h-5" />
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                    <Calendar className="w-4 h-4 text-white" />
+                  </div>
                   {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                  <ArrowRight className="w-5 h-5" />
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </div>
                 </Button>
                 
                 <Button 
@@ -583,7 +587,9 @@ const LocationNaples = () => {
                 onClick={() => window.location.href = `tel:${practiceInfo.phone}`}
                 data-testid="button-call-now"
               >
-                <Phone className="w-5 h-5 mr-2" />
+                <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-white/20 mr-2">
+                  <Phone className="w-4 h-4 text-white" />
+                </div>
                 {content.callNow}
               </Button>
             </div>

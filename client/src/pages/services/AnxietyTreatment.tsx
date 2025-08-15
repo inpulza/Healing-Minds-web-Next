@@ -371,9 +371,13 @@ const AnxietyTreatment = () => {
                   <div className="mt-8">
                     <Link href="/contact">
                       <Button size="lg" variant="secondary" className="bg-white text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full w-full inline-flex items-center justify-center gap-3">
-                        <Calendar className="w-5 h-5" />
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                          <Calendar className="w-4 h-4 text-green-800" />
+                        </div>
                         {language === 'en' ? 'Schedule Your Consultation' : 'Programe Su Consulta'}
-                        <ArrowRight className="w-5 h-5" />
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                          <ArrowRight className="w-4 h-4 text-green-800" />
+                        </div>
                       </Button>
                     </Link>
                   </div>
