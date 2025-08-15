@@ -264,7 +264,7 @@ const AdhdTreatment = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
               {/* Top Section with Content and Photo */}
-              <div className="grid lg:grid-cols-4 gap-8 mb-8">
+              <div className="grid lg:grid-cols-4 gap-8 mb-8 lg:items-stretch">
                 {/* Content Side - Takes 1/2 */}
                 <div className="lg:col-span-2">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
@@ -313,7 +313,7 @@ const AdhdTreatment = () => {
 
                 {/* Photo in Top Right Corner - Takes 1/2 */}
                 <div className="lg:col-span-2">
-                  <div className="w-full aspect-[3/2] overflow-hidden rounded-xl shadow-md">
+                  <div className="w-full h-full overflow-hidden rounded-xl shadow-md">
                     <div className="w-full h-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center">
                       <div className="text-center">
                         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
