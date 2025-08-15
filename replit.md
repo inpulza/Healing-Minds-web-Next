@@ -4,7 +4,19 @@
 
 This is a professional website for Healing Minds Psychiatry, the practice of Dr. Melva Reve, a board-certified psychiatrist serving Naples, FL and surrounding areas. The website provides bilingual (English/Spanish) psychiatric care information, services, and patient resources. It features a modern, accessible design built with React and TypeScript, focusing on mental health services including anxiety, depression, ADHD, PTSD, and other psychiatric conditions.
 
-## Recent Changes (August 14, 2025)
+## Recent Changes (August 15, 2025)
+
+- **Schema.org Optimization for Google Business Profile**: Completely enhanced structured data markup with Google Business Profile connection
+  - Added Google Business Profile URL to sameAs property for direct GBP connection 
+  - Updated coordinates to match exact GBP location (26.2044803,-81.8021344)
+  - Enhanced opening hours specification with proper schema format for all days
+  - Added @id properties for unique entity identification
+  - Integrated MedicalBusiness and Physician schemas with cross-references
+  - Improved hasMap property to use actual GBP URL instead of generic maps link
+  - Extended medicalSpecialty to include all service offerings (ADHD, PTSD, Bipolar)
+  - Optimized schema removal to avoid conflicts between multiple schemas
+
+## Previous Changes (August 14, 2025)
 
 - **Modern Section Layouts Implementation**: Applied DoctorSection-inspired design patterns to service pages with rounded containers, shadows, and sophisticated layouts
 - **Service Page Visual Modernization**: Converted traditional card layouts to modern containers with grid systems, statistical elements, and visual hierarchy

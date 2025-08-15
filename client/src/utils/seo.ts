@@ -71,13 +71,14 @@ const updateLinkTag = (rel: string, href: string) => {
   tag.setAttribute('href', href);
 };
 
-// Schema markup for medical practice
+// Comprehensive Schema markup for medical practice - optimized for Google Business Profile connection
 export const addMedicalBusinessSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
+    "@id": "https://healingmindsp.com/#medicalbusiness",
     "name": "Healing Minds Psychiatry - Dr. Melva Reve",
-    "description": "Compassionate psychiatric care for adults in Naples, Florida",
+    "description": "Compassionate psychiatric care for adults in Naples, Florida. Bilingual services available.",
     "url": "https://healingmindsp.com",
     "telephone": "+1-239-423-0272",
     "address": {
@@ -90,57 +91,94 @@ export const addMedicalBusinessSchema = () => {
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "26.1420",
-      "longitude": "-81.7948"
+      "latitude": 26.2044803,
+      "longitude": -81.8021344
     },
-    "openingHours": [
-      "Mo-Fr 09:00-17:00"
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "08:00",
+        "closes": "17:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Saturday", "Sunday"],
+        "opens": "00:00",
+        "closes": "00:00"
+      }
     ],
     "priceRange": "$$",
     "acceptedPaymentMethod": ["Insurance", "Cash", "Credit Card"],
-    "hasMap": "https://maps.google.com/?q=4760+Tamiami+Trl+N+25,+Naples,+FL+34103",
-    "medicalSpecialty": ["Psychiatry", "Adult Psychiatry", "Anxiety Treatment", "Depression Treatment"]
+    "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry+%7C+Naples/@26.2044803,-81.8021344,17z",
+    "medicalSpecialty": ["Psychiatry", "Adult Psychiatry", "Anxiety Treatment", "Depression Treatment", "ADHD Treatment", "PTSD Treatment", "Bipolar Treatment"],
+    "sameAs": [
+      "https://healingmindsp.com",
+      "https://www.google.com/maps/place/Healing+Minds+Psychiatry+%7C+Naples/@26.2044803,-81.8021344,17z"
+      // Add social media profiles here when available (Facebook, LinkedIn, etc.)
+    ]
   };
 
-  // Remove existing schema
-  const existingSchema = document.querySelector('script[type="application/ld+json"]');
+  // Remove existing medical business schema only
+  const existingSchema = document.querySelector('script[type="application/ld+json"]#medical-business-schema');
   if (existingSchema) {
     existingSchema.remove();
   }
 
-  // Add new schema
+  // Add enhanced schema
   const script = document.createElement('script');
   script.type = 'application/ld+json';
-  script.textContent = JSON.stringify(schema);
+  script.id = 'medical-business-schema';
+  script.textContent = JSON.stringify(schema, null, 2);
   document.head.appendChild(script);
 };
 
-// Physician schema
+// Enhanced Physician schema integrated with medical business
 export const addPhysicianSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Physician",
+    "@id": "https://healingmindsp.com/#physician",
     "name": "Dr. Melva Reve",
     "jobTitle": "Psychiatrist",
     "worksFor": {
       "@type": "MedicalOrganization",
-      "name": "Healing Minds Psychiatry"
+      "@id": "https://healingmindsp.com/#medicalbusiness",
+      "name": "Healing Minds Psychiatry",
+      "url": "https://healingmindsp.com",
+      "telephone": "+1-239-423-0272",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "4760 Tamiami Trl N #25",
+        "addressLocality": "Naples",
+        "addressRegion": "FL",
+        "postalCode": "34103",
+        "addressCountry": "US"
+      }
     },
-    "medicalSpecialty": "Psychiatry",
+    "medicalSpecialty": ["Psychiatry", "Adult Psychiatry"],
     "alumniOf": "University of Miami Miller School of Medicine",
     "memberOf": "American Psychiatric Association",
-    // "hasCredential": "Board Certified Psychiatrist",
-    "knows": ["English", "Spanish"],
+    "hasCredential": "Board Certified Psychiatrist",
+    "knowsLanguage": ["English", "Spanish"],
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "4760 Tamiami Trl N #25",
       "addressLocality": "Naples",
       "addressRegion": "FL",
+      "postalCode": "34103",
       "addressCountry": "US"
-    }
+    },
+    "sameAs": [
+      "https://healingmindsp.com",
+      "https://www.google.com/maps/place/Healing+Minds+Psychiatry+%7C+Naples/@26.2044803,-81.8021344,17z"
+      // Add professional profiles here when available (LinkedIn, medical directories, etc.)
+    ]
   };
 
   const script = document.createElement('script');
   script.type = 'application/ld+json';
+  script.id = 'physician-schema';
   script.textContent = JSON.stringify(schema);
   document.head.appendChild(script);
 };
