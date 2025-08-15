@@ -81,46 +81,28 @@ const Footer = () => {
               </Button>
             </div>
 
-            {/* Newsletter Section */}
+            {/* Social Media */}
             <div>
-              <p className="text-green-200 mb-4 max-w-md text-lg leading-relaxed">
-                {language === 'en'
-                  ? 'Join our newsletter to stay up to date on mental health resources and practice updates.'
-                  : 'Únase a nuestro boletín para mantenerse al día sobre recursos de salud mental y actualizaciones de la práctica.'
-                }
-              </p>
-              <form onSubmit={handleNewsletterSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="footer-email" className="block text-base font-medium text-green-200 mb-2">
-                    {language === 'en' ? 'Enter your email' : 'Ingresa tu email'}
-                  </label>
-                  <div className="flex gap-3">
-                    <input
-                      type="email"
-                      id="footer-email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder={language === 'en' ? 'your@email.com' : 'tu@email.com'}
-                      className="flex-1 px-4 py-3 bg-green-800/50 border border-green-700 rounded-lg text-white placeholder-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                      required
-                      data-testid="newsletter-email-input"
-                    />
-                    <Button
-                      type="submit"
-                      className="px-6 py-6 sm:py-7 bg-green-600 hover:bg-green-500 text-white text-base sm:text-lg rounded-lg font-semibold transition-colors duration-200"
-                      data-testid="newsletter-submit-button"
+              <h5 className="text-lg font-body font-bold text-white mb-4" data-testid="footer-social-title">
+                {language === 'en' ? <>Follow <span className="font-display italic text-green-200">Us</span></> : <><span className="font-display italic text-green-200">Síguenos</span></>}
+              </h5>
+              <div className="flex gap-4" data-testid="footer-social-links">
+                {socialLinks.map((social, index) => {
+                  const IconComponent = social.icon;
+                  return (
+                    <a
+                      key={index}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-green-800/50 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-200 group"
+                      data-testid={`footer-social-${social.label.toLowerCase()}`}
                     >
-                      {language === 'en' ? 'Subscribe' : 'Suscribirse'}
-                    </Button>
-                  </div>
-                </div>
-                <p className="text-sm text-green-300">
-                  {language === 'en'
-                    ? 'By subscribing you agree to our Privacy Policy and provide consent to receive updates from our practice.'
-                    : 'Al suscribirse, acepta nuestra Política de Privacidad y da su consentimiento para recibir actualizaciones de nuestra práctica.'
-                  }
-                </p>
-              </form>
+                      <IconComponent className="w-5 h-5 text-green-200 group-hover:text-white" />
+                    </a>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
@@ -174,12 +156,12 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Quick Links & Social */}
+              {/* Quick Links */}
               <div>
                 <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
                   {language === 'en' ? <>Quick <span className="font-display italic text-green-200">Links</span></> : <>Enlaces <span className="font-display italic text-green-200">Rápidos</span></>}
                 </h4>
-                <ul className="space-y-3 mb-6" data-testid="footer-quick-links-list">
+                <ul className="space-y-3" data-testid="footer-quick-links-list">
                   {quickLinks.map((link, index) => (
                     <li key={index}>
                       <Link 
@@ -193,30 +175,6 @@ const Footer = () => {
                     </li>
                   ))}
                 </ul>
-
-                {/* Social Media */}
-                <div>
-                  <h5 className="text-lg font-body font-bold text-white mb-4" data-testid="footer-social-title">
-                    {language === 'en' ? <>Follow <span className="font-display italic text-green-200">Us</span></> : <><span className="font-display italic text-green-200">Síguenos</span></>}
-                  </h5>
-                  <div className="flex gap-4" data-testid="footer-social-links">
-                    {socialLinks.map((social, index) => {
-                      const IconComponent = social.icon;
-                      return (
-                        <a
-                          key={index}
-                          href={social.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 bg-green-800/50 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-200 group"
-                          data-testid={`footer-social-${social.label.toLowerCase()}`}
-                        >
-                          <IconComponent className="w-5 h-5 text-green-200 group-hover:text-white" />
-                        </a>
-                      );
-                    })}
-                  </div>
-                </div>
               </div>
             </div>
 
