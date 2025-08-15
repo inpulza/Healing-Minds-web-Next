@@ -7,7 +7,7 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Brain } from 'lucide-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Brain, Activity, Sparkles } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconTarget } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
@@ -383,29 +383,79 @@ const AdhdTreatment = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {symptoms.map((category, index) => (
-                <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-xl font-body font-bold text-green-800 flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
-                      </div>
-                      {category.category}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {category.items.map((item, itemIndex) => (
-                        <div key={itemIndex} className="flex items-center gap-3">
-                          <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                          <span className="text-gray-700 font-body text-sm">{item}</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+              {symptoms.map((category, index) => {
+                const backgroundClasses = {
+                  0: 'bg-blue-50',
+                  1: 'bg-green-50', 
+                  2: 'bg-purple-50'
+                };
+                
+                return (
+                  <div
+                    key={index}
+                    className={`rounded-2xl sm:rounded-3xl ${backgroundClasses[index]} min-h-[400px] flex flex-col`}
+                  >
+                    <div className="p-6 sm:p-8 text-green-800 flex flex-col h-full">
+                      {/* Header */}
+                      <div className="text-center mb-6">
+                        <div className="inline-flex p-4 rounded-2xl mb-4">
+                          <Brain className="w-8 h-8 text-green-800" />
                         </div>
-                      ))}
+                        
+                        <div className="px-3 py-1 rounded-full text-xs font-bold text-green-800 inline-block mb-3">
+                          {language === 'en' ? 'Category' : 'Categoría'} {index + 1}
+                        </div>
+                        
+                        <h3 className="text-xl sm:text-2xl font-display font-bold mb-3 text-green-800">
+                          {category.category}
+                        </h3>
+                        
+                        <p className="text-green-800 font-body leading-relaxed text-sm sm:text-base">
+                          {language === 'en'
+                            ? 'Common symptoms that affect daily functioning and quality of life.'
+                            : 'Síntomas comunes que afectan el funcionamiento diario y la calidad de vida.'
+                          }
+                        </p>
+                      </div>
+
+                      {/* Features List */}
+                      <div className="flex-grow">
+                        <div className="space-y-3 mb-6">
+                          {category.items.map((item, itemIndex) => (
+                            <div 
+                              key={itemIndex}
+                              className="flex items-center gap-3 p-3 rounded-xl"
+                            >
+                              <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
+                              <span className="text-sm font-body text-green-800">
+                                {item}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Footer */}
+                      <div className="mt-auto">
+                        <div className="p-4 rounded-xl bg-[#ffffff]">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-green-800">
+                              {language === 'en' ? 'Symptom Focus' : 'Enfoque de Síntoma'}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <Activity className="w-4 h-4 text-green-800" />
+                              <span className="text-xs font-medium text-green-800">
+                                {language === 'en' ? 'Daily Impact' : 'Impacto Diario'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -429,22 +479,62 @@ const AdhdTreatment = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {treatments.map((treatment, index) => (
-                <Card key={index} className="border-blue-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-8">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-600 font-bold text-lg">{index + 1}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {treatments.map((treatment, index) => {
+                const backgroundClasses = {
+                  0: 'bg-blue-50',
+                  1: 'bg-green-50',
+                  2: 'bg-purple-50',
+                  3: 'bg-orange-50',
+                  4: 'bg-teal-50',
+                  5: 'bg-pink-50'
+                };
+                
+                return (
+                  <div
+                    key={index}
+                    className={`rounded-2xl sm:rounded-3xl ${backgroundClasses[index]} min-h-[300px] flex flex-col`}
+                  >
+                    <div className="p-6 sm:p-8 text-green-800 flex flex-col h-full">
+                      {/* Header */}
+                      <div className="text-center mb-6">
+                        <div className="inline-flex p-4 rounded-2xl mb-4">
+                          <CheckCircle className="w-8 h-8 text-green-800" />
+                        </div>
+                        
+                        <div className="px-3 py-1 rounded-full text-xs font-bold text-green-800 inline-block mb-3">
+                          {language === 'en' ? 'Step' : 'Paso'} {index + 1}
+                        </div>
+                        
+                        <h3 className="text-xl sm:text-2xl font-display font-bold mb-3 text-green-800">
+                          {treatment.title}
+                        </h3>
+                        
+                        <p className="text-green-800 font-body leading-relaxed text-sm sm:text-base">
+                          {treatment.description}
+                        </p>
                       </div>
-                      <div>
-                        <h3 className="text-xl font-body font-bold text-green-800 mb-3">{treatment.title}</h3>
-                        <p className="text-gray-600 font-body leading-relaxed">{treatment.description}</p>
+
+                      {/* Footer */}
+                      <div className="mt-auto">
+                        <div className="p-4 rounded-xl bg-[#ffffff]">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-green-800">
+                              {language === 'en' ? 'Treatment Focus' : 'Enfoque de Tratamiento'}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <Sparkles className="w-4 h-4 text-green-800" />
+                              <span className="text-xs font-medium text-green-800">
+                                {language === 'en' ? 'Expert Care' : 'Atención Experta'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
