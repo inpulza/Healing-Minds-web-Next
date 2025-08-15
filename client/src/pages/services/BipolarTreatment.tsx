@@ -575,7 +575,7 @@ const BipolarTreatment = () => {
                     <div className="p-6 sm:p-8 text-green-800 flex flex-col h-full">
                       {/* Header */}
                       <div className="text-center mb-6">
-                        <div className="inline-flex p-4 rounded-2xl mb-4">
+                        <div className="inline-flex p-4 rounded-2xl mb-4 bg-[#00ff5e5c]">
                           <Activity className="w-8 h-8 text-green-800" />
                         </div>
                         
