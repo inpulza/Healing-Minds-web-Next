@@ -50,13 +50,8 @@ const Footer = () => {
             {/* Brand */}
             <div className="mb-8">
               <Link href="/" className="inline-block">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-green-500 rounded-full mr-3 flex items-center justify-center">
-                    <div className="text-white font-display font-bold text-lg">H</div>
-                  </div>
-                  <div className="text-2xl font-display font-bold text-white">
-                    Healing Minds
-                  </div>
+                <div className="text-2xl font-body font-bold text-white">
+                  Healing Minds <span className="text-green-200">Psychiatry</span>
                 </div>
               </Link>
             </div>

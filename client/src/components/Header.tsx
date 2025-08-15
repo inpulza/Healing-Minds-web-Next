@@ -102,13 +102,8 @@ const Header = () => {
         <div className="flex justify-between items-center h-32">
           {/* Logo */}
           <Link href="/" data-testid="logo-link">
-            <div className="flex items-center">
-              <div className="w-8 h-8 min-w-[2rem] min-h-[2rem] bg-green-600 rounded-full mr-3 flex items-center justify-center flex-shrink-0">
-                <div className="text-white font-display font-bold text-sm">O</div>
-              </div>
-              <div className="text-2xl font-body font-bold text-green-800">
-                Healing <span className="font-display italic text-green-700">Minds</span>
-              </div>
+            <div className="text-2xl font-body font-bold text-green-800">
+              Healing Minds <span className="text-green-700">Psychiatry</span>
             </div>
           </Link>
 
