@@ -71,13 +71,14 @@ const updateLinkTag = (rel: string, href: string) => {
   tag.setAttribute('href', href);
 };
 
-// Comprehensive Schema markup for medical practice - optimized for Google Business Profile connection
+// Complete Medical Clinic Schema - optimized for Google Business Profile connection
 export const addMedicalBusinessSchema = () => {
   const schema = {
     "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
-    "name": "Healing Minds Psychiatry - Dr. Melva Reve",
-    "description": "Compassionate psychiatric care for adults in Naples, Florida. Bilingual services available.",
+    "@type": "MedicalClinic",
+    "name": "Healing Minds Psychiatry",
+    "description": "Healing Minds Psychiatry (Tamiami): Su centro de confianza para la salud mental en Naples, FL. Dirigidos por la Dra. Melva Reve, psiquiatra bilingüe (español/inglés), ofrecemos atención compasiva para ansiedad, depresión y TDAH. Nuestra oficina en Tamiami Trail N proporciona evaluaciones psiquiátricas, manejo de medicamentos y telepsiquiatría.",
+    "image": "/src/assets/hero-doctor-hq.webp",
     "url": "https://healingmindsp.com",
     "telephone": "+1-239-423-0272",
     "address": {
@@ -90,31 +91,63 @@ export const addMedicalBusinessSchema = () => {
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": 26.2044803,
-      "longitude": -81.8021344
+      "latitude": "26.2044803",
+      "longitude": "-81.8021344"
     },
     "openingHoursSpecification": [
       {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
         "opens": "08:00",
         "closes": "17:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Saturday", "Sunday"],
-        "opens": "00:00",
-        "closes": "00:00"
       }
     ],
-    "priceRange": "$$",
-    "acceptedPaymentMethod": ["Insurance", "Cash", "Credit Card"],
-    "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry+%7C+Naples/@26.2044803,-81.8021344,17z",
-    "medicalSpecialty": ["Psychiatry", "Adult Psychiatry", "Anxiety Treatment", "Depression Treatment", "ADHD Treatment", "PTSD Treatment", "Bipolar Treatment"],
+    "medicalSpecialty": "Psychiatry",
+    "availableService": [
+      {
+        "@type": "MedicalTherapy",
+        "name": "Anxiety Treatment"
+      },
+      {
+        "@type": "MedicalTherapy",
+        "name": "Depression Treatment"
+      },
+      {
+        "@type": "MedicalTherapy",
+        "name": "ADHD Treatment"
+      },
+      {
+        "@type": "MedicalTherapy",
+        "name": "PTSD Treatment"
+      },
+      {
+        "@type": "MedicalTherapy",
+        "name": "Bipolar Treatment"
+      },
+      {
+        "@type": "MedicalProcedure",
+        "name": "Medication Management"
+      },
+      {
+        "@type": "MedicalProcedure",
+        "name": "Telepsychiatry"
+      }
+    ],
+    "member": {
+      "@type": "Physician",
+      "name": "Dr. Melva Reve",
+      "jobTitle": "Psychiatrist",
+      "knowsLanguage": ["es-US", "en-US"]
+    },
     "sameAs": [
       "https://healingmindsp.com",
       "https://www.google.com/maps/place/Healing+Minds+Psychiatry+%7C+Naples/@26.2044803,-81.8021344,17z"
-      // Add social media profiles here when available (Facebook, LinkedIn, etc.)
     ]
   };
 
@@ -132,50 +165,10 @@ export const addMedicalBusinessSchema = () => {
   document.head.appendChild(script);
 };
 
-// Enhanced Physician schema integrated with medical business
+// Simplified: The physician info is now integrated into the main MedicalClinic schema above
+// This eliminates duplicate schemas and follows Google's latest recommendations
 export const addPhysicianSchema = () => {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Physician",
-    "name": "Dr. Melva Reve",
-    "jobTitle": "Psychiatrist",
-    "worksFor": {
-      "@type": "MedicalOrganization",
-      "name": "Healing Minds Psychiatry",
-      "url": "https://healingmindsp.com",
-      "telephone": "+1-239-423-0272",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "4760 Tamiami Trl N #25",
-        "addressLocality": "Naples",
-        "addressRegion": "FL",
-        "postalCode": "34103",
-        "addressCountry": "US"
-      }
-    },
-    "medicalSpecialty": ["Psychiatry", "Adult Psychiatry"],
-    "alumniOf": "University of Miami Miller School of Medicine",
-    "memberOf": "American Psychiatric Association",
-    "hasCredential": "Board Certified Psychiatrist",
-    "knowsLanguage": ["English", "Spanish"],
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "4760 Tamiami Trl N #25",
-      "addressLocality": "Naples",
-      "addressRegion": "FL",
-      "postalCode": "34103",
-      "addressCountry": "US"
-    },
-    "sameAs": [
-      "https://healingmindsp.com",
-      "https://www.google.com/maps/place/Healing+Minds+Psychiatry+%7C+Naples/@26.2044803,-81.8021344,17z"
-      // Add professional profiles here when available (LinkedIn, medical directories, etc.)
-    ]
-  };
-
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.id = 'physician-schema';
-  script.textContent = JSON.stringify(schema);
-  document.head.appendChild(script);
+  // Physician info is now included in the main MedicalClinic schema as "member"
+  // No separate physician schema needed
+  console.log('Physician info integrated into MedicalClinic schema');
 };

@@ -1,0 +1,74 @@
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic",
+  "name": "Healing Minds Psychiatry",
+  "description": "Healing Minds Psychiatry (Tamiami): Su centro de confianza para la salud mental en Naples, FL. Dirigidos por la Dra. Melva Reve, psiquiatra bilingüe (español/inglés), ofrecemos atención compasiva para ansiedad, depresión y TDAH. Nuestra oficina en Tamiami Trail N proporciona evaluaciones psiquiátricas, manejo de medicamentos y telepsiquiatría.",
+  "image": "https://www.internationalmedsolutions.com/clinic/angeles-imagen-diagnostica/",
+  "url": "https://www.healingmindsp.com/locations/naples",
+  "telephone": "+1-239-423-0272",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "4760 Tamiami Trl N #25",
+    "addressLocality": "Naples",
+    "addressRegion": "FL",
+    "postalCode": "34103",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "26.208470",
+    "longitude": "-81.801040"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "08:00",
+      "closes": "17:00"
+    }
+  ],
+  "medicalSpecialty": "Psychiatry",
+  "availableService": [
+    {
+      "@type": "MedicalTherapy",
+      "name": "Anxiety Treatment"
+    },
+    {
+      "@type": "MedicalTherapy",
+      "name": "Depression Treatment"
+    },
+    {
+      "@type": "MedicalTherapy",
+      "name": "ADHD Treatment"
+    },
+    {
+      "@type": "MedicalTherapy",
+      "name": "PTSD Treatment"
+    },
+    {
+      "@type": "MedicalTherapy",
+      "name": "Bipolar Treatment"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Medication Management"
+    },
+    {
+      "@type": "MedicalProcedure",
+      "name": "Telepsychiatry"
+    }
+  ],
+  "member": {
+      "@type": "Physician",
+      "name": "Dr. Melva Reve",
+      "jobTitle": "Psychiatrist",
+      "knowsLanguage": ["es-US", "en-US"],
+      "sameAs": "https://www.doximity.com/pub/melva-reve-md"
+    }
+}
