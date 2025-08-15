@@ -53,7 +53,7 @@ const CharmHealthBooking = ({
   if (variant === 'compact') {
     return (
       <div className={`flex items-center gap-3 ${className}`}>
-        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 h-10 px-4 flex items-center text-sm">
+        <Badge variant="outline" className="bg-[#ffffff] text-blue-700 border-blue-200 h-10 px-4 flex items-center text-sm">
           <VideoIcon className="w-4 h-4 mr-2" />
           {currentContent.badge}
         </Badge>
