@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { useAnalytics } from '@/hooks/use-analytics';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { initGA } from '@/lib/analytics';
 import { addMedicalBusinessSchema, addPhysicianSchema } from '@/utils/seo';
 import Home from '@/pages/Home';
@@ -28,6 +29,9 @@ import MedicationManagement from '@/pages/services/MedicationManagement';
 function Router() {
   // Track page views when routes change
   useAnalytics();
+  
+  // Scroll to top on route changes
+  useScrollToTop();
   
   return (
     <Switch>
