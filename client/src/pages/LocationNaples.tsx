@@ -23,6 +23,9 @@ import {
 } from 'lucide-react';
 import { IconSun, IconMapPin, IconBrain } from '@tabler/icons-react';
 
+// Import office photo
+import officePhoto from '@assets/_MG_3635_1755254273937.JPG';
+
 const LocationNaples = () => {
   const { language } = useLanguage();
 
@@ -343,17 +346,14 @@ const LocationNaples = () => {
                   {/* Photo - Fills remaining space */}
                   <div className="flex-1">
                     <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[10rem]">
-                      <div className="w-full h-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                        {/* Placeholder for now - you can replace with actual office photo */}
-                        <div className="text-center p-8">
-                          <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <MapPin className="w-8 h-8 text-white" />
-                          </div>
-                          <p className="text-green-800 font-body font-semibold">
-                            {language === 'en' ? 'Naples Office Location' : 'Ubicación de la Oficina de Naples'}
-                          </p>
-                        </div>
-                      </div>
+                      <img 
+                        src={officePhoto}
+                        alt="Dr. Melva Reve in her Naples psychiatric office - Professional medical environment"
+                        className="w-full h-full object-cover object-center"
+                        loading="lazy"
+                        decoding="async"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
                     </div>
                   </div>
                 </div>
