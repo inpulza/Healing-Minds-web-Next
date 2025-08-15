@@ -57,7 +57,7 @@ const InsuranceLogos = () => {
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="max-w-full max-h-16 sm:max-h-20 lg:max-h-24 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                  className="max-w-full max-h-20 sm:max-h-24 lg:max-h-28 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
                   loading="lazy"
                   decoding="async"
                 />
