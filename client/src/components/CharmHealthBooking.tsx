@@ -163,8 +163,7 @@ const CharmHealthBooking = ({
           
           <Button
             onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
-            variant="outline"
-            className="text-blue-600 border-blue-200 hover:bg-blue-50"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
             data-testid="button-charm-health-default"
           >
             <Calendar className="w-4 h-4 mr-2" />
