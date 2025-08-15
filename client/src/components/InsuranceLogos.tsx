@@ -3,14 +3,10 @@ import { useLanguage } from '@/hooks/useLanguage';
 // Import insurance logos
 import aetnaLogo from '@/assets/insurance-aetna.png';
 import cignaLogo from '@/assets/insurance-cigna.png';
-import doctorsLogo from '@/assets/insurance-doctors.png';
 import medicareLogo from '@/assets/insurance-medicare.png';
 import firstHealthLogo from '@/assets/insurance-first-health.png';
-import floridaBlueLogo from '@/assets/insurance-florida-blue.png';
 import medicaidLogo from '@/assets/insurance-medicaid.png';
-import unitedLogo from '@/assets/insurance-united.png';
 import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.png';
-import oscarLogo from '@/assets/insurance-oscar.png';
 import champvaLogo from '@/assets/insurance-champva.png';
 import sunshineHealthLogo from '@/assets/insurance-sunshine.png';
 import avmedLogo from '@/assets/insurance-avmed.png';
@@ -23,14 +19,10 @@ const InsuranceLogos = () => {
   const insuranceLogos = [
     { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
     { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
-    { src: doctorsLogo, alt: 'Doctors Healthcare Plans', name: 'Doctors Healthcare Plans' },
     { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
     { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
-    { src: floridaBlueLogo, alt: 'Florida Blue', name: 'Florida Blue' },
     { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
-    { src: unitedLogo, alt: 'United Healthcare', name: 'United Healthcare' },
     { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' },
-    { src: oscarLogo, alt: 'Oscar Health', name: 'Oscar' },
     { src: champvaLogo, alt: 'ChampVA', name: 'ChampVA' },
     { src: sunshineHealthLogo, alt: 'Sunshine Health', name: 'Sunshine Health' },
     { src: avmedLogo, alt: 'AvMed', name: 'AvMed' },
