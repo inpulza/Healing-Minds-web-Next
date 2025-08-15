@@ -501,12 +501,16 @@ const AdhdTreatment = () => {
                     <div className="p-6 sm:p-8 text-green-800 flex flex-col h-full">
                       {/* Header */}
                       <div className="text-center mb-6">
-                        <div className="inline-flex p-4 rounded-2xl mb-4">
-                          <CheckCircle className="w-8 h-8 text-green-800" />
-                        </div>
-                        
-                        <div className="px-3 py-1 rounded-full text-xs font-bold text-green-800 inline-block mb-3">
-                          {language === 'en' ? 'Step' : 'Paso'} {index + 1}
+                        {/* Icon and Step Group */}
+                        <div className="mb-4">
+                          <div className="inline-flex p-4 rounded-2xl">
+                            <CheckCircle className="w-8 h-8 text-green-800" />
+                          </div>
+                          <div className="block">
+                            <div className="px-3 py-1 rounded-full text-xs font-bold text-green-800 inline-block mt-2">
+                              {language === 'en' ? 'Step' : 'Paso'} {index + 1}
+                            </div>
+                          </div>
                         </div>
                         
                         <h3 className="text-xl sm:text-2xl font-display font-bold mb-3 text-green-800">
