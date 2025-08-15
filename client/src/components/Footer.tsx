@@ -217,11 +217,11 @@ const Footer = () => {
               <div className="flex items-center text-green-200 text-sm">
                 <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
                 <a 
-                  href="mailto:info@healingmindsnaples.com" 
+                  href="mailto:info@healingmindsp.com" 
                   className="hover:text-white transition-colors"
                   data-testid="footer-email"
                 >
-                  info@healingmindsnaples.com
+                  info@healingmindsp.com
                 </a>
               </div>
             </div>

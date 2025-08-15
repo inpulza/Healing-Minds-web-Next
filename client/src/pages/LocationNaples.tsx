@@ -6,6 +6,7 @@ import { updateSEO } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import WellnessIcon from '@/components/WellnessIcon';
 import { 
   MapPin, 
   Phone, 
@@ -17,8 +18,10 @@ import {
   Users,
   CheckCircle,
   ArrowRight,
-  Navigation
+  Navigation,
+  Calendar
 } from 'lucide-react';
+import { IconSun, IconMapPin, IconBrain } from '@tabler/icons-react';
 
 const LocationNaples = () => {
   const { language } = useLanguage();
@@ -40,12 +43,18 @@ const LocationNaples = () => {
     updateSEO(seoData);
 
     // Add LocalBusiness Schema
+    const existingScript = document.querySelector('script[data-schema="location"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+    
     const script = document.createElement('script');
     script.type = 'application/ld+json';
+    script.setAttribute('data-schema', 'location');
     script.textContent = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      "@id": "https://healingmindsnaples.com/locations/naples",
+      "@id": "https://healingmindsp.com/locations/naples",
       "name": practiceInfo.name,
       "address": {
         "@type": "PostalAddress",
@@ -57,7 +66,7 @@ const LocationNaples = () => {
       },
       "telephone": practiceInfo.phone,
       "email": practiceInfo.email,
-      "url": "https://healingmindsnaples.com",
+      "url": "https://healingmindsp.com",
       "sameAs": [
         "https://www.google.com/maps/place/4760+Tamiami+Trl+N+%2325,+Naples,+FL+34103"
       ],
@@ -75,7 +84,10 @@ const LocationNaples = () => {
     document.head.appendChild(script);
 
     return () => {
-      document.head.removeChild(script);
+      const scriptToRemove = document.querySelector('script[data-schema="location"]');
+      if (scriptToRemove && scriptToRemove.parentNode) {
+        scriptToRemove.parentNode.removeChild(scriptToRemove);
+      }
     };
   }, [language]);
 
@@ -160,35 +172,105 @@ const LocationNaples = () => {
     <div className="min-h-screen">
       <Header />
       <main>
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-20 overflow-hidden">
-          <div className="absolute inset-0 hero-modern"></div>
-          <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-5xl lg:text-7xl font-display font-bold text-green-800 mb-6 leading-tight">
-                {content.title}
+        {/* Hero Section - Service Page Style */}
+        <section className="pt-20 pb-8 sm:pb-12 lg:pb-16 bg-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Text Content Section - Full Width */}
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <WellnessIcon size="sm" color="blue">
+                  <IconMapPin />
+                </WellnessIcon>
+                <span className="text-blue-700 font-body font-semibold text-lg">
+                  {language === 'en' ? 'Find Us in Naples' : 'Encuéntranos en Naples'}
+                </span>
+              </div>
+              
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>
+                    Our Professional Practice Location in{' '}
+                    <span className="font-display italic text-green-700">Naples, FL</span>
+                  </>
+                ) : (
+                  <>
+                    Nuestra Ubicación de Práctica Profesional en{' '}
+                    <span className="font-display italic text-green-700">Naples, FL</span>
+                  </>
+                )}
               </h1>
-              <p className="text-xl lg:text-2xl text-gray-600 font-body mb-8 leading-relaxed">
-                {content.subtitle}
+              
+              <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed max-w-4xl mx-auto">
+                {language === 'en' 
+                  ? 'Discover our conveniently located psychiatric practice in the heart of Naples, Florida. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
+                  : 'Descubra nuestra práctica psiquiátrica convenientemente ubicada en el corazón de Naples, Florida. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
               </p>
+              
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
-                  className="pill-button text-lg px-8 py-6"
+                  size="lg" 
+                  className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
                   onClick={() => window.location.href = '/contact'}
-                  data-testid="button-book-appointment"
+                  data-testid="button-schedule-consultation"
                 >
-                  <Heart className="w-5 h-5 mr-2" />
-                  {content.bookNow}
+                  <Calendar className="w-5 h-5" />
+                  {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                  <ArrowRight className="w-5 h-5" />
                 </Button>
+                
                 <Button 
-                  variant="outline"
-                  className="text-lg px-8 py-6 rounded-full border-2 border-green-600 text-green-700 hover:bg-green-50 font-body"
+                  variant="outline" 
+                  size="lg" 
+                  className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
                   onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
                   data-testid="button-get-directions"
                 >
-                  <Navigation className="w-5 h-5 mr-2" />
+                  <Navigation className="w-5 h-5" />
                   {content.getDirections}
                 </Button>
+              </div>
+            </div>
+
+            {/* Stats Tags - Service Page Style */}
+            <div className="mt-16">
+              <div className="max-w-4xl mx-auto">
+                <div className="flex flex-wrap gap-4 justify-center">
+                  {[
+                    {
+                      en: '15+ Years Experience',
+                      es: '15+ Años de Experiencia'
+                    },
+                    {
+                      en: 'Bilingual Care Available',
+                      es: 'Atención Bilingüe Disponible'
+                    },
+                    {
+                      en: 'Modern Facilities',
+                      es: 'Instalaciones Modernas'
+                    },
+                    {
+                      en: 'Convenient Naples Location',
+                      es: 'Ubicación Conveniente en Naples'
+                    },
+                    {
+                      en: 'Insurance Accepted',
+                      es: 'Se Acepta Seguro'
+                    },
+                    {
+                      en: 'Same Day Appointments',
+                      es: 'Citas el Mismo Día'
+                    }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-3 bg-white rounded-full px-5 py-2.5 shadow-md hover:shadow-lg transition-shadow duration-200 border border-green-100">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+                      </div>
+                      <span className="text-gray-700 font-body font-medium text-sm">
+                        {language === 'en' ? item.en : item.es}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -222,7 +304,7 @@ const LocationNaples = () => {
         {/* NAP Information Section */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 h-auto lg:h-[800px]">
               {/* Contact Information */}
               <div className="space-y-8">
                 <div>
@@ -308,13 +390,13 @@ const LocationNaples = () => {
                 </div>
               </div>
 
-              {/* Google Map */}
-              <div>
+              {/* Google Map - Extended Height */}
+              <div className="h-full flex flex-col">
                 <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
                   {content.mapTitle}
                 </h2>
-                <Card className="card-modern">
-                  <div className="aspect-video rounded-2xl overflow-hidden">
+                <Card className="card-modern flex-1">
+                  <div className="h-[600px] lg:h-[700px] rounded-2xl overflow-hidden">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
                       width="100%"

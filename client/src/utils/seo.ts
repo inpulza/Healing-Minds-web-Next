@@ -78,7 +78,7 @@ export const addMedicalBusinessSchema = () => {
     "@type": "MedicalBusiness",
     "name": "Healing Minds Psychiatry - Dr. Melva Reve",
     "description": "Compassionate psychiatric care for adults in Naples, Florida",
-    "url": "https://healingmindsnaples.com",
+    "url": "https://healingmindsp.com",
     "telephone": "+1-239-423-0272",
     "address": {
       "@type": "PostalAddress",

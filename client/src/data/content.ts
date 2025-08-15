@@ -6,7 +6,7 @@ export const practiceInfo = {
   doctorName: "Dr. Melva Reve",
   credentials: "MD, Psychiatry",
   phone: "(239) 423-0272",
-  email: "info@healingmindsnaples.com",
+  email: "info@healingmindsp.com",
   address: {
     street: "4760 Tamiami Trl N #25",
     city: "Naples",

@@ -125,8 +125,8 @@ const Contact = () => {
     {
       icon: Mail,
       title: t('contact.email'),
-      value: 'info@healingmindsnaples.com',
-      link: 'mailto:info@healingmindsnaples.com',
+      value: 'info@healingmindsp.com',
+      link: 'mailto:info@healingmindsp.com',
       subtext: language === 'en' ? 'We respond within 24 hours' : 'Respondemos dentro de 24 horas'
     },
     {
