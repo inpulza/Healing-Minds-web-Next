@@ -15,6 +15,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
 import adhdImage from "@assets/generated_images/ADHD_concentration_challenges_4b3ea4fb.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
+import focusImage from "@assets/dfb74c06-cc22-4bd4-a763-984d9e0fb151_1755252634353.png";
 
 const AdhdTreatment = () => {
   const { language } = useLanguage();
@@ -314,15 +315,14 @@ const AdhdTreatment = () => {
                 {/* Photo in Top Right Corner - Takes 1/2 */}
                 <div className="lg:col-span-2">
                   <div className="w-full h-full overflow-hidden rounded-xl shadow-md">
-                    <div className="w-full h-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <span className="text-green-600 font-bold">🎯</span>
-                        </div>
-                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                        <p className="text-green-500 font-body text-xs">Enfoque/concentración</p>
-                      </div>
-                    </div>
+                    <img 
+                      src={focusImage}
+                      alt="Professional therapist reviewing ADHD treatment plans - Dr. Melva Reve's modern psychiatric practice"
+                      className="w-full h-full object-cover object-center"
+                      loading="lazy"
+                      decoding="async"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
                   </div>
                 </div>
               </div>
