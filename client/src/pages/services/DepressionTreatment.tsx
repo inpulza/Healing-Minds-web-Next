@@ -441,9 +441,6 @@ const DepressionTreatment = () => {
                           <Calendar className="w-4 h-4 text-green-800" />
                         </div>
                         {language === 'en' ? 'Schedule Your Consultation' : 'Programe Su Consulta'}
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                          <ArrowRight className="w-4 h-4 text-green-800" />
-                        </div>
                       </Button>
                     </Link>
                   </div>

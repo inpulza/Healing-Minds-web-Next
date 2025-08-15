@@ -595,9 +595,6 @@ const PtsdTreatment = () => {
                           <Calendar className="w-4 h-4 text-white" />
                         </div>
                         {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
-                          <ArrowRight className="w-4 h-4 text-white" />
-                        </div>
                       </Button>
                     </Link>
                     
