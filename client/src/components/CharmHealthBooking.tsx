@@ -53,15 +53,13 @@ const CharmHealthBooking = ({
   if (variant === 'compact') {
     return (
       <div className={`flex items-center gap-3 ${className}`}>
-        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 h-8 px-3 flex items-center">
-          <VideoIcon className="w-3 h-3 mr-1" />
+        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 h-10 px-4 flex items-center text-sm">
+          <VideoIcon className="w-4 h-4 mr-2" />
           {currentContent.badge}
         </Badge>
         <Button
           onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
-          variant="outline"
-          size="sm"
-          className="text-blue-600 border-blue-200 hover:bg-blue-50 h-8"
+          className="bg-blue-600 hover:bg-blue-700 text-white h-10 px-4 text-sm font-semibold"
           data-testid="button-charm-health-compact"
         >
           <Calendar className="w-4 h-4 mr-2" />
