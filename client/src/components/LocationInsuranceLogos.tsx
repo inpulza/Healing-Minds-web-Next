@@ -1,4 +1,5 @@
 import { useLanguage } from '@/hooks/useLanguage';
+import { useEffect } from 'react';
 
 // Import insurance logos
 import aetnaLogo from '@/assets/insurance-aetna.png';
@@ -15,6 +16,15 @@ import ambetterLogo from '@/assets/insurance-ambetter.png';
 
 const LocationInsuranceLogos = () => {
   const { language } = useLanguage();
+  
+  // Preload critical insurance logos for faster loading
+  useEffect(() => {
+    const criticalLogos = [aetnaLogo, cignaLogo, medicareLogo, medicaidLogo];
+    criticalLogos.forEach(logo => {
+      const img = new Image();
+      img.src = logo;
+    });
+  }, []);
 
   const insuranceLogos = [
     { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
@@ -55,22 +65,33 @@ const LocationInsuranceLogos = () => {
 
         {/* White Background Layout */}
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
-          <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center">
-            {insuranceLogos.map((logo, index) => (
-              <div 
-                key={index} 
-                className="group"
-                data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-              >
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  className="w-36 h-28 sm:w-44 sm:h-32 lg:w-52 lg:h-36 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-            ))}
+          <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
+            {insuranceLogos.map((logo, index) => {
+              const isHighPriority = index < 4; // First 4 images get high priority
+              return (
+                <div 
+                  key={index} 
+                  className="group flex-shrink-0"
+                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="w-36 h-28 sm:w-44 sm:h-32 lg:w-52 lg:h-36 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110"
+                    width={isHighPriority ? 208 : undefined}
+                    height={isHighPriority ? 144 : undefined}
+                    loading={isHighPriority ? "eager" : "lazy"}
+                    fetchPriority={isHighPriority ? "high" : "low"}
+                    decoding="async"
+                    style={{
+                      aspectRatio: '13/9',
+                      minWidth: '144px',
+                      minHeight: '112px'
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
           
           {/* Bottom Note */}
