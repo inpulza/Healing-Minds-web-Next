@@ -45,19 +45,19 @@ const InsuranceLogos = () => {
           </p>
         </div>
 
-        {/* Masonry Layout - Same Size Containers */}
+        {/* Masonry Layout - No Background */}
         <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
-          <div className="flex flex-wrap gap-4 sm:gap-6 justify-center items-start">
+          <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center">
             {insuranceLogos.map((logo, index) => (
               <div 
                 key={index} 
-                className="bg-white rounded-xl p-6 sm:p-8 w-32 h-24 sm:w-36 sm:h-28 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-center group"
+                className="group"
                 data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 <img
                   src={logo.src}
                   alt={logo.alt}
-                  className="max-w-full max-h-64 sm:max-h-72 lg:max-h-80 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                  className="w-28 h-20 sm:w-32 sm:h-24 lg:w-36 lg:h-28 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110"
                   loading="lazy"
                   decoding="async"
                 />
