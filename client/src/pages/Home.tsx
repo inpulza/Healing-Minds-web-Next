@@ -17,7 +17,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import { updateSEO } from '@/utils/seo';
 import { MapPin, Users, VideoIcon, Navigation, Monitor, CheckCircle, Clock } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import floridaMap from '@/assets/florida-map.png';
+import floridaMap from '../assets/florida-map.png';
 
 const Home = () => {
   const { language } = useLanguage();
