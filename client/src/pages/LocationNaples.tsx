@@ -22,7 +22,8 @@ import {
   Navigation,
   Calendar
 } from 'lucide-react';
-import { IconSun, IconMapPin, IconBrain } from '@tabler/icons-react';
+import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, IconLeaf } from '@tabler/icons-react';
+import { Link } from 'wouter';
 
 // Import office photo
 import officePhoto from '@/assets/office-photo.jpg';
@@ -504,74 +505,150 @@ const LocationNaples = () => {
           </div>
         </section>
 
-        {/* Services & Insurance Section */}
-        <section className="py-20 bg-soft-mint">
+        {/* Services Section */}
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {/* Services */}
-              <div>
-                <h2 className="text-3xl font-display font-bold text-green-800 mb-8">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <IconBrain />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {content.servicesTitle}
                 </h2>
-                <div className="space-y-4">
-                  {content.services.map((service, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-green-600 rounded-full flex-shrink-0"></div>
-                      <span className="text-gray-700 font-body text-lg">{service}</span>
-                    </div>
-                  ))}
-                </div>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <IconHeart />
+                </WellnessIcon>
               </div>
-
-              {/* Insurance Plans */}
-              <div>
-                <h2 className="text-3xl font-display font-bold text-green-800 mb-8">
-                  {content.insuranceTitle}
-                </h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {acceptedInsurance.map((insurance, index) => (
-                    <div key={index} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
-                      <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mb-3">
-                        <Shield className="w-6 h-6 text-gray-500" />
-                      </div>
-                      <p className="text-sm font-body text-gray-700 leading-tight">{insurance}</p>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Comprehensive psychiatric services available at our Naples location, tailored to meet your mental health needs with compassionate care.'
+                  : 'Servicios psiquiátricos integrales disponibles en nuestra ubicación de Naples, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                {
+                  id: 'anxiety',
+                  title: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad',
+                  description: language === 'en' 
+                    ? 'Expert care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments.'
+                    : 'Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.',
+                  icon: IconBrain,
+                  link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
+                },
+                {
+                  id: 'depression',
+                  title: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión',
+                  description: language === 'en'
+                    ? 'Comprehensive care for major depression with personalized treatment plans and ongoing support.'
+                    : 'Atención integral para depresión mayor con planes de tratamiento personalizados y apoyo continuo.',
+                  icon: IconSun,
+                  link: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
+                },
+                {
+                  id: 'adhd',
+                  title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
+                  description: language === 'en'
+                    ? 'Specialized evaluation and treatment for adults and teens to improve focus and daily functioning.'
+                    : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
+                  icon: IconMoodHappy,
+                  link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah'
+                },
+                {
+                  id: 'ptsd',
+                  title: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT',
+                  description: language === 'en'
+                    ? 'Trauma-informed psychiatric care to help you heal and reclaim your life from traumatic experiences.'
+                    : 'Atención psiquiátrica informada en trauma para ayudarle a sanar y reclamar su vida de experiencias traumáticas.',
+                  icon: IconLeaf,
+                  link: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'
+                },
+                {
+                  id: 'bipolar',
+                  title: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar',
+                  description: language === 'en'
+                    ? 'Expert mood stabilization to help achieve emotional balance and prevent future episodes.'
+                    : 'Estabilización experta del ánimo para lograr equilibrio emocional y prevenir episodios futuros.',
+                  icon: IconHeart,
+                  link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
+                },
+                {
+                  id: 'medication-management',
+                  title: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos',
+                  description: language === 'en'
+                    ? 'Expert psychiatric medication evaluation, monitoring, and adjustment with comprehensive safety assessments.'
+                    : 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales.',
+                  icon: IconUser,
+                  link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
+                }
+              ].map((service, index) => {
+                const IconComponent = service.icon;
+                return (
+                  <div
+                    key={service.id}
+                    className="rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-white text-green-800 border border-green-100"
+                    data-testid={`service-${service.id}`}
+                  >
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 bg-green-100">
+                      <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-green-800" />
                     </div>
-                  ))}
-                </div>
-              </div>
+                    
+                    <h3 className="text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 text-green-800">
+                      {service.title}
+                    </h3>
+                    
+                    <p className="text-sm sm:text-base font-body leading-relaxed mb-4 sm:mb-5 flex-grow text-gray-600">
+                      {service.description}
+                    </p>
 
-              {/* Service Areas */}
-              <div>
-                <h2 className="text-3xl font-display font-bold text-green-800 mb-8">
-                  {content.areaTitle}
-                </h2>
-                <div className="space-y-4">
-                  {serviceAreas.map((area, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <div className="w-3 h-3 bg-green-600 rounded-full flex-shrink-0"></div>
-                      <span className="text-gray-700 font-body text-lg">{area}</span>
-                    </div>
-                  ))}
-                </div>
+                    <Link href={service.link} className="mt-auto">
+                      <Button
+                        className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 px-6 sm:px-8 py-6 sm:py-7 w-full bg-green-800 text-white hover:bg-green-700"
+                        data-testid={`service-button-${service.id}`}
+                      >
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 bg-green-700">
+                          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                        </div>
+                        <span>{language === 'en' ? 'Learn More' : 'Saber Más'}</span>
+                      </Button>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Service Areas */}
+            <div className="mt-16 text-center">
+              <h3 className="text-2xl font-display font-bold text-green-800 mb-8">
+                {content.areaTitle}
+              </h3>
+              <div className="flex flex-wrap justify-center gap-4">
+                {serviceAreas.map((area, index) => (
+                  <div key={index} className="bg-green-50 rounded-full px-4 py-2 border border-green-200">
+                    <span className="text-green-800 font-body text-sm font-medium">{area}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 bg-green-800">
+        <section className="py-20 bg-gray-50">
           <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
-            <h2 className="text-4xl lg:text-5xl font-display font-bold text-white mb-6">
+            <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-6">
               {language === 'en' ? 'Ready to Begin Your Journey?' : '¿Listo para Comenzar su Viaje?'}
             </h2>
-            <p className="text-xl text-green-100 font-body mb-8 leading-relaxed">
+            <p className="text-xl text-gray-600 font-body mb-8 leading-relaxed">
               {language === 'en' 
                 ? 'Take the first step towards better mental health. Contact us today to schedule your consultation.'
                 : 'Dé el primer paso hacia una mejor salud mental. Contáctenos hoy para programar su consulta.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                className="bg-white text-green-800 hover:bg-gray-100 text-lg px-8 py-6 rounded-full font-body font-semibold"
+                className="bg-green-800 text-white hover:bg-green-700 text-lg px-8 py-6 rounded-full font-body font-semibold"
                 onClick={() => window.location.href = '/contact'}
                 data-testid="button-schedule-consultation"
               >
@@ -580,12 +657,12 @@ const LocationNaples = () => {
               </Button>
               <Button 
                 variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-green-800 text-lg px-8 py-6 rounded-full font-body font-semibold"
+                className="border-2 border-green-800 text-green-800 hover:bg-green-800 hover:text-white text-lg px-8 py-6 rounded-full font-body font-semibold"
                 onClick={() => window.location.href = `tel:${practiceInfo.phone}`}
                 data-testid="button-call-now"
               >
-                <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-white/20 mr-2">
-                  <Phone className="w-4 h-4 text-white" />
+                <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100 mr-2">
+                  <Phone className="w-4 h-4 text-green-800" />
                 </div>
                 {content.callNow}
               </Button>
