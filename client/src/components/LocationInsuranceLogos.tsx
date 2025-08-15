@@ -19,7 +19,7 @@ const LocationInsuranceLogos = () => {
   
   // Preload critical insurance logos for faster loading
   useEffect(() => {
-    const criticalLogos = [aetnaLogo, cignaLogo, medicareLogo, medicaidLogo];
+    const criticalLogos = [aetnaLogo, cignaLogo, medicareLogo, medicaidLogo, avmedLogo, wellcareLogo, ambetterLogo];
     criticalLogos.forEach(logo => {
       const img = new Image();
       img.src = logo;
@@ -67,7 +67,7 @@ const LocationInsuranceLogos = () => {
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
           <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
             {insuranceLogos.map((logo, index) => {
-              const isHighPriority = index < 4; // First 4 images get high priority
+              const isHighPriority = index < 4 || index >= 8; // First 4 and last 3 images get high priority
               return (
                 <div 
                   key={index} 
