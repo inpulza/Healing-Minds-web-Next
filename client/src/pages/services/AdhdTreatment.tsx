@@ -263,9 +263,10 @@ const AdhdTreatment = () => {
         <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid lg:grid-cols-2 gap-12 items-end">
-                {/* Content Side */}
-                <div>
+              {/* Top Section with Content and Photo */}
+              <div className="grid lg:grid-cols-3 gap-8 mb-8">
+                {/* Content Side - Takes 2/3 */}
+                <div className="lg:col-span-2">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                     {language === 'en' ? 'Adult-Focused Care' : 'Atención Enfocada en Adultos'}
                   </div>
@@ -308,56 +309,56 @@ const AdhdTreatment = () => {
                       </div>
                     </Button>
                   </Link>
+                </div>
 
-                  {/* Photo Placeholder */}
-                  <div className="mt-8">
-                    <div className="w-full aspect-[16/9] overflow-hidden rounded-xl shadow-md">
-                      <div className="w-full h-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <span className="text-green-600 font-bold">🎯</span>
-                          </div>
-                          <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                          <p className="text-green-500 font-body text-xs">Enfoque/concentración</p>
+                {/* Photo in Top Right Corner - Takes 1/3 */}
+                <div className="lg:col-span-1">
+                  <div className="w-full aspect-[4/3] overflow-hidden rounded-xl shadow-md">
+                    <div className="w-full h-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-green-600 font-bold">🎯</span>
                         </div>
+                        <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                        <p className="text-green-500 font-body text-xs">Enfoque/concentración</p>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Treatment Options List Side */}
-                <div className="space-y-4">
-                  {[
-                    {
-                      title: language === 'en' ? 'Late-Diagnosed ADHD Assessment' : 'Evaluación de TDAH Diagnosticado Tardíamente',
-                      description: language === 'en' ? 'Comprehensive evaluation for adults who suspect they may have ADHD.' : 'Evaluación integral para adultos que sospechan que pueden tener TDAH.'
-                    },
-                    {
-                      title: language === 'en' ? 'Adult-Specific Treatment Strategies' : 'Estrategias de Tratamiento Específicas para Adultos',
-                      description: language === 'en' ? 'Tailored approaches for managing ADHD in work and personal life.' : 'Enfoques adaptados para manejar el TDAH en el trabajo y la vida personal.'
-                    },
-                    {
-                      title: language === 'en' ? 'Career and Relationship Impact' : 'Impacto en Carrera y Relaciones',
-                      description: language === 'en' ? 'Addressing how ADHD affects professional and personal relationships.' : 'Abordar cómo el TDAH afecta las relaciones profesionales y personales.'
-                    },
-                    {
-                      title: language === 'en' ? 'Workplace Accommodation Guidance' : 'Orientación para Acomodaciones Laborales',
-                      description: language === 'en' ? 'Support with obtaining appropriate workplace accommodations.' : 'Apoyo para obtener acomodaciones laborales apropiadas.'
-                    }
-                  ].map((treatment, index) => (
-                    <div key={index} className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-body font-bold text-green-800 mb-2">{treatment.title}</h3>
-                          <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
-                        </div>
+              {/* Bottom Section - Treatment Options in 2x2 Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  {
+                    title: language === 'en' ? 'Late-Diagnosed ADHD Assessment' : 'Evaluación de TDAH Diagnosticado Tardíamente',
+                    description: language === 'en' ? 'Comprehensive evaluation for adults who suspect they may have ADHD.' : 'Evaluación integral para adultos que sospechan que pueden tener TDAH.'
+                  },
+                  {
+                    title: language === 'en' ? 'Adult-Specific Treatment Strategies' : 'Estrategias de Tratamiento Específicas para Adultos',
+                    description: language === 'en' ? 'Tailored approaches for managing ADHD in work and personal life.' : 'Enfoques adaptados para manejar el TDAH en el trabajo y la vida personal.'
+                  },
+                  {
+                    title: language === 'en' ? 'Career and Relationship Impact' : 'Impacto en Carrera y Relaciones',
+                    description: language === 'en' ? 'Addressing how ADHD affects professional and personal relationships.' : 'Abordar cómo el TDAH afecta las relaciones profesionales y personales.'
+                  },
+                  {
+                    title: language === 'en' ? 'Workplace Accommodation Guidance' : 'Orientación para Acomodaciones Laborales',
+                    description: language === 'en' ? 'Support with obtaining appropriate workplace accommodations.' : 'Apoyo para obtener acomodaciones laborales apropiadas.'
+                  }
+                ].map((treatment, index) => (
+                  <div key={index} className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-body font-bold text-green-800 mb-2">{treatment.title}</h3>
+                        <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
