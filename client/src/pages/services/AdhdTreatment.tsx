@@ -22,14 +22,14 @@ const AdhdTreatment = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'ADHD Treatment Naples FL - Adult & Teen ADHD Psychiatrist | Dr. Melva Reve'
-        : 'Tratamiento TDAH Naples FL - Psiquiatra TDAH Adultos y Adolescentes | Dra. Melva Reve',
+        ? 'ADHD Treatment Naples FL - Adult ADHD Psychiatrist | Dr. Melva Reve'
+        : 'Tratamiento TDAH Naples FL - Psiquiatra TDAH Adultos | Dra. Melva Reve',
       description: language === 'en'
-        ? 'Expert ADHD treatment for adults and teens in Naples, FL. Dr. Melva Reve provides comprehensive evaluation, medication management, and behavioral strategies. Bilingual ADHD psychiatrist.'
-        : 'Tratamiento experto de TDAH para adultos y adolescentes en Naples, FL. La Dra. Melva Reve brinda evaluación integral, manejo de medicamentos y estrategias conductuales. Psiquiatra TDAH bilingüe.',
+        ? 'Expert ADHD treatment for adults in Naples, FL. Dr. Melva Reve provides comprehensive evaluation, medication management, and behavioral strategies for adults 18+. Bilingual ADHD psychiatrist.'
+        : 'Tratamiento experto de TDAH para adultos en Naples, FL. La Dra. Melva Reve brinda evaluación integral, manejo de medicamentos y estrategias conductuales para adultos 18+. Psiquiatra TDAH bilingüe.',
       keywords: language === 'en'
-        ? 'ADHD treatment Naples FL, adult ADHD Naples, teen ADHD Naples, ADHD psychiatrist Naples, ADHD medication Naples, attention deficit disorder Naples'
-        : 'tratamiento TDAH Naples FL, TDAH adultos Naples, TDAH adolescentes Naples, psiquiatra TDAH Naples, medicamento TDAH Naples, trastorno déficit atención Naples',
+        ? 'ADHD treatment Naples FL, adult ADHD Naples, ADHD psychiatrist Naples, ADHD medication Naples, attention deficit disorder Naples, adult ADD Naples'
+        : 'tratamiento TDAH Naples FL, TDAH adultos Naples, psiquiatra TDAH Naples, medicamento TDAH Naples, trastorno déficit atención Naples, ADD adultos Naples',
       lang: language,
       canonical: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah'
     };
@@ -206,8 +206,8 @@ const AdhdTreatment = () => {
             es: 'Tratamiento de TDAH en Naples, FL'
           }}
           description={{
-            en: 'Unlock your potential with expert ADHD treatment. Dr. Melva Reve provides comprehensive evaluation and personalized treatment for adults and teens with attention deficit hyperactivity disorder.',
-            es: 'Desbloquee su potencial con tratamiento experto de TDAH. La Dra. Melva Reve brinda evaluación integral y tratamiento personalizado para adultos y adolescentes con trastorno por déficit de atención e hiperactividad.'
+            en: 'Unlock your potential with expert ADHD treatment. Dr. Melva Reve provides comprehensive evaluation and personalized treatment for adults 18+ with attention deficit hyperactivity disorder.',
+            es: 'Desbloquee su potencial con tratamiento experto de TDAH. La Dra. Melva Reve brinda evaluación integral y tratamiento personalizado para adultos 18+ con trastorno por déficit de atención e hiperactividad.'
           }}
           specialNote={{
             es: '<strong>El TDAH no es una limitación, es una diferencia en el funcionamiento del cerebro.</strong> Con el tratamiento adecuado, puede aprovechar sus fortalezas únicas y alcanzar su máximo potencial. Ofrecemos evaluación y tratamiento especializado.'
@@ -243,8 +243,8 @@ const AdhdTreatment = () => {
                 es: 'Evaluación integral de TDAH'
               },
               {
-                en: 'Teen and adult treatment',
-                es: 'Tratamiento para adolescentes y adultos'
+                en: 'Adult-focused treatment',
+                es: 'Tratamiento enfocado en adultos'
               },
               {
                 en: 'Medication management',
@@ -259,77 +259,105 @@ const AdhdTreatment = () => {
           }}
         />
 
-        {/* Modern Age Groups Section */}
+        {/* Adult ADHD Treatment Section */}
         <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="text-center mb-12">
-                <div className="inline-block bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                  {language === 'en' ? 'Age-Specific Care' : 'Atención Específica por Edad'}
-                </div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>ADHD Treatment for <span className="font-display italic text-green-700">All Ages</span></>
-                  ) : (
-                    <>Tratamiento de TDAH para <span className="font-display italic text-green-700">Todas las Edades</span></>
-                  )}
-                </h2>
-                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'We provide specialized ADHD care tailored to the unique needs of different age groups, from teens navigating school to adults managing careers.'
-                    : 'Brindamos atención especializada de TDAH adaptada a las necesidades únicas de diferentes grupos de edad, desde adolescentes navegando la escuela hasta adultos manejando carreras.'
-                  }
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {ageGroups.map((group, index) => (
-                  <div key={index} className="bg-blue-50 rounded-xl p-8 border border-blue-200 hover:bg-blue-100 transition-all duration-300">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0 border border-blue-300">
-                        <span className="text-blue-600 font-bold text-lg">{index + 1}</span>
-                      </div>
-                      <div>
-                        <h3 className="text-2xl font-body font-bold text-green-800">{group.title}</h3>
-                        <p className="text-gray-600 font-body">{group.description}</p>
+              <div className="grid lg:grid-cols-2 gap-12 items-end">
+                {/* Content Side */}
+                <div>
+                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    {language === 'en' ? 'Adult-Focused Care' : 'Atención Enfocada en Adultos'}
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                    {language === 'en' ? (
+                      <>Adult ADHD Treatment in <span className="font-display italic text-green-700">Naples</span></>
+                    ) : (
+                      <>Tratamiento de TDAH para Adultos en <span className="font-display italic text-green-700">Naples</span></>
+                    )}
+                  </h2>
+                  
+                  {/* Key Stats */}
+                  <div className="grid grid-cols-2 gap-6 mb-8">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">4.4%</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Adults have ADHD' : 'Adultos tienen TDAH'}
                       </div>
                     </div>
-                    
-                    <div className="space-y-3">
-                      {group.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center gap-3">
-                          <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                          <span className="text-gray-700 font-body">{feature}</span>
-                        </div>
-                      ))}
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
+                      <div className="text-3xl font-bold text-green-600 mb-2">85%</div>
+                      <div className="text-sm text-gray-600 font-body">
+                        {language === 'en' ? 'Treatment success rate' : 'Tasa de éxito del tratamiento'}
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-              
-              {/* Photo Placeholder */}
-              <div className="mt-8">
-                <div className="w-full h-48 bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center rounded-xl">
-                  <div className="text-center">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <span className="text-green-600 font-bold">🎯</span>
-                    </div>
-                    <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
-                    <p className="text-green-500 font-body text-xs">Enfoque/concentración</p>
-                  </div>
-                </div>
-              </div>
 
-              {/* Action Section */}
-              <div className="text-center mt-12">
-                <Link href="/contact">
-                  <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
-                    <span>{language === 'en' ? 'Schedule ADHD Evaluation' : 'Programar Evaluación de TDAH'}</span>
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
-                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Many adults discover they have ADHD later in life. Dr. Melva Reve provides comprehensive evaluation and treatment specifically designed for adults 18+ with ADHD.'
+                      : 'Muchos adultos descubren que tienen TDAH más tarde en la vida. La Dra. Melva Reve brinda evaluación integral y tratamiento específicamente diseñado para adultos de 18+ con TDAH.'
+                    }
+                  </p>
+
+                  <Link href="/contact">
+                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
+                      <span>{language === 'en' ? 'Schedule Adult ADHD Evaluation' : 'Programar Evaluación de TDAH para Adultos'}</span>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      </div>
+                    </Button>
+                  </Link>
+
+                  {/* Photo Placeholder */}
+                  <div className="mt-8">
+                    <div className="w-full aspect-[16/9] overflow-hidden rounded-xl shadow-md">
+                      <div className="w-full h-full bg-green-50 border-2 border-dashed border-green-200 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span className="text-green-600 font-bold">🎯</span>
+                          </div>
+                          <p className="text-green-600 font-body text-sm">Aquí va una foto</p>
+                          <p className="text-green-500 font-body text-xs">Enfoque/concentración</p>
+                        </div>
+                      </div>
                     </div>
-                  </Button>
-                </Link>
+                  </div>
+                </div>
+
+                {/* Treatment Options List Side */}
+                <div className="space-y-4">
+                  {[
+                    {
+                      title: language === 'en' ? 'Late-Diagnosed ADHD Assessment' : 'Evaluación de TDAH Diagnosticado Tardíamente',
+                      description: language === 'en' ? 'Comprehensive evaluation for adults who suspect they may have ADHD.' : 'Evaluación integral para adultos que sospechan que pueden tener TDAH.'
+                    },
+                    {
+                      title: language === 'en' ? 'Adult-Specific Treatment Strategies' : 'Estrategias de Tratamiento Específicas para Adultos',
+                      description: language === 'en' ? 'Tailored approaches for managing ADHD in work and personal life.' : 'Enfoques adaptados para manejar el TDAH en el trabajo y la vida personal.'
+                    },
+                    {
+                      title: language === 'en' ? 'Career and Relationship Impact' : 'Impacto en Carrera y Relaciones',
+                      description: language === 'en' ? 'Addressing how ADHD affects professional and personal relationships.' : 'Abordar cómo el TDAH afecta las relaciones profesionales y personales.'
+                    },
+                    {
+                      title: language === 'en' ? 'Workplace Accommodation Guidance' : 'Orientación para Acomodaciones Laborales',
+                      description: language === 'en' ? 'Support with obtaining appropriate workplace accommodations.' : 'Apoyo para obtener acomodaciones laborales apropiadas.'
+                    }
+                  ].map((treatment, index) => (
+                    <div key={index} className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-body font-bold text-green-800 mb-2">{treatment.title}</h3>
+                          <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
