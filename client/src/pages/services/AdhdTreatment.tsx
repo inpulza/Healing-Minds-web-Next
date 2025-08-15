@@ -400,11 +400,13 @@ const AdhdTreatment = () => {
                       <div className="text-center mb-6">
                         {/* Icon and Category Group */}
                         <div className="mb-4">
-                          <div className="inline-flex p-4 rounded-2xl mb-2 bg-[#22c55e54]">
+                          <div className="inline-flex p-4 rounded-2xl bg-[#22c55e54]">
                             <Brain className="w-8 h-8 text-green-800" />
                           </div>
-                          <div className="px-3 py-1 rounded-full text-xs font-bold text-green-800 inline-block">
-                            {language === 'en' ? 'Category' : 'Categoría'} {index + 1}
+                          <div className="block">
+                            <div className="px-3 py-1 rounded-full text-xs font-bold text-green-800 inline-block mt-2">
+                              {language === 'en' ? 'Category' : 'Categoría'} {index + 1}
+                            </div>
                           </div>
                         </div>
                         
