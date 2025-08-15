@@ -8,7 +8,43 @@ import heroImage from '@assets/hero-doctor-hq.webp';
 import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
 
 const Hero = () => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+
+  const services = [
+    'Anxiety Disorders',
+    'Depression Treatment', 
+    'ADHD Assessment',
+    'PTSD Therapy',
+    'Bipolar Disorder',
+    'OCD Treatment',
+    'Panic Disorders',
+    'Social Anxiety',
+    'Mood Stabilization',
+    'Trauma-Informed Care',
+    'Medication Management',
+    'Psychoeducation',
+    'Crisis Intervention',
+    'Stress Management'
+  ];
+
+  const servicesSpanish = [
+    'Trastornos de Ansiedad',
+    'Tratamiento de Depresión',
+    'Evaluación de TDAH',
+    'Terapia para TEPT',
+    'Trastorno Bipolar',
+    'Tratamiento TOC',
+    'Trastornos de Pánico',
+    'Ansiedad Social',
+    'Estabilización del Estado de Ánimo',
+    'Atención Informada por Trauma',
+    'Manejo de Medicamentos',
+    'Psicoeducación',
+    'Intervención de Crisis',
+    'Manejo del Estrés'
+  ];
+
+  const displayServices = language === 'en' ? services : servicesSpanish;
 
   return (
     <section className="pt-8 pb-16 bg-white">
@@ -23,6 +59,30 @@ const Hero = () => {
               className="absolute inset-0 w-full h-full object-cover object-center"
               loading="eager"
             />
+            
+            {/* Services Carousel Overlay - Mobile */}
+            <div className="absolute bottom-0 left-0 right-0 py-3 overflow-hidden">
+              <div className="flex animate-scroll whitespace-nowrap">
+                {/* First set */}
+                <div className="flex items-center space-x-4 text-white/90 font-body font-medium text-sm px-2">
+                  {displayServices.map((service, index) => (
+                    <div key={index} className="flex items-center space-x-4">
+                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
+                      <span className="text-white/70">•</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Duplicate for seamless loop */}
+                <div className="flex items-center space-x-4 text-white/90 font-body font-medium text-sm px-2">
+                  {displayServices.map((service, index) => (
+                    <div key={`duplicate-${index}`} className="flex items-center space-x-4">
+                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
+                      <span className="text-white/70">•</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
           
           {/* Mobile: Content container */}
@@ -118,6 +178,30 @@ const Hero = () => {
                       <span>Our Services</span>
                     </Button>
                   </Link>
+                </div>
+              </div>
+            </div>
+            
+            {/* Services Carousel Overlay - Desktop */}
+            <div className="absolute bottom-0 left-0 right-0 py-4 sm:py-6 overflow-hidden z-20">
+              <div className="flex animate-scroll whitespace-nowrap">
+                {/* First set */}
+                <div className="flex items-center space-x-6 sm:space-x-8 text-white/90 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
+                  {displayServices.map((service, index) => (
+                    <div key={index} className="flex items-center space-x-6 sm:space-x-8">
+                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
+                      <span className="text-white/70">•</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Duplicate for seamless loop */}
+                <div className="flex items-center space-x-6 sm:space-x-8 text-white/90 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
+                  {displayServices.map((service, index) => (
+                    <div key={`duplicate-${index}`} className="flex items-center space-x-6 sm:space-x-8">
+                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
+                      <span className="text-white/70">•</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
