@@ -488,30 +488,9 @@ const LocationNaples = () => {
                 {content.areaTitle}
               </h3>
               <div className="flex flex-wrap justify-center gap-4">
-                {[
-                  ...serviceAreas,
-                  ...(language === 'en' ? [
-                    'Convenient Location',
-                    'Modern Facilities',
-                    'Bilingual Services',
-                    'Easy Parking',
-                    'Private & Confidential',
-                    'Professional Care',
-                    'Accessible Location',
-                    'Telehealth Available'
-                  ] : [
-                    'Ubicación Conveniente',
-                    'Instalaciones Modernas',
-                    'Servicios Bilingües',
-                    'Estacionamiento Fácil',
-                    'Privado y Confidencial',
-                    'Atención Profesional',
-                    'Ubicación Accesible',
-                    'Telesalud Disponible'
-                  ])
-                ].map((item, index) => (
+                {serviceAreas.map((area, index) => (
                   <div key={index} className="bg-green-50 rounded-full px-4 py-2 border border-green-200">
-                    <span className="text-green-800 font-body text-sm font-medium">{item}</span>
+                    <span className="text-green-800 font-body text-sm font-medium">{area}</span>
                   </div>
                 ))}
               </div>
