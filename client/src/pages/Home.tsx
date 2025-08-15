@@ -13,6 +13,7 @@ import ForPatients from '@/components/ForPatients';
 import Contact from '@/components/Contact';
 import ServiceAreas from '@/components/ServiceAreas';
 import Footer from '@/components/Footer';
+import CharmHealthBooking from '@/components/CharmHealthBooking';
 import { updateSEO } from '@/utils/seo';
 
 const Home = () => {
@@ -41,6 +42,35 @@ const Home = () => {
       <main>
         <Hero />
         <InsuranceLogos />
+        
+        {/* Telehealth Booking Section */}
+        <section className="py-12 bg-gradient-to-br from-blue-50 to-indigo-50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-body font-bold text-gray-900 mb-4">
+                {language === 'en' ? (
+                  <>
+                    <span className="font-display italic text-blue-700">Telehealth</span> Services Available
+                  </>
+                ) : (
+                  <>
+                    Servicios de <span className="font-display italic text-blue-700">Telesalud</span> Disponibles
+                  </>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                {language === 'en' 
+                  ? 'Can\'t make it to our Naples office? Dr. Melva Reve now offers secure telehealth consultations throughout Florida.'
+                  : '¿No puede llegar a nuestra oficina de Naples? La Dra. Melva Reve ahora ofrece consultas seguras de telesalud en toda Florida.'
+                }
+              </p>
+            </div>
+            <div className="max-w-2xl mx-auto">
+              <CharmHealthBooking variant="prominent" />
+            </div>
+          </div>
+        </section>
+        
         <DoctorSection />
         <Services />
         <About />

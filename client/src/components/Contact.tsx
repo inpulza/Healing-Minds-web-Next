@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import CharmHealthBooking from '@/components/CharmHealthBooking';
 import { Phone, Mail, MapPin, AlertTriangle } from 'lucide-react';
 // Analytics will be imported once the module is available
 // import { trackEvent } from '@/lib/analytics';
@@ -206,6 +207,22 @@ const Contact = () => {
                 </div>
               </div>
             </Card>
+
+            {/* Telehealth Booking */}
+            <div className="mt-8">
+              <h3 className="text-xl font-body font-semibold text-gray-900 mb-4">
+                {language === 'en' ? (
+                  <>
+                    <span className="font-display italic text-blue-700">Telehealth</span> Appointments
+                  </>
+                ) : (
+                  <>
+                    Citas de <span className="font-display italic text-blue-700">Telesalud</span>
+                  </>
+                )}
+              </h3>
+              <CharmHealthBooking variant="default" showDescription={false} />
+            </div>
           </div>
 
           {/* Contact Form */}

@@ -2,7 +2,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { FaLinkedin, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
-import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowRight, Calendar } from 'lucide-react';
 import { useState } from 'react';
 
 const Footer = () => {
@@ -22,6 +22,8 @@ const Footer = () => {
     { href: '/contact', label: language === 'en' ? 'Contact Us' : 'Contáctanos' },
     { href: '/patient-portal', label: language === 'en' ? 'Patient Portal' : 'Portal del Paciente' }
   ];
+
+  const charmHealthUrl = "https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2";
 
   const socialLinks = [
     { href: 'https://linkedin.com/in/dr-melva-reve', icon: FaLinkedin, label: 'LinkedIn' },
@@ -153,7 +155,7 @@ const Footer = () => {
               <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
                 {language === 'en' ? <>Quick <span className="font-display italic text-green-200">Links</span></> : <>Enlaces <span className="font-display italic text-green-200">Rápidos</span></>}
               </h4>
-              <ul className="space-y-3 mb-8" data-testid="footer-quick-links-list">
+              <ul className="space-y-3 mb-6" data-testid="footer-quick-links-list">
                 {quickLinks.map((link, index) => (
                   <li key={index}>
                     <Link 
@@ -167,6 +169,29 @@ const Footer = () => {
                   </li>
                 ))}
               </ul>
+
+              {/* Telehealth Booking */}
+              <div className="mb-8 p-4 bg-green-800/30 rounded-lg border border-green-700">
+                <h5 className="text-base font-body font-semibold text-white mb-2 flex items-center">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+                </h5>
+                <p className="text-green-200 text-sm mb-3">
+                  {language === 'en' 
+                    ? 'Schedule secure online consultations with Dr. Melva Reve'
+                    : 'Programe consultas seguras en línea con la Dra. Melva Reve'
+                  }
+                </p>
+                <Button
+                  onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
+                  variant="outline"
+                  size="sm"
+                  className="text-green-200 border-green-600 hover:bg-green-700 hover:text-white text-sm"
+                  data-testid="footer-telehealth-button"
+                >
+                  {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
+                </Button>
+              </div>
 
               {/* Social Media */}
               <div>
