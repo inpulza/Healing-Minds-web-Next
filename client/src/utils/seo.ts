@@ -76,7 +76,6 @@ export const addMedicalBusinessSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
-    "@id": "https://healingmindsp.com/#medicalbusiness",
     "name": "Healing Minds Psychiatry - Dr. Melva Reve",
     "description": "Compassionate psychiatric care for adults in Naples, Florida. Bilingual services available.",
     "url": "https://healingmindsp.com",
@@ -138,12 +137,10 @@ export const addPhysicianSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Physician",
-    "@id": "https://healingmindsp.com/#physician",
     "name": "Dr. Melva Reve",
     "jobTitle": "Psychiatrist",
     "worksFor": {
       "@type": "MedicalOrganization",
-      "@id": "https://healingmindsp.com/#medicalbusiness",
       "name": "Healing Minds Psychiatry",
       "url": "https://healingmindsp.com",
       "telephone": "+1-239-423-0272",
