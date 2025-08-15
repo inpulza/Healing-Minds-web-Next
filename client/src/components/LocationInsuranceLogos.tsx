@@ -38,11 +38,11 @@ const LocationInsuranceLogos = () => {
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-green-800 mb-4">
             {language === 'en' ? (
               <>
-                <span className="font-display italic text-green-700">Insurance</span> Plans Accepted
+                Insurance <span className="font-display italic text-green-700">Plans</span> Accepted
               </>
             ) : (
               <>
-                Planes de <span className="font-display italic text-green-700">Seguro</span> Aceptados
+                <span className="font-display italic text-green-700">Planes</span> de Seguro Aceptados
               </>
             )}
           </h2>
