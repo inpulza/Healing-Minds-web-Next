@@ -14,6 +14,7 @@ import Services from '@/pages/Services';
 import ForPatients from '@/pages/ForPatients';
 import Contact from '@/pages/Contact';
 import ServiciosEspanol from '@/pages/ServiciosEspanol';
+import LocationNaples from '@/pages/LocationNaples';
 import NotFound from '@/pages/not-found';
 
 // Individual Service Pages
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/services" component={Services} />
       <Route path="/for-patients" component={ForPatients} />
+      <Route path="/locations/naples" component={LocationNaples} />
       <Route path="/contact" component={Contact} />
       <Route path="/servicios-espanol" component={ServiciosEspanol} />
       

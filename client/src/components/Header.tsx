@@ -41,7 +41,7 @@ const Header = () => {
     { href: '/', label: t('nav.home') },
     { href: '/about', label: t('nav.about') },
     { href: '/services', label: t('nav.services'), hasDropdown: true },
-    { href: '/for-patients', label: t('nav.forPatients') },
+    { href: '/locations/naples', label: language === 'en' ? 'Location' : 'Ubicación' },
     { href: '/contact', label: t('nav.contact') },
   ];
 
