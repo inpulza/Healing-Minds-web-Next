@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { IconBrain, IconHeart, IconLeaf } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import heroImage from '@assets/hero-doctor-hq.webp';
-import mobileHeroImage from '@assets/hero-doctor-mobile-hq.webp';
+import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
 
 const Hero = () => {
   const { t } = useLanguage();
