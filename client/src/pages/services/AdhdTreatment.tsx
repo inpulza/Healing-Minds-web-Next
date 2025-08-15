@@ -400,7 +400,7 @@ const AdhdTreatment = () => {
                       <div className="text-center mb-6">
                         {/* Icon and Category Group */}
                         <div className="mb-4">
-                          <div className="inline-flex p-4 rounded-2xl bg-[#22c55e54]">
+                          <div className="inline-flex p-4 rounded-2xl bg-[#00ff5c4f]">
                             <Brain className="w-8 h-8 text-green-800" />
                           </div>
                           <div className="block">
