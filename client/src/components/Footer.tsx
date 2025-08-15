@@ -103,119 +103,122 @@ const Footer = () => {
           </div>
 
           {/* Right Section - Links */}
-          <div className="lg:col-span-7 grid md:grid-cols-3 gap-8">
-            {/* Our Services */}
-            <div>
-              <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-services-title">
-                {language === 'en' ? <>Our <span className="font-display italic text-green-200">Services</span></> : <>Nuestros <span className="font-display italic text-green-200">Servicios</span></>}
-              </h4>
-              <ul className="space-y-3" data-testid="footer-services-list">
-                {services.map((service, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={service.href}
-                      className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
-                      data-testid={`footer-service-${index}`}
-                    >
-                      <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                      {service.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Service Areas */}
-            <div>
-              <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-areas-title">
-                {language === 'en' ? <>Service <span className="font-display italic text-green-200">Areas</span></> : <><span className="font-display italic text-green-200">Áreas</span> de Servicio</>}
-              </h4>
-              <ul className="space-y-3" data-testid="footer-areas-list">
-                <li className="text-green-200 text-base flex items-center">
-                  <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                  Naples, FL
-                </li>
-                <li className="text-green-200 text-base flex items-center">
-                  <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                  Marco Island, FL
-                </li>
-                <li className="text-green-200 text-base flex items-center">
-                  <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                  Bonita Springs, FL
-                </li>
-                <li className="text-green-200 text-base flex items-center">
-                  <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                  Collier County
-                </li>
-              </ul>
-            </div>
-
-            {/* Quick Links & Social */}
-            <div>
-              <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
-                {language === 'en' ? <>Quick <span className="font-display italic text-green-200">Links</span></> : <>Enlaces <span className="font-display italic text-green-200">Rápidos</span></>}
-              </h4>
-              <ul className="space-y-3 mb-6" data-testid="footer-quick-links-list">
-                {quickLinks.map((link, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={link.href}
-                      className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
-                      data-testid={`footer-quick-link-${index}`}
-                    >
-                      <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Telehealth Booking */}
-              <div className="mb-8 p-4 bg-green-800/30 rounded-lg border border-green-700">
-                <h5 className="text-base font-body font-semibold text-white mb-2 flex items-center">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
-                </h5>
-                <p className="text-green-200 text-sm mb-3">
-                  {language === 'en' 
-                    ? 'Schedule secure online consultations with Dr. Melva Reve'
-                    : 'Programe consultas seguras en línea con la Dra. Melva Reve'
-                  }
-                </p>
-                <Button
-                  onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
-                  variant="outline"
-                  size="sm"
-                  className="text-green-200 border-green-600 hover:bg-green-700 hover:text-white text-sm"
-                  data-testid="footer-telehealth-button"
-                >
-                  {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
-                </Button>
+          <div className="lg:col-span-7">
+            {/* Links Grid */}
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              {/* Our Services */}
+              <div>
+                <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-services-title">
+                  {language === 'en' ? <>Our <span className="font-display italic text-green-200">Services</span></> : <>Nuestros <span className="font-display italic text-green-200">Servicios</span></>}
+                </h4>
+                <ul className="space-y-3" data-testid="footer-services-list">
+                  {services.map((service, index) => (
+                    <li key={index}>
+                      <Link 
+                        href={service.href}
+                        className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
+                        data-testid={`footer-service-${index}`}
+                      >
+                        <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        {service.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              {/* Social Media */}
+              {/* Service Areas */}
               <div>
-                <h5 className="text-lg font-body font-bold text-white mb-4" data-testid="footer-social-title">
-                  {language === 'en' ? <>Follow <span className="font-display italic text-green-200">Us</span></> : <><span className="font-display italic text-green-200">Síguenos</span></>}
-                </h5>
-                <div className="flex gap-4" data-testid="footer-social-links">
-                  {socialLinks.map((social, index) => {
-                    const IconComponent = social.icon;
-                    return (
-                      <a
-                        key={index}
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-green-800/50 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-200 group"
-                        data-testid={`footer-social-${social.label.toLowerCase()}`}
+                <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-areas-title">
+                  {language === 'en' ? <>Service <span className="font-display italic text-green-200">Areas</span></> : <><span className="font-display italic text-green-200">Áreas</span> de Servicio</>}
+                </h4>
+                <ul className="space-y-3" data-testid="footer-areas-list">
+                  <li className="text-green-200 text-base flex items-center">
+                    <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
+                    Naples, FL
+                  </li>
+                  <li className="text-green-200 text-base flex items-center">
+                    <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
+                    Marco Island, FL
+                  </li>
+                  <li className="text-green-200 text-base flex items-center">
+                    <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
+                    Bonita Springs, FL
+                  </li>
+                  <li className="text-green-200 text-base flex items-center">
+                    <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
+                    Collier County
+                  </li>
+                </ul>
+              </div>
+
+              {/* Quick Links & Social */}
+              <div>
+                <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
+                  {language === 'en' ? <>Quick <span className="font-display italic text-green-200">Links</span></> : <>Enlaces <span className="font-display italic text-green-200">Rápidos</span></>}
+                </h4>
+                <ul className="space-y-3 mb-6" data-testid="footer-quick-links-list">
+                  {quickLinks.map((link, index) => (
+                    <li key={index}>
+                      <Link 
+                        href={link.href}
+                        className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
+                        data-testid={`footer-quick-link-${index}`}
                       >
-                        <IconComponent className="w-5 h-5 text-green-200 group-hover:text-white" />
-                      </a>
-                    );
-                  })}
+                        <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Social Media */}
+                <div>
+                  <h5 className="text-lg font-body font-bold text-white mb-4" data-testid="footer-social-title">
+                    {language === 'en' ? <>Follow <span className="font-display italic text-green-200">Us</span></> : <><span className="font-display italic text-green-200">Síguenos</span></>}
+                  </h5>
+                  <div className="flex gap-4" data-testid="footer-social-links">
+                    {socialLinks.map((social, index) => {
+                      const IconComponent = social.icon;
+                      return (
+                        <a
+                          key={index}
+                          href={social.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 bg-green-800/50 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-200 group"
+                          data-testid={`footer-social-${social.label.toLowerCase()}`}
+                        >
+                          <IconComponent className="w-5 h-5 text-green-200 group-hover:text-white" />
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
+            </div>
+
+            {/* Telehealth Booking - Full Width */}
+            <div className="p-4 bg-green-800/30 rounded-lg border border-green-700">
+              <h5 className="text-base font-body font-semibold text-white mb-2 flex items-center">
+                <Calendar className="w-4 h-4 mr-2" />
+                {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+              </h5>
+              <p className="text-green-200 text-sm mb-3">
+                {language === 'en' 
+                  ? 'Schedule secure online consultations with Dr. Melva Reve'
+                  : 'Programe consultas seguras en línea con la Dra. Melva Reve'
+                }
+              </p>
+              <Button
+                onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
+                variant="outline"
+                size="sm"
+                className="text-green-200 border-green-600 hover:bg-green-700 hover:text-white text-sm"
+                data-testid="footer-telehealth-button"
+              >
+                {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
+              </Button>
             </div>
           </div>
         </div>
