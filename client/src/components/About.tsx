@@ -20,7 +20,7 @@ const About = () => {
               <div className="relative bg-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
                 <img
                   src={doctorProfileImage}
-                  alt="Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL"
+                  alt="Dr. Melva Reve - Psychiatrist in Naples, FL"
                   className="w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover object-top"
                   data-testid="about-doctor-image"
                 />
@@ -52,15 +52,15 @@ const About = () => {
               
               <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 font-body leading-relaxed max-w-lg mx-auto lg:mx-0" data-testid="about-description">
                 {language === 'en'
-                  ? 'Board-certified psychiatrist with over 15 years of experience in comprehensive mental health care. Dr. Reve specializes in anxiety disorders, depression, ADHD, and trauma-informed therapy, providing personalized treatment plans that integrate evidence-based medicine with compassionate care.'
-                  : 'Psiquiatra certificada por la junta con más de 15 años de experiencia en atención integral de salud mental. La Dra. Reve se especializa en trastornos de ansiedad, depresión, TDAH y terapia informada por trauma, brindando planes de tratamiento personalizados que integran medicina basada en evidencia con atención compasiva.'
+                  ? 'Psychiatrist with over 15 years of experience in comprehensive mental health care. Dr. Reve specializes in anxiety disorders, depression, ADHD, and trauma-informed therapy, providing personalized treatment plans that integrate evidence-based medicine with compassionate care.'
+                  : 'Psiquiatra con más de 15 años de experiencia en atención integral de salud mental. La Dra. Reve se especializa en trastornos de ansiedad, depresión, TDAH y terapia informada por trauma, brindando planes de tratamiento personalizados que integran medicina basada en evidencia con atención compasiva.'
                 }
               </p>
 
               {/* Credentials */}
               <div className="mb-6 sm:mb-8">
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 text-sm sm:text-base text-gray-500 font-body">
-                  <div>
+                  <div className="hidden">
                     <div className="font-semibold text-green-600">
                       {language === 'en' ? 'Board Certified' : 'Certificada por la Junta'}
                     </div>

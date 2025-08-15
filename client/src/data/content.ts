@@ -51,13 +51,13 @@ export const acceptedInsurance = [
 export const credentials = {
   en: [
     "MD from University of Miami Miller School of Medicine",
-    "Board Certified by American Board of Psychiatry and Neurology", 
+    // "Board Certified by American Board of Psychiatry and Neurology", 
     "Member of American Psychiatric Association",
     "Fluent in English and Spanish"
   ],
   es: [
     "MD de la Escuela de Medicina Miller de la Universidad de Miami",
-    "Certificada por la Junta Americana de Psiquiatría y Neurología",
+    // "Certificada por la Junta Americana de Psiquiatría y Neurología",
     "Miembro de la Asociación Psiquiátrica Americana", 
     "Fluida en inglés y español"
   ]
@@ -303,9 +303,9 @@ export const seoContent = {
       keywords: "psychiatrist Naples FL, psychiatric care Naples, anxiety treatment Naples, depression treatment Naples, bilingual psychiatrist, Spanish speaking psychiatrist Naples"
     },
     about: {
-      title: "About Dr. Melva Reve - Board Certified Psychiatrist in Naples, FL",
-      description: "Learn about Dr. Melva Reve, a board-certified psychiatrist with 15+ years of experience serving Naples, FL. Bilingual care with cultural sensitivity.",
-      keywords: "Dr Melva Reve Naples, psychiatrist biography, board certified psychiatrist Naples, bilingual psychiatrist FL"
+      title: "About Dr. Melva Reve - Psychiatrist in Naples, FL",
+      description: "Learn about Dr. Melva Reve, a psychiatrist with 15+ years of experience serving Naples, FL. Bilingual care with cultural sensitivity.",
+      keywords: "Dr Melva Reve Naples, psychiatrist biography, psychiatrist Naples, bilingual psychiatrist FL"
     },
     services: {
       title: "Psychiatric Services Naples FL - Anxiety, Depression, ADHD Treatment",

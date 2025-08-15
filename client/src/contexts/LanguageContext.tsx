@@ -52,7 +52,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
       'about.description1': 'Dr. Melva Reve is a board-certified psychiatrist with over 15 years of experience providing compassionate mental health care to adults in Naples, Florida, and surrounding areas. She specializes in treating anxiety disorders, depression, ADHD, PTSD, and other psychiatric conditions.',
       'about.description2': 'As a bilingual practitioner fluent in both English and Spanish, Dr. Reve is uniquely positioned to serve the diverse community of Southwest Florida with culturally sensitive care that respects individual backgrounds and experiences.',
       'about.credential1': 'MD from University of Miami Miller School of Medicine',
-      'about.credential2': 'Board Certified by American Board of Psychiatry and Neurology',
+      // 'about.credential2': 'Board Certified by American Board of Psychiatry and Neurology',
       'about.credential3': 'Member of American Psychiatric Association',
       'about.credential4': 'Fluent in English and Spanish',
       'about.scheduleConsultation': 'Schedule Consultation',

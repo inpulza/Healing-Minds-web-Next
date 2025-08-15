@@ -53,7 +53,7 @@ const DoctorSection = () => {
               <div className="aspect-[4/5] sm:aspect-[5/6] lg:aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden">
                 <img
                   src={doctorImage}
-                  alt="Dr. Melva Reve - Board Certified Psychiatrist"
+                  alt="Dr. Melva Reve - Psychiatrist"
                   className="w-full h-full object-cover"
                   data-testid="doctor-section-image"
                 />

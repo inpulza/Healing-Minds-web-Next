@@ -129,7 +129,7 @@ export const addPhysicianSchema = () => {
     "medicalSpecialty": "Psychiatry",
     "alumniOf": "University of Miami Miller School of Medicine",
     "memberOf": "American Psychiatric Association",
-    "hasCredential": "Board Certified Psychiatrist",
+    // "hasCredential": "Board Certified Psychiatrist",
     "knows": ["English", "Spanish"],
     "address": {
       "@type": "PostalAddress",
