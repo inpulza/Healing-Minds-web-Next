@@ -153,7 +153,7 @@ const Contact = () => {
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Information */}
-          <div>
+          <div className="flex flex-col h-full">
             <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-info-title">
               {language === 'en' ? <>Contact <span className="font-display italic text-green-700">Information</span></> : <>Información de <span className="font-display italic text-green-700">Contacto</span></>}
             </h3>
@@ -209,7 +209,7 @@ const Contact = () => {
             </Card>
 
             {/* Telehealth Booking */}
-            <div className="mt-8">
+            <div className="mt-auto">
               <h3 className="text-xl font-body font-semibold text-gray-900 mb-4">
                 {language === 'en' ? (
                   <>
