@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
-import { generateSitemap, generateRobotsTxt } from "./routes/sitemap";
+import { generateSitemap, generateRobotsTxt, generateGoogleVerification, generateAdvancedSitemap } from "./routes/sitemap";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission endpoint
@@ -57,8 +57,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // SEO routes - Sitemap XML and Robots.txt
-  app.get("/sitemap.xml", generateSitemap);
+  app.get("/sitemap.xml", generateAdvancedSitemap);
+  app.get("/sitemap-basic.xml", generateSitemap); // Keep basic version for compatibility
   app.get("/robots.txt", generateRobotsTxt);
+  
+  // Google Search Console verification routes
+  app.get("/google:code.html", generateGoogleVerification);
+  app.get("/googleverification/:code", generateGoogleVerification);
+  app.get("/verification/:code", generateGoogleVerification);
 
   const httpServer = createServer(app);
   return httpServer;

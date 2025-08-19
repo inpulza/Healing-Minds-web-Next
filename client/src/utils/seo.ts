@@ -5,6 +5,8 @@ interface SEOData {
   lang?: string;
   canonical?: string;
   ogImage?: string;
+  robotsDirective?: string;
+  googleVerification?: string;
 }
 
 export const updateSEO = (data: SEOData) => {
@@ -44,6 +46,16 @@ export const updateSEO = (data: SEOData) => {
   
   if (data.ogImage) {
     updateMetaTag('twitter:image', data.ogImage, 'name');
+  }
+
+  // Update robots directive if provided
+  if (data.robotsDirective) {
+    updateMetaTag('robots', data.robotsDirective);
+  }
+
+  // Add Google verification if provided
+  if (data.googleVerification) {
+    updateMetaTag('google-site-verification', data.googleVerification);
   }
 };
 
