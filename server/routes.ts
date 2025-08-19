@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
-import { trackEvent } from '../client/src/lib/analytics';
+import { generateSitemap, generateRobotsTxt } from "./routes/sitemap";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission endpoint
@@ -55,6 +55,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+
+  // SEO routes - Sitemap XML and Robots.txt
+  app.get("/sitemap.xml", generateSitemap);
+  app.get("/robots.txt", generateRobotsTxt);
 
   const httpServer = createServer(app);
   return httpServer;
