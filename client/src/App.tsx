@@ -17,7 +17,6 @@ import Contact from '@/pages/Contact';
 import ServiciosEspanol from '@/pages/ServiciosEspanol';
 import LocationNaples from '@/pages/LocationNaples';
 import NotFound from '@/pages/not-found';
-import GSCDiagnostic from '@/pages/GSCDiagnostic';
 
 // Individual Service Pages
 import AnxietyTreatment from '@/pages/services/AnxietyTreatment';
@@ -43,7 +42,6 @@ function Router() {
       <Route path="/locations/naples" component={LocationNaples} />
       <Route path="/contact" component={Contact} />
       <Route path="/servicios-espanol" component={ServiciosEspanol} />
-      <Route path="/gsc-diagnostic" component={GSCDiagnostic} />
       
       {/* Individual Service Pages */}
       <Route path="/services/anxiety-treatment" component={AnxietyTreatment} />
