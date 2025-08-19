@@ -1,0 +1,45 @@
+[vite] connecting...
+[vite] connected.
+Warning: React does not recognize the &#x60;fetchPriority&#x60; prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase &#x60;fetchpriority&#x60; instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+    at img
+    at div
+    at div
+    at div
+    at div
+    at section
+    at InsuranceLogos (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/components/InsuranceLogos.tsx:33:24)
+    at main
+    at div
+    at Home (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/pages/Home.tsx:40:24)
+    at Route (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=75e554dc:323:16)
+    at Switch (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=75e554dc:379:17)
+    at Router (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/App.tsx?v=i3TlFb6jeLGwJFH9NIh68:45:3)
+    at LanguageProvider (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/contexts/LanguageContext.tsx:29:36)
+    at Provider (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OWVT6AXS.js?v=75e554dc:22:15)
+    at TooltipProvider (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=75e554dc:56:5)
+    at QueryClientProvider (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=75e554dc:2805:3)
+    at App (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/App.tsx?v=i3TlFb6jeLGwJFH9NIh68:160:3)
+at img
+at div
+at div
+at div
+at div
+at section
+at InsuranceLogos (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/components/InsuranceLogos.tsx:33:24)
+at main
+at div
+at Home (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/pages/Home.tsx:40:24)
+at Route (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=75e554dc:323:16)
+at Switch (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=75e554dc:379:17)
+at Router (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/App.tsx?v=i3TlFb6jeLGwJFH9NIh68:45:3)
+at LanguageProvider (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/contexts/LanguageContext.tsx:29:36)
+at Provider (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OWVT6AXS.js?v=75e554dc:22:15)
+at TooltipProvider (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=75e554dc:56:5)
+at QueryClientProvider (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=75e554dc:2805:3)
+at App (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/src/App.tsx?v=i3TlFb6jeLGwJFH9NIh68:160:3)
+at t.value (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://fbb56a71-6565-4f01-828c-99293bf5d460-00-1z8ehl02h61n9.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Google Analytics initialized successfully with ID: G-WMRK41PX2E
+Physician info integrated into MedicalClinic schema
