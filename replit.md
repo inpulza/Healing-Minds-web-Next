@@ -4,7 +4,24 @@
 
 This is a professional website for Healing Minds Psychiatry, the practice of Dr. Melva Reve, a board-certified psychiatrist serving Naples, FL and surrounding areas. The website provides bilingual (English/Spanish) psychiatric care information, services, and patient resources. It features a modern, accessible design built with React and TypeScript, focusing on mental health services including anxiety, depression, ADHD, PTSD, and other psychiatric conditions.
 
-## Recent Changes (August 15, 2025)
+## Recent Changes (August 19, 2025)
+
+- **Microsoft Clarity Integration**: Comprehensive behavioral analytics implementation
+  - Installed @microsoft/clarity package with NPM method for optimal React integration
+  - Created custom useClarity hook with environment-based initialization (production only)
+  - Implemented advanced event tracking for user interactions:
+    - Phone call clicks tracked from Footer, Contact page, and Service hero sections
+    - Email contact tracking from Contact page
+    - Contact form submissions with language preference tagging
+    - Language switching behavior tracking
+  - Added contextual tagging system:
+    - Language selection (English/Spanish)
+    - Click location tracking (footer, contact_page, service_hero)
+    - Site categorization (psychiatry_practice, naples_fl)
+  - Privacy-compliant setup with development mode disabled
+  - Full integration with existing Google Analytics without conflicts
+
+## Previous Changes (August 15, 2025)
 
 - **Schema.org Optimization for Google Business Profile**: Completely enhanced structured data markup with Google Business Profile connection
   - Added Google Business Profile URL to sameAs property for direct GBP connection 
@@ -111,4 +128,9 @@ Preferred communication style: Simple, everyday language.
 
 ### Analytics and Monitoring
 - **Google Analytics**: Website analytics and user behavior tracking
+- **Microsoft Clarity**: Behavioral analytics with session recordings and heatmaps
+  - Project ID: sxayts0dzk (production only)
+  - Custom event tracking for phone calls, form submissions, language changes
+  - Contextual tagging for user journey analysis
+  - Privacy-compliant implementation with development mode disabled
 - **Custom Analytics Module**: Event tracking for form submissions and user interactions

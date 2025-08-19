@@ -1,4 +1,5 @@
 import { useLanguage } from '@/hooks/useLanguage';
+import { useClarity } from '@/hooks/use-clarity';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { FaLinkedin, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
@@ -7,6 +8,7 @@ import { useState } from 'react';
 
 const Footer = () => {
   const { language } = useLanguage();
+  const { trackEvent, setTag } = useClarity();
   const [email, setEmail] = useState('');
 
   const services = [
@@ -193,6 +195,10 @@ const Footer = () => {
                   href="tel:+12394230272" 
                   className="hover:text-white transition-colors"
                   data-testid="footer-phone"
+                  onClick={() => {
+                    trackEvent('phone_call_initiated');
+                    setTag('phone_click_location', 'footer');
+                  }}
                 >
                   (239) 423-0272
                 </a>

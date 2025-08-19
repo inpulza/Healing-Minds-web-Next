@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useClarity } from '@/hooks/use-clarity';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,8 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import { Phone, Mail, MapPin, AlertTriangle } from 'lucide-react';
-// Analytics will be imported once the module is available
-// import { trackEvent } from '@/lib/analytics';
 
 interface FormData {
   firstName: string;
@@ -24,6 +23,7 @@ interface FormData {
 const Contact = () => {
   const { language, t } = useLanguage();
   const { toast } = useToast();
+  const { trackEvent, setTag } = useClarity();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -81,8 +81,10 @@ const Contact = () => {
         throw new Error('Failed to send message');
       }
 
-      // Track successful form submission (analytics disabled for now)
-      // trackEvent('form_submit', 'contact', 'contact_form');
+      // Track successful form submission with Clarity
+      trackEvent('contact_form_submitted');
+      setTag('contact_language', formData.preferredLanguage);
+      setTag('contact_form_type', 'main_contact');
 
       toast({
         title: language === 'en' ? 'Success!' : '¡Éxito!',
@@ -172,6 +174,15 @@ const Contact = () => {
                           className="text-primary-green hover:text-primary-green-hover"
                           target={info.link.startsWith('http') ? '_blank' : undefined}
                           rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          onClick={() => {
+                            if (info.link?.startsWith('tel:')) {
+                              trackEvent('phone_call_initiated');
+                              setTag('phone_click_location', 'contact_page');
+                            } else if (info.link?.startsWith('mailto:')) {
+                              trackEvent('email_initiated');
+                              setTag('email_click_location', 'contact_page');
+                            }
+                          }}
                         >
                           {info.value}
                         </a>

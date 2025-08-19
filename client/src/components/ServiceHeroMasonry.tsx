@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { IconSun, IconHeart, IconBrain } from '@tabler/icons-react';
 import { useLanguage } from "@/hooks/useLanguage";
+import { useClarity } from "@/hooks/use-clarity";
 
 interface ServiceHeroMasonryProps {
   tagline: {
@@ -60,6 +61,7 @@ export const ServiceHeroMasonry = ({
   quickStats 
 }: ServiceHeroMasonryProps) => {
   const { language } = useLanguage();
+  const { trackEvent, setTag } = useClarity();
 
   return (
     <section className="pt-20 pb-8 sm:pb-12 lg:pb-16 bg-green-50">
@@ -140,7 +142,14 @@ export const ServiceHeroMasonry = ({
               <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
                 <Phone className="w-4 h-4 text-green-800" />
               </div>
-              <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
+              <a 
+                href="tel:+12394230272" 
+                className="flex items-center gap-3"
+                onClick={() => {
+                  trackEvent('phone_call_initiated');
+                  setTag('phone_click_location', 'service_hero');
+                }}
+              >
                 {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
               </a>
             </Button>

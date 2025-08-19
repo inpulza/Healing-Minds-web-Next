@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useClarity } from '@/hooks/use-clarity';
 import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ReactCountryFlag from 'react-country-flag';
@@ -8,6 +9,7 @@ import ReactCountryFlag from 'react-country-flag';
 const Header = () => {
   const [location, navigate] = useLocation();
   const { language, setLanguage, t } = useLanguage();
+  const { trackEvent, setTag } = useClarity();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -34,7 +36,12 @@ const Header = () => {
   }, [location]);
 
   const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'es' : 'en');
+    const newLanguage = language === 'en' ? 'es' : 'en';
+    setLanguage(newLanguage);
+    
+    // Track language change with Clarity
+    trackEvent('language_changed');
+    setTag('selected_language', newLanguage);
   };
 
   const navigationItems = [
