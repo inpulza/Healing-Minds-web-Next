@@ -81,7 +81,7 @@ const InsuranceLogos = () => {
                     width={isHighPriority ? 208 : undefined}
                     height={isHighPriority ? 144 : undefined}
                     loading={isHighPriority ? "eager" : "lazy"}
-                    fetchpriority={isHighPriority ? "high" : "low"}
+                    {...(isHighPriority ? { fetchpriority: "high" as any } : { fetchpriority: "low" as any })}
                     decoding="async"
                     style={{
                       aspectRatio: '13/9',
