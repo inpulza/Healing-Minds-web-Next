@@ -196,7 +196,7 @@ const Home = () => {
                             <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                           </div>
                           <div>
-                            <h4 className="text-base sm:text-lg font-bold text-blue-800 mb-1">{feature.title}</h4>
+                            <h3 className="text-base sm:text-lg font-bold text-blue-800 mb-1">{feature.title}</h3>
                             <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
                           </div>
                         </div>
@@ -213,9 +213,9 @@ const Home = () => {
               <Card className="p-6 sm:p-8 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
                 <div className="text-center">
                   <VideoIcon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                  <h4 className="text-2xl sm:text-3xl font-bold text-blue-800 mb-3">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-blue-800 mb-3">
                     {language === 'en' ? 'Book Your Telehealth Session' : 'Reserve su Sesión de Telesalud'}
-                  </h4>
+                  </h3>
                   <p className="text-lg sm:text-xl text-blue-700 mb-6">
                     {language === 'en' 
                       ? 'Schedule with Dr. Melva Reve from anywhere in Florida'

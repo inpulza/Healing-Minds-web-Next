@@ -51,7 +51,7 @@ const Footer = () => {
           <div className="md:col-span-3 lg:col-span-5">
             {/* Brand */}
             <div className="mb-8">
-              <Link href="/" className="inline-block">
+              <Link href="/" className="inline-block" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Return to homepage' : 'Healing Minds Psychiatry - Volver al inicio'}>
                 <div className="text-2xl font-body font-bold text-white">
                   Healing Minds <span className="text-green-200">Psychiatry</span>
                 </div>
@@ -60,10 +60,10 @@ const Footer = () => {
 
             {/* Telehealth Booking */}
             <div className="mb-8 p-4 bg-green-800/30 rounded-lg border border-green-700">
-              <h5 className="text-base font-body font-semibold text-white mb-2 flex items-center">
+              <h2 className="text-base font-body font-semibold text-white mb-2 flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
                 {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
-              </h5>
+              </h2>
               <p className="text-green-200 text-sm mb-3">
                 {language === 'en' 
                   ? 'Schedule secure online consultations with Dr. Melva Reve'
@@ -82,9 +82,9 @@ const Footer = () => {
 
             {/* Social Media */}
             <div>
-              <h5 className="text-lg font-body font-bold text-white mb-4" data-testid="footer-social-title">
+              <h2 className="text-lg font-body font-bold text-white mb-4" data-testid="footer-social-title">
                 {language === 'en' ? <>Follow <span className="font-display italic text-green-200">Us</span></> : <><span className="font-display italic text-green-200">Síguenos</span></>}
-              </h5>
+              </h2>
               <div className="flex gap-4" data-testid="footer-social-links">
                 {socialLinks.map((social, index) => {
                   const IconComponent = social.icon;
@@ -96,6 +96,8 @@ const Footer = () => {
                       rel="noopener noreferrer"
                       className="w-10 h-10 bg-green-800/50 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-200 group"
                       data-testid={`footer-social-${social.label.toLowerCase()}`}
+                      aria-label={`${social.label} - ${language === 'en' ? 'Open in new window' : 'Abrir en nueva ventana'}`}
+                      title={social.label}
                     >
                       <IconComponent className="w-5 h-5 text-green-200 group-hover:text-white" />
                     </a>
@@ -111,9 +113,9 @@ const Footer = () => {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-8">
               {/* Our Services */}
               <div>
-                <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-services-title">
+                <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-services-title">
                   {language === 'en' ? <>Our <span className="font-display italic text-green-200">Services</span></> : <>Nuestros <span className="font-display italic text-green-200">Servicios</span></>}
-                </h4>
+                </h3>
                 <ul className="space-y-3" data-testid="footer-services-list">
                   {services.map((service, index) => (
                     <li key={index}>
@@ -132,9 +134,9 @@ const Footer = () => {
 
               {/* Service Areas */}
               <div>
-                <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-areas-title">
+                <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-areas-title">
                   {language === 'en' ? <>Service <span className="font-display italic text-green-200">Areas</span></> : <><span className="font-display italic text-green-200">Áreas</span> de Servicio</>}
-                </h4>
+                </h3>
                 <ul className="space-y-3" data-testid="footer-areas-list">
                   <li className="text-green-200 text-base flex items-center">
                     <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
@@ -157,9 +159,9 @@ const Footer = () => {
 
               {/* Quick Links */}
               <div>
-                <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
+                <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
                   {language === 'en' ? <>Quick <span className="font-display italic text-green-200">Links</span></> : <>Enlaces <span className="font-display italic text-green-200">Rápidos</span></>}
-                </h4>
+                </h3>
                 <ul className="space-y-3" data-testid="footer-quick-links-list">
                   {quickLinks.map((link, index) => (
                     <li key={index}>
@@ -195,6 +197,7 @@ const Footer = () => {
                   href="tel:+12394230272" 
                   className="hover:text-white transition-colors"
                   data-testid="footer-phone"
+                  aria-label={language === 'en' ? 'Call Healing Minds Psychiatry at (239) 423-0272' : 'Llamar a Healing Minds Psychiatry al (239) 423-0272'}
                   onClick={() => {
                     trackEvent('phone_call_initiated');
                     setTag('phone_click_location', 'footer');
@@ -209,6 +212,7 @@ const Footer = () => {
                   href="mailto:info@healingmindsp.com" 
                   className="hover:text-white transition-colors"
                   data-testid="footer-email"
+                  aria-label={language === 'en' ? 'Send email to info@healingmindsp.com' : 'Enviar email a info@healingmindsp.com'}
                 >
                   info@healingmindsp.com
                 </a>

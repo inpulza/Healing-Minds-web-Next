@@ -108,7 +108,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="flex justify-between items-center h-20 sm:h-24 md:h-28 lg:h-32">
           {/* Logo */}
-          <Link href="/" data-testid="logo-link">
+          <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'}>
             <div className="text-lg sm:text-xl md:text-2xl font-body font-bold text-green-800">
               Healing Minds <span className="text-green-700">Psychiatry</span>
             </div>
@@ -132,6 +132,8 @@ const Header = () => {
                           : 'text-gray-700 hover:text-primary hover:bg-white/50'
                       }`}
                       data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
+                      aria-label={isServicesOpen ? (language === 'en' ? 'Close services menu' : 'Cerrar menú de servicios') : (language === 'en' ? 'Open services menu' : 'Abrir menú de servicios')}
+                      aria-expanded={isServicesOpen}
                     >
                       {item.label}
                       <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${
@@ -164,6 +166,7 @@ const Header = () => {
               onClick={toggleLanguage}
               className="text-sm text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-4 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-2"
               data-testid="language-toggle"
+              aria-label={language === 'en' ? 'Cambiar a español' : 'Switch to English'}
             >
               <span>{language === 'en' ? 'ES' : 'EN'}</span>
               <ReactCountryFlag
@@ -197,6 +200,7 @@ const Header = () => {
               className="text-gray-700 hover:text-primary rounded-full p-2 sm:p-3"
               data-testid="mobile-menu-toggle"
               style={{ minWidth: '48px', minHeight: '48px' }}
+              aria-label={isMobileMenuOpen ? (language === 'en' ? 'Close navigation menu' : 'Cerrar menú de navegación') : (language === 'en' ? 'Open navigation menu' : 'Abrir menú de navegación')}
             >
               {isMobileMenuOpen ? (
                 <X style={{ width: '24px', height: '24px', strokeWidth: '2px' }} />
@@ -272,6 +276,8 @@ const Header = () => {
                           : 'text-gray-700 hover:text-primary'
                       }`}
                       data-testid={`mobile-nav-${item.href.replace('/', '') || 'home'}`}
+                      aria-label={isMobileServicesOpen ? (language === 'en' ? 'Close services submenu' : 'Cerrar submenú de servicios') : (language === 'en' ? 'Open services submenu' : 'Abrir submenú de servicios')}
+                      aria-expanded={isMobileServicesOpen}
                     >
                       {item.label}
                       <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
@@ -326,6 +332,7 @@ const Header = () => {
                 onClick={toggleLanguage}
                 className="text-sm text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-4 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-2 flex-shrink-0"
                 data-testid="mobile-language-toggle"
+                aria-label={language === 'en' ? 'Cambiar idioma a español' : 'Change language to English'}
               >
                 <span>{language === 'en' ? 'Español' : 'English'}</span>
                 <ReactCountryFlag

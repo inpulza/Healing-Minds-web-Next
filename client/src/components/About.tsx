@@ -20,7 +20,7 @@ const About = () => {
               <div className="relative bg-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
                 <img
                   src={doctorProfileImage}
-                  alt="Dr. Melva Reve - Psychiatrist in Naples, FL"
+                  alt="Dr. Melva Reve, MD - Professional headshot of board-certified psychiatrist specializing in anxiety, depression, and ADHD treatment in Naples"
                   className="w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[600px] object-cover object-top"
                   width={600}
                   height={600}

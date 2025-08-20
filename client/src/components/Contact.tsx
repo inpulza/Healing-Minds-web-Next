@@ -174,6 +174,15 @@ const Contact = () => {
                           className="text-primary-green hover:text-primary-green-hover"
                           target={info.link.startsWith('http') ? '_blank' : undefined}
                           rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          aria-label={
+                            info.link?.startsWith('tel:') 
+                              ? (language === 'en' ? `Call us at ${info.value}` : `Llamarnos al ${info.value}`)
+                              : info.link?.startsWith('mailto:') 
+                                ? (language === 'en' ? `Send email to ${info.value}` : `Enviar email a ${info.value}`)
+                                : info.link?.startsWith('http')
+                                  ? (language === 'en' ? `View address on Google Maps - ${info.value}` : `Ver dirección en Google Maps - ${info.value}`)
+                                  : undefined
+                          }
                           onClick={() => {
                             if (info.link?.startsWith('tel:')) {
                               trackEvent('phone_call_initiated');

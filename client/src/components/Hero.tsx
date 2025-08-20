@@ -55,7 +55,7 @@ const Hero = () => {
           <div className="relative rounded-2xl overflow-hidden mb-6 h-[250px]">
             <img 
               src={mobileHeroImage}
-              alt="Dr. Melva Reve - Psychiatrist in Naples, FL"
+              alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
               className="absolute inset-0 w-full h-full object-cover object-center"
               width={400}
               height={250}
@@ -139,7 +139,7 @@ const Hero = () => {
             {/* Background Image */}
             <img 
               src={heroImage}
-              alt="Dr. Melva Reve - Psychiatrist in Naples, FL"
+              alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
               className="absolute inset-0 w-full h-full object-cover object-center"
               width={1200}
               height={800}
