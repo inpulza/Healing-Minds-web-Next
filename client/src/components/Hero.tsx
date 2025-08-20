@@ -61,6 +61,7 @@ const Hero = () => {
               height={250}
               loading="eager"
               decoding="async"
+              fetchpriority="high"
             />
             
             {/* Services Carousel Overlay - Mobile */}
@@ -145,6 +146,7 @@ const Hero = () => {
               height={800}
               loading="eager"
               decoding="async"
+              fetchpriority="high"
             />
             
 

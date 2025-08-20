@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { MapPin, Navigation, Clock, Users } from 'lucide-react';
-import southwestFloridaMap from '../assets/southwest-florida-map.png';
+import southwestFloridaMap from '../assets/southwest-florida-map.webp';
 
 const ServiceAreas: React.FC = () => {
   const { language } = useLanguage();

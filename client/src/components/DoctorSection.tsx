@@ -2,7 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import doctorImage from '@assets/doctor-consultation.jpg';
+import doctorImage from '@assets/doctor-consultation.webp';
 
 const DoctorSection = () => {
   const { language } = useLanguage();

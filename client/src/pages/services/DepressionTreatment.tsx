@@ -15,7 +15,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
 import hopeSymbolImage from "@assets/generated_images/Hope_and_growth_symbolism_978bb907.png";
-import consultationImage from "../../assets/consultation-image.png";
+import consultationImage from "../../assets/consultation-image.webp";
 
 const DepressionTreatment = () => {
   const { language } = useLanguage();

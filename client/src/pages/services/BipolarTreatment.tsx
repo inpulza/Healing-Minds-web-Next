@@ -15,7 +15,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
 import bipolarImage from "@assets/generated_images/Wellness_meditation_space_ae6f4d77.png";
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
-import drMelvaOfficeImage from "../../assets/dr-melva-office.jpg";
+import drMelvaOfficeImage from "../../assets/dr-melva-office.webp";
 
 const BipolarTreatment = () => {
   const { language } = useLanguage();

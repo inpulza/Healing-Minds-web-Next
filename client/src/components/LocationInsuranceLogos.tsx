@@ -1,5 +1,4 @@
 import { useLanguage } from '@/hooks/useLanguage';
-import { useEffect } from 'react';
 
 // Import insurance logos
 import aetnaLogo from '@/assets/insurance-aetna.webp';
@@ -17,14 +16,7 @@ import ambetterLogo from '@/assets/insurance-ambetter.webp';
 const LocationInsuranceLogos = () => {
   const { language } = useLanguage();
   
-  // Preload critical insurance logos for faster loading
-  useEffect(() => {
-    const criticalLogos = [aetnaLogo, cignaLogo, medicareLogo, medicaidLogo, avmedLogo, wellcareLogo, ambetterLogo];
-    criticalLogos.forEach(logo => {
-      const img = new Image();
-      img.src = logo;
-    });
-  }, []);
+  // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
 
   const insuranceLogos = [
     { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
