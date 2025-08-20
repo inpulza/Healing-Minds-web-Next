@@ -76,7 +76,7 @@ const Testimonials = () => {
                   <div className="font-body font-semibold text-green-800" data-testid={`testimonial-name-${index}`}>
                     {testimonial.name}
                   </div>
-                  <div className="text-sm text-gray-500 font-body" data-testid={`testimonial-location-${index}`}>
+                  <div className="text-sm text-gray-600 font-body" data-testid={`testimonial-location-${index}`}>
                     {testimonial.location}
                   </div>
                 </div>

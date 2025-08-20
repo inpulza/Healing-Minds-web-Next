@@ -61,7 +61,7 @@ const Hero = () => {
               height={250}
               loading="eager"
               decoding="async"
-              fetchpriority="high"
+              {...({'fetchpriority': 'high'} as any)}
             />
             
             {/* Services Carousel Overlay - Mobile */}
@@ -146,7 +146,7 @@ const Hero = () => {
               height={800}
               loading="eager"
               decoding="async"
-              fetchpriority="high"
+              {...({'fetchpriority': 'high'} as any)}
             />
             
 

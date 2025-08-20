@@ -118,7 +118,7 @@ const CharmHealthBooking = ({
             {currentContent.button}
           </Button>
           
-          <div className="flex items-center justify-center gap-4 mt-6 text-sm text-gray-500">
+          <div className="flex items-center justify-center gap-4 mt-6 text-sm text-gray-600">
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-1" />
               {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}

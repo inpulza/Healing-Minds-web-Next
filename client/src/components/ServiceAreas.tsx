@@ -101,8 +101,18 @@ const ServiceAreas: React.FC = () => {
                 <div className="absolute inset-0">
                   <img 
                     src={southwestFloridaMap}
+                    srcSet={`
+                      ${southwestFloridaMap.replace('.webp', '-400w.webp')} 400w,
+                      ${southwestFloridaMap.replace('.webp', '-600w.webp')} 600w,
+                      ${southwestFloridaMap} 800w
+                    `}
+                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"
                     alt="Southwest Florida service area map showing Naples, Marco Island, Bonita Springs, and Estero with psychiatric care coverage locations"
                     className="w-full h-full object-cover rounded-xl sm:rounded-2xl"
+                    width={800}
+                    height={600}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
 

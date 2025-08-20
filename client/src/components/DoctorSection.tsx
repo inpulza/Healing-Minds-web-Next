@@ -53,8 +53,18 @@ const DoctorSection = () => {
               <div className="aspect-[4/5] sm:aspect-[5/6] md:aspect-[4/5] lg:aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden">
                 <img
                   src={doctorImage}
+                  srcSet={`
+                    ${doctorImage.replace('.webp', '-400w.webp')} 400w,
+                    ${doctorImage.replace('.webp', '-600w.webp')} 600w,
+                    ${doctorImage} 800w
+                  `}
+                  sizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"
                   alt="Dr. Melva Reve, MD - Engaged in consultation with a patient, demonstrating compassionate psychiatric care approach"
                   className="w-full h-full object-cover"
+                  width={800}
+                  height={600}
+                  loading="lazy"
+                  decoding="async"
                   data-testid="doctor-section-image"
                 />
               </div>

@@ -1,0 +1,216 @@
+Metrics
+Expand view
+First Contentful Paint
+1.4 s
+Largest Contentful Paint
+1.7 s
+Total Blocking Time
+10 ms
+Cumulative Layout Shift
+0.012
+Speed Index
+1.6 s
+View Treemap
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Later this year, insights will replace performance audits. Learn more and provide feedback here.
+Try insights
+Show audits relevant to:
+
+All
+
+FCP
+
+LCP
+
+TBT
+
+CLS
+Diagnostics
+Enable text compression Est savings of 380 KiB
+Text-based resources should be served with compression (gzip, deflate or brotli) to minimize total network bytes. Learn more about text compression.FCPLCP
+URL
+Transfer Size
+Est Savings
+healingmindsp.com 1st party
+528.6 KiB	379.6 KiB
+/assets/index-3_EbZ4YY.js(www.healingmindsp.com)
+449.6 KiB
+314.1 KiB
+/assets/index-CTwuMUcG.css(www.healingmindsp.com)
+78.9 KiB
+65.5 KiB
+Largest Contentful Paint element 1,670 ms
+This is the largest contentful element painted within the viewport. Learn more about the Largest Contentful Paint elementLCP
+Element
+img.absolute.inset-0.w-full.h-full.object-cover.object-center
+Phase
+% of LCP
+Timing
+TTFB
+25%
+430 ms
+Load Delay
+54%
+900 ms
+Load Time
+16%
+260 ms
+Render Delay
+5%
+90 ms
+Reduce unused JavaScript Est savings of 363 KiB
+Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. Learn how to reduce unused JavaScript.FCPLCP
+URL
+Transfer Size
+Est Savings
+healingmindsp.com 1st party
+449.2 KiB	177.1 KiB
+/assets/index-3_EbZ4YY.js(www.healingmindsp.com)
+449.2 KiB
+177.1 KiB
+Unattributable
+242.1 KiB	126.4 KiB
+chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/autofill.bundle.js
+242.1 KiB
+126.4 KiB
+Google Tag Manager tag-manager 
+141.2 KiB	59.4 KiB
+/gtag/js?id=G-WMRK41PX2E(www.googletagmanager.com)
+141.2 KiB
+59.4 KiB
+Properly size images Est savings of 714 KiB
+Serve images that are appropriately-sized to save cellular data and improve load time. Learn how to size images.FCPLCP
+URL
+Resource Size
+Est Savings
+healingmindsp.com 1st party
+840.4 KiB	713.8 KiB
+img.w-full.h-full.object-cover
+/assets/doctor-co….webp(www.healingmindsp.com)
+130.5 KiB
+113.8 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance-medicaid-BfcaDmDO.webp(www.healingmindsp.com)
+68.0 KiB
+67.0 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance….webp(www.healingmindsp.com)
+63.8 KiB
+62.9 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance-florida-medicaid-ClfrkJcs.webp(www.healingmindsp.com)
+57.6 KiB
+56.8 KiB
+img.w-full.h-full.object-cover.rounded-xl.sm:rounded-2xl
+/assets/southwest….webp(www.healingmindsp.com)
+86.0 KiB
+51.0 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance-first-health-DBPuZsBJ.webp(www.healingmindsp.com)
+47.0 KiB
+46.3 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance….webp(www.healingmindsp.com)
+43.6 KiB
+43.0 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance….webp(www.healingmindsp.com)
+43.3 KiB
+42.7 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance….webp(www.healingmindsp.com)
+37.7 KiB
+37.2 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance….webp(www.healingmindsp.com)
+37.2 KiB
+36.6 KiB
+img.absolute.inset-0.w-full.h-full.object-cover.object-center
+/assets/hero-doct….webp(www.healingmindsp.com)
+75.7 KiB
+35.1 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance….webp(www.healingmindsp.com)
+35.3 KiB
+34.8 KiB
+img.w-full.h-full.object-cover.rounded-xl.sm:rounded-2xl
+/assets/florida-map-DZAByGvU.webp(www.healingmindsp.com)
+60.4 KiB
+33.1 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance-wellcare-DEJcJUjs.webp(www.healingmindsp.com)
+29.0 KiB
+28.6 KiB
+img.w-28.h-20.sm:w-36.sm:h-28.md:w-44.md:h-32.lg:w-52.lg:h-36.object-contain.filter.grayscale.group-hover:grayscale-0.transition-all.duration-300.hover:scale-110
+/assets/insurance….webp(www.healingmindsp.com)
+25.4 KiB
+25.0 KiB
+Preload Largest Contentful Paint image
+If the LCP element is dynamically added to the page, you should preload the image in order to improve LCP. Learn more about preloading LCP elements.LCP
+URL
+Est Savings
+healingmindsp.com 1st party
+0 ms
+img.absolute.inset-0.w-full.h-full.object-cover.object-center
+/assets/hero-doct….webp(www.healingmindsp.com)
+0 ms
+Serve static assets with an efficient cache policy 2 resources found
+A long cache lifetime can speed up repeat visits to your page. Learn more about efficient cache policies.
+URL
+Cache TTL
+Transfer Size
+Clarity utility 
+31 KiB
+/0.8.25/clarity.js(scripts.clarity.ms)
+1d
+31 KiB
+JSDelivr CDN cdn 
+15 KiB
+…4x3/es.svg(cdn.jsdelivr.net)
+7d
+15 KiB
+Eliminate render-blocking resources Est savings of 0 ms
+Avoid serving legacy JavaScript to modern browsers Est savings of 10 KiB
+Polyfills and transforms enable legacy browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile Baseline features, unless you know you must support legacy browsers. Learn why most sites can deploy ES6+ code without transpilingFCPLCP
+URL
+Est Savings
+chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/autofill.bundle.js
+9.7 KiB
+autofill.bundle.js:2
+Array.prototype.includes
+Avoid an excessive DOM size 1,259 elements
+A large DOM will increase memory usage, cause longer style calculations, and produce costly layout reflows. Learn how to avoid an excessive DOM size.TBT
+Statistic
+Element
+Value
+Total DOM Elements
+1,259
+Maximum DOM Depth
+path
+16
+Maximum Child Elements
+div.flex.items-center.space-x-4.text-white/90.font-body.font-medium.text-sm.px-2
+14
+Reduce unused CSS Est savings of 49 KiB
+Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. Learn how to reduce unused CSS.FCPLCP
+URL
+Transfer Size
+Est Savings
+healingmindsp.com 1st party
+78.9 KiB	48.9 KiB
+/assets/index-CTwuMUcG.css(www.healingmindsp.com)
+78.9 KiB
+48.9 KiB
+Avoid large layout shifts 2 layout shifts found
+Minimize third-party usage Third-party code blocked the main thread for 0 ms
+Avoid long main-thread tasks 3 long tasks found
+Avoid chaining critical requests 2 chains found
+More information about the performance of your application. These numbers don't directly affect the Performance score.
+Passed audits (24)

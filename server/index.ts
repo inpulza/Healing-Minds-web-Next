@@ -1,8 +1,25 @@
 import express, { type Request, Response, NextFunction } from "express";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+
+// Enable gzip/brotli compression for better performance
+app.use(compression({
+  filter: (req: Request, res: Response) => {
+    // Don't compress responses with this request header
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    
+    // Fallback to standard filter function
+    return compression.filter(req, res);
+  },
+  level: 6, // Compression level (1-9, 6 is default)
+  threshold: 1024, // Only compress responses larger than 1KB
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

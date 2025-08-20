@@ -356,11 +356,19 @@ const LocationNaples = () => {
                     <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[10rem]">
                       <img 
                         src={officePhoto}
+                        srcSet={`
+                          ${officePhoto.replace('.webp', '-400w.webp')} 400w,
+                          ${officePhoto.replace('.webp', '-800w.webp')} 800w,
+                          ${officePhoto.replace('.webp', '-1200w.webp')} 1200w,
+                          ${officePhoto} 1600w
+                        `}
+                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1536px) 1200px, 1600px"
                         alt="Dr. Melva Reve in her Naples psychiatric office - Professional medical environment"
                         className="w-full h-full object-cover object-center"
+                        width={1600}
+                        height={1200}
                         loading="lazy"
                         decoding="async"
-                        sizes="(max-width: 1024px) 100vw, 50vw"
                       />
                     </div>
                   </div>

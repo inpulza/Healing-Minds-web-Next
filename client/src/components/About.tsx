@@ -63,7 +63,7 @@ const About = () => {
 
               {/* Credentials */}
               <div className="mb-6 sm:mb-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm sm:text-base text-gray-500 font-body">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm sm:text-base text-gray-600 font-body">
                   <div className="hidden">
                     <div className="font-semibold text-green-600">
                       {language === 'en' ? 'Board Certified' : 'Certificada por la Junta'}
