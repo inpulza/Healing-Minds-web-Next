@@ -130,14 +130,14 @@ const Services = () => {
 
                 <Link href={service.link} className="mt-auto">
                   <Button
-                    className={`group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 px-6 sm:px-8 py-6 sm:py-7 w-full ${
+                    className={`group flex items-center justify-start gap-3 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 px-4 sm:px-6 w-full h-16 sm:h-18 ${
                       service.featured
                         ? 'bg-white text-green-800 hover:bg-green-50'
                         : 'bg-green-800 text-white hover:bg-green-700'
                     }`}
                     data-testid={`service-button-${service.id}`}
                   >
-                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
                       service.featured
                         ? 'bg-green-100'
                         : 'bg-green-700'
@@ -146,7 +146,7 @@ const Services = () => {
                         service.featured ? 'text-green-800' : 'text-white'
                       }`} />
                     </div>
-                    <span>
+                    <span className="text-left leading-tight flex-1">
                       {language === 'en' 
                         ? (() => {
                             switch(service.id) {
