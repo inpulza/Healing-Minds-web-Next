@@ -106,14 +106,14 @@ const ServiceAreas: React.FC = () => {
                   />
                 </div>
 
-                {/* City Markers positioned exactly over map locations */}
-                <div className="absolute inset-0">
+                {/* City Markers positioned exactly over map locations - with overflow prevention */}
+                <div className="absolute inset-0 overflow-hidden">
                   {/* Naples - Center (Main Office) - Based on map position */}
                   <div className="absolute" style={{top: '68%', left: '37%', transform: 'translate(-50%, -50%)'}}>
                     <div className="relative">
                       <div className="w-4 h-4 sm:w-5 sm:h-5 bg-green-600 rounded-full shadow-lg animate-pulse border-2 border-white"></div>
-                      <div className="absolute -top-8 -left-8 whitespace-nowrap">
-                        <span className="text-xs font-bold text-white bg-green-600 px-2 py-1 rounded-md shadow-lg">
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap max-w-[120px] text-center">
+                        <span className="text-xs font-bold text-white bg-green-600 px-2 py-1 rounded-md shadow-lg inline-block">
                           Naples ⭐
                         </span>
                       </div>
@@ -124,8 +124,8 @@ const ServiceAreas: React.FC = () => {
                   <div className="absolute" style={{top: '88%', left: '40%', transform: 'translate(-50%, -50%)'}}>
                     <div className="relative">
                       <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
-                      <div className="absolute -top-8 -left-12 whitespace-nowrap">
-                        <span className="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg">
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap max-w-[120px] text-center">
+                        <span className="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg inline-block">
                           Marco Island
                         </span>
                       </div>
@@ -136,8 +136,8 @@ const ServiceAreas: React.FC = () => {
                   <div className="absolute" style={{top: '36%', left: '38%', transform: 'translate(-50%, -50%)'}}>
                     <div className="relative">
                       <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
-                      <div className="absolute -top-8 -left-6 whitespace-nowrap">
-                        <span className="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg">
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap max-w-[100px] text-center">
+                        <span className="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg inline-block">
                           Estero
                         </span>
                       </div>
@@ -148,8 +148,8 @@ const ServiceAreas: React.FC = () => {
                   <div className="absolute" style={{top: '28%', left: '25%', transform: 'translate(-50%, -50%)'}}>
                     <div className="relative">
                       <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full shadow-lg border-2 border-white"></div>
-                      <div className="absolute -top-8 -left-10 whitespace-nowrap">
-                        <span className="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg">
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap max-w-[120px] text-center">
+                        <span className="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-md shadow-lg inline-block">
                           Bonita Springs
                         </span>
                       </div>
@@ -158,7 +158,7 @@ const ServiceAreas: React.FC = () => {
 
                   {/* Service Coverage Circle around Naples */}
                   <div className="absolute" style={{top: '68%', left: '37%', transform: 'translate(-50%, -50%)'}}>
-                    <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-full bg-green-500 bg-opacity-10 border border-green-400 border-opacity-20"></div>
+                    <div className="w-32 h-32 sm:w-44 sm:h-44 lg:w-52 lg:h-52 rounded-full bg-green-500 bg-opacity-10 border border-green-400 border-opacity-20"></div>
                   </div>
                 </div>
 

@@ -319,12 +319,12 @@ const Header = () => {
                 )}
               </div>
             ))}
-            <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:justify-between pt-6 border-t border-gray-100">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={toggleLanguage}
-                className="text-sm text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-4 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-2"
+                className="text-sm text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-4 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-2 flex-shrink-0"
                 data-testid="mobile-language-toggle"
               >
                 <span>{language === 'en' ? 'Español' : 'English'}</span>
@@ -338,9 +338,9 @@ const Header = () => {
                   }}
                 />
               </Button>
-              <Link href="/contact">
+              <Link href="/contact" className="w-full sm:w-auto">
                 <Button
-                  className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 py-4"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 py-4 w-full sm:w-auto"
                   onClick={() => setIsMobileMenuOpen(false)}
                   data-testid="mobile-book-now-button"
                 >

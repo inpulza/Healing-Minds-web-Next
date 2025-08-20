@@ -77,16 +77,16 @@ const InsuranceLogos = () => {
                   <img
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-36 h-28 sm:w-44 sm:h-32 lg:w-52 lg:h-36 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110"
+                    className="w-28 h-20 sm:w-36 sm:h-28 md:w-44 md:h-32 lg:w-52 lg:h-36 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110"
                     width={isHighPriority ? 208 : undefined}
                     height={isHighPriority ? 144 : undefined}
                     loading={isHighPriority ? "eager" : "lazy"}
-                    {...(isHighPriority ? { fetchpriority: "high" as any } : { fetchpriority: "low" as any })}
+                    {...(isHighPriority ? { fetchpriority: "high" } : { fetchpriority: "low" })}
                     decoding="async"
                     style={{
                       aspectRatio: '13/9',
-                      minWidth: '144px',
-                      minHeight: '112px'
+                      minWidth: 'min(112px, 25vw)',
+                      minHeight: 'min(80px, 18vw)'
                     }}
                   />
                 </div>
