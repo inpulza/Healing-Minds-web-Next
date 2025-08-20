@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 import { IconHeart, IconSun } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
-import bilingualImage from '@assets/bilingual-consultation-updated.png';
+import bilingualImage from '@assets/bilingual-consultation-updated.webp';
 
 const BilingualCare = () => {
   const { language } = useLanguage();
@@ -82,6 +82,10 @@ const BilingualCare = () => {
               src={bilingualImage}
               alt="Bilingual psychiatric care - diverse community support"
               className="rounded-lg sm:rounded-xl shadow-lg w-full h-auto"
+              width={600}
+              height={400}
+              loading="lazy"
+              decoding="async"
               data-testid="bilingual-image"
             />
           </div>

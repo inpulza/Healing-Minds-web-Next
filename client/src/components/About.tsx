@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
 import { IconUserHeart } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
-import doctorProfileImage from '@assets/doctor-profile.png';
+import doctorProfileImage from '@assets/doctor-profile.webp';
 
 const About = () => {
   const { language } = useLanguage();
@@ -22,6 +22,10 @@ const About = () => {
                   src={doctorProfileImage}
                   alt="Dr. Melva Reve - Psychiatrist in Naples, FL"
                   className="w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[600px] object-cover object-top"
+                  width={600}
+                  height={600}
+                  loading="lazy"
+                  decoding="async"
                   data-testid="about-doctor-image"
                 />
                 {/* Subtle Green Gradient Overlay */}

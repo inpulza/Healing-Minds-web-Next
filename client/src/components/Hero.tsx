@@ -57,7 +57,10 @@ const Hero = () => {
               src={mobileHeroImage}
               alt="Dr. Melva Reve - Psychiatrist in Naples, FL"
               className="absolute inset-0 w-full h-full object-cover object-center"
+              width={400}
+              height={250}
               loading="eager"
+              decoding="async"
             />
             
             {/* Services Carousel Overlay - Mobile */}
@@ -138,7 +141,10 @@ const Hero = () => {
               src={heroImage}
               alt="Dr. Melva Reve - Psychiatrist in Naples, FL"
               className="absolute inset-0 w-full h-full object-cover object-center"
+              width={1200}
+              height={800}
               loading="eager"
+              decoding="async"
             />
             
 

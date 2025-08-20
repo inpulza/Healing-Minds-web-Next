@@ -2,17 +2,17 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useEffect } from 'react';
 
 // Import insurance logos
-import aetnaLogo from '@/assets/insurance-aetna.png';
-import cignaLogo from '@/assets/insurance-cigna.png';
-import medicareLogo from '@/assets/insurance-medicare.png';
-import firstHealthLogo from '@/assets/insurance-first-health.png';
-import medicaidLogo from '@/assets/insurance-medicaid.png';
-import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.png';
-import champvaLogo from '@/assets/insurance-champva.png';
-import sunshineHealthLogo from '@/assets/insurance-sunshine.png';
-import avmedLogo from '@/assets/insurance-avmed.png';
-import wellcareLogo from '@/assets/insurance-wellcare.png';
-import ambetterLogo from '@/assets/insurance-ambetter.png';
+import aetnaLogo from '@/assets/insurance-aetna.webp';
+import cignaLogo from '@/assets/insurance-cigna.webp';
+import medicareLogo from '@/assets/insurance-medicare.webp';
+import firstHealthLogo from '@/assets/insurance-first-health.webp';
+import medicaidLogo from '@/assets/insurance-medicaid.webp';
+import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.webp';
+import champvaLogo from '@/assets/insurance-champva.webp';
+import sunshineHealthLogo from '@/assets/insurance-sunshine.webp';
+import avmedLogo from '@/assets/insurance-avmed.webp';
+import wellcareLogo from '@/assets/insurance-wellcare.webp';
+import ambetterLogo from '@/assets/insurance-ambetter.webp';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
@@ -81,7 +81,6 @@ const InsuranceLogos = () => {
                     width={isHighPriority ? 208 : undefined}
                     height={isHighPriority ? 144 : undefined}
                     loading={isHighPriority ? "eager" : "lazy"}
-                    {...(isHighPriority ? { fetchpriority: "high" } : { fetchpriority: "low" })}
                     decoding="async"
                     style={{
                       aspectRatio: '13/9',

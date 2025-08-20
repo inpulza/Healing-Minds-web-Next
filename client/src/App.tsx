@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { Switch, Route } from 'wouter';
 import { queryClient } from './lib/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -19,13 +19,22 @@ import ServiciosEspanol from '@/pages/ServiciosEspanol';
 import LocationNaples from '@/pages/LocationNaples';
 import NotFound from '@/pages/not-found';
 
-// Individual Service Pages
-import AnxietyTreatment from '@/pages/services/AnxietyTreatment';
-import DepressionTreatment from '@/pages/services/DepressionTreatment';
-import AdhdTreatment from '@/pages/services/AdhdTreatment';
-import PtsdTreatment from '@/pages/services/PtsdTreatment';
-import BipolarTreatment from '@/pages/services/BipolarTreatment';
-import MedicationManagement from '@/pages/services/MedicationManagement';
+// Individual Service Pages - Lazy loaded for performance
+const AnxietyTreatment = lazy(() => import('@/pages/services/AnxietyTreatment'));
+const DepressionTreatment = lazy(() => import('@/pages/services/DepressionTreatment'));
+const AdhdTreatment = lazy(() => import('@/pages/services/AdhdTreatment'));
+const PtsdTreatment = lazy(() => import('@/pages/services/PtsdTreatment'));
+const BipolarTreatment = lazy(() => import('@/pages/services/BipolarTreatment'));
+const MedicationManagement = lazy(() => import('@/pages/services/MedicationManagement'));
+
+// Loading component for lazy routes
+const PageLoader = () => (
+  <div className="min-h-screen bg-white flex items-center justify-center">
+    <div className="animate-pulse text-green-600 font-body text-lg">
+      Cargando...
+    </div>
+  </div>
+);
 
 function Router() {
   // Track page views when routes change
@@ -38,7 +47,8 @@ function Router() {
   useScrollToTop();
   
   return (
-    <Switch>
+    <Suspense fallback={<PageLoader />}>
+      <Switch>
       <Route path="/" component={Home} />
       <Route path="/about" component={About} />
       <Route path="/services" component={Services} />
@@ -63,8 +73,9 @@ function Router() {
       <Route path="/es/servicios/tratamiento-bipolar" component={BipolarTreatment} />
       <Route path="/es/servicios/manejo-medicamentos" component={MedicationManagement} />
       
-      <Route component={NotFound} />
-    </Switch>
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 
