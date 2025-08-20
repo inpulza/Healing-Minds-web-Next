@@ -488,7 +488,32 @@ const LocationNaples = () => {
                         <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 bg-green-700">
                           <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                         </div>
-                        <span>{language === 'en' ? 'Learn More' : 'Saber Más'}</span>
+                        <span>
+                          {language === 'en' 
+                            ? (() => {
+                                switch(service.id) {
+                                  case 'anxiety': return 'Learn About Anxiety Treatment';
+                                  case 'depression': return 'Learn About Depression Treatment';
+                                  case 'adhd': return 'Learn About ADHD Treatment';
+                                  case 'ptsd': return 'Learn About PTSD Treatment';
+                                  case 'bipolar': return 'Learn About Bipolar Treatment';
+                                  case 'medication-management': return 'Learn About Medication Management';
+                                  default: return 'Learn More';
+                                }
+                              })()
+                            : (() => {
+                                switch(service.id) {
+                                  case 'anxiety': return 'Conocer Tratamiento de Ansiedad';
+                                  case 'depression': return 'Conocer Tratamiento de Depresión';
+                                  case 'adhd': return 'Conocer Tratamiento de TDAH';
+                                  case 'ptsd': return 'Conocer Tratamiento de TEPT';
+                                  case 'bipolar': return 'Conocer Tratamiento Bipolar';
+                                  case 'medication-management': return 'Conocer Manejo de Medicamentos';
+                                  default: return 'Saber Más';
+                                }
+                              })()
+                          }
+                        </span>
                       </Button>
                     </Link>
                   </div>
