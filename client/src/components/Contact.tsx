@@ -317,7 +317,7 @@ const Contact = () => {
                   {t('contact.form.preferredLanguage')}
                 </Label>
                 <Select value={formData.preferredLanguage} onValueChange={(value) => handleInputChange('preferredLanguage', value)}>
-                  <SelectTrigger className="w-full" data-testid="select-language">
+                  <SelectTrigger className="w-full" data-testid="select-language" aria-label={language === 'en' ? 'Select preferred language for communication' : 'Seleccione idioma preferido para comunicación'}>
                     <SelectValue placeholder="Select language" />
                   </SelectTrigger>
                   <SelectContent>

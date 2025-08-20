@@ -97,6 +97,9 @@ const About = () => {
                   href="https://linkedin.com/in/dr-melva-reve" 
                   className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
                   data-testid="linkedin-link"
+                  aria-label={language === 'en' ? 'Visit Dr. Melva Reve LinkedIn profile - opens in new window' : 'Visitar perfil de LinkedIn de la Dra. Melva Reve - abre en nueva ventana'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <FaLinkedin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 </a>
@@ -104,6 +107,9 @@ const About = () => {
                   href="https://facebook.com/healingmindspsychiatry" 
                   className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
                   data-testid="facebook-link"
+                  aria-label={language === 'en' ? 'Visit Healing Minds Psychiatry Facebook page - opens in new window' : 'Visitar página de Facebook de Healing Minds Psychiatry - abre en nueva ventana'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <FaFacebook className="w-4 h-4 sm:w-5 sm:h-5 text-blue-700" />
                 </a>
@@ -111,6 +117,9 @@ const About = () => {
                   href="https://instagram.com/healingmindspsychiatry" 
                   className="w-8 h-8 sm:w-10 sm:h-10 bg-pink-50 hover:bg-pink-100 rounded-lg flex items-center justify-center transition-colors duration-300"
                   data-testid="instagram-link"
+                  aria-label={language === 'en' ? 'Visit Healing Minds Psychiatry Instagram page - opens in new window' : 'Visitar página de Instagram de Healing Minds Psychiatry - abre en nueva ventana'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <FaInstagram className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600" />
                 </a>
