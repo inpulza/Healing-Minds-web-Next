@@ -236,6 +236,24 @@ const Footer = () => {
                 © {new Date().getFullYear()} Healing Minds Psychiatry. 
                 {language === 'en' ? ' All rights reserved.' : ' Todos los derechos reservados.'}
               </div>
+              <div className="text-xs text-green-400/70 mt-2 flex items-center justify-end gap-1" data-testid="footer-credits">
+                <span className="font-light">
+                  {language === 'en' ? 'Crafted with' : 'Creado con'} 
+                </span>
+                <span className="text-green-300 text-sm">♥</span>
+                <span className="font-light">
+                  {language === 'en' ? 'by' : 'por'}
+                </span>
+                <a 
+                  href="https://www.inpulza.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="font-medium text-green-300 hover:text-white transition-colors duration-200 ml-1"
+                  data-testid="footer-inpulza-link"
+                >
+                  Inpulza
+                </a>
+              </div>
             </div>
           </div>
         </div>
