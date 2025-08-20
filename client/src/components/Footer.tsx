@@ -2,7 +2,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { FaLinkedin, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaLinkedin, FaFacebook, FaInstagram, FaTiktok } from 'react-icons/fa';
 import { Mail, Phone, MapPin, ArrowRight, Calendar } from 'lucide-react';
 import { useState } from 'react';
 
@@ -30,10 +30,10 @@ const Footer = () => {
   const charmHealthUrl = "https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2";
 
   const socialLinks = [
-    { href: 'https://linkedin.com/in/dr-melva-reve', icon: FaLinkedin, label: 'LinkedIn' },
-    { href: 'https://facebook.com/healingmindspsychiatry', icon: FaFacebook, label: 'Facebook' },
-    { href: 'https://instagram.com/healingmindspsychiatry', icon: FaInstagram, label: 'Instagram' },
-    { href: 'https://twitter.com/healingmindsfl', icon: FaTwitter, label: 'Twitter' }
+    { href: 'https://www.linkedin.com/in/melva-reve-2549a9120', icon: FaLinkedin, label: 'LinkedIn' },
+    { href: 'https://www.facebook.com/profile.php?id=61578845287836', icon: FaFacebook, label: 'Facebook' },
+    { href: 'https://www.instagram.com/hmpsychiatry', icon: FaInstagram, label: 'Instagram' },
+    { href: 'https://www.tiktok.com/@dra.melvavidal', icon: FaTiktok, label: 'TikTok' }
   ];
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
