@@ -45,10 +45,10 @@ const Footer = () => {
 
   return (
     <footer className="bg-green-900 text-white py-16" data-testid="footer">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-12 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+        <div className="grid md:grid-cols-8 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-12">
           {/* Left Section - Brand & Newsletter */}
-          <div className="lg:col-span-5">
+          <div className="md:col-span-3 lg:col-span-5">
             {/* Brand */}
             <div className="mb-8">
               <Link href="/" className="inline-block">
@@ -106,9 +106,9 @@ const Footer = () => {
           </div>
 
           {/* Right Section - Links */}
-          <div className="lg:col-span-7">
+          <div className="md:col-span-5 lg:col-span-7">
             {/* Links Grid */}
-            <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-8">
               {/* Our Services */}
               <div>
                 <h4 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-services-title">
@@ -182,7 +182,7 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="border-t border-green-700 pt-8 mt-12">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6">
             {/* Contact Info */}
             <div className="space-y-2" data-testid="footer-contact-info">
               <div className="flex items-center text-green-200 text-sm">

@@ -40,9 +40,9 @@ const Testimonials = () => {
 
   return (
     <section className="py-20 bg-green-50">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-body font-bold text-green-800 mb-6" data-testid="testimonials-title">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="testimonials-title">
             What our <span className="font-display italic text-green-700">happy</span> patients say
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="testimonials-description">
@@ -53,7 +53,7 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {testimonials.map((testimonial, index) => (
             <div key={index} className="card-modern hover:shadow-xl transition-all duration-300 group" data-testid={`testimonial-${index}`}>
               <div className="flex items-center justify-center mb-8">

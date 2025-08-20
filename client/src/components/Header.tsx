@@ -104,18 +104,18 @@ const Header = () => {
       isScrolled 
         ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
         : 'bg-transparent'
-    } ${isServicesOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-32'}`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex justify-between items-center h-32">
+    } ${isServicesOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-20 sm:h-24 md:h-28 lg:h-32'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+        <div className="flex justify-between items-center h-20 sm:h-24 md:h-28 lg:h-32">
           {/* Logo */}
           <Link href="/" data-testid="logo-link">
-            <div className="text-2xl font-body font-bold text-green-800">
+            <div className="text-lg sm:text-xl md:text-2xl font-body font-bold text-green-800">
               Healing Minds <span className="text-green-700">Psychiatry</span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex relative mt-8 mb-8" ref={servicesRef}>
+          <div className="hidden md:flex relative mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 md:mb-8" ref={servicesRef}>
             <nav className={`flex items-center transition-all duration-500 ${
               isServicesOpen 
                 ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
@@ -194,14 +194,14 @@ const Header = () => {
             <Button
               variant="ghost"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-700 hover:text-primary rounded-full p-3"
+              className="text-gray-700 hover:text-primary rounded-full p-2 sm:p-3"
               data-testid="mobile-menu-toggle"
-              style={{ minWidth: '60px', minHeight: '60px' }}
+              style={{ minWidth: '48px', minHeight: '48px' }}
             >
               {isMobileMenuOpen ? (
-                <X style={{ width: '32px', height: '32px', strokeWidth: '2.5px' }} />
+                <X style={{ width: '24px', height: '24px', strokeWidth: '2px' }} />
               ) : (
-                <Menu style={{ width: '32px', height: '32px', strokeWidth: '2.5px' }} />
+                <Menu style={{ width: '24px', height: '24px', strokeWidth: '2px' }} />
               )}
             </Button>
           </div>
@@ -215,7 +215,7 @@ const Header = () => {
         }`}>
           <div className="hidden md:block">
             <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 mx-4 relative z-50">
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {serviceItems.map((service, index) => (
                   <Link
                     key={service.href}

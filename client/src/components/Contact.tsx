@@ -143,9 +143,9 @@ const Contact = () => {
 
   return (
     <section id="contact" className="py-20 bg-green-50">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
             Get in <span className="font-display italic text-green-700">touch</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="contact-description">
@@ -153,7 +153,7 @@ const Contact = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
           {/* Contact Information */}
           <div className="flex flex-col h-full">
             <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-info-title">

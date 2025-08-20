@@ -65,7 +65,7 @@ export const ServiceHeroMasonry = ({
 
   return (
     <section className="pt-20 pb-8 sm:pb-12 lg:pb-16 bg-green-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         {/* Text Content Section - Full Width */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-6">
@@ -77,7 +77,7 @@ export const ServiceHeroMasonry = ({
             </span>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
             {language === 'en' ? (
               <>
                 {title.en.includes('<span') ? (

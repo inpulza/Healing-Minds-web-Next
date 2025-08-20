@@ -12,16 +12,16 @@ const About = () => {
 
   return (
     <section id="about" className="py-12 sm:py-16 lg:py-20 bg-green-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 xl:p-16 shadow-lg">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center">
             {/* Doctor Image */}
             <div className="relative order-1 lg:order-1">
               <div className="relative bg-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
                 <img
                   src={doctorProfileImage}
                   alt="Dr. Melva Reve - Psychiatrist in Naples, FL"
-                  className="w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover object-top"
+                  className="w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[600px] object-cover object-top"
                   data-testid="about-doctor-image"
                 />
                 {/* Subtle Green Gradient Overlay */}
@@ -59,7 +59,7 @@ const About = () => {
 
               {/* Credentials */}
               <div className="mb-6 sm:mb-8">
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 text-sm sm:text-base text-gray-500 font-body">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm sm:text-base text-gray-500 font-body">
                   <div className="hidden">
                     <div className="font-semibold text-green-600">
                       {language === 'en' ? 'Board Certified' : 'Certificada por la Junta'}

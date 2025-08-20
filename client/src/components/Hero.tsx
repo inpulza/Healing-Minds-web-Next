@@ -48,9 +48,9 @@ const Hero = () => {
 
   return (
     <section className="pt-8 pb-16 bg-white">
-      <div className="max-w-[85%] lg:max-w-[90%] mx-auto px-2">
-        {/* Mobile: Separate containers, Desktop: Single container */}
-        <div className="block sm:hidden">
+      <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[90%] mx-auto px-2 sm:px-4">
+        {/* Mobile: Separate containers, Tablet & Desktop: Single container */}
+        <div className="block md:hidden">
           {/* Mobile: Doctor image container */}
           <div className="relative rounded-2xl overflow-hidden mb-6 h-[250px]">
             <img 
@@ -87,7 +87,7 @@ const Hero = () => {
           
           {/* Mobile: Content container */}
           <div className="bg-[#1e6b3b] rounded-2xl px-8 py-10 text-center">
-            <h1 className="text-3xl font-display font-bold leading-relaxed text-white mb-6" data-testid="hero-title">
+            <h1 className="text-2xl sm:text-3xl font-display font-bold leading-relaxed text-white mb-6" data-testid="hero-title">
               <div className="mb-2">Find Your Path to</div>
               <div className="flex items-center justify-center gap-2 mb-2">
                 <WellnessIcon size="sm" color="green" className="flex-shrink-0">
@@ -130,9 +130,9 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Desktop: Original single container layout */}
-        <div className="hidden sm:block">
-          <div className="relative rounded-3xl overflow-hidden h-[600px] sm:h-[700px] lg:h-[800px] flex items-center justify-center">
+        {/* Tablet & Desktop: Original single container layout */}
+        <div className="hidden md:block">
+          <div className="relative rounded-3xl overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] flex items-center justify-center">
             {/* Background Image */}
             <img 
               src={heroImage}
@@ -146,7 +146,7 @@ const Hero = () => {
             {/* Left-Aligned Content */}
             <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
               <div className="max-w-4xl ml-4">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
                   Find Your Path to<br />
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                     <IconBrain />

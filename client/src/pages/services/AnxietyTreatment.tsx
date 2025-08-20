@@ -144,11 +144,11 @@ const AnxietyTreatment = () => {
 
         {/* Modern Symptoms Section */}
         <section className="py-16 sm:py-20 bg-green-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="grid md:grid-cols-2 gap-8 md:gap-10 lg:gap-12 items-center">
                 {/* Content Side */}
-                <div className="order-2 lg:order-1">
+                <div className="order-2 md:order-1">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                     {language === 'en' ? 'Symptom Recognition' : 'Reconocimiento de Síntomas'}
                   </div>
@@ -186,7 +186,7 @@ const AnxietyTreatment = () => {
                 </div>
 
                 {/* Symptoms Grid Side */}
-                <div className="order-1 lg:order-2 flex flex-col h-full">
+                <div className="order-1 md:order-2 flex flex-col h-full">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     {symptoms.slice(0, 6).map((symptom, index) => (
                       <div key={index} className="p-4">
@@ -227,7 +227,7 @@ const AnxietyTreatment = () => {
 
         {/* Treatment Approach Section */}
         <section className="py-16 sm:py-20 bg-green-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
@@ -271,8 +271,8 @@ const AnxietyTreatment = () => {
 
         {/* Practice Information Section */}
         <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-12 items-center">
               <div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                   {language === 'en' ? (

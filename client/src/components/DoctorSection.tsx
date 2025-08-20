@@ -9,9 +9,9 @@ const DoctorSection = () => {
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 xl:p-16 shadow-lg border border-green-100">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center">
             {/* Content */}
             <div className="text-green-800 order-2 lg:order-1">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold mb-4 sm:mb-6" data-testid="doctor-section-title">
@@ -50,7 +50,7 @@ const DoctorSection = () => {
 
             {/* Doctor Image */}
             <div className="relative order-1 lg:order-2">
-              <div className="aspect-[4/5] sm:aspect-[5/6] lg:aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden">
+              <div className="aspect-[4/5] sm:aspect-[5/6] md:aspect-[4/5] lg:aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden">
                 <img
                   src={doctorImage}
                   alt="Dr. Melva Reve - Psychiatrist"

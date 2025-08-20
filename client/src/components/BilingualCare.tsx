@@ -32,8 +32,8 @@ const BilingualCare = () => {
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-center">
           <div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-green-800 leading-tight" data-testid="bilingual-title">
