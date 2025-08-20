@@ -482,13 +482,13 @@ const LocationNaples = () => {
 
                     <Link href={service.link} className="mt-auto">
                       <Button
-                        className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 px-6 sm:px-8 py-6 sm:py-7 w-full bg-green-800 text-white hover:bg-green-700"
+                        className="group flex items-center justify-start gap-3 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 px-4 sm:px-6 w-full min-h-[4rem] sm:min-h-[4.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
                         data-testid={`service-button-${service.id}`}
                       >
-                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 bg-green-700">
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
                           <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                         </div>
-                        <span>
+                        <span className="text-left leading-tight flex-1 py-2">
                           {language === 'en' 
                             ? (() => {
                                 switch(service.id) {
