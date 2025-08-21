@@ -1,0 +1,69 @@
+Sí, has encontrado al principal sospechoso. Es casi seguro que el script replit-dev-banner.js es el causante del problema del parámetro ?_g=.
+
+Ahora analizo todo el código que me has pasado y te doy un plan de acción completo.
+
+Análisis del Script "replit-dev-banner.js" 🕵️‍♂️
+Tal como indica el comentario en tu propio código, este script sirve para añadir un banner en la parte superior de la página cuando la ves en modo de desarrollo fuera del entorno de Replit (por ejemplo, cuando abres tu web en una pestaña normal del navegador).
+
+¿Por qué añade el parámetro ?_g=? Para funcionar correctamente, este script necesita saber si ya te ha mostrado el banner, si lo has cerrado, etc. Una forma de "recordar" este estado entre diferentes recargas de página es añadiendo un identificador único a la URL. Ese es casi con toda seguridad el propósito del parámetro ?_g=. Es su mecanismo de seguimiento.
+
+¿Es un problema? El script en sí no es "malo", su intención es ayudarte en el desarrollo. Sin embargo, para un sitio web en producción (es decir, tu web pública), es totalmente innecesario y, como ya has visto, causa un grave problema de SEO al generar miles de URLs que confunden a Google.
+
+Conclusión sobre el script: Has encontrado la fuente del problema. Este script debe ser eliminado de la versión final de tu web.
+
+Análisis General del Código HTML (index.html)
+Ahora reviso el resto del código que me has pasado. Tienes cosas muy bien hechas, pero he detectado un error de SEO muy importante que debes corregir.
+
+Lo que está bien 👍
+Meta Robots: La etiqueta <meta name="robots" content="index, follow, ..."> está perfecta. Le da a Google instrucciones claras y positivas para que indexe tu contenido.
+
+Carga de Fuentes Optimizada: La forma en que cargas las Google Fonts (usando media="print" y onload) es una técnica avanzada y excelente para mejorar la velocidad de carga de la web. Evita que las fuentes bloqueen la visualización de tu página. ¡Muy bien aquí!
+
+Scripts al final: Colocar los scripts justo antes del cierre de la etiqueta </body> es la mejor práctica para no retrasar la carga del contenido visible de la página.
+
+El Error Crítico a Corregir 🚨
+Etiqueta Canónica Estática: Has incluido esta línea:
+<link rel="canonical" href="https://healingmindsp.com">
+
+Esto es un error grave de SEO. Lo que esta línea le dice a Google es: "No importa en qué página de mi web estés (/sobre-nosotros, /contacto, /articulo-1), la página original y la única que importa es la página de inicio (/)".
+
+Como resultado, es muy probable que Google solo indexe tu página de inicio y ignore todas las demás, pensando que son duplicados de la home.
+
+La solución: La etiqueta canónica debe ser dinámica. Cada página debe tener una etiqueta canónica que apunte a sí misma.
+
+En la página https://healingmindsp.com/contacto, la canónica debe ser <link rel="canonical" href="https://healingmindsp.com/contacto">.
+
+En la página https://healingmindsp.com/blog/mi-articulo, la canónica debe ser <link rel="canonical" href="https://healingmindsp.com/blog/mi-articulo">.
+
+Dado que usas un archivo main.tsx (lo que sugiere que usas un framework como React), necesitarás una librería como React Helmet o similar para gestionar las etiquetas del <head> de forma dinámica para cada ruta o página de tu aplicación.
+
+¿Qué Debes Hacer Ahora? (Plan de Acción)
+Aquí tienes los pasos exactos para dejar tu web optimizada:
+
+Eliminar el Script del Banner de Replit (Solución al ?_g=):
+Simplemente borra esta línea completa de tu archivo index.html:
+<script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js" async></script>
+
+Corregir las Etiquetas Canónicas (Solución al problema de indexación):
+Este paso es crucial. Debes implementar una solución para que la etiqueta <link rel="canonical"> se genere dinámicamente con la URL correcta para cada página individual de tu sitio. Investiga cómo hacerlo con el framework que estés utilizando (por ejemplo, con "React Helmet" si usas React).
+
+Implementar la Regla en robots.txt (Como Red de Seguridad):
+Aunque elimines el script, te sigo recomendando crear o modificar el archivo robots.txt y añadir la regla que te comenté anteriormente.
+
+User-agent: *
+Disallow: /*?_g=
+Esto actuará como un seguro por si Google intenta rastrear alguna de las URLs antiguas que ya descubrió.
+
+Validar la Corrección en Google Search Console:
+Una vez que hayas subido los cambios (sin el script y con las canónicas corregidas), vuelve a Google Search Console, ve al informe de "Páginas no indexadas", selecciona el motivo "Excluida por la etiqueta 'noindex'" y haz clic en el botón "Validar corrección". Google volverá a rastrear tu sitio y, con el tiempo, el error desaparecerá.
+
+Resumen y Conclusión
+¡Felicidades por encontrar el script! Ese era el origen de tus miles de URLs.
+
+Ahora tienes dos tareas claras:
+
+Fácil: Eliminar el script replit-dev-banner.js.
+
+Urgente y Crítica: Arreglar la lógica de tus etiquetas canónicas para que no apunten todas a la página de inicio.
+
+Si solucionas ambas cosas, tu web estará en una posición mucho más sólida para posicionarse correctamente en Google.
