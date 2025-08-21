@@ -11,13 +11,15 @@ import { useClarity } from '@/hooks/use-clarity';
 import { initGA } from '@/lib/analytics';
 import { addMedicalBusinessSchema, addPhysicianSchema } from '@/utils/seo';
 import Home from '@/pages/Home';
-import About from '@/pages/About';
-import Services from '@/pages/Services';
-import ForPatients from '@/pages/ForPatients';
-import Contact from '@/pages/Contact';
-import ServiciosEspanol from '@/pages/ServiciosEspanol';
-import LocationNaples from '@/pages/LocationNaples';
-import NotFound from '@/pages/not-found';
+
+// All non-critical pages lazy loaded for performance optimization
+const About = lazy(() => import('@/pages/About'));
+const Services = lazy(() => import('@/pages/Services'));
+const ForPatients = lazy(() => import('@/pages/ForPatients'));
+const Contact = lazy(() => import('@/pages/Contact'));
+const ServiciosEspanol = lazy(() => import('@/pages/ServiciosEspanol'));
+const LocationNaples = lazy(() => import('@/pages/LocationNaples'));
+const NotFound = lazy(() => import('@/pages/not-found'));
 
 // Individual Service Pages - Lazy loaded for performance
 const AnxietyTreatment = lazy(() => import('@/pages/services/AnxietyTreatment'));

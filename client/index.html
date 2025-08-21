@@ -142,6 +142,8 @@
     <link rel="modulepreload" href="/src/App.tsx" />
     <link rel="modulepreload" href="/src/components/Hero.tsx" />
     <link rel="modulepreload" href="/src/components/Header.tsx" />
+    <link rel="modulepreload" href="/src/hooks/useLanguage.ts" />
+    <link rel="modulepreload" href="/src/contexts/LanguageContext.tsx" />
     <!-- Non-blocking font loading for mobile optimization -->
     <link
       rel="preload"
@@ -155,19 +157,22 @@
         href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap&subset=latin"
     /></noscript>
 
-    <!-- Mobile LCP Critical Resource Preload -->
+    <!-- LCP Critical Resource Preload - Mobile First -->
+    <link
+      rel="preload"
+      href="/src/assets/hero-doctor-mobile-optimized.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+      media="(max-width: 767px)"
+    />
     <link
       rel="preload"
       href="/src/assets/hero-doctor-hq.webp"
       as="image"
       type="image/webp"
       fetchpriority="high"
-    />
-    <link
-      rel="prefetch"
-      href="/src/assets/hero-doctor-mobile-optimized.webp"
-      as="image"
-      type="image/webp"
+      media="(min-width: 768px)"
     />
 
     <!-- Critical CSS inline optimization -->
@@ -204,7 +209,7 @@
         font-size: 0;
       }
 
-      /* Critical loading skeletons */
+      /* Critical loading optimizations */
       .skeleton {
         background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
         background-size: 200% 100%;
@@ -213,6 +218,12 @@
       @keyframes loading {
         0% { background-position: 200% 0; }
         100% { background-position: -200% 0; }
+      }
+      
+      /* Reduce animation cost */
+      @media (prefers-reduced-motion: reduce) {
+        .skeleton { animation: none; background: #f3f4f6; }
+        * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
       }
 
       /* Header critical styles */

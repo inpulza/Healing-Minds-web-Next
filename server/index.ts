@@ -5,7 +5,7 @@ import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 
-// Enable gzip/brotli compression for better performance
+// Enable aggressive gzip compression for better performance
 app.use(compression({
   filter: (req: Request, res: Response) => {
     // Don't compress responses with this request header
@@ -16,9 +16,22 @@ app.use(compression({
     // Fallback to standard filter function
     return compression.filter(req, res);
   },
-  level: 6, // Compression level (1-9, 6 is default)
-  threshold: 1024, // Only compress responses larger than 1KB
+  level: 9, // Maximum compression level for text files
+  threshold: 512, // Compress even smaller files
 }));
+
+// Add cache headers for static assets
+app.use((req: Request, res: Response, next: NextFunction) => {
+  // Cache static assets for 1 year
+  if (req.url.match(/\.(js|css|png|jpg|jpeg|webp|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  }
+  // Cache HTML for 5 minutes
+  else if (req.url.match(/\.html$/) || req.url === '/') {
+    res.setHeader('Cache-Control', 'public, max-age=300, must-revalidate');
+  }
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
