@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 
 // Sitemap XML generator for Dr. Melva Reve's psychiatric practice
 export const generateSitemap = (req: Request, res: Response) => {
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  // Use X-Forwarded-Proto header if available (for Replit proxy), otherwise fallback to req.protocol
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const baseUrl = `${protocol}://${req.get('host')}`;
   const currentDate = new Date().toISOString().split('T')[0];
   
   // Define bilingual page relationships for hreflang
@@ -168,7 +170,9 @@ ${bilingualPagesXml}
 
 // Robots.txt generator to reference sitemap
 export const generateRobotsTxt = (req: Request, res: Response) => {
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  // Use X-Forwarded-Proto header if available (for Replit proxy), otherwise fallback to req.protocol
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const baseUrl = `${protocol}://${req.get('host')}`;
   
   const robotsTxt = `User-agent: *
 Allow: /
