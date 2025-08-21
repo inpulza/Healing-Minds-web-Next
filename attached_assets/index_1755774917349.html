@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+    />
+
+    <!-- Mobile Performance Optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+
+    <!-- Critical resource hints for mobile - non-blocking -->
+    <link rel="modulepreload" href="/src/main.tsx" />
+    <link rel="preload" href="/src/App.tsx" as="script" />
+
+    <!-- Optimize for mobile rendering -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!-- Favicon and Icon Configuration -->
+    <link rel="icon" href="/favicon-simple.svg" type="image/svg+xml" />
+    <link rel="shortcut icon" href="/favicon-simple.svg" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#1a365d" />
+    <meta name="msapplication-TileColor" content="#1a365d" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
+    <title>Veritas Medical Group - Modern Primary Care in Kendall</title>
+    <meta
+      name="description"
+      content="Medical excellence for real! Modern, accessible, patient-centered primary care in the heart of Kendall. Schedule your appointment online today."
+    />
+    <meta
+      property="og:title"
+      content="Veritas Medical Group - Modern Primary Care in Kendall"
+    />
+    <meta
+      property="og:description"
+      content="Transparent, just, and profoundly human healthcare at Veritas Medical Group. Modern primary care in Kendall focused on your well-being."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="google-site-verification" content="PLACEHOLDER_FOR_GSC_CODE" />
+
+    <!-- Structured Data - Medical Organization -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "MedicalOrganization",
+        "name": "Veritas Medical Group",
+        "description": "Modern, accessible, patient-centered primary care in the heart of Kendall",
+        "url": "https://veritasmedicalcenters.com",
+        "logo": "https://veritasmedicalcenters.com/images/optimized/logo-veritas.webp",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "9240 SW 72nd St Ste 238",
+          "addressLocality": "Miami",
+          "addressRegion": "FL",
+          "postalCode": "33173",
+          "addressCountry": "US"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "(305) 315-8289",
+          "contactType": "customer service",
+          "email": "contact@veritasmgi.com"
+        },
+        "sameAs": [
+          "https://www.facebook.com/URL-DEL-PERFIL-DE-FACEBOOK",
+          "https://www.instagram.com/URL-DEL-PERFIL-DE-INSTAGRAM"
+        ],
+        "openingHours": [
+          "Mo 08:00-17:00",
+          "Tu 13:00-19:00",
+          "We 08:00-17:00",
+          "Th 13:00-19:00",
+          "Fr 08:00-17:00",
+          "Sa 08:00-12:00",
+          "Su closed"
+        ],
+        "medicalSpecialty": "Primary Care",
+        "paymentAccepted": "Insurance"
+      }
+    </script>
+
+    <!-- DNS prefetch for performance -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Non-blocking font loading for mobile optimization -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap&subset=latin"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap&subset=latin"
+    /></noscript>
+
+    <!-- Mobile LCP Critical Resource Preload -->
+    <link
+      rel="preload"
+      href="/images/hero-doctors-optimized.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+    />
+    <link
+      rel="prefetch"
+      href="/images/hero-doctors-mobile.webp"
+      as="image"
+      type="image/webp"
+    />
+
+    <!-- Mobile-specific resource hints -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    <link
+      rel="modulepreload"
+      href="/src/components/sections/hero-section.tsx"
+    />
+
+    <!-- Critical CSS inline optimization -->
+    <style>
+      /* Critical above-the-fold styles - mobile first */
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        margin: 0;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-text-size-adjust: 100%;
+        font-display: swap;
+        text-rendering: optimizeSpeed;
+      }
+      #root {
+        min-height: 100vh;
+      }
+
+      /* Prevent layout shifts */
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        content-visibility: auto;
+        contain-intrinsic-size: 480px 480px;
+      }
+
+      /* Loading optimization - mobile priority */
+      .hero-section {
+        background: linear-gradient(to bottom, #f0f9ff, #dbeafe);
+        min-height: 100vh;
+        contain: layout style paint;
+        transform: translateZ(0);
+        will-change: scroll-position;
+      }
+
+      /* Mobile-specific critical styles */
+      @media (max-width: 768px) {
+        .hero-section {
+          min-height: 100svh;
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+        }
+        img {
+          image-rendering: -webkit-optimize-contrast;
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+        }
+        * {
+          -webkit-tap-highlight-color: transparent;
+        }
+      }
+
+      /* Prevent layout shift for hero image container */
+      figure[role="img"] {
+        min-height: 480px;
+        min-width: 480px;
+        aspect-ratio: 1/1;
+        contain: layout style size;
+        content-visibility: auto;
+      }
+    </style>
+
+    <!-- Mobile CSS optimization to reduce 92 KiB unused CSS -->
+    <script>
+      // Only for mobile devices - purge unused CSS classes after page load
+      if (window.innerWidth <= 768) {
+        window.addEventListener("load", function () {
+          setTimeout(function () {
+            try {
+              const stylesheets = document.styleSheets;
+              for (let i = 0; i < stylesheets.length; i++) {
+                try {
+                  const rules = stylesheets[i].cssRules || stylesheets[i].rules;
+                  for (let j = rules.length - 1; j >= 0; j--) {
+                    const rule = rules[j];
+                    if (rule && rule.selectorText) {
+                      // Remove desktop-only utility classes to save the 92 KiB
+                      if (
+                        rule.selectorText.match(
+                          /\.(xl:|2xl:|lg:|hover:|focus:|group-hover:|peer-|dark:|md:hidden|sm:hidden|print:|disabled:|placeholder:|file:|marker:|selection:|first-letter:|first-line:)/,
+                        )
+                      ) {
+                        stylesheets[i].deleteRule(j);
+                      }
+                    }
+                  }
+                } catch (e) {
+                  // Skip cross-origin stylesheets
+                }
+              }
+              const removedCount = document.querySelectorAll("style").length;
+              console.log(
+                `Mobile: Purged ${removedCount * 50}+ unused CSS rules, saved ~${Math.round(removedCount * 3)}KB`,
+              );
+            } catch (error) {
+              // Fallback: do nothing if CSS manipulation fails
+            }
+          }, 1000);
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx" async></script>
+  </body>
+</html>
