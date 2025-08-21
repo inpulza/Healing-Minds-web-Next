@@ -1,0 +1,123 @@
+
+Forced reflow
+A forced reflow occurs when JavaScript queries geometric properties (such as offsetWidth) after styles have been invalidated by a change to the DOM state. This can result in poor performance. Learn more about forced reflows and possible mitigations.
+Top function call
+Total reflow time
+/gtag/js?id=G-WMRK41PX2E:838:135(www.googletagmanager.com)
+0 ms
+Source
+Total reflow time
+/0.8.25/clarity.js:2:28354(scripts.clarity.ms)
+171 ms
+[unattributed]
+63 ms
+/gtag/js?id=G-WMRK41PX2E:835:14(www.googletagmanager.com)
+0 ms
+LCP request discovery
+Optimize LCP by making the LCP image discoverable from the HTML immediately, and avoiding lazy-loadingLCP
+lazy load not applied
+fetchpriority=high applied
+Request is discoverable in initial document
+Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate menta…
+<img src="/assets/hero-doctor-mobile-optimized-oIFBEG9V.webp" alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate …" class="absolute inset-0 w-full h-full object-cover object-center" width="400" height="250" loading="eager" decoding="async" fetchpriority="high">
+Network dependency tree
+Avoid chaining critical requests by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.LCP
+Maximum critical path latency: 598 ms
+Initial Navigation
+https://www.healingmindsp.com - 199 ms, 3.27 KiB
+/assets/index-DAq0JV52.js(www.healingmindsp.com) - 598 ms, 133.72 KiB
+/assets/index-CKLEkmf0.css(www.healingmindsp.com) - 444 ms, 14.04 KiB
+Preconnected origins
+preconnect hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.
+no origins were preconnected
+Preconnect candidates
+Add preconnect hints to your most important origins, but try to use no more than 4.
+Origin
+Est LCP savings
+https://cdn.jsdelivr.net
+300 ms
+Use efficient cache lifetimes Est savings of 33 KiB
+A long cache lifetime can speed up repeat visits to your page. Learn more.LCPFCP
+Request
+Cache TTL
+Transfer Size
+Clarity utility 
+31 KiB
+/0.8.25/clarity.js(scripts.clarity.ms)
+None
+31 KiB
+JSDelivr CDN cdn 
+16 KiB
+…4x3/es.svg(cdn.jsdelivr.net)
+7d
+16 KiB
+Improve image delivery Est savings of 486 KiB
+Reducing the download time of images can improve the perceived load time of the page and LCP. Learn more about optimizing image sizeLCPFCP
+URL
+Resource Size
+Est Savings
+healingmindsp.com 1st party
+487.9 KiB	486.2 KiB
+/assets/insurance-medicaid-BfcaDmDO.webp(www.healingmindsp.com)
+68.0 KiB
+67.7 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+67.7 KiB
+/assets/insurance….webp(www.healingmindsp.com)
+63.8 KiB
+63.6 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+63.6 KiB
+/assets/insurance-florida-medicaid-ClfrkJcs.webp(www.healingmindsp.com)
+57.6 KiB
+57.4 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+57.4 KiB
+/assets/insurance-first-health-DBPuZsBJ.webp(www.healingmindsp.com)
+47.0 KiB
+46.8 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+46.8 KiB
+/assets/insurance….webp(www.healingmindsp.com)
+43.6 KiB
+43.5 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+43.5 KiB
+/assets/insurance….webp(www.healingmindsp.com)
+43.3 KiB
+43.1 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+43.1 KiB
+/assets/insurance….webp(www.healingmindsp.com)
+37.7 KiB
+37.6 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+37.6 KiB
+/assets/insurance….webp(www.healingmindsp.com)
+37.2 KiB
+37.1 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+37.1 KiB
+/assets/insurance….webp(www.healingmindsp.com)
+35.3 KiB
+35.2 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+35.2 KiB
+/assets/insurance-wellcare-DEJcJUjs.webp(www.healingmindsp.com)
+29.0 KiB
+28.9 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+28.9 KiB
+/assets/insurance….webp(www.healingmindsp.com)
+25.4 KiB
+25.3 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (112x63). Use responsive images to reduce the image download size.
+25.3 KiB
+Render blocking requests
+Requests are blocking the page's initial render, which may delay LCP. Deferring or inlining can move these network requests out of the critical path.LCPFCP
+URL
+Transfer Size
+Duration
+healingmindsp.com 1st party
+14.0 KiB	180 ms
+/assets/index-CKLEkmf0.css(www.healingmindsp.com)
