@@ -1,0 +1,64 @@
+El sitemap está bien estructurado y es muy completo, pero tiene un error técnico crítico y algunas oportunidades de mejora importantes para el SEO.
+
+Aquí te dejo mi análisis detallado.
+
+Lo que está bien ?? (Puntos Fuertes)
+Estructura Lógica: El sitemap refleja una arquitectura de sitio clara y coherente. Se puede ver la jerarquía desde la página de inicio, a las páginas principales (servicios, sobre nosotros), hasta las páginas de tratamiento específico.
+
+Completitud: Incluye todas las páginas importantes que quieres que Google rastree, tanto las versiones en inglés como las que están en español.
+
+Uso de Metadatos: El uso de las etiquetas <lastmod>, <changefreq> y <priority> es correcto. Has asignado la prioridad más alta (1.0) a la página de inicio y has ido bajando lógicamente para las páginas internas, lo cual es una buena práctica.
+
+Puntos Críticos a Corregir ?? (Alta Prioridad)
+Las URLs usan HTTP en lugar de HTTPS
+Este es el error más grave y debe corregirse de inmediato. Todas las URLs en tu sitemap empiezan con http:// en lugar de https://.
+
+Por qué es un problema: Le estás diciendo a Google que la versión "oficial" de tu sitio es la no segura. Esto puede causar problemas de indexación, advertencias de seguridad en los navegadores para los usuarios y diluir la autoridad de tu dominio seguro (https://).
+
+Solución: Simplemente, reemplaza todas las instancias de http://www.healingmindsp.com por https://www.healingmindsp.com.
+
+Falta de Etiquetas hreflang para Contenido Multilingüe
+Tienes páginas que son traducciones directas unas de otras (por ejemplo, /services/anxiety-treatment y /es/servicios/tratamiento-ansiedad). Sin embargo, no le estás indicando esta relación a Google.
+
+Por qué es un problema: Google podría ver estas páginas como contenido duplicado o no entender qué versión mostrar a los usuarios que buscan en español frente a los que buscan en inglés.
+
+Solución: Debes implementar las etiquetas hreflang. Estas etiquetas le dicen a Google: "Esta página en inglés es la versión equivalente de esta otra página en español". Puedes añadirlas directamente en el sitemap.
+
+Ejemplo de cómo debería verse una entrada en tu sitemap con hreflang:
+
+XML
+
+<url>
+  <loc>https://www.healingmindsp.com/services/anxiety-treatment</loc>
+  <xhtml:link 
+             rel="alternate"
+             hreflang="en"
+             href="https://www.healingmindsp.com/services/anxiety-treatment"
+             />
+  <xhtml:link 
+             rel="alternate"
+             hreflang="es"
+             href="https://www.healingmindsp.com/es/servicios/tratamiento-ansiedad"
+             />
+  <lastmod>2025-08-21</lastmod>
+</url>
+Nota: Deberás añadir el xmlns:xhtml="http://www.w3.org/1999/xhtml" en la etiqueta <urlset> de apertura para que esto funcione.
+
+Oportunidades de Mejora ?? (Recomendaciones)
+Consistencia en la Estructura de URLs en Español
+He notado una pequeña inconsistencia. La mayoría de tus páginas en español están bajo la subcarpeta /es/, lo cual es excelente. Sin embargo, tienes una página principal llamada /servicios-espanol.
+
+Recomendación: Para una estructura más limpia y coherente, considera mover esa página para que sea https://www.healingmindsp.com/es/servicios. De esta forma, todo tu contenido en español estaría agrupado bajo /es/, lo que facilita la gestión y la configuración de herramientas como Google Search Console.
+
+Veredicto y Próximos Pasos
+Es un sitemap muy sólido en cuanto a contenido, pero los fallos técnicos lo están frenando.
+
+Tu plan de acción debería ser:
+
+(Urgente) Corregir todas las URLs a https://.
+
+(Muy Importante) Implementar las etiquetas hreflang para todas las páginas que tengan una versión en otro idioma.
+
+(Recomendado) Estandarizar la estructura de las URLs en español para que todas estén bajo el directorio /es/.
+
+Una vez hechos estos cambios, vuelve a enviar el sitemap a Google Search Console. Esto mejorará significativamente la forma en que Google entiende, rastrea e indexa tu sitio web bilingüe.
