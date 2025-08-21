@@ -7,7 +7,16 @@ export function useAnalytics(): void {
   const [location] = useLocation();
 
   useEffect(() => {
-    // Track page view when location changes
-    trackPageView(location, document.title);
+    // Defer page tracking to avoid blocking critical rendering
+    const trackPage = () => {
+      trackPageView(location, document.title);
+    };
+    
+    // Use requestIdleCallback to defer analytics calls
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(trackPage);
+    } else {
+      setTimeout(trackPage, 100);
+    }
   }, [location]);
 }

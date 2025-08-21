@@ -126,15 +126,22 @@
     <!-- DNS prefetch for performance -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://scripts.clarity.ms" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://scripts.clarity.ms" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
     
     <!-- Critical resource hints for mobile - non-blocking -->
     <link rel="modulepreload" href="/src/main.tsx" />
-    <link rel="preload" href="/src/App.tsx" as="script" />
+    <link rel="modulepreload" href="/src/App.tsx" />
     <link rel="modulepreload" href="/src/components/Hero.tsx" />
+    <link rel="modulepreload" href="/src/components/Header.tsx" />
     <!-- Non-blocking font loading for mobile optimization -->
     <link
       rel="preload"
@@ -166,6 +173,9 @@
     <!-- Critical CSS inline optimization -->
     <style>
       /* Critical above-the-fold styles - mobile first */
+      * {
+        box-sizing: border-box;
+      }
       body {
         font-family:
           'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -176,18 +186,42 @@
         -webkit-text-size-adjust: 100%;
         font-display: swap;
         text-rendering: optimizeSpeed;
+        color: #111827;
+        background-color: #ffffff;
       }
       #root {
         min-height: 100vh;
+        isolation: isolate;
       }
 
-      /* Prevent layout shifts */
+      /* Prevent layout shifts and improve loading */
       img {
         max-width: 100%;
         height: auto;
         display: block;
         content-visibility: auto;
         contain-intrinsic-size: 480px 480px;
+        font-size: 0;
+      }
+
+      /* Critical loading skeletons */
+      .skeleton {
+        background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+      @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      /* Header critical styles */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        contain: layout style paint;
+        transform: translateZ(0);
       }
 
       /* Loading optimization - mobile priority */
@@ -223,6 +257,12 @@
         aspect-ratio: 1/1;
         contain: layout style size;
         content-visibility: auto;
+      }
+
+      /* Performance optimizations for images */
+      .insurance-logo {
+        contain-intrinsic-size: 208px 144px;
+        aspect-ratio: 13/9;
       }
     </style>
   </head>

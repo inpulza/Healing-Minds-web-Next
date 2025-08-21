@@ -74,10 +74,14 @@ const LocationInsuranceLogos = () => {
                     height={isHighPriority ? 144 : undefined}
                     loading={isHighPriority ? "eager" : "lazy"}
                     decoding="async"
+                    {...(isHighPriority && { fetchpriority: "high" })}
+                    sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, (max-width: 1024px) 176px, 208px"
                     style={{
                       aspectRatio: '13/9',
                       minWidth: 'min(112px, 25vw)',
-                      minHeight: 'min(80px, 18vw)'
+                      minHeight: 'min(80px, 18vw)',
+                      containIntrinsicSize: '208px 144px',
+                      contentVisibility: isHighPriority ? 'visible' : 'auto'
                     }}
                   />
                 </div>
