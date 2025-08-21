@@ -1,6 +1,13 @@
 User-agent: *
 Allow: /
 
+# CRÍTICO: Bloquear URLs con parámetros de tracking de Replit
+Disallow: /*?_g=
+
+# Bloquear directorios de backend
+Disallow: /api/
+Disallow: /server/
+
 # Sitemap location
 Sitemap: https://healingmindsp.com/sitemap.xml
 

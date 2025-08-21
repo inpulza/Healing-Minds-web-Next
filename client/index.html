@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+
+    <!-- Mobile Performance Optimizations -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     
     <!-- Favicon -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -34,21 +39,114 @@
     <meta name="twitter:image:alt" content="Healing Minds Psychiatry - Logo profesional de salud mental">
     
     <!-- Additional SEO -->
-    <link rel="canonical" href="https://healingmindsp.com">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="theme-color" content="#166534">
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Optimized font loading with resource hints and swap display -->
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"></noscript>
-    <!-- Hero images will be prioritized with fetchpriority="high" instead of preload to avoid path mismatch issues -->
+    <!-- DNS prefetch for performance -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Critical resource hints for mobile - non-blocking -->
+    <link rel="modulepreload" href="/src/main.tsx" />
+    <link rel="preload" href="/src/App.tsx" as="script" />
+    <link rel="modulepreload" href="/src/components/Hero.tsx" />
+    <!-- Non-blocking font loading for mobile optimization -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap&subset=latin"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap&subset=latin"
+    /></noscript>
+
+    <!-- Mobile LCP Critical Resource Preload -->
+    <link
+      rel="preload"
+      href="/src/assets/hero-doctor-hq.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+    />
+    <link
+      rel="prefetch"
+      href="/src/assets/hero-doctor-mobile-optimized.webp"
+      as="image"
+      type="image/webp"
+    />
+
+    <!-- Critical CSS inline optimization -->
+    <style>
+      /* Critical above-the-fold styles - mobile first */
+      body {
+        font-family:
+          'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        margin: 0;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-text-size-adjust: 100%;
+        font-display: swap;
+        text-rendering: optimizeSpeed;
+      }
+      #root {
+        min-height: 100vh;
+      }
+
+      /* Prevent layout shifts */
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        content-visibility: auto;
+        contain-intrinsic-size: 480px 480px;
+      }
+
+      /* Loading optimization - mobile priority */
+      .hero-section {
+        background: linear-gradient(to bottom, #f0f9ff, #dbeafe);
+        min-height: 100vh;
+        contain: layout style paint;
+        transform: translateZ(0);
+        will-change: scroll-position;
+      }
+
+      /* Mobile-specific critical styles */
+      @media (max-width: 768px) {
+        .hero-section {
+          min-height: 100svh;
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+        }
+        img {
+          image-rendering: -webkit-optimize-contrast;
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+        }
+        * {
+          -webkit-tap-highlight-color: transparent;
+        }
+      }
+
+      /* Prevent layout shift for hero image container */
+      figure[role="img"] {
+        min-height: 480px;
+        min-width: 480px;
+        aspect-ratio: 1/1;
+        contain: layout style size;
+        content-visibility: auto;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
-    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js" async></script>
   </body>
 </html>
