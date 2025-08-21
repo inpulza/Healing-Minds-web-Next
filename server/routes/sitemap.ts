@@ -5,6 +5,52 @@ export const generateSitemap = (req: Request, res: Response) => {
   const baseUrl = `${req.protocol}://${req.get('host')}`;
   const currentDate = new Date().toISOString().split('T')[0];
   
+  // Define bilingual page relationships for hreflang
+  const bilingualPages = [
+    {
+      en: '/services/anxiety-treatment',
+      es: '/es/servicios/tratamiento-ansiedad',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      en: '/services/depression-treatment',
+      es: '/es/servicios/tratamiento-depresion',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      en: '/services/adhd-treatment',
+      es: '/es/servicios/tratamiento-tdah',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      en: '/services/ptsd-treatment',
+      es: '/es/servicios/tratamiento-tept',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      en: '/services/bipolar-treatment',
+      es: '/es/servicios/tratamiento-bipolar',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      en: '/services/medication-management',
+      es: '/es/servicios/manejo-medicamentos',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    }
+  ];
+  
   // Define site structure with priorities and update frequencies
   const pages = [
     // Homepage - Maximum priority
@@ -35,83 +81,9 @@ export const generateSitemap = (req: Request, res: Response) => {
       priority: '0.8'
     },
     
-    // Individual service pages - High priority for SEO
+    // Spanish main services page - Will be moved to /es/servicios for consistency
     {
-      url: '/services/anxiety-treatment',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/services/depression-treatment',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/services/adhd-treatment',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/services/ptsd-treatment',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/services/bipolar-treatment',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/services/medication-management',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    
-    // Spanish content - Important for bilingual SEO
-    {
-      url: '/servicios-espanol',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/es/servicios/tratamiento-ansiedad',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/es/servicios/tratamiento-depresion',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/es/servicios/tratamiento-tdah',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/es/servicios/tratamiento-tept',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/es/servicios/tratamiento-bipolar',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      url: '/es/servicios/manejo-medicamentos',
+      url: '/es/servicios',
       lastmod: currentDate,
       changefreq: 'monthly',
       priority: '0.7'
@@ -132,15 +104,57 @@ export const generateSitemap = (req: Request, res: Response) => {
     }
   ];
 
-  // Generate XML sitemap
-  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages.map(page => `  <url>
+  // Generate XML sitemap with hreflang support
+  const regularPagesXml = pages.map(page => `  <url>
     <loc>${baseUrl}${page.url}</loc>
     <lastmod>${page.lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
-  </url>`).join('\n')}
+  </url>`).join('\n');
+
+  // Generate bilingual pages with hreflang
+  const bilingualPagesXml = bilingualPages.flatMap(page => [
+    // English version with hreflang
+    `  <url>
+    <loc>${baseUrl}${page.en}</loc>
+    <xhtml:link 
+                rel="alternate"
+                hreflang="en"
+                href="${baseUrl}${page.en}"
+                />
+    <xhtml:link 
+                rel="alternate"
+                hreflang="es"
+                href="${baseUrl}${page.es}"
+                />
+    <lastmod>${page.lastmod}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`,
+    // Spanish version with hreflang
+    `  <url>
+    <loc>${baseUrl}${page.es}</loc>
+    <xhtml:link 
+                rel="alternate"
+                hreflang="en"
+                href="${baseUrl}${page.en}"
+                />
+    <xhtml:link 
+                rel="alternate"
+                hreflang="es"
+                href="${baseUrl}${page.es}"
+                />
+    <lastmod>${page.lastmod}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`
+  ]).join('\n');
+
+  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${regularPagesXml}
+${bilingualPagesXml}
 </urlset>`;
 
   // Set proper headers for XML

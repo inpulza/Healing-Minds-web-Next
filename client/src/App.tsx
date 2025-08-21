@@ -55,7 +55,7 @@ function Router() {
       <Route path="/for-patients" component={ForPatients} />
       <Route path="/locations/naples" component={LocationNaples} />
       <Route path="/contact" component={Contact} />
-      <Route path="/servicios-espanol" component={ServiciosEspanol} />
+      <Route path="/es/servicios" component={ServiciosEspanol} />
       
       {/* Individual Service Pages */}
       <Route path="/services/anxiety-treatment" component={AnxietyTreatment} />

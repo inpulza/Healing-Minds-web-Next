@@ -18,7 +18,7 @@ const ServiciosEspanol = () => {
       description: 'Servicios psiquiátricos completos en español en Naples, FL. La Dra. Melva Reve ofrece atención culturalmente sensible para ansiedad, depresión, TDAH y más.',
       keywords: 'psiquiatra español Naples, servicios psiquiátricos español FL, psiquiatra bilingüe Naples, atención mental español',
       lang: 'es',
-      canonical: '/servicios-espanol'
+      canonical: '/es/servicios'
     };
     updateSEO(seoData);
   }, [setLanguage]);

@@ -248,7 +248,7 @@ const Header = () => {
               </div>
               <div className="mt-6 pt-6 border-t border-gray-200/60 text-center">
                 <Link
-                  href={language === 'en' ? '/services' : '/servicios-espanol'}
+                  href={language === 'en' ? '/services' : '/es/servicios'}
                   className="inline-flex items-center gap-2 text-green-700 hover:text-green-800 font-body font-medium transition-colors duration-300 text-lg"
                 >
                   {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
@@ -300,7 +300,7 @@ const Header = () => {
                           </Link>
                         ))}
                         <Link
-                          href={language === 'en' ? '/services' : '/servicios-espanol'}
+                          href={language === 'en' ? '/services' : '/es/servicios'}
                           className="block py-2 px-3 rounded-lg text-sm font-body text-green-700 hover:text-green-800 hover:bg-green-50/80 transition-all duration-200 border-t border-gray-200/60 mt-2 pt-3"
                           onClick={handleMobileServiceClick}
                         >
