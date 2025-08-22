@@ -1,103 +1,36 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import OptimizedImage from './OptimizedImage';
 
-// Import all insurance logos
-import aetnaLogo from '@/assets/insurance-aetna-new.png';
-import cignaLogo from '@/assets/insurance-cigna-new.png';
-import doctorsHealthcareLogo from '@/assets/insurance-doctors-healthcare.png';
-import medicareLogo from '@/assets/insurance-medicare-new.png';
-import firstHealthLogo from '@/assets/insurance-first-health-new.png';
-import floridaBlueLogo from '@/assets/insurance-florida-blue.png';
-import medicaidLogo from '@/assets/insurance-medicaid-new.png';
-import unitedHealthcareLogo from '@/assets/insurance-united-healthcare.png';
-import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid-new.png';
-import oscarLogo from '@/assets/insurance-oscar.png';
-import champvaLogo from '@/assets/insurance-champva-new.png';
-import sunshineHealthLogo from '@/assets/insurance-sunshine-new.png';
-import avmedLogo from '@/assets/insurance-avmed-new.png';
-import wellcareLogo from '@/assets/insurance-wellcare-new.png';
-import ambetterLogo from '@/assets/insurance-ambetter-new.png';
+// Import insurance logos
+import aetnaLogo from '@/assets/insurance-aetna.webp';
+import cignaLogo from '@/assets/insurance-cigna.webp';
+import medicareLogo from '@/assets/insurance-medicare.webp';
+import firstHealthLogo from '@/assets/insurance-first-health.webp';
+import medicaidLogo from '@/assets/insurance-medicaid.webp';
+import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.webp';
+import champvaLogo from '@/assets/insurance-champva.webp';
+import sunshineHealthLogo from '@/assets/insurance-sunshine.webp';
+import avmedLogo from '@/assets/insurance-avmed.webp';
+import wellcareLogo from '@/assets/insurance-wellcare.webp';
+import ambetterLogo from '@/assets/insurance-ambetter.webp';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
   
-  // Insurance logos array with all accepted providers
+  // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
+
   const insuranceLogos = [
-    { 
-      src: aetnaLogo, 
-      alt: language === 'en' ? 'Aetna Insurance Logo - Mental Health Coverage Accepted' : 'Logo de Seguro Aetna - Cobertura de Salud Mental Aceptada',
-      name: 'Aetna'
-    },
-    { 
-      src: cignaLogo, 
-      alt: language === 'en' ? 'Cigna Healthcare Insurance Logo - Psychiatric Services Covered' : 'Logo de Seguro Cigna Healthcare - Servicios Psiquiátricos Cubiertos',
-      name: 'Cigna Healthcare'
-    },
-    { 
-      src: doctorsHealthcareLogo, 
-      alt: language === 'en' ? 'Doctors Healthcare Plans Insurance Logo - Mental Health Benefits' : 'Logo de Planes de Salud Doctors Healthcare - Beneficios de Salud Mental',
-      name: 'Doctors Healthcare Plans'
-    },
-    { 
-      src: medicareLogo, 
-      alt: language === 'en' ? 'Medicare Insurance Logo - Mental Health Services Covered' : 'Logo de Seguro Medicare - Servicios de Salud Mental Cubiertos',
-      name: 'Medicare'
-    },
-    { 
-      src: firstHealthLogo, 
-      alt: language === 'en' ? 'First Health Insurance Logo - Psychiatric Treatment Coverage' : 'Logo de Seguro First Health - Cobertura de Tratamiento Psiquiátrico',
-      name: 'First Health'
-    },
-    { 
-      src: floridaBlueLogo, 
-      alt: language === 'en' ? 'Florida Blue Insurance Logo - Mental Health Care Benefits' : 'Logo de Seguro Florida Blue - Beneficios de Cuidado de Salud Mental',
-      name: 'Florida Blue'
-    },
-    { 
-      src: medicaidLogo, 
-      alt: language === 'en' ? 'Medicaid Insurance Logo - Psychiatric Services Accepted' : 'Logo de Seguro Medicaid - Servicios Psiquiátricos Aceptados',
-      name: 'Medicaid'
-    },
-    { 
-      src: unitedHealthcareLogo, 
-      alt: language === 'en' ? 'United Healthcare Insurance Logo - Mental Health Coverage' : 'Logo de Seguro United Healthcare - Cobertura de Salud Mental',
-      name: 'United Healthcare'
-    },
-    { 
-      src: floridaMedicaidLogo, 
-      alt: language === 'en' ? 'Florida Medicaid Insurance Logo - State Mental Health Benefits' : 'Logo de Seguro Florida Medicaid - Beneficios Estatales de Salud Mental',
-      name: 'Florida Medicaid'
-    },
-    { 
-      src: oscarLogo, 
-      alt: language === 'en' ? 'Oscar Health Insurance Logo - Behavioral Health Coverage' : 'Logo de Seguro Oscar Health - Cobertura de Salud Conductual',
-      name: 'Oscar Health'
-    },
-    { 
-      src: champvaLogo, 
-      alt: language === 'en' ? 'ChampVA Insurance Logo - Veterans Mental Health Benefits' : 'Logo de Seguro ChampVA - Beneficios de Salud Mental para Veteranos',
-      name: 'ChampVA'
-    },
-    { 
-      src: sunshineHealthLogo, 
-      alt: language === 'en' ? 'Sunshine Health Insurance Logo - Mental Health Services' : 'Logo de Seguro Sunshine Health - Servicios de Salud Mental',
-      name: 'Sunshine Health'
-    },
-    { 
-      src: avmedLogo, 
-      alt: language === 'en' ? 'AvMed Insurance Logo - Psychiatric Care Coverage' : 'Logo de Seguro AvMed - Cobertura de Cuidado Psiquiátrico',
-      name: 'AvMed'
-    },
-    { 
-      src: wellcareLogo, 
-      alt: language === 'en' ? 'WellCare Insurance Logo - Mental Health Benefits' : 'Logo de Seguro WellCare - Beneficios de Salud Mental',
-      name: 'WellCare'
-    },
-    { 
-      src: ambetterLogo, 
-      alt: language === 'en' ? 'Ambetter Health Insurance Logo - Behavioral Health Coverage' : 'Logo de Seguro Ambetter Health - Cobertura de Salud Conductual',
-      name: 'Ambetter Health'
-    }
+    { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
+    { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
+    { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
+    { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
+    { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
+    { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' },
+    { src: champvaLogo, alt: 'ChampVA', name: 'ChampVA' },
+    { src: sunshineHealthLogo, alt: 'Sunshine Health', name: 'Sunshine Health' },
+    { src: avmedLogo, alt: 'AvMed', name: 'AvMed' },
+    { src: wellcareLogo, alt: 'WellCare', name: 'WellCare' },
+    { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' }
   ];
 
   return (
@@ -123,47 +56,37 @@ const InsuranceLogos = () => {
           </p>
         </div>
 
-        {/* Insurance Logos Container - Ready for new logos */}
-        <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
+        {/* Masonry Layout - No Background */}
+        <div className="p-6 sm:p-8 lg:p-10">
           <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
-            {insuranceLogos.length > 0 ? (
-              insuranceLogos.map((logo, index) => {
-                const isHighPriority = index < 4 || index >= 8; // First 4 and last 3 images get high priority
-                return (
-                  <div 
-                    key={index} 
-                    className="group flex-shrink-0"
-                    data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    <OptimizedImage
-                      src={logo.src}
-                      alt={logo.alt}
-                      className="w-28 h-20 sm:w-36 sm:h-28 md:w-44 md:h-32 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-110"
-                      width={isHighPriority ? 208 : 112}
-                      height={isHighPriority ? 144 : 80}
-                      priority={isHighPriority}
-                      sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, (max-width: 1024px) 176px, 208px"
-                      style={{
-                        aspectRatio: '13/9',
-                        minWidth: 'min(112px, 25vw)',
-                        minHeight: 'min(80px, 18vw)',
-                        containIntrinsicSize: '208px 144px',
-                        contentVisibility: isHighPriority ? 'visible' : 'auto',
-                        willChange: 'auto'
-                      }}
-                    />
-                  </div>
-                );
-              })
-            ) : (
-              <div className="w-full text-center py-8">
-                <p className="text-gray-500 font-body text-lg">
-                  {language === 'en' 
-                    ? 'Insurance logos will be displayed here.'
-                    : 'Los logos de seguros se mostrarán aquí.'}
-                </p>
-              </div>
-            )}
+            {insuranceLogos.map((logo, index) => {
+              const isHighPriority = index < 4 || index >= 8; // First 4 and last 3 images get high priority
+              return (
+                <div 
+                  key={index} 
+                  className="group flex-shrink-0"
+                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <OptimizedImage
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="w-28 h-20 sm:w-36 sm:h-28 md:w-44 md:h-32 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-110"
+                    width={isHighPriority ? 208 : 112}
+                    height={isHighPriority ? 144 : 80}
+                    priority={isHighPriority}
+                    sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, (max-width: 1024px) 176px, 208px"
+                    style={{
+                      aspectRatio: '13/9',
+                      minWidth: 'min(112px, 25vw)',
+                      minHeight: 'min(80px, 18vw)',
+                      containIntrinsicSize: '208px 144px',
+                      contentVisibility: isHighPriority ? 'visible' : 'auto',
+                      willChange: 'auto'
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
           
           {/* Bottom Note */}
