@@ -85,12 +85,12 @@ const LocationInsuranceLogos = () => {
           
           {/* Mobile Layout - Auto Slider */}
           <div className="block md:hidden relative">
-            <div className="w-full h-48 flex justify-center items-end pb-4">
+            <div className="w-full h-48 flex justify-center items-center">
               <div className="relative w-72 h-48">
                 {insuranceLogos.map((logo, index) => (
                   <div 
                     key={index}
-                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ${
+                    className={`absolute inset-0 flex items-end justify-center pb-6 transition-all duration-500 ${
                       index === currentLogoIndex 
                         ? 'opacity-100' 
                         : 'opacity-0'
