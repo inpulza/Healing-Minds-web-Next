@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock } from 'lucide-react';
-import { Brain, Heart, Smile } from 'lucide-react';
+import { IconBrain, IconHeart, IconMoodHappy } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
@@ -142,25 +142,6 @@ const AnxietyTreatment = () => {
           }}
         />
 
-        {/* Page Title - H1 for SEO and Accessibility */}
-        <section className="py-8 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800">
-              {language === 'en' ? (
-                <>Anxiety <span className="font-display italic text-green-700">Treatment</span></>
-              ) : (
-                <>Tratamiento para la <span className="font-display italic text-green-700">Ansiedad</span></>
-              )}
-            </h1>
-            <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">
-              {language === 'en'
-                ? 'Expert psychiatric care for panic attacks, social anxiety, generalized anxiety disorder, and anxiety-related conditions.'
-                : 'Atención psiquiátrica experta para ataques de pánico, ansiedad social, trastorno de ansiedad generalizada y condiciones relacionadas con ansiedad.'
-              }
-            </p>
-          </div>
-        </section>
-
         {/* Modern Symptoms Section */}
         <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
@@ -198,7 +179,7 @@ const AnxietyTreatment = () => {
                     <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7">
                       <span>{language === 'en' ? 'Schedule Assessment' : 'Programar Evaluación'}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
-                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" aria-hidden="true" />
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                       </div>
                     </Button>
                   </Link>
@@ -210,7 +191,7 @@ const AnxietyTreatment = () => {
                     {symptoms.slice(0, 6).map((symptom, index) => (
                       <div key={index} className="p-4">
                         <div className="flex items-center gap-3">
-                          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" aria-hidden="true" />
+                          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
                           <span className="text-gray-700 font-body text-sm">{symptom}</span>
                         </div>
                       </div>
@@ -304,7 +285,7 @@ const AnxietyTreatment = () => {
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="green">
-                      <Brain />
+                      <IconBrain />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
@@ -321,7 +302,7 @@ const AnxietyTreatment = () => {
                   
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="blue">
-                      <Smile />
+                      <IconMoodHappy />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
@@ -338,7 +319,7 @@ const AnxietyTreatment = () => {
                   
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="green">
-                      <Heart />
+                      <IconHeart />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
@@ -364,7 +345,7 @@ const AnxietyTreatment = () => {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-green-300" aria-hidden="true" />
+                      <MapPin className="w-5 h-5 text-green-300" />
                       <span className="font-body">Naples, FL & Surrounding Areas</span>
                     </div>
                     <div className="flex items-center gap-3">
@@ -374,13 +355,13 @@ const AnxietyTreatment = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" aria-hidden="true" />
+                      <CheckCircle className="w-5 h-5 text-green-300" />
                       <span className="font-body">
                         {language === 'en' ? 'Most Insurance Plans Accepted' : 'Se Aceptan Mayoría de Seguros'}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-300" aria-hidden="true" />
+                      <CheckCircle className="w-5 h-5 text-green-300" />
                       <span className="font-body">
                         {language === 'en' ? 'Telehealth Options Available' : 'Opciones de Telesalud Disponibles'}
                       </span>
@@ -391,7 +372,7 @@ const AnxietyTreatment = () => {
                     <Link href="/contact">
                       <Button size="lg" variant="secondary" className="bg-white text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full w-full inline-flex items-center justify-center gap-3">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                          <Calendar className="w-4 h-4 text-green-800" aria-hidden="true" />
+                          <Calendar className="w-4 h-4 text-green-800" />
                         </div>
                         {language === 'en' ? 'Schedule Your Consultation' : 'Programe Su Consulta'}
                       </Button>

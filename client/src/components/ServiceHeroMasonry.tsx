@@ -8,7 +8,7 @@ import {
   Clock, 
   MapPin
 } from "lucide-react";
-import { Sun, Heart, Brain } from 'lucide-react';
+import { IconSun, IconHeart, IconBrain } from '@tabler/icons-react';
 import { useLanguage } from "@/hooks/useLanguage";
 import { useClarity } from "@/hooks/use-clarity";
 
@@ -70,7 +70,7 @@ export const ServiceHeroMasonry = ({
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-6">
             <WellnessIcon size="sm" color="blue">
-              <Sun />
+              <IconSun />
             </WellnessIcon>
             <span className="text-blue-700 font-body font-semibold text-lg">
               {language === 'en' ? tagline.en : tagline.es}
@@ -164,7 +164,7 @@ export const ServiceHeroMasonry = ({
               {facts.items.map((fact, index) => (
                 <div key={`fact-${index}`} className="flex items-center gap-3 bg-white rounded-full px-5 py-2.5 shadow-md hover:shadow-lg transition-shadow duration-200 border border-green-100">
                   <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Heart className="w-3.5 h-3.5 text-green-600" />
+                    <IconHeart className="w-3.5 h-3.5 text-green-600" />
                   </div>
                   <span className="text-gray-700 font-body font-medium text-sm">
                     {language === 'en' ? fact.en : fact.es}

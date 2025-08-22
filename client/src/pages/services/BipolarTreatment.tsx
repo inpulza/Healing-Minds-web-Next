@@ -7,7 +7,8 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain, Heart, Smile } from 'lucide-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain } from 'lucide-react';
+import { IconBrain, IconHeart, IconMoodHappy, IconMoodUp, IconMoodSad } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
@@ -272,25 +273,6 @@ const BipolarTreatment = () => {
           }}
         /> 
 
-        {/* Page Title - H1 for SEO and Accessibility */}
-        <section className="py-8 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800">
-              {language === 'en' ? (
-                <>Bipolar <span className="font-display italic text-green-700">Disorder</span> Treatment</>
-              ) : (
-                <>Tratamiento del Trastorno <span className="font-display italic text-green-700">Bipolar</span></>
-              )}
-            </h1>
-            <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">
-              {language === 'en'
-                ? 'Expert psychiatric care for bipolar I, bipolar II, and cyclothymia with comprehensive mood stabilization.'
-                : 'Atención psiquiátrica experta para bipolar I, bipolar II y ciclotimia con estabilización integral del ánimo.'
-              }
-            </p>
-          </div>
-        </section>
-
         {/* Modern Treatment Approach Section */}
         <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -417,7 +399,7 @@ const BipolarTreatment = () => {
             <div className="text-center mb-12 sm:mb-16">
               <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-6">
                 <WellnessIcon size="md" color="green" className="opacity-70">
-                  <Brain />
+                  <IconBrain />
                 </WellnessIcon>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center">
                   {language === 'en' ? (
@@ -427,7 +409,7 @@ const BipolarTreatment = () => {
                   )}
                 </h2>
                 <WellnessIcon size="md" color="green" className="opacity-70">
-                  <Heart />
+                  <IconHeart />
                 </WellnessIcon>
               </div>
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed px-4 sm:px-0">

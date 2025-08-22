@@ -7,7 +7,8 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Heart, Brain, Smile, Sun } from 'lucide-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Heart } from 'lucide-react';
+import { IconBrain, IconHeart, IconMoodHappy, IconSun } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
@@ -180,25 +181,6 @@ const DepressionTreatment = () => {
         {/* Hero Section with Masonry Design */}
         <ServiceHeroMasonry {...heroData} />
 
-        {/* Page Title - H1 for SEO and Accessibility */}
-        <section className="py-8 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800">
-              {language === 'en' ? (
-                <>Depression <span className="font-display italic text-green-700">Treatment</span></>
-              ) : (
-                <>Tratamiento para la <span className="font-display italic text-green-700">Depresión</span></>
-              )}
-            </h1>
-            <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">
-              {language === 'en'
-                ? 'Compassionate, evidence-based psychiatric care for major depression, postpartum depression, and seasonal depression.'
-                : 'Atención psiquiátrica compasiva basada en evidencia para depresión mayor, depresión posparto y depresión estacional.'
-              }
-            </p>
-          </div>
-        </section>
-
         {/* Crisis Support Banner */}
         {language === 'en' && (
           <section className="bg-red-600 text-white py-4">
@@ -363,7 +345,7 @@ const DepressionTreatment = () => {
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="blue">
-                      <Brain />
+                      <IconBrain />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
@@ -380,7 +362,7 @@ const DepressionTreatment = () => {
                   
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="purple">
-                      <Smile />
+                      <IconMoodHappy />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
@@ -397,7 +379,7 @@ const DepressionTreatment = () => {
                   
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="green">
-                      <Sun />
+                      <IconSun />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">

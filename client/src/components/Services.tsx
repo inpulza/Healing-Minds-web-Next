@@ -2,7 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { Brain, Heart, Smile, User, Sun, Leaf } from 'lucide-react';
+import { IconBrain, IconHeart, IconMoodHappy, IconUser, IconSun, IconLeaf } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 const Services = () => {
@@ -15,7 +15,7 @@ const Services = () => {
       description: language === 'en' 
         ? 'Expert care for panic attacks, social anxiety, and generalized anxiety disorder. Evidence-based treatment with compassionate support for lasting relief.'
         : 'Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada. Tratamiento basado en evidencia con apoyo compasivo para alivio duradero.',
-      icon: Brain,
+      icon: IconBrain,
       featured: true,
       link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
     },
@@ -25,7 +25,7 @@ const Services = () => {
       description: language === 'en'
         ? 'Comprehensive care for major depression, including medication management and therapy coordination. Find hope and healing with personalized treatment plans.'
         : 'Atención integral para depresión mayor, incluyendo manejo de medicamentos y coordinación de terapia. Encuentre esperanza y sanación con planes de tratamiento personalizados.',
-      icon: Sun,
+      icon: IconSun,
       featured: false,
       link: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
     },
@@ -35,7 +35,7 @@ const Services = () => {
       description: language === 'en'
         ? 'Specialized evaluation and treatment for adults and teens with ADHD. Improve focus, organization, and daily functioning with expert psychiatric care.'
         : 'Evaluación especializada y tratamiento para adultos y adolescentes con TDAH. Mejore el enfoque, organización y funcionamiento diario con atención psiquiátrica experta.',
-      icon: Smile,
+      icon: IconMoodHappy,
       featured: false,
       link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah'
     },
@@ -45,7 +45,7 @@ const Services = () => {
       description: language === 'en'
         ? 'Trauma-informed psychiatric care for post-traumatic stress disorder. Safe, culturally sensitive treatment to help you reclaim your life from trauma.'
         : 'Atención psiquiátrica informada en trauma para trastorno de estrés postraumático. Tratamiento seguro y culturalmente sensible para ayudarle a reclamar su vida del trauma.',
-      icon: Leaf,
+      icon: IconLeaf,
       featured: false,
       link: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'
     },
@@ -55,7 +55,7 @@ const Services = () => {
       description: language === 'en'
         ? 'Expert mood stabilization for bipolar I, II, and cyclothymia. Comprehensive care to help you achieve emotional balance and prevent future episodes.'
         : 'Estabilización experta del ánimo para bipolar I, II y ciclotimia. Atención integral para ayudarle a lograr equilibrio emocional y prevenir episodios futuros.',
-      icon: Heart,
+      icon: IconHeart,
       featured: false,
       link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
     },
@@ -65,7 +65,7 @@ const Services = () => {
       description: language === 'en'
         ? 'Expert psychiatric medication evaluation, monitoring, and adjustment. Personalized medication plans with comprehensive safety assessments and ongoing care.'
         : 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos. Planes de medicación personalizados con evaluaciones de seguridad integrales y atención continua.',
-      icon: User,
+      icon: IconUser,
       featured: false,
       link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
     }
@@ -77,13 +77,13 @@ const Services = () => {
         <div className="text-center mb-12 sm:mb-16">
           <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-6">
             <WellnessIcon size="md" color="green" className="opacity-70">
-              <Brain aria-hidden="true" />
+              <IconBrain />
             </WellnessIcon>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center" data-testid="services-title">
               Mental Health for <span className="font-display italic text-green-700">every</span> mind
             </h2>
             <WellnessIcon size="md" color="blue" className="opacity-70">
-              <Heart aria-hidden="true" />
+              <IconHeart />
             </WellnessIcon>
           </div>
           <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed px-4 sm:px-0" data-testid="services-description">
@@ -113,7 +113,7 @@ const Services = () => {
                 }`}>
                   <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${
                     service.featured ? 'text-white' : 'text-green-800'
-                  }`} aria-hidden="true" />
+                  }`} />
                 </div>
                 
                 <h3 className={`text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 ${
@@ -144,7 +144,7 @@ const Services = () => {
                     }`}>
                       <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 ${
                         service.featured ? 'text-green-800' : 'text-white'
-                      }`} aria-hidden="true" />
+                      }`} />
                     </div>
                     <span className="text-left leading-tight flex-1 py-2">
                       {language === 'en' 

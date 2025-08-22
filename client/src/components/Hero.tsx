@@ -2,7 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { Brain, Heart, Leaf } from 'lucide-react';
+import { IconBrain, IconHeart, IconLeaf } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import heroImage from '@assets/hero-doctor-hq.webp';
 import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
@@ -57,11 +57,11 @@ const Hero = () => {
               src={mobileHeroImage}
               alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
               className="absolute inset-0 w-full h-full object-cover object-center hero-image"
-              width={375}
+              width={400}
               height={250}
               loading="eager"
               decoding="async"
-              sizes="(max-width: 480px) 375px, (max-width: 768px) 480px, 768px"
+              sizes="100vw"
               {...({'fetchpriority': 'high'} as any)}
             />
             
@@ -96,14 +96,14 @@ const Hero = () => {
               <div className="mb-2">Find Your Path to</div>
               <div className="flex items-center justify-center gap-2 mb-2">
                 <WellnessIcon size="sm" color="green" className="flex-shrink-0">
-                  <Brain />
+                  <IconBrain />
                 </WellnessIcon>
                 <span>Mental Clarity</span>
               </div>
               <div className="flex items-center justify-center gap-2">
                 <span>with</span>
                 <WellnessIcon size="sm" color="blue" className="flex-shrink-0">
-                  <Heart />
+                  <IconHeart />
                 </WellnessIcon>
                 <span className="font-display italic">Dr. Reve</span>
               </div>
@@ -116,7 +116,7 @@ const Hero = () => {
               <div className="flex items-center justify-center gap-2">
                 <span>designed to help you navigate life's challenges</span>
                 <WellnessIcon size="sm" color="orange" className="flex-shrink-0">
-                  <Leaf />
+                  <IconLeaf />
                 </WellnessIcon>
               </div>
             </div>
@@ -141,11 +141,11 @@ const Hero = () => {
               src={heroImage}
               alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
               className="absolute inset-0 w-full h-full object-cover object-center hero-image"
-              width={1024}
-              height={600}
+              width={1200}
+              height={800}
               loading="eager"
               decoding="async"
-              sizes="(max-width: 768px) 768px, (max-width: 1024px) 1024px, (max-width: 1200px) 1200px, 1400px"
+              sizes="(min-width: 1200px) 1200px, 100vw"
               {...({'fetchpriority': 'high'} as any)}
             />
             
@@ -157,16 +157,16 @@ const Hero = () => {
                 <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
                   Find Your Path to<br />
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
-                    <Brain />
+                    <IconBrain />
                   </WellnessIcon>
                   <span className="font-display italic text-green-700">Mental Clarity</span><br />
                   With 
                   <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
-                    <Heart />
+                    <IconHeart />
                   </WellnessIcon>
                   Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span>
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
-                    <Leaf />
+                    <IconLeaf />
                   </WellnessIcon>
                 </h1>
                 

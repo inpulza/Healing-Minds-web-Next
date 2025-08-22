@@ -13,11 +13,6 @@ app.use(compression({
       return false;
     }
     
-    // Always compress TypeScript/JavaScript files (including Vite generated .tsx files)
-    if (req.url && req.url.match(/\.(tsx|ts|jsx|js|css|html|json|xml|svg)$/)) {
-      return true;
-    }
-    
     // Fallback to standard filter function
     return compression.filter(req, res);
   },
@@ -25,7 +20,7 @@ app.use(compression({
   threshold: 512, // Compress even smaller files
 }));
 
-// Add cache headers and compression headers for static assets
+// Add cache headers for static assets
 app.use((req: Request, res: Response, next: NextFunction) => {
   // Cache static assets for 1 year
   if (req.url.match(/\.(js|css|png|jpg|jpeg|webp|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
@@ -34,11 +29,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   // Cache HTML for 5 minutes
   else if (req.url.match(/\.html$/) || req.url === '/') {
     res.setHeader('Cache-Control', 'public, max-age=300, must-revalidate');
-  }
-  // Ensure text files are properly marked for compression
-  if (req.url.match(/\.(js|css|html|txt|json|xml|svg|tsx|ts|jsx)$/)) {
-    res.setHeader('Content-Type', res.getHeader('Content-Type') || 'text/plain');
-    res.setHeader('Vary', 'Accept-Encoding');
   }
   next();
 });
