@@ -84,13 +84,13 @@ const InsuranceLogos = () => {
         <div className="p-6 sm:p-8 lg:p-10">
           
           {/* Mobile Layout - Auto Slider */}
-          <div className="block md:hidden relative">
-            <div className="w-full h-48 flex justify-center items-center">
-              <div className="relative w-72 h-48">
+          <div className="block md:hidden">
+            <div className="h-48 flex items-center justify-center">
+              <div className="relative w-full flex items-center justify-center">
                 {insuranceLogos.map((logo, index) => (
                   <div 
                     key={index}
-                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ${
+                    className={`absolute flex items-center justify-center inset-0 transition-opacity duration-500 ${
                       index === currentLogoIndex 
                         ? 'opacity-100' 
                         : 'opacity-0'
@@ -100,35 +100,29 @@ const InsuranceLogos = () => {
                     <OptimizedImage
                       src={logo.src}
                       alt={logo.alt}
-                      className="w-72 h-48 object-contain filter grayscale"
+                      className="h-36 w-auto object-contain filter grayscale"
                       width={480}
                       height={336}
                       priority={index < 6}
-                      sizes="288px"
-                      style={{
-                        aspectRatio: '10/7',
-                        minWidth: '288px',
-                        minHeight: '192px',
-                        containIntrinsicSize: '480px 336px',
-                        contentVisibility: index < 6 ? 'visible' : 'auto',
-                        willChange: 'auto'
-                      }}
+                      sizes="320px"
                     />
                   </div>
                 ))}
               </div>
             </div>
             
-            {/* Progress dots - positioned at bottom edge of mobile container */}
-            <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex gap-1">
-              {insuranceLogos.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                    index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
-                  }`}
-                />
-              ))}
+            {/* Progress dots */}
+            <div className="flex justify-center mt-6">
+              <div className="flex gap-2">
+                {insuranceLogos.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
