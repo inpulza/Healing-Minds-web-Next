@@ -145,7 +145,7 @@ const Home = () => {
                   {/* Map Legend */}
                   <div className="mt-4 sm:mt-6 grid grid-cols-2 gap-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse"></div>
+                      <div className="w-3 h-3 bg-green-700 rounded-full animate-pulse"></div>
                       <span className="text-sm font-medium text-gray-700">
                         {language === 'en' ? 'Main Office' : 'Oficina Principal'}
                       </span>

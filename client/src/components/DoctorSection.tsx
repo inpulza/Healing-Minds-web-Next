@@ -37,11 +37,11 @@ const DoctorSection = () => {
 
               <Link href="/services">
                 <Button
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7"
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7"
                   data-testid="explore-services-button"
                 >
                   <span>{language === 'en' ? 'Explore services' : 'Explorar servicios'}</span>
-                  <ArrowRight className="w-8 h-8 sm:w-9 sm:h-9 p-2 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full transition-all duration-300 bg-green-500 text-white flex-shrink-0" />
+                  <ArrowRight className="w-8 h-8 sm:w-9 sm:h-9 p-2 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full transition-all duration-300 bg-green-600 text-white flex-shrink-0" />
                 </Button>
               </Link>
             </div>

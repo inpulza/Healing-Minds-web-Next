@@ -221,7 +221,7 @@ const LocationNaples = () => {
                   onClick={() => window.location.href = '/contact'}
                   data-testid="button-schedule-consultation"
                 >
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
                     <Calendar className="w-4 h-4 text-white" />
                   </div>
                   {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
@@ -321,12 +321,12 @@ const LocationNaples = () => {
                   </p>
 
                   <Button 
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7"
                     onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
                     data-testid="button-view-location"
                   >
                     <span>{language === 'en' ? 'View Our Location' : 'Ver Nuestra Ubicación'}</span>
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
                       <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                   </Button>
@@ -575,7 +575,7 @@ const LocationNaples = () => {
                   {/* Address */}
                   <Card className="card-modern mb-6">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0">
                         <MapPin className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -592,7 +592,7 @@ const LocationNaples = () => {
                   {/* Phone */}
                   <Card className="card-modern mb-6">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0">
                         <Phone className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -613,7 +613,7 @@ const LocationNaples = () => {
                   {/* Email */}
                   <Card className="card-modern mb-6">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0">
                         <Mail className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -634,7 +634,7 @@ const LocationNaples = () => {
                   {/* Hours */}
                   <Card className="card-modern">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0">
                         <Clock className="w-6 h-6 text-white" />
                       </div>
                       <div>

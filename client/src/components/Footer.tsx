@@ -73,7 +73,7 @@ const Footer = () => {
               <Button
                 onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
                 size="sm"
-                className="bg-green-600 hover:bg-green-500 text-white text-sm font-semibold"
+                className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold"
                 data-testid="footer-telehealth-button"
               >
                 {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
@@ -258,12 +258,12 @@ const Footer = () => {
                 © {new Date().getFullYear()} Healing Minds Psychiatry. 
                 {language === 'en' ? ' All rights reserved.' : ' Todos los derechos reservados.'}
               </div>
-              <div className="text-xs text-green-400/70 mt-2 flex items-center justify-end gap-1" data-testid="footer-credits">
-                <span className="font-light">
+              <div className="text-xs text-green-300 mt-2 flex items-center justify-end gap-1" data-testid="footer-credits">
+                <span className="font-normal">
                   {language === 'en' ? 'Crafted with' : 'Creado con'} 
                 </span>
                 <span className="text-green-300 text-sm">♥</span>
-                <span className="font-light">
+                <span className="font-normal">
                   {language === 'en' ? 'by' : 'por'}
                 </span>
                 <a 
