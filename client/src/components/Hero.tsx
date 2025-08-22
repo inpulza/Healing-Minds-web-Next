@@ -101,9 +101,6 @@ const Hero = () => {
                 care in
               </div>
               <div className="italic font-bold text-center">
-                <WellnessIcon size="sm" color="orange" className="inline-flex mx-1 align-middle">
-                  <IconLeaf />
-                </WellnessIcon>
                 Naples, FL
                 <WellnessIcon size="sm" color="green" className="inline-flex mx-1 align-middle">
                   <IconBrain />
@@ -175,9 +172,6 @@ const Hero = () => {
                     care in
                   </div>
                   <div className="font-display italic font-bold">
-                    <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
-                      <IconLeaf />
-                    </WellnessIcon>
                     Naples, FL
                     <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                       <IconBrain />
