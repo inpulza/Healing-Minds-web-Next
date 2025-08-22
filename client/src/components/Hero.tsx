@@ -94,7 +94,11 @@ const Hero = () => {
           <div className="bg-[#1e6b3b] rounded-2xl px-8 py-10 text-center">
             <h1 className="text-2xl sm:text-3xl font-display font-bold leading-relaxed text-white mb-6" data-testid="hero-title">
               <div className="italic font-bold mb-3 text-center">
-                Expert psychiatric care in
+                Expert psychiatric 
+                <WellnessIcon size="sm" color="blue" className="inline-flex mx-1 align-middle">
+                  <IconHeart />
+                </WellnessIcon>
+                care in
               </div>
               <div className="italic font-bold text-center">
                 <WellnessIcon size="sm" color="orange" className="inline-flex mx-1 align-middle">
@@ -103,9 +107,6 @@ const Hero = () => {
                 Naples, FL
                 <WellnessIcon size="sm" color="green" className="inline-flex mx-1 align-middle">
                   <IconBrain />
-                </WellnessIcon>
-                <WellnessIcon size="sm" color="blue" className="inline-flex mx-1 align-middle">
-                  <IconHeart />
                 </WellnessIcon>
               </div>
             </h1>
@@ -167,7 +168,11 @@ const Hero = () => {
                 
                 <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-relaxed text-green-700 text-left mb-6" data-testid="hero-title">
                   <div className="font-display italic font-bold mb-3">
-                    Expert psychiatric care in
+                    Expert psychiatric 
+                    <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
+                      <IconHeart />
+                    </WellnessIcon>
+                    care in
                   </div>
                   <div className="font-display italic font-bold">
                     <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
@@ -176,9 +181,6 @@ const Hero = () => {
                     Naples, FL
                     <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                       <IconBrain />
-                    </WellnessIcon>
-                    <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
-                      <IconHeart />
                     </WellnessIcon>
                   </div>
                 </h1>
