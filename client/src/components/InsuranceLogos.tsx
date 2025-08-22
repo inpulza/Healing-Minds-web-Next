@@ -84,8 +84,8 @@ const InsuranceLogos = () => {
           
           {/* Mobile Layout - Auto Slider */}
           <div className="block md:hidden">
-            <div className="w-full h-32 flex justify-center items-center relative">
-              <div className="relative w-40 h-28">
+            <div className="w-full h-36 flex justify-center items-center relative">
+              <div className="relative w-48 h-32">
                 {insuranceLogos.map((logo, index) => (
                   <div 
                     key={index}
@@ -99,16 +99,16 @@ const InsuranceLogos = () => {
                     <OptimizedImage
                       src={logo.src}
                       alt={logo.alt}
-                      className="w-40 h-28 object-contain filter grayscale"
-                      width={256}
-                      height={180}
+                      className="w-48 h-32 object-contain filter grayscale"
+                      width={320}
+                      height={224}
                       priority={index < 6}
-                      sizes="160px"
+                      sizes="192px"
                       style={{
-                        aspectRatio: '16/11',
-                        minWidth: '160px',
-                        minHeight: '112px',
-                        containIntrinsicSize: '256px 180px',
+                        aspectRatio: '3/2',
+                        minWidth: '192px',
+                        minHeight: '128px',
+                        containIntrinsicSize: '320px 224px',
                         contentVisibility: index < 6 ? 'visible' : 'auto',
                         willChange: 'auto'
                       }}
