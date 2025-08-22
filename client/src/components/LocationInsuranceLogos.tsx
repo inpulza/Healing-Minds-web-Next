@@ -81,16 +81,16 @@ const LocationInsuranceLogos = () => {
         </div>
 
         {/* Responsive Insurance Layout */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100 overflow-hidden">
           
           {/* Mobile Layout - Auto Slider */}
           <div className="block md:hidden relative">
-            <div className="w-full h-48 flex justify-center items-center">
-              <div className="relative w-72 h-48">
+            <div className="w-full h-40 flex justify-center items-center">
+              <div className="relative w-full max-w-sm h-40">
                 {insuranceLogos.map((logo, index) => (
                   <div 
                     key={index}
-                    className={`absolute inset-0 flex items-end justify-center pb-12 transition-all duration-500 ${
+                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ${
                       index === currentLogoIndex 
                         ? 'opacity-100' 
                         : 'opacity-0'
@@ -100,16 +100,16 @@ const LocationInsuranceLogos = () => {
                     <OptimizedImage
                       src={logo.src}
                       alt={logo.alt}
-                      className="w-72 h-48 object-contain filter grayscale"
+                      className="w-full h-32 object-contain filter grayscale max-w-xs"
                       width={480}
                       height={336}
                       priority={index < 6}
-                      sizes="288px"
+                      sizes="(max-width: 384px) 100vw, 384px"
                       style={{
                         aspectRatio: '10/7',
-                        minWidth: '288px',
-                        minHeight: '192px',
-                        containIntrinsicSize: '480px 336px',
+                        maxWidth: '320px',
+                        maxHeight: '128px',
+                        containIntrinsicSize: '320px 128px',
                         contentVisibility: index < 6 ? 'visible' : 'auto',
                         willChange: 'auto'
                       }}
@@ -120,42 +120,44 @@ const LocationInsuranceLogos = () => {
             </div>
             
             {/* Progress dots - positioned at bottom edge of mobile container */}
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-1">
-              {insuranceLogos.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                    index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
-                  }`}
-                />
-              ))}
+            <div className="flex justify-center mt-4">
+              <div className="flex gap-1">
+                {insuranceLogos.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                      index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Desktop Layout - Three Rows Brick Style */}
-          <div className="hidden md:flex flex-col items-center gap-4 lg:gap-6">
+          <div className="hidden md:flex flex-col items-center gap-3 lg:gap-4 w-full">
             
             {/* First Row */}
-            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
+            <div className="flex flex-wrap justify-center gap-3 lg:gap-6 w-full max-w-6xl">
               {firstRow.map((logo, index) => (
                 <div 
                   key={index} 
-                  className="group flex items-center justify-center"
+                  className="group flex items-center justify-center flex-shrink-0"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-32 h-24 lg:w-44 lg:h-32 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={208}
                     height={144}
                     priority={index < 4}
-                    sizes="(max-width: 1024px) 144px, 208px"
+                    sizes="(max-width: 1024px) 128px, 176px"
                     style={{
-                      aspectRatio: '13/9',
-                      minWidth: '144px',
-                      minHeight: '112px',
-                      containIntrinsicSize: '208px 144px',
+                      aspectRatio: '4/3',
+                      maxWidth: '176px',
+                      maxHeight: '128px',
+                      containIntrinsicSize: '176px 128px',
                       contentVisibility: index < 4 ? 'visible' : 'auto',
                       willChange: 'auto'
                     }}
@@ -164,27 +166,27 @@ const LocationInsuranceLogos = () => {
               ))}
             </div>
             
-            {/* Second Row - Offset */}
-            <div className="flex flex-wrap justify-center gap-4 lg:gap-8" style={{ marginLeft: 'clamp(2rem, 6vw, 4rem)' }}>
+            {/* Second Row - Slight Offset */}
+            <div className="flex flex-wrap justify-center gap-3 lg:gap-6 w-full max-w-6xl" style={{ transform: 'translateX(clamp(-1rem, -3vw, 1rem))' }}>
               {secondRow.map((logo, index) => (
                 <div 
                   key={index + firstRow.length} 
-                  className="group flex items-center justify-center"
+                  className="group flex items-center justify-center flex-shrink-0"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-32 h-24 lg:w-44 lg:h-32 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={208}
                     height={144}
                     priority={false}
-                    sizes="(max-width: 1024px) 144px, 208px"
+                    sizes="(max-width: 1024px) 128px, 176px"
                     style={{
-                      aspectRatio: '13/9',
-                      minWidth: '144px',
-                      minHeight: '112px',
-                      containIntrinsicSize: '208px 144px',
+                      aspectRatio: '4/3',
+                      maxWidth: '176px',
+                      maxHeight: '128px',
+                      containIntrinsicSize: '176px 128px',
                       contentVisibility: 'auto',
                       willChange: 'auto'
                     }}
@@ -194,26 +196,26 @@ const LocationInsuranceLogos = () => {
             </div>
             
             {/* Third Row */}
-            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
+            <div className="flex flex-wrap justify-center gap-3 lg:gap-6 w-full max-w-6xl">
               {thirdRow.map((logo, index) => (
                 <div 
                   key={index + firstRow.length + secondRow.length} 
-                  className="group flex items-center justify-center"
+                  className="group flex items-center justify-center flex-shrink-0"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-32 h-24 lg:w-44 lg:h-32 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={208}
                     height={144}
                     priority={false}
-                    sizes="(max-width: 1024px) 144px, 208px"
+                    sizes="(max-width: 1024px) 128px, 176px"
                     style={{
-                      aspectRatio: '13/9',
-                      minWidth: '144px',
-                      minHeight: '112px',
-                      containIntrinsicSize: '208px 144px',
+                      aspectRatio: '4/3',
+                      maxWidth: '176px',
+                      maxHeight: '128px',
+                      containIntrinsicSize: '176px 128px',
                       contentVisibility: 'auto',
                       willChange: 'auto'
                     }}
