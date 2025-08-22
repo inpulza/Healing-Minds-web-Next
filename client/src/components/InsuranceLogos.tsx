@@ -81,7 +81,7 @@ const InsuranceLogos = () => {
         </div>
 
         {/* Responsive Insurance Layout */}
-        <div className="p-6 sm:p-8 lg:p-10">
+        <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
           
           {/* Mobile Layout - Auto Slider */}
           <div className="block md:hidden">
