@@ -155,7 +155,7 @@ const Hero = () => {
             
             {/* Left-Aligned Content */}
             <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
-              <div className="max-w-5xl ml-4" style="max-width: 60%;">
+              <div className="max-w-5xl ml-4" style={{maxWidth: "60%"}}>
                 {/* SEO Pills */}
                 <div className="flex flex-wrap gap-3 mb-6">
                   <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-base font-medium">Board Certified Psychiatrist</span>
