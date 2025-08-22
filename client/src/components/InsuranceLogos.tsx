@@ -83,8 +83,8 @@ const InsuranceLogos = () => {
         <div className="p-6 sm:p-8 lg:p-10">
           
           {/* Mobile Layout - Auto Slider */}
-          <div className="block md:hidden">
-            <div className="w-full h-48 flex justify-center items-center relative">
+          <div className="block md:hidden relative">
+            <div className="w-full h-48 flex justify-center items-center">
               <div className="relative w-72 h-48">
                 {insuranceLogos.map((logo, index) => (
                   <div 
@@ -116,18 +116,18 @@ const InsuranceLogos = () => {
                   </div>
                 ))}
               </div>
-              
-              {/* Progress dots - positioned at bottom edge */}
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-1">
-                {insuranceLogos.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                      index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
-                    }`}
-                  />
-                ))}
-              </div>
+            </div>
+            
+            {/* Progress dots - positioned at bottom edge of mobile container */}
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-1">
+              {insuranceLogos.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
             </div>
           </div>
 
