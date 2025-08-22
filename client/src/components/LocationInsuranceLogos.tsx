@@ -84,8 +84,8 @@ const LocationInsuranceLogos = () => {
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
           
           {/* Mobile Layout - Auto Slider */}
-          <div className="block md:hidden relative">
-            <div className="w-full h-48 flex justify-center items-center">
+          <div className="block md:hidden relative h-48">
+            <div className="absolute inset-0 flex justify-center items-center">
               <div className="relative w-48 h-32">
                 {insuranceLogos.map((logo, index) => (
                   <div 
