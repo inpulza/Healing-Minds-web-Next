@@ -100,11 +100,11 @@ const LocationInsuranceLogos = () => {
                     <OptimizedImage
                       src={logo.src}
                       alt={logo.alt}
-                      className="h-28 w-auto object-contain filter grayscale"
+                      className="h-36 w-auto object-contain filter grayscale"
                       width={480}
                       height={336}
                       priority={index < 6}
-                      sizes="280px"
+                      sizes="320px"
                     />
                   </div>
                 ))}
