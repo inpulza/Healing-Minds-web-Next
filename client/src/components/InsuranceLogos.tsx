@@ -84,11 +84,11 @@ const InsuranceLogos = () => {
           
           {/* Mobile Layout - Auto Slider */}
           <div className="block md:hidden">
-            <div className="flex justify-center items-center h-24 relative">
+            <div className="flex justify-center items-center h-32 relative w-full">
               {insuranceLogos.map((logo, index) => (
                 <div 
                   key={index}
-                  className={`absolute flex items-center justify-center transition-all duration-500 ${
+                  className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-500 ${
                     index === currentLogoIndex 
                       ? 'opacity-100 translate-y-0' 
                       : 'opacity-0 translate-y-4'
@@ -98,16 +98,16 @@ const InsuranceLogos = () => {
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-28 h-20 object-contain filter grayscale"
-                    width={208}
-                    height={144}
+                    className="w-40 h-28 object-contain filter grayscale"
+                    width={256}
+                    height={180}
                     priority={index < 6}
-                    sizes="112px"
+                    sizes="160px"
                     style={{
-                      aspectRatio: '13/9',
-                      minWidth: '112px',
-                      minHeight: '80px',
-                      containIntrinsicSize: '208px 144px',
+                      aspectRatio: '16/11',
+                      minWidth: '160px',
+                      minHeight: '112px',
+                      containIntrinsicSize: '256px 180px',
                       contentVisibility: index < 6 ? 'visible' : 'auto',
                       willChange: 'auto'
                     }}
