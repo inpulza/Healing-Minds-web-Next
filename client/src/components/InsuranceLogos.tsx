@@ -124,7 +124,7 @@ const InsuranceLogos = () => {
         </div>
 
         {/* Insurance Logos Container - Ready for new logos */}
-        <div className="p-6 sm:p-8 lg:p-10">
+        <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
           <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
             {insuranceLogos.length > 0 ? (
               insuranceLogos.map((logo, index) => {
