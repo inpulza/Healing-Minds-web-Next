@@ -28,7 +28,7 @@ import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, Ico
 import { Link } from 'wouter';
 
 // Import office photo
-import officePhoto from '@/assets/office-photo.webp';
+import officePhoto from '@assets/office-photo.webp';
 
 const LocationNaples = () => {
   const { language } = useLanguage();

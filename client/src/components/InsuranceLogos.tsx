@@ -2,7 +2,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import OptimizedImage from './OptimizedImage';
 
 // Import insurance logos
-import aetnaLogo from '@/assets/1_1755867827627.png';
+import aetnaLogo from '@assets/1_1755867827627.png';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();

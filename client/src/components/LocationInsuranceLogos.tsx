@@ -2,17 +2,17 @@ import { useLanguage } from '@/hooks/useLanguage';
 import OptimizedImage from './OptimizedImage';
 
 // Import insurance logos
-import aetnaLogo from '@/assets/insurance-aetna.webp';
-import cignaLogo from '@/assets/insurance-cigna.webp';
-import medicareLogo from '@/assets/insurance-medicare.webp';
-import firstHealthLogo from '@/assets/insurance-first-health.webp';
-import medicaidLogo from '@/assets/insurance-medicaid.webp';
-import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.webp';
-import champvaLogo from '@/assets/insurance-champva.webp';
-import sunshineHealthLogo from '@/assets/insurance-sunshine.webp';
-import avmedLogo from '@/assets/insurance-avmed.webp';
-import wellcareLogo from '@/assets/insurance-wellcare.webp';
-import ambetterLogo from '@/assets/insurance-ambetter.webp';
+import aetnaLogo from '@assets/insurance-aetna.webp';
+import cignaLogo from '@assets/insurance-cigna.webp';
+import medicareLogo from '@assets/insurance-medicare.webp';
+import firstHealthLogo from '@assets/insurance-first-health.webp';
+import medicaidLogo from '@assets/insurance-medicaid.webp';
+import floridaMedicaidLogo from '@assets/insurance-florida-medicaid.webp';
+import champvaLogo from '@assets/insurance-champva.webp';
+import sunshineHealthLogo from '@assets/insurance-sunshine.webp';
+import avmedLogo from '@assets/insurance-avmed.webp';
+import wellcareLogo from '@assets/insurance-wellcare.webp';
+import ambetterLogo from '@assets/insurance-ambetter.webp';
 
 const LocationInsuranceLogos = () => {
   const { language } = useLanguage();
