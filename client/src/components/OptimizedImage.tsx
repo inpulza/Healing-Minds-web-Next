@@ -27,7 +27,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const { ref, isIntersecting } = useIntersectionObserver({
-    rootMargin: priority ? '0px' : '100px 0px',
+    rootMargin: priority ? '0px' : '200px 0px',
     triggerOnce: true,
   });
 

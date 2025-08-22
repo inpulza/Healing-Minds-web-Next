@@ -194,21 +194,21 @@ const LocationNaples = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-green-800 mb-6" style={{ fontFamily: 'var(--font-body)', willChange: 'auto' }}>
                 {language === 'en' ? (
                   <>
-                    Our Professional Practice <span className="font-display italic text-green-700">Location</span> in{' '}
-                    <span className="font-display italic text-green-700">Naples, FL</span>
+                    Our Professional Practice <span className="italic text-green-700">Location</span> in{' '}
+                    <span className="italic text-green-700">Naples, FL</span>
                   </>
                 ) : (
                   <>
                     Nuestra Ubicación de Práctica Profesional en{' '}
-                    <span className="font-display italic text-green-700">Naples, FL</span>
+                    <span className="italic text-green-700">Naples, FL</span>
                   </>
                 )}
               </h1>
               
-              <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed max-w-4xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto" style={{ fontFamily: 'var(--font-body)' }}>
                 {language === 'en' 
                   ? 'Discover our conveniently located psychiatric practice in the heart of Naples, Florida. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
                   : 'Descubra nuestra práctica psiquiátrica convenientemente ubicada en el corazón de Naples, Florida. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
@@ -284,9 +284,6 @@ const LocationNaples = () => {
             </div>
           </div>
         </section>
-
-        {/* Insurance Logos Section */}
-        <LocationInsuranceLogos />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">
@@ -369,6 +366,9 @@ const LocationNaples = () => {
             </div>
           </div>
         </section>
+
+        {/* Insurance Logos Section - Moved below fold */}
+        <LocationInsuranceLogos />
 
         {/* Services Section */}
         <section className="py-20 bg-white">
