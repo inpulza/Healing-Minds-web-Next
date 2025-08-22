@@ -43,9 +43,10 @@ const InsuranceLogos = () => {
     { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' }
   ];
 
-  // Split logos into two rows for brick layout
-  const firstRow = insuranceLogos.slice(0, 8);  // First 8 logos
-  const secondRow = insuranceLogos.slice(8);     // Remaining 7 logos
+  // Split logos into three rows for brick layout
+  const firstRow = insuranceLogos.slice(0, 5);   // First 5 logos
+  const secondRow = insuranceLogos.slice(5, 10); // Next 5 logos
+  const thirdRow = insuranceLogos.slice(10);     // Last 5 logos
 
   // Auto-rotate logos for mobile slider
   useEffect(() => {
@@ -131,7 +132,7 @@ const InsuranceLogos = () => {
             </div>
           </div>
 
-          {/* Desktop Layout - Two Rows Brick Style */}
+          {/* Desktop Layout - Three Rows Brick Style */}
           <div className="hidden md:flex flex-col items-center gap-4 lg:gap-6">
             
             {/* First Row */}
@@ -168,6 +169,35 @@ const InsuranceLogos = () => {
               {secondRow.map((logo, index) => (
                 <div 
                   key={index + firstRow.length} 
+                  className="group flex items-center justify-center"
+                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <OptimizedImage
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    width={208}
+                    height={144}
+                    priority={false}
+                    sizes="(max-width: 1024px) 144px, 208px"
+                    style={{
+                      aspectRatio: '13/9',
+                      minWidth: '144px',
+                      minHeight: '112px',
+                      containIntrinsicSize: '208px 144px',
+                      contentVisibility: 'auto',
+                      willChange: 'auto'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            
+            {/* Third Row */}
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
+              {thirdRow.map((logo, index) => (
+                <div 
+                  key={index + firstRow.length + secondRow.length} 
                   className="group flex items-center justify-center"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
