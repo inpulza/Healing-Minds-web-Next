@@ -119,7 +119,9 @@ const Hero = () => {
                   data-testid="hero-book-consultation"
                 >
                   <span>Our Services</span>
-                  <ArrowRight className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                    <ArrowRight className="w-4 h-4 text-green-800" />
+                  </div>
                 </Button>
               </Link>
               <a href="tel:(239) 423-0272">
@@ -128,7 +130,9 @@ const Hero = () => {
                   data-testid="hero-call-now"
                 >
                   <span>Llamar Ahora</span>
-                  <Phone className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                    <Phone className="w-4 h-4 text-green-800" />
+                  </div>
                 </Button>
               </a>
             </div>
