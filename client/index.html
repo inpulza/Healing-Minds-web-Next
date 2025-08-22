@@ -123,17 +123,20 @@
     }
     </script>
     
-    <!-- DNS prefetch for performance -->
+    <!-- DNS prefetch for performance - Critical resources first -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
-    <link rel="dns-prefetch" href="https://scripts.clarity.ms" />
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     
-    <!-- Preconnect to external domains -->
+    <!-- Preconnect to critical external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    
+    <!-- Lower priority DNS prefetch for analytics -->
+    <link rel="dns-prefetch" href="https://scripts.clarity.ms" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+    
+    <!-- Preconnect to analytics with lower priority -->
     <link rel="preconnect" href="https://scripts.clarity.ms" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     
@@ -141,9 +144,12 @@
     <link rel="modulepreload" href="/src/main.tsx" />
     <link rel="modulepreload" href="/src/App.tsx" />
     <link rel="modulepreload" href="/src/components/Hero.tsx" fetchpriority="high" />
-    <link rel="modulepreload" href="/src/components/Header.tsx" />
+    <link rel="modulepreload" href="/src/components/Header.tsx" fetchpriority="high" />
     <link rel="modulepreload" href="/src/hooks/useLanguage.ts" fetchpriority="high" />
     <link rel="modulepreload" href="/src/contexts/LanguageContext.tsx" fetchpriority="high" />
+    <link rel="modulepreload" href="/src/components/InsuranceLogos.tsx" />
+    <link rel="modulepreload" href="/src/components/OptimizedImage.tsx" />
+    <link rel="modulepreload" href="/src/pages/Home.tsx" fetchpriority="high" />
     <!-- Non-blocking font loading for mobile optimization -->
     <link
       rel="preload"

@@ -232,35 +232,35 @@ const Home = () => {
           </div>
         </section>
         
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="high" preload>
           <LazyDoctorSection />
         </SuspenseWrapper>
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="high" preload>
           <LazyServices />
         </SuspenseWrapper>
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="high">
           <LazyAbout />
         </SuspenseWrapper>
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="medium">
           <LazyBilingualCare />
         </SuspenseWrapper>
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="medium">
           <LazyServiceAreas />
         </SuspenseWrapper>
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="medium">
           <LazyTestimonials />
         </SuspenseWrapper>
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="low">
           <LazyForPatients />
         </SuspenseWrapper>
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="low">
           <LazyFAQ />
         </SuspenseWrapper>
-        <SuspenseWrapper>
+        <SuspenseWrapper priority="low">
           <LazyContact />
         </SuspenseWrapper>
       </main>
-      <SuspenseWrapper>
+      <SuspenseWrapper priority="low">
         <LazyFooter />
       </SuspenseWrapper>
     </div>
