@@ -119,7 +119,7 @@ const InsuranceLogos = () => {
             </div>
             
             {/* Progress dots */}
-            <div className="flex justify-center gap-1 mt-4">
+            <div className="flex justify-center gap-1 mt-2">
               {insuranceLogos.map((_, index) => (
                 <div
                   key={index}
