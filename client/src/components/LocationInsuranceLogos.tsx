@@ -90,7 +90,7 @@ const LocationInsuranceLogos = () => {
                 {insuranceLogos.map((logo, index) => (
                   <div 
                     key={index}
-                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ${
+                    className={`absolute inset-0 flex items-end justify-center pb-12 transition-all duration-500 ${
                       index === currentLogoIndex 
                         ? 'opacity-100' 
                         : 'opacity-0'
