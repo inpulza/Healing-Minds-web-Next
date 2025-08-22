@@ -1,14 +1,17 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import OptimizedImage from './OptimizedImage';
 
-// Import insurance logos - All logos removed
+// Import insurance logos
+import aetnaLogo from '@/assets/1_1755867827627.png';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
   
   // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
 
-  const insuranceLogos = [];
+  const insuranceLogos = [
+    { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' }
+  ];
 
   return (
     <section className="py-8 sm:py-12 lg:py-16 bg-white">
