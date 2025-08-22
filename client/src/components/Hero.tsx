@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
@@ -7,10 +8,12 @@ import WellnessIcon from '@/components/WellnessIcon';
 import heroImage from '@assets/hero-doctor-hq.webp';
 import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
 
-const Hero = () => {
+// Optimized Hero component with performance improvements
+const Hero = React.memo(() => {
   const { language } = useLanguage();
 
-  const services = [
+  // Memoize services arrays to prevent recreation on each render
+  const services = useMemo(() => [
     'Anxiety Disorders',
     'Depression Treatment', 
     'ADHD Assessment',
@@ -25,9 +28,9 @@ const Hero = () => {
     'Psychoeducation',
     'Crisis Intervention',
     'Stress Management'
-  ];
+  ], []);
 
-  const servicesSpanish = [
+  const servicesSpanish = useMemo(() => [
     'Trastornos de Ansiedad',
     'Tratamiento de Depresión',
     'Evaluación de TDAH',
@@ -42,9 +45,18 @@ const Hero = () => {
     'Psicoeducación',
     'Intervención de Crisis',
     'Manejo del Estrés'
-  ];
+  ], []);
 
-  const displayServices = language === 'en' ? services : servicesSpanish;
+  // Memoize display services to prevent recalculation
+  const displayServices = useMemo(() => 
+    language === 'en' ? services : servicesSpanish, 
+    [language, services, servicesSpanish]
+  );
+
+  // Memoize the scrolling text content to reduce DOM elements
+  const scrollingText = useMemo(() => {
+    return displayServices.join(' • ') + ' • ';
+  }, [displayServices]);
 
   return (
     <section className="pt-8 pb-16 bg-white">
@@ -65,27 +77,15 @@ const Hero = () => {
               {...({'fetchpriority': 'high'} as any)}
             />
             
-            {/* Services Carousel Overlay - Mobile */}
+            {/* Services Carousel Overlay - Mobile - Optimized */}
             <div className="absolute bottom-0 left-0 right-0 py-3 overflow-hidden">
-              <div className="flex animate-scroll whitespace-nowrap">
-                {/* First set */}
-                <div className="flex items-center space-x-4 text-gray-600/80 font-body font-medium text-sm px-2">
-                  {displayServices.map((service, index) => (
-                    <div key={index} className="flex items-center space-x-4">
-                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-600/80">•</span>
-                    </div>
-                  ))}
-                </div>
-                {/* Duplicate for seamless loop */}
-                <div className="flex items-center space-x-4 text-gray-600/80 font-body font-medium text-sm px-2">
-                  {displayServices.map((service, index) => (
-                    <div key={`duplicate-${index}`} className="flex items-center space-x-4">
-                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-600/80">•</span>
-                    </div>
-                  ))}
-                </div>
+              <div 
+                className="animate-scroll whitespace-nowrap text-gray-600/80 font-body font-medium text-sm px-2"
+                style={{ willChange: 'transform' }}
+              >
+                <span className="inline-block drop-shadow-md">
+                  {scrollingText.repeat(3)}
+                </span>
               </div>
             </div>
           </div>
@@ -214,27 +214,15 @@ const Hero = () => {
               </div>
             </div>
             
-            {/* Services Carousel Overlay - Desktop */}
+            {/* Services Carousel Overlay - Desktop - Optimized */}
             <div className="absolute bottom-0 left-0 right-0 py-4 sm:py-6 overflow-hidden z-20">
-              <div className="flex animate-scroll whitespace-nowrap">
-                {/* First set */}
-                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-600/80 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
-                  {displayServices.map((service, index) => (
-                    <div key={index} className="flex items-center space-x-6 sm:space-x-8">
-                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-600/80">•</span>
-                    </div>
-                  ))}
-                </div>
-                {/* Duplicate for seamless loop */}
-                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-600/80 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
-                  {displayServices.map((service, index) => (
-                    <div key={`duplicate-${index}`} className="flex items-center space-x-6 sm:space-x-8">
-                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-600/80">•</span>
-                    </div>
-                  ))}
-                </div>
+              <div 
+                className="animate-scroll whitespace-nowrap text-gray-600/80 font-body font-medium text-base sm:text-lg px-3 sm:px-4"
+                style={{ willChange: 'transform' }}
+              >
+                <span className="inline-block drop-shadow-md" style={{ letterSpacing: '0.5em' }}>
+                  {scrollingText.repeat(3)}
+                </span>
               </div>
             </div>
           </div>
@@ -242,6 +230,9 @@ const Hero = () => {
       </div>
     </section>
   );
-};
+});
+
+// Set display name for debugging
+Hero.displayName = 'Hero';
 
 export default Hero;

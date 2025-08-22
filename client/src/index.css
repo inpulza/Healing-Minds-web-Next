@@ -78,6 +78,21 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  
+  /* Performance utility classes */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  
+  .contain-layout {
+    contain: layout style paint;
+  }
+  
+  .content-visibility-auto {
+    content-visibility: auto;
+  }
 }
 
 @layer components {
@@ -126,10 +141,14 @@
 @layer components {
   .font-display {
     font-family: 'Playfair Display', serif;
+    font-display: swap;
+    font-variation-settings: normal;
   }
   
   .font-body {
     font-family: 'Instrument Sans', sans-serif;
+    font-display: swap;
+    font-variation-settings: normal;
   }
   
   
@@ -151,10 +170,10 @@
 
   @keyframes scroll {
     0% {
-      transform: translateX(0);
+      transform: translate3d(0, 0, 0);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translate3d(-50%, 0, 0);
     }
   }
 
@@ -171,6 +190,10 @@
 
   .animate-scroll {
     animation: scroll 25s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translateZ(0);
   }
 
   .animate-fade-in-up {
@@ -180,6 +203,44 @@
   @media (max-width: 640px) {
     .animate-scroll {
       animation: scroll 20s linear infinite;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+  }
+
+  /* Performance optimizations for hero section */
+  .hero-image {
+    contain: layout style paint;
+    content-visibility: auto;
+    contain-intrinsic-size: 1200px 800px;
+  }
+  
+  /* Optimize icon transitions */
+  .wellness-icon {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  
+  /* Reduce paint complexity */
+  .drop-shadow-md {
+    contain: paint;
+  }
+  
+  /* Optimize button hover effects */
+  .group:hover .transition-all {
+    will-change: transform, background-color;
+  }
+  
+  /* Critical loading state optimization */
+  .hero-content {
+    contain: layout style;
+    transform: translateZ(0);
+  }
+  
+  /* Prevent layout shift during font loading */
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-scroll {
+      animation-fill-mode: both;
     }
   }
 }
