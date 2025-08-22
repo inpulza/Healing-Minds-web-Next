@@ -116,18 +116,18 @@ const InsuranceLogos = () => {
                   </div>
                 ))}
               </div>
-            </div>
-            
-            {/* Progress dots */}
-            <div className="flex justify-center gap-1 mt-0.5">
-              {insuranceLogos.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                    index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
-                  }`}
-                />
-              ))}
+              
+              {/* Progress dots - positioned at bottom edge */}
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-1">
+                {insuranceLogos.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                      index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
