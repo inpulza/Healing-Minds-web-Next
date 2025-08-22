@@ -125,66 +125,90 @@ const LocationInsuranceLogos = () => {
           </div>
 
           {/* Desktop Layout - Three Rows Brick Style */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex flex-col items-center gap-4 lg:gap-6">
             
             {/* First Row */}
-            <div className="flex flex-wrap justify-center items-center gap-6 lg:gap-8 mb-6">
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
               {firstRow.map((logo, index) => (
                 <div 
                   key={index} 
-                  className="group"
+                  className="group flex items-center justify-center"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="h-24 w-auto lg:h-28 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={208}
                     height={144}
                     priority={index < 4}
-                    sizes="(max-width: 1024px) 160px, 180px"
+                    sizes="(max-width: 1024px) 144px, 208px"
+                    style={{
+                      aspectRatio: '13/9',
+                      minWidth: '144px',
+                      minHeight: '112px',
+                      containIntrinsicSize: '208px 144px',
+                      contentVisibility: index < 4 ? 'visible' : 'auto',
+                      willChange: 'auto'
+                    }}
                   />
                 </div>
               ))}
             </div>
             
             {/* Second Row - Offset */}
-            <div className="flex flex-wrap justify-center items-center gap-6 lg:gap-8 mb-6" style={{ paddingLeft: '2rem' }}>
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8" style={{ marginLeft: 'clamp(2rem, 6vw, 4rem)' }}>
               {secondRow.map((logo, index) => (
                 <div 
                   key={index + firstRow.length} 
-                  className="group"
+                  className="group flex items-center justify-center"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="h-24 w-auto lg:h-28 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={208}
                     height={144}
                     priority={false}
-                    sizes="(max-width: 1024px) 160px, 180px"
+                    sizes="(max-width: 1024px) 144px, 208px"
+                    style={{
+                      aspectRatio: '13/9',
+                      minWidth: '144px',
+                      minHeight: '112px',
+                      containIntrinsicSize: '208px 144px',
+                      contentVisibility: 'auto',
+                      willChange: 'auto'
+                    }}
                   />
                 </div>
               ))}
             </div>
             
             {/* Third Row */}
-            <div className="flex flex-wrap justify-center items-center gap-6 lg:gap-8">
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
               {thirdRow.map((logo, index) => (
                 <div 
                   key={index + firstRow.length + secondRow.length} 
-                  className="group"
+                  className="group flex items-center justify-center"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="h-24 w-auto lg:h-28 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={208}
                     height={144}
                     priority={false}
-                    sizes="(max-width: 1024px) 160px, 180px"
+                    sizes="(max-width: 1024px) 144px, 208px"
+                    style={{
+                      aspectRatio: '13/9',
+                      minWidth: '144px',
+                      minHeight: '112px',
+                      containIntrinsicSize: '208px 144px',
+                      contentVisibility: 'auto',
+                      willChange: 'auto'
+                    }}
                   />
                 </div>
               ))}
