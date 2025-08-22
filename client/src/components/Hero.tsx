@@ -93,7 +93,7 @@ const Hero = () => {
           {/* Mobile: Content container */}
           <div className="bg-[#1e6b3b] rounded-2xl px-8 py-10 text-center">
             <h1 className="text-2xl sm:text-3xl font-body font-bold leading-relaxed text-white mb-6" data-testid="hero-title">
-              <div className="mb-3">
+              <div className="mb-4">
                 Expert psychiatric care in 
                 <WellnessIcon size="sm" color="orange" className="inline-flex mx-1 align-middle">
                   <IconLeaf />
@@ -115,15 +115,26 @@ const Hero = () => {
               <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic">Mental Clarity</span> with Compassionate Care from <span className="font-display italic">Dr. Reve</span></span>
             </div>
             
-            <Link href="/services">
-              <Button
-                className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-green-50 px-8 py-4 shadow-lg"
-                data-testid="hero-book-consultation"
-              >
-                <span>Our Services</span>
-                <ArrowRight className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
-              </Button>
-            </Link>
+            <div className="flex flex-col gap-3">
+              <Link href="/services">
+                <Button
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-green-50 px-8 py-4 shadow-lg"
+                  data-testid="hero-book-consultation"
+                >
+                  <span>Our Services</span>
+                  <ArrowRight className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
+                </Button>
+              </Link>
+              <a href="tel:(239) 423-0272">
+                <Button
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-8 py-4 shadow-lg"
+                  data-testid="hero-call-now"
+                >
+                  <span>Llamar Ahora</span>
+                  <ArrowRight className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-white text-green-800" />
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -148,7 +159,7 @@ const Hero = () => {
             {/* Left-Aligned Content */}
             <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
               <div className="max-w-4xl ml-4">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-body font-bold leading-relaxed text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
                   Expert psychiatric care in 
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                     <IconLeaf />
@@ -157,6 +168,7 @@ const Hero = () => {
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                     <IconBrain />
                   </WellnessIcon>
+                  <br /><br />
                   <span className="font-display italic text-green-700">Anxiety</span>, <span className="font-display italic text-green-700">Depression</span>, <span className="font-display italic text-green-700">ADHD</span>, <span className="font-display italic text-green-700">Therapy</span>
                   <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
                     <IconHeart />
@@ -167,7 +179,7 @@ const Hero = () => {
                   <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic text-green-700">Mental Clarity</span> with Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span></span>
                 </div>
                 
-                <div className="ml-0">
+                <div className="ml-0 flex flex-col sm:flex-row gap-4">
                   <Link href="/services">
                     <Button
                       className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-6 sm:py-7 shadow-lg"
@@ -179,6 +191,17 @@ const Hero = () => {
                       </div>
                     </Button>
                   </Link>
+                  <a href="tel:(239) 423-0272">
+                    <Button
+                      className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-10 py-6 sm:py-7 shadow-lg"
+                      data-testid="hero-call-now"
+                    >
+                      <span>Call Now</span>
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white">
+                        <ArrowRight className="w-5 h-5 text-green-800" />
+                      </div>
+                    </Button>
+                  </a>
                 </div>
               </div>
             </div>
