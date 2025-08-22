@@ -45,7 +45,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     ...style,
     transition: 'opacity 0.3s ease-in-out',
     opacity: isLoaded ? 1 : 0,
-    backgroundColor: '#f3f4f6',
   };
 
   if (hasError) {
