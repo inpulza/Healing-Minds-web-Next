@@ -1,37 +1,61 @@
 import { useLanguage } from '@/hooks/useLanguage';
+import { useState, useEffect } from 'react';
 import OptimizedImage from './OptimizedImage';
 
 // Import insurance logos
-import aetnaLogo from '@assets/insurance-aetna.webp';
-import cignaLogo from '@assets/insurance-cigna.webp';
-import medicareLogo from '@assets/insurance-medicare.webp';
-import firstHealthLogo from '@assets/insurance-first-health.webp';
-import medicaidLogo from '@assets/insurance-medicaid.webp';
-import floridaMedicaidLogo from '@assets/insurance-florida-medicaid.webp';
-import champvaLogo from '@assets/insurance-champva.webp';
-import sunshineHealthLogo from '@assets/insurance-sunshine.webp';
-import avmedLogo from '@assets/insurance-avmed.webp';
-import wellcareLogo from '@assets/insurance-wellcare.webp';
-import ambetterLogo from '@assets/insurance-ambetter.webp';
+import aetnaLogo from '@assets/1_1755867827627.png';
+import ambetterLogo from '@assets/15_1755868276796.png';
+import cignaLogo from '@assets/2_1755868276797.png';
+import doctorsHealthcareLogo from '@assets/3_1755868276797.png';
+import medicareLogo from '@assets/4_1755868276797.png';
+import firstHealthLogo from '@assets/5_1755868276798.png';
+import floridaBlueLogo from '@assets/6_1755868276798.png';
+import medicaidLogo from '@assets/7_1755868276798.png';
+import unitedHealthcareLogo from '@assets/8_1755868276798.png';
+import floridaMedicaidLogo from '@assets/9_1755868276798.png';
+import oscarLogo from '@assets/10_1755868276798.png';
+import champvaLogo from '@assets/11_1755868276799.png';
+import sunshineHealthLogo from '@assets/12_1755868276799.png';
+import avmedLogo from '@assets/13_1755868276799.png';
+import wellcareLogo from '@assets/14_1755868276799.png';
 
 const LocationInsuranceLogos = () => {
   const { language } = useLanguage();
+  const [currentLogoIndex, setCurrentLogoIndex] = useState(0);
   
   // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
 
   const insuranceLogos = [
     { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
-    { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
+    { src: unitedHealthcareLogo, alt: 'United Healthcare', name: 'United Healthcare' },
     { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
-    { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
     { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
-    { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' },
-    { src: champvaLogo, alt: 'ChampVA', name: 'ChampVA' },
+    { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
+    { src: floridaBlueLogo, alt: 'Florida Blue', name: 'Florida Blue' },
+    { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' },
+    { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
+    { src: oscarLogo, alt: 'Oscar Health', name: 'Oscar' },
+    { src: wellcareLogo, alt: 'WellCare', name: 'WellCare' },
     { src: sunshineHealthLogo, alt: 'Sunshine Health', name: 'Sunshine Health' },
     { src: avmedLogo, alt: 'AvMed', name: 'AvMed' },
-    { src: wellcareLogo, alt: 'WellCare', name: 'WellCare' },
-    { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' }
+    { src: doctorsHealthcareLogo, alt: 'Doctors Healthcare Plans', name: 'Doctors Healthcare' },
+    { src: champvaLogo, alt: 'CHAMPVA', name: 'CHAMPVA' },
+    { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' }
   ];
+
+  // Split logos into three rows for brick layout
+  const firstRow = insuranceLogos.slice(0, 5);   // First 5 logos
+  const secondRow = insuranceLogos.slice(5, 10); // Next 5 logos
+  const thirdRow = insuranceLogos.slice(10);     // Last 5 logos
+
+  // Auto-rotate logos for mobile slider
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentLogoIndex((prev) => (prev + 1) % insuranceLogos.length);
+    }, 2000); // Change every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [insuranceLogos.length]);
 
   return (
     <section className="py-8 sm:py-12 lg:py-16 bg-[#f0fdf4]">
@@ -56,37 +80,148 @@ const LocationInsuranceLogos = () => {
           </p>
         </div>
 
-        {/* White Background Layout */}
+        {/* Responsive Insurance Layout */}
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
-          <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
-            {insuranceLogos.map((logo, index) => {
-              const isHighPriority = index < 4 || index >= 8; // First 4 and last 3 images get high priority
-              return (
+          
+          {/* Mobile Layout - Auto Slider */}
+          <div className="block md:hidden relative">
+            <div className="w-full h-48 flex justify-center items-center">
+              <div className="relative w-72 h-48">
+                {insuranceLogos.map((logo, index) => (
+                  <div 
+                    key={index}
+                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ${
+                      index === currentLogoIndex 
+                        ? 'opacity-100' 
+                        : 'opacity-0'
+                    }`}
+                    data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    <OptimizedImage
+                      src={logo.src}
+                      alt={logo.alt}
+                      className="w-72 h-48 object-contain filter grayscale"
+                      width={480}
+                      height={336}
+                      priority={index < 6}
+                      sizes="288px"
+                      style={{
+                        aspectRatio: '10/7',
+                        minWidth: '288px',
+                        minHeight: '192px',
+                        containIntrinsicSize: '480px 336px',
+                        contentVisibility: index < 6 ? 'visible' : 'auto',
+                        willChange: 'auto'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Progress dots - positioned at bottom edge of mobile container */}
+            <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex gap-1">
+              {insuranceLogos.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Layout - Three Rows Brick Style */}
+          <div className="hidden md:flex flex-col items-center gap-4 lg:gap-6">
+            
+            {/* First Row */}
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
+              {firstRow.map((logo, index) => (
                 <div 
                   key={index} 
-                  className="group flex-shrink-0"
+                  className="group flex items-center justify-center"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-28 h-20 sm:w-36 sm:h-28 md:w-44 md:h-32 lg:w-52 lg:h-36 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110"
-                    width={isHighPriority ? 208 : 112}
-                    height={isHighPriority ? 144 : 80}
-                    priority={isHighPriority}
-                    sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, (max-width: 1024px) 176px, 208px"
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    width={208}
+                    height={144}
+                    priority={index < 4}
+                    sizes="(max-width: 1024px) 144px, 208px"
                     style={{
                       aspectRatio: '13/9',
-                      minWidth: 'min(112px, 25vw)',
-                      minHeight: 'min(80px, 18vw)',
+                      minWidth: '144px',
+                      minHeight: '112px',
                       containIntrinsicSize: '208px 144px',
-                      contentVisibility: isHighPriority ? 'visible' : 'auto',
+                      contentVisibility: index < 4 ? 'visible' : 'auto',
                       willChange: 'auto'
                     }}
                   />
                 </div>
-              );
-            })}
+              ))}
+            </div>
+            
+            {/* Second Row - Offset */}
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8" style={{ marginLeft: 'clamp(2rem, 6vw, 4rem)' }}>
+              {secondRow.map((logo, index) => (
+                <div 
+                  key={index + firstRow.length} 
+                  className="group flex items-center justify-center"
+                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <OptimizedImage
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    width={208}
+                    height={144}
+                    priority={false}
+                    sizes="(max-width: 1024px) 144px, 208px"
+                    style={{
+                      aspectRatio: '13/9',
+                      minWidth: '144px',
+                      minHeight: '112px',
+                      containIntrinsicSize: '208px 144px',
+                      contentVisibility: 'auto',
+                      willChange: 'auto'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            
+            {/* Third Row */}
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
+              {thirdRow.map((logo, index) => (
+                <div 
+                  key={index + firstRow.length + secondRow.length} 
+                  className="group flex items-center justify-center"
+                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <OptimizedImage
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    width={208}
+                    height={144}
+                    priority={false}
+                    sizes="(max-width: 1024px) 144px, 208px"
+                    style={{
+                      aspectRatio: '13/9',
+                      minWidth: '144px',
+                      minHeight: '112px',
+                      containIntrinsicSize: '208px 144px',
+                      contentVisibility: 'auto',
+                      willChange: 'auto'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            
           </div>
           
           {/* Bottom Note */}
