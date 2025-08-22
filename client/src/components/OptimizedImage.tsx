@@ -83,8 +83,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         <div
           className={`${className} bg-gray-100 animate-pulse`}
           style={{ ...style }}
-          aria-label="Loading image..."
-        />
+          role="status"
+          aria-live="polite"
+        >
+          <span className="sr-only">Loading image...</span>
+        </div>
       )}
     </div>
   );
