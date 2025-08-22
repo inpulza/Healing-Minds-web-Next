@@ -42,7 +42,7 @@ const InsuranceLogos = () => {
   ];
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 bg-white">
+    <section className="py-8 sm:py-12 lg:py-16 bg-[#f0fdf4]">
       <div className="max-w-[85%] lg:max-w-[90%] mx-auto px-2">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -64,9 +64,9 @@ const InsuranceLogos = () => {
           </p>
         </div>
 
-        {/* Masonry Grid Layout */}
-        <div className="p-6 sm:p-8 lg:p-10">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 items-center justify-items-center">
+        {/* White Background Container with Masonry Layout */}
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
+          <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4 sm:gap-6 lg:gap-8 space-y-4 sm:space-y-6 lg:space-y-8">
             {insuranceLogos.map((logo, index) => {
               const isHighPriority = index < 6; // First 6 images get high priority
               
