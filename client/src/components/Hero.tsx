@@ -53,10 +53,6 @@ const Hero = React.memo(() => {
     [language, services, servicesSpanish]
   );
 
-  // Memoize the scrolling text content to reduce DOM elements
-  const scrollingText = useMemo(() => {
-    return displayServices.join(' • ') + ' • ';
-  }, [displayServices]);
 
   return (
     <section className="pt-8 pb-16 bg-white">
@@ -72,20 +68,32 @@ const Hero = React.memo(() => {
               width={400}
               height={250}
               loading="eager"
-              decoding="async"
+              decoding="sync"
               sizes="100vw"
               {...({'fetchpriority': 'high'} as any)}
             />
             
-            {/* Services Carousel Overlay - Mobile - Optimized */}
+            {/* Services Carousel Overlay - Mobile */}
             <div className="absolute bottom-0 left-0 right-0 py-3 overflow-hidden">
-              <div 
-                className="animate-scroll whitespace-nowrap text-gray-600/80 font-body font-medium text-sm px-2"
-                style={{ willChange: 'transform' }}
-              >
-                <span className="inline-block drop-shadow-md">
-                  {scrollingText.repeat(3)}
-                </span>
+              <div className="flex animate-scroll whitespace-nowrap" style={{ willChange: 'transform' }}>
+                {/* First set */}
+                <div className="flex items-center space-x-4 text-gray-600/80 font-body font-medium text-sm px-2">
+                  {displayServices.map((service, index) => (
+                    <div key={index} className="flex items-center space-x-4">
+                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
+                      <span className="text-gray-600/80">•</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Duplicate for seamless loop */}
+                <div className="flex items-center space-x-4 text-gray-600/80 font-body font-medium text-sm px-2">
+                  {displayServices.map((service, index) => (
+                    <div key={`duplicate-${index}`} className="flex items-center space-x-4">
+                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
+                      <span className="text-gray-600/80">•</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -141,7 +149,7 @@ const Hero = React.memo(() => {
 
         {/* Tablet & Desktop: Original single container layout */}
         <div className="hidden md:block">
-          <div className="relative rounded-3xl overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] flex items-center justify-center">
+          <div className="relative rounded-3xl overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] flex items-center justify-center hero-container">
             {/* Background Image */}
             <img 
               src={heroImage}
@@ -150,7 +158,7 @@ const Hero = React.memo(() => {
               width={1200}
               height={800}
               loading="eager"
-              decoding="async"
+              decoding="sync"
               sizes="(min-width: 1200px) 1200px, 100vw"
               {...({'fetchpriority': 'high'} as any)}
             />
@@ -214,15 +222,27 @@ const Hero = React.memo(() => {
               </div>
             </div>
             
-            {/* Services Carousel Overlay - Desktop - Optimized */}
+            {/* Services Carousel Overlay - Desktop */}
             <div className="absolute bottom-0 left-0 right-0 py-4 sm:py-6 overflow-hidden z-20">
-              <div 
-                className="animate-scroll whitespace-nowrap text-gray-600/80 font-body font-medium text-base sm:text-lg px-3 sm:px-4"
-                style={{ willChange: 'transform' }}
-              >
-                <span className="inline-block drop-shadow-md" style={{ letterSpacing: '0.5em' }}>
-                  {scrollingText.repeat(3)}
-                </span>
+              <div className="flex animate-scroll whitespace-nowrap" style={{ willChange: 'transform' }}>
+                {/* First set */}
+                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-600/80 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
+                  {displayServices.map((service, index) => (
+                    <div key={index} className="flex items-center space-x-6 sm:space-x-8">
+                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
+                      <span className="text-gray-600/80">•</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Duplicate for seamless loop */}
+                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-600/80 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
+                  {displayServices.map((service, index) => (
+                    <div key={`duplicate-${index}`} className="flex items-center space-x-6 sm:space-x-8">
+                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
+                      <span className="text-gray-600/80">•</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

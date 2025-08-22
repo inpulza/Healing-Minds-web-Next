@@ -140,10 +140,10 @@
     <!-- Critical resource hints for mobile - non-blocking -->
     <link rel="modulepreload" href="/src/main.tsx" />
     <link rel="modulepreload" href="/src/App.tsx" />
-    <link rel="modulepreload" href="/src/components/Hero.tsx" />
+    <link rel="modulepreload" href="/src/components/Hero.tsx" fetchpriority="high" />
     <link rel="modulepreload" href="/src/components/Header.tsx" />
-    <link rel="modulepreload" href="/src/hooks/useLanguage.ts" />
-    <link rel="modulepreload" href="/src/contexts/LanguageContext.tsx" />
+    <link rel="modulepreload" href="/src/hooks/useLanguage.ts" fetchpriority="high" />
+    <link rel="modulepreload" href="/src/contexts/LanguageContext.tsx" fetchpriority="high" />
     <!-- Non-blocking font loading for mobile optimization -->
     <link
       rel="preload"
@@ -164,6 +164,7 @@
       as="image"
       type="image/webp"
       media="(max-width: 767px)"
+      fetchpriority="high"
     />
     <link
       rel="preload"
@@ -171,6 +172,7 @@
       as="image"
       type="image/webp"
       media="(min-width: 768px)"
+      fetchpriority="high"
     />
 
     <!-- Critical CSS inline optimization -->
@@ -281,9 +283,32 @@
         aspect-ratio: 13/9;
       }
       
-      /* Hero image optimization */
+      /* Hero image optimization - Critical for LCP */
       .hero-image {
         contain-intrinsic-size: 1200px 800px;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+        transform: translateZ(0);
+        will-change: auto;
+      }
+      
+      /* Optimize hero container for faster LCP */
+      .hero-container {
+        contain: layout style paint;
+        transform: translateZ(0);
+      }
+      
+      /* Fast carousel animation */
+      @keyframes scroll-optimized {
+        0% { transform: translate3d(0, 0, 0); }
+        100% { transform: translate3d(-50%, 0, 0); }
+      }
+      
+      .animate-scroll-fast {
+        animation: scroll-optimized 25s linear infinite;
+        will-change: transform;
+        backface-visibility: hidden;
+        transform: translateZ(0);
       }
     </style>
   </head>
