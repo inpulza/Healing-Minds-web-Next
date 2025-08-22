@@ -124,11 +124,11 @@ const Hero = () => {
               </Link>
               <a href="tel:(239) 423-0272">
                 <Button
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-8 py-4 shadow-lg"
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-green-50 border-2 border-white hover:border-green-50 px-8 py-4 shadow-lg"
                   data-testid="hero-call-now"
                 >
                   <span>Llamar Ahora</span>
-                  <ArrowRight className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-white text-green-800" />
+                  <ArrowRight className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
                 </Button>
               </a>
             </div>
