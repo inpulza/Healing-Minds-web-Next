@@ -100,12 +100,13 @@ const Hero = () => {
                 </WellnessIcon>
                 <span className="font-display italic font-medium">Naples, FL</span>
               </div>
-              <div className="text-xl sm:text-2xl">
-                designed to help you navigate life's challenges and foster lasting well-being through personalized treatment
+              <div className="text-lg sm:text-xl">
+                <span className="font-display italic">Anxiety</span>, <span className="font-display italic">Depression</span>, <span className="font-display italic">ADHD</span>, <span className="font-display italic">Therapy</span>
               </div>
             </h1>
             
             <div className="text-lg leading-relaxed font-body mb-8 text-white/95 max-w-sm mx-auto" data-testid="hero-description">
+              <div className="mb-3">Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment</div>
               <div className="mb-2">Find Your Path to</div>
               <div className="flex items-center justify-center gap-2 mb-2">
                 <WellnessIcon size="sm" color="green" className="flex-shrink-0">
@@ -160,11 +161,13 @@ const Hero = () => {
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                     <IconLeaf />
                   </WellnessIcon>
-                  <span className="font-display italic text-green-700">Naples, FL</span>, designed to help you navigate life's challenges and foster lasting well-being through personalized treatment.
+                  <span className="font-display italic text-green-700">Naples, FL</span> - <span className="font-display italic text-green-700">Anxiety</span>, <span className="font-display italic text-green-700">Depression</span>, <span className="font-display italic text-green-700">ADHD</span>, <span className="font-display italic text-green-700">Therapy</span>
                 </h1>
                 
                 <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
-                  <span>Find Your Path to
+                  <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment.
+                  <br /><br />
+                  Find Your Path to
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                     <IconBrain />
                   </WellnessIcon>
