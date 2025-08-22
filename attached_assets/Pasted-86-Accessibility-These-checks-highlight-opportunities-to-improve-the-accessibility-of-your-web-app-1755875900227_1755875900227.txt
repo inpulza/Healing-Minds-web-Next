@@ -1,0 +1,36 @@
+86
+Accessibility
+These checks highlight opportunities to improve the accessibility of your web app. Automatic detection can only detect a subset of issues and does not guarantee the accessibility of your web app, so manual testing is also encouraged.
+Names and labels
+Image elements do not have [alt] attributes
+Informative elements should aim for short, descriptive alternate text. Decorative elements can be ignored with an empty alt attribute. Learn more about the alt attribute.
+Failing Elements
+div.flex > div.hidden > button.justify-center > img
+<img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/es.svg" style="display: inline-block; width: 20px; height: 15px; vertical-align: middle;">
+These are opportunities to improve the semantics of the controls in your application. This may enhance the experience for users of assistive technology, like a screen reader.
+ARIA
+Elements use prohibited ARIA attributes
+Using ARIA attributes in roles where they are prohibited can mean that important information is not communicated to users of assistive technologies. Learn more about prohibited ARIA roles.
+Failing Elements
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
+Loading image...
+<div class="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover…" aria-label="Loading image..." style="aspect-ratio: 13 / 9; min-width: 144px; min-height: 112px;">
