@@ -1,13 +1,103 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import OptimizedImage from './OptimizedImage';
 
+// Import all insurance logos
+import aetnaLogo from '@/assets/insurance-aetna-new.png';
+import cignaLogo from '@/assets/insurance-cigna-new.png';
+import doctorsHealthcareLogo from '@/assets/insurance-doctors-healthcare.png';
+import medicareLogo from '@/assets/insurance-medicare-new.png';
+import firstHealthLogo from '@/assets/insurance-first-health-new.png';
+import floridaBlueLogo from '@/assets/insurance-florida-blue.png';
+import medicaidLogo from '@/assets/insurance-medicaid-new.png';
+import unitedHealthcareLogo from '@/assets/insurance-united-healthcare.png';
+import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid-new.png';
+import oscarLogo from '@/assets/insurance-oscar.png';
+import champvaLogo from '@/assets/insurance-champva-new.png';
+import sunshineHealthLogo from '@/assets/insurance-sunshine-new.png';
+import avmedLogo from '@/assets/insurance-avmed-new.png';
+import wellcareLogo from '@/assets/insurance-wellcare-new.png';
+import ambetterLogo from '@/assets/insurance-ambetter-new.png';
+
 const InsuranceLogos = () => {
   const { language } = useLanguage();
   
-  // Insurance logos array - ready to receive new logos
+  // Insurance logos array with all accepted providers
   const insuranceLogos = [
-    // Add new insurance logos here
-    // Format: { src: logoImage, alt: 'Logo Alt Text', name: 'Logo Name' }
+    { 
+      src: aetnaLogo, 
+      alt: language === 'en' ? 'Aetna Insurance Logo - Mental Health Coverage Accepted' : 'Logo de Seguro Aetna - Cobertura de Salud Mental Aceptada',
+      name: 'Aetna'
+    },
+    { 
+      src: cignaLogo, 
+      alt: language === 'en' ? 'Cigna Healthcare Insurance Logo - Psychiatric Services Covered' : 'Logo de Seguro Cigna Healthcare - Servicios Psiquiátricos Cubiertos',
+      name: 'Cigna Healthcare'
+    },
+    { 
+      src: doctorsHealthcareLogo, 
+      alt: language === 'en' ? 'Doctors Healthcare Plans Insurance Logo - Mental Health Benefits' : 'Logo de Planes de Salud Doctors Healthcare - Beneficios de Salud Mental',
+      name: 'Doctors Healthcare Plans'
+    },
+    { 
+      src: medicareLogo, 
+      alt: language === 'en' ? 'Medicare Insurance Logo - Mental Health Services Covered' : 'Logo de Seguro Medicare - Servicios de Salud Mental Cubiertos',
+      name: 'Medicare'
+    },
+    { 
+      src: firstHealthLogo, 
+      alt: language === 'en' ? 'First Health Insurance Logo - Psychiatric Treatment Coverage' : 'Logo de Seguro First Health - Cobertura de Tratamiento Psiquiátrico',
+      name: 'First Health'
+    },
+    { 
+      src: floridaBlueLogo, 
+      alt: language === 'en' ? 'Florida Blue Insurance Logo - Mental Health Care Benefits' : 'Logo de Seguro Florida Blue - Beneficios de Cuidado de Salud Mental',
+      name: 'Florida Blue'
+    },
+    { 
+      src: medicaidLogo, 
+      alt: language === 'en' ? 'Medicaid Insurance Logo - Psychiatric Services Accepted' : 'Logo de Seguro Medicaid - Servicios Psiquiátricos Aceptados',
+      name: 'Medicaid'
+    },
+    { 
+      src: unitedHealthcareLogo, 
+      alt: language === 'en' ? 'United Healthcare Insurance Logo - Mental Health Coverage' : 'Logo de Seguro United Healthcare - Cobertura de Salud Mental',
+      name: 'United Healthcare'
+    },
+    { 
+      src: floridaMedicaidLogo, 
+      alt: language === 'en' ? 'Florida Medicaid Insurance Logo - State Mental Health Benefits' : 'Logo de Seguro Florida Medicaid - Beneficios Estatales de Salud Mental',
+      name: 'Florida Medicaid'
+    },
+    { 
+      src: oscarLogo, 
+      alt: language === 'en' ? 'Oscar Health Insurance Logo - Behavioral Health Coverage' : 'Logo de Seguro Oscar Health - Cobertura de Salud Conductual',
+      name: 'Oscar Health'
+    },
+    { 
+      src: champvaLogo, 
+      alt: language === 'en' ? 'ChampVA Insurance Logo - Veterans Mental Health Benefits' : 'Logo de Seguro ChampVA - Beneficios de Salud Mental para Veteranos',
+      name: 'ChampVA'
+    },
+    { 
+      src: sunshineHealthLogo, 
+      alt: language === 'en' ? 'Sunshine Health Insurance Logo - Mental Health Services' : 'Logo de Seguro Sunshine Health - Servicios de Salud Mental',
+      name: 'Sunshine Health'
+    },
+    { 
+      src: avmedLogo, 
+      alt: language === 'en' ? 'AvMed Insurance Logo - Psychiatric Care Coverage' : 'Logo de Seguro AvMed - Cobertura de Cuidado Psiquiátrico',
+      name: 'AvMed'
+    },
+    { 
+      src: wellcareLogo, 
+      alt: language === 'en' ? 'WellCare Insurance Logo - Mental Health Benefits' : 'Logo de Seguro WellCare - Beneficios de Salud Mental',
+      name: 'WellCare'
+    },
+    { 
+      src: ambetterLogo, 
+      alt: language === 'en' ? 'Ambetter Health Insurance Logo - Behavioral Health Coverage' : 'Logo de Seguro Ambetter Health - Cobertura de Salud Conductual',
+      name: 'Ambetter Health'
+    }
   ];
 
   return (
