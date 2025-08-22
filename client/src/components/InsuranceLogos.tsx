@@ -56,32 +56,31 @@ const InsuranceLogos = () => {
           </p>
         </div>
 
-        {/* Masonry Layout - No Background */}
-        <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
-          <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
+        {/* Masonry Layout - Clean No Background Design */}
+        <div className="py-8">
+          {/* Logo Grid - Masonry Style */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8 sm:gap-10 md:gap-12 items-center justify-items-center max-w-5xl mx-auto">
             {insuranceLogos.map((logo, index) => {
               const isHighPriority = index < 4 || index >= 8; // First 4 and last 3 images get high priority
               return (
                 <div 
                   key={index} 
-                  className="group flex-shrink-0"
+                  className="group flex items-center justify-center w-full h-24 sm:h-28 md:h-32"
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-28 h-20 sm:w-36 sm:h-28 md:w-44 md:h-32 lg:w-52 lg:h-36 object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-110"
-                    width={isHighPriority ? 208 : 112}
-                    height={isHighPriority ? 144 : 80}
+                    className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 hover:scale-105"
+                    width={isHighPriority ? 144 : 96}
+                    height={isHighPriority ? 96 : 64}
                     priority={isHighPriority}
-                    sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, (max-width: 1024px) 176px, 208px"
+                    sizes="(max-width: 640px) 96px, (max-width: 768px) 112px, (max-width: 1024px) 128px, 144px"
                     style={{
-                      aspectRatio: '13/9',
-                      minWidth: 'min(112px, 25vw)',
-                      minHeight: 'min(80px, 18vw)',
-                      containIntrinsicSize: '208px 144px',
-                      contentVisibility: isHighPriority ? 'visible' : 'auto',
-                      willChange: 'auto'
+                      maxWidth: '100%',
+                      maxHeight: '100%',
+                      width: 'auto',
+                      height: 'auto'
                     }}
                   />
                 </div>
@@ -90,7 +89,7 @@ const InsuranceLogos = () => {
           </div>
           
           {/* Bottom Note */}
-          <div className="text-center mt-8 pt-6 border-t border-gray-200">
+          <div className="text-center mt-12">
             <p className="text-sm text-gray-500 font-body">
               {language === 'en' 
                 ? 'Don\'t see your insurance? Contact us to verify coverage for your specific plan.'
