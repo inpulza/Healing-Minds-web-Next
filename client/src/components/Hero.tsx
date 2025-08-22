@@ -180,8 +180,10 @@ const Hero = () => {
                       className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-6 sm:py-7 shadow-lg"
                       data-testid="hero-book-consultation"
                     >
-                    <ArrowRight className="w-9 h-9 sm:w-10 sm:h-10 p-2 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
                       <span>Our Services</span>
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                        <ArrowRight className="w-5 h-5 text-green-800" />
+                      </div>
                     </Button>
                   </Link>
                 </div>
