@@ -93,18 +93,23 @@ const Hero = () => {
           {/* Mobile: Content container */}
           <div className="bg-[#1e6b3b] rounded-2xl px-8 py-10 text-center">
             <h1 className="text-2xl sm:text-3xl font-body font-bold leading-relaxed text-white mb-6" data-testid="hero-title">
-              <div className="mb-4">
-                Expert psychiatric care in 
+              <div className="font-display italic font-bold mb-3 text-center">
+                Expert psychiatric care in
+              </div>
+              <div className="font-display italic font-bold mb-3 text-center">
                 <WellnessIcon size="sm" color="orange" className="inline-flex mx-1 align-middle">
                   <IconLeaf />
                 </WellnessIcon>
-                <span className="font-display italic font-medium">Naples, FL</span>
+                <span className="font-medium">Naples, FL</span>
                 <WellnessIcon size="sm" color="green" className="inline-flex mx-1 align-middle">
                   <IconBrain />
                 </WellnessIcon>
               </div>
-              <div className="text-lg sm:text-xl">
-                <span className="font-display italic">Anxiety</span>, <span className="font-display italic">Depression</span>, <span className="font-display italic">ADHD</span>, <span className="font-display italic">Therapy</span>
+              <div className="text-lg sm:text-xl font-body font-bold mb-3 text-center">
+                <span>Anxiety</span>, <span>Depression</span>
+              </div>
+              <div className="text-lg sm:text-xl font-body font-bold text-center">
+                <span>ADHD</span>, <span>Therapy</span>
                 <WellnessIcon size="sm" color="blue" className="inline-flex mx-1 align-middle">
                   <IconHeart />
                 </WellnessIcon>
@@ -159,20 +164,35 @@ const Hero = () => {
             {/* Left-Aligned Content */}
             <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
               <div className="max-w-4xl ml-4">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-body font-bold leading-relaxed text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
-                  Expert psychiatric care in 
-                  <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
-                    <IconLeaf />
-                  </WellnessIcon>
-                  <span className="font-display italic text-green-700">Naples, FL</span>
-                  <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
-                    <IconBrain />
-                  </WellnessIcon>
-                  <br /><br />
-                  <span className="font-display italic text-green-700">Anxiety</span>, <span className="font-display italic text-green-700">Depression</span>, <span className="font-display italic text-green-700">ADHD</span>, <span className="font-display italic text-green-700">Therapy</span>
-                  <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
-                    <IconHeart />
-                  </WellnessIcon>
+                {/* SEO Pills */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Board Certified Psychiatrist</span>
+                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Naples Mental Health</span>
+                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">Southwest Florida</span>
+                </div>
+                
+                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-relaxed text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
+                  <div className="font-display italic font-bold mb-3">
+                    Expert psychiatric care in
+                  </div>
+                  <div className="font-display italic font-bold mb-3">
+                    <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
+                      <IconLeaf />
+                    </WellnessIcon>
+                    <span className="text-green-700">Naples, FL</span>
+                    <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
+                      <IconBrain />
+                    </WellnessIcon>
+                  </div>
+                  <div className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-body font-bold mb-3">
+                    <span className="text-green-700">Anxiety</span>, <span className="text-green-700">Depression</span>
+                  </div>
+                  <div className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-body font-bold">
+                    <span className="text-green-700">ADHD</span>, <span className="text-green-700">Therapy</span>
+                    <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
+                      <IconHeart />
+                    </WellnessIcon>
+                  </div>
                 </h1>
                 
                 <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
