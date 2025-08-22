@@ -1,4 +1,5 @@
 import { useLanguage } from '@/hooks/useLanguage';
+import { useState, useEffect } from 'react';
 import OptimizedImage from './OptimizedImage';
 
 // Import insurance logos
@@ -20,6 +21,7 @@ import wellcareLogo from '@assets/14_1755868276799.png';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
+  const [currentLogoIndex, setCurrentLogoIndex] = useState(0);
   
   // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
 
@@ -44,6 +46,15 @@ const InsuranceLogos = () => {
   // Split logos into two rows for brick layout
   const firstRow = insuranceLogos.slice(0, 8);  // First 8 logos
   const secondRow = insuranceLogos.slice(8);     // Remaining 7 logos
+
+  // Auto-rotate logos for mobile slider
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentLogoIndex((prev) => (prev + 1) % insuranceLogos.length);
+    }, 2000); // Change every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [insuranceLogos.length]);
 
   return (
     <section className="py-8 sm:py-12 lg:py-16 bg-white">
@@ -71,33 +82,49 @@ const InsuranceLogos = () => {
         {/* Responsive Insurance Layout */}
         <div className="p-6 sm:p-8 lg:p-10">
           
-          {/* Mobile Layout - Simple 2 Columns */}
+          {/* Mobile Layout - Auto Slider */}
           <div className="block md:hidden">
-            <div className="grid grid-cols-2 gap-6 justify-items-center max-w-md mx-auto">
+            <div className="flex justify-center items-center h-24 relative">
               {insuranceLogos.map((logo, index) => (
                 <div 
-                  key={index} 
-                  className="group flex items-center justify-center"
+                  key={index}
+                  className={`absolute flex items-center justify-center transition-all duration-500 ${
+                    index === currentLogoIndex 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-4'
+                  }`}
                   data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-32 h-24 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-28 h-20 object-contain filter grayscale"
                     width={208}
                     height={144}
                     priority={index < 6}
-                    sizes="128px"
+                    sizes="112px"
                     style={{
                       aspectRatio: '13/9',
-                      minWidth: '128px',
-                      minHeight: '96px',
+                      minWidth: '112px',
+                      minHeight: '80px',
                       containIntrinsicSize: '208px 144px',
                       contentVisibility: index < 6 ? 'visible' : 'auto',
                       willChange: 'auto'
                     }}
                   />
                 </div>
+              ))}
+            </div>
+            
+            {/* Progress dots */}
+            <div className="flex justify-center gap-1 mt-4">
+              {insuranceLogos.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
+                  }`}
+                />
               ))}
             </div>
           </div>
