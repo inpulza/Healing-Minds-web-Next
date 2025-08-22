@@ -194,21 +194,21 @@ const LocationNaples = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-green-800 mb-6" style={{ fontFamily: 'var(--font-body)', willChange: 'auto' }}>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Our Professional Practice <span className="italic text-green-700">Location</span> in{' '}
-                    <span className="italic text-green-700">Naples, FL</span>
+                    Our Professional Practice <span className="font-display italic text-green-700">Location</span> in{' '}
+                    <span className="font-display italic text-green-700">Naples, FL</span>
                   </>
                 ) : (
                   <>
                     Nuestra Ubicación de Práctica Profesional en{' '}
-                    <span className="italic text-green-700">Naples, FL</span>
+                    <span className="font-display italic text-green-700">Naples, FL</span>
                   </>
                 )}
               </h1>
               
-              <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto" style={{ fontFamily: 'var(--font-body)' }}>
+              <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto font-body">
                 {language === 'en' 
                   ? 'Discover our conveniently located psychiatric practice in the heart of Naples, Florida. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
                   : 'Descubra nuestra práctica psiquiátrica convenientemente ubicada en el corazón de Naples, Florida. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
@@ -350,15 +350,15 @@ const LocationNaples = () => {
 
                 {/* Photo Side */}
                 <div className="order-1 lg:order-2 flex flex-col h-full">
-                  <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[24rem]">
+                  <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <OptimizedImage
                       src={officePhoto}
                       alt="Dr. Melva Reve at her Naples psychiatric practice - Professional and compassionate mental health care"
                       className="w-full h-full object-cover object-center"
-                      width={1600}
-                      height={1200}
+                      width={800}
+                      height={600}
                       priority={true}
-                      sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1536px) 1200px, 1600px"
+                      sizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"
                     />
                   </div>
                 </div>
@@ -656,12 +656,12 @@ const LocationNaples = () => {
                       <><span className="font-display italic text-green-700">Encuéntrenos</span> en el <span className="font-display italic text-green-700">Mapa</span></>
                     )}
                   </h2>
-                  <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100">
+                  <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100 min-h-[400px]">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
                       width="100%"
                       height="100%"
-                      style={{ border: 0 }}
+                      style={{ border: 0, minHeight: '400px' }}
                       allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
