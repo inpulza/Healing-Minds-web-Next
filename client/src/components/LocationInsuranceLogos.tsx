@@ -85,7 +85,7 @@ const LocationInsuranceLogos = () => {
           
           {/* Mobile Layout - Auto Slider */}
           <div className="block md:hidden relative">
-            <div className="w-full h-40 flex justify-center items-center">
+            <div className="w-full h-48 flex justify-center items-start pt-4">
               <div className="relative w-72 h-40">
                 {insuranceLogos.map((logo, index) => (
                   <div 
@@ -120,7 +120,7 @@ const LocationInsuranceLogos = () => {
             </div>
             
             {/* Progress dots - positioned at bottom edge of mobile container */}
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-1">
               {insuranceLogos.map((_, index) => (
                 <div
                   key={index}
