@@ -28,7 +28,8 @@ import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, Ico
 import { Link } from 'wouter';
 
 // Import office photo
-import officePhoto from '@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png';
+import officePhoto from '@assets/_MG_3756_1755871805687.jpg';
+import OptimizedImage from '@/components/OptimizedImage';
 
 const LocationNaples = () => {
   const { language } = useLanguage();
@@ -354,21 +355,14 @@ const LocationNaples = () => {
                   {/* Photo - Fills remaining space */}
                   <div className="flex-1">
                     <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[10rem]">
-                      <img 
+                      <OptimizedImage
                         src={officePhoto}
-                        srcSet={`
-                          ${officePhoto.replace('.webp', '-400w.webp')} 400w,
-                          ${officePhoto.replace('.webp', '-800w.webp')} 800w,
-                          ${officePhoto.replace('.webp', '-1200w.webp')} 1200w,
-                          ${officePhoto} 1600w
-                        `}
-                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1536px) 1200px, 1600px"
-                        alt="Dr. Melva Reve in her Naples psychiatric office - Professional medical environment"
+                        alt="Dr. Melva Reve at her Naples psychiatric practice - Professional and compassionate mental health care"
                         className="w-full h-full object-cover object-center"
                         width={1600}
                         height={1200}
-                        loading="lazy"
-                        decoding="async"
+                        priority={true}
+                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1536px) 1200px, 1600px"
                       />
                     </div>
                   </div>
