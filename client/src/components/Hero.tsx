@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Phone } from 'lucide-react';
 import { IconBrain, IconHeart, IconLeaf } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import heroImage from '@assets/hero-doctor-hq.webp';
@@ -128,7 +128,7 @@ const Hero = () => {
                   data-testid="hero-call-now"
                 >
                   <span>Llamar Ahora</span>
-                  <ArrowRight className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
+                  <Phone className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
                 </Button>
               </a>
             </div>
@@ -202,7 +202,7 @@ const Hero = () => {
                     >
                       <span>Call Now</span>
                       <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white">
-                        <ArrowRight className="w-5 h-5 text-green-800" />
+                        <Phone className="w-5 h-5 text-green-800" />
                       </div>
                     </Button>
                   </a>
