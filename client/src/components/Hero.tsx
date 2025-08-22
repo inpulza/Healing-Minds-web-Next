@@ -159,7 +159,7 @@ const Hero = () => {
             
             {/* Left-Aligned Content */}
             <div className="relative z-10 w-full px-8 lg:px-16 py-8 text-left">
-              <div className="max-w-5xl ml-4" style={{maxWidth: "60%"}}>
+              <div className="max-w-5xl ml-2 md:ml-4" style={{maxWidth: "65%"}}>
                 {/* SEO Pills */}
                 <div className="flex flex-wrap gap-3 mb-6">
                   <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-base font-medium">Board Certified Psychiatrist</span>
@@ -167,45 +167,45 @@ const Hero = () => {
                   <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-base font-medium">Southwest Florida</span>
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-relaxed text-green-700 text-left mb-8" data-testid="hero-title">
-                  <div className="font-display italic font-bold mb-4">
+                <h1 className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-relaxed text-green-700 text-left mb-6 md:mb-8" data-testid="hero-title">
+                  <div className="font-display italic font-bold mb-2 md:mb-3 lg:mb-4">
                     Expert psychiatric 
-                    <WellnessIcon size="lg" color="blue" className="inline-flex mx-2 align-middle">
+                    <WellnessIcon size="md" color="blue" className="inline-flex mx-1 md:mx-2 align-middle">
                       <IconHeart />
                     </WellnessIcon>
                     care in
                   </div>
                   <div className="font-display italic font-bold">
                     Naples, FL
-                    <WellnessIcon size="lg" color="green" className="inline-flex mx-2 align-middle">
+                    <WellnessIcon size="md" color="green" className="inline-flex mx-1 md:mx-2 align-middle">
                       <IconBrain />
                     </WellnessIcon>
                   </div>
                 </h1>
                 
-                <div className="text-xl lg:text-2xl leading-relaxed font-body mb-12 text-[#1e6b3b]" data-testid="hero-description">
+                <div className="text-lg md:text-xl lg:text-xl xl:text-2xl leading-relaxed font-body mb-8 md:mb-10 lg:mb-12 text-[#1e6b3b]" data-testid="hero-description">
                   <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic text-green-700 font-bold">Mental Clarity</span> with Compassionate Care from <span className="font-display italic text-green-700 font-bold">Dr. Melva Reve</span></span>
                 </div>
                 
                 <div className="ml-0 flex flex-col sm:flex-row gap-4">
                   <Link href="/services">
                     <Button
-                      className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-6 sm:py-7 shadow-lg"
+                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg"
                       data-testid="hero-book-consultation"
                     >
                       <span>Our Services</span>
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
                         <ArrowRight className="w-5 h-5 text-green-800" />
                       </div>
                     </Button>
                   </Link>
                   <a href="tel:(239) 423-0272">
                     <Button
-                      className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-10 py-6 sm:py-7 shadow-lg"
+                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg"
                       data-testid="hero-call-now"
                     >
                       <span>Call Now</span>
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white">
+                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white">
                         <Phone className="w-5 h-5 text-green-800" />
                       </div>
                     </Button>
