@@ -52,7 +52,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       <div
         ref={ref}
         className={`${className} bg-gray-200 flex items-center justify-center text-gray-500 text-sm`}
-        style={{ width, height, ...style }}
+        style={{ ...style }}
       >
         Image unavailable
       </div>
@@ -60,7 +60,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   }
 
   return (
-    <div ref={ref} style={{ width, height }}>
+    <div ref={ref} style={style}>
       {shouldLoad ? (
         <img
           src={src}
@@ -80,7 +80,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       ) : (
         <div
           className={`${className} bg-gray-100 animate-pulse`}
-          style={{ width, height, ...style }}
+          style={{ ...style }}
           aria-label="Loading image..."
         />
       )}
