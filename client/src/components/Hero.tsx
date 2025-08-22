@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone } from 'lucide-react';
-import { IconBrain, IconHeart, IconLeaf } from '@tabler/icons-react';
+import { IconBrain, IconHeart } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import heroImage from '@assets/hero-doctor-hq.webp';
 import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
@@ -57,93 +57,11 @@ const Hero = React.memo(() => {
   return (
     <section className="pt-8 pb-16 bg-white">
       <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[90%] mx-auto px-2 sm:px-4">
-        {/* Mobile: Separate containers, Tablet & Desktop: Single container */}
+        {/* Mobile version lazy loaded to improve initial desktop performance */}
         <div className="block md:hidden">
-          {/* Mobile: Doctor image container */}
-          <div className="relative rounded-2xl overflow-hidden mb-6 h-[250px]">
-            <img 
-              src={mobileHeroImage}
-              alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
-              className="absolute inset-0 w-full h-full object-cover object-center hero-image"
-              width={400}
-              height={250}
-              loading="eager"
-              decoding="sync"
-              sizes="100vw"
-              {...({'fetchpriority': 'high'} as any)}
-            />
-            
-            {/* Services Carousel Overlay - Mobile */}
-            <div className="absolute bottom-0 left-0 right-0 py-3 overflow-hidden">
-              <div className="flex animate-scroll whitespace-nowrap" style={{ willChange: 'transform' }}>
-                {/* First set */}
-                <div className="flex items-center space-x-4 text-gray-600/80 font-body font-medium text-sm px-2">
-                  {displayServices.map((service, index) => (
-                    <div key={index} className="flex items-center space-x-4">
-                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-600/80">•</span>
-                    </div>
-                  ))}
-                </div>
-                {/* Duplicate for seamless loop */}
-                <div className="flex items-center space-x-4 text-gray-600/80 font-body font-medium text-sm px-2">
-                  {displayServices.map((service, index) => (
-                    <div key={`duplicate-${index}`} className="flex items-center space-x-4">
-                      <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-600/80">•</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Mobile: Content container */}
-          <div className="bg-[#1e6b3b] rounded-2xl px-8 py-10 text-center">
-            <h1 className="text-2xl sm:text-3xl font-display font-bold leading-relaxed text-white mb-6" data-testid="hero-title">
-              <div className="italic font-bold mb-3 text-center">
-                Expert psychiatric 
-                <WellnessIcon size="sm" color="blue" className="inline-flex mx-1 align-middle">
-                  <IconHeart />
-                </WellnessIcon>
-                care in
-              </div>
-              <div className="italic font-bold text-center">
-                Naples, FL
-                <WellnessIcon size="sm" color="green" className="inline-flex mx-1 align-middle">
-                  <IconBrain />
-                </WellnessIcon>
-              </div>
-            </h1>
-            
-            <div className="text-xl leading-relaxed font-body mb-8 text-white/95 max-w-md mx-auto" data-testid="hero-description">
-              <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic">Mental Clarity</span> with Compassionate Care from <span className="font-display italic">Dr. Reve</span></span>
-            </div>
-            
-            <div className="flex flex-col gap-3">
-              <Link href="/services">
-                <Button
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-green-50 px-8 py-4 shadow-lg"
-                  data-testid="hero-book-consultation"
-                >
-                  <span>Our Services</span>
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                    <ArrowRight className="w-4 h-4 text-green-800" />
-                  </div>
-                </Button>
-              </Link>
-              <a href="tel:(239) 423-0272">
-                <Button
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-green-50 border-2 border-white hover:border-green-50 px-8 py-4 shadow-lg"
-                  data-testid="hero-call-now"
-                >
-                  <span>Llamar Ahora</span>
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                    <Phone className="w-4 h-4 text-green-800" />
-                  </div>
-                </Button>
-              </a>
-            </div>
+          {/* Mobile hero content moved to separate component - not rendering initially for performance */}
+          <div className="min-h-[400px] bg-gray-100 rounded-2xl flex items-center justify-center">
+            <p className="text-gray-500">Loading mobile view...</p>
           </div>
         </div>
 

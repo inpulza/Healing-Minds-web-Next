@@ -16,11 +16,12 @@ export const LazyForPatients = lazy(() => import(/* webpackChunkName: "for-patie
 export const LazyFAQ = lazy(() => import(/* webpackChunkName: "faq" */ './FAQ'));
 export const LazyContact = lazy(() => import(/* webpackChunkName: "contact" */ './Contact'));
 export const LazyFooter = lazy(() => import(/* webpackChunkName: "footer" */ './Footer'));
+export const LazyTelehealthSection = lazy(() => import(/* webpackChunkName: "telehealth-section" */ './TelehealthSection'));
 
-// Preload high-priority chunks when the page is idle
+// Preload critical desktop chunks when the page is idle
 if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
   requestIdleCallback(() => {
+    // Only preload most critical components to reduce initial bundle size
     import('./DoctorSection');
-    import('./Services');
-  }, { timeout: 3000 });
+  }, { timeout: 2000 });
 }
