@@ -45,13 +45,6 @@ export default {
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
-        chart: {
-          "1": "var(--chart-1)",
-          "2": "var(--chart-2)",
-          "3": "var(--chart-3)",
-          "4": "var(--chart-4)",
-          "5": "var(--chart-5)",
-        },
         'primary-green': 'hsl(142, 69%, 28%)',
         'primary-green-hover': 'hsl(142, 69%, 24%)',
         'light-green': 'var(--light-green)',

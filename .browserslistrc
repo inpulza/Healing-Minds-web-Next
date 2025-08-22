@@ -1,0 +1,36 @@
+# Modern browsers only - remove IE11 and very old versions
+# This configuration targets ES2020+ capable browsers
+# Eliminates most polyfills for better performance
+
+# Chrome 88+ (2021, ES2020 support)
+Chrome >= 88
+
+# Firefox 78+ (2020, ES2020 support) 
+Firefox >= 78
+
+# Safari 14+ (2020, ES2020 support)
+Safari >= 14
+
+# Edge 88+ (Chromium based)
+Edge >= 88
+
+# Mobile Safari 14+
+iOS >= 14
+
+# Android Chrome 88+
+ChromeAndroid >= 88
+
+# Exclude Internet Explorer completely
+not IE 11
+not IE_Mob 11
+
+# Exclude very old browsers
+not Safari < 14
+not iOS < 14
+not ChromeAndroid < 88
+
+# Market share threshold
+> 0.5%
+
+# Still maintained browsers
+not dead

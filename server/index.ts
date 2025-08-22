@@ -5,6 +5,9 @@ import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 
+// Enable ETags for efficient cache validation
+app.set('etag', 'strong');
+
 // Enable aggressive gzip compression for better performance
 app.use(compression({
   filter: (req: Request, res: Response) => {
@@ -25,8 +28,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   // Cache static assets for 1 year
   if (req.url.match(/\.(js|css|png|jpg|jpeg|webp|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    // ETags less useful for immutable assets, but add for completeness
+    res.setHeader('ETag', `"${Date.now()}-${req.url.split('/').pop()}"`);
   }
-  // Cache HTML for 5 minutes
+  // Cache HTML for 5 minutes with ETag validation
   else if (req.url.match(/\.html$/) || req.url === '/') {
     res.setHeader('Cache-Control', 'public, max-age=300, must-revalidate');
   }
