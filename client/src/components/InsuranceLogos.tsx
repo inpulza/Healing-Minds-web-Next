@@ -1,37 +1,14 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import OptimizedImage from './OptimizedImage';
 
-// Import insurance logos
-import aetnaLogo from '@/assets/insurance-aetna.webp';
-import cignaLogo from '@/assets/insurance-cigna.webp';
-import medicareLogo from '@/assets/insurance-medicare.webp';
-import firstHealthLogo from '@/assets/insurance-first-health.webp';
-import medicaidLogo from '@/assets/insurance-medicaid.webp';
-import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.webp';
-import champvaLogo from '@/assets/insurance-champva.webp';
-import sunshineHealthLogo from '@/assets/insurance-sunshine.webp';
-import avmedLogo from '@/assets/insurance-avmed.webp';
-import wellcareLogo from '@/assets/insurance-wellcare.webp';
-import ambetterLogo from '@/assets/insurance-ambetter.webp';
+// Import insurance logos - All logos removed
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
   
   // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
 
-  const insuranceLogos = [
-    { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
-    { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
-    { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
-    { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
-    { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
-    { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' },
-    { src: champvaLogo, alt: 'ChampVA', name: 'ChampVA' },
-    { src: sunshineHealthLogo, alt: 'Sunshine Health', name: 'Sunshine Health' },
-    { src: avmedLogo, alt: 'AvMed', name: 'AvMed' },
-    { src: wellcareLogo, alt: 'WellCare', name: 'WellCare' },
-    { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' }
-  ];
+  const insuranceLogos = [];
 
   return (
     <section className="py-8 sm:py-12 lg:py-16 bg-white">
