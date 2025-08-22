@@ -28,7 +28,7 @@ import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, Ico
 import { Link } from 'wouter';
 
 // Import office photo
-import officePhoto from '@assets/office-photo.webp';
+import officePhoto from '@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png';
 
 const LocationNaples = () => {
   const { language } = useLanguage();
