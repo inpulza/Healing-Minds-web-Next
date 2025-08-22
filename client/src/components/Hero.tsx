@@ -92,7 +92,19 @@ const Hero = () => {
           
           {/* Mobile: Content container */}
           <div className="bg-[#1e6b3b] rounded-2xl px-8 py-10 text-center">
-            <h1 className="text-2xl sm:text-3xl font-display font-bold leading-relaxed text-white mb-6" data-testid="hero-title">
+            <h1 className="text-lg leading-relaxed font-body mb-6 text-white/95 max-w-sm mx-auto font-bold" data-testid="hero-title">
+              <div className="mb-3">
+                Compassionate and expert psychiatric care in <span className="font-display italic font-medium">Naples, FL</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <span>designed to help you navigate life's challenges</span>
+                <WellnessIcon size="sm" color="orange" className="flex-shrink-0">
+                  <IconLeaf />
+                </WellnessIcon>
+              </div>
+            </h1>
+            
+            <div className="text-2xl sm:text-3xl font-display font-bold leading-relaxed text-white mb-8" data-testid="hero-description">
               <div className="mb-2">Find Your Path to</div>
               <div className="flex items-center justify-center gap-2 mb-2">
                 <WellnessIcon size="sm" color="green" className="flex-shrink-0">
@@ -106,18 +118,6 @@ const Hero = () => {
                   <IconHeart />
                 </WellnessIcon>
                 <span className="font-display italic">Dr. Reve</span>
-              </div>
-            </h1>
-            
-            <div className="text-lg leading-relaxed font-body mb-8 text-white/95 max-w-sm mx-auto" data-testid="hero-description">
-              <div className="mb-3">
-                Compassionate and expert psychiatric care in <span className="font-medium">Naples, FL</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <span>designed to help you navigate life's challenges</span>
-                <WellnessIcon size="sm" color="orange" className="flex-shrink-0">
-                  <IconLeaf />
-                </WellnessIcon>
               </div>
             </div>
             
@@ -154,8 +154,16 @@ const Hero = () => {
             {/* Left-Aligned Content */}
             <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
               <div className="max-w-4xl ml-4">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-6" data-testid="hero-title">
-                  Find Your Path to<br />
+                <h1 className="text-lg lg:text-xl leading-relaxed font-body mb-6 text-[#1e6b3b] font-bold" data-testid="hero-title">
+                  Expert psychiatric care in 
+                  <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
+                    <IconLeaf />
+                  </WellnessIcon>
+                  <span className="font-display italic text-green-700">Naples, FL</span>, designed to help you navigate life's challenges and foster lasting well-being through personalized treatment.
+                </h1>
+                
+                <div className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-body font-bold leading-tight text-[#1e6b3b] text-left mb-8" data-testid="hero-description">
+                  <span>Find Your Path to<br />
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                     <IconBrain />
                   </WellnessIcon>
@@ -164,14 +172,7 @@ const Hero = () => {
                   <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
                     <IconHeart />
                   </WellnessIcon>
-                  Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span>
-                  <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
-                    <IconLeaf />
-                  </WellnessIcon>
-                </h1>
-                
-                <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
-                  <span>Expert psychiatric care in Naples, FL, designed to help you navigate life's challenges and foster lasting well-being through personalized treatment.</span>
+                  Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span></span>
                 </div>
                 
                 <div className="ml-0">
