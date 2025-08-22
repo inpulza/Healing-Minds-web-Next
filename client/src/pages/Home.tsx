@@ -3,16 +3,19 @@ import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import InsuranceLogos from '@/components/InsuranceLogos';
-import DoctorSection from '@/components/DoctorSection';
-import About from '@/components/About';
-import Services from '@/components/Services';
-import BilingualCare from '@/components/BilingualCare';
-import FAQ from '@/components/FAQ';
-import Testimonials from '@/components/Testimonials';
-import ForPatients from '@/components/ForPatients';
-import Contact from '@/components/Contact';
-import ServiceAreas from '@/components/ServiceAreas';
-import Footer from '@/components/Footer';
+import SuspenseWrapper from '@/components/SuspenseWrapper';
+import { 
+  LazyDoctorSection,
+  LazyServices,
+  LazyAbout,
+  LazyBilingualCare,
+  LazyServiceAreas,
+  LazyTestimonials,
+  LazyForPatients,
+  LazyFAQ,
+  LazyContact,
+  LazyFooter
+} from '@/components/LazyComponents';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import { updateSEO } from '@/utils/seo';
 import { MapPin, Users, VideoIcon, Navigation, Monitor, CheckCircle, Clock, Shield } from 'lucide-react';
@@ -229,17 +232,37 @@ const Home = () => {
           </div>
         </section>
         
-        <DoctorSection />
-        <Services />
-        <About />
-        <BilingualCare />
-        <ServiceAreas />
-        <Testimonials />
-        <ForPatients />
-        <FAQ />
-        <Contact />
+        <SuspenseWrapper>
+          <LazyDoctorSection />
+        </SuspenseWrapper>
+        <SuspenseWrapper>
+          <LazyServices />
+        </SuspenseWrapper>
+        <SuspenseWrapper>
+          <LazyAbout />
+        </SuspenseWrapper>
+        <SuspenseWrapper>
+          <LazyBilingualCare />
+        </SuspenseWrapper>
+        <SuspenseWrapper>
+          <LazyServiceAreas />
+        </SuspenseWrapper>
+        <SuspenseWrapper>
+          <LazyTestimonials />
+        </SuspenseWrapper>
+        <SuspenseWrapper>
+          <LazyForPatients />
+        </SuspenseWrapper>
+        <SuspenseWrapper>
+          <LazyFAQ />
+        </SuspenseWrapper>
+        <SuspenseWrapper>
+          <LazyContact />
+        </SuspenseWrapper>
       </main>
-      <Footer />
+      <SuspenseWrapper>
+        <LazyFooter />
+      </SuspenseWrapper>
     </div>
   );
 };

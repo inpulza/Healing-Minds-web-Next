@@ -27,7 +27,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const { ref, isIntersecting } = useIntersectionObserver({
-    rootMargin: '50px 0px',
+    rootMargin: priority ? '0px' : '100px 0px',
     triggerOnce: true,
   });
 
@@ -45,6 +45,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     ...style,
     transition: 'opacity 0.3s ease-in-out',
     opacity: isLoaded ? 1 : 0,
+    willChange: priority ? 'auto' : 'opacity',
   };
 
   if (hasError) {
@@ -75,6 +76,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={imageStyle}
           sizes={sizes}
           {...(priority && { fetchpriority: 'high' })}
+          {...(width && height && { intrinsicsize: `${width}x${height}` })}
           {...props}
         />
       ) : (

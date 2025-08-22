@@ -101,10 +101,10 @@ const InsuranceLogos = () => {
                       src={logo.src}
                       alt={logo.alt}
                       className="h-36 w-auto object-contain filter grayscale"
-                      width={480}
-                      height={336}
-                      priority={index < 6}
-                      sizes="320px"
+                      width={144}
+                      height={144}
+                      priority={index < 3}
+                      sizes="144px"
                     />
                   </div>
                 ))}
@@ -141,16 +141,16 @@ const InsuranceLogos = () => {
                     src={logo.src}
                     alt={logo.alt}
                     className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
-                    width={208}
-                    height={144}
-                    priority={index < 4}
+                    width={144}
+                    height={112}
+                    priority={index < 2}
                     sizes="(max-width: 1024px) 144px, 208px"
                     style={{
                       aspectRatio: '13/9',
                       minWidth: '144px',
                       minHeight: '112px',
-                      containIntrinsicSize: '208px 144px',
-                      contentVisibility: index < 4 ? 'visible' : 'auto',
+                      containIntrinsicSize: '144px 112px',
+                      contentVisibility: index < 2 ? 'visible' : 'auto',
                       willChange: 'auto'
                     }}
                   />
@@ -170,15 +170,15 @@ const InsuranceLogos = () => {
                     src={logo.src}
                     alt={logo.alt}
                     className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
-                    width={208}
-                    height={144}
+                    width={144}
+                    height={112}
                     priority={false}
                     sizes="(max-width: 1024px) 144px, 208px"
                     style={{
                       aspectRatio: '13/9',
                       minWidth: '144px',
                       minHeight: '112px',
-                      containIntrinsicSize: '208px 144px',
+                      containIntrinsicSize: '144px 112px',
                       contentVisibility: 'auto',
                       willChange: 'auto'
                     }}
@@ -199,15 +199,15 @@ const InsuranceLogos = () => {
                     src={logo.src}
                     alt={logo.alt}
                     className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
-                    width={208}
-                    height={144}
+                    width={144}
+                    height={112}
                     priority={false}
                     sizes="(max-width: 1024px) 144px, 208px"
                     style={{
                       aspectRatio: '13/9',
                       minWidth: '144px',
                       minHeight: '112px',
-                      containIntrinsicSize: '208px 144px',
+                      containIntrinsicSize: '144px 112px',
                       contentVisibility: 'auto',
                       willChange: 'auto'
                     }}

@@ -56,11 +56,12 @@ const Hero = () => {
             <img 
               src={mobileHeroImage}
               alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover object-center hero-image"
               width={400}
               height={250}
               loading="eager"
               decoding="async"
+              sizes="100vw"
               {...({'fetchpriority': 'high'} as any)}
             />
             
@@ -126,9 +127,7 @@ const Hero = () => {
                 data-testid="hero-book-consultation"
               >
                 <span>Our Services</span>
-                <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                  <ArrowRight className="w-4 h-4 text-green-800" />
-                </div>
+                <ArrowRight className="w-7 h-7 p-1.5 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
               </Button>
             </Link>
           </div>
@@ -141,11 +140,12 @@ const Hero = () => {
             <img 
               src={heroImage}
               alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover object-center hero-image"
               width={1200}
               height={800}
               loading="eager"
               decoding="async"
+              sizes="(min-width: 1200px) 1200px, 100vw"
               {...({'fetchpriority': 'high'} as any)}
             />
             
@@ -180,9 +180,7 @@ const Hero = () => {
                       className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-10 py-6 sm:py-7 shadow-lg"
                       data-testid="hero-book-consultation"
                     >
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                      <ArrowRight className="w-5 h-5 text-green-800" />
-                    </div>
+                    <ArrowRight className="w-9 h-9 sm:w-10 sm:h-10 p-2 rounded-full transition-all duration-300 bg-green-100 text-green-800" />
                       <span>Our Services</span>
                     </Button>
                   </Link>

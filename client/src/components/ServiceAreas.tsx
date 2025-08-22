@@ -81,9 +81,7 @@ const ServiceAreas: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
             {stats.map((stat, index) => (
               <div key={index} className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <stat.icon className="w-6 h-6 text-green-600" />
-                </div>
+                <stat.icon className="w-12 h-12 p-3 bg-green-100 rounded-lg text-green-600 flex-shrink-0" />
                 <div className="text-2xl font-bold text-green-800 whitespace-nowrap">{stat.value}</div>
                 <div className="text-sm text-gray-600 font-medium whitespace-nowrap">{stat.label}</div>
               </div>

@@ -157,13 +157,12 @@
         href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap&subset=latin"
     /></noscript>
 
-    <!-- LCP Critical Resource Preload - Mobile First -->
+    <!-- LCP Critical Resource Preload - Mobile First with Responsive Sizing -->
     <link
       rel="preload"
       href="/src/assets/hero-doctor-mobile-optimized.webp"
       as="image"
       type="image/webp"
-      fetchpriority="high"
       media="(max-width: 767px)"
     />
     <link
@@ -171,7 +170,6 @@
       href="/src/assets/hero-doctor-hq.webp"
       as="image"
       type="image/webp"
-      fetchpriority="high"
       media="(min-width: 768px)"
     />
 
@@ -218,6 +216,13 @@
       @keyframes loading {
         0% { background-position: 200% 0; }
         100% { background-position: -200% 0; }
+      }
+      
+      /* Optimize animations and transitions for performance */      
+      .group:hover .group-hover\:scale-105 {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+        will-change: transform;
       }
       
       /* Reduce animation cost */
@@ -272,8 +277,13 @@
 
       /* Performance optimizations for images */
       .insurance-logo {
-        contain-intrinsic-size: 208px 144px;
+        contain-intrinsic-size: 144px 112px;
         aspect-ratio: 13/9;
+      }
+      
+      /* Hero image optimization */
+      .hero-image {
+        contain-intrinsic-size: 1200px 800px;
       }
     </style>
   </head>

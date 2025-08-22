@@ -41,9 +41,7 @@ const DoctorSection = () => {
                   data-testid="explore-services-button"
                 >
                   <span>{language === 'en' ? 'Explore services' : 'Explorar servicios'}</span>
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
-                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                  </div>
+                  <ArrowRight className="w-8 h-8 sm:w-9 sm:h-9 p-2 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full transition-all duration-300 bg-green-500 text-white flex-shrink-0" />
                 </Button>
               </Link>
             </div>
