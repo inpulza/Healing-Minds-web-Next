@@ -53,6 +53,38 @@ export const generateSitemap = (req: Request, res: Response) => {
     }
   ];
   
+  // Define legal pages with bilingual support (lower priority as per SEO best practices)
+  const legalPages = [
+    {
+      en: '/privacy-policy',
+      es: '/es/politica-privacidad',
+      lastmod: currentDate,
+      changefreq: 'yearly',
+      priority: '0.3'
+    },
+    {
+      en: '/terms-of-service',
+      es: '/es/terminos-servicio',
+      lastmod: currentDate,
+      changefreq: 'yearly',
+      priority: '0.3'
+    },
+    {
+      en: '/hipaa-notice',
+      es: '/es/aviso-hipaa',
+      lastmod: currentDate,
+      changefreq: 'yearly',
+      priority: '0.3'
+    },
+    {
+      en: '/cookie-policy',
+      es: '/es/politica-cookies',
+      lastmod: currentDate,
+      changefreq: 'yearly',
+      priority: '0.3'
+    }
+  ];
+  
   // Define site structure with priorities and update frequencies
   const pages = [
     // Homepage - Maximum priority
@@ -114,8 +146,46 @@ export const generateSitemap = (req: Request, res: Response) => {
     <priority>${page.priority}</priority>
   </url>`).join('\n');
 
-  // Generate bilingual pages with hreflang
+  // Generate bilingual service pages with hreflang
   const bilingualPagesXml = bilingualPages.flatMap(page => [
+    // English version with hreflang
+    `  <url>
+    <loc>${baseUrl}${page.en}</loc>
+    <xhtml:link 
+                rel="alternate"
+                hreflang="en"
+                href="${baseUrl}${page.en}"
+                />
+    <xhtml:link 
+                rel="alternate"
+                hreflang="es"
+                href="${baseUrl}${page.es}"
+                />
+    <lastmod>${page.lastmod}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`,
+    // Spanish version with hreflang
+    `  <url>
+    <loc>${baseUrl}${page.es}</loc>
+    <xhtml:link 
+                rel="alternate"
+                hreflang="en"
+                href="${baseUrl}${page.en}"
+                />
+    <xhtml:link 
+                rel="alternate"
+                hreflang="es"
+                href="${baseUrl}${page.es}"
+                />
+    <lastmod>${page.lastmod}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`
+  ]).join('\n');
+
+  // Generate legal pages with hreflang (indexed for trust signals)
+  const legalPagesXml = legalPages.flatMap(page => [
     // English version with hreflang
     `  <url>
     <loc>${baseUrl}${page.en}</loc>
@@ -157,6 +227,7 @@ export const generateSitemap = (req: Request, res: Response) => {
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${regularPagesXml}
 ${bilingualPagesXml}
+${legalPagesXml}
 </urlset>`;
 
   // Set proper headers for XML

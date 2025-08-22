@@ -221,16 +221,38 @@ const Footer = () => {
 
             {/* Legal Links & Copyright */}
             <div className="text-right">
-              <div className="flex flex-wrap gap-6 text-sm text-green-300 mb-2" data-testid="footer-legal-links">
-                <Link href="/privacy" className="hover:text-white transition-colors">
+              <div className="flex flex-wrap gap-4 text-sm text-green-300 mb-2" data-testid="footer-legal-links">
+                <Link 
+                  href={language === 'en' ? '/privacy-policy' : '/es/politica-privacidad'} 
+                  className="hover:text-white transition-colors"
+                >
                   {language === 'en' ? 'Privacy Policy' : 'Política de Privacidad'}
                 </Link>
-                <Link href="/terms" className="hover:text-white transition-colors">
+                <Link 
+                  href={language === 'en' ? '/terms-of-service' : '/es/terminos-servicio'} 
+                  className="hover:text-white transition-colors"
+                >
                   {language === 'en' ? 'Terms of Service' : 'Términos de Servicio'}
                 </Link>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link 
+                  href={language === 'en' ? '/hipaa-notice' : '/es/aviso-hipaa'} 
+                  className="hover:text-white transition-colors"
+                >
+                  {language === 'en' ? 'HIPAA Notice' : 'Aviso HIPAA'}
+                </Link>
+                <Link 
+                  href={language === 'en' ? '/cookie-policy' : '/es/politica-cookies'} 
+                  className="hover:text-white transition-colors"
+                >
+                  {language === 'en' ? 'Cookie Policy' : 'Política de Cookies'}
+                </Link>
+                <button 
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="hover:text-white transition-colors cursor-pointer"
+                  data-testid="footer-back-to-top"
+                >
                   {language === 'en' ? 'Back to top' : 'Volver arriba'}
-                </a>
+                </button>
               </div>
               <div className="text-sm text-green-300" data-testid="footer-copyright">
                 © {new Date().getFullYear()} Healing Minds Psychiatry. 

@@ -29,6 +29,12 @@ const PtsdTreatment = lazy(() => import('@/pages/services/PtsdTreatment'));
 const BipolarTreatment = lazy(() => import('@/pages/services/BipolarTreatment'));
 const MedicationManagement = lazy(() => import('@/pages/services/MedicationManagement'));
 
+// Legal Pages - Lazy loaded for performance
+const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
+const HipaaNotice = lazy(() => import('@/pages/HipaaNotice'));
+const CookiePolicy = lazy(() => import('@/pages/CookiePolicy'));
+
 // Loading component for lazy routes
 const PageLoader = () => (
   <div className="min-h-screen bg-white flex items-center justify-center">
@@ -74,6 +80,18 @@ function Router() {
       <Route path="/es/servicios/tratamiento-tept" component={PtsdTreatment} />
       <Route path="/es/servicios/tratamiento-bipolar" component={BipolarTreatment} />
       <Route path="/es/servicios/manejo-medicamentos" component={MedicationManagement} />
+      
+      {/* Legal Pages - English */}
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/terms-of-service" component={TermsOfService} />
+      <Route path="/hipaa-notice" component={HipaaNotice} />
+      <Route path="/cookie-policy" component={CookiePolicy} />
+      
+      {/* Legal Pages - Spanish */}
+      <Route path="/es/politica-privacidad" component={PrivacyPolicy} />
+      <Route path="/es/terminos-servicio" component={TermsOfService} />
+      <Route path="/es/aviso-hipaa" component={HipaaNotice} />
+      <Route path="/es/politica-cookies" component={CookiePolicy} />
       
         <Route component={NotFound} />
       </Switch>
