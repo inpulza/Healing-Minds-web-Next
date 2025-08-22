@@ -172,6 +172,7 @@ const Header = () => {
               <ReactCountryFlag
                 countryCode={language === 'en' ? 'ES' : 'US'}
                 svg
+                alt={language === 'en' ? 'Bandera de España' : 'United States flag'}
                 style={{
                   width: '20px',
                   height: '15px',
