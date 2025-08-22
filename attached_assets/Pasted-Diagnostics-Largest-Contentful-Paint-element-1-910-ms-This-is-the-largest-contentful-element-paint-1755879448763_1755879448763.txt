@@ -1,0 +1,167 @@
+Diagnostics
+Largest Contentful Paint element 1,910 ms
+This is the largest contentful element painted within the viewport. Learn more about the Largest Contentful Paint elementLCP
+Element
+h1.text-4xl.sm:text-5xl.lg:text-6xl.font-body.font-bold.text-green-800.mb-6
+Phase
+% of LCP
+Timing
+TTFB
+21%
+410 ms
+Load Delay
+0%
+0 ms
+Load Time
+0%
+0 ms
+Render Delay
+79%
+1,500 ms
+Enable text compression Est savings of 32 KiB
+Text-based resources should be served with compression (gzip, deflate or brotli) to minimize total network bytes. Learn more about text compression.FCPLCP
+URL
+Transfer Size
+Est Savings
+healingmindsp.com 1st party
+42.4 KiB	31.6 KiB
+/assets/Header-CgJSvWXe.tsx(www.healingmindsp.com)
+17.6 KiB
+13.7 KiB
+/assets/Hero-CWFe5TzA.tsx(www.healingmindsp.com)
+10.3 KiB
+7.8 KiB
+/assets/LanguageC….tsx(www.healingmindsp.com)
+9.3 KiB
+6.2 KiB
+/assets/App-CARh_3Fz.tsx(www.healingmindsp.com)
+5.3 KiB
+3.8 KiB
+Reduce unused CSS Est savings of 10 KiB
+Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. Learn how to reduce unused CSS.FCPLCP
+URL
+Transfer Size
+Est Savings
+healingmindsp.com 1st party
+13.9 KiB	10.3 KiB
+/assets/index-78ua1PXE.css(www.healingmindsp.com)
+13.9 KiB
+10.3 KiB
+Reduce unused JavaScript Est savings of 230 KiB
+Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. Learn how to reduce unused JavaScript.FCPLCP
+URL
+Transfer Size
+Est Savings
+Unattributable
+242.1 KiB	126.4 KiB
+chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/autofill.bundle.js
+242.1 KiB
+126.4 KiB
+Google Tag Manager tag-manager 
+142.2 KiB	59.4 KiB
+/gtag/js?id=G-WMRK41PX2E(www.googletagmanager.com)
+142.2 KiB
+59.4 KiB
+healingmindsp.com 1st party
+101.1 KiB	44.5 KiB
+/assets/index-6wxYKccK.js(www.healingmindsp.com)
+101.1 KiB
+44.5 KiB
+Serve images in next-gen formats Est savings of 743 KiB
+Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. Learn more about modern image formats.FCPLCP
+URL
+Resource Size
+Est Savings
+healingmindsp.com 1st party
+956.8 KiB	742.9 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/6_1755868….png(www.healingmindsp.com)
+200.0 KiB
+156.7 KiB
+img.w-36.h-28.lg:w-52.lg:h-36.object-contain.transition-all.duration-300.hover:scale-105.filter.grayscale.hover:grayscale-0
+/assets/7_1755868….png(www.healingmindsp.com)
+172.6 KiB
+133.4 KiB
+img.w-36.h-28.lg:w-52.lg:h-36.object-contain.transition-all.duration-300.hover:scale-105.filter.grayscale.hover:grayscale-0
+/assets/8_1755868….png(www.healingmindsp.com)
+172.1 KiB
+130.9 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/2_1755868….png(www.healingmindsp.com)
+168.7 KiB
+130.4 KiB
+img.w-36.h-28.lg:w-52.lg:h-36.object-contain.transition-all.duration-300.hover:scale-105.filter.grayscale.hover:grayscale-0
+/assets/4_1755868….png(www.healingmindsp.com)
+133.5 KiB
+104.9 KiB
+img.w-36.h-28.lg:w-52.lg:h-36.object-contain.transition-all.duration-300.hover:scale-105.filter.grayscale.hover:grayscale-0
+/assets/1_1755867….png(www.healingmindsp.com)
+109.8 KiB
+86.6 KiB
+Serve static assets with an efficient cache policy 2 resources found
+A long cache lifetime can speed up repeat visits to your page. Learn more about efficient cache policies.
+URL
+Cache TTL
+Transfer Size
+Clarity utility 
+31 KiB
+/0.8.25/clarity.js(scripts.clarity.ms)
+1d
+31 KiB
+JSDelivr CDN cdn 
+15 KiB
+…4x3/es.svg(cdn.jsdelivr.net)
+7d
+15 KiB
+Eliminate render-blocking resources Est savings of 0 ms
+Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. Learn how to eliminate render-blocking resources.FCPLCP
+URL
+Transfer Size
+Est Savings
+healingmindsp.com 1st party
+13.9 KiB	310 ms
+/assets/index-78ua1PXE.css(www.healingmindsp.com)
+13.9 KiB
+310 ms
+Properly size images Est savings of 1,003 KiB
+Serve images that are appropriately-sized to save cellular data and improve load time. Learn how to size images.FCPLCP
+URL
+Resource Size
+Est Savings
+healingmindsp.com 1st party
+1,087.3 KiB	1,003.2 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/6_1755868….png(www.healingmindsp.com)
+200.0 KiB
+184.5 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/7_1755868….png(www.healingmindsp.com)
+172.6 KiB
+159.2 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/8_1755868….png(www.healingmindsp.com)
+172.1 KiB
+158.8 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/2_1755868….png(www.healingmindsp.com)
+168.7 KiB
+155.6 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/4_1755868….png(www.healingmindsp.com)
+133.5 KiB
+123.1 KiB
+img.w-full.h-full.object-cover.object-center
+/assets/doctor-co….webp(www.healingmindsp.com)
+130.5 KiB
+120.8 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/1_1755867….png(www.healingmindsp.com)
+109.8 KiB
+101.3 KiB
+Avoid serving legacy JavaScript to modern browsers Est savings of 10 KiB
+Avoid large layout shifts 3 layout shifts found
+Avoid chaining critical requests 11 chains found
+Minimize third-party usage Third-party code blocked the main thread for 0 ms
+Avoid long main-thread tasks 1 long task found
+More information about the performance of your application. These numbers don't directly affect the Performance score.
+Passed audits (25)
