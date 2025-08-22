@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Shield } from 'lucide-react';
-import { IconBrain, IconHeart, IconMoodHappy, IconShield } from '@tabler/icons-react';
+import { Brain, Heart, Smile } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
@@ -236,6 +236,25 @@ const PtsdTreatment = () => {
             symbolImage: therapyRoomImage
           }}
         />
+
+        {/* Page Title - H1 for SEO and Accessibility */}
+        <section className="py-8 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800">
+              {language === 'en' ? (
+                <>PTSD <span className="font-display italic text-green-700">Treatment</span></>
+              ) : (
+                <>Tratamiento de <span className="font-display italic text-green-700">TEPT</span></>
+              )}
+            </h1>
+            <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">
+              {language === 'en'
+                ? 'Expert trauma-informed psychiatric care for post-traumatic stress disorder with compassionate, evidence-based treatment.'
+                : 'Atención psiquiátrica experta informada en trauma para trastorno de estrés postraumático con tratamiento compasivo basado en evidencia.'
+              }
+            </p>
+          </div>
+        </section>
 
         {/* Modern Treatment Approach Section */}
         <section className="py-16 sm:py-20 bg-white">
@@ -573,7 +592,7 @@ const PtsdTreatment = () => {
               <div className="text-center lg:text-left">
                 <div className="bg-white rounded-2xl shadow-lg p-8">
                   <WellnessIcon size="lg" color="green" className="mx-auto lg:mx-0 mb-6">
-                    <IconBrain />
+                    <Brain />
                   </WellnessIcon>
                   <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
                     {language === 'en' ? 'Ready to Begin Healing?' : '¿Listo para Comenzar a Sanar?'}

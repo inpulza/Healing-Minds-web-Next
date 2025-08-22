@@ -115,6 +115,11 @@ const Home = () => {
                         src={floridaMap}
                         alt="Florida State Map - Telehealth Services Available"
                         className="w-full h-full object-cover rounded-xl sm:rounded-2xl"
+                        width={400}
+                        height={300}
+                        loading="lazy"
+                        decoding="async"
+                        sizes="(max-width: 640px) 300px, (max-width: 768px) 400px, (max-width: 1024px) 500px, 600px"
                       />
                     </div>
 

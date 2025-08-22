@@ -138,12 +138,10 @@
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     
     <!-- Critical resource hints for mobile - non-blocking -->
-    <link rel="modulepreload" href="/src/main.tsx" />
-    <link rel="modulepreload" href="/src/App.tsx" />
-    <link rel="modulepreload" href="/src/components/Hero.tsx" />
-    <link rel="modulepreload" href="/src/components/Header.tsx" />
-    <link rel="modulepreload" href="/src/hooks/useLanguage.ts" />
-    <link rel="modulepreload" href="/src/contexts/LanguageContext.tsx" />
+    <!-- Font file resource hints for faster loading -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/instrumentsans/v3/mCE-gm6PBTkEXwzSAWu4aNl5Pw20__WTlV0_bQ.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/playfairdisplay/v35/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvUDQZNLo_U2r.woff2" as="font" type="font/woff2" crossorigin>
+    
     <!-- Non-blocking font loading for mobile optimization -->
     <link
       rel="preload"
@@ -164,6 +162,7 @@
       as="image"
       type="image/webp"
       media="(max-width: 767px)"
+      fetchpriority="high"
     />
     <link
       rel="preload"
@@ -171,6 +170,7 @@
       as="image"
       type="image/webp"
       media="(min-width: 768px)"
+      fetchpriority="high"
     />
 
     <!-- Critical CSS inline optimization -->
@@ -181,7 +181,7 @@
       }
       body {
         font-family:
-          'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+          'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
         margin: 0;
         line-height: 1.6;
         -webkit-font-smoothing: antialiased;

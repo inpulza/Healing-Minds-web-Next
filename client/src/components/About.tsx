@@ -2,8 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
-import { IconUserHeart } from '@tabler/icons-react';
+import { Linkedin, Facebook, Instagram, Heart } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import doctorProfileImage from '@assets/doctor-profile.webp';
 
@@ -22,10 +21,11 @@ const About = () => {
                   src={doctorProfileImage}
                   alt="Dr. Melva Reve, MD - Professional headshot of board-certified psychiatrist specializing in anxiety, depression, and ADHD treatment in Naples"
                   className="w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[600px] object-cover object-top"
-                  width={600}
-                  height={600}
+                  width={400}
+                  height={500}
                   loading="lazy"
                   decoding="async"
+                  sizes="(max-width: 640px) 320px, (max-width: 768px) 400px, (max-width: 1024px) 450px, 500px"
                   data-testid="about-doctor-image"
                 />
                 {/* Subtle Green Gradient Overlay */}
@@ -47,7 +47,7 @@ const About = () => {
 
               <div className="flex items-center justify-center lg:justify-start gap-2 sm:gap-3 mb-4 sm:mb-6">
                 <WellnessIcon size="md" color="blue" className="opacity-80">
-                  <IconUserHeart />
+                  <Heart />
                 </WellnessIcon>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-gray-900" data-testid="about-title">
                   <span className="font-display italic text-green-700">Dr. Melva</span> Reve
@@ -101,7 +101,7 @@ const About = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FaLinkedin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                  <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 </a>
                 <a 
                   href="https://facebook.com/healingmindspsychiatry" 
@@ -111,7 +111,7 @@ const About = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FaFacebook className="w-4 h-4 sm:w-5 sm:h-5 text-blue-700" />
+                  <Facebook className="w-4 h-4 sm:w-5 sm:h-5 text-blue-700" />
                 </a>
                 <a 
                   href="https://instagram.com/healingmindspsychiatry" 
@@ -121,7 +121,7 @@ const About = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FaInstagram className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600" />
+                  <Instagram className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600" />
                 </a>
               </div>
 

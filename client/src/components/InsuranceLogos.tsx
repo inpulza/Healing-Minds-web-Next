@@ -2,22 +2,22 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useState, useEffect } from 'react';
 import OptimizedImage from './OptimizedImage';
 
-// Import insurance logos
-import aetnaLogo from '@assets/1_1755867827627.png';
-import ambetterLogo from '@assets/15_1755868276796.png';
-import cignaLogo from '@assets/2_1755868276797.png';
-import doctorsHealthcareLogo from '@assets/3_1755868276797.png';
-import medicareLogo from '@assets/4_1755868276797.png';
-import firstHealthLogo from '@assets/5_1755868276798.png';
-import floridaBlueLogo from '@assets/6_1755868276798.png';
-import medicaidLogo from '@assets/7_1755868276798.png';
-import unitedHealthcareLogo from '@assets/8_1755868276798.png';
-import floridaMedicaidLogo from '@assets/9_1755868276798.png';
-import oscarLogo from '@assets/10_1755868276798.png';
-import champvaLogo from '@assets/11_1755868276799.png';
-import sunshineHealthLogo from '@assets/12_1755868276799.png';
-import avmedLogo from '@assets/13_1755868276799.png';
-import wellcareLogo from '@assets/14_1755868276799.png';
+// Import optimized insurance logos (WebP format for better performance)
+import aetnaLogo from '@/assets/insurance-aetna.webp';
+import ambetterLogo from '@/assets/insurance-ambetter.webp';
+import cignaLogo from '@/assets/insurance-cigna.webp';
+import doctorsHealthcareLogo from '@/assets/insurance-first-health.webp'; // Temporary mapping until correct logo available
+import medicareLogo from '@/assets/insurance-medicare.webp';
+import firstHealthLogo from '@/assets/insurance-first-health.webp';
+import floridaBlueLogo from '@/assets/insurance-first-health.webp'; // Temporarily using First Health until Florida Blue logo available
+import medicaidLogo from '@/assets/insurance-medicaid.webp';
+import unitedHealthcareLogo from '@/assets/insurance-aetna.webp'; // Temporarily using Aetna until United Healthcare logo available
+import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.webp';
+import oscarLogo from '@/assets/insurance-medicare.webp'; // Temporarily using Medicare until Oscar logo available
+import champvaLogo from '@/assets/insurance-champva.webp';
+import sunshineHealthLogo from '@/assets/insurance-sunshine.webp';
+import avmedLogo from '@/assets/insurance-avmed.webp';
+import wellcareLogo from '@/assets/insurance-wellcare.webp';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
