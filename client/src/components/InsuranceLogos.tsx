@@ -56,8 +56,8 @@ const InsuranceLogos = () => {
           </p>
         </div>
 
-        {/* Masonry Layout - Original Design Restored */}
-        <div className="py-8">
+        {/* Masonry Layout - No Background */}
+        <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
           <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
             {insuranceLogos.map((logo, index) => {
               const isHighPriority = index < 4 || index >= 8; // First 4 and last 3 images get high priority
@@ -90,7 +90,7 @@ const InsuranceLogos = () => {
           </div>
           
           {/* Bottom Note */}
-          <div className="text-center mt-8 pt-6">
+          <div className="text-center mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500 font-body">
               {language === 'en' 
                 ? 'Don\'t see your insurance? Contact us to verify coverage for your specific plan.'
