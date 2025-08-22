@@ -69,20 +69,20 @@ const Hero = () => {
             <div className="absolute bottom-0 left-0 right-0 py-3 overflow-hidden">
               <div className="flex animate-scroll whitespace-nowrap">
                 {/* First set */}
-                <div className="flex items-center space-x-4 text-white/90 font-body font-medium text-sm px-2">
+                <div className="flex items-center space-x-4 text-gray-500/50 font-body font-medium text-sm px-2">
                   {displayServices.map((service, index) => (
                     <div key={index} className="flex items-center space-x-4">
                       <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-white/70">•</span>
+                      <span className="text-gray-500/50">•</span>
                     </div>
                   ))}
                 </div>
                 {/* Duplicate for seamless loop */}
-                <div className="flex items-center space-x-4 text-white/90 font-body font-medium text-sm px-2">
+                <div className="flex items-center space-x-4 text-gray-500/50 font-body font-medium text-sm px-2">
                   {displayServices.map((service, index) => (
                     <div key={`duplicate-${index}`} className="flex items-center space-x-4">
                       <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-white/70">•</span>
+                      <span className="text-gray-500/50">•</span>
                     </div>
                   ))}
                 </div>
@@ -154,7 +154,7 @@ const Hero = () => {
 
             
             {/* Left-Aligned Content */}
-            <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
+            <div className="relative z-10 w-full px-8 lg:px-16 py-8 text-left">
               <div className="max-w-5xl ml-4" style={{maxWidth: "60%"}}>
                 {/* SEO Pills */}
                 <div className="flex flex-wrap gap-3 mb-6">
@@ -179,8 +179,8 @@ const Hero = () => {
                   </div>
                 </h1>
                 
-                <div className="text-2xl lg:text-3xl leading-relaxed font-body mb-10 text-[#1e6b3b]" data-testid="hero-description">
-                  <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic text-green-700">Mental Clarity</span> with Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span></span>
+                <div className="text-2xl lg:text-3xl leading-relaxed font-body mb-12 text-[#1e6b3b]" data-testid="hero-description">
+                  <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic text-green-700 font-bold">Mental Clarity</span> with Compassionate Care from <span className="font-display italic text-green-700 font-bold">Dr. Melva Reve</span></span>
                 </div>
                 
                 <div className="ml-0 flex flex-col sm:flex-row gap-4">
@@ -214,20 +214,20 @@ const Hero = () => {
             <div className="absolute bottom-0 left-0 right-0 py-4 sm:py-6 overflow-hidden z-20">
               <div className="flex animate-scroll whitespace-nowrap">
                 {/* First set */}
-                <div className="flex items-center space-x-6 sm:space-x-8 text-white/90 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
+                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-500/50 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
                   {displayServices.map((service, index) => (
                     <div key={index} className="flex items-center space-x-6 sm:space-x-8">
                       <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-white/70">•</span>
+                      <span className="text-gray-500/50">•</span>
                     </div>
                   ))}
                 </div>
                 {/* Duplicate for seamless loop */}
-                <div className="flex items-center space-x-6 sm:space-x-8 text-white/90 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
+                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-500/50 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
                   {displayServices.map((service, index) => (
                     <div key={`duplicate-${index}`} className="flex items-center space-x-6 sm:space-x-8">
                       <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-white/70">•</span>
+                      <span className="text-gray-500/50">•</span>
                     </div>
                   ))}
                 </div>
