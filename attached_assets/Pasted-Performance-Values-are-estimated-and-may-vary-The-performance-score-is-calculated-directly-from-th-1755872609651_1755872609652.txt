@@ -1,0 +1,221 @@
+Performance
+Values are estimated and may vary. The performance score is calculated directly from these metrics.See calculator.
+0–49
+50–89
+90–100
+Final Screenshot
+
+Metrics
+Expand view
+First Contentful Paint
+1.1 s
+Largest Contentful Paint
+1.9 s
+Total Blocking Time
+0 ms
+Cumulative Layout Shift
+0.012
+Speed Index
+1.1 s
+View Treemap
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Later this year, insights will replace performance audits. Learn more and provide feedback here.
+Try insights
+Show audits relevant to:
+
+All
+
+FCP
+
+LCP
+
+TBT
+
+CLS
+Diagnostics
+Serve images in next-gen formats Est savings of 743 KiB
+Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. Learn more about modern image formats.FCPLCP
+URL
+Resource Size
+Est Savings
+healingmindsp.com 1st party
+956.8 KiB	742.9 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/6_1755868….png(www.healingmindsp.com)
+200.0 KiB
+156.7 KiB
+img.w-36.h-28.lg:w-52.lg:h-36.object-contain.transition-all.duration-300.hover:scale-105.filter.grayscale.hover:grayscale-0
+/assets/7_1755868….png(www.healingmindsp.com)
+172.6 KiB
+133.4 KiB
+img.w-36.h-28.lg:w-52.lg:h-36.object-contain.transition-all.duration-300.hover:scale-105.filter.grayscale.hover:grayscale-0
+/assets/8_1755868….png(www.healingmindsp.com)
+172.1 KiB
+130.9 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/2_1755868….png(www.healingmindsp.com)
+168.7 KiB
+130.4 KiB
+img.w-36.h-28.lg:w-52.lg:h-36.object-contain.transition-all.duration-300.hover:scale-105.filter.grayscale.hover:grayscale-0
+/assets/4_1755868….png(www.healingmindsp.com)
+133.5 KiB
+104.9 KiB
+img.w-36.h-28.lg:w-52.lg:h-36.object-contain.transition-all.duration-300.hover:scale-105.filter.grayscale.hover:grayscale-0
+/assets/1_1755867….png(www.healingmindsp.com)
+109.8 KiB
+86.6 KiB
+Properly size images Est savings of 952 KiB
+Serve images that are appropriately-sized to save cellular data and improve load time. Learn how to size images.FCPLCP
+URL
+Resource Size
+Est Savings
+healingmindsp.com 1st party
+1,092.9 KiB	952.1 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/6_1755868….png(www.healingmindsp.com)
+200.0 KiB
+184.5 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/7_1755868….png(www.healingmindsp.com)
+172.6 KiB
+159.2 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/8_1755868….png(www.healingmindsp.com)
+172.1 KiB
+158.8 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/2_1755868….png(www.healingmindsp.com)
+168.7 KiB
+155.6 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/4_1755868….png(www.healingmindsp.com)
+133.5 KiB
+123.1 KiB
+img.h-36.w-auto.object-contain.filter.grayscale
+/assets/1_1755867….png(www.healingmindsp.com)
+109.8 KiB
+101.3 KiB
+img.absolute.inset-0.w-full.h-full.object-cover.object-center
+/assets/hero-doct….webp(www.healingmindsp.com)
+75.7 KiB
+35.7 KiB
+img.w-full.h-full.object-cover.rounded-xl.sm:rounded-2xl
+/assets/florida-map-DZAByGvU.webp(www.healingmindsp.com)
+60.4 KiB
+34.0 KiB
+Largest Contentful Paint element 1,920 ms
+This is the largest contentful element painted within the viewport. Learn more about the Largest Contentful Paint elementLCP
+Element
+img.absolute.inset-0.w-full.h-full.object-cover.object-center
+Phase
+% of LCP
+Timing
+TTFB
+18%
+350 ms
+Load Delay
+45%
+860 ms
+Load Time
+29%
+560 ms
+Render Delay
+8%
+150 ms
+Enable text compression Est savings of 32 KiB
+Text-based resources should be served with compression (gzip, deflate or brotli) to minimize total network bytes. Learn more about text compression.FCPLCP
+URL
+Transfer Size
+Est Savings
+healingmindsp.com 1st party
+42.3 KiB	31.5 KiB
+/assets/Header-FHzUVn0G.tsx(www.healingmindsp.com)
+17.5 KiB
+13.6 KiB
+/assets/Hero-CuHEHAn0.tsx(www.healingmindsp.com)
+10.2 KiB
+7.9 KiB
+/assets/LanguageC….tsx(www.healingmindsp.com)
+9.3 KiB
+6.2 KiB
+/assets/App-CARh_3Fz.tsx(www.healingmindsp.com)
+5.3 KiB
+3.8 KiB
+Reduce unused JavaScript Est savings of 231 KiB
+Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. Learn how to reduce unused JavaScript.FCPLCP
+URL
+Transfer Size
+Est Savings
+Unattributable
+242.1 KiB	126.4 KiB
+chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/autofill.bundle.js
+242.1 KiB
+126.4 KiB
+Google Tag Manager tag-manager 
+141.7 KiB	59.5 KiB
+/gtag/js?id=G-WMRK41PX2E(www.googletagmanager.com)
+141.7 KiB
+59.5 KiB
+healingmindsp.com 1st party
+128.6 KiB	44.8 KiB
+/assets/index-JcqbPuiA.js(www.healingmindsp.com)
+128.6 KiB
+44.8 KiB
+Preload Largest Contentful Paint image
+If the LCP element is dynamically added to the page, you should preload the image in order to improve LCP. Learn more about preloading LCP elements.LCP
+URL
+Est Savings
+healingmindsp.com 1st party
+0 ms
+img.absolute.inset-0.w-full.h-full.object-cover.object-center
+/assets/hero-doct….webp(www.healingmindsp.com)
+0 ms
+Serve static assets with an efficient cache policy 2 resources found
+A long cache lifetime can speed up repeat visits to your page. Learn more about efficient cache policies.
+URL
+Cache TTL
+Transfer Size
+Clarity utility 
+31 KiB
+/0.8.25/clarity.js(scripts.clarity.ms)
+1d
+31 KiB
+JSDelivr CDN cdn 
+15 KiB
+…4x3/es.svg(cdn.jsdelivr.net)
+7d
+15 KiB
+Avoid serving legacy JavaScript to modern browsers Est savings of 10 KiB
+Polyfills and transforms enable legacy browsers to use new JavaScript features. However, many aren't necessary for modern browsers. Consider modifying your JavaScript build process to not transpile Baseline features, unless you know you must support legacy browsers. Learn why most sites can deploy ES6+ code without transpilingFCPLCP
+URL
+Est Savings
+chrome-extension://ailoabdmgclmfmhdagmlohpjlbpffblp/autofill.bundle.js
+9.7 KiB
+autofill.bundle.js:2
+Array.prototype.includes
+Avoid an excessive DOM size 1,356 elements
+A large DOM will increase memory usage, cause longer style calculations, and produce costly layout reflows. Learn how to avoid an excessive DOM size.TBT
+Statistic
+Element
+Value
+Total DOM Elements
+1,356
+Maximum DOM Depth
+path
+16
+Maximum Child Elements
+div.relative.w-full.flex.items-center.justify-center
+15
+Avoid large layout shifts 2 layout shifts found
+Avoid chaining critical requests 2 chains found
+Minimize third-party usage Third-party code blocked the main thread for 0 ms
+Avoid long main-thread tasks 2 long tasks found
+More information about the performance of your application. These numbers don't directly affect the Performance score.
+Passed audits (25)
