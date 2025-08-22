@@ -330,11 +330,9 @@ const LocationNaples = () => {
                       <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                   </Button>
-                </div>
 
-                {/* Features Grid Side */}
-                <div className="order-1 lg:order-2 flex flex-col h-full">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                  {/* Features Grid - moved below button */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
                     {[
                       { en: 'Easy Parking Available', es: 'Estacionamiento Fácil Disponible' },
                       { en: 'Accessible Location', es: 'Ubicación Accesible' },
@@ -351,20 +349,20 @@ const LocationNaples = () => {
                       </div>
                     ))}
                   </div>
-                  
-                  {/* Photo - Fills remaining space */}
-                  <div className="flex-1">
-                    <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[10rem]">
-                      <OptimizedImage
-                        src={officePhoto}
-                        alt="Dr. Melva Reve at her Naples psychiatric practice - Professional and compassionate mental health care"
-                        className="w-full h-full object-cover object-center"
-                        width={1600}
-                        height={1200}
-                        priority={true}
-                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1536px) 1200px, 1600px"
-                      />
-                    </div>
+                </div>
+
+                {/* Photo Side */}
+                <div className="order-1 lg:order-2 flex flex-col h-full">
+                  <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[24rem]">
+                    <OptimizedImage
+                      src={officePhoto}
+                      alt="Dr. Melva Reve at her Naples psychiatric practice - Professional and compassionate mental health care"
+                      className="w-full h-full object-cover object-center"
+                      width={1600}
+                      height={1200}
+                      priority={true}
+                      sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1536px) 1200px, 1600px"
+                    />
                   </div>
                 </div>
               </div>
