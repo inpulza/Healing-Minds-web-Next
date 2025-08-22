@@ -68,12 +68,49 @@ const InsuranceLogos = () => {
           </p>
         </div>
 
-        {/* Brick Masonry Layout - Two Rows */}
+        {/* Responsive Insurance Layout */}
         <div className="p-6 sm:p-8 lg:p-10">
-          <div className="flex flex-col items-center gap-4 sm:gap-6">
+          
+          {/* Mobile Layout - Compact Grid with Animations */}
+          <div className="block md:hidden">
+            <div className="grid grid-cols-3 gap-4 justify-items-center max-w-sm mx-auto">
+              {insuranceLogos.map((logo, index) => (
+                <div 
+                  key={index} 
+                  className="group flex items-center justify-center opacity-0 animate-fade-in-up"
+                  style={{ 
+                    animationDelay: `${index * 100}ms`,
+                    animationFillMode: 'forwards'
+                  }}
+                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <OptimizedImage
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="w-20 h-14 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    width={160}
+                    height={112}
+                    priority={index < 6}
+                    sizes="80px"
+                    style={{
+                      aspectRatio: '10/7',
+                      minWidth: '80px',
+                      minHeight: '56px',
+                      containIntrinsicSize: '160px 112px',
+                      contentVisibility: index < 6 ? 'visible' : 'auto',
+                      willChange: 'auto'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Layout - Two Rows Brick Style */}
+          <div className="hidden md:flex flex-col items-center gap-4 lg:gap-6">
             
             {/* First Row */}
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
               {firstRow.map((logo, index) => (
                 <div 
                   key={index} 
@@ -83,15 +120,15 @@ const InsuranceLogos = () => {
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-28 h-20 sm:w-36 sm:h-28 md:w-44 md:h-32 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={208}
                     height={144}
                     priority={index < 4}
-                    sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, (max-width: 1024px) 176px, 208px"
+                    sizes="(max-width: 1024px) 144px, 208px"
                     style={{
                       aspectRatio: '13/9',
-                      minWidth: 'min(112px, 25vw)',
-                      minHeight: 'min(80px, 18vw)',
+                      minWidth: '144px',
+                      minHeight: '112px',
                       containIntrinsicSize: '208px 144px',
                       contentVisibility: index < 4 ? 'visible' : 'auto',
                       willChange: 'auto'
@@ -102,7 +139,7 @@ const InsuranceLogos = () => {
             </div>
             
             {/* Second Row - Offset */}
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8" style={{ marginLeft: 'clamp(1.5rem, 8vw, 4rem)' }}>
+            <div className="flex flex-wrap justify-center gap-4 lg:gap-8" style={{ marginLeft: 'clamp(2rem, 6vw, 4rem)' }}>
               {secondRow.map((logo, index) => (
                 <div 
                   key={index + firstRow.length} 
@@ -112,15 +149,15 @@ const InsuranceLogos = () => {
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-28 h-20 sm:w-36 sm:h-28 md:w-44 md:h-32 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={208}
                     height={144}
                     priority={false}
-                    sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, (max-width: 1024px) 176px, 208px"
+                    sizes="(max-width: 1024px) 144px, 208px"
                     style={{
                       aspectRatio: '13/9',
-                      minWidth: 'min(112px, 25vw)',
-                      minHeight: 'min(80px, 18vw)',
+                      minWidth: '144px',
+                      minHeight: '112px',
                       containIntrinsicSize: '208px 144px',
                       contentVisibility: 'auto',
                       willChange: 'auto'
