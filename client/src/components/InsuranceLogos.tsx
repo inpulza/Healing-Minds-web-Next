@@ -1,18 +1,18 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import OptimizedImage from './OptimizedImage';
 
-// Import insurance logos
-import aetnaLogo from '@/assets/insurance-aetna.webp';
-import cignaLogo from '@/assets/insurance-cigna.webp';
-import medicareLogo from '@/assets/insurance-medicare.webp';
-import firstHealthLogo from '@/assets/insurance-first-health.webp';
-import medicaidLogo from '@/assets/insurance-medicaid.webp';
-import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.webp';
-import champvaLogo from '@/assets/insurance-champva.webp';
-import sunshineHealthLogo from '@/assets/insurance-sunshine.webp';
-import avmedLogo from '@/assets/insurance-avmed.webp';
-import wellcareLogo from '@/assets/insurance-wellcare.webp';
-import ambetterLogo from '@/assets/insurance-ambetter.webp';
+// Import insurance logos (PNG for transparency)
+import aetnaLogo from '@/assets/insurance-aetna.png';
+import cignaLogo from '@/assets/insurance-cigna.png';
+import medicareLogo from '@/assets/insurance-medicare.png';
+import firstHealthLogo from '@/assets/insurance-first-health.png';
+import medicaidLogo from '@/assets/insurance-medicaid.png';
+import floridaMedicaidLogo from '@/assets/insurance-florida-medicaid.png';
+import champvaLogo from '@/assets/insurance-champva.png';
+import sunshineHealthLogo from '@/assets/insurance-sunshine.png';
+import avmedLogo from '@/assets/insurance-avmed.png';
+import wellcareLogo from '@/assets/insurance-wellcare.png';
+import ambetterLogo from '@/assets/insurance-ambetter.png';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
@@ -57,7 +57,7 @@ const InsuranceLogos = () => {
         </div>
 
         {/* Masonry Layout - No Background */}
-        <div className="p-6 sm:p-8 lg:p-10">
+        <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
           <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
             {insuranceLogos.map((logo, index) => {
               const isHighPriority = index < 4 || index >= 8; // First 4 and last 3 images get high priority
