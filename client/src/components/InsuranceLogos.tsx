@@ -57,7 +57,7 @@ const InsuranceLogos = () => {
         </div>
 
         {/* Masonry Layout - No Background */}
-        <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10">
+        <div className="p-6 sm:p-8 lg:p-10">
           <div className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 justify-center items-center min-h-[112px] sm:min-h-[128px] lg:min-h-[144px]">
             {insuranceLogos.map((logo, index) => {
               const isHighPriority = index < 4 || index >= 8; // First 4 and last 3 images get high priority
