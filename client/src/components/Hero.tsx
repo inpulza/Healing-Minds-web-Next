@@ -155,31 +155,31 @@ const Hero = () => {
             
             {/* Left-Aligned Content */}
             <div className="relative z-10 w-full px-8 lg:px-16 py-16 text-left">
-              <div className="max-w-4xl ml-4">
+              <div className="max-w-5xl ml-4" style="max-width: 60%;">
                 {/* SEO Pills */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Board Certified Psychiatrist</span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Naples Mental Health</span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">Southwest Florida</span>
+                <div className="flex flex-wrap gap-3 mb-6">
+                  <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-base font-medium">Board Certified Psychiatrist</span>
+                  <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-base font-medium">Naples Mental Health</span>
+                  <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-base font-medium">Southwest Florida</span>
                 </div>
                 
-                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-relaxed text-green-700 text-left mb-6" data-testid="hero-title">
-                  <div className="font-display italic font-bold mb-3">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-relaxed text-green-700 text-left mb-8" data-testid="hero-title">
+                  <div className="font-display italic font-bold mb-4">
                     Expert psychiatric 
-                    <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
+                    <WellnessIcon size="lg" color="blue" className="inline-flex mx-2 align-middle">
                       <IconHeart />
                     </WellnessIcon>
                     care in
                   </div>
                   <div className="font-display italic font-bold">
                     Naples, FL
-                    <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
+                    <WellnessIcon size="lg" color="green" className="inline-flex mx-2 align-middle">
                       <IconBrain />
                     </WellnessIcon>
                   </div>
                 </h1>
                 
-                <div className="text-xl lg:text-2xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
+                <div className="text-2xl lg:text-3xl leading-relaxed font-body mb-10 text-[#1e6b3b]" data-testid="hero-description">
                   <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic text-green-700">Mental Clarity</span> with Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span></span>
                 </div>
                 
