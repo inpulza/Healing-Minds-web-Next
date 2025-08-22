@@ -28,7 +28,7 @@ import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, Ico
 import { Link } from 'wouter';
 
 // Import office photo
-import officePhoto from '@assets/_MG_3756_1755871805687.jpg';
+import officePhoto from '@assets/doctor-consultation.webp';
 import OptimizedImage from '@/components/OptimizedImage';
 
 const LocationNaples = () => {

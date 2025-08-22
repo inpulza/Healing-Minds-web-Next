@@ -2,7 +2,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useState, useEffect } from 'react';
 import OptimizedImage from './OptimizedImage';
 
-// Import insurance logos
+// Import insurance logos - Optimized versions from original file names
 import aetnaLogo from '@assets/1_1755867827627.png';
 import ambetterLogo from '@assets/15_1755868276796.png';
 import cignaLogo from '@assets/2_1755868276797.png';
