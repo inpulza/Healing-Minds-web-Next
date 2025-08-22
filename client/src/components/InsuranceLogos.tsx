@@ -71,38 +71,49 @@ const InsuranceLogos = () => {
         {/* Responsive Insurance Layout */}
         <div className="p-6 sm:p-8 lg:p-10">
           
-          {/* Mobile Layout - Compact Grid with Animations */}
+          {/* Mobile Layout - Horizontal Scroll */}
           <div className="block md:hidden">
-            <div className="grid grid-cols-3 gap-4 justify-items-center max-w-sm mx-auto">
-              {insuranceLogos.map((logo, index) => (
-                <div 
-                  key={index} 
-                  className="group flex items-center justify-center opacity-0 animate-fade-in-up"
-                  style={{ 
-                    animationDelay: `${index * 100}ms`,
-                    animationFillMode: 'forwards'
-                  }}
-                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <OptimizedImage
-                    src={logo.src}
-                    alt={logo.alt}
-                    className="w-20 h-14 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
-                    width={160}
-                    height={112}
-                    priority={index < 6}
-                    sizes="80px"
-                    style={{
-                      aspectRatio: '10/7',
-                      minWidth: '80px',
-                      minHeight: '56px',
-                      containIntrinsicSize: '160px 112px',
-                      contentVisibility: index < 6 ? 'visible' : 'auto',
-                      willChange: 'auto'
+            <div className="overflow-x-auto pb-4">
+              <div className="flex gap-6 px-4 min-w-max">
+                {insuranceLogos.map((logo, index) => (
+                  <div 
+                    key={index} 
+                    className="group flex-shrink-0 flex items-center justify-center opacity-0 animate-fade-in-up"
+                    style={{ 
+                      animationDelay: `${index * 50}ms`,
+                      animationFillMode: 'forwards'
                     }}
-                  />
-                </div>
-              ))}
+                    data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    <OptimizedImage
+                      src={logo.src}
+                      alt={logo.alt}
+                      className="w-24 h-18 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
+                      width={192}
+                      height={144}
+                      priority={index < 6}
+                      sizes="96px"
+                      style={{
+                        aspectRatio: '4/3',
+                        minWidth: '96px',
+                        minHeight: '72px',
+                        containIntrinsicSize: '192px 144px',
+                        contentVisibility: index < 6 ? 'visible' : 'auto',
+                        willChange: 'auto'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Mobile scroll indicator */}
+            <div className="flex justify-center mt-2">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                <div className="w-6 h-2 bg-gray-400 rounded-full"></div>
+                <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+              </div>
             </div>
           </div>
 
