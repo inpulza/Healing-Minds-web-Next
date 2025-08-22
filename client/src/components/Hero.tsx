@@ -99,28 +99,20 @@ const Hero = () => {
                   <IconLeaf />
                 </WellnessIcon>
                 <span className="font-display italic font-medium">Naples, FL</span>
+                <WellnessIcon size="sm" color="green" className="inline-flex mx-1 align-middle">
+                  <IconBrain />
+                </WellnessIcon>
               </div>
               <div className="text-lg sm:text-xl">
                 <span className="font-display italic">Anxiety</span>, <span className="font-display italic">Depression</span>, <span className="font-display italic">ADHD</span>, <span className="font-display italic">Therapy</span>
+                <WellnessIcon size="sm" color="blue" className="inline-flex mx-1 align-middle">
+                  <IconHeart />
+                </WellnessIcon>
               </div>
             </h1>
             
             <div className="text-lg leading-relaxed font-body mb-8 text-white/95 max-w-sm mx-auto" data-testid="hero-description">
-              <div className="mb-3">Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment</div>
-              <div className="mb-2">Find Your Path to</div>
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <WellnessIcon size="sm" color="green" className="flex-shrink-0">
-                  <IconBrain />
-                </WellnessIcon>
-                <span className="font-display italic">Mental Clarity</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <span>with</span>
-                <WellnessIcon size="sm" color="blue" className="flex-shrink-0">
-                  <IconHeart />
-                </WellnessIcon>
-                <span className="font-display italic">Compassionate Care from Dr. Reve</span>
-              </div>
+              <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic">Mental Clarity</span> with Compassionate Care from <span className="font-display italic">Dr. Reve</span></span>
             </div>
             
             <Link href="/services">
@@ -161,22 +153,18 @@ const Hero = () => {
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                     <IconLeaf />
                   </WellnessIcon>
-                  <span className="font-display italic text-green-700">Naples, FL</span> - <span className="font-display italic text-green-700">Anxiety</span>, <span className="font-display italic text-green-700">Depression</span>, <span className="font-display italic text-green-700">ADHD</span>, <span className="font-display italic text-green-700">Therapy</span>
-                </h1>
-                
-                <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
-                  <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment.
-                  <br /><br />
-                  Find Your Path to
+                  <span className="font-display italic text-green-700">Naples, FL</span>
                   <WellnessIcon size="md" color="green" className="inline-flex mx-2 align-middle">
                     <IconBrain />
                   </WellnessIcon>
-                  <span className="font-display italic text-green-700">Mental Clarity</span>
-                  With 
+                  <span className="font-display italic text-green-700">Anxiety</span>, <span className="font-display italic text-green-700">Depression</span>, <span className="font-display italic text-green-700">ADHD</span>, <span className="font-display italic text-green-700">Therapy</span>
                   <WellnessIcon size="md" color="blue" className="inline-flex mx-2 align-middle">
                     <IconHeart />
                   </WellnessIcon>
-                  Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span></span>
+                </h1>
+                
+                <div className="text-lg lg:text-xl leading-relaxed font-body mb-8 text-[#1e6b3b]" data-testid="hero-description">
+                  <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic text-green-700">Mental Clarity</span> with Compassionate Care from <span className="font-display italic text-green-700">Dr. Melva Reve</span></span>
                 </div>
                 
                 <div className="ml-0">
