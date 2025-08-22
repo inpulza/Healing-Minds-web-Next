@@ -84,36 +84,38 @@ const InsuranceLogos = () => {
           
           {/* Mobile Layout - Auto Slider */}
           <div className="block md:hidden">
-            <div className="flex justify-center items-center h-32 relative w-full">
-              {insuranceLogos.map((logo, index) => (
-                <div 
-                  key={index}
-                  className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-500 ${
-                    index === currentLogoIndex 
-                      ? 'opacity-100 translate-y-0' 
-                      : 'opacity-0 translate-y-4'
-                  }`}
-                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <OptimizedImage
-                    src={logo.src}
-                    alt={logo.alt}
-                    className="w-40 h-28 object-contain filter grayscale"
-                    width={256}
-                    height={180}
-                    priority={index < 6}
-                    sizes="160px"
-                    style={{
-                      aspectRatio: '16/11',
-                      minWidth: '160px',
-                      minHeight: '112px',
-                      containIntrinsicSize: '256px 180px',
-                      contentVisibility: index < 6 ? 'visible' : 'auto',
-                      willChange: 'auto'
-                    }}
-                  />
-                </div>
-              ))}
+            <div className="w-full h-32 flex justify-center items-center relative">
+              <div className="relative w-40 h-28">
+                {insuranceLogos.map((logo, index) => (
+                  <div 
+                    key={index}
+                    className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ${
+                      index === currentLogoIndex 
+                        ? 'opacity-100' 
+                        : 'opacity-0'
+                    }`}
+                    data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    <OptimizedImage
+                      src={logo.src}
+                      alt={logo.alt}
+                      className="w-40 h-28 object-contain filter grayscale"
+                      width={256}
+                      height={180}
+                      priority={index < 6}
+                      sizes="160px"
+                      style={{
+                        aspectRatio: '16/11',
+                        minWidth: '160px',
+                        minHeight: '112px',
+                        containIntrinsicSize: '256px 180px',
+                        contentVisibility: index < 6 ? 'visible' : 'auto',
+                        willChange: 'auto'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
             
             {/* Progress dots */}
