@@ -69,20 +69,20 @@ const Hero = () => {
             <div className="absolute bottom-0 left-0 right-0 py-3 overflow-hidden">
               <div className="flex animate-scroll whitespace-nowrap">
                 {/* First set */}
-                <div className="flex items-center space-x-4 text-gray-500/50 font-body font-medium text-sm px-2">
+                <div className="flex items-center space-x-4 text-gray-600/80 font-body font-medium text-sm px-2">
                   {displayServices.map((service, index) => (
                     <div key={index} className="flex items-center space-x-4">
                       <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-500/50">•</span>
+                      <span className="text-gray-600/80">•</span>
                     </div>
                   ))}
                 </div>
                 {/* Duplicate for seamless loop */}
-                <div className="flex items-center space-x-4 text-gray-500/50 font-body font-medium text-sm px-2">
+                <div className="flex items-center space-x-4 text-gray-600/80 font-body font-medium text-sm px-2">
                   {displayServices.map((service, index) => (
                     <div key={`duplicate-${index}`} className="flex items-center space-x-4">
                       <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-500/50">•</span>
+                      <span className="text-gray-600/80">•</span>
                     </div>
                   ))}
                 </div>
@@ -179,7 +179,7 @@ const Hero = () => {
                   </div>
                 </h1>
                 
-                <div className="text-2xl lg:text-3xl leading-relaxed font-body mb-12 text-[#1e6b3b]" data-testid="hero-description">
+                <div className="text-xl lg:text-2xl leading-relaxed font-body mb-12 text-[#1e6b3b]" data-testid="hero-description">
                   <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic text-green-700 font-bold">Mental Clarity</span> with Compassionate Care from <span className="font-display italic text-green-700 font-bold">Dr. Melva Reve</span></span>
                 </div>
                 
@@ -214,20 +214,20 @@ const Hero = () => {
             <div className="absolute bottom-0 left-0 right-0 py-4 sm:py-6 overflow-hidden z-20">
               <div className="flex animate-scroll whitespace-nowrap">
                 {/* First set */}
-                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-500/50 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
+                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-600/80 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
                   {displayServices.map((service, index) => (
                     <div key={index} className="flex items-center space-x-6 sm:space-x-8">
                       <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-500/50">•</span>
+                      <span className="text-gray-600/80">•</span>
                     </div>
                   ))}
                 </div>
                 {/* Duplicate for seamless loop */}
-                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-500/50 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
+                <div className="flex items-center space-x-6 sm:space-x-8 text-gray-600/80 font-body font-medium text-base sm:text-lg px-3 sm:px-4">
                   {displayServices.map((service, index) => (
                     <div key={`duplicate-${index}`} className="flex items-center space-x-6 sm:space-x-8">
                       <span className="whitespace-nowrap drop-shadow-md">{service}</span>
-                      <span className="text-gray-500/50">•</span>
+                      <span className="text-gray-600/80">•</span>
                     </div>
                   ))}
                 </div>

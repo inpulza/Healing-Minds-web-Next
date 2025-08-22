@@ -28,14 +28,14 @@ const Home = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Dr. Melva Reve - Compassionate Psychiatric Care in Naples, FL | Healing Minds'
-        : 'Dra. Melva Reve - Atención Psiquiátrica Compasiva en Naples, FL | Healing Minds',
+        ? 'Expert Psychiatric Care in Naples, FL - Anxiety, Depression, ADHD, Therapy | Dr. Melva Reve'
+        : 'Atención Psiquiátrica Experta en Naples, FL - Ansiedad, Depresión, TDAH, Terapia | Dra. Melva Reve',
       description: language === 'en'
-        ? 'Expert psychiatric care for adults in Naples, FL. Dr. Melva Reve offers bilingual treatment for anxiety, depression, ADHD, and PTSD. 15+ years experience. Book your consultation today.'
-        : 'Atención psiquiátrica experta para adultos en Naples, FL. La Dra. Melva Reve ofrece tratamiento bilingüe para ansiedad, depresión, TDAH y TEPT. Más de 15 años de experiencia. Reserve su consulta hoy.',
+        ? 'Board certified psychiatrist Dr. Melva Reve provides expert psychiatric care in Naples, FL. Specializing in anxiety, depression, ADHD, and therapy. Mental health services for Southwest Florida. Call (239) 423-0272.'
+        : 'La psiquiatra certificada Dra. Melva Reve brinda atención psiquiátrica experta en Naples, FL. Especializada en ansiedad, depresión, TDAH y terapia. Servicios de salud mental para el suroeste de Florida. Llame (239) 423-0272.',
       keywords: language === 'en'
-        ? 'psychiatrist Naples FL, psychiatric care Naples, anxiety treatment Naples, depression treatment Naples, bilingual psychiatrist, Spanish speaking psychiatrist Naples'
-        : 'psiquiatra Naples FL, atención psiquiátrica Naples, tratamiento ansiedad Naples, tratamiento depresión Naples, psiquiatra bilingüe, psiquiatra español Naples',
+        ? 'expert psychiatric care Naples FL, board certified psychiatrist Naples, anxiety treatment Naples FL, depression treatment Naples FL, ADHD therapy Naples, Naples mental health, Southwest Florida psychiatrist, Dr Melva Reve psychiatrist'
+        : 'atención psiquiátrica experta Naples FL, psiquiatra certificada Naples, tratamiento ansiedad Naples FL, tratamiento depresión Naples FL, terapia TDAH Naples, salud mental Naples, psiquiatra suroeste Florida, Dra Melva Reve psiquiatra',
       lang: language,
       canonical: language === 'en' ? '/' : '/es'
     };
