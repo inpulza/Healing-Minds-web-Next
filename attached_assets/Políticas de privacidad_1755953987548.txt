@@ -1,0 +1,85 @@
+# Política de Privacidad del Sitio Web de Healing Minds Psychiatry
+
+**Última actualización:** 22 de agosto de 2025
+
+Esta Política de Privacidad describe cómo Healing Minds Psychiatry ("nosotros", "nuestro"), operado por Vidal Healing Minds Corp., recopila, utiliza y protege la información personal que usted proporciona al usar nuestro sitio web https://www.healingmindsp.com/ (el "Sitio").
+
+Esta política se aplica a todos los visitantes del Sitio. Para la información de nuestros pacientes, por favor, consulte nuestro "Aviso de Prácticas de Privacidad" (NPP), que se rige por la ley HIPAA.
+
+### 1. Información que Recopilamos
+
+Recopilamos información para proporcionar y mejorar nuestros servicios. Los tipos de información que recopilamos son:
+
+**a) Información que Usted Proporciona Voluntariamente:**
+* **Formularios de Contacto:** Cuando se comunica con nosotros a través de un formulario, recopilamos su nombre, dirección de correo electrónico, número de teléfono y el contenido de su mensaje.
+* **Programación de Citas:** Al programar una cita a través de nuestro portal de terceros (Charm Health), puede que proporcione información personal y de salud. Dicha recopilación se rige por los términos y la política de privacidad de ese proveedor.
+
+**b) Información que Recopilamos Automáticamente:**
+Cuando usted visita nuestro Sitio, recopilamos automáticamente cierta información sobre su dispositivo y su comportamiento de navegación a través de cookies y tecnologías similares. Esta información incluye:
+* Su dirección de Protocolo de Internet (IP).
+* Tipo de navegador y sistema operativo.
+* Páginas que visita dentro de nuestro Sitio y tiempo de permanencia.
+* Fechas y horas de acceso.
+
+### 2. Cookies y Tecnologías de Seguimiento
+
+Utilizamos cookies y tecnologías similares para operar nuestro Sitio y analizar su rendimiento. Las herramientas específicas que utilizamos incluyen:
+
+* **Cookies Necesarias:** Esenciales para el funcionamiento técnico del Sitio.
+* **Google Analytics:** Utilizamos esta herramienta para entender cómo los visitantes interactúan con nuestro Sitio. Google Analytics recopila información de forma anónima y nos proporciona informes sobre el tráfico y las tendencias del sitio web.
+* **Google Ads:** Utilizamos cookies de Google Ads para realizar un seguimiento de las conversiones de nuestros anuncios y para mostrar publicidad relevante a los visitantes en otros sitios web (remarketing).
+* **Microsoft Clarity:** Utilizamos esta herramienta para capturar cómo los usuarios interactúan con nuestro sitio web a través de grabaciones de sesiones y mapas de calor (heatmaps). Esto nos ayuda a identificar problemas de usabilidad y a mejorar la experiencia del usuario. La información recopilada es anónima en la medida de lo posible.
+
+### 3. Cómo Usamos su Información
+
+Utilizamos la información recopilada para los siguientes propósitos:
+* Para responder a sus preguntas y solicitudes.
+* Para operar, mantener y mejorar nuestro Sitio y servicios.
+* Para analizar el uso del Sitio y optimizar la experiencia del usuario.
+* Para fines de marketing y publicidad, como medir el rendimiento de nuestras campañas en Google Ads.
+
+### 4. Cómo Compartimos su Información
+
+No vendemos su información personal. Podemos compartir su información únicamente en las siguientes circunstancias:
+
+* **Proveedores de Servicios:** Compartimos información con empresas de terceros que nos prestan servicios, como el alojamiento web (Hostinger), análisis de datos (Google, Microsoft) y plataformas de publicidad (Google). Estos proveedores solo tienen acceso a la información necesaria para realizar sus funciones y están obligados a protegerla.
+* **Fines Legales:** Podemos divulgar su información si así lo exige la ley o en respuesta a una solicitud legal válida, como una orden judicial o una citación.
+* **Transferencias Comerciales:** En caso de una fusión, adquisición o venta de activos, su información personal puede ser transferida a la entidad adquirente.
+
+### 5. Seguridad de los Datos
+
+Hemos implementado medidas de seguridad administrativas, técnicas y físicas razonables para proteger la información personal contra el acceso, la divulgación, la alteración y la destrucción no autorizados, en conformidad con la Ley de Protección de la Información de Florida (FIPA). Sin embargo, ningún método de transmisión por Internet es 100% seguro.
+
+### 6. Notificación en Caso de Brecha de Seguridad
+
+En el caso de una brecha de seguridad que afecte a su información personal, cumpliremos con las leyes aplicables. De acuerdo con la Ley de Protección de la Información de Florida (FIPA), notificaremos a las personas afectadas y al Departamento de Asuntos Legales de Florida sin demoras indebidas, y a más tardar 30 días después de determinar que ha ocurrido una brecha.
+
+### 7. Privacidad de los Niños
+
+Nuestro Sitio Web no está dirigido a niños menores de 13 años. No recopilamos intencionadamente información personal de niños menores de 13 años. Si usted es un padre o tutor y cree que su hijo nos ha proporcionado información personal, por favor, póngase en contacto con nosotros para que podamos eliminarla.
+
+### 8. Enlaces a Sitios de Terceros
+
+Nuestro Sitio puede contener enlaces a otros sitios web que no son operados por nosotros (como nuestro portal de citas). Si hace clic en un enlace de un tercero, será dirigido al sitio de ese tercero. Le recomendamos encarecidamente que revise la Política de Privacidad de cada sitio que visite. No tenemos control ni asumimos ninguna responsabilidad por el contenido o las prácticas de los sitios o servicios de terceros.
+
+### 9. Sus Opciones y Derechos de Privacidad
+
+Usted tiene control sobre la información que se recopila a través de cookies y tecnologías de seguimiento.
+
+* **Configuración del Navegador:** Puede configurar su navegador para que rechace todas o algunas cookies, o para que le avise cuando se envíen cookies. Tenga en cuenta que si deshabilita las cookies, es posible que algunas partes de este Sitio no sean accesibles o no funcionen correctamente.
+* **Exclusión de Google Analytics:** Para evitar que sus datos sean utilizados por Google Analytics, puede instalar el complemento de inhabilitación para navegadores de Google, disponible en: [https://tools.google.com/dlpage/gaoptout](https://tools.google.com/dlpage/gaoptout).
+* **Configuración de Anuncios de Google:** Puede gestionar sus preferencias de anuncios y optar por no recibir publicidad personalizada de Google en su Centro de Anuncios: [https://myadcenter.google.com/](https://myadcenter.google.com/).
+* **Controles de Privacidad de Microsoft:** Puede gestionar sus datos y la configuración de privacidad con Microsoft a través de su panel de privacidad: [https://account.microsoft.com/privacy](https://account.microsoft.com/privacy).
+
+### 10. Cambios a esta Política de Privacidad
+
+Podemos actualizar nuestra Política de Privacidad periódicamente. Le notificaremos de cualquier cambio publicando la nueva política en esta página y actualizando la fecha de "Última actualización" en la parte superior.
+
+### 11. Información de Contacto
+
+Si tiene alguna pregunta sobre esta Política de Privacidad, puede contactarnos en:
+
+**Healing Minds Psychiatry**
+4760 Tamiami Trl N #25,
+Naples, FL 34103
+Correo electrónico: info@healingmindsp.com

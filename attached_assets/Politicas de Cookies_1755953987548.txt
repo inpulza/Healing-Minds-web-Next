@@ -1,0 +1,53 @@
+# Política de Cookies de Healing Minds Psychiatry
+
+**Última actualización:** 22 de agosto de 2025
+
+Esta Política de Cookies explica qué son las cookies, cómo las utilizamos en el sitio web https://www.healingmindsp.com/ (el "Sitio"), los tipos de cookies que usamos, la información que recopilamos mediante cookies y cómo se utiliza esa información.
+
+### ¿Qué son las cookies?
+
+[cite_start]Las cookies son pequeños archivos de texto que se almacenan en su navegador o dispositivo cuando visita un sitio web[cite: 381]. Se utilizan ampliamente para hacer que los sitios web funcionen, o funcionen de manera más eficiente, así como para proporcionar información a los propietarios del sitio. Las cookies nos permiten reconocer su dispositivo y recordar información sobre sus preferencias o acciones pasadas.
+
+### Tipos de Cookies que Utilizamos
+
+Clasificamos las cookies utilizadas en nuestro Sitio en las siguientes categorías:
+
+**1. Cookies Estrictamente Necesarias**
+[cite_start]Estas cookies son esenciales para que pueda navegar por el Sitio y utilizar sus funciones, como acceder a áreas seguras[cite: 383]. Sin estas cookies, los servicios que ha solicitado no se pueden proporcionar.
+
+**2. Cookies de Rendimiento / Analíticas**
+[cite_start]Estas cookies recopilan información sobre cómo los visitantes utilizan nuestro Sitio, por ejemplo, qué páginas visitan con más frecuencia y si reciben mensajes de error[cite: 386]. [cite_start]La información que recopilan estas cookies es agregada y, por lo tanto, anónima[cite: 386]. [cite_start]Solo se utiliza para mejorar el funcionamiento del Sitio[cite: 386]. Específicamente, utilizamos:
+* **Google Analytics:** Para analizar el tráfico del sitio y el comportamiento del usuario.
+* **Microsoft Clarity:** Para generar mapas de calor y grabaciones de sesiones que nos ayudan a entender cómo los usuarios interactúan con las páginas y a mejorar la usabilidad.
+
+**3. Cookies de Marketing / Publicidad**
+[cite_start]Estas cookies se utilizan para rastrear la actividad de los usuarios en la web con el fin de ofrecer publicidad más relevante y medir la eficacia de nuestras campañas publicitarias[cite: 387]. En nuestro Sitio, utilizamos:
+* **Google Ads:** Para realizar un seguimiento de las conversiones de nuestros anuncios y para mostrarle anuncios personalizados en otros sitios web (remarketing) basados en su visita anterior a nuestro Sitio.
+
+### Cómo Gestionar sus Preferencias de Cookies
+
+Usted tiene el control total sobre el uso de cookies en nuestro Sitio.
+
+* [cite_start]**Herramienta de Consentimiento de Cookies:** La principal forma de gestionar sus preferencias es a través del banner de consentimiento de cookies que se le presenta la primera vez que visita nuestro Sitio[cite: 388]. A través de esta herramienta, puede aceptar o rechazar las diferentes categorías de cookies no esenciales.
+* [cite_start]**Configuración del Navegador:** Además de nuestra herramienta de consentimiento, la mayoría de los navegadores web le permiten controlar la mayoría de las cookies a través de su configuración[cite: 388]. Puede configurar su navegador para que le notifique cuando reciba una cookie, dándole la opción de aceptarla o no. También puede bloquear todas las cookies. Para saber cómo hacerlo, consulte la sección de "Ayuda" de su navegador.
+* **Enlaces de Exclusión de Terceros:** Puede optar por no participar en el seguimiento de ciertos terceros visitando los siguientes enlaces:
+    * **Google Analytics:** [https://tools.google.com/dlpage/gaoptout](https://tools.google.com/dlpage/gaoptout)
+    * **Google Ads:** [https://myadcenter.google.com/](https://myadcenter.google.com/)
+    * **Microsoft:** [https://account.microsoft.com/privacy](https://account.microsoft.com/privacy)
+
+### Cookies de Terceros
+
+[cite_start]Algunas de las cookies de nuestro Sitio son establecidas por organizaciones de terceros[cite: 389]. Este es el caso de las cookies de Google y Microsoft. Estas empresas gestionan las cookies y los datos que recopilan de acuerdo con sus propias políticas de privacidad. Le recomendamos que las revise para entender cómo utilizan su información.
+
+### Cambios a esta Política de Cookies
+
+Podemos actualizar esta Política de Cookies de vez en cuando para reflejar, por ejemplo, cambios en las cookies que utilizamos o por otras razones operativas, legales o reglamentarias. Por lo tanto, le pedimos que revise esta política regularmente para mantenerse informado.
+
+### Información de Contacto
+
+Si tiene alguna pregunta sobre nuestro uso de cookies, puede contactarnos en:
+
+**Healing Minds Psychiatry**
+4760 Tamiami Trl N #25,
+Naples, FL 34103
+Correo electrónico: info@healingmindsp.com
