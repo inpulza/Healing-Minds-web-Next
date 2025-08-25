@@ -244,7 +244,7 @@ const ServiceAreas: React.FC = () => {
                     {language === 'en' ? 'Main Office Location' : 'Ubicación de Oficina Principal'}
                   </h4>
                   <p className="text-sm sm:text-base text-gray-700 mb-2 leading-relaxed">
-                    Naples, FL 34102<br />
+                    4760 Tamiami Trl N, Ste 25, Naples, FL 34103<br />
                     {language === 'en' 
                       ? 'Serving all surrounding communities' 
                       : 'Sirviendo todas las comunidades circundantes'
