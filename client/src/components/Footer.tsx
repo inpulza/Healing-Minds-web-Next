@@ -14,7 +14,7 @@ const Footer = () => {
   const services = [
     { href: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad', label: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad' },
     { href: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion', label: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión' },
-    { href: '/tratamiento-tdah-adultos-naples-fl', label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH' },
+    { href: '/adhd-treatment-adults-naples-fl', label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH' },
     { href: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept', label: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT' },
     { href: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar', label: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar' },
     { href: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos', label: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos' }
