@@ -33,7 +33,7 @@ const AdhdTreatment = () => {
         ? 'ADHD treatment Naples FL, adult ADHD Naples, ADHD psychiatrist Naples, ADHD medication Naples, attention deficit disorder Naples, adult ADD Naples'
         : 'tratamiento TDAH adultos Naples FL, psiquiatra TDAH Naples, diagnóstico TDAH adultos, medicamento TDAH Naples, trastorno déficit atención adultos, Condado Collier TDAH',
       lang: language,
-      canonical: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah'
+      canonical: language === 'en' ? '/services/adhd-treatment' : '/tratamiento-tdah-adultos-naples-fl'
     };
     updateSEO(seoData);
     addADHDTreatmentSchema();
@@ -665,105 +665,6 @@ const AdhdTreatment = () => {
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Frequently Asked <span className="font-display italic text-green-700">Questions</span></>
-                ) : (
-                  <>Preguntas <span className="font-display italic text-green-700">Frecuentes</span></>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                {language === 'en'
-                  ? 'Common questions about adult ADHD treatment in Naples, FL'
-                  : 'Preguntas comunes sobre el tratamiento del TDAH en adultos en Naples, FL'
-                }
-              </p>
-            </div>
-
-            <div className="space-y-3 sm:space-y-4">
-              {[
-                {
-                  question: language === 'en' 
-                    ? 'What is the first step to treat ADHD if I am an adult?'
-                    : '¿Cuál es el primer paso para tratar el TDAH si soy adulto?',
-                  answer: language === 'en'
-                    ? 'The first and most important step is to seek a complete professional evaluation with a qualified psychiatrist, like Dr. Reve. An accurate diagnosis is fundamental to creating an effective treatment plan.'
-                    : 'El primer y más importante paso es buscar una evaluación profesional completa con un psiquiatra cualificado, como la Dra. Reve. Un diagnóstico preciso es fundamental para crear un plan de tratamiento efectivo.'
-                },
-                {
-                  question: language === 'en'
-                    ? 'Does ADHD treatment always include medications?'
-                    : '¿El tratamiento para el TDAH siempre incluye medicamentos?',
-                  answer: language === 'en'
-                    ? 'Not necessarily. While medications are highly effective for many adults, they are not the only option. The best approach often combines therapy, behavioral strategies, and, if appropriate, medication. The plan is personalized for you.'
-                    : 'No necesariamente. Si bien los medicamentos son altamente efectivos para muchos adultos, no son la única opción. El mejor enfoque a menudo combina terapia, estrategias de comportamiento y, si es apropiado, medicación. El plan se personaliza para ti.'
-                },
-                {
-                  question: language === 'en'
-                    ? 'How can therapy help in my work and relationships?'
-                    : '¿Cómo puede ayudar la terapia en mi trabajo y relaciones?',
-                  answer: language === 'en'
-                    ? 'Therapy can provide you with invaluable tools to better manage time, improve your organizational and communication skills, and understand how ADHD influences your interactions. This can lead to reduced stress and healthier, more productive relationships.'
-                    : 'La terapia puede proporcionarte herramientas invaluables para gestionar mejor el tiempo, mejorar tus habilidades de organización y comunicación, y comprender cómo el TDAH influye en tus interacciones. Esto puede conducir a una reducción del estrés y a relaciones más saludables y productivas.'
-                },
-                {
-                  question: language === 'en'
-                    ? 'Do you offer telepsychiatry for ADHD treatment in Florida?'
-                    : '¿Ofrecen telepsiquiatría para el tratamiento del TDAH en Florida?',
-                  answer: language === 'en'
-                    ? 'Yes, at Healing Minds Psychiatry we offer telepsychiatry services. This allows you to receive expert care and follow-up from the comfort of your home, as long as you are located within the state of Florida.'
-                    : 'Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría. Esto te permite recibir atención experta y seguimiento desde la comodidad de tu hogar, siempre que te encuentres en el estado de Florida.'
-                }
-              ].map((faq, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden"
-                  data-testid={`faq-item-${index}`}
-                >
-                  <button
-                    onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
-                    className="w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-left flex items-center justify-between hover:bg-green-50 transition-colors duration-200"
-                    data-testid={`faq-question-${index}`}
-                  >
-                    <h3 className="text-lg sm:text-xl font-display font-semibold text-gray-900 pr-4 sm:pr-8">
-                      {faq.question}
-                    </h3>
-                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
-                      openFAQ === index 
-                        ? 'bg-green-600' 
-                        : 'bg-green-200'
-                    }`}>
-                      <ChevronDown 
-                        className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
-                          openFAQ === index 
-                            ? 'text-white rotate-180' 
-                            : 'text-green-700'
-                        }`} 
-                      />
-                    </div>
-                  </button>
-                  
-                  {openFAQ === index && (
-                    <div className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
-                      <div className="pt-2 border-t border-green-100">
-                        <p 
-                          className="text-gray-600 font-body leading-relaxed text-lg"
-                          data-testid={`faq-answer-${index}`}
-                        >
-                          {faq.answer}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Final Call to Action */}
         <section className="py-16 sm:py-20 bg-gradient-to-br from-green-600 to-green-700">
@@ -903,6 +804,106 @@ const AdhdTreatment = () => {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                {language === 'en' ? (
+                  <>Frequently Asked <span className="font-display italic text-green-700">Questions</span></>
+                ) : (
+                  <>Preguntas <span className="font-display italic text-green-700">Frecuentes</span></>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                {language === 'en'
+                  ? 'Common questions about adult ADHD treatment in Naples, FL'
+                  : 'Preguntas comunes sobre el tratamiento del TDAH en adultos en Naples, FL'
+                }
+              </p>
+            </div>
+
+            <div className="space-y-3 sm:space-y-4">
+              {[
+                {
+                  question: language === 'en' 
+                    ? 'What is the first step to treat ADHD if I am an adult?'
+                    : '¿Cuál es el primer paso para tratar el TDAH si soy adulto?',
+                  answer: language === 'en'
+                    ? 'The first and most important step is to seek a complete professional evaluation with a qualified psychiatrist, like Dr. Reve. An accurate diagnosis is fundamental to creating an effective treatment plan.'
+                    : 'El primer y más importante paso es buscar una evaluación profesional completa con un psiquiatra cualificado, como la Dra. Reve. Un diagnóstico preciso es fundamental para crear un plan de tratamiento efectivo.'
+                },
+                {
+                  question: language === 'en'
+                    ? 'Does ADHD treatment always include medications?'
+                    : '¿El tratamiento para el TDAH siempre incluye medicamentos?',
+                  answer: language === 'en'
+                    ? 'Not necessarily. While medications are highly effective for many adults, they are not the only option. The best approach often combines therapy, behavioral strategies, and, if appropriate, medication. The plan is personalized for you.'
+                    : 'No necesariamente. Si bien los medicamentos son altamente efectivos para muchos adultos, no son la única opción. El mejor enfoque a menudo combina terapia, estrategias de comportamiento y, si es apropiado, medicación. El plan se personaliza para ti.'
+                },
+                {
+                  question: language === 'en'
+                    ? 'How can therapy help in my work and relationships?'
+                    : '¿Cómo puede ayudar la terapia en mi trabajo y relaciones?',
+                  answer: language === 'en'
+                    ? 'Therapy can provide you with invaluable tools to better manage time, improve your organizational and communication skills, and understand how ADHD influences your interactions. This can lead to reduced stress and healthier, more productive relationships.'
+                    : 'La terapia puede proporcionarte herramientas invaluables para gestionar mejor el tiempo, mejorar tus habilidades de organización y comunicación, y comprender cómo el TDAH influye en tus interacciones. Esto puede conducir a una reducción del estrés y a relaciones más saludables y productivas.'
+                },
+                {
+                  question: language === 'en'
+                    ? 'Do you offer telepsychiatry for ADHD treatment in Florida?'
+                    : '¿Ofrecen telepsiquiatría para el tratamiento del TDAH en Florida?',
+                  answer: language === 'en'
+                    ? 'Yes, at Healing Minds Psychiatry we offer telepsychiatry services. This allows you to receive expert care and follow-up from the comfort of your home, as long as you are located within the state of Florida.'
+                    : 'Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría. Esto te permite recibir atención experta y seguimiento desde la comodidad de tu hogar, siempre que te encuentres en el estado de Florida.'
+                }
+              ].map((faq, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden"
+                  data-testid={`faq-item-${index}`}
+                >
+                  <button
+                    onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+                    className="w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-left flex items-center justify-between hover:bg-green-50 transition-colors duration-200"
+                    data-testid={`faq-question-${index}`}
+                  >
+                    <h3 className="text-lg sm:text-xl font-display font-semibold text-gray-900 pr-4 sm:pr-8">
+                      {faq.question}
+                    </h3>
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
+                      openFAQ === index 
+                        ? 'bg-green-600' 
+                        : 'bg-green-200'
+                    }`}>
+                      <ChevronDown 
+                        className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
+                          openFAQ === index 
+                            ? 'text-white rotate-180' 
+                            : 'text-green-700'
+                        }`} 
+                      />
+                    </div>
+                  </button>
+                  
+                  {openFAQ === index && (
+                    <div className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
+                      <div className="pt-2 border-t border-green-100">
+                        <p 
+                          className="text-gray-600 font-body leading-relaxed text-lg"
+                          data-testid={`faq-answer-${index}`}
+                        >
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </section>
