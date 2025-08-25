@@ -33,7 +33,7 @@ const AdhdTreatment = () => {
         ? 'ADHD treatment Naples FL, adult ADHD Naples, ADHD psychiatrist Naples, ADHD medication Naples, attention deficit disorder Naples, adult ADD Naples'
         : 'tratamiento TDAH adultos Naples FL, psiquiatra TDAH Naples, diagnóstico TDAH adultos, medicamento TDAH Naples, trastorno déficit atención adultos, Condado Collier TDAH',
       lang: language,
-      canonical: language === 'en' ? '/services/adhd-treatment' : '/tratamiento-tdah-adultos-naples-fl'
+      canonical: '/tratamiento-tdah-adultos-naples-fl'
     };
     updateSEO(seoData);
     addADHDTreatmentSchema();

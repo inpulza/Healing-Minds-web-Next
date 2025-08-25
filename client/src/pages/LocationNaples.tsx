@@ -423,7 +423,7 @@ const LocationNaples = () => {
                     ? 'Specialized evaluation and treatment for adults and teens to improve focus and daily functioning.'
                     : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
                   icon: IconMoodHappy,
-                  link: language === 'en' ? '/services/adhd-treatment' : '/tratamiento-tdah-adultos-naples-fl'
+                  link: '/tratamiento-tdah-adultos-naples-fl'
                 },
                 {
                   id: 'ptsd',

@@ -68,7 +68,6 @@ function Router() {
       {/* Individual Service Pages */}
       <Route path="/services/anxiety-treatment" component={AnxietyTreatment} />
       <Route path="/services/depression-treatment" component={DepressionTreatment} />
-      <Route path="/services/adhd-treatment" component={AdhdTreatment} />
       <Route path="/services/ptsd-treatment" component={PtsdTreatment} />
       <Route path="/services/bipolar-treatment" component={BipolarTreatment} />
       <Route path="/services/medication-management" component={MedicationManagement} />

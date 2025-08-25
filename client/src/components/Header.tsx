@@ -64,7 +64,7 @@ const Header = () => {
       description: language === 'en' ? 'Comprehensive depression care' : 'Atención integral para depresión'
     },
     {
-      href: language === 'en' ? '/services/adhd-treatment' : '/tratamiento-tdah-adultos-naples-fl',
+      href: '/tratamiento-tdah-adultos-naples-fl',
       label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
       description: language === 'en' ? 'Specialized ADHD evaluation & care' : 'Evaluación y atención especializada de TDAH'
     },
