@@ -25,7 +25,7 @@ export const generateSitemap = (req: Request, res: Response) => {
     },
     {
       en: '/services/adhd-treatment',
-      es: '/es/servicios/tratamiento-tdah',
+      es: '/tratamiento-tdah-adultos-naples-fl',
       lastmod: currentDate,
       changefreq: 'monthly',
       priority: '0.7'

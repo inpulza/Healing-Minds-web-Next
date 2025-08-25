@@ -37,7 +37,7 @@ const Services = () => {
         : 'Evaluación especializada y tratamiento para adultos y adolescentes con TDAH. Mejore el enfoque, organización y funcionamiento diario con atención psiquiátrica experta.',
       icon: IconMoodHappy,
       featured: false,
-      link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah'
+      link: language === 'en' ? '/services/adhd-treatment' : '/tratamiento-tdah-adultos-naples-fl'
     },
     {
       id: 'ptsd',
