@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addADHDTreatmentSchema } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Brain, Activity, Sparkles, HelpCircle, Users, MessageSquare, ChevronDown } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconTarget } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -36,6 +36,7 @@ const AdhdTreatment = () => {
       canonical: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah'
     };
     updateSEO(seoData);
+    addADHDTreatmentSchema();
   }, [language]);
 
   const symptoms = language === 'en' ? [
