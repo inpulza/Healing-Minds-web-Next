@@ -365,23 +365,22 @@ const AdhdTreatment = () => {
         <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              {/* Top Section with Content and Photo */}
-              <div className="grid lg:grid-cols-4 gap-8 mb-8">
-                {/* Content Side - Takes 1/2 */}
-                <div className="lg:col-span-2">
-                  <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Adult-Focused Care' : 'Atención Enfocada en Adultos'}
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Adult ADHD Treatment in <span className="font-display italic text-green-700">Naples</span></>
-                    ) : (
-                      <>Tratamiento de TDAH para Adultos en <span className="font-display italic text-green-700">Naples</span></>
-                    )}
-                  </h2>
-                  
-                  {/* Key Stats */}
-                  <div className="grid grid-cols-2 gap-6 mb-8">
+              {/* Header Section */}
+              <div className="text-center mb-10">
+                <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                  {language === 'en' ? 'Adult-Focused Care' : 'Atención Enfocada en Adultos'}
+                </div>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
+                  {language === 'en' ? (
+                    <>Adult ADHD Treatment in <span className="font-display italic text-green-700">Naples</span></>
+                  ) : (
+                    <>Tratamiento de TDAH para Adultos en <span className="font-display italic text-green-700">Naples</span></>
+                  )}
+                </h2>
+                
+                {/* Key Stats */}
+                <div className="flex justify-center">
+                  <div className="grid grid-cols-2 gap-6 max-w-md">
                     <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
                       <div className="text-3xl font-bold text-blue-600 mb-2">4.4%</div>
                       <div className="text-sm text-gray-600 font-body">
@@ -395,27 +394,20 @@ const AdhdTreatment = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
 
-                  <p className="text-lg sm:text-xl text-gray-600 mb-6 font-body leading-relaxed">
+              {/* Main Content with Photo */}
+              <div className="grid lg:grid-cols-2 gap-12 mb-10">
+                <div>
+                  <p className="text-lg text-gray-600 mb-8 font-body leading-relaxed">
                     {language === 'en'
                       ? 'Many adults discover they have ADHD later in life. Dr. Melva Reve, M.D., a board-certified psychiatrist, provides comprehensive evaluation and treatment specifically designed for adults 18+ with ADHD. She sees you not just as a set of symptoms, but as a complete person with unique goals and challenges.'
                       : 'Muchos adultos descubren que tienen TDAH más tarde en la vida. La Dra. Melva Reve, M.D., una psiquiatra certificada, brinda evaluación integral y tratamiento específicamente diseñado para adultos de 18+ con TDAH. Ella no solo te ve como un conjunto de síntomas, sino como una persona completa con metas y desafíos únicos.'
                     }
                   </p>
-                  
-                  <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg mb-8">
-                    <blockquote className="italic text-gray-700 text-lg leading-relaxed">
-                      {language === 'en'
-                        ? '"Throughout my career, I have seen firsthand how an ADHD diagnosis in adulthood can be both challenging and revelatory. My passion, especially here in the Naples community, is to offer a safe and bilingual space where my patients not only receive treatment, but also rediscover their strengths and learn to thrive."'
-                        : '"A lo largo de mi carrera, he visto de primera mano cómo un diagnóstico de TDAH en la etapa adulta puede ser tanto un desafío como una revelación. Mi pasión, especialmente aquí en la comunidad de Naples, es ofrecer un espacio seguro y bilingüe donde mis pacientes no solo reciben un tratamiento, sino que también redescubren sus fortalezas y aprenden a prosperar."'
-                      }
-                    </blockquote>
-                    <cite className="block text-right text-green-800 font-semibold mt-4">
-                      - Dra. Melva Reve
-                    </cite>
-                  </div>
-                  
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 mb-8">
+
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 mb-6">
                     <h3 className="text-lg font-bold text-green-800 mb-3">
                       {language === 'en' ? 'Bilingual Care (English & Spanish)' : 'Atención Bilingüe (Inglés y Español)'}
                     </h3>
@@ -437,9 +429,8 @@ const AdhdTreatment = () => {
                   </Link>
                 </div>
 
-                {/* Photo in Top Right Corner - Takes 1/2 */}
-                <div className="lg:col-span-2">
-                  <div className="w-full aspect-square overflow-hidden rounded-xl shadow-md">
+                <div>
+                  <div className="w-full aspect-[4/3] overflow-hidden rounded-xl shadow-lg mb-6">
                     <img 
                       src={focusImage}
                       alt="Professional therapist reviewing ADHD treatment plans - Dr. Melva Reve's modern psychiatric practice"
@@ -448,6 +439,24 @@ const AdhdTreatment = () => {
                       decoding="async"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                     />
+                  </div>
+                </div>
+              </div>
+
+              {/* Dr. Reve Quote Section */}
+              <div className="border-t border-gray-200 pt-8 mb-8">
+                <div className="max-w-4xl mx-auto text-center">
+                  <div className="mb-6">
+                    <div className="w-1 h-12 bg-green-600 mx-auto mb-6"></div>
+                    <blockquote className="text-xl lg:text-2xl text-gray-700 font-light leading-relaxed italic">
+                      {language === 'en'
+                        ? '"Throughout my career, I have seen firsthand how an ADHD diagnosis in adulthood can be both challenging and revelatory. My passion, especially here in the Naples community, is to offer a safe and bilingual space where my patients not only receive treatment, but also rediscover their strengths and learn to thrive."'
+                        : '"A lo largo de mi carrera, he visto de primera mano cómo un diagnóstico de TDAH en la etapa adulta puede ser tanto un desafío como una revelación. Mi pasión, especialmente aquí en la comunidad de Naples, es ofrecer un espacio seguro y bilingüe donde mis pacientes no solo reciben un tratamiento, sino que también redescubren sus fortalezas y aprenden a prosperar."'
+                      }
+                    </blockquote>
+                    <cite className="block text-green-800 font-semibold text-lg mt-6">
+                      - Dra. Melva Reve, M.D.
+                    </cite>
                   </div>
                 </div>
               </div>
