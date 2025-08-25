@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
@@ -7,7 +7,7 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Brain, Activity, Sparkles, HelpCircle, Users, MessageSquare } from 'lucide-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Brain, Activity, Sparkles, HelpCircle, Users, MessageSquare, ChevronDown } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconTarget } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
@@ -19,6 +19,7 @@ import focusImage from "@assets/dfb74c06-cc22-4bd4-a763-984d9e0fb151_17552526343
 
 const AdhdTreatment = () => {
   const { language } = useLanguage();
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
   useEffect(() => {
     const seoData = {
@@ -32,7 +33,7 @@ const AdhdTreatment = () => {
         ? 'ADHD treatment Naples FL, adult ADHD Naples, ADHD psychiatrist Naples, ADHD medication Naples, attention deficit disorder Naples, adult ADD Naples'
         : 'tratamiento TDAH adultos Naples FL, psiquiatra TDAH Naples, diagnóstico TDAH adultos, medicamento TDAH Naples, trastorno déficit atención adultos, Condado Collier TDAH',
       lang: language,
-      canonical: language === 'en' ? '/services/adhd-treatment' : '/services/tratamiento-tdah-adultos-naples-fl'
+      canonical: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-tdah'
     };
     updateSEO(seoData);
   }, [language]);
@@ -202,7 +203,7 @@ const AdhdTreatment = () => {
             es: 'Enfoque y Éxito'
           }}
           title={{
-            en: 'ADHD Treatment in Naples, FL',
+            en: 'Adult ADHD Treatment in Naples, FL',
             es: 'Tratamiento Especializado de TDAH para Adultos en Naples, FL'
           }}
           description={{
@@ -293,72 +294,6 @@ const AdhdTreatment = () => {
           </div>
         </section>
 
-        {/* Dr. Melva Reve Section */}
-        <section className="py-16 sm:py-20 bg-green-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                  <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Your Naples ADHD Ally' : 'Tu Aliada en Naples para el TDAH'}
-                  </div>
-                  
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Meet <span className="font-display italic text-green-700">Dr. Melva Reve</span></>
-                    ) : (
-                      <>Conoce a la <span className="font-display italic text-green-700">Dra. Melva Reve</span></>
-                    )}
-                  </h2>
-
-                  <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                    {language === 'en'
-                      ? 'The foundation of our approach is personalized care, and that care is directed by Dr. Melva Reve, M.D., a board-certified psychiatrist with deep dedication to her patients\' well-being. She sees you not just as a set of symptoms, but as a complete person with unique goals and challenges.'
-                      : 'El pilar de nuestro enfoque es la atención personalizada, y esa atención la dirige la Dra. Melva Reve, M.D., una psiquiatra certificada con una profunda dedicación al bienestar de sus pacientes. Ella no solo te ve como un conjunto de síntomas, sino como una persona completa con metas y desafíos únicos.'
-                    }
-                  </p>
-
-                  <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
-                    <blockquote className="italic text-gray-700 text-lg leading-relaxed">
-                      {language === 'en'
-                        ? '"Throughout my career, I have seen firsthand how an ADHD diagnosis in adulthood can be both challenging and revelatory. My passion, especially here in the Naples community, is to offer a safe and bilingual space where my patients not only receive treatment, but also rediscover their strengths and learn to thrive."'
-                        : '"A lo largo de mi carrera, he visto de primera mano cómo un diagnóstico de TDAH en la etapa adulta puede ser tanto un desafío como una revelación. Mi pasión, especialmente aquí en la comunidad de Naples, es ofrecer un espacio seguro y bilingüe donde mis pacientes no solo reciben un tratamiento, sino que también redescubren sus fortalezas y aprenden a prosperar."'
-                      }
-                    </blockquote>
-                    <cite className="block text-right text-green-800 font-semibold mt-4">
-                      - Dra. Melva Reve
-                    </cite>
-                  </div>
-
-                  <div className="mt-8 bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
-                    <h3 className="text-xl font-bold text-green-800 mb-4">
-                      {language === 'en' ? 'Bilingual Care (English & Spanish)' : 'Un Enfoque Compasivo y Bilingüe (Inglés y Español)'}
-                    </h3>
-                    <p className="text-gray-700">
-                      {language === 'en'
-                        ? 'We understand the importance of communicating with clarity and confidence. Dr. Reve is fully bilingual, offering evaluations and treatments in both English and Spanish. This eliminates language barriers and ensures accessible mental health care for the entire Naples community.'
-                        : 'Entendemos la importancia de comunicarse con claridad y confianza. La Dra. Reve es completamente bilingüe, ofreciendo evaluaciones y tratamientos tanto en inglés como en español. Esto elimina las barreras del idioma y asegura un cuidado de salud mental accesible para toda la comunidad de Naples.'
-                      }
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="w-full aspect-square overflow-hidden rounded-xl shadow-lg">
-                    <img 
-                      src={doctorImage}
-                      alt="Dr. Melva Reve - Board-certified psychiatrist specializing in adult ADHD treatment in Naples, FL"
-                      className="w-full h-full object-cover object-center"
-                      loading="lazy"
-                      decoding="async"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Treatment Process Section */}
         <section className="py-16 sm:py-20 bg-white">
@@ -461,12 +396,36 @@ const AdhdTreatment = () => {
                     </div>
                   </div>
 
-                  <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
+                  <p className="text-lg sm:text-xl text-gray-600 mb-6 font-body leading-relaxed">
                     {language === 'en'
-                      ? 'Many adults discover they have ADHD later in life. Dr. Melva Reve provides comprehensive evaluation and treatment specifically designed for adults 18+ with ADHD.'
-                      : 'Muchos adultos descubren que tienen TDAH más tarde en la vida. La Dra. Melva Reve brinda evaluación integral y tratamiento específicamente diseñado para adultos de 18+ con TDAH.'
+                      ? 'Many adults discover they have ADHD later in life. Dr. Melva Reve, M.D., a board-certified psychiatrist, provides comprehensive evaluation and treatment specifically designed for adults 18+ with ADHD. She sees you not just as a set of symptoms, but as a complete person with unique goals and challenges.'
+                      : 'Muchos adultos descubren que tienen TDAH más tarde en la vida. La Dra. Melva Reve, M.D., una psiquiatra certificada, brinda evaluación integral y tratamiento específicamente diseñado para adultos de 18+ con TDAH. Ella no solo te ve como un conjunto de síntomas, sino como una persona completa con metas y desafíos únicos.'
                     }
                   </p>
+                  
+                  <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg mb-8">
+                    <blockquote className="italic text-gray-700 text-lg leading-relaxed">
+                      {language === 'en'
+                        ? '"Throughout my career, I have seen firsthand how an ADHD diagnosis in adulthood can be both challenging and revelatory. My passion, especially here in the Naples community, is to offer a safe and bilingual space where my patients not only receive treatment, but also rediscover their strengths and learn to thrive."'
+                        : '"A lo largo de mi carrera, he visto de primera mano cómo un diagnóstico de TDAH en la etapa adulta puede ser tanto un desafío como una revelación. Mi pasión, especialmente aquí en la comunidad de Naples, es ofrecer un espacio seguro y bilingüe donde mis pacientes no solo reciben un tratamiento, sino que también redescubren sus fortalezas y aprenden a prosperar."'
+                      }
+                    </blockquote>
+                    <cite className="block text-right text-green-800 font-semibold mt-4">
+                      - Dra. Melva Reve
+                    </cite>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 mb-8">
+                    <h3 className="text-lg font-bold text-green-800 mb-3">
+                      {language === 'en' ? 'Bilingual Care (English & Spanish)' : 'Atención Bilingüe (Inglés y Español)'}
+                    </h3>
+                    <p className="text-gray-700 text-sm leading-relaxed">
+                      {language === 'en'
+                        ? 'Dr. Reve is fully bilingual, offering evaluations and treatments in both English and Spanish. This eliminates language barriers and ensures accessible mental health care for the entire Naples community.'
+                        : 'La Dra. Reve es completamente bilingüe, ofreciendo evaluaciones y tratamientos tanto en inglés como en español. Esto elimina las barreras del idioma y asegura un cuidado de salud mental accesible para toda la comunidad de Naples.'
+                      }
+                    </p>
+                  </div>
 
                   <Link href="/contact">
                     <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7">
@@ -551,7 +510,7 @@ const AdhdTreatment = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {symptoms.map((category, index) => {
-                const backgroundClasses = {
+                const backgroundClasses: { [key: number]: string } = {
                   0: 'bg-blue-50',
                   1: 'bg-green-50', 
                   2: 'bg-purple-50'
@@ -715,7 +674,7 @@ const AdhdTreatment = () => {
               </p>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-3 sm:space-y-4">
               {[
                 {
                   question: language === 'en' 
@@ -750,16 +709,46 @@ const AdhdTreatment = () => {
                     : 'Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría. Esto te permite recibir atención experta y seguimiento desde la comodidad de tu hogar, siempre que te encuentres en el estado de Florida.'
                 }
               ].map((faq, index) => (
-                <div key={index} className="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-8">
-                  <div className="flex items-start gap-6">
-                    <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
-                      <HelpCircle className="w-6 h-6 text-white" />
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden"
+                  data-testid={`faq-item-${index}`}
+                >
+                  <button
+                    onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+                    className="w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-left flex items-center justify-between hover:bg-green-50 transition-colors duration-200"
+                    data-testid={`faq-question-${index}`}
+                  >
+                    <h3 className="text-lg sm:text-xl font-display font-semibold text-gray-900 pr-4 sm:pr-8">
+                      {faq.question}
+                    </h3>
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
+                      openFAQ === index 
+                        ? 'bg-green-600' 
+                        : 'bg-green-200'
+                    }`}>
+                      <ChevronDown 
+                        className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
+                          openFAQ === index 
+                            ? 'text-white rotate-180' 
+                            : 'text-green-700'
+                        }`} 
+                      />
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-green-800 mb-4">{faq.question}</h3>
-                      <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                  </button>
+                  
+                  {openFAQ === index && (
+                    <div className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
+                      <div className="pt-2 border-t border-green-100">
+                        <p 
+                          className="text-gray-600 font-body leading-relaxed text-lg"
+                          data-testid={`faq-answer-${index}`}
+                        >
+                          {faq.answer}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -846,7 +835,7 @@ const AdhdTreatment = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {treatments.map((treatment, index) => {
-                const backgroundClasses = {
+                const backgroundClasses: { [key: number]: string } = {
                   0: 'bg-blue-50',
                   1: 'bg-green-50',
                   2: 'bg-purple-50',
