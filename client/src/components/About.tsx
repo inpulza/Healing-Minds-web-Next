@@ -6,7 +6,7 @@ import { FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
 import { IconUserHeart, IconBrain, IconStethoscope } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import Reviews from '@/components/Reviews';
-import doctorProfileImage from '@assets/doctor-profile.webp';
+import doctorProfileImage from '@assets/doctor-profile-v2.webp';
 
 const About = () => {
   const { language } = useLanguage();
