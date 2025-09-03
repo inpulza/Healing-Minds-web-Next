@@ -15,7 +15,8 @@ import {
   LazyFAQ,
   LazyContact,
   LazyFooter,
-  LazyTelehealthSection
+  LazyTelehealthSection,
+  LazyCTASection
 } from '@/components/LazyComponents';
 import { updateSEO } from '@/utils/seo';
 // Removed unused imports: CharmHealthBooking, icons moved to TelehealthSection for performance
@@ -64,6 +65,12 @@ const Home = () => {
         <SuspenseWrapper priority="medium">
           <LazyServiceAreas />
         </SuspenseWrapper>
+        
+        {/* CTA disruptivo a mitad de página */}
+        <SuspenseWrapper priority="medium">
+          <LazyCTASection />
+        </SuspenseWrapper>
+        
         <SuspenseWrapper priority="medium">
           <LazyReviews />
         </SuspenseWrapper>

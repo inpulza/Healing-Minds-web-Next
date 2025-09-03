@@ -18,6 +18,7 @@ export const LazyFAQ = lazy(() => import(/* webpackChunkName: "faq" */ './FAQ'))
 export const LazyContact = lazy(() => import(/* webpackChunkName: "contact" */ './Contact'));
 export const LazyFooter = lazy(() => import(/* webpackChunkName: "footer" */ './Footer'));
 export const LazyTelehealthSection = lazy(() => import(/* webpackChunkName: "telehealth-section" */ './TelehealthSection'));
+export const LazyCTASection = lazy(() => import(/* webpackChunkName: "cta-section" */ './CTASection'));
 
 // Preload critical desktop chunks when the page is idle
 if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
