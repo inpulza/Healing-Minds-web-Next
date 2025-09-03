@@ -7,19 +7,10 @@ import SuspenseWrapper from '@/components/SuspenseWrapper';
 import { 
   LazyDoctorSection,
   LazyServices,
-  LazyAbout,
-  LazyBilingualCare,
-  LazyServiceAreas,
-  LazyTestimonials,
   LazyReviews,
-  LazyForPatients,
-  LazyFAQ,
-  LazyContact,
-  LazyFooter,
-  LazyTelehealthSection
+  LazyFooter
 } from '@/components/LazyComponents';
 import { updateSEO } from '@/utils/seo';
-// Removed unused imports: CharmHealthBooking, icons moved to TelehealthSection for performance
 
 const Home = () => {
   const { language } = useLanguage();
@@ -48,37 +39,14 @@ const Home = () => {
         <Hero />
         <InsuranceLogos />
         
-        {/* Telehealth Services Section - Now lazy loaded for performance */}
-        <SuspenseWrapper priority="medium">
-          <LazyTelehealthSection />
-        </SuspenseWrapper>
-        
         <SuspenseWrapper priority="high" preload>
           <LazyDoctorSection />
         </SuspenseWrapper>
         <SuspenseWrapper priority="high" preload>
           <LazyServices />
         </SuspenseWrapper>
-        <SuspenseWrapper priority="high">
-          <LazyAbout />
-        </SuspenseWrapper>
-        <SuspenseWrapper priority="medium">
-          <LazyBilingualCare />
-        </SuspenseWrapper>
-        <SuspenseWrapper priority="medium">
-          <LazyServiceAreas />
-        </SuspenseWrapper>
         <SuspenseWrapper priority="medium">
           <LazyReviews />
-        </SuspenseWrapper>
-        <SuspenseWrapper priority="low">
-          <LazyForPatients />
-        </SuspenseWrapper>
-        <SuspenseWrapper priority="low">
-          <LazyFAQ />
-        </SuspenseWrapper>
-        <SuspenseWrapper priority="low">
-          <LazyContact />
         </SuspenseWrapper>
       </main>
       <SuspenseWrapper priority="low">
