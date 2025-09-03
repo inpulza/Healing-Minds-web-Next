@@ -8,7 +8,7 @@ const DoctorSection = () => {
   const { language } = useLanguage();
 
   return (
-    <section className="pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-10 lg:pb-12 bg-green-50">
+    <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 xl:p-16 shadow-lg border border-green-100">
           <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center">
