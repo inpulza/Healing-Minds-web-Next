@@ -87,16 +87,16 @@ const About = () => {
       {/* Sección 2: Videos de la Doctora - Una Conversación con la Dra. Reve */}
       <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-12 lg:p-16 shadow-lg border">
             {/* Encabezado de sección */}
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="video-section-title">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4 sm:mb-6 px-2 sm:px-0" data-testid="video-section-title">
                 {language === 'en' 
                   ? <>A <span className="font-display italic text-green-700">Conversation</span> with Dr. Reve</>
                   : <>Una <span className="font-display italic text-green-700">Conversación</span> con la Dra. Reve</>
                 }
               </h2>
-              <p className="text-xl text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto font-body leading-relaxed px-2 sm:px-0">
                 {language === 'en'
                   ? 'Get to know me through these educational videos where I share insights about mental health, answer common questions, and provide guidance for your wellness journey.'
                   : 'Conóceme a través de estos videos educativos donde comparto conocimientos sobre salud mental, respondo preguntas comunes y brindo orientación para tu viaje de bienestar.'
@@ -106,7 +106,7 @@ const About = () => {
 
             {/* Grid de Videos */}
             {isLoadingVideos ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
                 {[...Array(4)].map((_, index) => (
                   <div key={index} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border animate-pulse">
                     <div className="aspect-[9/16] bg-gray-200" />
@@ -118,7 +118,7 @@ const About = () => {
                 ))}
               </div>
             ) : (
-              <div className={`grid gap-6 mb-12 ${tikTokVideos && tikTokVideos.length > 3 ? 'md:grid-cols-2 lg:grid-cols-4' : tikTokVideos && tikTokVideos.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
+              <div className={`grid gap-4 sm:gap-6 mb-8 sm:mb-12 ${tikTokVideos && tikTokVideos.length > 3 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : tikTokVideos && tikTokVideos.length === 3 ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2'}`}>
                 {tikTokVideos?.slice(0, 4).map((video, index) => (
                   <div key={video.id} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 group">
                     <a 
@@ -152,13 +152,13 @@ const About = () => {
                         )}
                       </div>
                       <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2" data-testid={`video-title-${index + 1}`}>
+                        <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-2 line-clamp-2" data-testid={`video-title-${index + 1}`}>
                           {video.title.length > 60 ? `${video.title.substring(0, 60)}...` : video.title}
                         </h3>
-                        <p className="text-sm text-gray-600 line-clamp-2">
+                        <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">
                           {video.description}
                         </p>
-                        <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                        <div className="mt-2 flex items-center gap-2 sm:gap-4 text-xs text-gray-500">
                           <span>💬 {video.commentCount}</span>
                           {video.reactionCount > 0 && <span>❤️ {video.reactionCount}</span>}
                         </div>
@@ -172,13 +172,13 @@ const About = () => {
             {/* Call to Action para TikTok */}
             <div className="text-center">
               <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
-                <h3 className="text-2xl font-semibold text-green-800 mb-4">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-green-800 mb-4">
                   {language === 'en' 
                     ? 'Have a Question for Dr. Reve?'
                     : '¿Tienes una Pregunta para la Dra. Reve?'
                   }
                 </h3>
-                <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+                <p className="text-sm sm:text-base text-gray-600 mb-6 max-w-2xl mx-auto px-2 sm:px-0">
                   {language === 'en'
                     ? 'Follow me on TikTok for daily mental health tips and feel free to ask your questions directly!'
                     : '¡Sígueme en TikTok para consejos diarios de salud mental y no dudes en hacer tus preguntas directamente!'
@@ -188,7 +188,7 @@ const About = () => {
                   href="https://www.tiktok.com/@dra.melvavidal"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-3 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-800 transition-colors duration-300"
+                  className="inline-flex items-center justify-center gap-2 sm:gap-3 bg-black text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-full font-semibold text-sm sm:text-base md:text-lg hover:bg-gray-800 transition-colors duration-300"
                   data-testid="tiktok-follow-button"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -208,8 +208,8 @@ const About = () => {
       <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="biography-title">
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4 sm:mb-6 px-2 sm:px-0" data-testid="biography-title">
                 {language === 'en' 
                   ? <>Meet <span className="font-display italic text-green-700">Dr. Melva</span> Reve</>
                   : <>Conoce a la <span className="font-display italic text-green-700">Dra. Melva</span> Reve</>
@@ -540,13 +540,13 @@ const About = () => {
       <section className="py-16 lg:py-20 from-green-700 to-green-800 text-white bg-[#14532d]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold mb-6" data-testid="final-cta-title">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-body font-bold mb-4 sm:mb-6 px-2 sm:px-0" data-testid="final-cta-title">
               {language === 'en' 
                 ? <>Ready to Take the <span className="font-display italic text-green-200">First</span> Step?</>
                 : <>¿Listo/a para Dar el <span className="font-display italic text-green-200">Primer</span> Paso?</>
               }
             </h2>
-            <p className="text-xl lg:text-2xl text-green-100 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-green-100 mb-6 sm:mb-8 max-w-3xl mx-auto font-body leading-relaxed px-2 sm:px-0">
               {language === 'en'
                 ? 'Change begins with a simple conversation. I am here to listen to you, understand you, and walk with you toward a fuller and more balanced life.'
                 : 'El cambio comienza con una simple conversación. Estoy aquí para escucharte, entenderte y caminar contigo hacia una vida más plena y equilibrada.'
@@ -555,10 +555,12 @@ const About = () => {
             
             <Link href="/contact">
               <Button
-                className="group inline-flex items-center justify-center gap-4 rounded-full text-xl font-semibold transition-all duration-300 bg-white text-green-700 hover:bg-green-50 px-10 py-8 hover:shadow-xl hover:-translate-y-2 mb-6"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 md:gap-4 rounded-full text-sm sm:text-base md:text-lg lg:text-xl font-semibold transition-all duration-300 bg-white text-green-700 hover:bg-green-50 px-4 sm:px-6 md:px-8 lg:px-10 py-4 sm:py-6 md:py-7 lg:py-8 hover:shadow-xl hover:-translate-y-2 mb-6"
                 data-testid="final-cta-button"
               >
-                <span>{language === 'en' ? 'Schedule My Consultation Now' : 'Agendar mi Consulta Ahora'}</span>
+                <span className="text-center">
+                  {language === 'en' ? 'Schedule My Consultation Now' : 'Agendar mi Consulta Ahora'}
+                </span>
                 <div className="w-10 h-10 bg-green-700 text-white rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-green-800">
                   <ArrowRight className="w-6 h-6" />
                 </div>
