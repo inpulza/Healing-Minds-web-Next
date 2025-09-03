@@ -7,7 +7,6 @@ import SuspenseWrapper from '@/components/SuspenseWrapper';
 import { 
   LazyDoctorSection,
   LazyServices,
-  LazyAbout,
   LazyBilingualCare,
   LazyServiceAreas,
   LazyTestimonials,
@@ -58,9 +57,6 @@ const Home = () => {
         </SuspenseWrapper>
         <SuspenseWrapper priority="high" preload>
           <LazyServices />
-        </SuspenseWrapper>
-        <SuspenseWrapper priority="high">
-          <LazyAbout />
         </SuspenseWrapper>
         <SuspenseWrapper priority="medium">
           <LazyBilingualCare />
