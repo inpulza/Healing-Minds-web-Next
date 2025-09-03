@@ -38,10 +38,10 @@ const About = () => {
               {/* Contenido empático */}
               <div className="text-center lg:text-left order-1 lg:order-2">
                 {/* H1 Principal */}
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-body font-bold text-gray-900 mb-6" data-testid="about-hero-title">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-body font-bold text-green-800 mb-6" data-testid="about-hero-title">
                   {language === 'en' 
-                    ? <>Un Espacio <span className="font-display italic text-green-700">Seguro</span> para Sanar y Encontrar Claridad</>
-                    : <>Un Espacio <span className="font-display italic text-green-700">Seguro</span> para Sanar y Encontrar Claridad</>
+                    ? <>Un <span className="font-display italic text-green-700">Espacio Seguro</span> para <span className="font-display italic text-green-700">Sanar</span> y Encontrar <span className="font-display italic text-green-700">Claridad</span></>
+                    : <>Un <span className="font-display italic text-green-700">Espacio Seguro</span> para <span className="font-display italic text-green-700">Sanar</span> y Encontrar <span className="font-display italic text-green-700">Claridad</span></>
                   }
                 </h1>
                 
