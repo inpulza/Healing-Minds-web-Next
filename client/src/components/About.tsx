@@ -247,23 +247,6 @@ const About = () => {
 
       {/* Sección 4: Prueba Social (Reseñas de Pacientes) */}
       <section className="py-16 lg:py-20 bg-green-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="testimonials-title">
-              {language === 'en' 
-                ? <>Stories of <span className="font-display italic text-green-700">Hope</span> and Recovery</>
-                : <>Historias de <span className="font-display italic text-green-700">Esperanza</span> y Recuperación</>
-              }
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-              {language === 'en'
-                ? 'These are real words from patients who have found hope and healing through our compassionate care.'
-                : 'Estas son las palabras reales de pacientes que han encontrado esperanza y sanación a través de nuestro cuidado compasivo.'
-              }
-            </p>
-          </div>
-        </div>
-        
         {/* Integrar el componente Reviews existente */}
         <Reviews />
       </section>
