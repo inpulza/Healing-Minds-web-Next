@@ -83,88 +83,6 @@ const About = () => {
           </div>
         </div>
       </section>
-      {/* Sección 2: Mi Enfoque (Filosofía de Cuidado) */}
-      <section className="py-16 lg:py-20 bg-green-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-          <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
-            {/* Encabezado de sección */}
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="approach-title">
-                {language === 'en' 
-                  ? <><span className="font-display italic text-green-700">Modern</span>, Human and Collaborative Psychiatry</>
-                  : <>Psiquiatría <span className="font-display italic text-green-700">Moderna</span>, Humana y Colaborativa</>
-                }
-              </h2>
-              <p className="text-xl text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'My practice is not just a distant clinical model. It is a therapeutic alliance where we co-create a wellness plan designed specifically for you, combining evidence-based medicine with deep human understanding.'
-                  : 'Mi práctica no es solo un modelo clínico distante. Es una alianza terapéutica donde co-creamos un plan de bienestar diseñado específicamente para ti, combinando medicina basada en evidencia con comprensión humana profunda.'
-                }
-              </p>
-            </div>
-
-            {/* Tres pilares del enfoque */}
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Pilar 1: Diagnóstico Preciso */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <IconBrain className="w-8 h-8 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  {language === 'en' 
-                    ? 'Precise Diagnosis and Personalized Treatment'
-                    : 'Diagnóstico Preciso y Tratamiento Personalizado'
-                  }
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {language === 'en'
-                    ? 'Comprehensive evaluations that go beyond surface symptoms, identifying underlying causes to create truly personalized treatment strategies.'
-                    : 'Evaluaciones exhaustivas que van más allá de los síntomas superficiales, identificando las causas subyacentes para crear estrategias de tratamiento verdaderamente personalizadas.'
-                  }
-                </p>
-              </div>
-
-              {/* Pilar 2: Terapia Informada */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Heart className="w-8 h-8 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  {language === 'en' 
-                    ? 'Trauma-Informed Therapy and Cultural Sensitivity'
-                    : 'Terapia Informada en Trauma y Sensibilidad Cultural'
-                  }
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {language === 'en'
-                    ? 'Care that recognizes how past experiences shape the present, with deep sensitivity toward your cultural and linguistic background.'
-                    : 'Atención que reconoce cómo las experiencias pasadas moldean el presente, con profunda sensibilidad hacia tu trasfondo cultural y lingüístico.'
-                  }
-                </p>
-              </div>
-
-              {/* Pilar 3: Colaboración Continua */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-8 h-8 text-purple-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  {language === 'en' 
-                    ? 'Continuous Collaboration and Empowerment'
-                    : 'Colaboración Continua y Empoderamiento'
-                  }
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {language === 'en'
-                    ? 'You are the expert in your own life. We work together as partners in your healing, adjusting treatment according to your progress and changing needs.'
-                    : 'Tú eres el experto en tu propia vida. Trabajamos juntos como socios en tu sanación, ajustando el tratamiento según tu progreso y tus necesidades cambiantes.'
-                  }
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Sección 2: Videos de la Doctora - Una Conversación con la Dra. Reve */}
       <section className="py-16 lg:py-20 bg-green-50">
@@ -451,7 +369,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Sección 4: Mi Enfoque (Filosofía de Cuidado) */}
+      {/* Sección 4: El Proceso (Qué Esperar) */}
       <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
@@ -528,13 +446,97 @@ const About = () => {
           </div>
         </div>
       </section>
-      {/* Sección 4: Prueba Social (Reseñas de Pacientes) */}
+
+      {/* Sección 5: Prueba Social (Reseñas de Pacientes) */}
       <section className="py-16 lg:py-20 bg-green-50">
         {/* Integrar el componente Reviews existente */}
         <Reviews />
       </section>
 
-      {/* Sección 6: Llamada a la Acción Final */}
+      {/* Sección 6: Mi Enfoque (Filosofía de Cuidado) */}
+      <section className="py-16 lg:py-20 bg-green-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+          <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
+            {/* Encabezado de sección */}
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="approach-title">
+                {language === 'en' 
+                  ? <><span className="font-display italic text-green-700">Modern</span>, Human and Collaborative Psychiatry</>
+                  : <>Psiquiatría <span className="font-display italic text-green-700">Moderna</span>, Humana y Colaborativa</>
+                }
+              </h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'My practice is not just a distant clinical model. It is a therapeutic alliance where we co-create a wellness plan designed specifically for you, combining evidence-based medicine with deep human understanding.'
+                  : 'Mi práctica no es solo un modelo clínico distante. Es una alianza terapéutica donde co-creamos un plan de bienestar diseñado específicamente para ti, combinando medicina basada en evidencia con comprensión humana profunda.'
+                }
+              </p>
+            </div>
+
+            {/* Tres pilares del enfoque */}
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Pilar 1: Diagnóstico Preciso */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <IconBrain className="w-8 h-8 text-green-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  {language === 'en' 
+                    ? 'Precise Diagnosis and Personalized Treatment'
+                    : 'Diagnóstico Preciso y Tratamiento Personalizado'
+                  }
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {language === 'en'
+                    ? 'Comprehensive evaluations that go beyond surface symptoms, identifying underlying causes to create truly personalized treatment strategies.'
+                    : 'Evaluaciones exhaustivas que van más allá de los síntomas superficiales, identificando las causas subyacentes para crear estrategias de tratamiento verdaderamente personalizadas.'
+                  }
+                </p>
+              </div>
+
+              {/* Pilar 2: Terapia Informada */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Heart className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  {language === 'en' 
+                    ? 'Trauma-Informed Therapy and Cultural Sensitivity'
+                    : 'Terapia Informada en Trauma y Sensibilidad Cultural'
+                  }
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {language === 'en'
+                    ? 'Care that recognizes how past experiences shape the present, with deep sensitivity toward your cultural and linguistic background.'
+                    : 'Atención que reconoce cómo las experiencias pasadas moldean el presente, con profunda sensibilidad hacia tu trasfondo cultural y lingüístico.'
+                  }
+                </p>
+              </div>
+
+              {/* Pilar 3: Colaboración Continua */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Users className="w-8 h-8 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  {language === 'en' 
+                    ? 'Continuous Collaboration and Empowerment'
+                    : 'Colaboración Continua y Empoderamiento'
+                  }
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {language === 'en'
+                    ? 'You are the expert in your own life. We work together as partners in your healing, adjusting treatment according to your progress and changing needs.'
+                    : 'Tú eres el experto en tu propia vida. Trabajamos juntos como socios en tu sanación, ajustando el tratamiento según tu progreso y tus necesidades cambiantes.'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sección 7: Llamada a la Acción Final */}
       <section className="py-16 lg:py-20 from-green-700 to-green-800 text-white bg-[#14532d]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="text-center">
