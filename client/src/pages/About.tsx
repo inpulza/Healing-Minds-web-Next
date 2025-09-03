@@ -28,7 +28,7 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      <main className="pt-16">
+      <main className="pt-16 bg-[#f0fdf4]">
         <About />
       </main>
       <Footer />
