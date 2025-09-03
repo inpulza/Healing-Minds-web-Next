@@ -90,6 +90,14 @@ export class MetricoolService {
     }
 
     return metricoolReviews.map(review => {
+      console.log(`🔍 Processing review ${review.id}:`, {
+        hasMessage: !!review.message,
+        hasComment: !!review.comment,
+        messageLength: review.message?.length || 0,
+        commentLength: review.comment?.length || 0,
+        messagePreview: review.message?.substring(0, 50) + '...'
+      });
+      
       const fullComment = review.message || review.comment || '';
       const truncatedComment = fullComment.length > 120 
         ? `${fullComment.substring(0, 120)}...`
@@ -121,7 +129,7 @@ export class MetricoolService {
       const customerName = customerParticipant?.name || review.customer?.name || 'Anonymous';
       const customerImage = customerParticipant?.imageProfileUrl || review.customer?.imageProfileUrl;
 
-      return {
+      const result = {
         id: review.id,
         name: customerName,
         image: customerImage,
@@ -131,6 +139,15 @@ export class MetricoolService {
         fullComment: fullComment,
         createdAt: createdDate,
       };
+      
+      console.log(`📝 Final transformed review ${review.id}:`, {
+        name: result.name,
+        commentLength: result.comment.length,
+        fullCommentLength: result.fullComment.length,
+        rating: result.rating
+      });
+      
+      return result;
     });
   }
 
