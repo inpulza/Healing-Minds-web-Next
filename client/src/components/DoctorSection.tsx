@@ -3,6 +3,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import doctorImage from '@assets/doctor-consultation.webp';
+import CompactVideoCarousel from './CompactVideoCarousel';
 
 const DoctorSection = () => {
   const { language } = useLanguage();
@@ -68,6 +69,9 @@ const DoctorSection = () => {
               </div>
             </div>
           </div>
+
+          {/* Compact Video Carousel */}
+          <CompactVideoCarousel />
         </div>
       </div>
     </section>
