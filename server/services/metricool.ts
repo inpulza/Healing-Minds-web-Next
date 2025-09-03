@@ -6,7 +6,8 @@ interface MetricoolCustomer {
 interface MetricoolReview {
   id: string;
   providerId: string;
-  stars?: number;
+  stars: number;
+  message?: string;
   comment?: string;
   creationDate: string;
   customer?: MetricoolCustomer;
@@ -54,20 +55,26 @@ export class MetricoolService {
       }
 
       const data = await response.json();
-      console.log('📊 Raw Metricool API response:', JSON.stringify(data, null, 2));
       
       // Handle Metricool API response structure
       let reviews = [];
       if (data.data && Array.isArray(data.data)) {
         reviews = data.data;
+        console.log(`✅ Metricool API: Fetched ${reviews.length} reviews from data.data`);
       } else if (data.reviews && Array.isArray(data.reviews)) {
         reviews = data.reviews;
+        console.log(`✅ Metricool API: Fetched ${reviews.length} reviews from data.reviews`);
       } else if (Array.isArray(data)) {
         reviews = data;
+        console.log(`✅ Metricool API: Fetched ${reviews.length} reviews from root array`);
+      } else {
+        console.log('📊 Full Metricool API response structure:', JSON.stringify(data, null, 2));
+        console.log('⚠️ No reviews array found in response');
       }
       
-      console.log(`✅ Metricool API: Fetched ${reviews.length} reviews successfully`);
-      console.log('📋 Sample review structure:', reviews[0] ? JSON.stringify(reviews[0], null, 2) : 'No reviews available');
+      if (reviews.length > 0) {
+        console.log('📋 First review structure:', JSON.stringify(reviews[0], null, 2));
+      }
       
       return { reviews } as MetricoolResponse;
     } catch (error) {
@@ -83,7 +90,7 @@ export class MetricoolService {
     }
 
     return metricoolReviews.map(review => {
-      const fullComment = review.comment || '';
+      const fullComment = review.message || review.comment || '';
       const truncatedComment = fullComment.length > 120 
         ? `${fullComment.substring(0, 120)}...`
         : fullComment;
@@ -107,10 +114,12 @@ export class MetricoolService {
         dateString = years === 1 ? 'hace 1 año' : `hace ${years} años`;
       }
 
-      // Get customer info from participants or customer field
-      const participant = review.participants?.[0];
-      const customerName = review.customer?.name || participant?.name || 'Anonymous';
-      const customerImage = review.customer?.imageProfileUrl || participant?.imageProfileUrl;
+      // Get customer info from participants (excluding business account)
+      const customerParticipant = review.participants?.find(p => 
+        p.name && !p.id.includes('accounts/')
+      );
+      const customerName = customerParticipant?.name || review.customer?.name || 'Anonymous';
+      const customerImage = customerParticipant?.imageProfileUrl || review.customer?.imageProfileUrl;
 
       return {
         id: review.id,
