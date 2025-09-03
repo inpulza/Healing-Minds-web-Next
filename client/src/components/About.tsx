@@ -104,13 +104,15 @@ const About = () => {
               </p>
             </div>
 
-            {/* Grid de Videos */}
+            {/* Grid de Videos - Layout Responsivo Compacto */}
             {isLoadingVideos ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
                 {[...Array(4)].map((_, index) => (
-                  <div key={index} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border animate-pulse">
-                    <div className="aspect-[9/16] bg-gray-200" />
-                    <div className="p-4">
+                  <div key={index} className="bg-gray-50 rounded-xl lg:rounded-2xl overflow-hidden shadow-sm border animate-pulse">
+                    {/* Cuadrado en móvil, vertical en desktop */}
+                    <div className="aspect-square lg:aspect-[9/16] bg-gray-200" />
+                    {/* Info solo en desktop */}
+                    <div className="hidden lg:block p-4">
                       <div className="h-6 bg-gray-200 rounded mb-2" />
                       <div className="h-4 bg-gray-200 rounded" />
                     </div>
@@ -118,9 +120,9 @@ const About = () => {
                 ))}
               </div>
             ) : (
-              <div className={`grid gap-6 mb-12 ${tikTokVideos && tikTokVideos.length > 3 ? 'md:grid-cols-2 lg:grid-cols-4' : tikTokVideos && tikTokVideos.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
                 {tikTokVideos?.slice(0, 4).map((video, index) => (
-                  <div key={video.id} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 group">
+                  <div key={video.id} className="bg-gray-50 rounded-xl lg:rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 group">
                     <a 
                       href={video.url}
                       target="_blank"
@@ -128,7 +130,8 @@ const About = () => {
                       className="block"
                       data-testid={`video-link-${index + 1}`}
                     >
-                      <div className="aspect-[9/16] relative overflow-hidden">
+                      {/* Cuadrado en móvil, vertical en desktop */}
+                      <div className="aspect-square lg:aspect-[9/16] relative overflow-hidden">
                         {video.thumbnail ? (
                           <>
                             <img 
@@ -138,20 +141,22 @@ const About = () => {
                               loading="lazy"
                             />
                             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                              <div className="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                <Play className="w-8 h-8 text-gray-800 ml-1" />
+                              {/* Botón de play más pequeño en móvil */}
+                              <div className="w-10 h-10 lg:w-16 lg:h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <Play className="w-5 h-5 lg:w-8 lg:h-8 text-gray-800 ml-0.5 lg:ml-1" />
                               </div>
                             </div>
                           </>
                         ) : (
                           <div className="bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center h-full">
-                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                              <Play className="w-8 h-8 text-green-600" />
+                            <div className="w-10 h-10 lg:w-16 lg:h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                              <Play className="w-5 h-5 lg:w-8 lg:h-8 text-green-600 ml-0.5 lg:ml-1" />
                             </div>
                           </div>
                         )}
                       </div>
-                      <div className="p-4">
+                      {/* Info solo visible en desktop */}
+                      <div className="hidden lg:block p-4">
                         <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2" data-testid={`video-title-${index + 1}`}>
                           {video.title.length > 60 ? `${video.title.substring(0, 60)}...` : video.title}
                         </h3>
