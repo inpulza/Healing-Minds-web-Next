@@ -89,7 +89,7 @@ const Reviews = () => {
   }
 
   return (
-    <section className="py-20 from-white to-gray-50 bg-[#000000e3]" data-testid="reviews-section">
+    <section className="py-20 from-white to-gray-50 bg-[#f0fdf4]" data-testid="reviews-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
