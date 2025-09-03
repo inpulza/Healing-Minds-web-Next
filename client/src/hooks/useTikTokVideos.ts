@@ -24,8 +24,8 @@ interface TikTokAPIResponse {
 const targetVideoIds = [
   '7545182480849014029',  // Vence la Parálisis por Desorden
   '7543698359270329655',  // Guía Rápida para Calmar un Ataque de Pánico
-  '7544069344217582903',  // TDAH en Pareja (replacement for missing video)
-  '7543327515486506253'   // ¿El Rechazo te Duele Físicamente? DSR (replacement for missing video)
+  '7542966062690700558',  // Cerebro de Carreras, Frenos de Bicicleta (video original solicitado)
+  '7543327515486506253'   // ¿El Rechazo te Duele Físicamente? DSR
 ];
 
 export function useTikTokVideos() {
