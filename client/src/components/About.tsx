@@ -286,7 +286,172 @@ const About = () => {
         </div>
       </section>
 
-      {/* Sección 3: El Proceso (Qué Esperar) */}
+      {/* Sección 3: Biografía y Credenciales Profesionales - Meet Dr. Melva Reve */}
+      <section className="py-16 lg:py-20 bg-green-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="biography-title">
+                {language === 'en' 
+                  ? <>Meet <span className="font-display italic text-green-700">Dr. Melva</span> Reve</>
+                  : <>Conoce a la <span className="font-display italic text-green-700">Dra. Melva</span> Reve</>
+                }
+              </h2>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-12">
+              {/* Biografía personal - 2 columnas */}
+              <div className="lg:col-span-2">
+                <div className="prose prose-lg max-w-none">
+                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                    {language === 'en'
+                      ? <>My passion for <span className="font-bold text-green-600">psychiatry</span> was born from a deep conviction: we all deserve to live with <span className="font-bold text-green-600">mental clarity</span>, <span className="font-bold text-green-600">emotional peace</span>, and renewed hope. For over <span className="font-bold text-green-600">15 years</span>, I have had the privilege of accompanying people in their most vulnerable moments and witnessing their incredible transformations through <span className="font-bold text-green-600">evidence-based treatment</span> and <span className="font-bold text-green-600">compassionate care</span>.</>
+                      : <>Mi pasión por la <span className="font-bold text-green-600">psiquiatría</span> nació de una profunda convicción: todos merecemos vivir con <span className="font-bold text-green-600">claridad mental</span>, <span className="font-bold text-green-600">paz emocional</span> y esperanza renovada. Durante más de <span className="font-bold text-green-600">15 años</span>, he tenido el privilegio de acompañar a personas en sus momentos más vulnerables y ser testigo de sus increíbles transformaciones a través del <span className="font-bold text-green-600">tratamiento basado en evidencia</span> y <span className="font-bold text-green-600">cuidado compasivo</span>.</>
+                    }
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                    {language === 'en'
+                      ? <>As the daughter of immigrants and a <span className="font-bold text-green-600">native Spanish speaker</span>, I deeply understand the unique challenges <span className="font-bold text-green-600">Latino families</span> face when seeking <span className="font-bold text-green-600">mental health care</span>. <span className="font-bold text-green-600">Language barriers</span>, cultural differences, and stigma should not prevent someone from receiving the care they deserve. My <span className="font-bold text-green-600">bilingual practice</span> ensures that every patient feels heard, understood, and respected in their preferred language, creating a bridge of trust that is essential for effective <span className="font-bold text-green-600">psychiatric treatment</span>.</>
+                      : <>Como hija de inmigrantes y <span className="font-bold text-green-600">hablante nativa de español</span>, entiendo profundamente los desafíos únicos que enfrentan las <span className="font-bold text-green-600">familias latinas</span> al buscar <span className="font-bold text-green-600">atención de salud mental</span>. La <span className="font-bold text-green-600">barrera del idioma</span>, las diferencias culturales y el estigma no deberían impedir que alguien reciba el cuidado que merece. Mi <span className="font-bold text-green-600">práctica bilingüe</span> asegura que cada paciente se sienta escuchado, entendido y respetado en su idioma preferido, creando un puente de confianza que es esencial para un <span className="font-bold text-green-600">tratamiento psiquiátrico</span> efectivo.</>
+                    }
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                    {language === 'en'
+                      ? <>My philosophy is simple but powerful: <span className="font-bold text-green-600">healing happens in relationship</span>. You are not a diagnosis; you are a complete person with a unique story, innate strengths, and unlimited potential for growth. My job is to walk with you on that journey toward <span className="font-bold text-green-600">wellness</span> and <span className="font-bold text-green-600">recovery</span>.</>
+                      : <>Mi filosofía es simple pero poderosa: <span className="font-bold text-green-600">la sanación sucede en relación</span>. No eres un diagnóstico; eres una persona completa con una historia única, fortalezas innatas y un potencial ilimitado para el crecimiento. Mi trabajo es caminar contigo en ese viaje hacia el <span className="font-bold text-green-600">bienestar</span> y la <span className="font-bold text-green-600">recuperación</span>.</>
+                    }
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                    {language === 'en'
+                      ? <>My approach combines the latest advances in <span className="font-bold text-green-600">psychiatric medicine</span> with time-honored principles of <span className="font-bold text-green-600">therapeutic alliance</span>. Whether you're struggling with <span className="font-bold text-green-600">anxiety</span>, <span className="font-bold text-green-600">depression</span>, <span className="font-bold text-green-600">ADHD</span>, <span className="font-bold text-green-600">PTSD</span>, or <span className="font-bold text-green-600">bipolar disorder</span>, I believe in creating a safe space where vulnerability becomes strength and challenges become opportunities for growth.</>
+                      : <>Mi enfoque combina los últimos avances en <span className="font-bold text-green-600">medicina psiquiátrica</span> con principios consagrados de <span className="font-bold text-green-600">alianza terapéutica</span>. Ya sea que estés luchando con <span className="font-bold text-green-600">ansiedad</span>, <span className="font-bold text-green-600">depresión</span>, <span className="font-bold text-green-600">TDAH</span>, <span className="font-bold text-green-600">TEPT</span> o <span className="font-bold text-green-600">trastorno bipolar</span>, creo en crear un espacio seguro donde la vulnerabilidad se convierte en fortaleza y los desafíos se convierten en oportunidades de crecimiento.</>
+                    }
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                    {language === 'en'
+                      ? <>In my practice in <span className="font-bold text-green-600">Naples, Florida</span>, I've witnessed countless stories of transformation. From the anxious professional who learned to manage their stress, to the mother who overcame postpartum depression, to the teenager who found their voice again after trauma - each journey reminds me why I chose this calling. My commitment extends beyond traditional <span className="font-bold text-green-600">medication management</span> to include <span className="font-bold text-green-600">psychoeducation</span>, <span className="font-bold text-green-600">lifestyle interventions</span>, and collaborative care planning that empowers you to be an active participant in your healing.</>
+                      : <>En mi práctica en <span className="font-bold text-green-600">Naples, Florida</span>, he sido testigo de innumerables historias de transformación. Desde el profesional ansioso que aprendió a manejar su estrés, hasta la madre que superó la depresión posparto, hasta el adolescente que encontró su voz nuevamente después del trauma - cada viaje me recuerda por qué elegí esta vocación. Mi compromiso se extiende más allá del tradicional <span className="font-bold text-green-600">manejo de medicamentos</span> para incluir <span className="font-bold text-green-600">psicoeducación</span>, <span className="font-bold text-green-600">intervenciones de estilo de vida</span> y planificación de cuidado colaborativo que te empodera a ser un participante activo en tu sanación.</>
+                    }
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    {language === 'en'
+                      ? <>Every session is an opportunity to reclaim your narrative, to rediscover your resilience, and to build the life you deserve. My role as your <span className="font-bold text-green-600">psychiatrist</span> is not just to diagnose and treat, but to walk alongside you as you navigate the path toward <span className="font-bold text-green-600">mental wellness</span>, <span className="font-bold text-green-600">emotional balance</span>, and renewed hope. Together, we'll create a treatment plan that honors your unique circumstances, respects your cultural background, and aligns with your personal goals for recovery and growth.</>
+                      : <>Cada sesión es una oportunidad para reclamar tu narrativa, redescubrir tu resistencia y construir la vida que mereces. Mi papel como tu <span className="font-bold text-green-600">psiquiatra</span> no es solo diagnosticar y tratar, sino caminar a tu lado mientras navegas el camino hacia el <span className="font-bold text-green-600">bienestar mental</span>, el <span className="font-bold text-green-600">equilibrio emocional</span> y la esperanza renovada. Juntos, crearemos un plan de tratamiento que honre tus circunstancias únicas, respete tu trasfondo cultural y se alinee con tus metas personales de recuperación y crecimiento.</>
+                    }
+                  </p>
+                </div>
+              </div>
+
+              {/* Credenciales - 1 columna */}
+              <div className="lg:col-span-1">
+                <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-6">
+                    {language === 'en' ? 'Credentials and Training' : 'Credenciales y Formación'}
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-semibold text-green-700 mb-2">
+                        {language === 'en' ? 'Board Certification' : 'Certificación Médica'}
+                      </h4>
+                      <p className="text-gray-700">
+                        {language === 'en' 
+                          ? 'Board Certified in Adult Psychiatry'
+                          : 'Certificada en Psiquiatría de Adultos'
+                        }
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-green-700 mb-2">
+                        {language === 'en' ? 'Medical Education' : 'Educación Médica'}
+                      </h4>
+                      <p className="text-gray-700 text-sm">
+                        {language === 'en' 
+                          ? <>Doctor of Medicine (M.D.)<br />Psychiatric Residency Training<br />Specialized Training in Cultural Competency</>
+                          : <>Doctora en Medicina (M.D.)<br />Residencia en Psiquiatría<br />Entrenamiento Especializado en Competencia Cultural</>
+                        }
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-green-700 mb-2">
+                        {language === 'en' ? 'Areas of Specialization' : 'Áreas de Especialización'}
+                      </h4>
+                      <ul className="text-gray-700 text-sm space-y-1">
+                        {language === 'en' 
+                          ? <>
+                            <li>• Anxiety Disorders</li>
+                            <li>• Depression</li>
+                            <li>• Adult ADHD</li>
+                            <li>• Trauma and PTSD</li>
+                            <li>• Bipolar Disorder</li>
+                          </>
+                          : <>
+                            <li>• Trastornos de Ansiedad</li>
+                            <li>• Depresión</li>
+                            <li>• TDAH en Adultos</li>
+                            <li>• Trauma y TEPT</li>
+                            <li>• Trastorno Bipolar</li>
+                          </>
+                        }
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-green-700 mb-2">
+                        {language === 'en' ? 'Languages' : 'Idiomas'}
+                      </h4>
+                      <p className="text-gray-700">
+                        {language === 'en' 
+                          ? <>Spanish (native)<br />English (fluent)</>
+                          : <>Español (nativo)<br />Inglés (fluido)</>
+                        }
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Social Media Icons */}
+                  <div className="flex gap-3 mt-8 pt-6 border-t border-green-200">
+                    <a 
+                      href="https://linkedin.com/in/dr-melva-reve" 
+                      className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
+                      data-testid="linkedin-link"
+                      aria-label={language === 'en' ? 'Visit Dr. Melva Reve LinkedIn profile' : 'Visitar perfil de LinkedIn de la Dra. Melva Reve'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaLinkedin className="w-5 h-5 text-blue-600" />
+                    </a>
+                    <a 
+                      href="https://facebook.com/healingmindspsychiatry" 
+                      className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
+                      data-testid="facebook-link"
+                      aria-label={language === 'en' ? 'Visit Healing Minds Psychiatry Facebook page' : 'Visitar página de Facebook de Healing Minds Psychiatry'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaFacebook className="w-5 h-5 text-blue-700" />
+                    </a>
+                    <a 
+                      href="https://instagram.com/healingmindspsychiatry" 
+                      className="w-10 h-10 bg-pink-50 hover:bg-pink-100 rounded-lg flex items-center justify-center transition-colors duration-300"
+                      data-testid="instagram-link"
+                      aria-label={language === 'en' ? 'Visit Healing Minds Psychiatry Instagram page' : 'Visitar página de Instagram de Healing Minds Psychiatry'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaInstagram className="w-5 h-5 text-pink-600" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sección 4: Mi Enfoque (Filosofía de Cuidado) */}
       <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
@@ -367,170 +532,6 @@ const About = () => {
       <section className="py-16 lg:py-20 bg-green-50">
         {/* Integrar el componente Reviews existente */}
         <Reviews />
-      </section>
-      {/* Sección 5: Biografía y Credenciales Profesionales */}
-      <section className="py-16 lg:py-20 bg-green-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="biography-title">
-                {language === 'en' 
-                  ? <>Meet <span className="font-display italic text-green-700">Dr. Melva</span> Reve</>
-                  : <>Conoce a la <span className="font-display italic text-green-700">Dra. Melva</span> Reve</>
-                }
-              </h2>
-            </div>
-
-            <div className="grid lg:grid-cols-3 gap-12">
-              {/* Biografía personal - 2 columnas */}
-              <div className="lg:col-span-2">
-                <div className="prose prose-lg max-w-none">
-                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>My passion for <span className="font-bold text-green-600">psychiatry</span> was born from a deep conviction: we all deserve to live with <span className="font-bold text-green-600">mental clarity</span>, <span className="font-bold text-green-600">emotional peace</span>, and renewed hope. For over <span className="font-bold text-green-600">15 years</span>, I have had the privilege of accompanying people in their most vulnerable moments and witnessing their incredible transformations through <span className="font-bold text-green-600">evidence-based treatment</span> and <span className="font-bold text-green-600">compassionate care</span>.</>
-                      : <>Mi pasión por la <span className="font-bold text-green-600">psiquiatría</span> nació de una profunda convicción: todos merecemos vivir con <span className="font-bold text-green-600">claridad mental</span>, <span className="font-bold text-green-600">paz emocional</span> y esperanza renovada. Durante más de <span className="font-bold text-green-600">15 años</span>, he tenido el privilegio de acompañar a personas en sus momentos más vulnerables y ser testigo de sus increíbles transformaciones a través del <span className="font-bold text-green-600">tratamiento basado en evidencia</span> y <span className="font-bold text-green-600">cuidado compasivo</span>.</>
-                    }
-                  </p>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>As the daughter of immigrants and a <span className="font-bold text-green-600">native Spanish speaker</span>, I deeply understand the unique challenges <span className="font-bold text-green-600">Latino families</span> face when seeking <span className="font-bold text-green-600">mental health care</span>. <span className="font-bold text-green-600">Language barriers</span>, cultural differences, and stigma should not prevent someone from receiving the care they deserve. My <span className="font-bold text-green-600">bilingual practice</span> ensures that every patient feels heard, understood, and respected in their preferred language, creating a bridge of trust that is essential for effective <span className="font-bold text-green-600">psychiatric treatment</span>.</>
-                      : <>Como hija de inmigrantes y <span className="font-bold text-green-600">hablante nativa de español</span>, entiendo profundamente los desafíos únicos que enfrentan las <span className="font-bold text-green-600">familias latinas</span> al buscar <span className="font-bold text-green-600">atención de salud mental</span>. La <span className="font-bold text-green-600">barrera del idioma</span>, las diferencias culturales y el estigma no deberían impedir que alguien reciba el cuidado que merece. Mi <span className="font-bold text-green-600">práctica bilingüe</span> asegura que cada paciente se sienta escuchado, entendido y respetado en su idioma preferido, creando un puente de confianza que es esencial para un <span className="font-bold text-green-600">tratamiento psiquiátrico</span> efectivo.</>
-                    }
-                  </p>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>My philosophy is simple but powerful: <span className="font-bold text-green-600">healing happens in relationship</span>. You are not a diagnosis; you are a complete person with a unique story, innate strengths, and unlimited potential for growth. My job is to walk with you on that journey toward <span className="font-bold text-green-600">wellness</span> and <span className="font-bold text-green-600">recovery</span>.</>
-                      : <>Mi filosofía es simple pero poderosa: <span className="font-bold text-green-600">la sanación sucede en relación</span>. No eres un diagnóstico; eres una persona completa con una historia única, fortalezas innatas y un potencial ilimitado para el crecimiento. Mi trabajo es caminar contigo en ese viaje hacia el <span className="font-bold text-green-600">bienestar</span> y la <span className="font-bold text-green-600">recuperación</span>.</>
-                    }
-                  </p>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>My approach combines the latest advances in <span className="font-bold text-green-600">psychiatric medicine</span> with time-honored principles of <span className="font-bold text-green-600">therapeutic alliance</span>. Whether you're struggling with <span className="font-bold text-green-600">anxiety</span>, <span className="font-bold text-green-600">depression</span>, <span className="font-bold text-green-600">ADHD</span>, <span className="font-bold text-green-600">PTSD</span>, or <span className="font-bold text-green-600">bipolar disorder</span>, I believe in creating a safe space where vulnerability becomes strength and challenges become opportunities for growth.</>
-                      : <>Mi enfoque combina los últimos avances en <span className="font-bold text-green-600">medicina psiquiátrica</span> con principios consagrados de <span className="font-bold text-green-600">alianza terapéutica</span>. Ya sea que estés luchando con <span className="font-bold text-green-600">ansiedad</span>, <span className="font-bold text-green-600">depresión</span>, <span className="font-bold text-green-600">TDAH</span>, <span className="font-bold text-green-600">TEPT</span> o <span className="font-bold text-green-600">trastorno bipolar</span>, creo en crear un espacio seguro donde la vulnerabilidad se convierte en fortaleza y los desafíos se convierten en oportunidades de crecimiento.</>
-                    }
-                  </p>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>In my practice in <span className="font-bold text-green-600">Naples, Florida</span>, I've witnessed countless stories of transformation. From the anxious professional who learned to manage their stress, to the mother who overcame postpartum depression, to the teenager who found their voice again after trauma - each journey reminds me why I chose this calling. My commitment extends beyond traditional <span className="font-bold text-green-600">medication management</span> to include <span className="font-bold text-green-600">psychoeducation</span>, <span className="font-bold text-green-600">lifestyle interventions</span>, and collaborative care planning that empowers you to be an active participant in your healing.</>
-                      : <>En mi práctica en <span className="font-bold text-green-600">Naples, Florida</span>, he sido testigo de innumerables historias de transformación. Desde el profesional ansioso que aprendió a manejar su estrés, hasta la madre que superó la depresión posparto, hasta el adolescente que encontró su voz nuevamente después del trauma - cada viaje me recuerda por qué elegí esta vocación. Mi compromiso se extiende más allá del tradicional <span className="font-bold text-green-600">manejo de medicamentos</span> para incluir <span className="font-bold text-green-600">psicoeducación</span>, <span className="font-bold text-green-600">intervenciones de estilo de vida</span> y planificación de cuidado colaborativo que te empodera a ser un participante activo en tu sanación.</>
-                    }
-                  </p>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    {language === 'en'
-                      ? <>Every session is an opportunity to reclaim your narrative, to rediscover your resilience, and to build the life you deserve. My role as your <span className="font-bold text-green-600">psychiatrist</span> is not just to diagnose and treat, but to walk alongside you as you navigate the path toward <span className="font-bold text-green-600">mental wellness</span>, <span className="font-bold text-green-600">emotional balance</span>, and renewed hope. Together, we'll create a treatment plan that honors your unique circumstances, respects your cultural background, and aligns with your personal goals for recovery and growth.</>
-                      : <>Cada sesión es una oportunidad para reclamar tu narrativa, redescubrir tu resistencia y construir la vida que mereces. Mi papel como tu <span className="font-bold text-green-600">psiquiatra</span> no es solo diagnosticar y tratar, sino caminar a tu lado mientras navegas el camino hacia el <span className="font-bold text-green-600">bienestar mental</span>, el <span className="font-bold text-green-600">equilibrio emocional</span> y la esperanza renovada. Juntos, crearemos un plan de tratamiento que honre tus circunstancias únicas, respete tu trasfondo cultural y se alinee con tus metas personales de recuperación y crecimiento.</>
-                    }
-                  </p>
-                </div>
-              </div>
-
-              {/* Credenciales - 1 columna */}
-              <div className="lg:col-span-1">
-                <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-6">
-                    {language === 'en' ? 'Credentials and Training' : 'Credenciales y Formación'}
-                  </h3>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Education' : 'Educación'}
-                      </h4>
-                      <p className="text-gray-700">
-                        {language === 'en' 
-                          ? <>Doctor of Medicine (MD)<br />Psychiatry Residency</>
-                          : <>Doctor en Medicina (MD)<br />Residencia en Psiquiatría</>
-                        }
-                      </p>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Certifications' : 'Certificaciones'}
-                      </h4>
-                      <p className="text-gray-700">
-                        {language === 'en' 
-                          ? <>American Board of Psychiatry<br />Adult Psychiatry Certification</>
-                          : <>Junta Americana de Psiquiatría<br />Certificación en Psiquiatría de Adultos</>
-                        }
-                      </p>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Specialties' : 'Especialidades'}
-                      </h4>
-                      <ul className="text-gray-700 space-y-1">
-                        {language === 'en' 
-                          ? <>
-                            <li>• Anxiety Disorders</li>
-                            <li>• Depression</li>
-                            <li>• Adult ADHD</li>
-                            <li>• Trauma and PTSD</li>
-                            <li>• Bipolar Disorder</li>
-                          </>
-                          : <>
-                            <li>• Trastornos de Ansiedad</li>
-                            <li>• Depresión</li>
-                            <li>• TDAH en Adultos</li>
-                            <li>• Trauma y TEPT</li>
-                            <li>• Trastorno Bipolar</li>
-                          </>
-                        }
-                      </ul>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Languages' : 'Idiomas'}
-                      </h4>
-                      <p className="text-gray-700">
-                        {language === 'en' 
-                          ? <>Spanish (native)<br />English (fluent)</>
-                          : <>Español (nativo)<br />Inglés (fluido)</>
-                        }
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Social Media Icons */}
-                  <div className="flex gap-3 mt-8 pt-6 border-t border-green-200">
-                    <a 
-                      href="https://linkedin.com/in/dr-melva-reve" 
-                      className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
-                      data-testid="linkedin-link"
-                      aria-label={language === 'en' ? 'Visit Dr. Melva Reve LinkedIn profile' : 'Visitar perfil de LinkedIn de la Dra. Melva Reve'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <FaLinkedin className="w-5 h-5 text-blue-600" />
-                    </a>
-                    <a 
-                      href="https://facebook.com/healingmindspsychiatry" 
-                      className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
-                      data-testid="facebook-link"
-                      aria-label={language === 'en' ? 'Visit Healing Minds Psychiatry Facebook page' : 'Visitar página de Facebook de Healing Minds Psychiatry'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <FaFacebook className="w-5 h-5 text-blue-700" />
-                    </a>
-                    <a 
-                      href="https://instagram.com/healingmindspsychiatry" 
-                      className="w-10 h-10 bg-pink-50 hover:bg-pink-100 rounded-lg flex items-center justify-center transition-colors duration-300"
-                      data-testid="instagram-link"
-                      aria-label={language === 'en' ? 'Visit Healing Minds Psychiatry Instagram page' : 'Visitar página de Instagram de Healing Minds Psychiatry'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <FaInstagram className="w-5 h-5 text-pink-600" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Sección 6: Llamada a la Acción Final */}
