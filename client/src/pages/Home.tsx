@@ -16,7 +16,8 @@ import {
   LazyContact,
   LazyFooter,
   LazyTelehealthSection,
-  LazyCTASection
+  LazyCTASection,
+  LazyCompactVideoCarousel
 } from '@/components/LazyComponents';
 import { updateSEO } from '@/utils/seo';
 // Removed unused imports: CharmHealthBooking, icons moved to TelehealthSection for performance
@@ -56,6 +57,12 @@ const Home = () => {
         <SuspenseWrapper priority="high" preload>
           <LazyDoctorSection />
         </SuspenseWrapper>
+        
+        {/* Carrusel compacto de videos - continuación visual del DoctorSection */}
+        <SuspenseWrapper priority="medium">
+          <LazyCompactVideoCarousel />
+        </SuspenseWrapper>
+        
         <SuspenseWrapper priority="high" preload>
           <LazyServices />
         </SuspenseWrapper>
