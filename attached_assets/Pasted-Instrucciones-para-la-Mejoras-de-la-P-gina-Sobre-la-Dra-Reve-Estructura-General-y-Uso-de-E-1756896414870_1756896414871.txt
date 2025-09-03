@@ -1,0 +1,49 @@
+Instrucciones para la Mejoras de la Página "Sobre la Dra. Reve"
+
+
+
+Estructura General y Uso de Encabezados (H1, H2, H3)
+
+Para empezar, es fundamental que la página utilice una estructura semántica de encabezados correcta para el SEO y la accesibilidad. Debe haber un único encabezado H1 en la página, reservado para el titular principal de la sección "Héroe". Los títulos de las secciones principales que describiré a continuación deben usar encabezados H2. Si dentro de una sección hay subtítulos importantes (como en la biografía), utiliza encabezados H3.
+
+
+
+El "Porqué" del Orden Estratégico de las Secciones
+
+Antes de detallar cada sección, es crucial entender el flujo psicológico. No empezamos con las credenciales, sino con la conexión. La sección "Héroe" (la imagen y el titular empático) crea una conexión emocional inmediata. Justo después, la sección "Mi Enfoque" establece la confianza metodológica, explicando el "cómo" y el "porqué" de su práctica. Este orden está diseñado para que el paciente primero se sienta comprendido ("Esta doctora entiende lo que siento") y luego se sienta seguro ("Esta doctora tiene el enfoque correcto para ayudarme"). Solo entonces presentamos la prueba social y las credenciales para solidificar esa confianza.
+
+
+
+Sección 1: Sección Héroe de Conexión Inmediata
+
+Crea una sección principal que ocupe toda la parte superior de la página. A la izquierda, utiliza la excelente fotografía profesional existente de la Dra. Melva Reve. A la derecha, el contenido de texto debe incluir: un H1 como titular principal que sea una declaración de valor empática para el paciente (ej: "Un Espacio Seguro para Sanar y Encontrar Claridad"); un subtítulo que la presente y resuma su misión de cuidado compasivo; y un botón de Llamada a la Acción (CTA) principal y claro (ej: "Agenda una Consulta Confidencial").
+
+
+
+Sección 2: Mi Enfoque (Filosofía de Cuidado)
+
+Bajo un encabezado H2 (ej: "Psiquiatría Moderna, Humana y Colaborativa"), redacta un párrafo en primera persona que describa la filosofía de la Dra. Reve. Debe enfatizar que su práctica es una alianza terapéutica, no un modelo clínico distante, donde se co-crea un plan de bienestar con el paciente. A continuación, crea tres sub-secciones visuales (con iconos) que destaquen los pilares de su enfoque: 1. Diagnóstico Preciso y Tratamiento Personalizado, 2. Terapia Informada en Trauma, y 3. Manejo Consciente de la Medicación.
+
+
+
+Sección 3: El Proceso (Qué Esperar)
+
+Esta sección, bajo un H2 (ej: "Tu Viaje con Nosotros: Qué Esperar"), tiene el objetivo de reducir la ansiedad del nuevo paciente. Crea una lista numerada con 3 pasos simples y tranquilizadores que describan el proceso desde la primera consulta hasta el seguimiento. Cada paso debe ser breve y centrarse en la experiencia del paciente: sentirse escuchado, colaborar en un plan claro y recibir apoyo continuo.
+
+
+
+Sección 4: Prueba Social (Reseñas de Pacientes)
+
+Bajo un H2 (ej: "Historias de Esperanza y Recuperación"), integra las reseñas reales de pacientes. No crees testimonios nuevos. En su lugar, utiliza las reseñas existentes que están en la página de inicio (Home), conectadas desde el perfil de Google Business. Muestra de 2 a 3 de las reseñas más potentes, asegurándote de que se vean auténticas y generen confianza. Si es posible, muestra la calificación de estrellas promedio de Google.
+
+
+
+Sección 5: Biografía y Credenciales Profesionales
+
+Crea una sección de biografía con un H2 (ej: "Conoce a la Dra. Melva Reve"). Diseña esta área en dos columnas. En la columna principal (izquierda), redacta una biografía cálida y en primera persona que cuente su historia y su motivación para dedicarse a la psiquiatría. En la columna secundaria (derecha), bajo un H3 (ej: "Credenciales y Formación"), crea una lista clara y escaneable con su información profesional: Educación, Especialidades, Idiomas y cualquier otra certificación o membresía relevante.
+
+
+
+Sección 6: Llamada a la Acción Final
+
+Al final de la página, incluye una última sección de conversión con un H2 (ej: "¿Listo/a para Dar el Primer Paso?"). Debe contener un párrafo breve que refuerce el mensaje de que el cambio comienza con una simple conversación. Incluye un botón de CTA grande y visible (ej: "Agendar mi Consulta Ahora") y, debajo, una pequeña línea de texto que reitere la confidencialidad del proceso para reducir cualquier duda final.
