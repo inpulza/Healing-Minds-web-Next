@@ -1,15 +1,17 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Heart, Shield, Users, Clock, CheckCircle, FileText } from 'lucide-react';
+import { ArrowRight, Heart, Shield, Users, Clock, CheckCircle, FileText, Play } from 'lucide-react';
 import { FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
 import { IconUserHeart, IconBrain, IconStethoscope } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import Reviews from '@/components/Reviews';
+import { useTikTokVideos } from '@/hooks/useTikTokVideos';
 import doctorProfileImage from '@assets/doctor-profile-v2.webp';
 
 const About = () => {
   const { language } = useLanguage();
+  const { data: tikTokVideos, isLoading: isLoadingVideos } = useTikTokVideos();
 
   return (
     <div className="min-h-screen bg-green-50">
@@ -431,139 +433,69 @@ const About = () => {
             </div>
 
             {/* Grid de Videos */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {/* Video 1 */}
-              <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow duration-300">
-                <a 
-                  href="https://www.tiktok.com/@dra.melvavidal/video/7545182480849014029"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                  data-testid="video-link-1"
-                >
-                  <div className="aspect-[9/16] bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
+            {isLoadingVideos ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                {[...Array(4)].map((_, index) => (
+                  <div key={index} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border animate-pulse">
+                    <div className="aspect-[9/16] bg-gray-200" />
+                    <div className="p-4">
+                      <div className="h-6 bg-gray-200 rounded mb-2" />
+                      <div className="h-4 bg-gray-200 rounded" />
                     </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2" data-testid="video-title-1">
-                      {language === 'en' 
-                        ? 'Understanding Anxiety: Signs and Solutions'
-                        : 'Entendiendo la Ansiedad: Señales y Soluciones'
-                      }
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {language === 'en'
-                        ? 'Learn to identify anxiety symptoms and discover effective management strategies.'
-                        : 'Aprende a identificar síntomas de ansiedad y descubre estrategias efectivas de manejo.'
-                      }
-                    </p>
-                  </div>
-                </a>
+                ))}
               </div>
-
-              {/* Video 2 */}
-              <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow duration-300">
-                <a 
-                  href="https://www.tiktok.com/@dra.melvavidal/video/7543698359270329655"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                  data-testid="video-link-2"
-                >
-                  <div className="aspect-[9/16] bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
+            ) : (
+              <div className={`grid gap-6 mb-12 ${tikTokVideos && tikTokVideos.length > 3 ? 'md:grid-cols-2 lg:grid-cols-4' : tikTokVideos && tikTokVideos.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
+                {tikTokVideos?.slice(0, 4).map((video, index) => (
+                  <div key={video.id} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 group">
+                    <a 
+                      href={video.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                      data-testid={`video-link-${index + 1}`}
+                    >
+                      <div className="aspect-[9/16] relative overflow-hidden">
+                        {video.thumbnail ? (
+                          <>
+                            <img 
+                              src={video.thumbnail}
+                              alt={`Video de la Dra. Reve: ${video.title}`}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                              <div className="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <Play className="w-8 h-8 text-gray-800 ml-1" />
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center h-full">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                              <Play className="w-8 h-8 text-green-600" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2" data-testid={`video-title-${index + 1}`}>
+                          {video.title.length > 60 ? `${video.title.substring(0, 60)}...` : video.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {video.description}
+                        </p>
+                        <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                          <span>💬 {video.commentCount}</span>
+                          {video.reactionCount > 0 && <span>❤️ {video.reactionCount}</span>}
+                        </div>
+                      </div>
+                    </a>
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2" data-testid="video-title-2">
-                      {language === 'en' 
-                        ? 'Depression vs Sadness: Key Differences'
-                        : 'Depresión vs Tristeza: Diferencias Clave'
-                      }
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {language === 'en'
-                        ? 'Understanding when feelings of sadness may indicate clinical depression.'
-                        : 'Entendiendo cuándo los sentimientos de tristeza pueden indicar depresión clínica.'
-                      }
-                    </p>
-                  </div>
-                </a>
+                ))}
               </div>
-
-              {/* Video 3 */}
-              <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow duration-300">
-                <a 
-                  href="https://www.tiktok.com/@dra.melvavidal/video/7542966062690700558"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                  data-testid="video-link-3"
-                >
-                  <div className="aspect-[9/16] bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2" data-testid="video-title-3">
-                      {language === 'en' 
-                        ? 'ADHD in Adults: Common Misconceptions'
-                        : 'TDAH en Adultos: Conceptos Erróneos Comunes'
-                      }
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {language === 'en'
-                        ? 'Debunking myths about adult ADHD and exploring treatment options.'
-                        : 'Desmintiendo mitos sobre el TDAH adulto y explorando opciones de tratamiento.'
-                      }
-                    </p>
-                  </div>
-                </a>
-              </div>
-
-              {/* Video 4 */}
-              <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow duration-300">
-                <a 
-                  href="https://www.tiktok.com/@dra.melvavidal/video/7541842758235901239"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                  data-testid="video-link-4"
-                >
-                  <div className="aspect-[9/16] bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2" data-testid="video-title-4">
-                      {language === 'en' 
-                        ? 'Mental Health Tips for Daily Wellness'
-                        : 'Consejos de Salud Mental para el Bienestar Diario'
-                      }
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {language === 'en'
-                        ? 'Practical strategies you can implement today for better mental health.'
-                        : 'Estrategias prácticas que puedes implementar hoy para mejor salud mental.'
-                      }
-                    </p>
-                  </div>
-                </a>
-              </div>
-            </div>
+            )}
 
             {/* Call to Action para TikTok */}
             <div className="text-center">

@@ -184,6 +184,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // TikTok posts endpoint
+  app.get("/api/tiktok", async (req, res) => {
+    try {
+      console.log("🎵 TikTok API endpoint called");
+      const tiktokData = await metricoolService.fetchTikTokPosts();
+      
+      res.status(200).json({ 
+        success: true, 
+        data: tiktokData 
+      });
+    } catch (error) {
+      console.error("❌ Error in TikTok endpoint:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error fetching TikTok posts",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   // SEO routes - Sitemap XML and Robots.txt
   app.get("/sitemap.xml", generateSitemap);
   app.get("/robots.txt", generateRobotsTxt);

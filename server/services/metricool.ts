@@ -29,9 +29,11 @@ interface MetricoolResponse {
 
 export class MetricoolService {
   private readonly apiUrl = 'https://app.metricool.com/api/v2/inbox/reviews';
+  private readonly postCommentsUrl = 'https://app.metricool.com/api/v2/inbox/post-comments';
   private readonly userId = '2603584';
   private readonly blogId = '5128724';
   private readonly provider = 'GMB';
+  private readonly tiktokProvider = 'TIKTOKBUSINESS';
   private readonly token = process.env.METRICOOL_TOKEN;
 
   async fetchReviews(): Promise<MetricoolResponse> {
@@ -184,5 +186,37 @@ export class MetricoolService {
       totalReviews,
       ratingDistribution: ratingCounts
     };
+  }
+
+  async fetchTikTokPosts(): Promise<any> {
+    if (!this.token) {
+      throw new Error('METRICOOL_TOKEN environment variable is not set');
+    }
+
+    const url = `${this.postCommentsUrl}?userId=${this.userId}&blogId=${this.blogId}&provider=${this.tiktokProvider}`;
+
+    try {
+      console.log(`🎵 Fetching TikTok posts from: ${url}`);
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Mc-Auth': this.token,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Metricool TikTok API error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('🎵 TikTok API Response:', JSON.stringify(data, null, 2));
+      
+      return data;
+    } catch (error) {
+      console.error('❌ Error fetching TikTok posts from Metricool:', error);
+      throw error;
+    }
   }
 }
