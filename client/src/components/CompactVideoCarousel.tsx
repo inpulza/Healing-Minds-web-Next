@@ -4,7 +4,7 @@ import { Play } from 'lucide-react';
 
 const CompactVideoCarousel = () => {
   const { language } = useLanguage();
-  const { tikTokVideos, isLoadingVideos } = useTikTokVideos();
+  const { data: tikTokVideos, isLoading: isLoadingVideos } = useTikTokVideos();
 
   return (
     <div className="mt-8 pt-8 border-t border-green-200">
@@ -19,7 +19,7 @@ const CompactVideoCarousel = () => {
         </div>
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-          {tikTokVideos?.slice(0, 4).map((video, index) => (
+          {tikTokVideos?.slice(0, 4).map((video: any, index: number) => (
             <div key={video.id} className="group">
               <a 
                 href={video.url}
