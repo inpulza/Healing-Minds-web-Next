@@ -3,6 +3,9 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
 import { generateSitemap, generateRobotsTxt } from "./routes/sitemap";
+import { MetricoolService } from "./services/metricool";
+import { reviewsCache } from "./cache/reviews-cache";
+import { staticReviews, staticStats } from "./data/static-reviews";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission endpoint
@@ -52,6 +55,131 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ 
         success: false, 
         message: "Error fetching contact messages" 
+      });
+    }
+  });
+
+  // Reviews endpoints
+  const metricoolService = new MetricoolService();
+
+  // Get reviews with statistics
+  app.get("/api/reviews", async (req, res) => {
+    try {
+      const cacheKey = "reviews-data";
+      
+      // Try to get from cache first
+      let cachedData = reviewsCache.get(cacheKey);
+      if (cachedData) {
+        return res.status(200).json({ success: true, data: cachedData });
+      }
+
+      try {
+        // Fetch from Metricool API
+        const metricoolResponse = await metricoolService.fetchReviews();
+        console.log('📊 Metricool response structure:', { 
+          hasReviews: 'reviews' in metricoolResponse,
+          reviewsType: typeof metricoolResponse.reviews,
+          reviewsLength: metricoolResponse.reviews?.length || 0
+        });
+        
+        const reviews = metricoolResponse.reviews || [];
+        const transformedReviews = metricoolService.transformReviewsToUIFormat(reviews);
+        const stats = metricoolService.calculateStats(reviews);
+
+        const reviewsData = {
+          stats,
+          reviews: transformedReviews,
+        };
+
+        // Cache the successful response
+        reviewsCache.set(cacheKey, reviewsData);
+        
+        res.status(200).json({ success: true, data: reviewsData });
+      } catch (apiError) {
+        // Fallback to static reviews if API fails
+        console.log("📋 Using static reviews as fallback due to API error:", apiError);
+        
+        const fallbackData = {
+          stats: staticStats,
+          reviews: staticReviews,
+        };
+        
+        res.status(200).json({ 
+          success: true, 
+          data: fallbackData, 
+          fallback: true,
+          message: "Using static reviews - API unavailable"
+        });
+      }
+    } catch (error) {
+      console.error("Error in reviews endpoint:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error fetching reviews" 
+      });
+    }
+  });
+
+  // Get only rating statistics
+  app.get("/api/reviews/rating", async (req, res) => {
+    try {
+      const cacheKey = "reviews-data";
+      let cachedData = reviewsCache.get(cacheKey);
+      
+      if (cachedData) {
+        return res.status(200).json({ 
+          success: true, 
+          data: { 
+            averageRating: cachedData.stats.averageRating,
+            totalReviews: cachedData.stats.totalReviews 
+          }
+        });
+      }
+
+      try {
+        const metricoolResponse = await metricoolService.fetchReviews();
+        const stats = metricoolService.calculateStats(metricoolResponse.reviews);
+        
+        res.status(200).json({ 
+          success: true, 
+          data: { 
+            averageRating: stats.averageRating,
+            totalReviews: stats.totalReviews 
+          }
+        });
+      } catch (apiError) {
+        console.log("📋 Using static rating as fallback due to API error:", apiError);
+        res.status(200).json({ 
+          success: true, 
+          data: { 
+            averageRating: staticStats.averageRating,
+            totalReviews: staticStats.totalReviews 
+          },
+          fallback: true
+        });
+      }
+    } catch (error) {
+      console.error("Error in reviews rating endpoint:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error fetching reviews rating" 
+      });
+    }
+  });
+
+  // Refresh reviews cache
+  app.post("/api/reviews/refresh", async (req, res) => {
+    try {
+      reviewsCache.clear();
+      res.status(200).json({ 
+        success: true, 
+        message: "Reviews cache cleared successfully" 
+      });
+    } catch (error) {
+      console.error("Error clearing reviews cache:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error clearing cache" 
       });
     }
   });

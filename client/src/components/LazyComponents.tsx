@@ -10,6 +10,7 @@ export const LazyAbout = lazy(() => import(/* webpackChunkName: "about" */ './Ab
 export const LazyBilingualCare = lazy(() => import(/* webpackChunkName: "bilingual-care" */ './BilingualCare'));
 export const LazyServiceAreas = lazy(() => import(/* webpackChunkName: "service-areas" */ './ServiceAreas'));
 export const LazyTestimonials = lazy(() => import(/* webpackChunkName: "testimonials" */ './Testimonials'));
+export const LazyReviews = lazy(() => import(/* webpackChunkName: "reviews" */ './Reviews'));
 
 // Lower priority components (bottom of page)
 export const LazyForPatients = lazy(() => import(/* webpackChunkName: "for-patients" */ './ForPatients'));

@@ -11,6 +11,7 @@ import {
   LazyBilingualCare,
   LazyServiceAreas,
   LazyTestimonials,
+  LazyReviews,
   LazyForPatients,
   LazyFAQ,
   LazyContact,
@@ -68,7 +69,7 @@ const Home = () => {
           <LazyServiceAreas />
         </SuspenseWrapper>
         <SuspenseWrapper priority="medium">
-          <LazyTestimonials />
+          <LazyReviews />
         </SuspenseWrapper>
         <SuspenseWrapper priority="low">
           <LazyForPatients />
