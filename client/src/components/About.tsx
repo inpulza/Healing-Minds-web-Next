@@ -13,89 +13,70 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-green-50">
-      {/* Hero de Conexión Inmediata - Estilo expandido similar a Home */}
-      <section className="pt-8 pb-16 bg-white">
-        <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[90%] mx-auto px-2 sm:px-4">
-          <div className="relative rounded-3xl overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] flex items-center justify-center">
-            {/* Background Image */}
-            <img
-              src={doctorProfileImage}
-              alt="Dr. Melva Reve, MD - Professional headshot of board-certified psychiatrist specializing in anxiety, depression, and ADHD treatment in Naples"
-              className="absolute inset-0 w-full h-full object-cover object-top"
-              width={1200}
-              height={800}
-              loading="eager"
-              decoding="sync"
-              sizes="(min-width: 1200px) 1200px, 100vw"
-              data-testid="about-hero-image"
-            />
-            
-            {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent" />
-            
-            {/* Content Overlay */}
-            <div className="relative z-10 w-full px-8 lg:px-16 py-8 text-left">
-              <div className="max-w-5xl ml-2 md:ml-4" style={{maxWidth: "65%"}}>
-                {/* Badges de credibilidad */}
-                <div className="flex flex-wrap gap-3 mb-6">
-                  <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-base font-medium">
-                    {language === 'en' ? '15+ years experience' : '15+ años experiencia'}
-                  </span>
-                  <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-base font-medium">
-                    {language === 'en' ? 'Bilingual' : 'Bilingüe'}
-                  </span>
-                  <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-base font-medium">
-                    {language === 'en' ? 'Board Certified' : 'Certificada'}
-                  </span>
-                </div>
-                
-                {/* H1 Principal */}
-                <h1 className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-relaxed text-white text-left mb-6 md:mb-8" data-testid="about-hero-title">
-                  <div className="font-display italic font-bold mb-2 md:mb-3 lg:mb-4">
-                    {language === 'en' 
-                      ? <>A <span className="font-display italic text-green-200">Safe Space</span> to</>
-                      : <>Un <span className="font-display italic text-green-200">Espacio Seguro</span> para</>
-                    }
-                    <WellnessIcon size="md" color="blue" className="inline-flex mx-1 md:mx-2 align-middle">
-                      <IconUserHeart />
-                    </WellnessIcon>
-                  </div>
-                  <div className="font-display italic font-bold">
-                    {language === 'en' 
-                      ? <><span className="font-display italic text-green-200">Heal</span> and Find <span className="font-display italic text-green-200">Clarity</span></>
-                      : <><span className="font-display italic text-green-200">Sanar</span> y Encontrar <span className="font-display italic text-green-200">Claridad</span></>
-                    }
-                    <WellnessIcon size="md" color="green" className="inline-flex mx-1 md:mx-2 align-middle">
-                      <IconBrain />
-                    </WellnessIcon>
-                  </div>
-                </h1>
-                
-                {/* Subtítulo de misión */}
-                <div className="text-lg md:text-xl lg:text-xl xl:text-2xl leading-relaxed font-body mb-8 md:mb-10 lg:mb-12 text-white/90" data-testid="about-hero-subtitle">
-                  <span>
-                    {language === 'en'
-                      ? <>I am <span className="font-display italic text-green-200 font-bold">Dr. Melva Reve</span>, and my mission is to accompany you on your journey toward <span className="font-display italic text-green-200 font-bold">mental wellness</span> with compassionate care, personalized treatments, and renewed hope.</>
-                      : <>Soy la <span className="font-display italic text-green-200 font-bold">Dra. Melva Reve</span>, y mi misión es acompañarte en tu camino hacia el <span className="font-display italic text-green-200 font-bold">bienestar mental</span> con cuidado compasivo, tratamientos personalizados y esperanza renovada.</>
-                    }
-                  </span>
-                </div>
-                
-                {/* CTA Principal */}
-                <div className="ml-0 flex flex-col sm:flex-row gap-4">
-                  <Link href="/contact">
-                    <Button
-                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg"
-                      data-testid="about-hero-cta"
-                    >
-                      <span>{language === 'en' ? 'Schedule Consultation' : 'Agendar mi Consulta'}</span>
-                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                        <ArrowRight className="w-5 h-5 text-green-800" />
-                      </div>
-                    </Button>
-                  </Link>
-                </div>
+      {/* Hero de Conexión Inmediata - Sin contenedor blanco */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Foto de la doctora */}
+            <div className="relative order-2 lg:order-1">
+              <div className="relative bg-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
+                <img
+                  src={doctorProfileImage}
+                  alt="Dr. Melva Reve, MD - Professional headshot of board-certified psychiatrist specializing in anxiety, depression, and ADHD treatment in Naples"
+                  className="w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover object-top"
+                  width={600}
+                  height={600}
+                  loading="lazy"
+                  decoding="async"
+                  data-testid="about-hero-image"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-green-600/10" />
               </div>
+            </div>
+            
+            {/* Contenido empático */}
+            <div className="text-center lg:text-left order-1 lg:order-2">
+              {/* H1 Principal */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-body font-bold text-green-800 mb-6" data-testid="about-hero-title">
+                {language === 'en' 
+                  ? <>A <span className="font-display italic text-green-700">Safe Space</span> to <span className="font-display italic text-green-700">Heal</span> and Find <span className="font-display italic text-green-700">Clarity</span></>
+                  : <>Un <span className="font-display italic text-green-700">Espacio Seguro</span> para <span className="font-display italic text-green-700">Sanar</span> y Encontrar <span className="font-display italic text-green-700">Claridad</span></>
+                }
+              </h1>
+              
+              {/* Subtítulo de misión */}
+              <p className="text-xl lg:text-2xl text-gray-600 mb-8 font-body leading-relaxed" data-testid="about-hero-subtitle">
+                {language === 'en'
+                  ? 'I am Dr. Melva Reve, and my mission is to accompany you on your journey toward mental wellness with compassionate care, personalized treatments, and renewed hope.'
+                  : 'Soy la Dra. Melva Reve, y mi misión es acompañarte en tu camino hacia el bienestar mental con cuidado compasivo, tratamientos personalizados y esperanza renovada.'
+                }
+              </p>
+
+              {/* Badges de credibilidad */}
+              <div className="flex justify-center lg:justify-start gap-4 mb-8 flex-wrap">
+                <span className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium border border-green-200">
+                  {language === 'en' ? '15+ years experience' : '15+ años experiencia'}
+                </span>
+                <span className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium border border-blue-200">
+                  {language === 'en' ? 'Bilingual' : 'Bilingüe'}
+                </span>
+                <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium border border-purple-200">
+                  {language === 'en' ? 'Board Certified' : 'Certificada'}
+                </span>
+              </div>
+
+              {/* CTA Principal */}
+              <Link href="/contact">
+                <Button
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-7 hover:shadow-lg hover:-translate-y-1"
+                  data-testid="about-hero-cta"
+                >
+                  <span>{language === 'en' ? 'Schedule Consultation' : 'Agendar mi Consulta'}</span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
+                    <ArrowRight className="w-5 h-5 text-white" />
+                  </div>
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
