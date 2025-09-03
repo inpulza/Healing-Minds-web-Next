@@ -25,23 +25,22 @@ const CompactVideoCarousel = () => {
           </p>
         </div>
 
-        {/* Carrusel compacto de videos */}
+        {/* Carrusel compacto de videos - MUCHO MÁS PEQUEÑO */}
         {isLoadingVideos ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-3 mb-6">
             {[...Array(4)].map((_, index) => (
-              <div key={index} className="bg-white rounded-xl overflow-hidden shadow-sm border animate-pulse">
-                <div className="aspect-[9/16] bg-gray-200" />
-                <div className="p-3">
-                  <div className="h-4 bg-gray-200 rounded mb-1" />
-                  <div className="h-3 bg-gray-200 rounded w-3/4" />
+              <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border animate-pulse">
+                <div className="aspect-[3/4] bg-gray-200" />
+                <div className="p-2">
+                  <div className="h-3 bg-gray-200 rounded mb-1" />
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-3 mb-6">
             {tikTokVideos?.slice(0, 4).map((video, index) => (
-              <div key={video.id} className="bg-white rounded-xl overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 group">
+              <div key={video.id} className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 group">
                 <a 
                   href={video.url}
                   target="_blank"
@@ -49,7 +48,7 @@ const CompactVideoCarousel = () => {
                   className="block"
                   data-testid={`compact-video-link-${index + 1}`}
                 >
-                  <div className="aspect-[9/16] relative overflow-hidden">
+                  <div className="aspect-[3/4] relative overflow-hidden">
                     {video.thumbnail ? (
                       <>
                         <img 
@@ -59,27 +58,23 @@ const CompactVideoCarousel = () => {
                           loading="lazy"
                         />
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                          <div className="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                            <Play className="w-5 h-5 text-gray-800 ml-1" />
+                          <div className="w-6 h-6 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <Play className="w-3 h-3 text-gray-800 ml-0.5" />
                           </div>
                         </div>
                       </>
                     ) : (
                       <div className="bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center h-full">
-                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
-                          <Play className="w-5 h-5 text-green-600" />
+                        <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
+                          <Play className="w-3 h-3 text-green-600" />
                         </div>
                       </div>
                     )}
                   </div>
-                  <div className="p-3">
-                    <h4 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-2" data-testid={`compact-video-title-${index + 1}`}>
-                      {video.title.length > 40 ? `${video.title.substring(0, 40)}...` : video.title}
+                  <div className="p-2">
+                    <h4 className="text-xs font-medium text-gray-900 line-clamp-2 leading-tight" data-testid={`compact-video-title-${index + 1}`}>
+                      {video.title.length > 30 ? `${video.title.substring(0, 30)}...` : video.title}
                     </h4>
-                    <div className="flex items-center gap-3 text-xs text-gray-500">
-                      <span>💬 {video.commentCount}</span>
-                      {video.reactionCount > 0 && <span>❤️ {video.reactionCount}</span>}
-                    </div>
                   </div>
                 </a>
               </div>
