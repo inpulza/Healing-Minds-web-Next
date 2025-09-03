@@ -350,7 +350,7 @@ const LocationNaples = () => {
 
                 {/* Photo Side */}
                 <div className="order-1 lg:order-2 flex flex-col h-full">
-                  <div className="w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
+                  <div className="w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[4/5] rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <OptimizedImage
                       src={officePhoto}
                       alt="Dr. Melva Reve at her Naples psychiatric practice - Professional and compassionate mental health care"
