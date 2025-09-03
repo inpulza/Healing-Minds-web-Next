@@ -1,0 +1,70 @@
+Te explico cómo está implementada la integración con la API de Metricool para mostrar los reviews de Google en el sitio web:
+
+Estructura de la Implementación
+1. Servicio de Metricool (server/services/metricool.ts)
+Este es el núcleo de la integración. La clase MetricoolService maneja toda la comunicación con Metricool:
+
+Configuración de la API:
+
+URL base: https://app.metricool.com/api/v2/inbox/reviews
+Parámetros necesarios:
+userId: 2603584 (ID del usuario en Metricool)
+blogId: 5126552 (ID del negocio)
+provider: GMB (Google My Business)
+Autenticación:
+
+Usa el header X-Mc-Auth con el token de Metricool
+El token se lee desde la variable de entorno METRICOOL_TOKEN
+2. Sistema de Cache (server/cache/reviews-cache.ts)
+Implementa un sistema de cache inteligente:
+
+Duración: 30 minutos para evitar llamadas excesivas a la API
+Funcionalidad: Guarda los reviews en memoria y verifica la expiración automáticamente
+Logs: Muestra si es "cache hit", "cache miss" o "cache expired"
+3. Transformación de Datos
+El servicio convierte los datos de Metricool al formato que necesita la interfaz:
+
+// Datos de Metricool ? Datos para la UI
+{
+  id: review.id,
+  name: customer?.name || 'Anonymous',
+  image: customer?.imageProfileUrl,
+  date: 'hace X días', // Formato español
+  rating: review.stars,
+  comment: truncatedComment, // Limitado a 120 caracteres
+  fullComment: fullComment,
+  createdAt: new Date(review.creationDate)
+}
+4. API Backend (server/routes.ts)
+Expone dos endpoints:
+
+GET /api/reviews: Devuelve estadísticas completas y reviews más recientes
+GET /api/reviews/rating: Solo devuelve el rating promedio y total de reviews
+POST /api/reviews/refresh: Limpia el cache y fuerza una nueva consulta
+5. Consumo Frontend
+El frontend usa React Query para consumir la API:
+
+const { data: reviewsData } = useQuery({
+  queryKey: ['/api/reviews'],
+  staleTime: 5 * 60 * 1000, // 5 minutos
+});
+6. Sistema de Respaldo
+Si la API de Metricool falla:
+
+Usa reviews estáticos reales que están hardcoded en el código
+Calcula estadísticas con esos datos
+Mantiene la funcionalidad del sitio web
+Para Implementar en Otro Cliente
+Variables que necesitas cambiar:
+
+USER_ID: El ID del cliente en Metricool
+BLOG_ID: El ID del negocio del cliente
+METRICOOL_TOKEN: Token de API del cliente
+Reviews estáticos: Reemplazar con reviews reales del cliente
+Proceso:
+
+El cliente necesita tener una cuenta en Metricool
+Conectar su Google Business Profile a Metricool
+Obtener su token de API de Metricool
+Configurar las variables de entorno
+Adaptar el código con sus IDs específicos
