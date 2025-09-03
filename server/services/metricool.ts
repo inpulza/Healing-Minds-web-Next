@@ -211,7 +211,7 @@ export class MetricoolService {
       }
 
       const data = await response.json();
-      console.log('🎵 TikTok API Response:', JSON.stringify(data, null, 2));
+      console.log(`🎵 TikTok API: Successfully fetched ${data?.data?.length || 0} posts`);
       
       return data;
     } catch (error) {

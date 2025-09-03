@@ -20,12 +20,12 @@ interface TikTokAPIResponse {
   };
 }
 
-// Specific video IDs we want to display (in order)
+// Specific video IDs we want to display (in order of preference)
 const targetVideoIds = [
-  '7545182480849014029',
-  '7543698359270329655', 
-  '7542966062690700558',
-  '7541842758235901239'
+  '7545182480849014029',  // Vence la Parálisis por Desorden
+  '7543698359270329655',  // Guía Rápida para Calmar un Ataque de Pánico
+  '7544069344217582903',  // TDAH en Pareja (replacement for missing video)
+  '7543327515486506253'   // ¿El Rechazo te Duele Físicamente? DSR (replacement for missing video)
 ];
 
 export function useTikTokVideos() {
@@ -48,6 +48,7 @@ export function useTikTokVideos() {
       // Filter and order videos by our target list
       const orderedVideos = targetVideoIds.map((targetId, index) => {
         const foundVideo = allVideos.find(video => video.id === targetId);
+        
         if (foundVideo) {
           return { ...foundVideo, displayIndex: index };
         }
@@ -63,6 +64,25 @@ export function useTikTokVideos() {
           displayIndex: index
         };
       });
+
+      // If we found fewer than expected, also include some available videos
+      const foundVideosCount = orderedVideos.filter(v => !v.id.startsWith('fallback-')).length;
+      if (foundVideosCount < 4 && allVideos.length > 0) {
+        // Add any available videos that we don't have yet
+        const missingSlots = 4 - foundVideosCount;
+        const additionalVideos = allVideos
+          .filter(video => !orderedVideos.some(ov => ov.id === video.id))
+          .slice(0, missingSlots)
+          .map((video, index) => ({ ...video, displayIndex: foundVideosCount + index }));
+        
+        // Replace fallback videos with real ones
+        additionalVideos.forEach(realVideo => {
+          const fallbackIndex = orderedVideos.findIndex(v => v.id.startsWith('fallback-'));
+          if (fallbackIndex !== -1) {
+            orderedVideos[fallbackIndex] = realVideo;
+          }
+        });
+      }
 
       return orderedVideos;
     },
