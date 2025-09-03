@@ -79,7 +79,7 @@ const CharmHealthBooking = ({
             </div>
           </div>
           
-          <Badge className="bg-indigo-600 text-white mb-4 px-6 py-3 text-base font-medium rounded-full" data-testid="telehealth-badge">
+          <Badge className="bg-slate-500 text-white mb-4 px-6 py-3 text-base font-medium rounded-full" data-testid="telehealth-badge">
             <Monitor className="w-4 h-4 mr-2" />
             {currentContent.badge}
           </Badge>
