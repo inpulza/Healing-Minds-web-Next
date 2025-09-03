@@ -59,7 +59,14 @@ const Hero = React.memo(() => {
       <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[90%] mx-auto px-2 sm:px-4">
         {/* Mobile version */}
         <div className="block md:hidden">
-          <div className="relative rounded-2xl overflow-hidden h-[400px] sm:h-[450px] flex items-center justify-center">
+          {/* Mobile SEO Pills - Above photo container */}
+          <div className="flex flex-wrap justify-center gap-2 mb-4 px-4">
+            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Board Certified</span>
+            <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Naples FL</span>
+          </div>
+
+          {/* Photo Container */}
+          <div className="relative rounded-2xl overflow-hidden h-[400px] sm:h-[450px] mb-6">
             {/* Mobile Background Image */}
             <img 
               src={mobileHeroImage}
@@ -73,17 +80,11 @@ const Hero = React.memo(() => {
               {...({'fetchpriority': 'high'} as any)}
             />
             
-            {/* Mobile Content Overlay */}
-            <div className="relative z-10 w-full px-4 sm:px-6 py-6 text-center">
+            {/* Mobile Content Overlay - Bottom of photo */}
+            <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
               <div className="max-w-sm mx-auto">
-                {/* Mobile SEO Pills */}
-                <div className="flex flex-wrap justify-center gap-2 mb-4">
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Board Certified</span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Naples FL</span>
-                </div>
-                
                 {/* Mobile Title */}
-                <h1 className="text-2xl sm:text-3xl leading-tight text-green-700 text-center mb-4" data-testid="hero-title-mobile">
+                <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center mb-3" data-testid="hero-title-mobile">
                   <div className="font-display italic font-bold mb-2">
                     Expert psychiatric care in
                   </div>
@@ -96,33 +97,33 @@ const Hero = React.memo(() => {
                 </h1>
                 
                 {/* Mobile Description */}
-                <div className="text-base leading-relaxed font-body mb-6 text-[#1e6b3b]" data-testid="hero-description-mobile">
-                  <span>Find Your Path to <span className="font-display italic text-green-700 font-bold">Mental Clarity</span> with <span className="font-display italic text-green-700 font-bold">Dr. Melva Reve</span></span>
-                </div>
-                
-                {/* Mobile Action Buttons */}
-                <div className="flex flex-col gap-3">
-                  <Link href="/services">
-                    <Button
-                      className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg"
-                      data-testid="hero-book-consultation-mobile"
-                    >
-                      <span>Our Services</span>
-                      <ArrowRight className="w-4 h-4 text-green-800" />
-                    </Button>
-                  </Link>
-                  <a href="tel:(239) 423-0272">
-                    <Button
-                      className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 py-4 shadow-lg"
-                      data-testid="hero-call-now-mobile"
-                    >
-                      <span>Call Now</span>
-                      <Phone className="w-4 h-4 text-white" />
-                    </Button>
-                  </a>
+                <div className="text-sm leading-relaxed font-body text-white/90" data-testid="hero-description-mobile">
+                  <span>Find Your Path to <span className="font-display italic text-green-300 font-bold">Mental Clarity</span> with <span className="font-display italic text-green-300 font-bold">Dr. Melva Reve</span></span>
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Mobile Action Buttons - Below photo container */}
+          <div className="flex flex-col gap-3 px-4">
+            <Link href="/services">
+              <Button
+                className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg border border-gray-200"
+                data-testid="hero-book-consultation-mobile"
+              >
+                <span>Our Services</span>
+                <ArrowRight className="w-4 h-4 text-green-800" />
+              </Button>
+            </Link>
+            <a href="tel:(239) 423-0272">
+              <Button
+                className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 py-4 shadow-lg"
+                data-testid="hero-call-now-mobile"
+              >
+                <span>Call Now</span>
+                <Phone className="w-4 h-4 text-white" />
+              </Button>
+            </a>
           </div>
         </div>
 
