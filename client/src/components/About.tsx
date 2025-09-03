@@ -165,6 +165,127 @@ const About = () => {
           </div>
         </div>
       </section>
+
+      {/* Sección 2: Videos de la Doctora - Una Conversación con la Dra. Reve */}
+      <section className="py-16 lg:py-20 bg-green-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
+            {/* Encabezado de sección */}
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="video-section-title">
+                {language === 'en' 
+                  ? <>A <span className="font-display italic text-green-700">Conversation</span> with Dr. Reve</>
+                  : <>Una <span className="font-display italic text-green-700">Conversación</span> con la Dra. Reve</>
+                }
+              </h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Get to know me through these educational videos where I share insights about mental health, answer common questions, and provide guidance for your wellness journey.'
+                  : 'Conóceme a través de estos videos educativos donde comparto conocimientos sobre salud mental, respondo preguntas comunes y brindo orientación para tu viaje de bienestar.'
+                }
+              </p>
+            </div>
+
+            {/* Grid de Videos */}
+            {isLoadingVideos ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                {[...Array(4)].map((_, index) => (
+                  <div key={index} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border animate-pulse">
+                    <div className="aspect-[9/16] bg-gray-200" />
+                    <div className="p-4">
+                      <div className="h-6 bg-gray-200 rounded mb-2" />
+                      <div className="h-4 bg-gray-200 rounded" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className={`grid gap-6 mb-12 ${tikTokVideos && tikTokVideos.length > 3 ? 'md:grid-cols-2 lg:grid-cols-4' : tikTokVideos && tikTokVideos.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
+                {tikTokVideos?.slice(0, 4).map((video, index) => (
+                  <div key={video.id} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 group">
+                    <a 
+                      href={video.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                      data-testid={`video-link-${index + 1}`}
+                    >
+                      <div className="aspect-[9/16] relative overflow-hidden">
+                        {video.thumbnail ? (
+                          <>
+                            <img 
+                              src={video.thumbnail}
+                              alt={`Video de la Dra. Reve: ${video.title}`}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                              <div className="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <Play className="w-8 h-8 text-gray-800 ml-1" />
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center h-full">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                              <Play className="w-8 h-8 text-green-600" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2" data-testid={`video-title-${index + 1}`}>
+                          {video.title.length > 60 ? `${video.title.substring(0, 60)}...` : video.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {video.description}
+                        </p>
+                        <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                          <span>💬 {video.commentCount}</span>
+                          {video.reactionCount > 0 && <span>❤️ {video.reactionCount}</span>}
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Call to Action para TikTok */}
+            <div className="text-center">
+              <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
+                <h3 className="text-2xl font-semibold text-green-800 mb-4">
+                  {language === 'en' 
+                    ? 'Have a Question for Dr. Reve?'
+                    : '¿Tienes una Pregunta para la Dra. Reve?'
+                  }
+                </h3>
+                <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+                  {language === 'en'
+                    ? 'Follow me on TikTok for daily mental health tips and feel free to ask your questions directly!'
+                    : '¡Sígueme en TikTok para consejos diarios de salud mental y no dudes en hacer tus preguntas directamente!'
+                  }
+                </p>
+                <a
+                  href="https://www.tiktok.com/@dra.melvavidal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-3 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-800 transition-colors duration-300"
+                  data-testid="tiktok-follow-button"
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-1.183-.11 6.44 6.44 0 0 0-6.444 6.444 6.44 6.44 0 0 0 6.444 6.444 6.44 6.44 0 0 0 6.444-6.444V8.862a8.23 8.23 0 0 0 4.789 1.515v-3.446a4.792 4.792 0 0 1-.817-.245z"/>
+                  </svg>
+                  <span>
+                    {language === 'en' ? 'Follow @dra.melvavidal' : 'Seguir @dra.melvavidal'}
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Sección 3: El Proceso (Qué Esperar) */}
       <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
@@ -412,127 +533,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Sección 6: Videos de la Doctora - Una Conversación con la Dra. Reve */}
-      <section className="py-16 lg:py-20 bg-green-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
-            {/* Encabezado de sección */}
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="video-section-title">
-                {language === 'en' 
-                  ? <>A <span className="font-display italic text-green-700">Conversation</span> with Dr. Reve</>
-                  : <>Una <span className="font-display italic text-green-700">Conversación</span> con la Dra. Reve</>
-                }
-              </h2>
-              <p className="text-xl text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Get to know me through these educational videos where I share insights about mental health, answer common questions, and provide guidance for your wellness journey.'
-                  : 'Conóceme a través de estos videos educativos donde comparto conocimientos sobre salud mental, respondo preguntas comunes y brindo orientación para tu viaje de bienestar.'
-                }
-              </p>
-            </div>
-
-            {/* Grid de Videos */}
-            {isLoadingVideos ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                {[...Array(4)].map((_, index) => (
-                  <div key={index} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border animate-pulse">
-                    <div className="aspect-[9/16] bg-gray-200" />
-                    <div className="p-4">
-                      <div className="h-6 bg-gray-200 rounded mb-2" />
-                      <div className="h-4 bg-gray-200 rounded" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className={`grid gap-6 mb-12 ${tikTokVideos && tikTokVideos.length > 3 ? 'md:grid-cols-2 lg:grid-cols-4' : tikTokVideos && tikTokVideos.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
-                {tikTokVideos?.slice(0, 4).map((video, index) => (
-                  <div key={video.id} className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 group">
-                    <a 
-                      href={video.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block"
-                      data-testid={`video-link-${index + 1}`}
-                    >
-                      <div className="aspect-[9/16] relative overflow-hidden">
-                        {video.thumbnail ? (
-                          <>
-                            <img 
-                              src={video.thumbnail}
-                              alt={`Video de la Dra. Reve: ${video.title}`}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                              <div className="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                <Play className="w-8 h-8 text-gray-800 ml-1" />
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center h-full">
-                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                              <Play className="w-8 h-8 text-green-600" />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2" data-testid={`video-title-${index + 1}`}>
-                          {video.title.length > 60 ? `${video.title.substring(0, 60)}...` : video.title}
-                        </h3>
-                        <p className="text-sm text-gray-600 line-clamp-2">
-                          {video.description}
-                        </p>
-                        <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
-                          <span>💬 {video.commentCount}</span>
-                          {video.reactionCount > 0 && <span>❤️ {video.reactionCount}</span>}
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Call to Action para TikTok */}
-            <div className="text-center">
-              <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
-                <h3 className="text-2xl font-semibold text-green-800 mb-4">
-                  {language === 'en' 
-                    ? 'Have a Question for Dr. Reve?'
-                    : '¿Tienes una Pregunta para la Dra. Reve?'
-                  }
-                </h3>
-                <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                  {language === 'en'
-                    ? 'Follow me on TikTok for daily mental health tips and feel free to ask your questions directly!'
-                    : '¡Sígueme en TikTok para consejos diarios de salud mental y no dudes en hacer tus preguntas directamente!'
-                  }
-                </p>
-                <a
-                  href="https://www.tiktok.com/@dra.melvavidal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-3 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-800 transition-colors duration-300"
-                  data-testid="tiktok-follow-button"
-                >
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-1.183-.11 6.44 6.44 0 0 0-6.444 6.444 6.44 6.44 0 0 0 6.444 6.444 6.44 6.44 0 0 0 6.444-6.444V8.862a8.23 8.23 0 0 0 4.789 1.515v-3.446a4.792 4.792 0 0 1-.817-.245z"/>
-                  </svg>
-                  <span>
-                    {language === 'en' ? 'Follow @dra.melvavidal' : 'Seguir @dra.melvavidal'}
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Sección 7: Llamada a la Acción Final */}
+      {/* Sección 6: Llamada a la Acción Final */}
       <section className="py-16 lg:py-20 from-green-700 to-green-800 text-white bg-[#14532d]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="text-center">
