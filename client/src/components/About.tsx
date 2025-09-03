@@ -12,9 +12,9 @@ const About = () => {
   const { language } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-green-50">
       {/* Sección 1: Hero de Conexión Inmediata */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-green-50 to-white">
+      <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -85,7 +85,7 @@ const About = () => {
       </section>
 
       {/* Sección 2: Mi Enfoque (Filosofía de Cuidado) */}
-      <section className="py-16 lg:py-20 bg-white">
+      <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
             {/* Encabezado de sección */}
@@ -168,7 +168,7 @@ const About = () => {
       </section>
 
       {/* Sección 3: El Proceso (Qué Esperar) */}
-      <section className="py-16 lg:py-20 bg-gray-50">
+      <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
             <div className="text-center mb-12">
@@ -246,7 +246,7 @@ const About = () => {
       </section>
 
       {/* Sección 4: Prueba Social (Reseñas de Pacientes) */}
-      <section className="py-16 lg:py-20 bg-white">
+      <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="testimonials-title">
@@ -269,7 +269,7 @@ const About = () => {
       </section>
 
       {/* Sección 5: Biografía y Credenciales Profesionales */}
-      <section className="py-16 lg:py-20 bg-gray-50">
+      <section className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
             <div className="text-center mb-12">
