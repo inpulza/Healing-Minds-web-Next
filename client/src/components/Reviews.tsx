@@ -21,12 +21,29 @@ const Reviews = () => {
   const reviews = reviewsData?.data?.reviews || [];
   const stats = reviewsData?.data?.stats || { averageRating: 0, totalReviews: 0 };
   
-  // Mobile carousel auto-scroll logic
+  // Mobile carousel auto-scroll logic with scroll sync
   useEffect(() => {
     if (reviews.length <= 1 || isPaused) return;
 
     autoScrollRef.current = setInterval(() => {
-      setCurrentPage(prev => (prev + 1) % reviews.length);
+      setCurrentPage(prev => {
+        const next = (prev + 1) % reviews.length;
+        
+        // Auto-scroll to the next card
+        if (scrollContainerRef.current) {
+          const container = scrollContainerRef.current;
+          const cardWidth = 320;
+          const gap = 16;
+          const scrollPosition = next * (cardWidth + gap);
+          
+          container.scrollTo({
+            left: scrollPosition,
+            behavior: 'smooth'
+          });
+        }
+        
+        return next;
+      });
     }, 4000);
 
     return () => {
@@ -36,10 +53,24 @@ const Reviews = () => {
     };
   }, [reviews.length, isPaused]);
 
-  // Handle manual navigation
+  // Handle manual navigation with scroll sync
   const goToPage = (page: number) => {
     setCurrentPage(page);
     setIsPaused(true);
+    
+    // Scroll to the specific card
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const cardWidth = 320; // Matches sm:min-w-[320px]
+      const gap = 16; // Matches gap-4
+      const scrollPosition = page * (cardWidth + gap);
+      
+      container.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+    }
+    
     setTimeout(() => setIsPaused(false), 8000); // Resume auto-scroll after 8 seconds
   };
 
@@ -182,7 +213,7 @@ const Reviews = () => {
         <div className="lg:hidden" data-testid="reviews-mobile-container">
           <div 
             ref={scrollContainerRef}
-            className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
+            className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide px-4 -mx-4"
             style={{ scrollSnapType: 'x mandatory' }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
@@ -191,7 +222,7 @@ const Reviews = () => {
             {reviews.map((review, index) => (
               <Card 
                 key={review.id}
-                className="min-w-[280px] sm:min-w-[320px] bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 snap-center flex-shrink-0 relative overflow-hidden"
+                className="min-w-[280px] sm:min-w-[320px] w-[280px] sm:w-[320px] bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 snap-center flex-shrink-0 relative overflow-hidden"
                 data-testid={`review-card-mobile-${index}`}
               >
                 {/* Verified Badge */}
