@@ -108,7 +108,7 @@ const Hero = React.memo(() => {
           <div className="flex flex-col gap-3 px-4">
             <Link href="/services">
               <Button
-                className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg border border-gray-200"
+                className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg border border-green-200"
                 data-testid="hero-book-consultation-mobile"
               >
                 <span>Our Services</span>
