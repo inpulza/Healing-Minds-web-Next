@@ -409,7 +409,198 @@ const About = () => {
           </div>
         </div>
       </section>
-      {/* Sección 6: Llamada a la Acción Final */}
+
+      {/* Sección 6: Videos de la Doctora - Una Conversación con la Dra. Reve */}
+      <section className="py-16 lg:py-20 bg-green-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
+            {/* Encabezado de sección */}
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="video-section-title">
+                {language === 'en' 
+                  ? <>A <span className="font-display italic text-green-700">Conversation</span> with Dr. Reve</>
+                  : <>Una <span className="font-display italic text-green-700">Conversación</span> con la Dra. Reve</>
+                }
+              </h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Get to know me through these educational videos where I share insights about mental health, answer common questions, and provide guidance for your wellness journey.'
+                  : 'Conóceme a través de estos videos educativos donde comparto conocimientos sobre salud mental, respondo preguntas comunes y brindo orientación para tu viaje de bienestar.'
+                }
+              </p>
+            </div>
+
+            {/* Grid de Videos */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {/* Video 1 */}
+              <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow duration-300">
+                <a 
+                  href="https://www.tiktok.com/@dra.melvavidal/video/7545182480849014029"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                  data-testid="video-link-1"
+                >
+                  <div className="aspect-[9/16] bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2" data-testid="video-title-1">
+                      {language === 'en' 
+                        ? 'Understanding Anxiety: Signs and Solutions'
+                        : 'Entendiendo la Ansiedad: Señales y Soluciones'
+                      }
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {language === 'en'
+                        ? 'Learn to identify anxiety symptoms and discover effective management strategies.'
+                        : 'Aprende a identificar síntomas de ansiedad y descubre estrategias efectivas de manejo.'
+                      }
+                    </p>
+                  </div>
+                </a>
+              </div>
+
+              {/* Video 2 */}
+              <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow duration-300">
+                <a 
+                  href="https://www.tiktok.com/@dra.melvavidal/video/7543698359270329655"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                  data-testid="video-link-2"
+                >
+                  <div className="aspect-[9/16] bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2" data-testid="video-title-2">
+                      {language === 'en' 
+                        ? 'Depression vs Sadness: Key Differences'
+                        : 'Depresión vs Tristeza: Diferencias Clave'
+                      }
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {language === 'en'
+                        ? 'Understanding when feelings of sadness may indicate clinical depression.'
+                        : 'Entendiendo cuándo los sentimientos de tristeza pueden indicar depresión clínica.'
+                      }
+                    </p>
+                  </div>
+                </a>
+              </div>
+
+              {/* Video 3 */}
+              <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow duration-300">
+                <a 
+                  href="https://www.tiktok.com/@dra.melvavidal/video/7542966062690700558"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                  data-testid="video-link-3"
+                >
+                  <div className="aspect-[9/16] bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2" data-testid="video-title-3">
+                      {language === 'en' 
+                        ? 'ADHD in Adults: Common Misconceptions'
+                        : 'TDAH en Adultos: Conceptos Erróneos Comunes'
+                      }
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {language === 'en'
+                        ? 'Debunking myths about adult ADHD and exploring treatment options.'
+                        : 'Desmintiendo mitos sobre el TDAH adulto y explorando opciones de tratamiento.'
+                      }
+                    </p>
+                  </div>
+                </a>
+              </div>
+
+              {/* Video 4 */}
+              <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow duration-300">
+                <a 
+                  href="https://www.tiktok.com/@dra.melvavidal/video/7541842758235901239"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                  data-testid="video-link-4"
+                >
+                  <div className="aspect-[9/16] bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2" data-testid="video-title-4">
+                      {language === 'en' 
+                        ? 'Mental Health Tips for Daily Wellness'
+                        : 'Consejos de Salud Mental para el Bienestar Diario'
+                      }
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {language === 'en'
+                        ? 'Practical strategies you can implement today for better mental health.'
+                        : 'Estrategias prácticas que puedes implementar hoy para mejor salud mental.'
+                      }
+                    </p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            {/* Call to Action para TikTok */}
+            <div className="text-center">
+              <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
+                <h3 className="text-2xl font-semibold text-green-800 mb-4">
+                  {language === 'en' 
+                    ? 'Have a Question for Dr. Reve?'
+                    : '¿Tienes una Pregunta para la Dra. Reve?'
+                  }
+                </h3>
+                <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+                  {language === 'en'
+                    ? 'Follow me on TikTok for daily mental health tips and feel free to ask your questions directly!'
+                    : '¡Sígueme en TikTok para consejos diarios de salud mental y no dudes en hacer tus preguntas directamente!'
+                  }
+                </p>
+                <a
+                  href="https://www.tiktok.com/@dra.melvavidal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-3 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-800 transition-colors duration-300"
+                  data-testid="tiktok-follow-button"
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-1.183-.11 6.44 6.44 0 0 0-6.444 6.444 6.44 6.44 0 0 0 6.444 6.444 6.44 6.44 0 0 0 6.444-6.444V8.862a8.23 8.23 0 0 0 4.789 1.515v-3.446a4.792 4.792 0 0 1-.817-.245z"/>
+                  </svg>
+                  <span>
+                    {language === 'en' ? 'Follow @dra.melvavidal' : 'Seguir @dra.melvavidal'}
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sección 7: Llamada a la Acción Final */}
       <section className="py-16 lg:py-20 from-green-700 to-green-800 text-white bg-[#14532d]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="text-center">
