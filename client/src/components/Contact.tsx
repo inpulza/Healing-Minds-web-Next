@@ -229,7 +229,7 @@ const Contact = () => {
             </Card>
 
             {/* Telehealth Booking */}
-            <div className="mt-auto">
+            <div className="mt-8 md:mt-auto">
               <h3 className="text-xl font-body font-semibold text-gray-900 mb-4">
                 {language === 'en' ? (
                   <>
