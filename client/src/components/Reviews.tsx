@@ -280,15 +280,21 @@ const Reviews = () => {
 
         {/* Call to Action */}
         <div className="text-center mt-12">
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 border border-gray-200 shadow-sm">
+          <a 
+            href="https://g.page/r/CX_IlTO2gnY7EBM/review"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 border border-gray-200 shadow-sm hover:shadow-lg hover:bg-white transition-all duration-300 hover:-translate-y-1"
+            data-testid="button-google-review"
+          >
             <Star className="w-5 h-5 text-yellow-400 fill-current" />
             <span className="text-gray-700 font-medium">
               {language === 'en' 
-                ? 'Leave us a review on Google' 
-                : 'Déjanos una reseña en Google'
+                ? 'Click here - Leave us a review on Google' 
+                : 'Click aquí - Déjanos una reseña en Google'
               }
             </span>
-          </div>
+          </a>
         </div>
       </div>
 
