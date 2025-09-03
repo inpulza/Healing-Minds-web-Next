@@ -5,10 +5,16 @@ interface MetricoolCustomer {
 
 interface MetricoolReview {
   id: string;
-  stars: number;
-  comment: string;
+  providerId: string;
+  stars?: number;
+  comment?: string;
   creationDate: string;
   customer?: MetricoolCustomer;
+  participants?: Array<{
+    id: string;
+    name?: string;
+    imageProfileUrl?: string;
+  }>;
 }
 
 interface MetricoolResponse {
@@ -23,7 +29,7 @@ interface MetricoolResponse {
 export class MetricoolService {
   private readonly apiUrl = 'https://app.metricool.com/api/v2/inbox/reviews';
   private readonly userId = '2603584';
-  private readonly blogId = '5128724'; // Updated blogId as specified
+  private readonly blogId = '5128724';
   private readonly provider = 'GMB';
   private readonly token = process.env.METRICOOL_TOKEN;
 
@@ -47,10 +53,23 @@ export class MetricoolService {
         throw new Error(`Metricool API error: ${response.status} ${response.statusText}`);
       }
 
-      const data: MetricoolResponse = await response.json();
-      console.log(`✅ Metricool API: Fetched ${data.reviews?.length || 0} reviews successfully`);
+      const data = await response.json();
+      console.log('📊 Raw Metricool API response:', JSON.stringify(data, null, 2));
       
-      return data;
+      // Handle Metricool API response structure
+      let reviews = [];
+      if (data.data && Array.isArray(data.data)) {
+        reviews = data.data;
+      } else if (data.reviews && Array.isArray(data.reviews)) {
+        reviews = data.reviews;
+      } else if (Array.isArray(data)) {
+        reviews = data;
+      }
+      
+      console.log(`✅ Metricool API: Fetched ${reviews.length} reviews successfully`);
+      console.log('📋 Sample review structure:', reviews[0] ? JSON.stringify(reviews[0], null, 2) : 'No reviews available');
+      
+      return { reviews } as MetricoolResponse;
     } catch (error) {
       console.error('❌ Error fetching reviews from Metricool:', error);
       throw error;
@@ -88,12 +107,17 @@ export class MetricoolService {
         dateString = years === 1 ? 'hace 1 año' : `hace ${years} años`;
       }
 
+      // Get customer info from participants or customer field
+      const participant = review.participants?.[0];
+      const customerName = review.customer?.name || participant?.name || 'Anonymous';
+      const customerImage = review.customer?.imageProfileUrl || participant?.imageProfileUrl;
+
       return {
         id: review.id,
-        name: review.customer?.name || 'Anonymous',
-        image: review.customer?.imageProfileUrl,
+        name: customerName,
+        image: customerImage,
         date: dateString,
-        rating: review.stars,
+        rating: review.stars ?? 5,
         comment: truncatedComment,
         fullComment: fullComment,
         createdAt: createdDate,
@@ -126,7 +150,7 @@ export class MetricoolService {
       return acc;
     }, { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 });
 
-    const totalStars = reviews.reduce((sum, review) => sum + review.stars, 0);
+    const totalStars = reviews.reduce((sum, review) => sum + (review.stars ?? 0), 0);
     const averageRating = Math.round((totalStars / totalReviews) * 10) / 10;
 
     return {
