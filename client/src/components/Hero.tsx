@@ -57,11 +57,72 @@ const Hero = React.memo(() => {
   return (
     <section className="pt-8 pb-16 bg-white">
       <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[90%] mx-auto px-2 sm:px-4">
-        {/* Mobile version lazy loaded to improve initial desktop performance */}
+        {/* Mobile version */}
         <div className="block md:hidden">
-          {/* Mobile hero content moved to separate component - not rendering initially for performance */}
-          <div className="min-h-[400px] bg-gray-100 rounded-2xl flex items-center justify-center">
-            <p className="text-gray-500">Loading mobile view...</p>
+          <div className="relative rounded-2xl overflow-hidden h-[400px] sm:h-[450px] flex items-center justify-center">
+            {/* Mobile Background Image */}
+            <img 
+              src={mobileHeroImage}
+              alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in Naples, FL"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              width={768}
+              height={450}
+              loading="eager"
+              decoding="sync"
+              sizes="(max-width: 767px) 100vw, 768px"
+              {...({'fetchpriority': 'high'} as any)}
+            />
+            
+            {/* Mobile Content Overlay */}
+            <div className="relative z-10 w-full px-4 sm:px-6 py-6 text-center">
+              <div className="max-w-sm mx-auto">
+                {/* Mobile SEO Pills */}
+                <div className="flex flex-wrap justify-center gap-2 mb-4">
+                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Board Certified</span>
+                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Naples FL</span>
+                </div>
+                
+                {/* Mobile Title */}
+                <h1 className="text-2xl sm:text-3xl leading-tight text-green-700 text-center mb-4" data-testid="hero-title-mobile">
+                  <div className="font-display italic font-bold mb-2">
+                    Expert psychiatric care in
+                  </div>
+                  <div className="font-display italic font-bold">
+                    Naples, FL
+                    <WellnessIcon size="sm" color="green" className="inline-flex mx-1 align-middle">
+                      <IconBrain />
+                    </WellnessIcon>
+                  </div>
+                </h1>
+                
+                {/* Mobile Description */}
+                <div className="text-base leading-relaxed font-body mb-6 text-[#1e6b3b]" data-testid="hero-description-mobile">
+                  <span>Find Your Path to <span className="font-display italic text-green-700 font-bold">Mental Clarity</span> with <span className="font-display italic text-green-700 font-bold">Dr. Melva Reve</span></span>
+                </div>
+                
+                {/* Mobile Action Buttons */}
+                <div className="flex flex-col gap-3">
+                  <Link href="/services">
+                    <Button
+                      className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg"
+                      data-testid="hero-book-consultation-mobile"
+                    >
+                      <span>Our Services</span>
+                      <ArrowRight className="w-4 h-4 text-green-800" />
+                    </Button>
+                  </Link>
+                  <a href="tel:(239) 423-0272">
+                    <Button
+                      className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 py-4 shadow-lg"
+                      data-testid="hero-call-now-mobile"
+                    >
+                      <span>Call Now</span>
+                      <Phone className="w-4 h-4 text-white" />
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
