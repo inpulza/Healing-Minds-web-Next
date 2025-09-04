@@ -5,15 +5,42 @@ export const generateSitemap = (req: Request, res: Response) => {
   // Use X-Forwarded-Proto header if available (for Replit proxy), otherwise fallback to req.protocol
   const protocol = req.headers['x-forwarded-proto'] || req.protocol;
   const baseUrl = `${protocol}://${req.get('host')}`;
-  const currentDate = new Date().toISOString().split('T')[0];
+  
+  // Define realistic last modification dates for different types of content
+  const recentDate = '2025-08-20'; // Recent major updates (Microsoft Clarity, schema optimization)
+  const contentDate = '2025-08-15'; // Service page content updates
+  const oldContentDate = '2025-07-15'; // Older established content
+  const legalDate = '2025-06-01'; // Legal pages (less frequent updates)
   
   // Define bilingual page relationships for hreflang
   const bilingualPages = [
+    // Main pages with bilingual versions
+    {
+      en: '/about',
+      es: '/es/acerca-de',
+      lastmod: oldContentDate,
+      changefreq: 'monthly',
+      priority: '0.8'
+    },
+    {
+      en: '/contact',
+      es: '/es/contacto',
+      lastmod: oldContentDate,
+      changefreq: 'monthly',
+      priority: '0.8'
+    },
+    {
+      en: '/for-patients',
+      es: '/es/para-pacientes',
+      lastmod: oldContentDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
     // Main service pages with bilingual versions
     {
       en: '/services',
       es: '/es/servicios',
-      lastmod: currentDate,
+      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.8'
     },
@@ -21,35 +48,42 @@ export const generateSitemap = (req: Request, res: Response) => {
     {
       en: '/services/anxiety-treatment',
       es: '/es/servicios/tratamiento-ansiedad',
-      lastmod: currentDate,
+      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/depression-treatment',
       es: '/es/servicios/tratamiento-depresion',
-      lastmod: currentDate,
+      lastmod: contentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      en: '/services/adhd-treatment',
+      es: '/es/servicios/tratamiento-adhd',
+      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/ptsd-treatment',
       es: '/es/servicios/tratamiento-tept',
-      lastmod: currentDate,
+      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/bipolar-treatment',
       es: '/es/servicios/tratamiento-bipolar',
-      lastmod: currentDate,
+      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/medication-management',
       es: '/es/servicios/manejo-medicamentos',
-      lastmod: currentDate,
+      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     }
@@ -58,14 +92,8 @@ export const generateSitemap = (req: Request, res: Response) => {
   // Pages that exist only in English (no Spanish version)
   const englishOnlyPages = [
     {
-      url: '/services/adhd-treatment',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
       url: '/locations/naples',
-      lastmod: currentDate,
+      lastmod: oldContentDate,
       changefreq: 'monthly',
       priority: '0.6'
     }
@@ -76,62 +104,41 @@ export const generateSitemap = (req: Request, res: Response) => {
     {
       en: '/privacy-policy',
       es: '/es/politica-privacidad',
-      lastmod: currentDate,
+      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/terms-of-service',
       es: '/es/terminos-servicio',
-      lastmod: currentDate,
+      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/hipaa-notice',
       es: '/es/aviso-hipaa',
-      lastmod: currentDate,
+      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/cookie-policy',
       es: '/es/politica-cookies',
-      lastmod: currentDate,
+      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     }
   ];
   
-  // Define site structure with priorities and update frequencies
+  // Define site structure with priorities and update frequencies  
   const pages = [
-    // Homepage - Maximum priority
+    // Homepage - Maximum priority (recent schema and analytics updates)
     {
       url: '/',
-      lastmod: currentDate,
+      lastmod: recentDate,
       changefreq: 'weekly',
       priority: '1.0'
-    },
-    
-    {
-      url: '/about',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.8'
-    },
-    {
-      url: '/contact',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.8'
-    },
-    
-    // Patient info pages
-    {
-      url: '/for-patients',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.6'
     }
   ];
 
