@@ -9,6 +9,15 @@ export const generateSitemap = (req: Request, res: Response) => {
   
   // Define bilingual page relationships for hreflang
   const bilingualPages = [
+    // Main service pages with bilingual versions
+    {
+      en: '/services',
+      es: '/es/servicios',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.8'
+    },
+    // Individual service pages with bilingual versions
     {
       en: '/services/anxiety-treatment',
       es: '/es/servicios/tratamiento-ansiedad',
@@ -19,13 +28,6 @@ export const generateSitemap = (req: Request, res: Response) => {
     {
       en: '/services/depression-treatment',
       es: '/es/servicios/tratamiento-depresion',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      en: '/adhd-treatment-adults-naples-fl',
-      es: '/adhd-treatment-adults-naples-fl',
       lastmod: currentDate,
       changefreq: 'monthly',
       priority: '0.7'
@@ -50,6 +52,28 @@ export const generateSitemap = (req: Request, res: Response) => {
       lastmod: currentDate,
       changefreq: 'monthly',
       priority: '0.7'
+    }
+  ];
+
+  // Pages that exist only in English (no Spanish version)
+  const englishOnlyPages = [
+    {
+      url: '/services/adhd-treatment',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      url: '/adhd-treatment-adults-naples-fl',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      url: '/locations/naples',
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: '0.6'
     }
   ];
   
@@ -95,13 +119,6 @@ export const generateSitemap = (req: Request, res: Response) => {
       priority: '1.0'
     },
     
-    // Main service pages - Very high priority
-    {
-      url: '/services',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.8'
-    },
     {
       url: '/about',
       lastmod: currentDate,
@@ -115,21 +132,7 @@ export const generateSitemap = (req: Request, res: Response) => {
       priority: '0.8'
     },
     
-    // Spanish main services page - Will be moved to /es/servicios for consistency
-    {
-      url: '/es/servicios',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    
-    // Location and patient info pages
-    {
-      url: '/locations/naples',
-      lastmod: currentDate,
-      changefreq: 'yearly',
-      priority: '0.6'
-    },
+    // Patient info pages
     {
       url: '/for-patients',
       lastmod: currentDate,
@@ -140,6 +143,14 @@ export const generateSitemap = (req: Request, res: Response) => {
 
   // Generate XML sitemap with hreflang support
   const regularPagesXml = pages.map(page => `  <url>
+    <loc>${baseUrl}${page.url}</loc>
+    <lastmod>${page.lastmod}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`).join('\n');
+
+  // Generate English-only pages
+  const englishOnlyPagesXml = englishOnlyPages.map(page => `  <url>
     <loc>${baseUrl}${page.url}</loc>
     <lastmod>${page.lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
@@ -227,6 +238,7 @@ export const generateSitemap = (req: Request, res: Response) => {
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${regularPagesXml}
 ${bilingualPagesXml}
+${englishOnlyPagesXml}
 ${legalPagesXml}
 </urlset>`;
 
