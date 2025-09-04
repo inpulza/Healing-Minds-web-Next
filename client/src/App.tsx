@@ -76,7 +76,6 @@ function Router() {
       {/* Spanish Service Pages */}
       <Route path="/es/servicios/tratamiento-ansiedad" component={AnxietyTreatment} />
       <Route path="/es/servicios/tratamiento-depresion" component={DepressionTreatment} />
-      <Route path="/adhd-treatment-adults-naples-fl" component={AdhdTreatment} />
       <Route path="/es/servicios/tratamiento-tept" component={PtsdTreatment} />
       <Route path="/es/servicios/tratamiento-bipolar" component={BipolarTreatment} />
       <Route path="/es/servicios/manejo-medicamentos" component={MedicationManagement} />

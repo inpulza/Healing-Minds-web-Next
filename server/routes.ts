@@ -8,6 +8,10 @@ import { reviewsCache } from "./cache/reviews-cache";
 import { staticReviews, staticStats } from "./data/static-reviews";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // 301 redirect from old ADHD URL to new consistent URL
+  app.get('/adhd-treatment-adults-naples-fl', (req, res) => {
+    res.redirect(301, '/services/adhd-treatment');
+  });
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {

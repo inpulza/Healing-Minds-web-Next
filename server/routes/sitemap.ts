@@ -64,12 +64,6 @@ export const generateSitemap = (req: Request, res: Response) => {
       priority: '0.7'
     },
     {
-      url: '/adhd-treatment-adults-naples-fl',
-      lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
       url: '/locations/naples',
       lastmod: currentDate,
       changefreq: 'monthly',
