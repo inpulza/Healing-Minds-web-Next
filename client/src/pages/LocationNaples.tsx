@@ -214,7 +214,7 @@ const LocationNaples = () => {
               {/* Hero Image - Dr. Melva at Practice */}
               <div className="mb-8">
                 <div className="max-w-4xl mx-auto">
-                  <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden shadow-lg">
+                  <div className="w-full aspect-[1200/667] rounded-2xl overflow-hidden shadow-lg">
                     <OptimizedImage
                       src={heroLocationImage}
                       alt="Dr. Melva Reve at her Naples psychiatric practice - Professional mental health care in a welcoming environment"
