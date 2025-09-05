@@ -11,10 +11,11 @@ const BilingualCare = () => {
 
   const features = [
     {
-      title: language === 'en' ? 'Native Spanish Fluency' : 'Fluidez Nativa en Español',
+      title: language === 'en' ? 'Native Spanish and English' : 'Español e Inglés Nativo',
       description: language === 'en' 
-        ? 'Consultations conducted entirely in Spanish for optimal communication'
-        : 'Consultas realizadas completamente en español para una comunicación óptima'
+        ? 'Consultations conducted in both Spanish and English for optimal communication'
+        : 'Consultas realizadas tanto en español como en inglés para una comunicación óptima',
+      isBilingual: true
     },
     {
       title: language === 'en' ? 'Cultural Understanding' : 'Comprensión Cultural',
@@ -54,7 +55,12 @@ const BilingualCare = () => {
             
             <div className="grid md:grid-cols-1 gap-4 sm:gap-6 mb-6 sm:mb-8" data-testid="bilingual-features">
               {features.map((feature, index) => (
-                <div key={index} className="flex items-start bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm">
+                <div key={index} className="relative flex items-start bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm">
+                  {feature.isBilingual && (
+                    <div className="absolute -top-2 -right-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
+                      {language === 'en' ? 'Bilingual' : 'Bilingüe'}
+                    </div>
+                  )}
                   <div className="w-3 h-3 bg-green-500 rounded-full mr-3 sm:mr-4 mt-2 flex-shrink-0" />
                   <div>
                     <h4 className="font-display font-bold text-green-800 mb-1 sm:mb-2 text-sm sm:text-base">{feature.title}</h4>
