@@ -31,6 +31,7 @@ import { Link } from 'wouter';
 
 // Import office photo
 import officePhoto from '@assets/doctor-consultation.webp';
+import heroLocationImage from '@assets/dr-melva-location-hero.webp';
 import OptimizedImage from '@/components/OptimizedImage';
 
 const LocationNaples = () => {
@@ -209,6 +210,23 @@ const LocationNaples = () => {
                   </>
                 )}
               </h1>
+
+              {/* Hero Image - Dr. Melva at Practice */}
+              <div className="mb-8">
+                <div className="max-w-4xl mx-auto">
+                  <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden shadow-lg">
+                    <OptimizedImage
+                      src={heroLocationImage}
+                      alt="Dr. Melva Reve at her Naples psychiatric practice - Professional mental health care in a welcoming environment"
+                      className="w-full h-full object-cover object-center"
+                      width={1200}
+                      height={675}
+                      priority={true}
+                      sizes="(max-width: 640px) 600px, (max-width: 1024px) 800px, 1200px"
+                    />
+                  </div>
+                </div>
+              </div>
               
               <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto font-body">
                 {language === 'en' 
