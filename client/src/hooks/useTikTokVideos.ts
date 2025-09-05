@@ -68,23 +68,54 @@ export function useTikTokVideos() {
       // If we found fewer than expected, also include some available videos
       const foundVideosCount = orderedVideos.filter(v => !v.id.startsWith('fallback-')).length;
       if (foundVideosCount < 4 && allVideos.length > 0) {
-        // Add any available videos that we don't have yet
-        const missingSlots = 4 - foundVideosCount;
-        const additionalVideos = allVideos
-          .filter(video => !orderedVideos.some(ov => ov.id === video.id))
-          .slice(0, missingSlots)
-          .map((video, index) => ({ ...video, displayIndex: foundVideosCount + index }));
+        // Get all real video IDs that are already used
+        const usedVideoIds = new Set(orderedVideos
+          .filter(v => !v.id.startsWith('fallback-'))
+          .map(v => v.id)
+        );
         
-        // Replace fallback videos with real ones
-        additionalVideos.forEach(realVideo => {
-          const fallbackIndex = orderedVideos.findIndex(v => v.id.startsWith('fallback-'));
-          if (fallbackIndex !== -1) {
-            orderedVideos[fallbackIndex] = realVideo;
-          }
-        });
+        // Find available videos that haven't been used yet
+        const availableVideos = allVideos.filter(video => !usedVideoIds.has(video.id));
+        
+        // Replace fallback videos with unique real ones
+        const fallbackIndices = orderedVideos
+          .map((video, index) => video.id.startsWith('fallback-') ? index : -1)
+          .filter(index => index !== -1);
+        
+        const missingSlots = Math.min(fallbackIndices.length, availableVideos.length);
+        
+        for (let i = 0; i < missingSlots; i++) {
+          const fallbackIndex = fallbackIndices[i];
+          const replacementVideo = availableVideos[i];
+          
+          orderedVideos[fallbackIndex] = {
+            ...replacementVideo,
+            displayIndex: fallbackIndex
+          };
+        }
       }
 
-      return orderedVideos;
+      // Final validation: ensure all keys are absolutely unique
+      const seenIds = new Set();
+      const finalVideos = orderedVideos.map((video, index) => {
+        let uniqueId = video.id;
+        let counter = 0;
+        
+        // If we've seen this ID before, make it unique
+        while (seenIds.has(uniqueId)) {
+          counter++;
+          uniqueId = `${video.id}-${counter}`;
+        }
+        
+        seenIds.add(uniqueId);
+        
+        return {
+          ...video,
+          id: uniqueId
+        };
+      });
+
+      return finalVideos;
     },
     staleTime: 1000 * 60 * 10, // 10 minutes
   });
