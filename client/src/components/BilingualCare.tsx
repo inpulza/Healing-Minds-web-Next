@@ -57,7 +57,7 @@ const BilingualCare = () => {
               {features.map((feature, index) => (
                 <div key={index} className="relative flex items-start bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm">
                   {feature.isBilingual && (
-                    <div className="absolute -top-3 -right-3 bg-orange-400 text-gray-800 text-sm font-bold px-3 py-1.5 rounded-full shadow-md">
+                    <div className="absolute -top-3 -right-3 bg-orange-100 text-green-700 text-sm font-bold px-3 py-1.5 rounded-full shadow-md">
                       {language === 'en' ? 'Bilingual' : 'Bilingüe'}
                     </div>
                   )}
