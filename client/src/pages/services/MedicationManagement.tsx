@@ -499,14 +499,14 @@ const MedicationManagement = () => {
                     'Bilingual services in English and Spanish',
                     'Insurance coverage assistance',
                     'Regular follow-up and safety monitoring',
-                    'Convenient scheduling and accessible Naples, FL location'
+                    <>Convenient scheduling and <Link href="/locations/naples" className="text-green-700 hover:text-green-800 underline">accessible Naples, FL location</Link></>
                   ] : [
                     'Psiquiatra certificada con experiencia en medicamentos',
                     'Monitoreo integral y ajustes de medicación',
                     'Servicios bilingües en inglés y español',
                     'Asistencia con cobertura de seguro',
                     'Seguimiento regular y monitoreo de seguridad',
-                    'Horarios convenientes y ubicación accesible en Naples, FL'
+                    <>Horarios convenientes y <Link href="/locations/naples" className="text-green-700 hover:text-green-800 underline">ubicación accesible en Naples, FL</Link></>
                   ]).map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">

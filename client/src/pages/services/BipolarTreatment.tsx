@@ -655,14 +655,14 @@ const BipolarTreatment = () => {
                     'Evidence-based medication management',
                     'Collaborative approach with therapists and support teams',
                     'Regular monitoring and adjustment of treatment plans',
-                    'Insurance accepted and flexible scheduling at our Naples, FL location'
+                    <>Insurance accepted and flexible scheduling at <Link href="/locations/naples" className="text-green-700 hover:text-green-800 underline">our Naples, FL location</Link></>
                   ] : [
                     'Psiquiatra certificada con experiencia en trastornos del ánimo',
                     'Servicios bilingües en inglés y español',
                     'Manejo de medicamentos basado en evidencia',
                     'Enfoque colaborativo con terapeutas y equipos de apoyo',
                     'Monitoreo regular y ajuste de planes de tratamiento',
-                    'Se acepta seguro y horarios flexibles en nuestra ubicación en Naples, FL'
+                    <>Se acepta seguro y horarios flexibles en <Link href="/locations/naples" className="text-green-700 hover:text-green-800 underline">nuestra ubicación en Naples, FL</Link></>
                   ]).map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">

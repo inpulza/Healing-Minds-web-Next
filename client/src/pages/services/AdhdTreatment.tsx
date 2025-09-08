@@ -858,8 +858,8 @@ const AdhdTreatment = () => {
                     ? 'Do you offer telepsychiatry for ADHD treatment in Florida?'
                     : '¿Ofrecen telepsiquiatría para el tratamiento del TDAH en Florida?',
                   answer: language === 'en'
-                    ? 'Yes, at Healing Minds Psychiatry we offer telepsychiatry services from our Naples, FL practice. This allows you to receive expert care and follow-up from the comfort of your home, as long as you are located within the state of Florida.'
-                    : 'Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría desde nuestra práctica en Naples, FL. Esto te permite recibir atención experta y seguimiento desde la comodidad de tu hogar, siempre que te encuentres en el estado de Florida.'
+                    ? <>Yes, at Healing Minds Psychiatry we offer telepsychiatry services from <Link href="/locations/naples" className="text-green-700 hover:text-green-800 underline">our Naples, FL practice</Link>. This allows you to receive expert care and follow-up from the comfort of your home, as long as you are located within the state of Florida.</>
+                    : <>Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría desde <Link href="/locations/naples" className="text-green-700 hover:text-green-800 underline">nuestra práctica en Naples, FL</Link>. Esto te permite recibir atención experta y seguimiento desde la comodidad de tu hogar, siempre que te encuentres en el estado de Florida.</>
                 }
               ].map((faq, index) => (
                 <div
