@@ -6,6 +6,7 @@ import { generateSitemap, generateRobotsTxt } from "./routes/sitemap";
 import { MetricoolService } from "./services/metricool";
 import { reviewsCache } from "./cache/reviews-cache";
 import { staticReviews, staticStats } from "./data/static-reviews";
+import { emailService } from "./services/email";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // 301 redirect from old ADHD URL to new consistent URL
@@ -21,7 +22,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Store the contact message
       const contactMessage = await storage.createContactMessage(validatedData);
       
-      // In a real application, you would also send an email here
+      // Send notification email to practice and confirmation email to patient
+      try {
+        await Promise.all([
+          emailService.sendContactNotification(validatedData),
+          emailService.sendConfirmationEmail(validatedData)
+        ]);
+        console.log("✅ Emails sent successfully for contact form submission");
+      } catch (emailError) {
+        console.error("❌ Error sending emails:", emailError);
+        // Don't fail the entire request if email fails, but log the error
+        // The contact message is still saved in storage
+      }
+      
       console.log("New contact message received:", contactMessage);
       
       // Return success response
