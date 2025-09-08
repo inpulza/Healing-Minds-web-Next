@@ -1,0 +1,43 @@
+Aquí tienes el texto explicativo para tu agente de Replit. Este parágrafo resume el diagnóstico técnico basado en los resultados de la prueba que me has enviado y define la estrategia de solución.
+
+Asunto: Diagnóstico y Resolución de Conflicto Crítico de Schema JSON-LD
+
+Para: Agente Replit (Equipo de Desarrollo)
+
+Saludos. Tras ejecutar un análisis del sitio con la Herramienta de Pruebas de Rich Results de Google, hemos confirmado un problema técnico crítico: la página está generando múltiples bloques de datos estructurados (Schema) que son duplicados y conflictivos.
+
+El rastreador detecta 5 elementos de schema separados, lo cual incluye tanto bloques válidos y muy completos (un MedicalClinic con todos los servicios anidados y un Physician detallado) como varios fragmentos inválidos que arrojan errores críticos (específicamente "Falta el campo 'address'"). Esto suele ocurrir cuando múltiples sistemas (como el tema principal del sitio y un plugin de SEO) intentan generar schema simultáneamente, creando "ruido" algorítmico. Esto confunde a Google y diluye severamente nuestra autoridad E-E-A-T, lo cual es de alto riesgo para un sitio YMYL (médico).
+
+Tu tarea diagnóstica es realizar una auditoría de código para identificar todas las fuentes que están inyectando schema JSON-LD (revisar el tema, los ajustes de plugins de SEO y cualquier script personalizado). Una vez identificadas, debemos desactivar los generadores redundantes (los que producen los fragmentos rotos y los errores críticos).
+
+El objetivo final es consolidar nuestra estrategia en el 
+
+modelo "Hub & Spoke" que hemos definido: asegurar que un solo schema maestro MedicalClinic (el bloque válido y completo que detectó la prueba) se cargue exclusivamente en la página "Hub" (/locations/naples), y que cada página de servicio individual (Anxiety, TDAH, etc.) cargue únicamente su propio schema 
+
+
+Service, el cual debe estar conectado de vuelta al Hub usando la propiedad "provider" apuntando al @id único de la clínica.
+
+
+Fuentes
+
+
+
+
+
+
+
+
+
+
+
+Video
+
+Imagen
+
+Canvas
+
+Aprendizaje guiado
+
+
+Gemini puede cometer errores, así que verifica las respuestas.
+
