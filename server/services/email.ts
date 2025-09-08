@@ -9,7 +9,7 @@ export interface EmailService {
 }
 
 export class ResendEmailService implements EmailService {
-  private readonly fromEmail = 'noreply@healingminds.com';
+  private readonly fromEmail = 'onboarding@resend.dev';
   private readonly practiceEmail = 'info@healingmindsp.com';
 
   async sendContactNotification(contactData: InsertContactMessage): Promise<void> {
@@ -42,14 +42,17 @@ export class ResendEmailService implements EmailService {
     `;
 
     try {
-      await resend.emails.send({
+      console.log('📧 Sending notification email to:', this.practiceEmail, 'from:', this.fromEmail);
+      const response = await resend.emails.send({
         from: this.fromEmail,
         to: this.practiceEmail,
         subject: subject,
         html: htmlContent,
       });
+      console.log('✅ Resend notification response:', response);
     } catch (error) {
-      console.error('Error sending contact notification email:', error);
+      console.error('❌ Error sending contact notification email:', error);
+      console.error('❌ Error details:', JSON.stringify(error, null, 2));
       throw new Error('Failed to send contact notification email');
     }
   }
@@ -64,14 +67,17 @@ export class ResendEmailService implements EmailService {
     const htmlContent = isSpanish ? this.getSpanishConfirmationTemplate(contactData) : this.getEnglishConfirmationTemplate(contactData);
 
     try {
-      await resend.emails.send({
+      console.log('📧 Sending confirmation email to:', contactData.email, 'from:', this.fromEmail);
+      const response = await resend.emails.send({
         from: this.fromEmail,
         to: contactData.email,
         subject: subject,
         html: htmlContent,
       });
+      console.log('✅ Resend confirmation response:', response);
     } catch (error) {
-      console.error('Error sending confirmation email:', error);
+      console.error('❌ Error sending confirmation email:', error);
+      console.error('❌ Error details:', JSON.stringify(error, null, 2));
       throw new Error('Failed to send confirmation email');
     }
   }
