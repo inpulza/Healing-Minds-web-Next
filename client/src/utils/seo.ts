@@ -219,84 +219,9 @@ export const addPhysicianSchema = () => {
   console.log('Physician info integrated into MedicalClinic schema');
 };
 
-// ADHD Treatment Page Specific Schema
-export const addADHDTreatmentSchema = () => {
-  const schema = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Physician",
-        "name": "Dra. Melva Reve, M.D.",
-        "description": "Psiquiatra certificada bilingüe especializada en el tratamiento de TDAH, depresión y ansiedad en adultos en Naples, FL.",
-        "medicalSpecialty": "Psychiatry",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "4760 Tamiami Trl N # 25",
-          "addressLocality": "Naples",
-          "addressRegion": "FL",
-          "postalCode": "34103",
-          "addressCountry": "US"
-        },
-        "telephone": "+12394230272",
-        "worksFor": {
-          "@type": "Organization",
-          "name": "Healing Minds Psychiatry"
-        },
-        "knowsLanguage": ["es-US", "en-US"]
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "¿Cuál es el primer paso para tratar el TDAH si soy adulto?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "El primer y más importante paso es buscar una evaluación profesional completa con un psiquiatra cualificado, como la Dra. Reve en Healing Minds Psychiatry. Un diagnóstico preciso es fundamental para crear un plan de tratamiento efectivo."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "¿El tratamiento para el TDAH siempre incluye medicamentos?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No necesariamente. Si bien los medicamentos son altamente efectivos para muchos adultos, el mejor enfoque a menudo combina terapia, estrategias de comportamiento y, si es apropiado, medicación. El plan se personaliza para cada individuo."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "¿Cómo puede ayudar la terapia en mi trabajo y relaciones?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "La terapia puede proporcionarte herramientas invaluables para gestionar mejor el tiempo, mejorar tus habilidades de organización y comunicación, y comprender cómo el TDAH influye en tus interacciones, lo que puede conducir a una reducción del estrés y a relaciones más saludables."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "¿Ofrecen telepsiquiatría para el tratamiento del TDAH en Florida?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría, permitiéndote recibir atención experta y seguimiento desde la comodidad de tu hogar en cualquier lugar del estado de Florida."
-            }
-          }
-        ]
-      }
-    ]
-  };
-
-  // Remove existing ADHD page schema if present
-  const existingSchema = document.querySelector('script[type="application/ld+json"]#adhd-page-schema');
-  if (existingSchema) {
-    existingSchema.remove();
-  }
-
-  // Add ADHD-specific schema to head
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.id = 'adhd-page-schema';
-  script.textContent = JSON.stringify(schema, null, 2);
-  document.head.appendChild(script);
-};
+// DEPRECATED: Function removed to prevent schema conflicts.
+// All physician information is now integrated into the main MedicalClinic schema
+// and individual service pages use the addServiceSchema function following Hub & Spoke model.
 
 // Generic Service Schema Generator for Hub & Spoke Model
 export const addServiceSchema = (serviceConfig: {
