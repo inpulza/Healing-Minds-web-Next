@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addServiceSchema } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Zap, Info } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconBolt, IconTarget } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -35,6 +35,18 @@ const MedicationManagement = () => {
       canonical: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
     };
     updateSEO(seoData);
+    
+    // Add Service Schema (SPOKE) - connects to MedicalClinic HUB
+    addServiceSchema({
+      serviceType: "Medication Management",
+      name: language === 'en' 
+        ? "Manejo de Medicamentos en Naples, FL"
+        : "Medication Management in Naples, FL",
+      description: language === 'en'
+        ? "Expert psychiatric medication evaluation, monitoring, and adjustment with comprehensive safety assessments and personalized treatment plans."
+        : "Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales y planes de tratamiento personalizados.",
+      pageId: "medication-management"
+    });
   }, [language]);
 
   const benefits = language === 'en' ? [

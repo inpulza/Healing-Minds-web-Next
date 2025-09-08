@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addServiceSchema } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconMoodUp, IconMoodSad } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -35,6 +35,18 @@ const BipolarTreatment = () => {
       canonical: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
     };
     updateSEO(seoData);
+    
+    // Add Service Schema (SPOKE) - connects to MedicalClinic HUB
+    addServiceSchema({
+      serviceType: "Bipolar Treatment",
+      name: language === 'en' 
+        ? "Tratamiento de Trastorno Bipolar en Naples, FL"
+        : "Bipolar Disorder Treatment in Naples, FL",
+      description: language === 'en'
+        ? "Expert psychiatric care for bipolar disorder with mood stabilization, medication management, and comprehensive support for bipolar I, II, and cyclothymia."
+        : "Atención psiquiátrica experta para trastorno bipolar con estabilización del ánimo, manejo de medicamentos y apoyo integral para bipolar I, II y ciclotimia.",
+      pageId: "bipolar"
+    });
   }, [language]);
 
   const symptoms = language === 'en' ? [

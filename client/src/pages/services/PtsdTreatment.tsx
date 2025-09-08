@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addServiceSchema } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Shield } from 'lucide-react';
 import { IconBrain, IconHeart, IconMoodHappy, IconShield } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -42,6 +42,18 @@ const PtsdTreatment = () => {
       canonical: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'
     };
     updateSEO(seoData);
+    
+    // Add Service Schema (SPOKE) - connects to MedicalClinic HUB
+    addServiceSchema({
+      serviceType: "PTSD Treatment",
+      name: language === 'en' 
+        ? "Tratamiento de TEPT en Naples, FL"
+        : "PTSD Treatment in Naples, FL",
+      description: language === 'en'
+        ? "Trauma-informed psychiatric care for post-traumatic stress disorder using evidence-based treatments to help heal from traumatic experiences."
+        : "Atención psiquiátrica informada en trauma para trastorno de estrés postraumático usando tratamientos basados en evidencia para ayudar a sanar de experiencias traumáticas.",
+      pageId: "ptsd"
+    });
   }, [language]);
 
   const symptoms = language === 'en' ? [
