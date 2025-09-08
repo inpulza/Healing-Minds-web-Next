@@ -8,11 +8,11 @@ export const practiceInfo = {
   phone: "(239) 423-0272",
   email: "info@healingmindsp.com",
   address: {
-    street: "4760 Tamiami Trl N, Ste 25",
+    street: "4760 Tamiami Trl N # 25",
     city: "Naples",
     state: "FL",
     zip: "34103",
-    full: "4760 Tamiami Trl N, Ste 25, Naples, FL 34103"
+    full: "4760 Tamiami Trl N # 25, Naples, FL 34103"
   },
   hours: "Monday - Friday: 9:00 AM - 5:00 PM",
   googleMapsUrl: "https://maps.google.com/?q=4760+Tamiami+Trl+N,+Ste+25,+Naples,+FL+34103",

@@ -83,7 +83,7 @@ export const addMedicalBusinessSchema = () => {
     "telephone": "+1-239-423-0272",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "4760 Tamiami Trl N, Ste 25",
+      "streetAddress": "4760 Tamiami Trl N # 25",
       "addressLocality": "Naples",
       "addressRegion": "FL",
       "postalCode": "34103",
@@ -185,7 +185,7 @@ export const addADHDTreatmentSchema = () => {
         "medicalSpecialty": "Psychiatry",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "4760 Tamiami Trl N, Ste 25",
+          "streetAddress": "4760 Tamiami Trl N # 25",
           "addressLocality": "Naples",
           "addressRegion": "FL",
           "postalCode": "34103",
