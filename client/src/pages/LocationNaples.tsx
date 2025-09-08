@@ -40,8 +40,8 @@ const LocationNaples = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Naples Location - Dr. Melva Reve Psychiatric Care | Healing Minds'
-        : 'Ubicación Naples - Atención Psiquiátrica Dra. Melva Reve | Healing Minds',
+        ? 'Psychiatrist Naples FL - Dr. Melva Reve Location | Healing Minds'
+        : 'Psiquiatra Naples FL - Ubicación Dra. Melva Reve | Healing Minds',
       description: language === 'en'
         ? 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N, Ste 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
         : 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N, Ste 25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
@@ -200,12 +200,12 @@ const LocationNaples = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Our Professional Practice <span className="font-display italic text-green-700">Location</span> in{' '}
+                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
                     <span className="font-display italic text-green-700">Naples, FL</span>
                   </>
                 ) : (
                   <>
-                    Nuestra Ubicación de Práctica Profesional en{' '}
+                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
                     <span className="font-display italic text-green-700">Naples, FL</span>
                   </>
                 )}

@@ -97,15 +97,45 @@ export const addMedicalBusinessSchema = () => {
     "openingHoursSpecification": [
       {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
-        "opens": "08:00",
+        "dayOfWeek": "Monday",
+        "opens": "09:00",
         "closes": "17:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification", 
+        "dayOfWeek": "Tuesday",
+        "opens": "09:00",
+        "closes": "17:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Wednesday", 
+        "opens": "09:00",
+        "closes": "17:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Thursday",
+        "opens": "09:00", 
+        "closes": "17:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Friday",
+        "opens": "09:00",
+        "closes": "17:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "00:00",
+        "closes": "00:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification", 
+        "dayOfWeek": "Sunday",
+        "opens": "00:00",
+        "closes": "00:00"
       }
     ],
     "medicalSpecialty": "Psychiatry",
@@ -141,9 +171,24 @@ export const addMedicalBusinessSchema = () => {
     ],
     "member": {
       "@type": "Physician",
+      "@id": "https://healingmindsp.com/about#physician",
       "name": "Dr. Melva Reve",
       "jobTitle": "Psychiatrist",
-      "knowsLanguage": ["es-US", "en-US"]
+      "knowsLanguage": ["es-US", "en-US"],
+      "knowsAbout": [
+        "Anxiety Treatment",
+        "Depression Treatment", 
+        "ADHD Treatment",
+        "PTSD Treatment",
+        "Bipolar Treatment",
+        "Medication Management"
+      ],
+      "alumniOf": "University of Miami Miller School of Medicine",
+      "memberOf": "American Psychiatric Association",
+      "worksFor": {
+        "@type": "MedicalClinic",
+        "name": "Healing Minds Psychiatry"
+      }
     },
     "sameAs": [
       "https://healingmindsp.com",
