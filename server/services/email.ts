@@ -17,27 +17,31 @@ export class ResendEmailService implements EmailService {
     const subject = `Nueva consulta desde el sitio web - ${contactData.firstName} ${contactData.lastName}`;
     
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #16a34a; border-bottom: 2px solid #16a34a; padding-bottom: 10px;">
-          Nueva Consulta - Healing Minds Psychiatry
-        </h2>
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 30px; background: #ffffff;">
         
-        <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="color: #374151; margin-top: 0;">Información del Paciente:</h3>
-          <p><strong>Nombre:</strong> ${contactData.firstName} ${contactData.lastName}</p>
-          <p><strong>Email:</strong> ${contactData.email}</p>
-          <p><strong>Teléfono:</strong> ${contactData.phone || 'No proporcionado'}</p>
-          <p><strong>Idioma preferido:</strong> ${contactData.preferredLanguage === 'spanish' ? 'Español' : 'Inglés'}</p>
+        <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #16a34a; padding-bottom: 15px;">
+          <h1 style="color: #16a34a; margin: 0; font-size: 24px; font-weight: 600;">Nuevo Lead - Healing Minds</h1>
         </div>
 
-        <div style="background: #fff; border-left: 4px solid #16a34a; padding: 20px; margin: 20px 0;">
-          <h3 style="color: #374151; margin-top: 0;">Mensaje:</h3>
-          <p style="line-height: 1.6; color: #4b5563;">${contactData.message}</p>
+        <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h2 style="color: #16a34a; margin: 0 0 15px 0; font-size: 18px;">Información del Contacto</h2>
+          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Nombre:</strong> ${contactData.firstName} ${contactData.lastName}</p>
+          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Email:</strong> ${contactData.email}</p>
+          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Teléfono:</strong> ${contactData.phone || 'No proporcionado'}</p>
+          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Idioma:</strong> ${contactData.preferredLanguage === 'spanish' ? 'Español' : 'Inglés'}</p>
         </div>
 
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
-          <p>Este mensaje fue enviado desde el formulario de contacto del sitio web de Healing Minds Psychiatry.</p>
-          <p>Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/New_York' })}</p>
+        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #16a34a;">
+          <h3 style="color: #374151; margin: 0 0 10px 0; font-size: 16px;">Mensaje:</h3>
+          <p style="margin: 0; color: #4b5563; font-size: 15px; line-height: 1.5;">
+            "${contactData.message}"
+          </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+          <p style="color: #6b7280; font-size: 13px; margin: 0;">
+            Enviado desde healingmindsp.com • ${new Date().toLocaleString('es-ES', { timeZone: 'America/New_York' })}
+          </p>
         </div>
       </div>
     `;
@@ -86,42 +90,38 @@ export class ResendEmailService implements EmailService {
 
   private getSpanishConfirmationTemplate(contactData: InsertContactMessage): string {
     return `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="color: #16a34a; margin: 0;">Healing Minds Psychiatry</h1>
-          <p style="color: #6b7280; margin: 5px 0;">Dra. Melva Reve - Naples, FL</p>
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 30px; background: #ffffff;">
+        
+        <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #16a34a; padding-bottom: 20px;">
+          <h1 style="color: #16a34a; margin: 0; font-size: 28px; font-weight: 600;">Healing Minds Psychiatry</h1>
+          <p style="color: #6b7280; margin: 8px 0; font-size: 16px;">Dra. Melva Reve • Naples, FL</p>
         </div>
 
-        <div style="background: #f0fdf4; border: 1px solid #16a34a; border-radius: 8px; padding: 20px; margin: 20px 0;">
-          <h2 style="color: #16a34a; margin-top: 0;">¡Gracias por contactarnos!</h2>
-          <p>Estimado/a ${contactData.firstName},</p>
-          <p>Hemos recibido su consulta y nos pondremos en contacto con usted lo antes posible. Su bienestar mental es nuestra prioridad.</p>
+        <div style="margin-bottom: 25px;">
+          <h2 style="color: #16a34a; margin: 0 0 15px 0; font-size: 22px;">¡Gracias por contactarnos!</h2>
+          <p style="color: #374151; font-size: 16px; line-height: 1.5; margin: 0;">
+            Estimado/a <strong>${contactData.firstName}</strong>, hemos recibido su consulta y nos pondremos en contacto con usted pronto.
+          </p>
         </div>
 
-        <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="color: #374151; margin-top: 0;">Información de su consulta:</h3>
-          <p><strong>Nombre:</strong> ${contactData.firstName} ${contactData.lastName}</p>
-          <p><strong>Email:</strong> ${contactData.email}</p>
-          <p><strong>Teléfono:</strong> ${contactData.phone || 'No proporcionado'}</p>
-          <p><strong>Idioma preferido:</strong> Español</p>
+        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #16a34a;">
+          <p style="margin: 0; color: #4b5563; font-style: italic; font-size: 15px;">
+            "${contactData.message}"
+          </p>
         </div>
 
-        <div style="border-left: 4px solid #16a34a; padding: 20px; margin: 20px 0;">
-          <h3 style="color: #374151; margin-top: 0;">Su mensaje:</h3>
-          <p style="line-height: 1.6; color: #4b5563; font-style: italic;">"${contactData.message}"</p>
+        <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 25px 0;">
+          <h3 style="color: #16a34a; margin: 0 0 15px 0; font-size: 18px;">Información de Contacto</h3>
+          <p style="margin: 5px 0; color: #374151;"><strong>Teléfono:</strong> (239) 276-3030</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Email:</strong> info@healingmindsp.com</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Dirección:</strong> Naples, FL</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Horarios:</strong> Lunes - Viernes, 9:00 AM - 5:00 PM</p>
         </div>
 
-        <div style="background: #eff6ff; border-radius: 8px; padding: 20px; margin: 20px 0;">
-          <h3 style="color: #1e40af; margin-top: 0;">Información de contacto:</h3>
-          <p><strong>Teléfono:</strong> (239) 276-3030</p>
-          <p><strong>Email:</strong> info@healingmindsp.com</p>
-          <p><strong>Dirección:</strong> Naples, FL</p>
-          <p><strong>Horarios:</strong> Lunes a Viernes, 9:00 AM - 5:00 PM</p>
-        </div>
-
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; text-align: center;">
-          <p>La Dra. Melva Reve es una psiquiatra certificada que brinda atención integral en salud mental.</p>
-          <p>Especializada en ansiedad, depresión, TDAH, TEPT y otros trastornos psiquiátricos.</p>
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+          <p style="color: #6b7280; font-size: 14px; margin: 0;">
+            Atención integral en salud mental • Ansiedad • Depresión • TDAH • TEPT
+          </p>
         </div>
       </div>
     `;
@@ -129,42 +129,38 @@ export class ResendEmailService implements EmailService {
 
   private getEnglishConfirmationTemplate(contactData: InsertContactMessage): string {
     return `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="color: #16a34a; margin: 0;">Healing Minds Psychiatry</h1>
-          <p style="color: #6b7280; margin: 5px 0;">Dr. Melva Reve - Naples, FL</p>
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 30px; background: #ffffff;">
+        
+        <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #16a34a; padding-bottom: 20px;">
+          <h1 style="color: #16a34a; margin: 0; font-size: 28px; font-weight: 600;">Healing Minds Psychiatry</h1>
+          <p style="color: #6b7280; margin: 8px 0; font-size: 16px;">Dr. Melva Reve • Naples, FL</p>
         </div>
 
-        <div style="background: #f0fdf4; border: 1px solid #16a34a; border-radius: 8px; padding: 20px; margin: 20px 0;">
-          <h2 style="color: #16a34a; margin-top: 0;">Thank you for contacting us!</h2>
-          <p>Dear ${contactData.firstName},</p>
-          <p>We have received your inquiry and will get back to you as soon as possible. Your mental health is our priority.</p>
+        <div style="margin-bottom: 25px;">
+          <h2 style="color: #16a34a; margin: 0 0 15px 0; font-size: 22px;">Thank you for contacting us!</h2>
+          <p style="color: #374151; font-size: 16px; line-height: 1.5; margin: 0;">
+            Dear <strong>${contactData.firstName}</strong>, we have received your inquiry and will get back to you soon.
+          </p>
         </div>
 
-        <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="color: #374151; margin-top: 0;">Your inquiry details:</h3>
-          <p><strong>Name:</strong> ${contactData.firstName} ${contactData.lastName}</p>
-          <p><strong>Email:</strong> ${contactData.email}</p>
-          <p><strong>Phone:</strong> ${contactData.phone || 'Not provided'}</p>
-          <p><strong>Preferred Language:</strong> English</p>
+        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #16a34a;">
+          <p style="margin: 0; color: #4b5563; font-style: italic; font-size: 15px;">
+            "${contactData.message}"
+          </p>
         </div>
 
-        <div style="border-left: 4px solid #16a34a; padding: 20px; margin: 20px 0;">
-          <h3 style="color: #374151; margin-top: 0;">Your message:</h3>
-          <p style="line-height: 1.6; color: #4b5563; font-style: italic;">"${contactData.message}"</p>
+        <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 25px 0;">
+          <h3 style="color: #16a34a; margin: 0 0 15px 0; font-size: 18px;">Contact Information</h3>
+          <p style="margin: 5px 0; color: #374151;"><strong>Phone:</strong> (239) 276-3030</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Email:</strong> info@healingmindsp.com</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Address:</strong> Naples, FL</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM</p>
         </div>
 
-        <div style="background: #eff6ff; border-radius: 8px; padding: 20px; margin: 20px 0;">
-          <h3 style="color: #1e40af; margin-top: 0;">Contact Information:</h3>
-          <p><strong>Phone:</strong> (239) 276-3030</p>
-          <p><strong>Email:</strong> info@healingmindsp.com</p>
-          <p><strong>Address:</strong> Naples, FL</p>
-          <p><strong>Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM</p>
-        </div>
-
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; text-align: center;">
-          <p>Dr. Melva Reve is a board-certified psychiatrist providing comprehensive mental health care.</p>
-          <p>Specializing in anxiety, depression, ADHD, PTSD, and other psychiatric conditions.</p>
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+          <p style="color: #6b7280; font-size: 14px; margin: 0;">
+            Comprehensive mental health care • Anxiety • Depression • ADHD • PTSD
+          </p>
         </div>
       </div>
     `;
