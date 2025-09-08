@@ -412,7 +412,9 @@ const DepressionTreatment = () => {
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <MapPin className="w-5 h-5 text-green-300" />
-                      <span className="font-body">Naples, FL & Surrounding Areas</span>
+                      <Link href="/locations/naples" className="font-body hover:text-green-100 transition-colors underline">
+                        {language === 'en' ? 'Visit Our Naples, FL Location' : 'Visite Nuestra Ubicación en Naples, FL'}
+                      </Link>
                     </div>
                     <div className="flex items-center gap-3">
                       <Clock className="w-5 h-5 text-green-300" />
