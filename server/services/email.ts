@@ -13,6 +13,7 @@ export class ResendEmailService implements EmailService {
   private readonly practiceEmail = 'info@healingmindsp.com';
 
   async sendContactNotification(contactData: InsertContactMessage): Promise<void> {
+    console.log('🚀 ENTERED sendContactNotification method');
     const subject = `Nueva consulta desde el sitio web - ${contactData.firstName} ${contactData.lastName}`;
     
     const htmlContent = `
@@ -58,6 +59,7 @@ export class ResendEmailService implements EmailService {
   }
 
   async sendConfirmationEmail(contactData: InsertContactMessage): Promise<void> {
+    console.log('🚀 ENTERED sendConfirmationEmail method');
     const isSpanish = contactData.preferredLanguage === 'spanish';
     
     const subject = isSpanish 

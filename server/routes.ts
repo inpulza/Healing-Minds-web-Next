@@ -24,6 +24,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Send notification email to practice and confirmation email to patient
       try {
+        console.log("🔄 Starting email sending process...");
         await Promise.all([
           emailService.sendContactNotification(validatedData),
           emailService.sendConfirmationEmail(validatedData)
