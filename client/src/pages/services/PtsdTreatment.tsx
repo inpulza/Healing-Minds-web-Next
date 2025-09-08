@@ -551,14 +551,14 @@ const PtsdTreatment = () => {
                     'Trauma-informed care approach',
                     'Collaborative treatment with specialized therapists',
                     'Insurance accepted and affordable payment options',
-                    'Same-week appointment availability'
+                    'Same-week appointment availability at our Naples, FL office'
                   ] : [
                     'Psiquiatra certificada con entrenamiento especializado en trauma',
                     'Servicios bilingües en inglés y español',
                     'Enfoque de atención informada en trauma',
                     'Tratamiento colaborativo con terapeutas especializados',
                     'Se acepta seguro y opciones de pago accesibles',
-                    'Disponibilidad de citas en la misma semana'
+                    'Disponibilidad de citas en la misma semana en nuestra oficina en Naples, FL'
                   ]).map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
