@@ -297,3 +297,41 @@ export const addADHDTreatmentSchema = () => {
   script.textContent = JSON.stringify(schema, null, 2);
   document.head.appendChild(script);
 };
+
+// Generic Service Schema Generator for Hub & Spoke Model
+export const addServiceSchema = (serviceConfig: {
+  serviceType: string;
+  name: string;
+  description: string;
+  pageId: string;
+  areaServed?: string;
+}) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": serviceConfig.serviceType,
+    "name": serviceConfig.name,
+    "description": serviceConfig.description,
+    "areaServed": {
+      "@type": "City",
+      "name": serviceConfig.areaServed || "Naples"
+    },
+    "provider": {
+      "@type": "MedicalClinic",
+      "@id": "https://www.healingmindsp.com/#MedicalClinic"
+    }
+  };
+
+  // Remove existing service schema if present
+  const existingSchema = document.querySelector(`script[type="application/ld+json"]#${serviceConfig.pageId}-service-schema`);
+  if (existingSchema) {
+    existingSchema.remove();
+  }
+
+  // Add service schema to head
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = `${serviceConfig.pageId}-service-schema`;
+  script.textContent = JSON.stringify(schema, null, 2);
+  document.head.appendChild(script);
+};
