@@ -1,0 +1,100 @@
+sunto: ACTUALIZACIÓN CRÍTICA: Plan de Acción de SEO Técnico, Sincronización GBP y E-E-A-T para HealingMindsP.com
+Para: Equipo de Desarrollo (Agente Replit)
+De: GeoRanker Pro
+Prioridad: CRÍTICA
+
+Equipo, hemos recibido la arquitectura de URL específica para healingmindsp.com. El sitio ya posee una estructura de silos de servicio y una página de ubicación dedicada (/locations/naples). Esto es excelente.
+
+Nuestra misión se actualiza: debemos auditar estos activos existentes y conectarlos técnicamente al ecosistema de Google. El negocio es YMYL (Your Money or Your Life) , por lo que las siguientes implementaciones de E-E-A-T y señales de confianza no son negociables.
+
+
+
+MÓDULO 1: Sincronización Fundamental GBP y Estructura (Impacto Inmediato)
+El sitio web y el GBP están funcionando actualmente como dos entidades separadas. Debemos fusionarlos algorítmicamente.
+
+1.1. Actualizar el Enlace Principal del GBP (Tarea Crítica)
+El "Website" en el perfil de Google Business NO debe apuntar a la página de inicio (homepage). Debe apuntar a la página que representa esa ubicación física específica.
+
+Acción: Cambiar el enlace principal del sitio web en el dashboard de Google Business Profile para que apunte a: https://www.healingmindsp.com/locations/naples. Esta página es el verdadero "hub" para la ubicación de Naples.
+
+1.2. Auditoría y Estandarización del NAP (Footer)
+El NAP (Nombre, Dirección, Teléfono) debe ser 100% consistente.
+
+Acción: Auditar el pie de página (footer) global del sitio. Debe contener el NAP canónico exacto como texto HTML:
+
+
+
+Healing Minds Psychiatry
+
+4760 Tamiami Trl N # 25, Naples, FL 34103
+
+(239) 423-0272
+
+1.3. Sincronización de Servicios (Brecha de Contenido)
+El GBP solo menciona 3 servicios; el sitio web enumera 6. Debemos corregir esto para maximizar la relevancia en búsquedas de nicho.
+
+Acción (en el Dashboard de GBP): Acceder a la pestaña "Servicios" (o "Editar Servicios") en el Google Business Profile y AÑADIR los servicios que faltan, asegurándose de que los nombres coincidan con los del sitio web:
+
+Tratamiento de TEPT (PTSD) 
+
+Tratamiento Bipolar
+
+Manejo de Medicamentos (Medication Management)
+
+
+Acción (en el Sitio Web): Asegurarse de que cada una de las 6 páginas de servicio enlace internamente a la página /locations/naples para pasar relevancia geográfica.
+
+MÓDULO 2: Implementación de Schema YMYL y E-E-A-T (El Blindaje Técnico)
+Debemos definir explícitamente nuestra pericia (E-E-A-T) para los algoritmos de Google.
+
+2.1. Auditoría de Schema Physician (Clínica Médica)
+
+Acción: Auditar la página /locations/naples. Esta página (no la página de inicio) debe contener el Schema Physician (preferible a MedicalClinic si la Dra. Reve es la proveedora principal, o MedicalClinic si hay varios).
+
+
+Propiedades requeridas: Debe incluir name, address (anidado), telephone, y url (la URL canónica de la página de la ubicación).
+
+
+2.2. Implementación de Schema Person (El Pilar de la Pericia)
+Esta es la tarea de E-E-A-T más importante. Necesitamos validar a la Dra. Melva Reve como una experta.
+
+Acción: Verificar que exista una página de biografía dedicada para la "Dra. Melva Reve". El schema Person debe ser implementado en esa página.
+
+
+Propiedades requeridas: name (Melva Reve), jobTitle (Psychiatrist), alumniOf (su escuela de medicina), knowsAbout (listando las 6 condiciones: "Anxiety", "Depression", "ADHD", "PTSD", etc.), y knowsLanguage ("English", "Spanish").
+
+
+Conexión: Este schema Person debe estar conectado al schema Physician/MedicalClinic usando la propiedad worksFor para crear el grafo de entidad.
+
+MÓDULO 3: Auditoría On-Page de Activos Existentes (Relevancia Local)
+Las 7 URLs proporcionadas son nuestros activos principales. Deben estar optimizadas para la ubicación.
+
+3.1. Optimización Geo-Específica de Títulos y H1
+
+Acción: Auditar las 6 páginas de servicio (Anxiety, Depression, ADHD, PTSD, Bipolar, Med Management). Sus etiquetas <title> y encabezados <h1> DEBEN incluir el modificador geográfico.
+
+Ejemplo de Auditoría:
+
+MALO: <title>ADHD Treatment | Healing Minds Psychiatry</title>
+
+BUENO: <title>ADHD Treatment in Naples, FL | Healing Minds Psychiatry</title> 
+
+
+
+Acción: Auditar la página /locations/naples. Su H1 debe ser algo similar a "Su Psiquiatra de Confianza en Naples, FL".
+
+3.2. Implementación de Seguimiento UTM (Medición de ROI)
+Debemos medir qué tráfico y conversiones provienen del GBP.
+
+
+Acción: Implementar los siguientes enlaces actualizados en el dashboard de GBP (reemplazando los enlaces actuales):
+
+Enlace Principal del Sitio Web (Website):
+
+
+https://www.healingmindsp.com/locations/naples?utm_source=google&utm_medium=organic&utm_campaign=gbp_listing 
+
+Enlace de Citas (Appointments - si usa healingmindsp.com):
+
+
+https://www.healingmindsp.com/appointments-url?utm_source=google&utm_medium=organic&utm_campaign=gbp_listing&utm_content=appointment_link 
