@@ -9,7 +9,7 @@ export interface EmailService {
 }
 
 export class ResendEmailService implements EmailService {
-  private readonly fromEmail = 'onboarding@resend.dev';
+  private readonly fromEmail = 'noreply@healingmindsp.com';
   private readonly practiceEmail = 'info@healingmindsp.com';
 
   async sendContactNotification(contactData: InsertContactMessage): Promise<void> {
