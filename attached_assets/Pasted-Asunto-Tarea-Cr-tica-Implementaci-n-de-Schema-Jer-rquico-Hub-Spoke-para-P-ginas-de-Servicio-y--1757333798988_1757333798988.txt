@@ -1,0 +1,84 @@
+Asunto: Tarea Crítica: Implementación de Schema Jerárquico (Hub & Spoke) para Páginas de Servicio y Ubicación
+Para: Agente de Replit (Equipo de Desarrollo Web)
+De: GeoRanker Pro (Consultor SEO Local)
+
+Equipo,
+
+Siguiendo nuestra auditoría de SEO, debemos implementar una estrategia de datos estructurados (Schema Markup) de nivel avanzado para alinear el sitio con las directrices YMYL (Your Money or Your Life) y E-E-A-T.
+
+Actualmente, el sitio tiene páginas de ubicación y páginas de servicio separadas. Esto es correcto, pero debemos conectarlas semánticamente usando JSON-LD para que Google entienda la relación exacta entre la clínica (la entidad física) y los tratamientos (los servicios expertos).
+
+Implementaremos un modelo "Hub and Spoke" (Centro y Radios).
+
+Tarea 1: El "HUB" (Schema de la Entidad Física)
+Objetivo: Definir la entidad física principal (MedicalClinic o Physician) exclusivamente en la página de ubicación.
+
+Página Objetivo: https://www.healingmindsp.com/locations/naples
+
+Acción: Auditar el schema existente en esta página. Debe contener UN schema MedicalClinic (o Physician) que defina la práctica.
+
+Requerimiento Crítico: Este schema DEBE tener un identificador @id único y permanente para que otras páginas puedan referenciarlo.
+
+Ejemplo de Código (JSON-LD) para la página /locations/naples:
+
+JSON
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic", // O "Physician" si se centra solo en la Dra.
+  "@id": "https://www.healingmindsp.com/#MedicalClinic", // ID ÚNICO DEL HUB
+  "name": "Healing Minds Psychiatry",
+  "url": "https://www.healingmindsp.com/",
+  "telephone": "+1-239-423-0272",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "4760 Tamiami Trl N # 25",
+    "addressLocality": "Naples",
+    "addressRegion": "FL",
+    "postalCode": "34103",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "LATITUD_AQUI",  // Rellenar con coordenadas
+    "longitude": "LONGITUD_AQUI" // Rellenar con coordenadas
+  },
+  "founder": { // O "employee". Conectar a la Dra. Reve aquí.
+    "@type": "Person",
+    "name": "Dr. Melva Reve"
+    // Idealmente, este enlaza a su propia página de biografía
+  }
+}
+</script>
+Tarea 2: Los "SPOKES" (Schema de Oferta de Servicio)
+Objetivo: Definir cada tratamiento como un Service y conectarlo de vuelta al "Hub".
+
+Páginas Objetivo: Cada una de las 6 páginas de servicio (ej. /services/anxiety-treatment, /services/adhd-treatment, etc.).
+
+Acción: Cada una de estas páginas debe tener su propio script de schema Service. Este schema NO debe incluir la dirección o el teléfono (eso pertenece al Hub).
+
+Requerimiento Crítico: El schema Service debe usar la propiedad "provider" para apuntar al @id que definimos en la Tarea 1. Esto le dice a Google: "Este servicio específico es proporcionado por esa clínica específica".
+
+Ejemplo de Código (JSON-LD) para la página /services/anxiety-treatment:
+
+JSON
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Anxiety Treatment", // Específico del servicio
+  "name": "Tratamiento de Ansiedad en Naples, FL",
+  "description": "Una breve descripción del servicio de tratamiento de ansiedad...",
+  "areaServed": {
+    "@type": "City",
+    "name": "Naples"
+  },
+  "provider": {
+    "@type": "MedicalClinic",
+    "@id": "https://www.healingmindsp.com/#MedicalClinic" // CONEXIÓN DIRECTA AL HUB
+  }
+}
+</script>
+Instrucción: Repetir este bloque de Tarea 2 para las otras 5 páginas de servicio, personalizando el serviceType, name y description para cada una (TDAH, Depresión, etc.), pero manteniendo el mismo @id del provider en todas ellas.

@@ -6,7 +6,7 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import CompactVideoCarousel from '@/components/CompactVideoCarousel';
 import Reviews from '@/components/Reviews';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addMedicalBusinessSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -53,52 +53,11 @@ const LocationNaples = () => {
     };
     updateSEO(seoData);
 
-    // Add LocalBusiness Schema
-    const existingScript = document.querySelector('script[data-schema="location"]');
-    if (existingScript) {
-      existingScript.remove();
-    }
-    
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.setAttribute('data-schema', 'location');
-    script.textContent = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "@id": "https://healingmindsp.com/locations/naples",
-      "name": practiceInfo.name,
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": practiceInfo.address.street,
-        "addressLocality": practiceInfo.address.city,
-        "addressRegion": practiceInfo.address.state,
-        "postalCode": practiceInfo.address.zip,
-        "addressCountry": "US"
-      },
-      "telephone": practiceInfo.phone,
-      "email": practiceInfo.email,
-      "url": "https://healingmindsp.com",
-      "sameAs": [
-        "https://www.google.com/maps/place/4760+Tamiami+Trl+N,+Ste+25,+Naples,+FL+34103"
-      ],
-      "openingHours": "Mo-Fr 09:00-17:00",
-      "priceRange": "$$",
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "26.2540",
-        "longitude": "-81.8057"
-      },
-      "areaServed": serviceAreas,
-      "medicalSpecialty": "Psychiatry",
-      "paymentAccepted": acceptedInsurance
-    });
-    document.head.appendChild(script);
+    // Add MedicalClinic Schema (HUB) - replaces LocalBusiness for Hub & Spoke model
+    addMedicalBusinessSchema();
 
     return () => {
-      const scriptToRemove = document.querySelector('script[data-schema="location"]');
-      if (scriptToRemove && scriptToRemove.parentNode) {
-        scriptToRemove.parentNode.removeChild(scriptToRemove);
-      }
+      // Cleanup managed by addMedicalBusinessSchema function
     };
   }, [language]);
 

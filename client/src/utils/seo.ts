@@ -76,6 +76,7 @@ export const addMedicalBusinessSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "MedicalClinic",
+    "@id": "https://www.healingmindsp.com/#MedicalClinic",
     "name": "Healing Minds Psychiatry",
     "description": "Healing Minds Psychiatry (Tamiami): Su centro de confianza para la salud mental en Naples, FL. Dirigidos por la Dra. Melva Reve, psiquiatra bilingüe (español/inglés), ofrecemos atención compasiva para ansiedad, depresión y TDAH. Nuestra oficina en Tamiami Trail N proporciona evaluaciones psiquiátricas, manejo de medicamentos y telepsiquiatría.",
     "image": "https://healingmindsp.com/favicon.svg",
