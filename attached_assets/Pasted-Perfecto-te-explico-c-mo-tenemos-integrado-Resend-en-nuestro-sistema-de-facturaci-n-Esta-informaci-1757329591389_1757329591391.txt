@@ -1,0 +1,119 @@
+Perfecto, te explico cómo tenemos integrado Resend en nuestro sistema de facturación. Esta información te servirá para explicárselo a otro desarrollador:
+
+?? Resumen de la Integración
+Resend es nuestro servicio de envío de emails transaccionales, principalmente utilizado para enviar facturas por email de forma automática y manual, con archivos PDF adjuntos.
+
+?? Configuración Inicial
+Ubicación: server/email-service.ts (línea 5)
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+Variable de entorno: RESEND_API_KEY - contiene la clave API de Resend
+Instancia única: Se crea una sola instancia del cliente Resend para toda la aplicación
+Dominio verificado: Usamos inpulza.com como dominio remitente
+?? Arquitectura del Servicio de Email
+Clase Principal: EmailService
+Ubicación: server/email-service.ts
+
+Método principal: sendInvoiceEmail()
+
+Propósito: Envía facturas por email con PDF adjunto
+Parámetros:
+async sendInvoiceEmail(
+  invoiceId: string,
+  recipientEmail: string,
+  subject?: string,        // Opcional: asunto personalizado
+  body?: string,          // Opcional: cuerpo personalizado  
+  automationRuleId?: string // Para tracking de automatización
+)
+Flujo de Envío de Email:
+Obtención de datos: Recupera factura, workspace y usuario de la base de datos
+Generación de PDF: Crea el archivo PDF de la factura usando PDFKit
+Preparación del email:
+Asunto: "Invoice {número} from {workspace}"
+Remitente: "{workspace} <noreply@inpulza.com>"
+Contenido HTML predefinido o personalizado
+Envío vía Resend:
+await resend.emails.send({
+  from: `${workspace.name} <noreply@inpulza.com>`,
+  to: [recipientEmail],
+  subject: emailSubject,
+  html: emailBody,
+  attachments: [{
+    filename: `invoice-${invoice.invoiceNumber}.pdf`,
+    content: pdfBuffer,
+  }],
+});
+Logging: Registra el envío (exitoso o fallido) en la base de datos
+?? Sistema de Automatización
+Ubicación: server/automation-service.ts
+
+Integración con Cron Jobs:
+Frecuencia: Cada hora ('0 * * * *')
+Proceso: Revisa reglas de automatización activas
+Ejecución: Llama a emailService.sendInvoiceEmail() cuando corresponde
+Flujo de Automatización:
+Cron job ejecuta cada hora
+Obtiene reglas activas de automatización
+Evalúa si es momento de enviar (shouldSendInvoice())
+Crea factura automáticamente desde template
+Envía email vía Resend
+Actualiza fecha de próximo envío
+?? Generación de PDFs
+Ubicación: server/email-service.ts (método generateInvoicePDF())
+
+Tecnología: PDFKit (reemplazamos Puppeteer por rendimiento)
+Proceso: Se genera el PDF en memoria como Buffer
+Datos incluidos:
+Información completa de la factura
+Datos del cliente y workspace
+Información bancaria
+Items de la factura
+Historial de pagos
+?? Templates de Email
+Template por Defecto:
+Ubicación: server/email-service.ts (método getDefaultEmailBody())
+
+Formato: HTML completo con estilos CSS
+Elementos:
+Header con nombre del workspace
+Saludo personalizado al cliente
+Detalles de la factura
+Mensaje profesional
+Firma con datos del usuario/workspace
+Templates Personalizados:
+Almacenamiento: Base de datos (invoice_templates)
+API: Rutas CRUD en server/routes.ts
+Uso: Las reglas de automatización pueden usar templates específicos
+?? APIs Relacionadas
+Rutas de Email:
+POST /api/invoices/:id/send - Envío manual de factura
+POST /api/automation-rules/:id/test - Prueba de regla de automatización
+Rutas de Automatización:
+GET/POST/PUT/DELETE /api/workspaces/:id/automation-rules
+GET/POST/PUT/DELETE /api/workspaces/:id/templates
+?? Logging y Monitoreo
+Tabla: email_logs
+Campos registrados:
+
+workspaceId, invoiceId, automationRuleId
+recipientEmail, subject, body
+status (sent/failed)
+resendMessageId (ID de seguimiento de Resend)
+sentAt, errorMessage
+?? Manejo de Errores
+Try/catch completo en sendInvoiceEmail()
+Logging de errores en base de datos
+Respuestas estructuradas: { success: boolean, messageId?: string, error?: string }
+Tolerancia a fallos en automatización (continúa con siguiente regla)
+?? Seguridad
+API Key en variable de entorno (no hardcodeada)
+Dominio verificado en Resend
+Validación de ownership en todas las APIs
+Escape de HTML en templates
+?? Dependencias
+{
+  "resend": "^X.X.X",  // Cliente oficial de Resend
+  "node-cron": "^X.X.X", // Para automatización
+  "pdfkit": "^X.X.X"   // Para generar PDFs
+}
+¿Te gustaría que profundice en algún aspecto específico de la integración?
