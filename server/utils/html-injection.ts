@@ -3,9 +3,10 @@ import { Request } from 'express';
 interface MetaTag {
   name?: string;
   property?: string;
-  content: string;
+  content?: string;
   rel?: string;
   href?: string;
+  hreflang?: string;
 }
 
 interface PageMeta {
@@ -70,10 +71,14 @@ export function injectMetaTags(html: string, req: Request): string {
     const additionalTags = pageMetaData.metaTags
       .map(tag => {
         if (tag.rel && tag.href) {
+          // Handle hreflang links
+          if (tag.hreflang) {
+            return `    <link rel="${tag.rel}" hreflang="${tag.hreflang}" href="${tag.href}" />`;
+          }
           return `    <link rel="${tag.rel}" href="${tag.href}" />`;
-        } else if (tag.name) {
+        } else if (tag.name && tag.content) {
           return `    <meta name="${tag.name}" content="${tag.content}" />`;
-        } else if (tag.property) {
+        } else if (tag.property && tag.content) {
           return `    <meta property="${tag.property}" content="${tag.content}" />`;
         }
         return '';
@@ -121,6 +126,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/`
+          },
+          // HREFLANG CRITICAL: Homepage bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/`
           }
         ]
       };
@@ -141,6 +157,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/about`
+          },
+          // HREFLANG: About bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/about`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/acerca-de`
           }
         ]
       };
@@ -161,6 +188,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/contact`
+          },
+          // HREFLANG: Contact bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/contact`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/contacto`
           }
         ]
       };
@@ -181,6 +219,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/services`
+          },
+          // HREFLANG: Services bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios`
           }
         ]
       };
@@ -316,6 +365,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/for-patients`
+          },
+          // HREFLANG: For Patients bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/for-patients`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/para-pacientes`
           }
         ]
       };
@@ -345,6 +405,8 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
             property: 'og:url',
             content: `${baseUrl}/locations/naples`
           }
+          // CRITICAL: Locations page was missing hreflang per diagnostico
+          // Note: No Spanish version exists yet, so no hreflang needed
         ]
       };
 
@@ -640,6 +702,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/`
+          },
+          // HREFLANG: Homepage bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/`
           }
         ]
       };
@@ -660,6 +733,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/acerca-de`
+          },
+          // HREFLANG: About bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/about`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/acerca-de`
           }
         ]
       };
@@ -680,6 +764,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/contacto`
+          },
+          // HREFLANG: Contact bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/contact`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/contacto`
           }
         ]
       };
@@ -700,6 +795,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/para-pacientes`
+          },
+          // HREFLANG: For Patients bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/for-patients`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/para-pacientes`
           }
         ]
       };
