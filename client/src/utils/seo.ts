@@ -253,7 +253,6 @@ export const addServiceSchema = (serviceConfig: {
       "name": serviceConfig.areaServed || "Naples"
     },
     "provider": {
-      "@type": "MedicalClinic",
       "@id": "https://www.healingmindsp.com/#MedicalClinic"
     }
   };

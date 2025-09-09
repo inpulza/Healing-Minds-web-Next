@@ -1,0 +1,366 @@
+Elementos detectados
+check_circle
+Healing Minds Psychiatry
+type
+MedicalClinic
+name
+Healing Minds Psychiatry
+description
+Healing Minds Psychiatry (Tamiami): Su centro de confianza para la salud mental en Naples, FL. Dirigidos por la Dra. Melva Reve, psiquiatra bilingüe (español/inglés), ofrecemos atención compasiva para ansiedad, depresión y TDAH.
+image
+https://healingmindsp.com/favicon.svg
+url
+https://healingmindsp.com/
+telephone
++1-239-423-0272
+address
+type
+PostalAddress
+streetAddress
+4760 Tamiami Trl N, Ste 25
+addressLocality
+Naples
+addressRegion
+FL
+postalCode
+34103
+addressCountry
+type
+Country
+name
+US
+geo
+type
+GeoCoordinates
+latitude
+26.2044803
+longitude
+-81.8021344
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Monday
+dayOfWeek
+http://schema.org/Tuesday
+dayOfWeek
+http://schema.org/Wednesday
+dayOfWeek
+http://schema.org/Thursday
+dayOfWeek
+http://schema.org/Friday
+opens
+T08:00
+closes
+T17:00
+medicalSpecialty
+Psychiatry
+availableService
+type
+MedicalTherapy
+name
+Anxiety Treatment
+availableService
+type
+MedicalTherapy
+name
+Depression Treatment
+availableService
+type
+MedicalTherapy
+name
+ADHD Treatment
+availableService
+type
+MedicalTherapy
+name
+PTSD Treatment
+availableService
+type
+MedicalTherapy
+name
+Bipolar Treatment
+availableService
+type
+MedicalProcedure
+name
+Medication Management
+availableService
+type
+MedicalProcedure
+name
+Telepsychiatry
+member
+type
+Physician
+name
+Dr. Melva Reve
+jobTitle
+Psychiatrist
+knowsLanguage
+es-US
+knowsLanguage
+en-US
+sameAs
+https://healingmindsp.com/
+sameAs
+https://www.google.com/maps/place/Healing+Minds+Psychiatry+%7C+Naples/@26.2044803,-81.8021344,17z
+
+-------------------------------------------------------------------------------------------------------
+
+check_circle
+Healing Minds Psychiatry
+type
+MedicalClinic
+id
+https://www.healingmindsp.com/#MedicalClinic
+name
+Healing Minds Psychiatry
+description
+Healing Minds Psychiatry (Tamiami): Su centro de confianza para la salud mental en Naples, FL. Dirigidos por la Dra. Melva Reve, psiquiatra bilingüe (español/inglés), ofrecemos atención compasiva para ansiedad, depresión y TDAH. Nuestra oficina en Tamiami Trail N proporciona evaluaciones psiquiátricas, manejo de medicamentos y telepsiquiatría.
+image
+https://healingmindsp.com/favicon.svg
+url
+https://healingmindsp.com/
+telephone
++1-239-423-0272
+address
+type
+PostalAddress
+streetAddress
+4760 Tamiami Trl N # 25
+addressLocality
+Naples
+addressRegion
+FL
+postalCode
+34103
+addressCountry
+type
+Country
+name
+US
+geo
+type
+GeoCoordinates
+latitude
+26.2044803
+longitude
+-81.8021344
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Monday
+opens
+T09:00
+closes
+T17:00
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Tuesday
+opens
+T09:00
+closes
+T17:00
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Wednesday
+opens
+T09:00
+closes
+T17:00
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Thursday
+opens
+T09:00
+closes
+T17:00
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Friday
+opens
+T09:00
+closes
+T17:00
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Saturday
+opens
+T00:00
+closes
+T00:00
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Sunday
+opens
+T00:00
+closes
+T00:00
+medicalSpecialty
+Psychiatry
+availableService
+type
+MedicalTherapy
+name
+Anxiety Treatment
+availableService
+type
+MedicalTherapy
+name
+Depression Treatment
+availableService
+type
+MedicalTherapy
+name
+ADHD Treatment
+availableService
+type
+MedicalTherapy
+name
+PTSD Treatment
+availableService
+type
+MedicalTherapy
+name
+Bipolar Treatment
+availableService
+type
+MedicalProcedure
+name
+Medication Management
+availableService
+type
+MedicalProcedure
+name
+Telepsychiatry
+member
+type
+Physician
+id
+https://healingmindsp.com/about#physician
+name
+Dr. Melva Reve
+jobTitle
+Psychiatrist
+knowsLanguage
+es-US
+knowsLanguage
+en-US
+knowsAbout
+Anxiety Treatment
+knowsAbout
+Depression Treatment
+knowsAbout
+ADHD Treatment
+knowsAbout
+PTSD Treatment
+knowsAbout
+Bipolar Treatment
+knowsAbout
+Medication Management
+alumniOf
+University of Miami Miller School of Medicine
+memberOf
+type
+Thing
+name
+American Psychiatric Association
+worksFor
+type
+MedicalClinic
+name
+Healing Minds Psychiatry
+sameAs
+https://healingmindsp.com/
+sameAs
+https://www.google.com/maps/place/Healing+Minds+Psychiatry+%7C+Naples/@26.2044803,-81.8021344,17z
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+error
+Dr. Melva Reve
+1 problema crítico
+
+Falta el campo "address"
+type
+Physician
+name
+Dr. Melva Reve
+jobTitle
+Psychiatrist
+knowsLanguage
+es-US
+knowsLanguage
+en-US
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
+error
+Dr. Melva Reve
+1 problema crítico
+
+Falta el campo "address"
+type
+Physician
+id
+https://healingmindsp.com/about#physician
+name
+Dr. Melva Reve
+jobTitle
+Psychiatrist
+knowsLanguage
+es-US
+knowsLanguage
+en-US
+knowsAbout
+Anxiety Treatment
+knowsAbout
+Depression Treatment
+knowsAbout
+ADHD Treatment
+knowsAbout
+PTSD Treatment
+knowsAbout
+Bipolar Treatment
+knowsAbout
+Medication Management
+alumniOf
+University of Miami Miller School of Medicine
+memberOf
+type
+Thing
+name
+American Psychiatric Association
+worksFor
+type
+MedicalClinic
+name
+Healing Minds Psychiatry
+error
+Healing Minds Psychiatry
+1 problema crítico
+
+Falta el campo "address"
+type
+MedicalClinic
+name
+Healing Minds Psychiatry
