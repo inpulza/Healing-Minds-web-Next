@@ -1,0 +1,69 @@
+Perfecto. Aquí tienes un mensaje técnico, específico y estructurado para tu agente de Replit.
+
+Este mensaje primero le explica el problema de forma global y luego le solicita que ejecute un diagnóstico sistemático para verificar cada punto antes de implementar las soluciones definitivas.
+
+Asunto: Solicitud de Diagnóstico Técnico Exhaustivo y Plan de Limpieza de Dominio (healingmindsp.com)
+
+Para: Equipo de Replit
+
+Saludos,
+
+Tras un análisis profundo de Google Search Console, hemos identificado varios problemas técnicos críticos que están afectando la salud del dominio healingmindsp.com. La evidencia sugiere que estos problemas son secuelas de la migración del sitio desde una plataforma WordPress anterior.
+
+Aunque hemos resuelto con éxito los problemas de renderizado server-side y de caché, persisten problemas de fondo que están generando miles de URLs de baja calidad, causando errores "Soft 404" y "Duplicate without user-selected canonical", y malgastando el presupuesto de rastreo de Google.
+
+Antes de implementar soluciones permanentes, te solicitamos que ejecutes el siguiente plan de diagnóstico para confirmar la causa raíz y el alcance de cada problema.
+
+Problemas Estratégicos Identificados:
+Contaminación del Índice por Hackeo Previo: GSC muestra URLs (ej. /?zhHant/product/surugaya/...) indicativas de un posible "Japanese Keyword Hack" en la instalación anterior de WordPress.
+
+Spam de Parámetros Masivo: Miles de URLs con el parámetro ?_g= están siendo descubiertas por Google, causando contenido duplicado a gran escala.
+
+URLs "Fantasma" y Errores "Soft 404": URLs del antiguo tema de WordPress (ej. /home-2/, /member/..., /product/...) persisten en el índice de Google. Nuestra hipótesis es que la aplicación actual las sirve con un código de estado 200 OK en lugar de un 404 Not Found, provocando los errores "Soft 404" que vemos en GSC.
+
+Plan de Diagnóstico Solicitado:
+Por favor, ejecuta y documenta los resultados de los siguientes puntos:
+
+1. Auditoría de Seguridad y Residuos de Hackeo:
+
+Tarea: Realiza una revisión de seguridad del entorno actual para confirmar que no existen archivos, scripts o inyecciones de base de datos residuales del posible hackeo del sitio WordPress anterior.
+
+Pregunta a Responder: ¿Está el entorno de Replit 100% limpio y seguro?
+
+2. Análisis del Manejo de URLs Inexistentes (Diagnóstico de "Soft 404"):
+
+Tarea: Utiliza curl o una herramienta similar para verificar el encabezado de respuesta HTTP de varias URLs "fantasma" identificadas en GSC.
+
+URLs de Ejemplo para Probar:
+
+https://www.healingmindsp.com/home-2/
+
+https://www.healingmindsp.com/member/hulk-m-kenbon-3/
+
+https://www.healingmindsp.com/product/legend-product-2/
+
+Pregunta a Responder: ¿Estas URLs devuelven un código de estado 200 OK (lo que confirmaría la causa del "Soft 404") o ya devuelven un 404 Not Found?
+
+3. Verificación de la Configuración de robots.txt:
+
+Tarea: Inspecciona el archivo robots.txt en producción.
+
+Preguntas a Responder:
+
+¿Contiene la directiva Disallow: /*?_g= para bloquear el spam de parámetros?
+
+¿Se han eliminado directivas obsoletas como Crawl-delay?
+
+4. Propuesta de Mapeo de Limpieza (Plan de Acción):
+
+Tarea: Basado en tus hallazgos, por favor, propón un plan de acción técnico.
+
+Entregable Esperado:
+
+Una lista o patrón de las URLs que deben ser configuradas para devolver un código de estado 410 Gone (para todo el contenido de hackeo y basura de WordPress).
+
+La confirmación de que una regla "catch-all" está implementada para que cualquier otra URL no definida devuelva un 404 Not Found.
+
+El objetivo final es crear un entorno donde Google solo pueda rastrear e indexar las 71+ páginas legítimas del sitemap, eliminando toda la "basura digital" que está dañando la autoridad y la reputación del dominio.
+
+Quedamos a la espera de tu diagnóstico para proceder con la implementación.
