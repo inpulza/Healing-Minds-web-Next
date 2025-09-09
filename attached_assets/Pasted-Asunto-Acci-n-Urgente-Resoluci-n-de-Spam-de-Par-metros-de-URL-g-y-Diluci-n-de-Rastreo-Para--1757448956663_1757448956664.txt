@@ -1,0 +1,43 @@
+Asunto: Acción Urgente: Resolución de Spam de Parámetros de URL (?_g=) y Dilución de Rastreo
+
+Para: Equipo de Replit (Desarrollo Web)
+
+Saludos,
+
+Tras un análisis de Google Search Console, hemos confirmado que Google ha descubierto y está intentando procesar miles de URLs de baja calidad generadas por un parámetro de spam (?_g=). Esto está creando un problema técnico de SEO significativo que requiere una solución inmediata.
+
+El Diagnóstico (Qué está Sucediendo)
+El sitio está siendo bombardeado por bots de spam o de referencia que añaden automáticamente el parámetro ?_g= seguido de un número aleatorio a la URL principal. Googlebot, en su intento de ser exhaustivo, rastrea estos enlaces y los descubre. Como resultado, Google ve miles de URLs diferentes (ej. /?_g=123, /?_g=456, etc.) que en realidad son todas copias exactas de la página de inicio.
+
+El Impacto SEO (Por Qué es un Problema Crítico)
+Dilución de Autoridad por Contenido Duplicado: Google penaliza el contenido duplicado. Al ver miles de copias de tu página de inicio, la autoridad de la URL real y canónica se diluye masivamente, perjudicando su capacidad para clasificar.
+
+Desperdicio del Presupuesto de Rastreo (Crawl Budget): Google asigna un presupuesto de rastreo limitado a cada sitio web. En lugar de usarlo para encontrar e indexar tus páginas de servicios importantes, artículos de blog y actualizaciones, lo está malgastando en miles de URLs basura. Esto puede hacer que tu contenido nuevo y valioso nunca sea indexado.
+
+Contaminación de Métricas: Este tráfico de bots puede inflar artificialmente las métricas en Google Analytics, dificultando el análisis del comportamiento real de los usuarios.
+
+El Plan de Acción Técnico (Cómo Solucionarlo)
+La solución consiste en darle a Google instrucciones claras para que ignore estas URLs basura.
+
+Paso 1: Bloquear el Rastreo del Parámetro en robots.txt (Solución Principal)
+
+Acción: Debemos editar el archivo robots.txt del sitio y añadir una directiva Disallow específica para este parámetro.
+
+Código a Añadir:
+
+User-agent: *
+Disallow: /*?_g=
+Efecto: Esta regla le dice a todos los rastreadores: "No rastrees NINGUNA URL en este sitio que contenga el parámetro ?_g=". Esto detendrá de raíz el desperdicio del presupuesto de rastreo.
+
+Paso 2: Verificar la Etiqueta Canónica (La Red de Seguridad)
+
+Acción: Asegurarse de que la página de inicio (y todas las demás páginas) tengan una etiqueta canónica auto-referenciada correctamente implementada en el <head> del HTML. Ya discutimos que esto debía ser renderizado en el servidor.
+
+Ejemplo para la Homepage:
+
+HTML
+
+<link rel="canonical" href="https://www.healingmindsp.com/" />
+Efecto: La etiqueta canónica es nuestra póliza de seguro. Si, por alguna razón, Google llegara a rastrear una URL con el parámetro, esta etiqueta le dirá: "Ignora los parámetros, la versión maestra y única de esta página es la que no los tiene".
+
+Por favor, implementen la regla en robots.txt con la máxima prioridad. Una vez hecho esto, con el tiempo, Google dejará de rastrear estas URLs y las eliminará de su índice, permitiéndonos enfocar la autoridad y el presupuesto de rastreo del sitio en las páginas que realmente importan.
