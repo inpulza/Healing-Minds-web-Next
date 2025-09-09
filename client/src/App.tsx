@@ -9,7 +9,7 @@ import { useAnalytics } from '@/hooks/use-analytics';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useClarity } from '@/hooks/use-clarity';
 import { initGA } from '@/lib/analytics';
-import { addMedicalBusinessSchema, addPhysicianSchema } from '@/utils/seo';
+import { addMedicalBusinessSchema } from '@/utils/seo';
 import Home from '@/pages/Home';
 
 // All non-critical pages lazy loaded for performance optimization
@@ -110,7 +110,7 @@ function App() {
 
     // Add structured data schemas
     addMedicalBusinessSchema();
-    addPhysicianSchema();
+    // Physician schema now integrated in MedicalClinic schema
   }, []);
 
   return (

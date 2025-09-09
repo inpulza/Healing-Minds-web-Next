@@ -170,11 +170,22 @@ export const addMedicalBusinessSchema = () => {
         "name": "Telepsychiatry"
       }
     ],
+    "priceRange": "$$",
     "member": {
       "@type": "Physician",
       "@id": "https://healingmindsp.com/about#physician",
       "name": "Dr. Melva Reve",
       "jobTitle": "Psychiatrist",
+      "telephone": "+1-239-423-0272",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "4760 Tamiami Trl N # 25",
+        "addressLocality": "Naples",
+        "addressRegion": "FL",
+        "postalCode": "34103",
+        "addressCountry": "US"
+      },
+      "image": "https://healingmindsp.com/favicon.svg",
       "knowsLanguage": ["es-US", "en-US"],
       "knowsAbout": [
         "Anxiety Treatment",

@@ -6,7 +6,7 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import CompactVideoCarousel from '@/components/CompactVideoCarousel';
 import Reviews from '@/components/Reviews';
-import { updateSEO, addMedicalBusinessSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -53,11 +53,10 @@ const LocationNaples = () => {
     };
     updateSEO(seoData);
 
-    // Add MedicalClinic Schema (HUB) - replaces LocalBusiness for Hub & Spoke model
-    addMedicalBusinessSchema();
+    // Schema already managed by App.tsx to avoid duplication
 
     return () => {
-      // Cleanup managed by addMedicalBusinessSchema function
+      // No cleanup needed
     };
   }, [language]);
 
