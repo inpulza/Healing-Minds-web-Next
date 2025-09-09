@@ -19,6 +19,12 @@ const ForPatients = lazy(() => import('@/pages/ForPatients'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const ServiciosEspanol = lazy(() => import('@/pages/ServiciosEspanol'));
 const LocationNaples = lazy(() => import('@/pages/LocationNaples'));
+
+// Spanish Main Pages - Lazy loaded for performance
+const HomeEspanol = lazy(() => import('@/pages/HomeEspanol'));
+const AcercaEspanol = lazy(() => import('@/pages/AcercaEspanol'));
+const ContactoEspanol = lazy(() => import('@/pages/ContactoEspanol'));
+const ParaPacientesEspanol = lazy(() => import('@/pages/ParaPacientesEspanol'));
 const NotFound = lazy(() => import('@/pages/not-found'));
 
 // Individual Service Pages - Lazy loaded for performance
@@ -63,6 +69,12 @@ function Router() {
       <Route path="/for-patients" component={ForPatients} />
       <Route path="/locations/naples" component={LocationNaples} />
       <Route path="/contact" component={Contact} />
+      
+      {/* Spanish Main Pages */}
+      <Route path="/es" component={HomeEspanol} />
+      <Route path="/es/acerca-de" component={AcercaEspanol} />
+      <Route path="/es/contacto" component={ContactoEspanol} />
+      <Route path="/es/para-pacientes" component={ParaPacientesEspanol} />
       <Route path="/es/servicios" component={ServiciosEspanol} />
       
       {/* Individual Service Pages */}
@@ -76,6 +88,7 @@ function Router() {
       {/* Spanish Service Pages */}
       <Route path="/es/servicios/tratamiento-ansiedad" component={AnxietyTreatment} />
       <Route path="/es/servicios/tratamiento-depresion" component={DepressionTreatment} />
+      <Route path="/es/servicios/tratamiento-adhd" component={AdhdTreatment} />
       <Route path="/es/servicios/tratamiento-tept" component={PtsdTreatment} />
       <Route path="/es/servicios/tratamiento-bipolar" component={BipolarTreatment} />
       <Route path="/es/servicios/manejo-medicamentos" component={MedicationManagement} />
