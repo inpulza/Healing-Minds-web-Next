@@ -20,14 +20,19 @@ interface PageMeta {
  * CRÍTICO: HTML Injection para meta tags server-side
  * Esta función inyecta meta tags específicos por ruta ANTES de enviar HTML al cliente
  * Compatible con desarrollo (Vite) y producción (static files)
+ * 
+ * ARQUITECTURA:
+ * - Desarrollo: Intercepta HTML transformado por Vite
+ * - Producción: Intercepta HTML estático servido por Express
+ * - Ambos casos: Inyecta canonical tags y schema JSON-LD antes de envío al cliente
  */
 export function injectMetaTags(html: string, req: Request): string {
   const url = req.originalUrl;
   const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
   let host = req.get('host') || 'www.healingmindsp.com';
   
-  // Ensure consistent www subdomain
-  if (host === 'healingmindsp.com') {
+  // Ensure consistent www subdomain (critical for production SEO)
+  if (host === 'healingmindsp.com' || host?.includes('replit.app')) {
     host = 'www.healingmindsp.com';
   }
   
@@ -130,7 +135,8 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
 }
 
 /**
- * Generate MedicalBusiness schema for locations
+ * Generate comprehensive MedicalBusiness schema optimized for Google Rich Results
+ * Compatible with Google Business Profile and Local SEO requirements
  */
 function getMedicalBusinessSchema(baseUrl: string) {
   return {
@@ -169,13 +175,14 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "Medication Management"
     ],
     "availableLanguage": ["English", "Spanish"],
-    "paymentAccepted": "Insurance, Credit Card, Cash",
+    "paymentAccepted": ["Insurance", "Credit Card", "Cash"],
     "currenciesAccepted": "USD",
     "sameAs": [
       "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z"
     ],
     "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
     "isAcceptingNewPatients": true,
+    "priceRange": "$$",
     "founder": {
       "@type": "Person",
       "@id": `${baseUrl}/#Physician`,
