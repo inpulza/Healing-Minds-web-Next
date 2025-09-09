@@ -31,9 +31,15 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     // ETags less useful for immutable assets, but add for completeness
     res.setHeader('ETag', `"${Date.now()}-${req.url.split('/').pop()}"`);
   }
-  // Cache HTML for 5 minutes with ETag validation
-  else if (req.url.match(/\.html$/) || req.url === '/') {
-    res.setHeader('Cache-Control', 'public, max-age=300, must-revalidate');
+  // 🚨 TEMPORARY: Disable HTML caching to force fresh content for Google crawlers
+  // This ensures Google sees updated schema markup and NAP consistency fixes
+  else if (req.url.match(/\.html$/) || req.url === '/' || req.url.includes('/locations/')) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    // Extra headers to prevent any CDN/proxy caching
+    res.setHeader('Surrogate-Control', 'no-store');
+    res.setHeader('X-Accel-Expires', '0');
   }
   next();
 });
