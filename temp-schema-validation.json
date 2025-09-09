@@ -1,0 +1,80 @@
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic",
+  "@id": "http://www.healingmindsp.com/#MedicalClinic",
+  "name": "Healing Minds Psychiatry",
+  "url": "http://www.healingmindsp.com",
+  "logo": "http://www.healingmindsp.com/favicon.svg",
+  "image": "http://www.healingmindsp.com/favicon.svg",
+  "description": "Board certified psychiatrist Dr. Melva Reve providing expert psychiatric care in Naples, FL. Specializing in anxiety, depression, ADHD, PTSD, and comprehensive mental health services.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "4760 Tamiami Trl N # 25",
+    "addressLocality": "Naples",
+    "addressRegion": "FL",
+    "postalCode": "34103",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 26.2044803,
+    "longitude": -81.8021344
+  },
+  "telephone": "(239) 423-0272",
+  "email": "info@healingmindsp.com",
+  "openingHours": [
+    "Mo-Fr 09:00-17:00"
+  ],
+  "medicalSpecialty": [
+    "Anxiety Disorders",
+    "Depression",
+    "ADHD",
+    "PTSD",
+    "Bipolar Disorder",
+    "Medication Management"
+  ],
+  "availableLanguage": [
+    "English",
+    "Spanish"
+  ],
+  "paymentAccepted": [
+    "Insurance",
+    "Credit Card",
+    "Cash"
+  ],
+  "currenciesAccepted": "USD",
+  "sameAs": [
+    "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z"
+  ],
+  "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
+  "isAcceptingNewPatients": true,
+  "priceRange": "$$",
+  "founder": {
+    "@type": "Person",
+    "@id": "http://www.healingmindsp.com/#Physician",
+    "name": "Dr. Melva Reve",
+    "jobTitle": "Board Certified Psychiatrist",
+    "hasCredential": [
+      {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "Medical Degree",
+        "educationalLevel": "MD",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "University of Miami"
+        }
+      }
+    ],
+    "memberOf": {
+      "@type": "Organization",
+      "name": "American Psychiatric Association"
+    },
+    "knowsLanguage": [
+      "English",
+      "Spanish"
+    ],
+    "workLocation": {
+      "@id": "http://www.healingmindsp.com/#MedicalClinic"
+    }
+  }
+}
