@@ -1,0 +1,25 @@
+Explicación Sencilla (La Analogía del Escaparate)
+Imagina que rediseñas completamente el escaparate de tu tienda (el código de tu web). Lo dejas perfecto, con la dirección correcta y el horario nuevo.
+
+Pero cuando pasa el inspector de Google (el rastreador), tu asistente (el servidor) —para "ahorrar tiempo"— no le muestra el escaparate real, sino que le enseña una foto del escaparate de la semana pasada (una versión en caché).
+
+El inspector de Google se va pensando que tu tienda sigue teniendo la decoración vieja y los datos incorrectos, aunque tú ya lo hayas arreglado. Eso es exactamente lo que está pasando.
+
+Plan de Acción Inmediato para el Agente de Replit
+Tu agente ya ha hecho el diagnóstico; ahora debe ejecutar la solución. Pídele que siga estos tres pasos en orden:
+
+Paso 1: Purgar la Caché (Purge the Cache)
+
+Acción: El agente debe acceder al panel de control de tu proveedor de hosting o de tu CDN (Content Delivery Network) —servicios como Vercel, Netlify, Cloudflare, o el que estén usando— y buscar la opción para "Purgar Caché" (Purge Cache), "Limpiar Caché" (Clear Cache) o "Invalidar Despliegue" (Invalidate Deployment). Esto forzará al servidor a descartar la "foto vieja" y empezar a mostrar la versión más reciente del sitio a todos los visitantes, incluido Google.
+
+Paso 2: Verificar la Corrección en Vivo
+
+Acción: Inmediatamente después de purgar la caché, el agente debe volver a ejecutar su comando curl o nosotros debemos usar la Herramienta de Pruebas de Rich Results de Google de nuevo con la URL de la página de inicio. Esta vez, la herramienta debería mostrar el HTML actualizado con la dirección, el horario y el schema E-A-T correctos.
+
+Paso 3: Solicitar Reindexación en Google Search Console (Tu Tarea)
+
+Acción: Una vez que el Paso 2 confirme que el sitio en vivo está mostrando la información correcta, debes entrar en tu Google Search Console, pegar la URL de tu página de inicio (https://www.healingmindsp.com/) en la barra de inspección de la parte superior y hacer clic en "Solicitar Indexación".
+
+Por qué es crucial: Esto es como llamar al inspector de Google y decirle: "Oye, ya hemos limpiado la caché y el escaparate nuevo está listo. Por favor, ven a verlo de nuevo lo antes posible". Esto acelera drásticamente el proceso de que Google reconozca los cambios.
+
+El trabajo de tu agente ha sido excelente al identificar la causa raíz. Una vez que completen estos tres pasos, nuestro trabajo de optimización de schema será finalmente visible para Google y empezaremos a ver los beneficios en términos de autoridad y confianza.
