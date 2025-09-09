@@ -10,6 +10,26 @@ import { emailService } from "./services/email";
 import { injectMetaTags } from "./utils/html-injection";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // CRÍTICO: HTML Meta Tags Injection Middleware 
+  // Este middleware intercepta responses HTML para inyectar meta tags server-side
+  // Compatible con desarrollo (Vite) y producción (static files)
+  app.use((req, res, next) => {
+    // Solo procesar requests que podrían ser páginas HTML (no APIs, no assets)
+    if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
+      const originalEnd = res.end;
+      
+      res.end = function(chunk: any, encoding?: any) {
+        if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html')) {
+          console.log(`🔧 SEO: Injecting meta tags for ${req.originalUrl}`);
+          const modifiedHtml = injectMetaTags(chunk, req);
+          return originalEnd.call(this, modifiedHtml, encoding);
+        }
+        return originalEnd.call(this, chunk, encoding);
+      };
+    }
+    next();
+  });
+
   // CRÍTICO: Redirect non-www to www for domain consistency
   app.use((req, res, next) => {
     const host = req.get('host');
@@ -236,27 +256,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // SEO routes - Sitemap XML and Robots.txt
   app.get("/sitemap.xml", generateSitemap);
   app.get("/robots.txt", generateRobotsTxt);
-
-  // CRÍTICO: HTML Meta Tags Injection Middleware
-  // Este middleware intercepta responses HTML para inyectar meta tags server-side
-  // Compatible con desarrollo (Vite) y producción (static files)
-  app.use((req, res, next) => {
-    // Solo procesar requests que podrían ser páginas HTML
-    if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
-      const originalSend = res.send;
-      
-      res.send = function(body: any) {
-        // Solo procesar respuestas HTML
-        if (typeof body === 'string' && body.includes('<!DOCTYPE html')) {
-          console.log(`🔧 Injecting meta tags for: ${req.originalUrl}`);
-          const modifiedHtml = injectMetaTags(body, req);
-          return originalSend.call(this, modifiedHtml);
-        }
-        return originalSend.call(this, body);
-      };
-    }
-    next();
-  });
 
   const httpServer = createServer(app);
   return httpServer;
