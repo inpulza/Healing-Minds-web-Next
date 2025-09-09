@@ -272,10 +272,11 @@ export const generateRobotsTxt = (req: Request, res: Response) => {
   
   const baseUrl = `${protocol}://${host}`;
   
+  // OPTIMIZADO: Robots.txt conforme a directrices Google 2025
   const robotsTxt = `User-agent: *
 Allow: /
 
-# CRÍTICO: Sitemap debe usar dominio consistente con www
+# Sitemap location
 Sitemap: ${baseUrl}/sitemap.xml
 
 # Block backend endpoints and admin areas
@@ -286,28 +287,15 @@ Disallow: /_next/
 Disallow: /404
 Disallow: /500
 
-# CRÍTICO: Bloquear URLs con parámetros de tracking de Replit
+# Block URLs with tracking parameters
 Disallow: /*?_g=
-
-# Allow specific search engines
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
 
 # Block resource-intensive crawlers
 User-agent: AhrefsBot
 Disallow: /
 
 User-agent: MJ12bot
-Disallow: /
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1`;
+Disallow: /`;
 
   res.set({
     'Content-Type': 'text/plain',
