@@ -2,9 +2,16 @@ import { Request, Response } from 'express';
 
 // Sitemap XML generator for Dr. Melva Reve's psychiatric practice
 export const generateSitemap = (req: Request, res: Response) => {
-  // Use X-Forwarded-Proto header if available (for Replit proxy), otherwise fallback to req.protocol
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-  const baseUrl = `${protocol}://${req.get('host')}`;
+  // Determine preferred protocol and domain consistently
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  let host = req.get('host') || 'www.healingmindsp.com';
+  
+  // Ensure consistent www subdomain for canonical URLs
+  if (host === 'healingmindsp.com') {
+    host = 'www.healingmindsp.com';
+  }
+  
+  const baseUrl = `${protocol}://${host}`;
   
   // Define realistic last modification dates for different types of content
   const recentDate = '2025-08-20'; // Recent major updates (Microsoft Clarity, schema optimization)
@@ -254,22 +261,53 @@ ${legalPagesXml}
 
 // Robots.txt generator to reference sitemap
 export const generateRobotsTxt = (req: Request, res: Response) => {
-  // Use X-Forwarded-Proto header if available (for Replit proxy), otherwise fallback to req.protocol
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-  const baseUrl = `${protocol}://${req.get('host')}`;
+  // Determine preferred protocol and domain consistently
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  let host = req.get('host') || 'www.healingmindsp.com';
+  
+  // Ensure consistent www subdomain for canonical URLs
+  if (host === 'healingmindsp.com') {
+    host = 'www.healingmindsp.com';
+  }
+  
+  const baseUrl = `${protocol}://${host}`;
   
   const robotsTxt = `User-agent: *
 Allow: /
 
-# Sitemap location
+# CRÍTICO: Sitemap debe usar dominio consistente con www
 Sitemap: ${baseUrl}/sitemap.xml
 
-# Block admin and private areas
-Disallow: /admin/
+# Block backend endpoints and admin areas
 Disallow: /api/
+Disallow: /server/
+Disallow: /admin/
 Disallow: /_next/
 Disallow: /404
-Disallow: /500`;
+Disallow: /500
+
+# CRÍTICO: Bloquear URLs con parámetros de tracking de Replit
+Disallow: /*?_g=
+
+# Allow specific search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block resource-intensive crawlers
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1`;
 
   res.set({
     'Content-Type': 'text/plain',
