@@ -618,6 +618,112 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         ]
       };
 
+    // Homepage española
+    case '/es':
+    case '/es/':
+      return {
+        canonical: `${baseUrl}/es/`,
+        schema: getMedicalBusinessSchema(baseUrl),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'La psiquiatra certificada Dra. Melva Reve brinda atención psiquiátrica experta en Naples, FL. Especializada en ansiedad, depresión, TDAH y terapia. Servicios de salud mental para el suroeste de Florida.'
+          },
+          {
+            property: 'og:title',
+            content: 'Dra. Melva Reve - Psiquiatra Naples FL | Healing Minds Psychiatry'
+          },
+          {
+            property: 'og:description',
+            content: 'Psiquiatra certificada en Naples, FL. Tratamiento experto para ansiedad, depresión, TDAH, TEPT. Atención bilingüe disponible.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/es/`
+          }
+        ]
+      };
+
+    // Acerca de español
+    case '/es/acerca-de':
+      return {
+        canonical: `${baseUrl}/es/acerca-de`,
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Conozca a la Dra. Melva Reve, psiquiatra certificada con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.'
+          },
+          {
+            property: 'og:title',
+            content: 'Acerca de la Dra. Melva Reve - Psiquiatra Certificada Naples FL | Healing Minds'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/es/acerca-de`
+          }
+        ]
+      };
+
+    // Contacto español
+    case '/es/contacto':
+      return {
+        canonical: `${baseUrl}/es/contacto`,
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Contacte Healing Minds Psychiatry en Naples, FL para programar su consulta. Llame (239) 423-0272 o envíe un mensaje. Servicios bilingües disponibles.'
+          },
+          {
+            property: 'og:title',
+            content: 'Contactar Dra. Melva Reve - Naples FL Psiquiatra | Healing Minds'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/es/contacto`
+          }
+        ]
+      };
+
+    // Para Pacientes español
+    case '/es/para-pacientes':
+      return {
+        canonical: `${baseUrl}/es/para-pacientes`,
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Información importante para pacientes sobre seguro, citas y atención psiquiátrica en Healing Minds Naples. FAQ y qué esperar.'
+          },
+          {
+            property: 'og:title',
+            content: 'Para Pacientes - Healing Minds Psychiatry | Dra. Melva Reve Naples FL'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/es/para-pacientes`
+          }
+        ]
+      };
+
+    // ADHD Treatment español (faltaba esta ruta crítica)
+    case '/es/servicios/tratamiento-adhd':
+      return {
+        canonical: `${baseUrl}/es/servicios/tratamiento-adhd`,
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Tratamiento de TDAH para adultos en Naples, FL. La Dra. Melva Reve proporciona evaluación integral de TDAH, terapia y manejo de medicamentos.'
+          },
+          {
+            property: 'og:title',
+            content: 'Tratamiento TDAH Adultos Naples FL - Dra. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/es/servicios/tratamiento-adhd`
+          }
+        ]
+      };
+
     // Add more routes as needed
     default:
       return null;
