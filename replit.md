@@ -4,6 +4,17 @@
 
 This is a professional website for Healing Minds Psychiatry, the practice of Dr. Melva Reve, a board-certified psychiatrist serving Naples, FL and surrounding areas. The website provides bilingual (English/Spanish) psychiatric care information, services, and patient resources. It features a modern, accessible design built with React and TypeScript, focusing on mental health services including anxiety, depression, ADHD, PTSD, and other psychiatric conditions.
 
+## CRÍTICO: Resolución de Problemas de Indexación (September 9, 2025)
+
+- **PROBLEMA CRÍTICO RESUELTO**: Indexación fallida de Google para /locations/naples
+  - ✅ **Conflicto Robots.txt**: Eliminado archivo robots.txt estático que causaba inconsistencias de dominio
+  - ✅ **Dominio Consistente**: Implementado redirect automático 301 de no-www a www.healingmindsp.com
+  - ✅ **Sitemap Dinámico**: Corregido generador para usar siempre dominio www consistente
+  - ✅ **Canonical URLs**: Mejorada función SEO para generar URLs canónicas consistentes con www
+  - ✅ **Robots.txt Dinámico**: Implementado generador robusto con reglas Googlebot específicas
+  - ✅ **Verificación**: Confirmado que /locations/naples está correctamente incluida en sitemap
+  - 🔄 **PENDIENTE**: Solicitar reindexación en Google Search Console
+
 ## Recent Changes (September 8, 2025)
 
 - **SEO Local Optimization Implementation**: Successfully completed comprehensive local SEO optimization plan
