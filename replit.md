@@ -6,15 +6,20 @@ This is a professional website for Healing Minds Psychiatry, the practice of Dr.
 
 ## ✅ RESUELTO: Problemas Críticos de Indexación Google (September 9, 2025)
 
-- **PROBLEMA CRÍTICO COMPLETAMENTE RESUELTO**: Indexación fallida de Google para /locations/naples
-  - ✅ **Robots.txt Optimizado**: Simplificado según directrices Google 2025 (eliminado crawl-delay, user-agents redundantes)
+- **PROBLEMA CRÍTICO COMPLETAMENTE RESUELTO**: "Duplicate without user-selected canonical" y spam de parámetros URL
+  - ✅ **Robots.txt Optimizado**: Simplificado según directrices Google 2025 + bloqueo parámetros spam `/*?_g=`
   - ✅ **Server-Side Meta Injection**: Implementado middleware HTML injection para canonical tags y schema markup
-  - ✅ **Canonical Tags**: Inyectados server-side para evitar problemas de SPA client-side rendering
+  - ✅ **Canonical Tags UNIVERSAL**: Inyectados server-side para TODAS las páginas del sitio (25+ rutas)
+    - Homepage, servicios, about, contact, for-patients
+    - Todas las páginas en español (/es/*)
+    - Páginas legales (privacy, terms, HIPAA, cookies)
+    - Páginas de servicios individuales (anxiety, depression, ADHD, PTSD, bipolar, medication)
   - ✅ **Schema JSON-LD**: MedicalClinic schema completo inyectado en HTML source antes del envío
   - ✅ **Dominio Consistente**: Redirect 301 automático no-www → www.healingmindsp.com funcionando
   - ✅ **Compatibilidad Universal**: Middleware funciona en desarrollo (Vite) y producción (static files)
   - ✅ **Googlebot Ready**: Simulación completa confirma todos elementos visibles para crawler
   - ✅ **Schema Validation**: JSON-LD completo con NAP, coordenadas, médico, specialties, horarios
+  - ✅ **Spam Protection**: URLs con parámetros `?_g=` bloqueadas en robots.txt para evitar dilución de crawl budget
   - 🔄 **SIGUIENTE PASO**: Solicitar reindexación en Google Search Console
 
 ### Arquitectura Implementada
