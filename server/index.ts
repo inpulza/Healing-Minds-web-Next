@@ -33,7 +33,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   }
   // 🚨 TEMPORARY: Disable HTML caching to force fresh content for Google crawlers
   // This ensures Google sees updated schema markup and NAP consistency fixes
-  else if (req.url.match(/\.html$/) || req.url === '/' || req.url.includes('/locations/')) {
+  else if (req.url.match(/\.html$/) || 
+           req.url === '/' || 
+           req.url.includes('/locations/') ||
+           req.url.includes('/services/') ||
+           req.url.includes('/es/') ||
+           req.url.match(/^\/(about|contact|for-patients|privacy-policy|terms-of-service|hipaa-notice|cookie-policy)/) ||
+           req.url === '/services' ||
+           req.url === '/es/servicios') {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
