@@ -135,8 +135,8 @@ const Contact = () => {
     {
       icon: MapPin,
       title: t('contact.address'),
-      value: '4760 Tamiami Trl N, Ste 25\nNaples, FL 34103',
-      link: 'https://maps.google.com/?q=4760+Tamiami+Trl+N,+Ste+25,+Naples,+FL+34103',
+      value: '4760 Tamiami Trl N # 25\nNaples, FL 34103',
+      link: 'https://maps.google.com/?q=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103',
       subtext: language === 'en' ? 'View on Google Maps →' : 'Ver en Google Maps →'
     }
   ];

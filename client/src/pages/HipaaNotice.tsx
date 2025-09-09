@@ -39,7 +39,7 @@ const HipaaNotice = () => {
                   <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 p-6 rounded-lg mb-6">
                     <p className="text-blue-800 dark:text-blue-300 font-semibold text-lg">
                       Healing Minds Psychiatry<br />
-                      4760 Tamiami Tr N, Unit 25<br />
+                      4760 Tamiami Trl N # 25<br />
                       Naples, FL - 34103-3025
                     </p>
                   </div>
@@ -173,7 +173,7 @@ const HipaaNotice = () => {
                   <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 p-6 rounded-lg mb-6">
                     <p className="text-blue-800 dark:text-blue-300 font-semibold text-lg">
                       Healing Minds Psychiatry<br />
-                      4760 Tamiami Tr N, Unit 25<br />
+                      4760 Tamiami Trl N # 25<br />
                       Naples, FL - 34103-3025
                     </p>
                   </div>

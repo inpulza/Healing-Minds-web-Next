@@ -43,11 +43,11 @@ const LocationNaples = () => {
         ? 'Psychiatrist Naples FL - Dr. Melva Reve Location | Healing Minds'
         : 'Psiquiatra Naples FL - Ubicación Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N, Ste 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N, Ste 25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N # 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N # 25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
-        ? 'psychiatrist Naples FL location, 4760 Tamiami Trail Naples Suite 25, psychiatric office Naples, Dr Melva Reve address, mental health Naples FL'
-        : 'ubicación psiquiatra Naples FL, 4760 Tamiami Trail Naples Suite 25, consultorio psiquiátrico Naples, dirección Dra Melva Reve, salud mental Naples FL',
+        ? 'psychiatrist Naples FL location, 4760 Tamiami Trail Naples # 25, psychiatric office Naples, Dr Melva Reve address, mental health Naples FL'
+        : 'ubicación psiquiatra Naples FL, 4760 Tamiami Trail Naples # 25, consultorio psiquiátrico Naples, dirección Dra Melva Reve, salud mental Naples FL',
       lang: language,
       canonical: '/locations/naples'
     };
