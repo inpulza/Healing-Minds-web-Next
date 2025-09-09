@@ -108,8 +108,10 @@ function App() {
       initGA();
     }
 
-    // Add structured data schemas
+    // Add structured data schemas with debug info
+    console.log('🔧 Executing addMedicalBusinessSchema...');
     addMedicalBusinessSchema();
+    console.log('✅ Schema executed - NAP should be updated to # 25');
     // Physician schema now integrated in MedicalClinic schema
   }, []);
 
