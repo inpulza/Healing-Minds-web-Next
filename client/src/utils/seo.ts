@@ -24,9 +24,13 @@ export const updateSEO = (data: SEOData) => {
     document.documentElement.lang = data.lang;
   }
   
-  // Update canonical URL
+  // Update canonical URL - CRÍTICO: Usar dominio preferido consistente
   if (data.canonical) {
-    updateLinkTag('canonical', `${window.location.origin}${data.canonical}`);
+    // Ensure canonical URLs always use www subdomain for consistency
+    const preferredOrigin = window.location.origin.includes('healingmindsp.com') 
+      ? window.location.origin.replace('://healingmindsp.com', '://www.healingmindsp.com')
+      : window.location.origin;
+    updateLinkTag('canonical', `${preferredOrigin}${data.canonical}`);
   }
   
   // Update Open Graph tags
