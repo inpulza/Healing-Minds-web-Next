@@ -9,6 +9,16 @@ import { staticReviews, staticStats } from "./data/static-reviews";
 import { emailService } from "./services/email";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // CRÍTICO: Redirect non-www to www for domain consistency
+  app.use((req, res, next) => {
+    const host = req.get('host');
+    if (host === 'healingmindsp.com') {
+      const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+      return res.redirect(301, `${protocol}://www.healingmindsp.com${req.url}`);
+    }
+    next();
+  });
+
   // 301 redirect from old ADHD URL to new consistent URL
   app.get('/adhd-treatment-adults-naples-fl', (req, res) => {
     res.redirect(301, '/services/adhd-treatment');
