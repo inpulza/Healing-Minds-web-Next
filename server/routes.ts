@@ -257,6 +257,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/sitemap.xml", generateSitemap);
   app.get("/robots.txt", generateRobotsTxt);
 
+  // CRÍTICO: URL Cleanup Middleware - DEBE ir ANTES del catch-all routing
+  // Esta es la solución definitiva para Soft 404 y spam de parámetros
+  app.use((req, res, next) => {
+    const url = req.originalUrl;
+    const pathname = req.path;
+
+    // 1. HACKEO: Japanese Keyword Hack URLs → 410 Gone (contenido eliminado permanentemente)
+    if (url.includes('zhHant') || 
+        url.includes('surugaya') || 
+        url.includes('product/surugaya') ||
+        pathname.startsWith('/product/') ||
+        pathname.includes('/zh') ||
+        pathname.includes('/ja/')) {
+      console.log(`🚫 410 Gone: Japanese hack URL blocked - ${url}`);
+      return res.status(410).json({
+        error: 'Gone',
+        message: 'This content has been permanently removed',
+        code: 410
+      });
+    }
+
+    // 2. SPAM: URLs con parámetro ?_g= → 403 Forbidden (acceso denegado)
+    if (url.includes('?_g=') || url.includes('&_g=')) {
+      console.log(`🚫 403 Forbidden: Parameter spam blocked - ${url}`);
+      return res.status(403).json({
+        error: 'Forbidden', 
+        message: 'Access denied - parameter spam detected',
+        code: 403
+      });
+    }
+
+    // 3. WORDPRESS LEGACY: URLs fantasma del tema anterior → 404 Not Found
+    if (pathname.startsWith('/home-') ||
+        pathname.startsWith('/member/') ||
+        pathname.startsWith('/legend/') ||
+        pathname.includes('/wp-') ||
+        pathname.includes('/wordpress/') ||
+        pathname.includes('/blog/') && !pathname.startsWith('/blog') // Bloquea /blog/algo pero permite /blog
+        ) {
+      console.log(`🚫 404 Not Found: WordPress legacy URL blocked - ${url}`);
+      return res.status(404).json({
+        error: 'Not Found',
+        message: 'The requested page does not exist',
+        code: 404
+      });
+    }
+
+    // 4. URLs legítimas → continuar al SPA routing normal
+    next();
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
