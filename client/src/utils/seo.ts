@@ -75,8 +75,21 @@ const updateLinkTag = (rel: string, href: string) => {
   tag.setAttribute('href', href);
 };
 
-// Complete Medical Clinic Schema - optimized for Google Business Profile connection
+// Complete Medical Clinic Schema - Single authoritative source for Healing Minds Psychiatry
+// Optimized to prevent duplicate schemas and Google Rich Results validation issues
 export const addMedicalBusinessSchema = () => {
+  // STEP 1: Remove ALL existing schema markup to prevent duplicates
+  const existingSchemas = document.querySelectorAll('script[type="application/ld+json"]');
+  existingSchemas.forEach(schema => {
+    const content = schema.textContent || '';
+    // Remove any schema that mentions our business to prevent conflicts
+    if (content.includes('Healing Minds Psychiatry') || content.includes('Melva Reve') || content.includes('MedicalClinic')) {
+      schema.remove();
+      console.log('🧹 Removed existing schema to prevent duplicates:', schema.id || 'unnamed');
+    }
+  });
+
+  // STEP 2: Create single, complete, authoritative schema
   const schema = {
     "@context": "https://schema.org",
     "@type": "MedicalClinic",
@@ -212,31 +225,21 @@ export const addMedicalBusinessSchema = () => {
     ]
   };
 
-  // Remove existing medical business schema only
-  const existingSchema = document.querySelector('script[type="application/ld+json"]#medical-business-schema');
-  if (existingSchema) {
-    existingSchema.remove();
-  }
-
-  // Add enhanced schema
+  // STEP 3: Add single, clean schema with unique identifier
   const script = document.createElement('script');
   script.type = 'application/ld+json';
-  script.id = 'medical-business-schema';
+  script.id = 'healing-minds-schema'; // Unique ID to prevent duplicates
+  script.setAttribute('data-schema-type', 'medical-business');
   script.textContent = JSON.stringify(schema, null, 2);
   document.head.appendChild(script);
+  
+  console.log('✅ Single authoritative schema added for Healing Minds Psychiatry');
 };
 
-// Simplified: The physician info is now integrated into the main MedicalClinic schema above
-// This eliminates duplicate schemas and follows Google's latest recommendations
-export const addPhysicianSchema = () => {
-  // Physician info is now included in the main MedicalClinic schema as "member"
-  // No separate physician schema needed
-  console.log('Physician info integrated into MedicalClinic schema');
-};
-
-// DEPRECATED: Function removed to prevent schema conflicts.
-// All physician information is now integrated into the main MedicalClinic schema
-// and individual service pages use the addServiceSchema function following Hub & Spoke model.
+// FUNCTION PERMANENTLY REMOVED: addPhysicianSchema
+// All physician information is now integrated into the main MedicalClinic schema above.
+// This prevents Google Rich Results from detecting duplicate or conflicting schemas.
+// DO NOT RE-ADD THIS FUNCTION - it causes schema conflicts and validation issues.
 
 // Generic Service Schema Generator for Hub & Spoke Model
 export const addServiceSchema = (serviceConfig: {
