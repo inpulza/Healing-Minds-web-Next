@@ -1,17 +1,108 @@
-// Google Analytics 4 integration
+// Google Analytics 4 integration with Google Consent Mode v2 and cookie consent support
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
     dataLayer: any[];
+    hmp_analytics_initialized?: boolean;
+    hmp_consent_mode_initialized?: boolean;
   }
 }
 
-// Initialize Google Analytics with performance optimization
+// Check if analytics consent is granted
+function hasAnalyticsConsent(): boolean {
+  try {
+    const stored = localStorage.getItem('hmp_cookie_consent');
+    if (stored) {
+      const consent = JSON.parse(stored);
+      return consent?.hasConsented && consent?.consent?.analytics;
+    }
+  } catch (error) {
+    console.error('Error checking analytics consent:', error);
+  }
+  return false;
+}
+
+// Check if marketing consent is granted
+function hasMarketingConsent(): boolean {
+  try {
+    const stored = localStorage.getItem('hmp_cookie_consent');
+    if (stored) {
+      const consent = JSON.parse(stored);
+      return consent?.hasConsented && consent?.consent?.marketing;
+    }
+  } catch (error) {
+    console.error('Error checking marketing consent:', error);
+  }
+  return false;
+}
+
+// Initialize Google Consent Mode v2 with default denied state
+function initConsentMode(): void {
+  if (window.hmp_consent_mode_initialized) {
+    return;
+  }
+
+  // Initialize dataLayer first to prevent errors
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag(...args: any[]) {
+    window.dataLayer.push(arguments);
+  };
+
+  // Set default consent state (all denied) - REQUIRED for Google Consent Mode v2
+  window.gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    wait_for_update: 500, // milliseconds to wait for update
+  });
+
+  window.hmp_consent_mode_initialized = true;
+  console.log('🔒 Google Consent Mode v2 initialized with default denied state');
+}
+
+// Update consent based on user preferences with proper category separation
+export function updateGoogleConsent(analyticsConsent: boolean, marketingConsent: boolean): void {
+  if (!window.hmp_consent_mode_initialized) {
+    initConsentMode();
+  }
+
+  if (typeof window.gtag !== 'undefined') {
+    // Use requestIdleCallback to defer consent updates
+    const updateConsent = () => {
+      window.gtag('consent', 'update', {
+        analytics_storage: analyticsConsent ? 'granted' : 'denied',
+        ad_storage: marketingConsent ? 'granted' : 'denied',
+        ad_user_data: marketingConsent ? 'granted' : 'denied',
+        ad_personalization: marketingConsent ? 'granted' : 'denied',
+      });
+
+      console.log(`🔄 Google Consent updated: analytics_storage=${analyticsConsent ? 'granted' : 'denied'}, ad_storage=${marketingConsent ? 'granted' : 'denied'}`);
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(updateConsent);
+    } else {
+      setTimeout(updateConsent, 50);
+    }
+  }
+}
+
+// Initialize Google Analytics with performance optimization and consent checking
 export function initGA(): void {
   const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
   
   if (!measurementId) {
     console.warn('Google Analytics measurement ID not provided');
+    return;
+  }
+
+  // Initialize consent mode first
+  initConsentMode();
+
+  // Prevent duplicate initialization
+  if (window.hmp_analytics_initialized) {
+    console.log('📊 Google Analytics already initialized');
     return;
   }
 
@@ -23,12 +114,6 @@ export function initGA(): void {
     script.defer = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
     
-    // Initialize dataLayer first to prevent errors
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag(...args: any[]) {
-      window.dataLayer.push(arguments);
-    };
-    
     // Load script after DOM is interactive
     script.onload = () => {
       // Use requestIdleCallback to defer configuration
@@ -37,7 +122,7 @@ export function initGA(): void {
         window.gtag('config', measurementId, {
           page_title: document.title,
           page_location: window.location.href,
-          send_page_view: true,
+          send_page_view: hasAnalyticsConsent(), // Only send if consent is available
           allow_enhanced_conversions: true,
           custom_map: {
             'custom_1': 'service_type',
@@ -45,8 +130,14 @@ export function initGA(): void {
           }
         });
         
+        // Update consent based on current state
+        updateGoogleConsent(hasAnalyticsConsent(), hasMarketingConsent());
+        
+        // Mark as initialized
+        window.hmp_analytics_initialized = true;
+        
         if (import.meta.env.DEV) {
-          console.log('Google Analytics initialized successfully with ID:', measurementId);
+          console.log('📊 Google Analytics initialized successfully with ID:', measurementId);
         }
       };
       
@@ -60,7 +151,7 @@ export function initGA(): void {
     document.head.appendChild(script);
   };
   
-  // Initialize GA after the page has loaded and is idle
+  // Initialize GA immediately (consent mode is already set up)
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       if ('requestIdleCallback' in window) {
@@ -80,6 +171,10 @@ export function initGA(): void {
 
 // Track page views with throttling to prevent performance impact
 export function trackPageView(path: string, title?: string): void {
+  if (!hasAnalyticsConsent()) {
+    return;
+  }
+  
   if (typeof window.gtag !== 'undefined') {
     // Use requestIdleCallback to defer tracking calls
     const trackPage = () => {
@@ -99,6 +194,10 @@ export function trackPageView(path: string, title?: string): void {
 
 // Track custom events with performance optimization
 export function trackEvent(action: string, category: string, label?: string, value?: number): void {
+  if (!hasAnalyticsConsent()) {
+    return;
+  }
+  
   if (typeof window.gtag !== 'undefined') {
     const trackEventDeferred = () => {
       window.gtag('event', action, {
@@ -142,4 +241,47 @@ export function trackContactFormEvent(action: 'start' | 'submit' | 'error', form
 // Track insurance logo clicks
 export function trackInsuranceClick(insuranceName: string): void {
   trackEvent('insurance_logo_click', 'user_engagement', insuranceName);
+}
+
+// Handle granular consent changes for FDBR compliance
+export function handleConsentChange(analyticsConsent: boolean, marketingConsent: boolean): void {
+  // Update Google Consent Mode v2 with granular consent
+  updateGoogleConsent(analyticsConsent, marketingConsent);
+
+  if (analyticsConsent) {
+    // Initialize analytics if consent is granted and not already initialized
+    if (!window.hmp_analytics_initialized) {
+      console.log('🔄 Initializing Google Analytics after analytics consent granted');
+      initGA();
+    } else {
+      console.log('🔄 Google Analytics consent granted - tracking enabled');
+    }
+  } else {
+    // Analytics consent revoked - keep GA loaded but with denied consent state
+    if (window.hmp_analytics_initialized) {
+      console.log('🚫 Google Analytics consent revoked - tracking disabled via Consent Mode');
+      
+      // Clear analytics cookies for compliance
+      clearAnalyticsCookies();
+    } else {
+      console.log('🚫 Google Analytics consent revoked - never initialized');
+    }
+  }
+  
+  // Log marketing consent changes for compliance tracking
+  if (marketingConsent) {
+    console.log('🔄 Marketing consent granted - ad tracking enabled');
+  } else {
+    console.log('🚫 Marketing consent revoked - ad tracking disabled');
+  }
+}
+
+// Clear analytics cookies when consent is revoked
+function clearAnalyticsCookies(): void {
+  const cookiesToClear = ['_ga', '_ga_' + import.meta.env.VITE_GA_MEASUREMENT_ID?.replace('G-', ''), '_gid', '_gat'];
+  
+  cookiesToClear.forEach(cookie => {
+    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname}`;
+    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  });
 }

@@ -5,11 +5,13 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { CookieConsentProvider } from '@/contexts/CookieConsentContext';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useClarity } from '@/hooks/use-clarity';
-import { initGA } from '@/lib/analytics';
+import { initGA, handleConsentChange } from '@/lib/analytics';
 import { addMedicalBusinessSchema } from '@/utils/seo';
+import CookieBanner from '@/components/CookieBanner';
 import Home from '@/pages/Home';
 
 // All non-critical pages lazy loaded for performance optimization
@@ -40,6 +42,7 @@ const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
 const HipaaNotice = lazy(() => import('@/pages/HipaaNotice'));
 const CookiePolicy = lazy(() => import('@/pages/CookiePolicy'));
+
 
 // Loading component for lazy routes
 const PageLoader = () => (
@@ -112,29 +115,48 @@ function Router() {
 }
 
 function App() {
-  // Initialize Google Analytics when app loads
+  // Initialize analytics and handle consent changes
   useEffect(() => {
     // Verify required environment variable is present
     if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
       console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
     } else {
+      // Initialize GA with consent check (it will check internally)
       initGA();
     }
 
-    // Add structured data schemas with debug info
+    // Add structured data schemas
     console.log('🔧 Executing addMedicalBusinessSchema...');
     addMedicalBusinessSchema();
     console.log('✅ Schema executed - NAP should be updated to # 25');
-    // Physician schema now integrated in MedicalClinic schema
+    
+    // Listen for granular consent changes
+    const handleConsentChangeEvent = (event: CustomEvent) => {
+      const { analytics, marketing, hasAnalyticsConsent, hasMarketingConsent } = event.detail;
+      // Use the boolean values directly from the consent data
+      handleConsentChange(analytics ?? hasAnalyticsConsent, marketing ?? hasMarketingConsent);
+    };
+    
+    window.addEventListener('consentChanged', handleConsentChangeEvent as EventListener);
+    
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('consentChanged', handleConsentChangeEvent as EventListener);
+    };
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <LanguageProvider>
-          <Router />
-          <Toaster />
-        </LanguageProvider>
+        <CookieConsentProvider>
+          <LanguageProvider>
+            <Router />
+            <Toaster />
+            <Suspense fallback={null}>
+              <CookieBanner />
+            </Suspense>
+          </LanguageProvider>
+        </CookieConsentProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
