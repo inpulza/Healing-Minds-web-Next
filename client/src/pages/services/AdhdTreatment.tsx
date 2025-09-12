@@ -392,16 +392,16 @@ const AdhdTreatment = () => {
                 
                 {/* Key Stats */}
                 <div className="flex justify-center">
-                  <div className="grid grid-cols-2 gap-6 max-w-md">
-                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">4.4%</div>
-                      <div className="text-sm text-gray-600 font-body">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-xs sm:max-w-md">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 sm:p-6">
+                      <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">4.4%</div>
+                      <div className="text-xs sm:text-sm text-gray-600 font-body">
                         {language === 'en' ? 'Adults have ADHD' : 'Adultos tienen TDAH'}
                       </div>
                     </div>
-                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
-                      <div className="text-3xl font-bold text-green-600 mb-2">85%</div>
-                      <div className="text-sm text-gray-600 font-body">
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 sm:p-6">
+                      <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-2">85%</div>
+                      <div className="text-xs sm:text-sm text-gray-600 font-body">
                         {language === 'en' ? 'Treatment success rate' : 'Tasa de éxito del tratamiento'}
                       </div>
                     </div>
@@ -410,7 +410,7 @@ const AdhdTreatment = () => {
               </div>
 
               {/* Main Content with Photo */}
-              <div className="grid lg:grid-cols-2 gap-12 mb-10">
+              <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 mb-8 sm:mb-10">
                 <div>
                   <p className="text-lg text-gray-600 mb-8 font-body leading-relaxed">
                     {language === 'en'
@@ -432,17 +432,17 @@ const AdhdTreatment = () => {
                   </div>
 
                   <Link href="/contact">
-                    <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Schedule Adult ADHD Evaluation' : 'Programar Evaluación de TDAH para Adultos'}</span>
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
-                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-7 w-full sm:w-auto">
+                      <span className="text-center">{language === 'en' ? 'Schedule ADHD Evaluation' : 'Programar Evaluación TDAH'}</span>
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 lg:w-9 lg:h-9 min-w-[1.5rem] min-h-[1.5rem] sm:min-w-[2rem] sm:min-h-[2rem] lg:min-w-[2.25rem] lg:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
+                        <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-white" />
                       </div>
                     </Button>
                   </Link>
                 </div>
 
-                <div>
-                  <div className="w-full aspect-[4/3] overflow-hidden rounded-xl shadow-lg mb-6">
+                <div className="w-full">
+                  <div className="w-full aspect-[4/3] overflow-hidden rounded-xl shadow-lg mb-6 max-w-full">
                     <img 
                       src={focusImage}
                       alt="Professional therapist reviewing ADHD treatment plans - Dr. Melva Reve's modern psychiatric practice"
@@ -474,7 +474,7 @@ const AdhdTreatment = () => {
               </div>
 
               {/* Bottom Section - Treatment Options in 2x2 Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {[
                   {
                     title: language === 'en' ? 'Late-Diagnosed ADHD Assessment' : 'Evaluación de TDAH Diagnosticado Tardíamente',
@@ -493,14 +493,14 @@ const AdhdTreatment = () => {
                     description: language === 'en' ? 'Support with obtaining appropriate workplace accommodations.' : 'Apoyo para obtener acomodaciones laborales apropiadas.'
                   }
                 ].map((treatment, index) => (
-                  <div key={index} className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-blue-600 font-bold text-sm">{index + 1}</span>
+                  <div key={index} className="p-4 sm:p-6">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-blue-600 font-bold text-xs sm:text-sm">{index + 1}</span>
                       </div>
-                      <div>
-                        <h3 className="text-lg font-body font-bold text-green-800 mb-2">{treatment.title}</h3>
-                        <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-base sm:text-lg font-body font-bold text-green-800 mb-2">{treatment.title}</h3>
+                        <p className="text-gray-600 font-body text-xs sm:text-sm leading-relaxed">{treatment.description}</p>
                       </div>
                     </div>
                   </div>
