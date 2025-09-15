@@ -156,13 +156,13 @@ const LocationBonitaSprings = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Bonita Springs, FL</span>
+                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
+                    <span className="font-display italic text-green-700">Bonita Springs Residents</span>
                   </>
                 ) : (
                   <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Bonita Springs, FL</span>
+                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
+                    <span className="font-display italic text-green-700">Residentes de Bonita Springs</span>
                   </>
                 )}
               </h1>
@@ -186,8 +186,8 @@ const LocationBonitaSprings = () => {
               
               <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto font-body">
                 {language === 'en' 
-                  ? 'Serving residents of Bonita Springs with expert psychiatric care from our conveniently located Naples practice. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
-                  : 'Sirviendo a los residentes de Bonita Springs con atención psiquiátrica experta desde nuestra práctica convenientemente ubicada en Naples. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
+                  ? 'Expert mental health and telepsychiatry services for the Bonita Springs community. Whether you need a psychiatrist in Bonita Springs for an ADHD evaluation or are seeking compassionate depression treatment, our clinic is a short drive from home. We offer bilingual care specializing in anxiety, depression, PTSD, and psychiatric medication management.'
+                  : 'Servicios expertos de salud mental y telepsiquiatría para la comunidad de Bonita Springs. Ya sea que necesite un psiquiatra en Bonita Springs para un diagnóstico de TDAH o esté buscando tratamiento de depresión compasivo, nuestra clínica está a un corto viaje desde su hogar. Ofrecemos atención bilingüe especializada en ansiedad, depresión, TEPT y manejo de medicamentos psiquiátricos.'}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -273,9 +273,9 @@ const LocationBonitaSprings = () => {
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                     {language === 'en' ? (
-                      <>Your Healing Journey Starts Here for <span className="font-display italic text-green-700">Bonita Springs</span> Residents</>
+                      <>Bonita Springs <span className="font-display italic text-green-700">Psychiatrist</span>: Your Path to Wellness</>
                     ) : (
-                      <>Su Viaje de Sanación Comienza Aquí para Residentes de <span className="font-display italic text-green-700">Bonita Springs</span></>
+                      <>Psiquiatra Especialista en <span className="font-display italic text-green-700">Bonita Springs</span>: Su Camino Hacia el Bienestar</>
                     )}
                   </h2>
                   
@@ -289,8 +289,8 @@ const LocationBonitaSprings = () => {
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
                     {language === 'en'
-                      ? 'Conveniently serving Bonita Springs residents from our Naples location on Tamiami Trail. Our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment that prioritizes your privacy and comfort.'
-                      : 'Sirviendo convenientemente a los residentes de Bonita Springs desde nuestra ubicación de Naples en Tamiami Trail. Nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo que prioriza su privacidad y comodidad.'}
+                      ? 'As a psychiatrist near you in the Bonita Springs area, I offer specialized mental health services from our Naples practice on Tamiami Trail. Our modern facilities provide a welcoming environment specifically designed for anxiety treatment in Naples FL and psychiatric medication management near you. The proximity to Bonita Springs makes accessing compassionate psychiatric care convenient and private.'
+                      : 'Como psiquiatra cerca de usted en el área de Bonita Springs, ofrezco servicios especializados de salud mental desde nuestra práctica en Naples en Tamiami Trail. Nuestras instalaciones modernas brindan un ambiente acogedor específicamente diseñado para tratamientos de ansiedad y manejo de medicamentos psiquiátricos cerca de usted. La proximidad a Bonita Springs hace que el acceso a atención psiquiátrica compasiva sea conveniente y privado.'}
                   </p>
 
                   <Button 
@@ -356,9 +356,9 @@ const LocationBonitaSprings = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Services</span> for Bonita Springs Residents</>
+                    <><span className="font-display italic text-green-700">Mental Health</span> Treatments for Bonita Springs</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Servicios</span> para Residentes de Bonita Springs</>
+                    <>Tratamientos de <span className="font-display italic text-green-700">Salud Mental</span> para Bonita Springs</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -367,8 +367,8 @@ const LocationBonitaSprings = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Comprehensive psychiatric services available for Bonita Springs residents, tailored to meet your mental health needs with compassionate care.'
-                  : 'Servicios psiquiátricos integrales disponibles para residentes de Bonita Springs, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
+                  ? 'Specialized psychiatric services for Bonita Springs residents, including depression treatment Bonita Springs FL, ADHD evaluations, and expert psychiatric medication management. Our compassionate care is designed specifically for the Southwest Florida community.'
+                  : 'Servicios psiquiátricos especializados para residentes de Bonita Springs, incluyendo tratamiento de depresión, evaluaciones de TDAH, y manejo experto de medicamentos psiquiátricos. Nuestra atención compasiva está diseñada específicamente para la comunidad del Suroeste de Florida.'}
               </p>
             </div>
             
@@ -378,8 +378,8 @@ const LocationBonitaSprings = () => {
                   id: 'anxiety',
                   title: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad',
                   description: language === 'en' 
-                    ? 'Expert care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments.'
-                    : 'Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.',
+                    ? 'Specialized anxiety treatment in Naples FL for Bonita Springs residents. Expert care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments.'
+                    : 'Tratamiento especializado de ansiedad para residentes de Bonita Springs. Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.',
                   icon: IconBrain,
                   link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
                 },
@@ -387,8 +387,8 @@ const LocationBonitaSprings = () => {
                   id: 'depression',
                   title: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión',
                   description: language === 'en'
-                    ? 'Comprehensive care for major depression with personalized treatment plans and ongoing support.'
-                    : 'Atención integral para depresión mayor con planes de tratamiento personalizados y apoyo continuo.',
+                    ? 'Depression treatment Bonita Springs FL with comprehensive care for major depression. Personalized treatment plans and ongoing support designed specifically for the Bonita Springs community.'
+                    : 'Tratamiento de depresión con atención integral para depresión mayor. Planes de tratamiento personalizados y apoyo continuo diseñados específicamente para la comunidad de Bonita Springs.',
                   icon: IconSun,
                   link: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
                 },
@@ -396,7 +396,7 @@ const LocationBonitaSprings = () => {
                   id: 'adhd',
                   title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
                   description: language === 'en'
-                    ? 'Specialized evaluation and treatment for adults and teens to improve focus and daily functioning.'
+                    ? 'ADHD evaluation and treatment Bonita Springs FL. Specialized assessment and treatment for adults and teens to improve focus and daily functioning with medication management near me.'
                     : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
                   icon: IconMoodHappy,
                   link: '/services/adhd-treatment'
@@ -405,7 +405,7 @@ const LocationBonitaSprings = () => {
                   id: 'ptsd',
                   title: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT',
                   description: language === 'en'
-                    ? 'Trauma-informed psychiatric care to help you heal and reclaim your life from traumatic experiences.'
+                    ? 'PTSD treatment near Bonita Springs with trauma-informed psychiatric care to help you heal and reclaim your life from traumatic experiences.'
                     : 'Atención psiquiátrica informada en trauma para ayudarle a sanar y reclamar su vida de experiencias traumáticas.',
                   icon: IconLeaf,
                   link: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'
@@ -414,7 +414,7 @@ const LocationBonitaSprings = () => {
                   id: 'bipolar',
                   title: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar',
                   description: language === 'en'
-                    ? 'Expert mood stabilization to help achieve emotional balance and prevent future episodes.'
+                    ? 'Bipolar disorder treatment Bonita Springs with expert mood stabilization to help achieve emotional balance and prevent future episodes.'
                     : 'Estabilización experta del ánimo para lograr equilibrio emocional y prevenir episodios futuros.',
                   icon: IconHeart,
                   link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
@@ -423,8 +423,8 @@ const LocationBonitaSprings = () => {
                   id: 'medication-management',
                   title: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos',
                   description: language === 'en'
-                    ? 'Expert psychiatric medication evaluation, monitoring, and adjustment with comprehensive safety assessments.'
-                    : 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales.',
+                    ? 'Psychiatric medication management near me for Bonita Springs residents. Expert evaluation, monitoring, and medication adjustments with comprehensive safety assessments and ongoing follow-up.'
+                    : 'Manejo de medicamentos psiquiátricos para residentes de Bonita Springs. Evaluación experta, monitoreo y ajustes de medicación con evaluaciones de seguridad integrales y seguimiento continuo.',
                   icon: IconUser,
                   link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
                 }
@@ -519,9 +519,9 @@ const LocationBonitaSprings = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">How to Get Here</span> from Bonita Springs</>
+                    <>Acceso Fácil para <span className="font-display italic text-green-700">Residentes de Bonita Springs</span></>
                   ) : (
-                    <><span className="font-display italic text-green-700">Cómo Llegar</span> desde Bonita Springs</>
+                    <>Acceso Fácil para <span className="font-display italic text-green-700">Residentes de Bonita Springs</span></>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="green" className="opacity-70">
