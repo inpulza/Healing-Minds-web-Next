@@ -14,6 +14,8 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+  const [isLocationsOpen, setIsLocationsOpen] = useState(false);
+  const [isMobileLocationsOpen, setIsMobileLocationsOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,10 +31,11 @@ const Header = () => {
     };
   }, []);
 
-  // Close mobile menu when navigation occurs (but keep services dropdown open)
+  // Close mobile menu when navigation occurs (but keep dropdowns open)
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsMobileServicesOpen(false);
+    setIsMobileLocationsOpen(false);
   }, [location]);
 
   const toggleLanguage = () => {
@@ -47,8 +50,8 @@ const Header = () => {
   const navigationItems = [
     { href: '/', label: t('nav.home') },
     { href: '/about', label: t('nav.about') },
-    { href: '/services', label: t('nav.services'), hasDropdown: true },
-    { href: '/locations/naples', label: language === 'en' ? 'Location' : 'Ubicación' },
+    { href: '/services', label: t('nav.services'), hasDropdown: true, dropdownType: 'services' },
+    { href: '/locations', label: language === 'en' ? 'Locations We Serve' : 'Áreas de Servicio', hasDropdown: true, dropdownType: 'locations' },
     { href: '/contact', label: t('nav.contact') },
   ];
 
@@ -85,6 +88,59 @@ const Header = () => {
     }
   ];
 
+  const locationItems = [
+    {
+      href: '/locations/psychiatrist-naples',
+      label: language === 'en' ? 'Naples, FL' : 'Naples, FL',
+      description: language === 'en' ? 'Comprehensive psychiatric care in Southwest Florida' : 'Atención psiquiátrica integral en el suroeste de Florida'
+    },
+    {
+      href: '/locations/psychiatrist-ave-maria',
+      label: language === 'en' ? 'Ave Maria, FL' : 'Ave Maria, FL',
+      description: language === 'en' ? 'Expert psychiatric care in Ave Maria' : 'Atención psiquiátrica experta en Ave Maria'
+    },
+    {
+      href: '/locations/psychiatrist-bonita-springs',
+      label: language === 'en' ? 'Bonita Springs, FL' : 'Bonita Springs, FL',
+      description: language === 'en' ? 'Professional psychiatric services in Bonita Springs' : 'Servicios psiquiátricos profesionales en Bonita Springs'
+    },
+    {
+      href: '/locations/psychiatrist-estero',
+      label: language === 'en' ? 'Estero, FL' : 'Estero, FL',
+      description: language === 'en' ? 'Quality mental health care in Estero' : 'Atención de salud mental de calidad en Estero'
+    },
+    {
+      href: '/locations/psychiatrist-fort-myers',
+      label: language === 'en' ? 'Fort Myers, FL' : 'Fort Myers, FL',
+      description: language === 'en' ? 'Comprehensive psychiatric treatment in Fort Myers' : 'Tratamiento psiquiátrico integral en Fort Myers'
+    },
+    {
+      href: '/locations/psychiatrist-golden-gate',
+      label: language === 'en' ? 'Golden Gate, FL' : 'Golden Gate, FL',
+      description: language === 'en' ? 'Expert psychiatric care in Golden Gate' : 'Atención psiquiátrica experta en Golden Gate'
+    },
+    {
+      href: '/locations/psychiatrist-immokalee',
+      label: language === 'en' ? 'Immokalee, FL' : 'Immokalee, FL',
+      description: language === 'en' ? 'Professional mental health services in Immokalee' : 'Servicios profesionales de salud mental en Immokalee'
+    },
+    {
+      href: '/locations/psychiatrist-lely-resorts',
+      label: language === 'en' ? 'Lely Resort, FL' : 'Lely Resort, FL',
+      description: language === 'en' ? 'Quality psychiatric care in Lely Resort' : 'Atención psiquiátrica de calidad en Lely Resort'
+    },
+    {
+      href: '/locations/psychiatrist-marco-island',
+      label: language === 'en' ? 'Marco Island, FL' : 'Marco Island, FL',
+      description: language === 'en' ? 'Expert psychiatric treatment on Marco Island' : 'Tratamiento psiquiátrico experto en Marco Island'
+    },
+    {
+      href: '/locations/psychiatrist-vanderbilt-beach',
+      label: language === 'en' ? 'Vanderbilt Beach, FL' : 'Vanderbilt Beach, FL',
+      description: language === 'en' ? 'Professional psychiatric services in Vanderbilt Beach' : 'Servicios psiquiátricos profesionales en Vanderbilt Beach'
+    }
+  ];
+
   const isActive = (href: string) => {
     return location === href || (href !== '/' && location.startsWith(href));
   };
@@ -99,12 +155,20 @@ const Header = () => {
     }, 100); // Small delay to allow navigation
   };
 
+  const handleMobileLocationClick = () => {
+    console.log('Mobile location clicked - closing menus after navigation');
+    setTimeout(() => {
+      setIsMobileMenuOpen(false);
+      setIsMobileLocationsOpen(false);
+    }, 100); // Small delay to allow navigation
+  };
+
   return (
     <header className={`sticky top-0 z-50 transition-all duration-500 mb-4 ${
       isScrolled 
         ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
         : 'bg-transparent'
-    } ${isServicesOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-20 sm:h-24 md:h-28 lg:h-32'}`}>
+    } ${isServicesOpen || isLocationsOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-20 sm:h-24 md:h-28 lg:h-32'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="flex justify-between items-center h-20 sm:h-24 md:h-28 lg:h-32">
           {/* Logo */}
@@ -117,7 +181,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex relative mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 md:mb-8" ref={servicesRef}>
             <nav className={`flex items-center transition-all duration-500 ${
-              isServicesOpen 
+              isServicesOpen || isLocationsOpen
                 ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
                 : 'bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50'
             }`} data-testid="desktop-nav">
@@ -125,19 +189,33 @@ const Header = () => {
                 <div key={item.href} className="relative">
                   {item.hasDropdown ? (
                     <button
-                      onClick={() => setIsServicesOpen(!isServicesOpen)}
+                      onClick={() => {
+                        if (item.dropdownType === 'services') {
+                          setIsServicesOpen(!isServicesOpen);
+                          setIsLocationsOpen(false);
+                        } else if (item.dropdownType === 'locations') {
+                          setIsLocationsOpen(!isLocationsOpen);
+                          setIsServicesOpen(false);
+                        }
+                      }}
                       className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-500 flex items-center gap-2 ${
-                        isActive(item.href) || isServicesOpen
+                        isActive(item.href) || (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen)
                           ? 'bg-white text-primary shadow-sm'
                           : 'text-gray-700 hover:text-primary hover:bg-white/50'
                       }`}
                       data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
-                      aria-label={isServicesOpen ? (language === 'en' ? 'Close services menu' : 'Cerrar menú de servicios') : (language === 'en' ? 'Open services menu' : 'Abrir menú de servicios')}
-                      aria-expanded={isServicesOpen}
+                      aria-label={
+                        item.dropdownType === 'services'
+                          ? (isServicesOpen ? (language === 'en' ? 'Close services menu' : 'Cerrar menú de servicios') : (language === 'en' ? 'Open services menu' : 'Abrir menú de servicios'))
+                          : item.dropdownType === 'locations'
+                          ? (isLocationsOpen ? (language === 'en' ? 'Close locations menu' : 'Cerrar menú de ubicaciones') : (language === 'en' ? 'Open locations menu' : 'Abrir menú de ubicaciones'))
+                          : ''
+                      }
+                      aria-expanded={item.dropdownType === 'services' ? isServicesOpen : item.dropdownType === 'locations' ? isLocationsOpen : false}
                     >
                       {item.label}
                       <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${
-                        isServicesOpen ? 'rotate-180' : ''
+                        (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen) ? 'rotate-180' : ''
                       }`} />
                     </button>
                   ) : (
@@ -259,6 +337,45 @@ const Header = () => {
             </div>
           </div>
         </div>
+
+        {/* Expanded Locations Menu - Now inside header */}
+        <div className={`transition-all duration-500 ease-in-out ${
+          isLocationsOpen 
+            ? 'max-h-[500px] opacity-100 py-8' 
+            : 'max-h-0 opacity-0 py-0 pointer-events-none'
+        }`}>
+          <div className="hidden md:block">
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 mx-4 relative z-50">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {locationItems.map((location, index) => (
+                  <Link
+                    key={location.href}
+                    href={location.href}
+                    className="block"
+                    data-testid={`dropdown-location-${index}`}
+                  >
+                    <Button
+                      variant="ghost"
+                      className="group w-full p-4 h-auto rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="w-3 h-3 min-w-[0.75rem] min-h-[0.75rem] rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700 flex-shrink-0"></div>
+                        <div>
+                          <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
+                            {location.label}
+                          </h3>
+                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1 leading-relaxed">
+                            {location.description}
+                          </p>
+                        </div>
+                      </div>
+                    </Button>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -270,24 +387,38 @@ const Header = () => {
                 {item.hasDropdown ? (
                   <>
                     <button
-                      onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                      onClick={() => {
+                        if (item.dropdownType === 'services') {
+                          setIsMobileServicesOpen(!isMobileServicesOpen);
+                          setIsMobileLocationsOpen(false);
+                        } else if (item.dropdownType === 'locations') {
+                          setIsMobileLocationsOpen(!isMobileLocationsOpen);
+                          setIsMobileServicesOpen(false);
+                        }
+                      }}
                       className={`flex items-center justify-between w-full py-3 text-base font-body transition-colors duration-200 ${
-                        isActive(item.href) || isMobileServicesOpen
+                        isActive(item.href) || (item.dropdownType === 'services' && isMobileServicesOpen) || (item.dropdownType === 'locations' && isMobileLocationsOpen)
                           ? 'text-primary font-medium'
                           : 'text-gray-700 hover:text-primary'
                       }`}
                       data-testid={`mobile-nav-${item.href.replace('/', '') || 'home'}`}
-                      aria-label={isMobileServicesOpen ? (language === 'en' ? 'Close services submenu' : 'Cerrar submenú de servicios') : (language === 'en' ? 'Open services submenu' : 'Abrir submenú de servicios')}
-                      aria-expanded={isMobileServicesOpen}
+                      aria-label={
+                        item.dropdownType === 'services'
+                          ? (isMobileServicesOpen ? (language === 'en' ? 'Close services submenu' : 'Cerrar submenú de servicios') : (language === 'en' ? 'Open services submenu' : 'Abrir submenú de servicios'))
+                          : item.dropdownType === 'locations'
+                          ? (isMobileLocationsOpen ? (language === 'en' ? 'Close locations submenu' : 'Cerrar submenú de ubicaciones') : (language === 'en' ? 'Open locations submenu' : 'Abrir submenú de ubicaciones'))
+                          : ''
+                      }
+                      aria-expanded={item.dropdownType === 'services' ? isMobileServicesOpen : item.dropdownType === 'locations' ? isMobileLocationsOpen : false}
                     >
                       {item.label}
                       <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
-                        isMobileServicesOpen ? 'rotate-180' : ''
+                        (item.dropdownType === 'services' && isMobileServicesOpen) || (item.dropdownType === 'locations' && isMobileLocationsOpen) ? 'rotate-180' : ''
                       }`} />
                     </button>
                     
                     {/* Mobile Services Submenu */}
-                    {isMobileServicesOpen && (
+                    {item.dropdownType === 'services' && isMobileServicesOpen && (
                       <div className="ml-4 mt-2 space-y-2 animate-in slide-in-from-top-2 fade-in-0">
                         {serviceItems.map((service, index) => (
                           <Link
@@ -307,6 +438,23 @@ const Header = () => {
                         >
                           {language === 'en' ? 'View All Services' : 'Ver Todos los Servicios'}
                         </Link>
+                      </div>
+                    )}
+
+                    {/* Mobile Locations Submenu */}
+                    {item.dropdownType === 'locations' && isMobileLocationsOpen && (
+                      <div className="ml-4 mt-2 space-y-2 animate-in slide-in-from-top-2 fade-in-0">
+                        {locationItems.map((location, index) => (
+                          <Link
+                            key={location.href}
+                            href={location.href}
+                            className="block py-2 px-3 rounded-lg text-sm font-body text-gray-600 hover:text-green-700 hover:bg-green-50/80 transition-all duration-200"
+                            data-testid={`mobile-dropdown-location-${index}`}
+                            onClick={handleMobileLocationClick}
+                          >
+                            {location.label}
+                          </Link>
+                        ))}
                       </div>
                     )}
                   </>

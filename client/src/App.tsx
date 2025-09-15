@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react';
-import { Switch, Route } from 'wouter';
+import { Switch, Route, useLocation } from 'wouter';
 import { queryClient } from './lib/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
@@ -21,6 +21,15 @@ const ForPatients = lazy(() => import('@/pages/ForPatients'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const ServiciosEspanol = lazy(() => import('@/pages/ServiciosEspanol'));
 const LocationNaples = lazy(() => import('@/pages/LocationNaples'));
+const LocationBonitaSprings = lazy(() => import('@/pages/LocationBonitaSprings'));
+const LocationMarcoIsland = lazy(() => import('@/pages/LocationMarcoIsland'));
+const LocationEstero = lazy(() => import('@/pages/LocationEstero'));
+const LocationGoldenGate = lazy(() => import('@/pages/LocationGoldenGate'));
+const LocationImmokalee = lazy(() => import('@/pages/LocationImmokalee'));
+const LocationVanderbiltBeach = lazy(() => import('@/pages/LocationVanderbiltBeach'));
+const LocationAveMaria = lazy(() => import('@/pages/LocationAveMaria'));
+const LocationFortMyers = lazy(() => import('@/pages/LocationFortMyers'));
+const LocationLelyResorts = lazy(() => import('@/pages/LocationLelyResorts'));
 
 // Spanish Main Pages - Lazy loaded for performance
 const HomeEspanol = lazy(() => import('@/pages/HomeEspanol'));
@@ -53,6 +62,18 @@ const PageLoader = () => (
   </div>
 );
 
+// Redirect component for legacy URLs
+const RedirectToNaplesLocation = () => {
+  const [, navigate] = useLocation();
+  
+  useEffect(() => {
+    // Use replaceState to avoid back button issues
+    navigate('/locations/psychiatrist-naples', { replace: true });
+  }, [navigate]);
+  
+  return <PageLoader />;
+};
+
 function Router() {
   // Track page views when routes change
   useAnalytics();
@@ -70,7 +91,17 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/services" component={Services} />
       <Route path="/for-patients" component={ForPatients} />
-      <Route path="/locations/naples" component={LocationNaples} />
+      <Route path="/locations/naples" component={RedirectToNaplesLocation} />
+      <Route path="/locations/psychiatrist-naples" component={LocationNaples} />
+      <Route path="/locations/psychiatrist-bonita-springs" component={LocationBonitaSprings} />
+      <Route path="/locations/psychiatrist-marco-island" component={LocationMarcoIsland} />
+      <Route path="/locations/psychiatrist-estero" component={LocationEstero} />
+      <Route path="/locations/psychiatrist-golden-gate" component={LocationGoldenGate} />
+      <Route path="/locations/psychiatrist-immokalee" component={LocationImmokalee} />
+      <Route path="/locations/psychiatrist-vanderbilt-beach" component={LocationVanderbiltBeach} />
+      <Route path="/locations/psychiatrist-ave-maria" component={LocationAveMaria} />
+      <Route path="/locations/psychiatrist-fort-myers" component={LocationFortMyers} />
+      <Route path="/locations/psychiatrist-lely-resorts" component={LocationLelyResorts} />
       <Route path="/contact" component={Contact} />
       
       {/* Spanish Main Pages */}

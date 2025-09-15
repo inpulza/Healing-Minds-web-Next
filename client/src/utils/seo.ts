@@ -7,72 +7,100 @@ interface SEOData {
   ogImage?: string;
 }
 
+// Helper function to create new meta tags (used after deduplication)
+function createMetaTag(name: string, content: string, attribute: string = 'name') {
+  const tag = document.createElement('meta');
+  tag.setAttribute(attribute, name);
+  tag.setAttribute('content', content);
+  document.head.appendChild(tag);
+}
+
+// Helper function to create new link tags (used after deduplication)
+function createLinkTag(rel: string, href: string) {
+  const tag = document.createElement('link');
+  tag.setAttribute('rel', rel);
+  tag.setAttribute('href', href);
+  document.head.appendChild(tag);
+}
+
 export const updateSEO = (data: SEOData) => {
-  // Update title
+  // CRITICAL: Remove ALL existing SEO meta tags before adding new ones to prevent duplicates
+  // This is essential for SPA navigation where multiple route changes could accumulate tags
+  
+  // Step 1: Remove existing meta tags that we're about to update
+  const metaTags = [
+    'meta[name="description"]',
+    'meta[name="keywords"]', 
+    'meta[property="og:title"]',
+    'meta[property="og:description"]',
+    'meta[property="og:url"]',
+    'meta[property="og:image"]',
+    'meta[name="twitter:title"]',
+    'meta[name="twitter:description"]',
+    'meta[name="twitter:image"]',
+    'link[rel="canonical"]'
+  ];
+  
+  metaTags.forEach(selector => {
+    const existingTags = document.querySelectorAll(selector);
+    existingTags.forEach(tag => tag.remove());
+  });
+  
+  // Step 2: Update title (direct assignment, no duplication possible)
   document.title = data.title;
   
-  // Update or create meta description
-  updateMetaTag('description', data.description);
-  
-  // Update or create meta keywords
-  if (data.keywords) {
-    updateMetaTag('keywords', data.keywords);
-  }
-  
-  // Update language
+  // Step 3: Update language attribute
   if (data.lang) {
     document.documentElement.lang = data.lang;
   }
   
-  // Update canonical URL - CRÍTICO: Usar dominio preferido consistente
+  // Step 4: Create new meta tags and canonical link (guaranteed unique now)
+  createMetaTag('description', data.description);
+  
+  if (data.keywords) {
+    createMetaTag('keywords', data.keywords);
+  }
+  
+  // Step 5: Create canonical URL - ALWAYS absolute for consistency
   if (data.canonical) {
     // Ensure canonical URLs always use www subdomain for consistency
     const preferredOrigin = window.location.origin.includes('healingmindsp.com') 
       ? window.location.origin.replace('://healingmindsp.com', '://www.healingmindsp.com')
       : window.location.origin;
-    updateLinkTag('canonical', `${preferredOrigin}${data.canonical}`);
+    
+    // Convert relative canonical to absolute URL
+    const absoluteCanonical = data.canonical.startsWith('http') 
+      ? data.canonical 
+      : `${preferredOrigin}${data.canonical}`;
+      
+    createLinkTag('canonical', absoluteCanonical);
   }
   
-  // Update Open Graph tags
-  updateMetaTag('og:title', data.title, 'property');
-  updateMetaTag('og:description', data.description, 'property');
-  updateMetaTag('og:url', window.location.href, 'property');
+  // Step 6: Create Open Graph tags
+  createMetaTag('og:title', data.title, 'property');
+  createMetaTag('og:description', data.description, 'property');
+  
+  // Use canonical URL for og:url if available, otherwise current URL
+  const ogUrl = data.canonical 
+    ? (data.canonical.startsWith('http') 
+        ? data.canonical 
+        : `${window.location.origin.includes('healingmindsp.com') 
+            ? window.location.origin.replace('://healingmindsp.com', '://www.healingmindsp.com')
+            : window.location.origin}${data.canonical}`)
+    : window.location.href;
+  createMetaTag('og:url', ogUrl, 'property');
   
   if (data.ogImage) {
-    updateMetaTag('og:image', data.ogImage, 'property');
+    createMetaTag('og:image', data.ogImage, 'property');
   }
   
-  // Update Twitter Card tags
-  updateMetaTag('twitter:title', data.title, 'name');
-  updateMetaTag('twitter:description', data.description, 'name');
+  // Step 7: Create Twitter Card tags
+  createMetaTag('twitter:title', data.title, 'name');
+  createMetaTag('twitter:description', data.description, 'name');
   
   if (data.ogImage) {
-    updateMetaTag('twitter:image', data.ogImage, 'name');
+    createMetaTag('twitter:image', data.ogImage, 'name');
   }
-};
-
-const updateMetaTag = (name: string, content: string, attribute: string = 'name') => {
-  let tag = document.querySelector(`meta[${attribute}="${name}"]`) as HTMLMetaElement;
-  
-  if (!tag) {
-    tag = document.createElement('meta');
-    tag.setAttribute(attribute, name);
-    document.head.appendChild(tag);
-  }
-  
-  tag.setAttribute('content', content);
-};
-
-const updateLinkTag = (rel: string, href: string) => {
-  let tag = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
-  
-  if (!tag) {
-    tag = document.createElement('link');
-    tag.setAttribute('rel', rel);
-    document.head.appendChild(tag);
-  }
-  
-  tag.setAttribute('href', href);
 };
 
 // Complete Medical Clinic Schema - Single authoritative source for Healing Minds Psychiatry

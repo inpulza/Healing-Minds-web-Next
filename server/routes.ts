@@ -44,6 +44,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/adhd-treatment-adults-naples-fl', (req, res) => {
     res.redirect(301, '/services/adhd-treatment');
   });
+
+  // 301 redirect from legacy Naples location URL to new consistent URL
+  app.get('/locations/naples', (req, res) => {
+    res.redirect(301, '/locations/psychiatrist-naples');
+  });
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {

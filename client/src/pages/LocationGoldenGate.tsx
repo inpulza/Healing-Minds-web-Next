@@ -34,22 +34,22 @@ import officePhoto from '@assets/doctor-consultation.webp';
 import heroLocationImage from '@assets/dr-melva-location-hero.webp';
 import OptimizedImage from '@/components/OptimizedImage';
 
-const LocationNaples = () => {
+const LocationGoldenGate = () => {
   const { language } = useLanguage();
 
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Naples FL - Dr. Melva Reve Location | Healing Minds'
-        : 'Psiquiatra Naples FL - Ubicación Dra. Melva Reve | Healing Minds',
+        ? 'Psychiatrist Golden Gate FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Golden Gate FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N # 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N # 25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Dr. Melva Reve serves Golden Gate, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Golden Gate, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
-        ? 'psychiatrist Naples FL location, 4760 Tamiami Trail Naples # 25, psychiatric office Naples, Dr Melva Reve address, mental health Naples FL'
-        : 'ubicación psiquiatra Naples FL, 4760 Tamiami Trail Naples # 25, consultorio psiquiátrico Naples, dirección Dra Melva Reve, salud mental Naples FL',
+        ? 'psychiatrist Golden Gate FL, mental health Golden Gate, Dr Melva Reve Golden Gate, psychiatric care Golden Gate FL'
+        : 'psiquiatra Golden Gate FL, salud mental Golden Gate, Dra Melva Reve Golden Gate, atención psiquiátrica Golden Gate FL',
       lang: language,
-      canonical: '/locations/psychiatrist-naples'
+      canonical: '/locations/psychiatrist-golden-gate'
     };
     updateSEO(seoData);
 
@@ -62,8 +62,8 @@ const LocationNaples = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Naples Location",
-      subtitle: "Your mental health journey starts here in the heart of Naples, Florida",
+      title: "Visit Our Golden Gate Location",
+      subtitle: "Your mental health journey starts here, serving Golden Gate, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
@@ -77,7 +77,7 @@ const LocationNaples = () => {
       features: [
         {
           title: "Convenient Location",
-          description: "Easy access from major roads in Naples with ample parking available"
+          description: "Easily accessible from Golden Gate with ample parking available"
         },
         {
           title: "Modern Facilities", 
@@ -98,8 +98,8 @@ const LocationNaples = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Naples",
-      subtitle: "Su viaje de salud mental comienza aquí en el corazón de Naples, Florida",
+      title: "Visite Nuestra Ubicación en Golden Gate",
+      subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Golden Gate, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
@@ -113,7 +113,7 @@ const LocationNaples = () => {
       features: [
         {
           title: "Ubicación Conveniente",
-          description: "Fácil acceso desde las principales carreteras de Naples con amplio estacionamiento disponible"
+          description: "Fácil acceso desde Golden Gate con amplio estacionamiento disponible"
         },
         {
           title: "Instalaciones Modernas",
@@ -151,7 +151,7 @@ const LocationNaples = () => {
                   <IconMapPin />
                 </WellnessIcon>
                 <span className="text-blue-700 font-body font-semibold text-lg">
-                  {language === 'en' ? 'Find Us in Naples' : 'Encuéntranos en Naples'}
+                  {language === 'en' ? 'Serving Golden Gate' : 'Sirviendo a Golden Gate'}
                 </span>
               </div>
               
@@ -159,12 +159,12 @@ const LocationNaples = () => {
                 {language === 'en' ? (
                   <>
                     Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Naples, FL</span>
+                    <span className="font-display italic text-green-700">Golden Gate, FL</span>
                   </>
                 ) : (
                   <>
                     Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Naples, FL</span>
+                    <span className="font-display italic text-green-700">Golden Gate, FL</span>
                   </>
                 )}
               </h1>
@@ -175,7 +175,7 @@ const LocationNaples = () => {
                   <div className="w-full aspect-[1200/667] rounded-2xl overflow-hidden shadow-lg">
                     <OptimizedImage
                       src={heroLocationImage}
-                      alt="Dr. Melva Reve at her Naples psychiatric practice - Professional mental health care in a welcoming environment"
+                      alt="Dr. Melva Reve serving Golden Gate - Professional mental health care in a welcoming environment"
                       className="w-full h-full object-cover object-center"
                       width={1200}
                       height={675}
@@ -188,8 +188,8 @@ const LocationNaples = () => {
               
               <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto font-body">
                 {language === 'en' 
-                  ? 'Discover our conveniently located psychiatric practice in the heart of Naples, Florida. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
-                  : 'Descubra nuestra práctica psiquiátrica convenientemente ubicada en el corazón de Naples, Florida. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
+                  ? 'Serving residents of Golden Gate with expert psychiatric care from our conveniently located Naples practice. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
+                  : 'Sirviendo a los residentes de Golden Gate con atención psiquiátrica experta desde nuestra práctica convenientemente ubicada en Naples. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -236,8 +236,8 @@ const LocationNaples = () => {
                       es: 'Instalaciones Modernas'
                     },
                     {
-                      en: 'Convenient Naples Location',
-                      es: 'Ubicación Conveniente en Naples'
+                      en: 'Serving Golden Gate',
+                      es: 'Sirviendo a Golden Gate'
                     },
                     {
                       en: 'Insurance Accepted',
@@ -271,13 +271,13 @@ const LocationNaples = () => {
                 {/* Content Side */}
                 <div className="order-2 lg:order-1">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Premium Location' : 'Ubicación Premium'}
+                    {language === 'en' ? 'Serving Golden Gate' : 'Sirviendo a Golden Gate'}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                     {language === 'en' ? (
-                      <>Your Healing Journey Starts at Our <span className="font-display italic text-green-700">Naples</span> Office</>
+                      <>Your Healing Journey Starts Here for <span className="font-display italic text-green-700">Golden Gate</span> Residents</>
                     ) : (
-                      <>Su Viaje de Sanación Comienza en Nuestra Oficina de <span className="font-display italic text-green-700">Naples</span></>
+                      <>Su Viaje de Sanación Comienza Aquí para Residentes de <span className="font-display italic text-green-700">Golden Gate</span></>
                     )}
                   </h2>
                   
@@ -285,14 +285,14 @@ const LocationNaples = () => {
                   <div className="mb-6 sm:mb-8">
                     <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">15+</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Years serving the Naples community with excellence' : 'Años sirviendo a la comunidad de Naples con excelencia'}
+                      {language === 'en' ? 'Years serving the Southwest Florida community with excellence' : 'Años sirviendo a la comunidad del Suroeste de Florida con excelencia'}
                     </div>
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
                     {language === 'en'
-                      ? 'Located in the heart of Naples on Tamiami Trail, our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment in a setting that prioritizes your privacy and comfort.'
-                      : 'Ubicado en el corazón de Naples en Tamiami Trail, nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo en un entorno que prioriza su privacidad y comodidad.'}
+                      ? 'Conveniently serving Golden Gate residents from our Naples location on Tamiami Trail. Our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment that prioritizes your privacy and comfort.'
+                      : 'Sirviendo convenientemente a los residentes de Golden Gate desde nuestra ubicación de Naples en Tamiami Trail. Nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo que prioriza su privacidad y comodidad.'}
                   </p>
 
                   <Button 
@@ -331,7 +331,7 @@ const LocationNaples = () => {
                   <div className="w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[4/5] rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <OptimizedImage
                       src={officePhoto}
-                      alt="Dr. Melva Reve at her Naples psychiatric practice - Professional and compassionate mental health care"
+                      alt="Dr. Melva Reve serving Golden Gate - Professional and compassionate mental health care"
                       className="w-full h-full object-cover object-center"
                       width={800}
                       height={600}
@@ -358,9 +358,9 @@ const LocationNaples = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Services</span> at This Location</>
+                    <><span className="font-display italic text-green-700">Services</span> for Golden Gate Residents</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Servicios</span> en Esta Ubicación</>
+                    <><span className="font-display italic text-green-700">Servicios</span> para Residentes de Golden Gate</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -369,8 +369,8 @@ const LocationNaples = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Comprehensive psychiatric services available at our Naples location, tailored to meet your mental health needs with compassionate care.'
-                  : 'Servicios psiquiátricos integrales disponibles en nuestra ubicación de Naples, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
+                  ? 'Comprehensive psychiatric services available for Golden Gate residents, tailored to meet your mental health needs with compassionate care.'
+                  : 'Servicios psiquiátricos integrales disponibles para residentes de Golden Gate, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
               </p>
             </div>
             
@@ -532,45 +532,19 @@ const LocationNaples = () => {
               </div>
 
               <CompactVideoCarousel />
-            </div>
-          </div>
-        </section>
 
-        {/* CTA Section - Ready to take the first step */}
-        <section className="py-16 lg:py-20 from-green-700 to-green-800 text-white bg-[#14532d]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold mb-6" data-testid="cta-title">
-                {language === 'en' 
-                  ? <>Ready to Take the <span className="font-display italic text-green-200">First</span> Step?</>
-                  : <>¿Listo/a para Dar el <span className="font-display italic text-green-200">Primer</span> Paso?</>
-                }
-              </h2>
-              <p className="text-xl lg:text-2xl text-green-100 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Change begins with a simple conversation. I am here to listen to you, understand you, and walk with you toward a fuller and more balanced life.'
-                  : 'El cambio comienza con una simple conversación. Estoy aquí para escucharte, entenderte y caminar contigo hacia una vida más plena y equilibrada.'
-                }
-              </p>
-              
-              <Link href="/contact">
-                <Button
-                  className="group inline-flex items-center justify-center gap-2 sm:gap-4 rounded-full text-base sm:text-xl font-semibold transition-all duration-300 bg-white text-green-700 hover:bg-green-50 px-4 sm:px-10 py-6 sm:py-8 hover:shadow-xl hover:-translate-y-2 mb-6"
-                  data-testid="cta-button"
+              {/* Contact CTA */}
+              <div className="text-center mt-12">
+                <Button 
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                  onClick={() => window.location.href = '/contact'}
+                  data-testid="button-schedule-after-video"
                 >
-                  <span className="text-center">{language === 'en' ? 'Schedule My Consultation Now' : 'Agendar mi Consulta Ahora'}</span>
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-700 text-white rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-green-800 flex-shrink-0">
-                    <ArrowRight className="w-4 h-4 sm:w-6 sm:h-6" />
-                  </div>
+                  <Calendar className="w-5 h-5" />
+                  <span>{language === 'en' ? 'Schedule Your Consultation' : 'Programar Su Consulta'}</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
                 </Button>
-              </Link>
-              
-              <p className="text-green-200 text-sm max-w-2xl mx-auto">
-                {language === 'en'
-                  ? 'All consultations are completely confidential and protected by medical privacy laws. Your privacy and well-being are our highest priorities.'
-                  : 'Todas las consultas son completamente confidenciales y están protegidas por las leyes de privacidad médica. Tu privacidad y bienestar son nuestras máximas prioridades.'
-                }
-              </p>
+              </div>
             </div>
           </div>
         </section>
@@ -578,186 +552,98 @@ const LocationNaples = () => {
         {/* Reviews Section */}
         <Reviews />
 
-        {/* Telehealth Services Section */}
-        <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
+        {/* Contact Information Section */}
+        <section className="py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
-                  <>
-                    <span className="font-display italic text-blue-700">Telehealth</span> Services Available
-                  </>
+                  <><span className="font-display italic text-green-700">Contact</span> Information</>
                 ) : (
-                  <>
-                    Servicios de <span className="font-display italic text-blue-700">Telesalud</span> Disponibles
-                  </>
+                  <><span className="font-display italic text-green-700">Información</span> de Contacto</>
                 )}
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                {language === 'en' 
-                  ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
-                  : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
-                }
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Ready to take the first step? Reach out today to schedule your consultation.'
+                  : '¿Listo para dar el primer paso? Póngase en contacto hoy para programar su consulta.'}
               </p>
             </div>
-            <CharmHealthBooking variant="prominent" />
-          </div>
-        </section>
 
-        {/* NAP Information Section */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 lg:p-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* Contact Information */}
-                <div className="space-y-8">
-                  <h2 className="text-4xl font-body font-bold text-green-800 mb-8">
-                    <span className="font-display italic text-green-700">Contact</span> {language === 'en' ? 'Information' : 'Información'}
-                  </h2>
-                  
-                  {/* Address */}
-                  <Card className="card-modern mb-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0">
-                        <MapPin className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
-                          {content.addressTitle}
-                        </h3>
-                        <p className="text-gray-700 font-body text-lg leading-relaxed" data-testid="text-address">
-                          {practiceInfo.address.full}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Phone */}
-                  <Card className="card-modern mb-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Phone className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
-                          {language === 'en' ? 'Phone Number' : 'Número de Teléfono'}
-                        </h3>
-                        <a 
-                          href={`tel:${practiceInfo.phone}`}
-                          className="text-gray-700 font-body text-lg hover:text-green-700 transition-colors"
-                          data-testid="link-phone"
-                        >
-                          {practiceInfo.phone}
-                        </a>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Email */}
-                  <Card className="card-modern mb-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Mail className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
-                          {language === 'en' ? 'Email Address' : 'Dirección de Email'}
-                        </h3>
-                        <a 
-                          href={`mailto:${practiceInfo.email}`}
-                          className="text-gray-700 font-body text-lg hover:text-green-700 transition-colors"
-                          data-testid="link-email"
-                        >
-                          {practiceInfo.email}
-                        </a>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Hours */}
-                  <Card className="card-modern">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Clock className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-body font-semibold text-green-800 mb-2">
-                          {content.hoursTitle}
-                        </h3>
-                        <p className="text-gray-700 font-body text-lg" data-testid="text-hours">
-                          {practiceInfo.hours}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-
-                {/* Google Map - Full Height */}
-                <div className="flex flex-col h-full">
-                  <h2 className="text-4xl font-display font-bold text-green-800 mb-8">
-                    {language === 'en' ? (
-                      <><span className="font-display italic text-green-700">Find</span> Us on the <span className="font-display italic text-green-700">Map</span></>
-                    ) : (
-                      <><span className="font-display italic text-green-700">Encuéntrenos</span> en el <span className="font-display italic text-green-700">Mapa</span></>
-                    )}
-                  </h2>
-                  <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100 min-h-[400px]">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, minHeight: '400px' }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Healing Minds Psychiatry Location Map"
-                      data-testid="map-google"
-                    ></iframe>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Contact Info */}
+              <div className="space-y-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-6 h-6 text-green-800" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                      {content.addressTitle}
+                    </h3>
+                    <p className="text-gray-600 font-body leading-relaxed">
+                      4760 Tamiami Trl N # 25<br />
+                      Naples, FL 34103
+                    </p>
                   </div>
                 </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-6 h-6 text-green-800" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                      {content.contactTitle}
+                    </h3>
+                    <p className="text-gray-600 font-body leading-relaxed">
+                      Phone: (239) 423-0272<br />
+                      Fax: (239) 330-2073
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-6 h-6 text-green-800" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                      {content.hoursTitle}
+                    </h3>
+                    <p className="text-gray-600 font-body leading-relaxed">
+                      {language === 'en' 
+                        ? 'Monday - Friday: 9:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
+                        : 'Lunes - Viernes: 9:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <Button 
+                    className="bg-green-800 hover:bg-green-700 text-white"
+                    onClick={() => window.location.href = '/contact'}
+                    data-testid="button-contact-form"
+                  >
+                    <Mail className="w-5 h-5 mr-2" />
+                    {language === 'en' ? 'Contact Form' : 'Formulario de Contacto'}
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="border-green-800 text-green-800 hover:bg-green-50"
+                    onClick={() => window.open(`tel:${practiceInfo.phone}`, '_self')}
+                    data-testid="button-call-now"
+                  >
+                    <Phone className="w-5 h-5 mr-2" />
+                    {content.callNow}
+                  </Button>
+                </div>
               </div>
-            </div>
-          </div>
-        </section>
 
-
-        {/* Call to Action */}
-        <section className="py-20 bg-white">
-          <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
-            <h2 className="text-4xl lg:text-5xl font-body font-bold text-gray-900 mb-6">
-              {language === 'en' ? (
-                <>
-                  <span className="font-display italic text-green-700">Ready to Begin</span> Your <span className="font-display italic text-green-700">Journey?</span>
-                </>
-              ) : (
-                <>
-                  <span className="font-display italic text-green-700">¿Listo para Comenzar</span> su <span className="font-display italic text-green-700">Viaje?</span>
-                </>
-              )}
-            </h2>
-            <p className="text-xl text-gray-600 font-body mb-8 leading-relaxed">
-              {language === 'en' 
-                ? 'Take the first step towards better mental health. Contact us today to schedule your consultation.'
-                : 'Dé el primer paso hacia una mejor salud mental. Contáctenos hoy para programar su consulta.'}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                className="bg-green-800 text-white hover:bg-green-700 px-8 py-6 rounded-full font-body font-semibold text-lg min-w-[240px]"
-                onClick={() => window.location.href = '/contact'}
-                data-testid="button-schedule-consultation"
-              >
-                <Heart className="w-5 h-5 mr-2" />
-                {content.bookNow}
-              </Button>
-              <Button 
-                variant="outline"
-                className="border-2 border-green-800 text-green-800 hover:bg-green-800 hover:text-white px-8 py-6 rounded-full font-body font-semibold text-lg min-w-[240px]"
-                onClick={() => window.location.href = `tel:${practiceInfo.phone}`}
-                data-testid="button-call-now"
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                {content.callNow}
-              </Button>
+              {/* CharmHealth Booking Widget */}
+              <div className="lg:pl-8">
+                <CharmHealthBooking />
+              </div>
             </div>
           </div>
         </section>
@@ -767,4 +653,4 @@ const LocationNaples = () => {
   );
 };
 
-export default LocationNaples;
+export default LocationGoldenGate;
