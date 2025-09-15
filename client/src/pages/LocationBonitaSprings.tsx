@@ -509,6 +509,468 @@ const LocationBonitaSprings = () => {
           </div>
         </section>
 
+        {/* How to Get Here Section - Cómo Llegar */}
+        <section className="py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <Navigation />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">How to Get Here</span> from Bonita Springs</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Cómo Llegar</span> desde Bonita Springs</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <MapPin />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Easy directions from popular Bonita Springs locations to our Naples psychiatric practice. Just 20-30 minutes via US-41 North (Tamiami Trail).'
+                  : 'Direcciones fáciles desde ubicaciones populares de Bonita Springs a nuestra práctica psiquiátrica en Naples. Solo 20-30 minutos por US-41 Norte (Tamiami Trail).'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* From Bonita Springs Public Library */}
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <IconMapPin className="w-6 h-6 text-blue-800" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                      {language === 'en' ? 'From Bonita Springs Library' : 'Desde la Biblioteca de Bonita Springs'}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-body">
+                      10560 Reynolds Street
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-4 mb-6">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">1</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'Head east on Reynolds Street toward US-41 (Tamiami Trail)'
+                        : 'Diríjase hacia el este por Reynolds Street hacia US-41 (Tamiami Trail)'}
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">2</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'Turn right (north) on US-41. Pass through Estero and continue toward Naples'
+                        : 'Gire a la derecha (norte) en US-41. Pase por Estero y continúe hacia Naples'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">3</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'Our office is on the right at 4760 Tamiami Trl N # 25, just past Wiggins Pass Road'
+                        : 'Nuestra oficina está a la derecha en 4760 Tamiami Trl N # 25, justo después de Wiggins Pass Road'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                  <Clock className="w-4 h-4" />
+                  <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
+                </div>
+
+                <Button 
+                  className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                  onClick={() => window.open('https://maps.google.com/?saddr=10560+Reynolds+Street,+Bonita+Springs,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                  data-testid="button-directions-library"
+                >
+                  <Navigation className="w-4 h-4 mr-2" />
+                  {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                </Button>
+              </div>
+
+              {/* From Coconut Point */}
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <IconMapPin className="w-6 h-6 text-blue-800" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                      {language === 'en' ? 'From Coconut Point' : 'Desde Coconut Point'}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-body">
+                      Estero/Bonita Springs Area
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-4 mb-6">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">1</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'Exit Coconut Point toward Coconut Road and head west to US-41'
+                        : 'Salga de Coconut Point hacia Coconut Road y diríjase al oeste hacia US-41'}
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">2</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'Turn right (north) on US-41 Tamiami Trail toward Naples. Pass Germain Arena area'
+                        : 'Gire a la derecha (norte) en US-41 Tamiami Trail hacia Naples. Pase el área de Germain Arena'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">3</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'Continue north. Our psychiatric practice is located at 4760 Tamiami Trl N # 25'
+                        : 'Continúe hacia el norte. Nuestra práctica psiquiátrica está ubicada en 4760 Tamiami Trl N # 25'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                  <Clock className="w-4 h-4" />
+                  <span>{language === 'en' ? '20-25 minutes' : '20-25 minutos'}</span>
+                </div>
+
+                <Button 
+                  className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                  onClick={() => window.open('https://maps.google.com/?saddr=Coconut+Point,+Estero,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                  data-testid="button-directions-coconut-point"
+                >
+                  <Navigation className="w-4 h-4 mr-2" />
+                  {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                </Button>
+              </div>
+
+              {/* From Downtown Bonita Springs */}
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <IconMapPin className="w-6 h-6 text-blue-800" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                      {language === 'en' ? 'From Downtown Bonita Springs' : 'Desde el Centro de Bonita Springs'}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-body">
+                      Riverside Park Area
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-4 mb-6">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">1</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'From Riverside Park area, head east on Old 41 Road toward US-41'
+                        : 'Desde el área de Riverside Park, diríjase al este por Old 41 Road hacia US-41'}
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">2</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'Merge onto US-41 North (Tamiami Trail) and continue toward Naples'
+                        : 'Incorpórese a US-41 Norte (Tamiami Trail) y continúe hacia Naples'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-green-800 font-bold text-xs">3</span>
+                    </div>
+                    <p className="text-sm text-gray-700 font-body leading-relaxed">
+                      {language === 'en'
+                        ? 'Look for our mental health practice at 4760 Tamiami Trl N # 25, near Wiggins Pass'
+                        : 'Busque nuestra práctica de salud mental en 4760 Tamiami Trl N # 25, cerca de Wiggins Pass'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                  <Clock className="w-4 h-4" />
+                  <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
+                </div>
+
+                <Button 
+                  className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                  onClick={() => window.open('https://maps.google.com/?saddr=Riverside+Park,+Bonita+Springs,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                  data-testid="button-directions-downtown"
+                >
+                  <Navigation className="w-4 h-4 mr-2" />
+                  {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                </Button>
+              </div>
+            </div>
+
+            {/* Additional Info Section */}
+            <div className="mt-16 text-center">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
+                <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
+                  {language === 'en' ? 'Easy Access for Bonita Springs Residents' : 'Fácil Acceso para Residentes de Bonita Springs'}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Convenient Location' : 'Ubicación Conveniente'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Located directly on US-41, our Naples psychiatric practice is easily accessible from all Bonita Springs neighborhoods'
+                            : 'Ubicada directamente en US-41, nuestra práctica psiquiátrica en Naples es fácilmente accesible desde todos los vecindarios de Bonita Springs'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Free, convenient parking available for all Bonita Springs patients visiting our facility'
+                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Bonita Springs que visiten nuestras instalaciones'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Transit Friendly' : 'Amigable para el Transporte'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Accessible by public transportation and ride-sharing services from Bonita Springs'
+                            : 'Accesible por transporte público y servicios de viajes compartidos desde Bonita Springs'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Clear Signage' : 'Señalización Clara'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Well-marked building with clear signs to help you find our mental health practice easily'
+                            : 'Edificio bien marcado con señales claras para ayudarle a encontrar nuestra práctica de salud mental fácilmente'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-green-100">
+                  <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Serving Bonita Springs residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
+                      : 'Sirviendo a los residentes de Bonita Springs con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Community Involvement Section - Participación Comunitaria */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <Heart />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Community</span> Involvement in Bonita Springs</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Bonita Springs</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <Users />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Mental health is fundamental to building a thriving community. We proudly support Bonita Springs through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
+                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Bonita Springs a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* Arts Bonita (Center for the Arts) */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Arts Bonita
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Supporting arts education and cultural enrichment in our community. Home to the renowned Bonita Springs National Art Festival, Arts Bonita has provided over $150,000 in scholarships and served more than 15,000 young people through their educational programs.'
+                    : 'Apoyando la educación artística y el enriquecimiento cultural en nuestra comunidad. Hogar del reconocido Festival Nacional de Arte de Bonita Springs, Arts Bonita ha proporcionado más de $150,000 en becas y ha servido a más de 15,000 jóvenes a través de sus programas educativos.'}
+                </p>
+
+                <a
+                  href="https://artsbonita.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-arts-bonita"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Visit Arts Bonita' : 'Visitar Arts Bonita'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+
+              {/* Bonita Springs Assistance Office */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Users className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Bonita Springs Assistance Office
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'For over 39 years, this vital organization has provided emergency assistance and food bank services to families in need. Their dedication to supporting our community during challenging times aligns with our commitment to mental health and overall well-being.'
+                    : 'Por más de 39 años, esta organización vital ha proporcionado asistencia de emergencia y servicios de banco de alimentos a familias necesitadas. Su dedicación a apoyar a nuestra comunidad durante tiempos difíciles se alinea con nuestro compromiso con la salud mental y el bienestar general.'}
+                </p>
+
+                <a
+                  href="https://www.bonitaassistance.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-bonita-assistance"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Learn About Their Mission' : 'Conocer Su Misión'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+
+              {/* Café of Life */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Café of Life
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'This grassroots organization began in Bonita Springs city park, providing lunch services and community outreach to those in need. Their compassionate approach to community care reflects the same values we bring to mental health treatment - meeting people where they are with dignity and respect.'
+                    : 'Esta organización de base comenzó en el parque de la ciudad de Bonita Springs, proporcionando servicios de almuerzo y divulgación comunitaria a quienes lo necesitan. Su enfoque compasivo hacia el cuidado comunitario refleja los mismos valores que aportamos al tratamiento de salud mental: encontrar a las personas donde están con dignidad y respeto.'}
+                </p>
+
+                <a
+                  href="https://cafeoflife.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-cafe-of-life"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Support Their Mission' : 'Apoyar Su Misión'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="mt-16 text-center">
+              <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Just as these organizations strengthen our Bonita Springs community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
+                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Bonita Springs, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+              </p>
+              <Button 
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                onClick={() => window.location.href = '/contact'}
+                data-testid="button-schedule-community"
+              >
+                <Calendar className="w-5 h-5" />
+                <span>{language === 'en' ? 'Schedule Your Consultation Today' : 'Programar Su Consulta Hoy'}</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+              </Button>
+            </div>
+          </div>
+        </section>
+
         {/* Video Section - A Conversation with Dr. Reve */}
         <section className="py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
