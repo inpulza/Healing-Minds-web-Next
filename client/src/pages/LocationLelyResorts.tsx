@@ -548,7 +548,7 @@ const LocationLelyResorts = () => {
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
                   {language === 'en'
                     ? 'Our Naples office is conveniently located for Lely Resort residents. Use these familiar landmarks to find us easily.'
-                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Lely Resort. Use estos puntos de referencia familiares para encontrarnos fácilmente.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Lely Resort. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
                 </p>
               </div>
               
