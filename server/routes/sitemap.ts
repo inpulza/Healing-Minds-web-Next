@@ -22,6 +22,14 @@ export const generateSitemap = (req: Request, res: Response) => {
   
   // Define bilingual page relationships for hreflang
   const bilingualPages = [
+    // Homepage with bilingual version
+    {
+      en: '/',
+      es: '/es/',
+      lastmod: recentDate,
+      changefreq: 'weekly',
+      priority: '1.0'
+    },
     // Main pages with bilingual versions
     {
       en: '/about',
@@ -195,15 +203,7 @@ export const generateSitemap = (req: Request, res: Response) => {
   ];
   
   // Define site structure with priorities and update frequencies  
-  const pages = [
-    // Homepage - Maximum priority (recent schema and analytics updates)
-    {
-      url: '/',
-      lastmod: recentDate,
-      changefreq: 'weekly',
-      priority: '1.0'
-    }
-  ];
+  const pages: Array<{url: string, lastmod: string, changefreq: string, priority: string}> = [];
 
   // Generate XML sitemap with hreflang support
   const regularPagesXml = pages.map(page => `  <url>
@@ -213,9 +213,14 @@ export const generateSitemap = (req: Request, res: Response) => {
     <priority>${page.priority}</priority>
   </url>`).join('\n');
 
-  // Generate English-only pages
+  // Generate English-only pages with hreflang auto-reference
   const englishOnlyPagesXml = englishOnlyPages.map(page => `  <url>
     <loc>${baseUrl}${page.url}</loc>
+    <xhtml:link 
+                rel="alternate"
+                hreflang="en"
+                href="${baseUrl}${page.url}"
+                />
     <lastmod>${page.lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
