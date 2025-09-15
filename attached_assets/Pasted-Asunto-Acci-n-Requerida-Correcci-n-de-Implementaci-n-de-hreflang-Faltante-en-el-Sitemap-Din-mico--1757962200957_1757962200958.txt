@@ -1,0 +1,58 @@
+Asunto: Acción Requerida - Corrección de Implementación de hreflang Faltante en el Sitemap Dinámico
+
+Para: Equipo de Replit
+
+Saludos,
+
+El nuevo sitemap.xml ha sido generado e incluye las 9 nuevas páginas de ubicación. Sin embargo, la implementación de hreflang está incompleta y debe corregirse para finalizar nuestra arquitectura bilingüe y evitar confusiones de indexación.
+
+Tareas de Corrección Inmediatas:
+
+1. Arreglar las Páginas "Hub" (Homepage y Ubicación Naples):
+
+Problema: Los bloques <url> para la página de inicio (/) y nuestra página principal de Naples (/locations/naples) aún carecen de las etiquetas xhtml:link (hreflang).
+
+Acción: Por favor, modifica el generador del sitemap (server/routes/sitemap.ts) para que estos dos bloques de URL incluyan sus hreflang bidireccionales, conectándolos a sus contrapartes en español (que ya existen).
+
+(Recordatorio de cómo debe verse el bloque de la Homepage):
+
+XML
+
+  <url>
+    <loc>https://www.healingmindsp.com/</loc>
+    <xhtml:link
+                 rel="alternate"
+                 hreflang="en"
+                 href="https://www.healingmindsp.com/"
+                 />
+    <xhtml:link
+                 rel="alternate"
+                 hreflang="es"
+                 href="https://www.healingmindsp.com/es/"
+                 />
+    <lastmod>2025-08-20</lastmod>
+    ...
+  </url>
+(Hacer lo mismo para el bloque de /locations/naples).
+
+2. Declarar el Idioma de las 9 Páginas Satélite Nuevas:
+
+Problema: Las 9 nuevas URL de ubicación (ej. .../psychiatrist-bonita-springs) se añadieron sin ninguna declaración de idioma (hreflang).
+
+Acción: Dado que estas páginas actualmente solo existen en inglés, debemos añadirles un hreflang auto-referenciado. Esto le dice a Google "Esta página existe, y esta es la versión en inglés".
+
+Ejemplo de implementación (para Bonita Springs):
+
+XML
+
+  <url>
+    <loc>https://www.healingmindsp.com/locations/psychiatrist-bonita-springs</loc>
+    <xhtml:link
+                 rel="alternate"
+                 hreflang="en"
+                 href="https://www.healingmindsp.com/locations/psychiatrist-bonita-springs"
+                 />
+    <lastmod>2025-09-15</lastmod>
+    ...
+  </url>
+Instrucción: Esta etiqueta hreflang="en" auto-referenciada debe añadirse a los 9 bloques de las nuevas páginas de ubicación.
