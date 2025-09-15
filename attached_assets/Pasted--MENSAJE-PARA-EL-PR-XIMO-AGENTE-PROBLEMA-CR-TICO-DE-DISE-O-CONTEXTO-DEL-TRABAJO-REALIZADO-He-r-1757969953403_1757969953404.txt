@@ -1,0 +1,59 @@
+🚨 MENSAJE PARA EL PRÓXIMO AGENTE - PROBLEMA CRÍTICO DE DISEÑO
+CONTEXTO DEL TRABAJO REALIZADO
+He resuelto exitosamente el problema original de las URLs 404 en español, pero he introducido un error crítico de diseño en el proceso.
+
+✅ LO QUE SÍ FUNCIONA:
+
+Las 10 URLs de ubicaciones en español ya no dan 404
+El contenido se muestra en español correctamente
+Los enlaces y funcionalidades básicas funcionan
+El SEO (hreflang, canonical tags) está implementado correctamente
+🚨 PROBLEMA CRÍTICO QUE DEBES ARREGLAR
+SÍNTOMA: Cuando el usuario cambia el idioma usando el botón de navegación, SOLO cambian los textos, pero:
+
+❌ El diseño se ve completamente diferente
+❌ La estructura de la información está alterada
+❌ Los estilos de las páginas están rotos
+❌ Las secciones están "desbaratadas"
+CAUSA RAÍZ: Creé componentes dedicados en español (*Espanol.tsx) que NO mantienen la misma estructura de diseño y estilos que las páginas originales en inglés.
+
+ARCHIVOS PROBLEMÁTICOS CREADOS:
+client/src/pages/LocationNaplesEspanol.tsx
+client/src/pages/LocationBonitaSpringsEspanol.tsx  
+client/src/pages/LocationMarcoIslandEspanol.tsx
+client/src/pages/LocationEsteroEspanol.tsx
+client/src/pages/LocationGoldenGateEspanol.tsx
+client/src/pages/LocationImmokaleeEspanol.tsx
+client/src/pages/LocationVanderbiltBeachEspanol.tsx
+client/src/pages/LocationAveMariaEspanol.tsx
+client/src/pages/LocationFortMyersEspanol.tsx
+client/src/pages/LocationLelyResortsEspanol.tsx
+URLs AFECTADAS:
+/es/ubicaciones/psiquiatra-naples
+/es/ubicaciones/psiquiatra-bonita-springs
+/es/ubicaciones/psiquiatra-marco-island
+/es/ubicaciones/psiquiatra-estero
+/es/ubicaciones/psiquiatra-golden-gate
+/es/ubicaciones/psiquiatra-immokalee
+/es/ubicaciones/psiquiatra-vanderbilt-beach
+/es/ubicaciones/psiquiatra-ave-maria
+/es/ubicaciones/psiquiatra-fort-myers
+/es/ubicaciones/psiquiatra-lely-resorts
+SOLUCIÓN REQUERIDA:
+DEBES hacer que las páginas en español tengan EXACTAMENTE el mismo diseño, estructura y estilos que las páginas en inglés. Solo debe cambiar el contenido de texto.
+
+OPCIONES DE IMPLEMENTACIÓN:
+
+OPCIÓN A (RECOMENDADA): Modificar los componentes existentes en inglés para ser bilingües usando el contexto de idioma
+OPCIÓN B: Corregir los 10 componentes españoles para que tengan la estructura de diseño idéntica a los ingleses
+ARCHIVOS DE REFERENCIA (DISEÑO CORRECTO):
+client/src/pages/LocationNaples.tsx (y otros /Location*.tsx)
+COMPORTAMIENTO ESPERADO:
+Cuando el usuario cambie de idioma, las páginas deben verse visualmente idénticas - misma estructura, mismo diseño, mismos estilos. Solo el texto debe cambiar de inglés a español.
+
+NOTAS IMPORTANTES:
+✅ NO toques las rutas en client/src/App.tsx - están correctas
+✅ NO toques la implementación SEO - está funcionando perfectamente
+✅ NO toques los archivos de datos de contenido
+🎯 ENFÓCATE ÚNICAMENTE en hacer que el diseño y estructura sean idénticos entre idiomas
+PRIORIDAD: Este es un problema crítico de experiencia de usuario que debe resolverse inmediatamente.
