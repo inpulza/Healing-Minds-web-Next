@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -51,10 +51,26 @@ const LocationMarcoIsland = () => {
     };
     updateSEO(seoData);
 
-    // Schema already managed by App.tsx to avoid duplication
+    // Add Service Schema for Marco Island location (Hub & Spoke Model)
+    // This schema points to the main MedicalClinic as provider, avoiding conflicts
+    const serviceDescription = language === 'en'
+      ? 'Expert psychiatric care serving Marco Island residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Marco Island community.'
+      : 'Atención psiquiátrica experta para residentes de Marco Island. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Marco Island.';
+
+    addLocationServiceSchema({
+      locationName: 'Marco Island',
+      description: serviceDescription,
+      pageId: 'marco-island-location',
+      language: language
+    });
 
     return () => {
-      // No cleanup needed
+      // Clean up Service schema when component unmounts
+      const serviceSchema = document.querySelector('script[type="application/ld+json"]#marco-island-location-service-schema');
+      if (serviceSchema) {
+        serviceSchema.remove();
+        console.log('🧹 Cleaned up Marco Island Service schema');
+      }
     };
   }, [language]);
 
@@ -156,13 +172,13 @@ const LocationMarcoIsland = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Marco Island, FL</span>
+                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
+                    <span className="font-display italic text-green-700">Marco Island Residents</span>
                   </>
                 ) : (
                   <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Marco Island, FL</span>
+                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
+                    <span className="font-display italic text-green-700">Residentes de Marco Island</span>
                   </>
                 )}
               </h1>
@@ -186,8 +202,8 @@ const LocationMarcoIsland = () => {
               
               <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto font-body">
                 {language === 'en' 
-                  ? 'Serving residents of Marco Island with expert psychiatric care from our conveniently located Naples practice. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
-                  : 'Sirviendo a los residentes de Marco Island con atención psiquiátrica experta desde nuestra práctica convenientemente ubicada en Naples. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
+                  ? 'Expert mental health and telepsychiatry services for the Marco Island community. Whether you need a psychiatrist in Marco Island for an ADHD evaluation or are seeking compassionate depression treatment, our clinic is a short drive across the bridge. We offer bilingual care specializing in anxiety treatment in Naples FL, depression, PTSD, and psychiatric medication management.'
+                  : 'Servicios expertos de salud mental y telepsiquiatría para la comunidad de Marco Island. Ya sea que necesite un psiquiatra en Marco Island para un diagnóstico de TDAH o esté buscando tratamiento de depresión compasivo, nuestra clínica está a un corto viaje a través del puente. Ofrecemos atención bilingüe especializada en ansiedad, depresión, TEPT y manejo de medicamentos psiquiátricos.'}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
