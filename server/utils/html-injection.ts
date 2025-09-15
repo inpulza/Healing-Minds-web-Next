@@ -137,6 +137,11 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
             rel: 'alternate',
             hreflang: 'es',
             href: `${baseUrl}/es/`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'x-default',
+            href: `${baseUrl}/`
           }
         ]
       };
@@ -1038,6 +1043,11 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
             rel: 'alternate',
             hreflang: 'es',
             href: `${baseUrl}/es/`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'x-default',
+            href: `${baseUrl}/`
           }
         ]
       };
