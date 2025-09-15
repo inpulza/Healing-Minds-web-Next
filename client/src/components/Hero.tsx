@@ -10,7 +10,7 @@ import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
 
 // Optimized Hero component with performance improvements
 const Hero = React.memo(() => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   // Memoize services arrays to prevent recreation on each render
   const services = useMemo(() => [
@@ -86,7 +86,7 @@ const Hero = React.memo(() => {
                 {/* Mobile Title */}
                 <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center mb-3" data-testid="hero-title-mobile">
                   <div className="font-display italic font-bold mb-2">
-                    Expert psychiatric care in
+                    {language === 'en' ? 'Expert psychiatric care in' : 'Atención psiquiátrica experta en'}
                   </div>
                   <div className="font-display italic font-bold">
                     Naples, FL
@@ -98,7 +98,7 @@ const Hero = React.memo(() => {
                 
                 {/* Mobile Description */}
                 <div className="text-sm leading-relaxed font-body text-white/90" data-testid="hero-description-mobile">
-                  <span>Find Your Path to <span className="font-display italic text-green-300 font-bold">Mental Clarity</span> with <span className="font-display italic text-green-300 font-bold">Dr. Melva Reve</span></span>
+                  <span>{t('hero.description')}</span>
                 </div>
               </div>
             </div>
@@ -111,7 +111,7 @@ const Hero = React.memo(() => {
                 className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg border border-green-800"
                 data-testid="hero-book-consultation-mobile"
               >
-                <span>Our Services</span>
+                <span>{language === 'en' ? 'Our Services' : 'Nuestros Servicios'}</span>
                 <ArrowRight className="w-4 h-4 text-green-800" />
               </Button>
             </Link>
@@ -120,7 +120,7 @@ const Hero = React.memo(() => {
                 className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 py-4 shadow-lg"
                 data-testid="hero-call-now-mobile"
               >
-                <span>Call Now</span>
+                <span>{language === 'en' ? 'Call Now' : 'Llamar Ahora'}</span>
                 <Phone className="w-4 h-4 text-white" />
               </Button>
             </a>
@@ -157,11 +157,11 @@ const Hero = React.memo(() => {
                 
                 <h1 className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-relaxed text-green-700 text-left mb-6 md:mb-8" data-testid="hero-title">
                   <div className="font-display italic font-bold mb-2 md:mb-3 lg:mb-4">
-                    Expert psychiatric
+                    {language === 'en' ? 'Expert psychiatric' : 'Atención psiquiátrica experta'}
                     <WellnessIcon size="md" color="blue" className="inline-flex mx-1 md:mx-2 align-middle">
                       <IconHeart />
                     </WellnessIcon>
-                    care in
+                    {language === 'en' ? ' care in' : ' en'}
                   </div>
                   <div className="font-display italic font-bold">
                     Naples, FL
@@ -172,7 +172,7 @@ const Hero = React.memo(() => {
                 </h1>
                 
                 <div className="text-lg md:text-xl lg:text-xl xl:text-2xl leading-relaxed font-body mb-8 md:mb-10 lg:mb-12 text-[#1e6b3b]" data-testid="hero-description">
-                  <span>Designed to help you navigate life's challenges and foster lasting well-being through personalized treatment. Find Your Path to <span className="font-display italic text-green-700 font-bold">Mental Clarity</span> with Compassionate Care from <span className="font-display italic text-green-700 font-bold">Dr. Melva Reve</span></span>
+                  <span>{t('hero.description')}</span>
                 </div>
                 
                 <div className="ml-0 flex flex-col sm:flex-row gap-4">
@@ -181,7 +181,7 @@ const Hero = React.memo(() => {
                       className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg"
                       data-testid="hero-book-consultation"
                     >
-                      <span>Our Services</span>
+                      <span>{language === 'en' ? 'Our Services' : 'Nuestros Servicios'}</span>
                       <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
                         <ArrowRight className="w-5 h-5 text-green-800" />
                       </div>
@@ -192,7 +192,7 @@ const Hero = React.memo(() => {
                       className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg"
                       data-testid="hero-call-now"
                     >
-                      <span>Call Now</span>
+                      <span>{language === 'en' ? 'Call Now' : 'Llamar Ahora'}</span>
                       <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white">
                         <Phone className="w-5 h-5 text-green-800" />
                       </div>

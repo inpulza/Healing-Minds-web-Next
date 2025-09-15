@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { hasBilingualCounterpart } from '@/utils/urlMapping';
+import { hasBilingualCounterpart } from '../utils/urlMapping';
 
 type Language = 'en' | 'es';
 
