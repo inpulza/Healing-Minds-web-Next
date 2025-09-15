@@ -10,7 +10,7 @@ interface FAQItem {
 }
 
 interface LocationFAQProps {
-  faqs: FAQItem[];
+  faqs: readonly FAQItem[];
   title?: string;
   description?: string;
 }
