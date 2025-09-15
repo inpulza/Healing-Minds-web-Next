@@ -1,0 +1,31 @@
+Consulta Técnica sobre Lógica del Conmutador de Idioma (Language Toggle) y Arquitectura SEO Bilingüe
+
+Para: Equipo de Replit
+
+Saludos,
+
+Primero, el trabajo que has hecho para implementar la arquitectura bilingüe completa (las nuevas páginas 
+
+/es/, las rutas del router, el middleware SSR y el sitemap actualizado) ha sido excelente .
+
+Sin embargo, hemos detectado una observación funcional en el front-end que parece estar en conflicto con la arquitectura "estándar de oro" (URLs separadas) que acabamos de implementar.
+
+Observación y Diagnóstico (Hipótesis):
+
+Hemos notado que cuando un usuario está en una página en inglés (ejemplo: /about) y hace clic en el botón para cambiar a "ES", el texto de la página se traduce correctamente a español, pero la URL en el navegador permanece sin cambios (sigue siendo /about).
+
+Nuestra hipótesis técnica es que el botón de idioma está actualmente vinculado solo al LanguageContext de React para realizar una traducción del lado del cliente (client-side) (intercambiando el texto), en lugar de ejecutar una navegación de ruta completa (full page navigation).
+
+Esto crea una desconexión SEO crítica: le estamos diciendo a Google (a través del sitemap y hreflang) que la página oficial en español es /es/acerca-de, pero funcionalmente estamos impidiendo que los usuarios que navegan por el sitio lleguen a esa URL a través del conmutador de idioma.
+
+Solicitud de Diagnóstico:
+
+Queríamos pedirte dos cosas:
+
+¿Podrías por favor revisar la implementación actual del conmutador de idioma para confirmar esta lógica?
+
+¿Estás de acuerdo con este diagnóstico de que el botón está realizando un cambio de contexto client-side en lugar de un cambio de ruta (navegación)?
+
+Si se confirma, nuestro siguiente paso estratégico sería discutir la refactorización de ese componente para que el botón de idioma navegue al usuario a la URL de la contraparte lingüística correspondiente (ej. /about -> /es/acerca-de y viceversa), alineando así la experiencia del usuario al 100% con nuestra arquitectura SEO.
+
+Gracias por tu excelente trabajo.
