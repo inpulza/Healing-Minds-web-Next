@@ -848,7 +848,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
     "name": "Healing Minds Psychiatry",
     "url": baseUrl,
     "logo": `${baseUrl}/favicon.svg`,
-    "image": `${baseUrl}/favicon.svg`,
+    "image": `${baseUrl}/doctor-profile-v2.webp`,
     "description": "Board certified psychiatrist Dr. Melva Reve providing expert psychiatric care in Naples, FL. Specializing in anxiety, depression, ADHD, PTSD, and comprehensive mental health services.",
     "address": {
       "@type": "PostalAddress",
