@@ -4,8 +4,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
-import CompactVideoCarousel from '@/components/CompactVideoCarousel';
-import Reviews from '@/components/Reviews';
 import { updateSEO } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
@@ -531,7 +529,6 @@ const LocationEstero = () => {
                 </p>
               </div>
 
-              <CompactVideoCarousel />
 
               {/* Contact CTA */}
               <div className="text-center mt-12">
@@ -549,8 +546,6 @@ const LocationEstero = () => {
           </div>
         </section>
 
-        {/* Reviews Section */}
-        <Reviews />
 
         {/* Contact Information Section */}
         <section className="py-16 lg:py-20 bg-white">
