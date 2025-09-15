@@ -758,122 +758,158 @@ const LocationVanderbiltBeach = () => {
           </div>
         </section>
 
-        {/* Community Involvement Section */}
-        <section className="py-20 bg-green-50">
+        {/* Community Involvement Section - Participación Comunitaria */}
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12">
-              <div className="text-center mb-12">
-                <div className="flex items-center justify-center gap-4 mb-6">
-                  <WellnessIcon size="md" color="green" className="opacity-70">
-                    <Users />
-                  </WellnessIcon>
-                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
-                    {language === 'en' ? (
-                      <>Community <span className="font-display italic text-green-700">Involvement</span></>
-                    ) : (
-                      <>Participación <span className="font-display italic text-green-700">Comunitaria</span></>
-                    )}
-                  </h2>
-                  <WellnessIcon size="md" color="blue" className="opacity-70">
-                    <Heart />
-                  </WellnessIcon>
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <Heart />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Community</span> Involvement in Vanderbilt Beach</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Vanderbilt Beach</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <Users />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Mental health is fundamental to building a thriving community. We proudly support Vanderbilt Beach through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
+                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Vanderbilt Beach a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* Vanderbilt Beach Residents Association */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Shield className="w-6 h-6 text-green-800" />
                 </div>
-                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Vanderbilt Beach Residents Association
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'We proudly support Vanderbilt Beach community organizations and encourage our patients to connect with local resources for holistic wellness.'
-                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Vanderbilt Beach y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                    ? 'Community advocacy organization preserving quality of life in Vanderbilt Beach through active resident engagement and environmental stewardship. They work tirelessly to maintain the character and natural beauty of our coastal community while advocating for responsible development.'
+                    : 'Organización de defensa comunitaria que preserva la calidad de vida en Vanderbilt Beach a través del compromiso activo de los residentes y la administración ambiental. Trabajan incansablemente para mantener el carácter y la belleza natural de nuestra comunidad costera mientras abogan por el desarrollo responsable.'}
                 </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <Shield className="w-6 h-6 text-blue-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Vanderbilt Beach Residents Assoc.' : 'Asociación Residentes Vanderbilt Beach'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Community advocacy organization preserving quality of life in Vanderbilt Beach through active resident engagement.'
-                      : 'Organización de defensa comunitaria que preserva la calidad de vida en Vanderbilt Beach a través del compromiso activo de los residentes.'}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-blue-700 border-blue-200 hover:bg-blue-50 rounded-full"
-                    onClick={() => window.open('https://vbra.org/', '_blank')}
-                    data-testid="link-residents-association"
-                  >
-                    {language === 'en' ? 'Learn More' : 'Aprender Más'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
 
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <Heart className="w-6 h-6 text-green-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Collier Community Foundation' : 'Fundación Comunitaria de Collier'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Supporting Collier County nonprofits and community initiatives that serve Vanderbilt Beach and surrounding areas.'
-                      : 'Apoyando organizaciones sin fines de lucro e iniciativas comunitarias del Condado de Collier que sirven a Vanderbilt Beach y áreas circundantes.'}
-                  </p>
+                <a
+                  href="https://vbra.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-vanderbilt-residents"
+                >
                   <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-green-700 border-green-200 hover:bg-green-50 rounded-full"
-                    onClick={() => window.open('https://colliercf.org/', '_blank')}
-                    data-testid="link-community-foundation"
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
                   >
-                    {language === 'en' ? 'Visit Website' : 'Visitar Sitio'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Visit VBRA Website' : 'Visitar Sitio VBRA'}
+                    </span>
                   </Button>
-                </div>
-
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <Star className="w-6 h-6 text-purple-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Vanderbilt Beach MSTU' : 'MSTU de Vanderbilt Beach'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Municipal Services Taxing Unit managing landscaping and community improvements throughout Vanderbilt Beach area.'
-                      : 'Unidad de Servicios Municipales que gestiona paisajismo y mejoras comunitarias en toda el área de Vanderbilt Beach.'}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-purple-700 border-purple-200 hover:bg-purple-50 rounded-full"
-                    onClick={() => window.open('https://www.colliercountyfl.gov/', '_blank')}
-                    data-testid="link-mstu"
-                  >
-                    {language === 'en' ? 'County Info' : 'Info del Condado'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
+                </a>
               </div>
 
-              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
-                    <Heart className="w-8 h-8 text-green-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Supporting Our Vanderbilt Beach Community' : 'Apoyando Nuestra Comunidad de Vanderbilt Beach'}
-                  </h3>
-                  <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
-                    {language === 'en'
-                      ? 'Mental health is strengthened through community connection. We encourage our Vanderbilt Beach patients to engage with local organizations that promote wellness, support, and community involvement.'
-                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Vanderbilt Beach a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento comunitario.'}
-                  </p>
+              {/* Collier Community Foundation */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
                 </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Collier Community Foundation
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Supporting Collier County nonprofits and community initiatives that serve Vanderbilt Beach and surrounding areas. Their philanthropic leadership helps address critical community needs through strategic grants and partnerships that enhance quality of life for all residents.'
+                    : 'Apoyando organizaciones sin fines de lucro e iniciativas comunitarias del Condado de Collier que sirven a Vanderbilt Beach y áreas circundantes. Su liderazgo filantrópico ayuda a abordar las necesidades críticas de la comunidad a través de subvenciones estratégicas y asociaciones que mejoran la calidad de vida de todos los residentes.'}
+                </p>
+
+                <a
+                  href="https://colliercf.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-collier-foundation"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Learn About Their Impact' : 'Conocer Su Impacto'}
+                    </span>
+                  </Button>
+                </a>
               </div>
+
+              {/* Vanderbilt Beach MSTU */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Users className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Vanderbilt Beach MSTU
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Municipal Services Taxing Unit managing landscaping and community improvements throughout Vanderbilt Beach area. They maintain the beautiful streetscapes, parks, and public spaces that make our community a peaceful and welcoming place for residents and visitors alike.'
+                    : 'Unidad de Servicios Municipales que gestiona paisajismo y mejoras comunitarias en toda el área de Vanderbilt Beach. Mantienen los hermosos paisajes urbanos, parques y espacios públicos que hacen de nuestra comunidad un lugar pacífico y acogedor para residentes y visitantes por igual.'}
+                </p>
+
+                <a
+                  href="https://www.colliercountyfl.gov/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-vanderbilt-mstu"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'View County Services' : 'Ver Servicios del Condado'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="mt-16 text-center">
+              <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Just as these organizations strengthen our Vanderbilt Beach community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
+                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Vanderbilt Beach, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+              </p>
+              <Button 
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                onClick={() => window.location.href = '/contact'}
+                data-testid="button-schedule-community"
+              >
+                <Calendar className="w-5 h-5" />
+                <span>{language === 'en' ? 'Schedule Your Consultation Today' : 'Programar Su Consulta Hoy'}</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+              </Button>
             </div>
           </div>
         </section>

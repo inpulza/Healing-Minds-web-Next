@@ -758,122 +758,158 @@ const LocationLelyResorts = () => {
           </div>
         </section>
 
-        {/* Community Involvement Section */}
-        <section className="py-20 bg-green-50">
+        {/* Community Involvement Section - Participación Comunitaria */}
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12">
-              <div className="text-center mb-12">
-                <div className="flex items-center justify-center gap-4 mb-6">
-                  <WellnessIcon size="md" color="green" className="opacity-70">
-                    <Users />
-                  </WellnessIcon>
-                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
-                    {language === 'en' ? (
-                      <>Community <span className="font-display italic text-green-700">Involvement</span></>
-                    ) : (
-                      <>Participación <span className="font-display italic text-green-700">Comunitaria</span></>
-                    )}
-                  </h2>
-                  <WellnessIcon size="md" color="blue" className="opacity-70">
-                    <Heart />
-                  </WellnessIcon>
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <Heart />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Community</span> Involvement in Lely Resorts</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Lely Resorts</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <Users />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Mental health is fundamental to building a thriving community. We proudly support Lely Resorts through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
+                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Lely Resorts a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* Lely Master POA */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Shield className="w-6 h-6 text-green-800" />
                 </div>
-                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Lely Master POA
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'We proudly support Lely Resorts community organizations and encourage our patients to connect with local resources for holistic wellness.'
-                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Lely Resorts y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                    ? 'Coordinating with 48 HOAs and condo associations within Lely Resorts to maintain community standards and quality of life. This master association ensures cohesive community management, landscape maintenance, and preservation of property values across all residential areas in Lely Resorts.'
+                    : 'Coordinando con 48 HOAs y asociaciones de condominios dentro de Lely Resorts para mantener estándares comunitarios y calidad de vida. Esta asociación maestra asegura la gestión cohesiva de la comunidad, mantenimiento de paisajismo y preservación de valores de propiedad en todas las áreas residenciales en Lely Resorts.'}
                 </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <Shield className="w-6 h-6 text-blue-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Lely Master POA' : 'POA Master de Lely'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Coordinating with 48 HOAs and condo associations within Lely Resorts to maintain community standards and quality of life.'
-                      : 'Coordinando con 48 HOAs y asociaciones de condominios dentro de Lely Resorts para mantener estándares comunitarios y calidad de vida.'}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-blue-700 border-blue-200 hover:bg-blue-50 rounded-full"
-                    onClick={() => window.open('https://lelymasterpoa.com/', '_blank')}
-                    data-testid="link-master-poa"
-                  >
-                    {language === 'en' ? 'Learn More' : 'Aprender Más'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
 
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <Heart className="w-6 h-6 text-green-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Lely Community Development District' : 'Distrito Desarrollo Comunitario Lely'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Special purpose government established in 1990, managing 1,500 acres with over 9,000 approved residential units across Lely Resorts.'
-                      : 'Gobierno de propósito especial establecido en 1990, gestionando 1,500 acres con más de 9,000 unidades residenciales aprobadas en Lely Resorts.'}
-                  </p>
+                <a
+                  href="https://lelymasterpoa.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-lely-master-poa"
+                >
                   <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-green-700 border-green-200 hover:bg-green-50 rounded-full"
-                    onClick={() => window.open('https://www.lelycdd.com/', '_blank')}
-                    data-testid="link-community-district"
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
                   >
-                    {language === 'en' ? 'Visit Website' : 'Visitar Sitio'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Visit Master POA' : 'Visitar POA Master'}
+                    </span>
                   </Button>
-                </div>
-
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <Star className="w-6 h-6 text-purple-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Lely Country Club POA' : 'POA Country Club Lely'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Property Owners Association managing the exclusive country club lifestyle and amenities for Lely Resorts residents.'
-                      : 'Asociación de Propietarios que gestiona el estilo de vida exclusivo del country club y amenidades para residentes de Lely Resorts.'}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-purple-700 border-purple-200 hover:bg-purple-50 rounded-full"
-                    onClick={() => window.open('https://lelycountryclub.com/lely-country-club-property-owners-association/', '_blank')}
-                    data-testid="link-country-club-poa"
-                  >
-                    {language === 'en' ? 'Country Club Info' : 'Info Country Club'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
+                </a>
               </div>
 
-              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
-                    <Heart className="w-8 h-8 text-green-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Supporting Our Lely Resorts Community' : 'Apoyando Nuestra Comunidad de Lely Resorts'}
-                  </h3>
-                  <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
-                    {language === 'en'
-                      ? 'Mental health is strengthened through community connection. We encourage our Lely Resorts patients to engage with local organizations that promote wellness, support, and active community involvement.'
-                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Lely Resorts a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento activo comunitario.'}
-                  </p>
+              {/* Lely Community Development District */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
                 </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Lely Community Development District
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Special purpose government established in 1990, managing 1,500 acres with over 9,000 approved residential units across Lely Resorts. This district oversees infrastructure maintenance, water management systems, road improvements, and community facilities that support the exceptional quality of life in Lely Resorts.'
+                    : 'Gobierno de propósito especial establecido en 1990, gestionando 1,500 acres con más de 9,000 unidades residenciales aprobadas en Lely Resorts. Este distrito supervisa el mantenimiento de infraestructura, sistemas de gestión de agua, mejoras de carreteras e instalaciones comunitarias que apoyan la calidad de vida excepcional en Lely Resorts.'}
+                </p>
+
+                <a
+                  href="https://www.lelycdd.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-lely-community-district"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Learn About District Services' : 'Conocer Servicios del Distrito'}
+                    </span>
+                  </Button>
+                </a>
               </div>
+
+              {/* Lely Country Club POA */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Star className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Lely Country Club POA
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Property Owners Association managing the exclusive country club lifestyle and amenities for Lely Resorts residents. They oversee the prestigious golf courses, clubhouse facilities, recreational amenities, and social programs that create the premier resort-style living experience that defines Lely Resorts.'
+                    : 'Asociación de Propietarios que gestiona el estilo de vida exclusivo del country club y amenidades para residentes de Lely Resorts. Supervisan los prestigiosos campos de golf, instalaciones del club, amenidades recreativas y programas sociales que crean la experiencia de vida estilo resort de primera clase que define a Lely Resorts.'}
+                </p>
+
+                <a
+                  href="https://lelycountryclub.com/lely-country-club-property-owners-association/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-lely-country-club"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Explore Country Club Amenities' : 'Explorar Amenidades del Club'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="mt-16 text-center">
+              <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Just as these organizations strengthen our Lely Resorts community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
+                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Lely Resorts, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+              </p>
+              <Button 
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                onClick={() => window.location.href = '/contact'}
+                data-testid="button-schedule-community"
+              >
+                <Calendar className="w-5 h-5" />
+                <span>{language === 'en' ? 'Schedule Your Consultation Today' : 'Programar Su Consulta Hoy'}</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+              </Button>
             </div>
           </div>
         </section>

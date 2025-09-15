@@ -758,122 +758,158 @@ const LocationAveMaria = () => {
           </div>
         </section>
 
-        {/* Community Involvement Section */}
-        <section className="py-20 bg-green-50">
+        {/* Community Involvement Section - Participación Comunitaria */}
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12">
-              <div className="text-center mb-12">
-                <div className="flex items-center justify-center gap-4 mb-6">
-                  <WellnessIcon size="md" color="green" className="opacity-70">
-                    <Users />
-                  </WellnessIcon>
-                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
-                    {language === 'en' ? (
-                      <>Community <span className="font-display italic text-green-700">Involvement</span></>
-                    ) : (
-                      <>Participación <span className="font-display italic text-green-700">Comunitaria</span></>
-                    )}
-                  </h2>
-                  <WellnessIcon size="md" color="blue" className="opacity-70">
-                    <Heart />
-                  </WellnessIcon>
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <Heart />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Community</span> Involvement in Ave Maria</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Ave Maria</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <Users />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Mental health is fundamental to building a thriving community. We proudly support Ave Maria through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
+                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Ave Maria a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* Ave Maria Stewardship Community Development District */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Shield className="w-6 h-6 text-green-800" />
                 </div>
-                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Ave Maria Stewardship District
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'We proudly support Ave Maria community organizations and encourage our patients to connect with local resources for holistic wellness.'
-                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Ave Maria y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                    ? 'Local government entity providing essential infrastructure and community services to Ave Maria residents. This special-purpose district manages water systems, stormwater management, landscaping, and recreational facilities that make Ave Maria a beautiful and functional community.'
+                    : 'Entidad gubernamental local que brinda infraestructura esencial y servicios comunitarios a los residentes de Ave Maria. Este distrito de propósito especial gestiona sistemas de agua, manejo de aguas pluviales, paisajismo e instalaciones recreativas que hacen de Ave Maria una comunidad hermosa y funcional.'}
                 </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <Shield className="w-6 h-6 text-blue-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Ave Maria Stewardship District' : 'Distrito Administrativo de Ave Maria'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Local government providing community infrastructure and services to Ave Maria residents.'
-                      : 'Gobierno local que brinda infraestructura comunitaria y servicios a los residentes de Ave Maria.'}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-blue-700 border-blue-200 hover:bg-blue-50 rounded-full"
-                    onClick={() => window.open('https://avemariastewardshipcd.org/', '_blank')}
-                    data-testid="link-stewardship-district"
-                  >
-                    {language === 'en' ? 'Learn More' : 'Aprender Más'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
 
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <Heart className="w-6 h-6 text-green-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Ave Maria Master Association' : 'Asociación Master de Ave Maria'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Managing community amenities and resident services to enhance the Ave Maria living experience.'
-                      : 'Gestionando amenidades comunitarias y servicios para residentes para mejorar la experiencia de vida en Ave Maria.'}
-                  </p>
+                <a
+                  href="https://avemariastewardshipcd.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-ave-maria-stewardship"
+                >
                   <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-green-700 border-green-200 hover:bg-green-50 rounded-full"
-                    onClick={() => window.open('https://avemariamasterassociation.com/', '_blank')}
-                    data-testid="link-master-association"
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
                   >
-                    {language === 'en' ? 'Visit Website' : 'Visitar Sitio'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Visit Stewardship District' : 'Visitar Distrito Administrativo'}
+                    </span>
                   </Button>
-                </div>
-
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <Star className="w-6 h-6 text-purple-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Ave Maria Catholic Parish' : 'Parroquia Católica Ave Maria'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Central gathering place providing spiritual support and community connections in Ave Maria.'
-                      : 'Lugar central de reunión que brinda apoyo espiritual y conexiones comunitarias en Ave Maria.'}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-purple-700 border-purple-200 hover:bg-purple-50 rounded-full"
-                    onClick={() => window.open('https://www.avemariaparish.org/', '_blank')}
-                    data-testid="link-catholic-parish"
-                  >
-                    {language === 'en' ? 'Parish Info' : 'Info Parroquial'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
+                </a>
               </div>
 
-              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
-                    <Heart className="w-8 h-8 text-green-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Supporting Our Ave Maria Community' : 'Apoyando Nuestra Comunidad de Ave Maria'}
-                  </h3>
-                  <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
-                    {language === 'en'
-                      ? 'Mental health is strengthened through community connection. We encourage our Ave Maria patients to engage with local organizations that promote wellness, support, and community involvement.'
-                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Ave Maria a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento comunitario.'}
-                  </p>
+              {/* Ave Maria Master Association */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
                 </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Ave Maria Master Association
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Managing community amenities and resident services to enhance the Ave Maria living experience. They coordinate maintenance of common areas, community events, and ensure that the high quality of life standards that make Ave Maria special are preserved for all residents.'
+                    : 'Gestionando amenidades comunitarias y servicios para residentes para mejorar la experiencia de vida en Ave Maria. Coordinan el mantenimiento de áreas comunes, eventos comunitarios y se aseguran de que los altos estándares de calidad de vida que hacen especial a Ave Maria se preserven para todos los residentes.'}
+                </p>
+
+                <a
+                  href="https://avemariamasterassociation.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-ave-maria-master-association"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Learn About Community Services' : 'Conocer Servicios Comunitarios'}
+                    </span>
+                  </Button>
+                </a>
               </div>
+
+              {/* Ave Maria Catholic Parish */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Star className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Ave Maria Catholic Parish
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Central gathering place providing spiritual support and community connections in Ave Maria. This beautiful parish serves as the heart of the community, offering worship services, community outreach programs, and fostering the strong sense of faith and fellowship that defines Ave Maria.'
+                    : 'Lugar central de reunión que brinda apoyo espiritual y conexiones comunitarias en Ave Maria. Esta hermosa parroquia sirve como el corazón de la comunidad, ofreciendo servicios de adoración, programas de divulgación comunitaria y fomentando el fuerte sentido de fe y compañerismo que define a Ave Maria.'}
+                </p>
+
+                <a
+                  href="https://www.avemariaparish.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-ave-maria-parish"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Visit Parish Community' : 'Visitar Comunidad Parroquial'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="mt-16 text-center">
+              <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Just as these organizations strengthen our Ave Maria community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
+                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Ave Maria, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+              </p>
+              <Button 
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                onClick={() => window.location.href = '/contact'}
+                data-testid="button-schedule-community"
+              >
+                <Calendar className="w-5 h-5" />
+                <span>{language === 'en' ? 'Schedule Your Consultation Today' : 'Programar Su Consulta Hoy'}</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+              </Button>
             </div>
           </div>
         </section>
