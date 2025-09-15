@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { CookieConsentProvider } from '@/contexts/CookieConsentContext';
+import { useLanguage } from '@/hooks/useLanguage';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useClarity } from '@/hooks/use-clarity';
@@ -31,17 +32,16 @@ const LocationAveMaria = lazy(() => import('@/pages/LocationAveMaria'));
 const LocationFortMyers = lazy(() => import('@/pages/LocationFortMyers'));
 const LocationLelyResorts = lazy(() => import('@/pages/LocationLelyResorts'));
 
-// Spanish Location Pages - Lazy loaded for performance
-const LocationNaplesEspanol = lazy(() => import('@/pages/LocationNaplesEspanol'));
-const LocationBonitaSpringsEspanol = lazy(() => import('@/pages/LocationBonitaSpringsEspanol'));
-const LocationMarcoIslandEspanol = lazy(() => import('@/pages/LocationMarcoIslandEspanol'));
-const LocationEsteroEspanol = lazy(() => import('@/pages/LocationEsteroEspanol'));
-const LocationGoldenGateEspanol = lazy(() => import('@/pages/LocationGoldenGateEspanol'));
-const LocationImmokaleeEspanol = lazy(() => import('@/pages/LocationImmokaleeEspanol'));
-const LocationVanderbiltBeachEspanol = lazy(() => import('@/pages/LocationVanderbiltBeachEspanol'));
-const LocationAveMariaEspanol = lazy(() => import('@/pages/LocationAveMariaEspanol'));
-const LocationFortMyersEspanol = lazy(() => import('@/pages/LocationFortMyersEspanol'));
-const LocationLelyResortsEspanol = lazy(() => import('@/pages/LocationLelyResortsEspanol'));
+// Language wrapper component for Spanish routes
+const SpanishRouteWrapper = ({ Component }: { Component: React.ComponentType }) => {
+  const { setLanguage } = useLanguage();
+  
+  useEffect(() => {
+    setLanguage('es');
+  }, [setLanguage]);
+  
+  return <Component />;
+};
 
 // Spanish Main Pages - Lazy loaded for performance
 const HomeEspanol = lazy(() => import('@/pages/HomeEspanol'));
@@ -115,17 +115,17 @@ function Router() {
       <Route path="/locations/psychiatrist-fort-myers" component={LocationFortMyers} />
       <Route path="/locations/psychiatrist-lely-resorts" component={LocationLelyResorts} />
       
-      {/* Spanish Location Pages */}
-      <Route path="/es/ubicaciones/psiquiatra-naples" component={LocationNaplesEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-bonita-springs" component={LocationBonitaSpringsEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-marco-island" component={LocationMarcoIslandEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-estero" component={LocationEsteroEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-golden-gate" component={LocationGoldenGateEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-immokalee" component={LocationImmokaleeEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-vanderbilt-beach" component={LocationVanderbiltBeachEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-ave-maria" component={LocationAveMariaEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-fort-myers" component={LocationFortMyersEspanol} />
-      <Route path="/es/ubicaciones/psiquiatra-lely-resorts" component={LocationLelyResortsEspanol} />
+      {/* Spanish Location Pages - Now use English components with Spanish language wrapper */}
+      <Route path="/es/ubicaciones/psiquiatra-naples" component={() => <SpanishRouteWrapper Component={LocationNaples} />} />
+      <Route path="/es/ubicaciones/psiquiatra-bonita-springs" component={() => <SpanishRouteWrapper Component={LocationBonitaSprings} />} />
+      <Route path="/es/ubicaciones/psiquiatra-marco-island" component={() => <SpanishRouteWrapper Component={LocationMarcoIsland} />} />
+      <Route path="/es/ubicaciones/psiquiatra-estero" component={() => <SpanishRouteWrapper Component={LocationEstero} />} />
+      <Route path="/es/ubicaciones/psiquiatra-golden-gate" component={() => <SpanishRouteWrapper Component={LocationGoldenGate} />} />
+      <Route path="/es/ubicaciones/psiquiatra-immokalee" component={() => <SpanishRouteWrapper Component={LocationImmokalee} />} />
+      <Route path="/es/ubicaciones/psiquiatra-vanderbilt-beach" component={() => <SpanishRouteWrapper Component={LocationVanderbiltBeach} />} />
+      <Route path="/es/ubicaciones/psiquiatra-ave-maria" component={() => <SpanishRouteWrapper Component={LocationAveMaria} />} />
+      <Route path="/es/ubicaciones/psiquiatra-fort-myers" component={() => <SpanishRouteWrapper Component={LocationFortMyers} />} />
+      <Route path="/es/ubicaciones/psiquiatra-lely-resorts" component={() => <SpanishRouteWrapper Component={LocationLelyResorts} />} />
       
       <Route path="/contact" component={Contact} />
       
