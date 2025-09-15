@@ -344,11 +344,11 @@ const Header = () => {
         {/* Expanded Locations Menu - Now inside header */}
         <div className={`transition-all duration-500 ease-in-out ${
           isLocationsOpen 
-            ? 'max-h-[600px] opacity-100 py-10' 
+            ? 'max-h-[calc(100vh-8rem)] opacity-100 py-4 md:py-6 overflow-y-auto overscroll-contain' 
             : 'max-h-0 opacity-0 py-0 pointer-events-none'
         }`}>
           <div className="hidden md:block">
-            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-10 mx-6 relative z-50">
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 md:p-8 mx-4 md:mx-6 relative z-50">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {locationItems.map((location, index) => (
                   <Link
@@ -359,7 +359,7 @@ const Header = () => {
                   >
                     <Button
                       variant="ghost"
-                      className="group w-full p-6 min-h-[120px] rounded-2xl overflow-hidden transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
+                      className="group w-full p-5 min-h-[112px] rounded-2xl overflow-hidden transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
                     >
                       <div className="flex items-start gap-4">
                         <div className="w-3 h-3 min-w-[0.75rem] min-h-[0.75rem] rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700 flex-shrink-0"></div>
