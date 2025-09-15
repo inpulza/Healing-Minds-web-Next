@@ -359,15 +359,15 @@ const Header = () => {
                   >
                     <Button
                       variant="ghost"
-                      className="group w-full p-6 min-h-[120px] rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
+                      className="group w-full p-6 min-h-[120px] rounded-2xl overflow-hidden transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
                     >
                       <div className="flex items-start gap-4">
                         <div className="w-3 h-3 min-w-[0.75rem] min-h-[0.75rem] rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700 flex-shrink-0"></div>
-                        <div>
+                        <div className="min-w-0 w-full">
                           <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
                             {location.label}
                           </h3>
-                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-2 leading-relaxed line-clamp-2">
+                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-2 leading-relaxed whitespace-normal break-words">
                             {location.description}
                           </p>
                         </div>
