@@ -3,6 +3,24 @@
 ## Overview
 This project is a professional, bilingual (English/Spanish) website for Healing Minds Psychiatry, Dr. Melva Reve's practice in Naples, FL. The site provides information on mental health services, including anxiety, depression, ADHD, PTSD, and other psychiatric conditions, along with patient resources. Its core purpose is to establish a strong online presence, attract new patients, and provide accessible, high-quality information, with a focus on modern design and optimal search engine visibility in the Naples, FL area.
 
+## Recent Changes
+
+### September 15, 2025 - Spanish Location URLs 404 Resolution
+- **Critical Fix**: Resolved 404 errors for Spanish location URLs that were present in sitemap.xml but not implemented in the application
+- **Implementation**: Added 10 Spanish location routes in App.tsx to complete the bilingual routing architecture:
+  - `/es/ubicaciones/psiquiatra-naples`
+  - `/es/ubicaciones/psiquiatra-bonita-springs`
+  - `/es/ubicaciones/psiquiatra-marco-island`
+  - `/es/ubicaciones/psiquiatra-estero`
+  - `/es/ubicaciones/psiquiatra-golden-gate`
+  - `/es/ubicaciones/psiquiatra-immokalee`
+  - `/es/ubicaciones/psiquiatra-vanderbilt-beach`
+  - `/es/ubicaciones/psiquiatra-ave-maria`
+  - `/es/ubicaciones/psiquiatra-fort-myers`
+  - `/es/ubicaciones/psiquiatra-lely-resorts`
+- **Architecture**: The existing bilingual component infrastructure was already in place; only the route definitions were missing
+- **SEO Impact**: All URLs declared in sitemap.xml now have complete implementation, ensuring proper indexing and user experience
+
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 
