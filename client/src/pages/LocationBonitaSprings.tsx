@@ -1130,7 +1130,7 @@ const LocationBonitaSprings = () => {
         </section>
 
         {/* FAQ Section */}
-        <LocationFAQ faqs={locationFAQs.bonitaSprings} />
+        <LocationFAQ locationFAQs={locationFAQs.bonitaSprings} />
       </main>
       <Footer />
     </div>

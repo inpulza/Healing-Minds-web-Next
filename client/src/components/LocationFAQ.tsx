@@ -3,21 +3,20 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { ChevronDown } from 'lucide-react';
 import { IconHelp } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
-
-interface FAQItem {
-  question: string;
-  answer: string;
-}
+import { BilingualLocationFAQs } from '@/data/locationFAQs';
 
 interface LocationFAQProps {
-  faqs: readonly FAQItem[];
+  locationFAQs: BilingualLocationFAQs;
   title?: string;
   description?: string;
 }
 
-const LocationFAQ = ({ faqs, title, description }: LocationFAQProps) => {
+const LocationFAQ = ({ locationFAQs, title, description }: LocationFAQProps) => {
   const { language } = useLanguage();
   const [openItem, setOpenItem] = useState<number | null>(0);
+  
+  // Select FAQs based on current language
+  const faqs = locationFAQs[language] || locationFAQs.en;
 
   const defaultTitle = language === 'en' 
     ? <>Frequently <span className="font-display italic text-green-700">Asked</span> Questions</> 

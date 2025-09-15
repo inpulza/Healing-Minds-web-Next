@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
+import LocationFAQ from '@/components/LocationFAQ';
+import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
@@ -1083,6 +1085,9 @@ const LocationFortMyers = () => {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        <LocationFAQ locationFAQs={locationFAQs.fortMyers} />
       </main>
       <Footer />
     </div>
