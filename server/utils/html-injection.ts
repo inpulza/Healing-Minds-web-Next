@@ -380,9 +380,9 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         ]
       };
 
-    case '/locations/naples':
+    case '/locations/psychiatrist-naples':
       return {
-        canonical: `${baseUrl}/locations/naples`,
+        canonical: `${baseUrl}/locations/psychiatrist-naples`,
         schema: getMedicalBusinessSchema(baseUrl),
         metaTags: [
           {
@@ -403,13 +403,13 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           },
           {
             property: 'og:url',
-            content: `${baseUrl}/locations/naples`
+            content: `${baseUrl}/locations/psychiatrist-naples`
           },
           // HREFLANG: Naples bilingual versions (FIXED - Spanish version now exists)
           {
             rel: 'alternate',
             hreflang: 'en',
-            href: `${baseUrl}/locations/naples`
+            href: `${baseUrl}/locations/psychiatrist-naples`
           },
           {
             rel: 'alternate',
@@ -1177,7 +1177,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             rel: 'alternate',
             hreflang: 'en',
-            href: `${baseUrl}/locations/naples`
+            href: `${baseUrl}/locations/psychiatrist-naples`
           },
           {
             rel: 'alternate',

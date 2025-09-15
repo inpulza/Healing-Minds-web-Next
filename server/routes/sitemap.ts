@@ -105,7 +105,7 @@ export const generateSitemap = (req: Request, res: Response) => {
     },
     // Location pages with bilingual versions (CRITICAL for local SEO)
     {
-      en: '/locations/naples',
+      en: '/locations/psychiatrist-naples',
       es: '/es/ubicaciones/psiquiatra-naples',
       lastmod: oldContentDate,
       changefreq: 'monthly',
