@@ -6,7 +6,7 @@ import WellnessIcon from '@/components/WellnessIcon';
 import { BilingualLocationFAQs } from '@/data/locationFAQs';
 
 interface LocationFAQProps {
-  locationFAQs: BilingualLocationFAQs;
+  locationFAQs?: BilingualLocationFAQs;
   title?: string;
   description?: string;
 }
@@ -15,8 +15,12 @@ const LocationFAQ = ({ locationFAQs, title, description }: LocationFAQProps) => 
   const { language } = useLanguage();
   const [openItem, setOpenItem] = useState<number | null>(0);
   
-  // Select FAQs based on current language
-  const faqs = locationFAQs[language] || locationFAQs.en;
+  // Select FAQs based on current language with defensive null checking
+  const faqs = (locationFAQs && locationFAQs[language]) 
+    ? locationFAQs[language] 
+    : (locationFAQs && locationFAQs.en) 
+      ? locationFAQs.en 
+      : [];
 
   const defaultTitle = language === 'en' 
     ? <>Frequently <span className="font-display italic text-green-700">Asked</span> Questions</> 

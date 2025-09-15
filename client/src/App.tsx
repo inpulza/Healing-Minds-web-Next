@@ -31,6 +31,18 @@ const LocationAveMaria = lazy(() => import('@/pages/LocationAveMaria'));
 const LocationFortMyers = lazy(() => import('@/pages/LocationFortMyers'));
 const LocationLelyResorts = lazy(() => import('@/pages/LocationLelyResorts'));
 
+// Spanish Location Pages - Lazy loaded for performance
+const LocationNaplesEspanol = lazy(() => import('@/pages/LocationNaplesEspanol'));
+const LocationBonitaSpringsEspanol = lazy(() => import('@/pages/LocationBonitaSpringsEspanol'));
+const LocationMarcoIslandEspanol = lazy(() => import('@/pages/LocationMarcoIslandEspanol'));
+const LocationEsteroEspanol = lazy(() => import('@/pages/LocationEsteroEspanol'));
+const LocationGoldenGateEspanol = lazy(() => import('@/pages/LocationGoldenGateEspanol'));
+const LocationImmokaleeEspanol = lazy(() => import('@/pages/LocationImmokaleeEspanol'));
+const LocationVanderbiltBeachEspanol = lazy(() => import('@/pages/LocationVanderbiltBeachEspanol'));
+const LocationAveMariaEspanol = lazy(() => import('@/pages/LocationAveMariaEspanol'));
+const LocationFortMyersEspanol = lazy(() => import('@/pages/LocationFortMyersEspanol'));
+const LocationLelyResortsEspanol = lazy(() => import('@/pages/LocationLelyResortsEspanol'));
+
 // Spanish Main Pages - Lazy loaded for performance
 const HomeEspanol = lazy(() => import('@/pages/HomeEspanol'));
 const AcercaEspanol = lazy(() => import('@/pages/AcercaEspanol'));
@@ -104,16 +116,16 @@ function Router() {
       <Route path="/locations/psychiatrist-lely-resorts" component={LocationLelyResorts} />
       
       {/* Spanish Location Pages */}
-      <Route path="/es/ubicaciones/psiquiatra-naples" component={LocationNaples} />
-      <Route path="/es/ubicaciones/psiquiatra-bonita-springs" component={LocationBonitaSprings} />
-      <Route path="/es/ubicaciones/psiquiatra-marco-island" component={LocationMarcoIsland} />
-      <Route path="/es/ubicaciones/psiquiatra-estero" component={LocationEstero} />
-      <Route path="/es/ubicaciones/psiquiatra-golden-gate" component={LocationGoldenGate} />
-      <Route path="/es/ubicaciones/psiquiatra-immokalee" component={LocationImmokalee} />
-      <Route path="/es/ubicaciones/psiquiatra-vanderbilt-beach" component={LocationVanderbiltBeach} />
-      <Route path="/es/ubicaciones/psiquiatra-ave-maria" component={LocationAveMaria} />
-      <Route path="/es/ubicaciones/psiquiatra-fort-myers" component={LocationFortMyers} />
-      <Route path="/es/ubicaciones/psiquiatra-lely-resorts" component={LocationLelyResorts} />
+      <Route path="/es/ubicaciones/psiquiatra-naples" component={LocationNaplesEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-bonita-springs" component={LocationBonitaSpringsEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-marco-island" component={LocationMarcoIslandEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-estero" component={LocationEsteroEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-golden-gate" component={LocationGoldenGateEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-immokalee" component={LocationImmokaleeEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-vanderbilt-beach" component={LocationVanderbiltBeachEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-ave-maria" component={LocationAveMariaEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-fort-myers" component={LocationFortMyersEspanol} />
+      <Route path="/es/ubicaciones/psiquiatra-lely-resorts" component={LocationLelyResortsEspanol} />
       
       <Route path="/contact" component={Contact} />
       
