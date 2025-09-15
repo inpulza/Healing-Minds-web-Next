@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
-import { Star, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, Shield, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import type { ReviewsResponse } from '@shared/schema';
 
@@ -183,27 +183,42 @@ const Reviews = () => {
               </blockquote>
               
               {/* Author */}
-              <div className="flex items-center gap-3">
-                {review.image ? (
-                  <img 
-                    src={review.image} 
-                    alt={review.name}
-                    className="w-10 h-10 rounded-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-green-700 font-semibold text-sm">
-                      {review.name.charAt(0).toUpperCase()}
-                    </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {review.image ? (
+                    <img 
+                      src={review.image} 
+                      alt={review.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-green-700 font-semibold text-sm">
+                        {review.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-semibold text-gray-900">{review.name}</p>
+                    <p className="text-sm text-gray-500">
+                      {language === 'en' ? 'Patient' : 'Paciente'}
+                    </p>
                   </div>
-                )}
-                <div>
-                  <p className="font-semibold text-gray-900">{review.name}</p>
-                  <p className="text-sm text-gray-500">
-                    {language === 'en' ? 'Patient' : 'Paciente'}
-                  </p>
                 </div>
+                
+                {/* View on Google Button */}
+                <a 
+                  href="https://g.page/r/CX_IlTO2gnY7EBM/review"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium transition-colors duration-200 hover:scale-105"
+                  aria-label={language === 'en' ? 'View this review on Google' : 'Ver esta reseña en Google'}
+                  data-testid={`button-view-google-desktop-${index}`}
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  <span>{language === 'en' ? 'View on Google' : 'Ver en Google'}</span>
+                </a>
               </div>
             </Card>
           ))}
@@ -245,27 +260,42 @@ const Reviews = () => {
                 </blockquote>
                 
                 {/* Author */}
-                <div className="flex items-center gap-3">
-                  {review.image ? (
-                    <img 
-                      src={review.image} 
-                      alt={review.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-700 font-semibold text-sm">
-                        {review.name.charAt(0).toUpperCase()}
-                      </span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {review.image ? (
+                      <img 
+                        src={review.image} 
+                        alt={review.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <span className="text-green-700 font-semibold text-sm">
+                          {review.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-semibold text-gray-900">{review.name}</p>
+                      <p className="text-sm text-gray-500">
+                        {language === 'en' ? 'Patient' : 'Paciente'}
+                      </p>
                     </div>
-                  )}
-                  <div>
-                    <p className="font-semibold text-gray-900">{review.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {language === 'en' ? 'Patient' : 'Paciente'}
-                    </p>
                   </div>
+                  
+                  {/* View on Google Button */}
+                  <a 
+                    href="https://g.page/r/CX_IlTO2gnY7EBM/review"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium transition-colors duration-200 hover:scale-105"
+                    aria-label={language === 'en' ? 'View this review on Google' : 'Ver esta reseña en Google'}
+                    data-testid={`button-view-google-mobile-${index}`}
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    <span>{language === 'en' ? 'View on Google' : 'Ver en Google'}</span>
+                  </a>
                 </div>
               </Card>
             ))}
