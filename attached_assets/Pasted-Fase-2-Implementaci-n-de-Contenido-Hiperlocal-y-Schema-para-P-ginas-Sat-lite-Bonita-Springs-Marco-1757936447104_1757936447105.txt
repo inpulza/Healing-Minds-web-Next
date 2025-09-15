@@ -1,0 +1,86 @@
+Fase 2: Implementación de Contenido Hiperlocal y Schema para Páginas Satélite (Bonita Springs, Marco Island, etc.)
+
+Para: Equipo de Replit
+
+De: GeoRanker Pro (Consultor SEO)
+
+Contexto:
+Hemos completado la Fase 1 (limpieza técnica y creación de rutas). Ahora que las rutas y el mega-menú "Locations We Serve" están implementados, comenzamos la Fase 2: la implementación de contenido en estas páginas satélite.
+
+Objetivo Estratégico (White-Hat):
+El objetivo de estas páginas (ej. /locations/psychiatrist-bonita-springs) es actuar como Páginas de Captación Hiperlocal altamente relevantes. Deben posicionarse para búsquedas originadas en esas ciudades (ej. "psiquiatra en Bonita Springs"). Para evitar penalizaciones de Google por "Doorway Pages", cada una de estas páginas debe ser un recurso sustancialmente único.
+
+Directrices de Contenido: Qué Incluir y Qué Excluir
+Para mantener estas páginas rápidas, enfocadas y únicas, NO deben ser un clon de la página "Hub" de Naples.
+
+QUÉ NO INCLUIR (Para Evitar Contenido Duplicado):
+NO incluir el Widget de Reseñas de la API de Google: El widget que extrae dinámicamente las 9 reseñas de GBP debe vivir solo en la página Hub de Naples. Incluirlo en todas las páginas satélite crearía contenido duplicado masivo.
+
+NO incluir el Feed de TikTok: La sección completa de "A Conversation with Dr. Reve" (los 4+ videos) debe permanecer solo en la página Hub. Repetir esto diluye el propósito de la página satélite.
+
+NO Inventar Contenido: No debemos crear testimonios falsos. Eliminaremos la sección de testimonios específicos de estas páginas por ahora, ya que no tenemos reseñas específicas verificables para estas ciudades (según nuestra última revisión, solo tenemos 9 reseñas en total).
+
+QUÉ SÍ INCLUIR (Requerimientos para Cada Página Satélite):
+Diseño Consistente: Todo el contenido debe adherirse al Design System ya establecido (fuentes, colores, botones, espaciado).
+
+Contenido Hiperlocal ÚNICO: El texto debe ser reescrito para cada página para reflejar esa comunidad específica.
+
+Integración de Palabras Clave (Ver Sección 5): El contenido debe incluir de forma natural las palabras clave relevantes de GSC.
+
+Plan de Implementación de Contenido por Sección (Ej. Bonita Springs)
+1. Sección Hero
+H1 Único: Debe incluir la palabra clave principal. (Ej. "Atención Psiquiátrica Compasiva para Residentes de Bonita Springs").
+
+Subtítulo Único: (Ej. "Servicios expertos de salud mental y telepsiquiatría para la comunidad de Bonita Springs").
+
+2. Sección de Servicios
+Encabezado Localizado: (Ej. "Nuestros Servicios Psiquiátricos para Bonita Springs").
+
+Contenido: Utilizar la cuadrícula de 6 servicios (Ansiedad, Depresión, TDAH, TEPT, Bipolar, Med Management) que ya está diseñada.
+
+Vínculos: Cada uno de estos servicios debe enlazar de vuelta a las páginas Silo principales (ej. enlazar a /services/anxiety-treatment), NO a nuevas páginas.
+
+3. Sección "Cómo Llegar" (Acción Requerida)
+Tarea: Para esta sección, debes investigar activamente la ruta.
+
+Acción: Usa Google Maps para generar instrucciones de manejo claras y textuales desde un punto de referencia central en esa ciudad (ej. "Desde Bonita Springs Public Library" o "Cerca de Coconut Point Mall") hasta nuestra dirección en Naples (4760 Tamiami Trl N # 25). El texto resultante será 100% único.
+
+4. Sección "Participación Comunitaria" (Acción Requerida)
+Tarea: Investigar e incluir un enlace externo relevante.
+
+Acción: Identifica un evento, organización benéfica o institución importante en esa ciudad (ej. "Bonita Springs National Art Festival"). Escribe 1-2 frases sobre nuestro apoyo/conexión con esa comunidad.
+
+Implementación: Incluye un enlace externo (external link) de alta autoridad a la página oficial de ese evento u organización. Esto construye una fuerte señal de relevancia local.
+
+5. Sección de Seguros
+Acción: Puedes reutilizar el componente de la cuadrícula de logos de seguros (Aetna, Cigna, etc.) que está en la página de Naples. Esta sección puede ser idéntica.
+
+5. Estrategia de Palabras Clave (Basada en GSC)
+He analizado las consultas principales de GSC. El contenido de cada página debe tejer naturalmen-te estas intenciones.
+
+Keywords de GSC de Alto Valor:
+
+psychiatrist bonita springs
+
+depression treatment bonita springs fl
+
+anxiety treatment in naples fl (usar variaciones para cada ciudad)
+
+psychiatrist medication management near me
+
+psiquiatra cerca de mi (Recordar mantener el lenguaje bilingüe)
+
+Cómo usarlas: Integrarlas en los H1, subtítulos y párrafos de texto.
+
+Ejemplo en el texto: "Ya sea que necesite un psiquiatra en Bonita Springs para un diagnóstico de TDAH o esté buscando un tratamiento de depresión compasivo, nuestra clínica está a un corto viaje..."
+
+6. Recordatorio Crítico de Schema Técnico
+Como discutimos, el Schema para estas páginas es fundamental y debe seguir nuestro modelo Hub & Spoke:
+
+NO crear un nuevo Schema MedicalClinic para Bonita Springs.
+
+SÍ implementar un Schema Service en esta página que incluya:
+
+areaServed: { "@type": "City", "name": "Bonita Springs" }
+
+provider: { "@type": "MedicalClinic", "@id": "https://www.healingmindsp.com/#MedicalClinic" } (Apuntando al ID del Hub de Naples).
