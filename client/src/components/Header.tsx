@@ -170,21 +170,23 @@ const Header = () => {
         : 'bg-transparent'
     } ${isServicesOpen || isLocationsOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-20 sm:h-24 md:h-28 lg:h-32'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-        <div className="flex justify-between items-center h-20 sm:h-24 md:h-28 lg:h-32">
-          {/* Logo */}
-          <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'}>
-            <div className="text-lg sm:text-xl md:text-2xl font-body font-bold text-green-800">
-              Healing Minds <span className="text-green-700">Psychiatry</span>
-            </div>
-          </Link>
+        <div className="flex items-center h-20 sm:h-24 md:h-28 lg:h-32">
+          {/* Logo + Navigation Group */}
+          <div className="flex items-center gap-6">
+            {/* Logo */}
+            <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'}>
+              <div className="text-base sm:text-lg md:text-xl font-body font-bold text-green-800">
+                Healing Minds <span className="text-green-700">Psychiatry</span>
+              </div>
+            </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex relative mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 md:mb-8" ref={servicesRef}>
-            <nav className={`flex items-center transition-all duration-500 ${
-              isServicesOpen || isLocationsOpen
-                ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
-                : 'bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50'
-            }`} data-testid="desktop-nav">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex relative mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 md:mb-8" ref={servicesRef}>
+              <nav className={`flex items-center transition-all duration-500 ${
+                isServicesOpen || isLocationsOpen
+                  ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
+                  : 'bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50'
+              }`} data-testid="desktop-nav">
               {navigationItems.map((item) => (
                 <div key={item.href} className="relative">
                   {item.hasDropdown ? (
@@ -198,7 +200,7 @@ const Header = () => {
                           setIsServicesOpen(false);
                         }
                       }}
-                      className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-500 flex items-center gap-2 ${
+                      className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 flex items-center gap-2 ${
                         isActive(item.href) || (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen)
                           ? 'bg-white text-primary shadow-sm'
                           : 'text-gray-700 hover:text-primary hover:bg-white/50'
@@ -221,7 +223,7 @@ const Header = () => {
                   ) : (
                     <Link
                       href={item.href}
-                      className={`relative px-6 py-3 rounded-full font-body font-medium transition-all duration-500 ${
+                      className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 ${
                         isActive(item.href)
                           ? 'bg-white text-primary shadow-sm'
                           : 'text-gray-700 hover:text-primary hover:bg-white/50'
@@ -233,16 +235,17 @@ const Header = () => {
                   )}
                 </div>
               ))}
-            </nav>
+              </nav>
+            </div>
           </div>
 
           {/* Language Toggle & CTA */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4 ml-auto">
             <Button
               variant="ghost"
               size="sm"
               onClick={toggleLanguage}
-              className="text-sm text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-4 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-2"
+              className="text-xs text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-3 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-1.5"
               data-testid="language-toggle"
               aria-label={language === 'en' ? 'Cambiar a español' : 'Switch to English'}
             >
@@ -341,12 +344,12 @@ const Header = () => {
         {/* Expanded Locations Menu - Now inside header */}
         <div className={`transition-all duration-500 ease-in-out ${
           isLocationsOpen 
-            ? 'max-h-[500px] opacity-100 py-8' 
+            ? 'max-h-[600px] opacity-100 py-10' 
             : 'max-h-0 opacity-0 py-0 pointer-events-none'
         }`}>
           <div className="hidden md:block">
-            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 mx-4 relative z-50">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-10 mx-6 relative z-50">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {locationItems.map((location, index) => (
                   <Link
                     key={location.href}
@@ -356,15 +359,15 @@ const Header = () => {
                   >
                     <Button
                       variant="ghost"
-                      className="group w-full p-4 h-auto rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
+                      className="group w-full p-6 h-auto rounded-2xl transition-all duration-300 hover:bg-green-50/80 hover:shadow-sm border border-transparent hover:border-green-100 cursor-pointer relative z-10 text-left justify-start"
                     >
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-start gap-4">
                         <div className="w-3 h-3 min-w-[0.75rem] min-h-[0.75rem] rounded-full bg-green-600 mt-2 transition-all duration-300 group-hover:bg-green-700 flex-shrink-0"></div>
                         <div>
                           <h3 className="font-body font-semibold text-green-800 group-hover:text-green-900 transition-colors duration-300 text-lg">
                             {location.label}
                           </h3>
-                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-1 leading-relaxed">
+                          <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300 mt-2 leading-relaxed">
                             {location.description}
                           </p>
                         </div>
