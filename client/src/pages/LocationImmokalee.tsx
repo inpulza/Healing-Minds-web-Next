@@ -977,6 +977,37 @@ const LocationImmokalee = () => {
           </div>
         </section>
 
+        {/* Bottom CTA after Community Involvement cards */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
+              <div className="text-center">
+                <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8 text-green-700" />
+                </div>
+                <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                  {language === 'en' ? 'Supporting Our Immokalee Community' : 'Apoyando Nuestra Comunidad de Immokalee'}
+                </h3>
+                <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
+                  {language === 'en'
+                    ? 'Mental health is strengthened through community connection. We encourage our Immokalee patients to engage with local organizations that promote wellness, support, and community involvement.'
+                    : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Immokalee a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento comunitario.'}
+                </p>
+                
+                {/* CTA Button - Added to complete the Bottom CTA section */}
+                <Link href="/contact" data-testid="button-contact-immokalee">
+                  <Button className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6 mt-6">
+                    <Calendar className="w-5 h-5" />
+                    <span>
+                      {language === 'en' ? 'Schedule Your Consultation' : 'Programar Su Consulta'}
+                    </span>
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Video Section - A Conversation with Dr. Reve */}
         <section className="py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
