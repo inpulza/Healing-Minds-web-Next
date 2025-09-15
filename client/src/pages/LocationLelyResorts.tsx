@@ -40,14 +40,14 @@ const LocationLelyResorts = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Lely Resorts FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Lely Resorts FL - Dra. Melva Reve | Healing Minds',
+        ? 'Psychiatrist Lely Resort FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Lely Resort FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Lely Resorts, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Lely Resorts, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Dr. Melva Reve serves Lely Resort, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Lely Resort, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
-        ? 'psychiatrist Lely Resorts FL, mental health Lely Resorts, Dr Melva Reve Lely Resorts, psychiatric care Lely Resorts FL'
-        : 'psiquiatra Lely Resorts FL, salud mental Lely Resorts, Dra Melva Reve Lely Resorts, atención psiquiátrica Lely Resorts FL',
+        ? 'psychiatrist Lely Resort FL, mental health Lely Resort, Dr Melva Reve Lely Resort, psychiatric care Lely Resort FL'
+        : 'psiquiatra Lely Resort FL, salud mental Lely Resort, Dra Melva Reve Lely Resort, atención psiquiátrica Lely Resort FL',
       lang: language,
       canonical: '/locations/psychiatrist-lely-resorts'
     };
@@ -55,11 +55,11 @@ const LocationLelyResorts = () => {
 
     // This schema points to the main MedicalClinic as provider, avoiding conflicts
     const serviceDescription = language === 'en'
-      ? 'Expert psychiatric care serving Lely Resorts residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Lely Resorts community.'
-      : 'Atención psiquiátrica experta para residentes de Lely Resorts. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Lely Resorts.';
+      ? 'Expert psychiatric care serving Lely Resort residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Lely Resort community.'
+      : 'Atención psiquiátrica experta para residentes de Lely Resort. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Lely Resort.';
 
     addLocationServiceSchema({
-      locationName: 'Lely Resorts',
+      locationName: 'Lely Resort',
       description: serviceDescription,
       pageId: 'lely-resorts-location',
       language: language
@@ -70,15 +70,15 @@ const LocationLelyResorts = () => {
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#lely-resorts-location-service-schema');
       if (serviceSchema) {
         serviceSchema.remove();
-        console.log('🧹 Cleaned up Lely Resorts Service schema');
+        console.log('🧹 Cleaned up Lely Resort Service schema');
       }
     };
   }, [language]);
 
   const contentData = {
     en: {
-      title: "Visit Our Lely Resorts Location",
-      subtitle: "Your mental health journey starts here, serving Lely Resorts, Florida",
+      title: "Visit Our Lely Resort Location",
+      subtitle: "Your mental health journey starts here, serving Lely Resort, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
@@ -92,7 +92,7 @@ const LocationLelyResorts = () => {
       features: [
         {
           title: "Convenient Location",
-          description: "Easily accessible from Lely Resorts with ample parking available"
+          description: "Easily accessible from Lely Resort with ample parking available"
         },
         {
           title: "Modern Facilities", 
@@ -113,8 +113,8 @@ const LocationLelyResorts = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Lely Resorts",
-      subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Lely Resorts, Florida",
+      title: "Visite Nuestra Ubicación en Lely Resort",
+      subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Lely Resort, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
@@ -128,7 +128,7 @@ const LocationLelyResorts = () => {
       features: [
         {
           title: "Ubicación Conveniente",
-          description: "Fácil acceso desde Lely Resorts con amplio estacionamiento disponible"
+          description: "Fácil acceso desde Lely Resort con amplio estacionamiento disponible"
         },
         {
           title: "Instalaciones Modernas",
@@ -166,7 +166,7 @@ const LocationLelyResorts = () => {
                   <IconMapPin />
                 </WellnessIcon>
                 <span className="text-blue-700 font-body font-semibold text-lg">
-                  {language === 'en' ? 'Serving Lely Resorts' : 'Sirviendo a Lely Resorts'}
+                  {language === 'en' ? 'Serving Lely Resort' : 'Sirviendo a Lely Resort'}
                 </span>
               </div>
               
@@ -174,12 +174,12 @@ const LocationLelyResorts = () => {
                 {language === 'en' ? (
                   <>
                     Compassionate Psychiatric Care for{' '}
-                    <span className="font-display italic text-green-700">Lely Resorts</span> Residents
+                    <span className="font-display italic text-green-700">Lely Resort</span> Residents
                   </>
                 ) : (
                   <>
                     Atención Psiquiátrica Compasiva para Residentes de{' '}
-                    <span className="font-display italic text-green-700">Lely Resorts</span>
+                    <span className="font-display italic text-green-700">Lely Resort</span>
                   </>
                 )}
               </h1>
@@ -190,7 +190,7 @@ const LocationLelyResorts = () => {
                   <div className="w-full aspect-[1200/667] rounded-2xl overflow-hidden shadow-lg">
                     <OptimizedImage
                       src={heroLocationImage}
-                      alt="Dr. Melva Reve serving Lely Resorts - Professional mental health care in a welcoming environment"
+                      alt="Dr. Melva Reve serving Lely Resort - Professional mental health care in a welcoming environment"
                       className="w-full h-full object-cover object-center"
                       width={1200}
                       height={675}
@@ -203,8 +203,8 @@ const LocationLelyResorts = () => {
               
               <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto font-body">
                 {language === 'en' 
-                  ? 'Serving residents of Lely Resorts with expert psychiatric care from our conveniently located Naples practice. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
-                  : 'Sirviendo a los residentes de Lely Resorts con atención psiquiátrica experta desde nuestra práctica convenientemente ubicada en Naples. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
+                  ? 'Serving residents of Lely Resort with expert psychiatric care from our conveniently located Naples practice. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
+                  : 'Sirviendo a los residentes de Lely Resort con atención psiquiátrica experta desde nuestra práctica convenientemente ubicada en Naples. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -251,8 +251,8 @@ const LocationLelyResorts = () => {
                       es: 'Instalaciones Modernas'
                     },
                     {
-                      en: 'Serving Lely Resorts',
-                      es: 'Sirviendo a Lely Resorts'
+                      en: 'Serving Lely Resort',
+                      es: 'Sirviendo a Lely Resort'
                     },
                     {
                       en: 'Insurance Accepted',
@@ -286,13 +286,13 @@ const LocationLelyResorts = () => {
                 {/* Content Side */}
                 <div className="order-2 lg:order-1">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Serving Lely Resorts' : 'Sirviendo a Lely Resorts'}
+                    {language === 'en' ? 'Serving Lely Resort' : 'Sirviendo a Lely Resort'}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                     {language === 'en' ? (
-                      <>Your Healing Journey Starts Here for <span className="font-display italic text-green-700">Lely Resorts</span> Residents</>
+                      <>Your Healing Journey Starts Here for <span className="font-display italic text-green-700">Lely Resort</span> Residents</>
                     ) : (
-                      <>Su Viaje de Sanación Comienza Aquí para Residentes de <span className="font-display italic text-green-700">Lely Resorts</span></>
+                      <>Su Viaje de Sanación Comienza Aquí para Residentes de <span className="font-display italic text-green-700">Lely Resort</span></>
                     )}
                   </h2>
                   
@@ -306,8 +306,8 @@ const LocationLelyResorts = () => {
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
                     {language === 'en'
-                      ? 'Conveniently serving Lely Resorts residents from our Naples location on Tamiami Trail. Our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment that prioritizes your privacy and comfort.'
-                      : 'Sirviendo convenientemente a los residentes de Lely Resorts desde nuestra ubicación de Naples en Tamiami Trail. Nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo que prioriza su privacidad y comodidad.'}
+                      ? 'Conveniently serving Lely Resort residents from our Naples location on Tamiami Trail. Our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment that prioritizes your privacy and comfort.'
+                      : 'Sirviendo convenientemente a los residentes de Lely Resort desde nuestra ubicación de Naples en Tamiami Trail. Nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo que prioriza su privacidad y comodidad.'}
                   </p>
 
                   <Button 
@@ -346,7 +346,7 @@ const LocationLelyResorts = () => {
                   <div className="w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[4/5] rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <OptimizedImage
                       src={officePhoto}
-                      alt="Dr. Melva Reve serving Lely Resorts - Professional and compassionate mental health care"
+                      alt="Dr. Melva Reve serving Lely Resort - Professional and compassionate mental health care"
                       className="w-full h-full object-cover object-center"
                       width={800}
                       height={600}
@@ -373,9 +373,9 @@ const LocationLelyResorts = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Services</span> for Lely Resorts Residents</>
+                    <><span className="font-display italic text-green-700">Services</span> for Lely Resort Residents</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Servicios</span> para Residentes de Lely Resorts</>
+                    <><span className="font-display italic text-green-700">Servicios</span> para Residentes de Lely Resort</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -384,8 +384,8 @@ const LocationLelyResorts = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Comprehensive psychiatric services available for Lely Resorts residents, tailored to meet your mental health needs with compassionate care.'
-                  : 'Servicios psiquiátricos integrales disponibles para residentes de Lely Resorts, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
+                  ? 'Comprehensive psychiatric services available for Lely Resort residents, tailored to meet your mental health needs with compassionate care.'
+                  : 'Servicios psiquiátricos integrales disponibles para residentes de Lely Resort, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
               </p>
             </div>
             
@@ -547,8 +547,8 @@ const LocationLelyResorts = () => {
                 </div>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
                   {language === 'en'
-                    ? 'Our Naples office is conveniently located for Lely Resorts residents. Use these familiar landmarks to find us easily.'
-                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Lely Resorts. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                    ? 'Our Naples office is conveniently located for Lely Resort residents. Use these familiar landmarks to find us easily.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Lely Resort. Use estos puntos de referencia familiares para encontrarnos fácilmente.'
                 </p>
               </div>
               
@@ -575,8 +575,8 @@ const LocationLelyResorts = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Exit Lely Resorts and head north on Santa Barbara Blvd'
-                          : 'Salga de Lely Resorts y diríjase al norte por Santa Barbara Blvd'}
+                          ? 'Exit Lely Resort and head north on Santa Barbara Blvd'
+                          : 'Salga de Lely Resort y diríjase al norte por Santa Barbara Blvd'}
                       </p>
                     </div>
                     
@@ -759,7 +759,7 @@ const LocationLelyResorts = () => {
             <div className="mt-16 text-center">
               <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
                 <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
-                  {language === 'en' ? 'Easy Access for Lely Resorts Residents' : 'Fácil Acceso para Residentes de Lely Resorts'}
+                  {language === 'en' ? 'Easy Access for Lely Resort Residents' : 'Fácil Acceso para Residentes de Lely Resort'}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                   <div className="space-y-4">
@@ -771,8 +771,8 @@ const LocationLelyResorts = () => {
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Located directly on US-41, our Naples psychiatric practice is easily accessible from all Lely Resorts neighborhoods'
-                            : 'Ubicada directamente en US-41, nuestra práctica psiquiátrica en Naples es fácilmente accesible desde todos los vecindarios de Lely Resorts'}
+                            ? 'Located directly on US-41, our Naples psychiatric practice is easily accessible from all Lely Resort neighborhoods'
+                            : 'Ubicada directamente en US-41, nuestra práctica psiquiátrica en Naples es fácilmente accesible desde todos los vecindarios de Lely Resort'}
                         </p>
                       </div>
                     </div>
@@ -785,8 +785,8 @@ const LocationLelyResorts = () => {
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Free, convenient parking available for all Lely Resorts patients visiting our facility'
-                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Lely Resorts que visiten nuestras instalaciones'}
+                            ? 'Free, convenient parking available for all Lely Resort patients visiting our facility'
+                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Lely Resort que visiten nuestras instalaciones'}
                         </p>
                       </div>
                     </div>
@@ -801,8 +801,8 @@ const LocationLelyResorts = () => {
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Accessible by public transportation and ride-sharing services from Lely Resorts'
-                            : 'Accesible por transporte público y servicios de viajes compartidos desde Lely Resorts'}
+                            ? 'Accessible by public transportation and ride-sharing services from Lely Resort'
+                            : 'Accesible por transporte público y servicios de viajes compartidos desde Lely Resort'}
                         </p>
                       </div>
                     </div>
@@ -826,8 +826,8 @@ const LocationLelyResorts = () => {
                 <div className="mt-8 pt-6 border-t border-green-100">
                   <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
                     {language === 'en'
-                      ? 'Serving Lely Resorts residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                      : 'Sirviendo a los residentes de Lely Resorts con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                      ? 'Serving Lely Resort residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
+                      : 'Sirviendo a los residentes de Lely Resort con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
                   </p>
                 </div>
               </div>
@@ -845,9 +845,9 @@ const LocationLelyResorts = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Community</span> Involvement in Lely Resorts</>
+                    <><span className="font-display italic text-green-700">Community</span> Involvement in Lely Resort</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Lely Resorts</>
+                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Lely Resort</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -856,8 +856,8 @@ const LocationLelyResorts = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Mental health is fundamental to building a thriving community. We proudly support Lely Resorts through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
-                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Lely Resorts a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+                  ? 'Mental health is fundamental to building a thriving community. We proudly support Lely Resort through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
+                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Lely Resort a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
               </p>
             </div>
             
@@ -874,8 +874,8 @@ const LocationLelyResorts = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Coordinating with 48 HOAs and condo associations within Lely Resorts to maintain community standards and quality of life. This master association ensures cohesive community management, landscape maintenance, and preservation of property values across all residential areas in Lely Resorts.'
-                    : 'Coordinando con 48 HOAs y asociaciones de condominios dentro de Lely Resorts para mantener estándares comunitarios y calidad de vida. Esta asociación maestra asegura la gestión cohesiva de la comunidad, mantenimiento de paisajismo y preservación de valores de propiedad en todas las áreas residenciales en Lely Resorts.'}
+                    ? 'Coordinating with 48 HOAs and condo associations within Lely Resort to maintain community standards and quality of life. This master association ensures cohesive community management, landscape maintenance, and preservation of property values across all residential areas in Lely Resort.'
+                    : 'Coordinando con 48 HOAs y asociaciones de condominios dentro de Lely Resort para mantener estándares comunitarios y calidad de vida. Esta asociación maestra asegura la gestión cohesiva de la comunidad, mantenimiento de paisajismo y preservación de valores de propiedad en todas las áreas residenciales en Lely Resort.'}
                 </p>
 
                 <a
@@ -910,8 +910,8 @@ const LocationLelyResorts = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Special purpose government established in 1990, managing 1,500 acres with over 9,000 approved residential units across Lely Resorts. This district oversees infrastructure maintenance, water management systems, road improvements, and community facilities that support the exceptional quality of life in Lely Resorts.'
-                    : 'Gobierno de propósito especial establecido en 1990, gestionando 1,500 acres con más de 9,000 unidades residenciales aprobadas en Lely Resorts. Este distrito supervisa el mantenimiento de infraestructura, sistemas de gestión de agua, mejoras de carreteras e instalaciones comunitarias que apoyan la calidad de vida excepcional en Lely Resorts.'}
+                    ? 'Special purpose government established in 1990, managing 1,500 acres with over 9,000 approved residential units across Lely Resort. This district oversees infrastructure maintenance, water management systems, road improvements, and community facilities that support the exceptional quality of life in Lely Resort.'
+                    : 'Gobierno de propósito especial establecido en 1990, gestionando 1,500 acres con más de 9,000 unidades residenciales aprobadas en Lely Resort. Este distrito supervisa el mantenimiento de infraestructura, sistemas de gestión de agua, mejoras de carreteras e instalaciones comunitarias que apoyan la calidad de vida excepcional en Lely Resort.'}
                 </p>
 
                 <a
@@ -946,8 +946,8 @@ const LocationLelyResorts = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Property Owners Association managing the exclusive country club lifestyle and amenities for Lely Resorts residents. They oversee the prestigious golf courses, clubhouse facilities, recreational amenities, and social programs that create the premier resort-style living experience that defines Lely Resorts.'
-                    : 'Asociación de Propietarios que gestiona el estilo de vida exclusivo del country club y amenidades para residentes de Lely Resorts. Supervisan los prestigiosos campos de golf, instalaciones del club, amenidades recreativas y programas sociales que crean la experiencia de vida estilo resort de primera clase que define a Lely Resorts.'}
+                    ? 'Property Owners Association managing the exclusive country club lifestyle and amenities for Lely Resort residents. They oversee the prestigious golf courses, clubhouse facilities, recreational amenities, and social programs that create the premier resort-style living experience that defines Lely Resort.'
+                    : 'Asociación de Propietarios que gestiona el estilo de vida exclusivo del country club y amenidades para residentes de Lely Resort. Supervisan los prestigiosos campos de golf, instalaciones del club, amenidades recreativas y programas sociales que crean la experiencia de vida estilo resort de primera clase que define a Lely Resort.'}
                 </p>
 
                 <a
@@ -975,8 +975,8 @@ const LocationLelyResorts = () => {
             <div className="mt-16 text-center">
               <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Just as these organizations strengthen our Lely Resorts community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
-                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Lely Resorts, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+                  ? 'Just as these organizations strengthen our Lely Resort community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
+                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Lely Resort, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
               </p>
               <Button 
                 className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
