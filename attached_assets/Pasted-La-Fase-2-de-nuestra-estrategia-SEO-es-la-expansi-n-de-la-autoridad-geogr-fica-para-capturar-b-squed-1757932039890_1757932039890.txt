@@ -1,0 +1,99 @@
+La Fase 2 de nuestra estrategia SEO es la expansión de la autoridad geográfica para capturar búsquedas de intención local en ciudades y comunidades clave circundantes a nuestra oficina de Naples.
+
+
+
+Esta primera tarea de desarrollo consiste en construir el andamiaje técnico (rutas y navegación) para soportar estas nuevas páginas de destino de ubicación, tal como se describe en nuestro plan estratégico.
+
+
+
+2. Tareas de Implementación (Fase 1)
+
+
+
+Tarea 2.1: Actualizar el Menú de Navegación Principal
+
+El objetivo es modificar el enlace de navegación principal existente para reflejar una estrategia de área de servicio más amplia.
+
+
+
+Acción: Localizar el componente del Header (Header.tsx) y cambiar el texto del enlace de navegación de "Location" (o "Location (Naples)") a "Locations We Serve" (o en español, "Áreas de Servicio").
+
+
+
+Requerimiento Funcional: Este nuevo enlace de navegación "Locations We Serve" debe activarse como un "mega menú" o un menú desplegable estructurado, utilizando el mismo estilo y funcionalidad que el menú desplegable existente de "Services".
+
+
+
+Tarea 2.2: Lista de Ubicaciones Prioritarias y Creación de Rutas
+
+
+
+Basado en nuestro análisis estratégico de las comunidades de alto valor dentro de un radio de ~40 km de Naples, hemos definido el siguiente listado inicial de páginas de área de servicio.
+
+
+
+Lista de Ubicaciones (Además de Naples):
+
+Bonita Springs
+
+Marco Island
+
+Estero
+
+Golden Gate
+
+Immokalee
+
+Vanderbilt Beach
+
+Ave Maria
+
+Fort Myers
+
+Lely Resort
+
+
+
+Acción: Crear los nuevos componentes de página (React) para cada una de estas 6 ubicaciones (ej. LocationBonitaSprings.tsx, LocationMarcoIsland.tsx, etc.). Inicialmente, estos pueden ser plantillas vacías o duplicados de la plantilla de página estándar.
+
+
+
+Acción: Implementar las nuevas rutas en el router principal (App.tsx) para cada una de estas páginas, asegurando que se carguen de forma diferida (lazy-loaded).
+
+
+
+Estructura de URL (Según estrategia): Debemos seguir la estructura de URL optimizada para palabras clave definida en la plantilla estratégica. Las nuevas rutas a implementar son:
+
+
+
+/locations/psychiatrist-bonita-springs
+
+/locations/psychiatrist-marco-island
+
+/locations/psychiatrist-estero
+
+/locations/psychiatrist-golden-gate
+
+/locations/psychiatrist-immokalee
+
+/locations/psychiatrist-vanderbilt-beach
+
+/locations/psychiatrist-ave-maria
+
+/locations/psychiatrist-fort-myers
+
+/locations/psychiatrist-lely-resorts
+
+
+
+Tarea 2.3: Vincular Navegación y Rutas
+
+Acción: El "mega menú" creado en la Tarea 2.1 debe ser poblado con enlaces directos a estas 6 nuevas rutas de ubicación (además de un enlace a la página principal de Naples ya existente).
+
+
+
+3. Próximos Pasos (Fase 2 - Aún no implementar)
+
+
+
+Una vez completada esta Fase 1, la arquitectura base estará lista. La Fase 2 consistirá en que nuestro equipo de contenido rellene estas páginas con contenido hiperlocal único (basado en la Plantilla de Página de Ubicación ) y que tu equipo implemente la inyección de meta tags server-side (en html-injection.ts) y el schema Service específico (con areaServed) para cada una de estas nuevas rutas.
