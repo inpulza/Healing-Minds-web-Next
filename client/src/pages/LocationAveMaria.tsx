@@ -754,11 +754,9 @@ const LocationAveMaria = () => {
               </div>
 
             </div>
-          </div>
-        </section>
 
-        {/* Additional Info Section */}
-        <div className="mt-16 text-center">
+            {/* Additional Info Section */}
+            <div className="mt-16 text-center">
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
             <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
               {language === 'en' ? 'Easy Access for Ave Maria Residents' : 'Fácil Acceso para Residentes de Ave Maria'}
@@ -833,7 +831,7 @@ const LocationAveMaria = () => {
               </p>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Community Involvement Section - Participación Comunitaria */}
         <section className="py-20 bg-white">
