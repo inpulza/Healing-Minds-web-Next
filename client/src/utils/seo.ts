@@ -269,7 +269,77 @@ export const addMedicalBusinessSchema = () => {
 // This prevents Google Rich Results from detecting duplicate or conflicting schemas.
 // DO NOT RE-ADD THIS FUNCTION - it causes schema conflicts and validation issues.
 
-// Generic Service Schema Generator for Hub & Spoke Model
+// Enhanced Service Schema Generator for Hub & Spoke Model
+// Creates Service schemas for satellite location pages that reference the main MedicalClinic
+export const addLocationServiceSchema = (serviceConfig: {
+  locationName: string;
+  description: string;
+  pageId: string;
+  language?: 'en' | 'es';
+}) => {
+  // Define available services in both languages
+  const services = {
+    en: [
+      "Anxiety Treatment",
+      "Depression Treatment", 
+      "ADHD Treatment",
+      "PTSD Treatment",
+      "Bipolar Treatment",
+      "Medication Management"
+    ],
+    es: [
+      "Tratamiento de Ansiedad",
+      "Tratamiento de Depresión",
+      "Tratamiento de TDAH", 
+      "Tratamiento de TEPT",
+      "Tratamiento Bipolar",
+      "Manejo de Medicamentos"
+    ]
+  };
+
+  const lang = serviceConfig.language || 'en';
+  const serviceName = lang === 'en' 
+    ? `Psychiatric Services for ${serviceConfig.locationName}`
+    : `Servicios Psiquiátricos para ${serviceConfig.locationName}`;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": serviceName,
+    "description": serviceConfig.description,
+    "serviceType": lang === 'en' ? "Mental Health Services" : "Servicios de Salud Mental",
+    "areaServed": {
+      "@type": "City", 
+      "name": serviceConfig.locationName,
+      "addressRegion": "FL"
+    },
+    "provider": {
+      "@type": "MedicalClinic",
+      "@id": "https://www.healingmindsp.com/#MedicalClinic"
+    },
+    "availableService": services[lang]
+  };
+
+  // Remove existing service schema for this location if present
+  const existingSchema = document.querySelector(`script[type="application/ld+json"]#${serviceConfig.pageId}-service-schema`);
+  if (existingSchema) {
+    existingSchema.remove();
+    console.log(`🧹 Removed existing service schema for ${serviceConfig.locationName}`);
+  }
+
+  // Add new service schema to head
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = `${serviceConfig.pageId}-service-schema`;
+  script.setAttribute('data-schema-type', 'location-service');
+  script.setAttribute('data-location', serviceConfig.locationName);
+  script.textContent = JSON.stringify(schema, null, 2);
+  document.head.appendChild(script);
+  
+  console.log(`✅ Location Service schema added for ${serviceConfig.locationName}`);
+};
+
+// Legacy function - kept for backward compatibility
 export const addServiceSchema = (serviceConfig: {
   serviceType: string;
   name: string;
