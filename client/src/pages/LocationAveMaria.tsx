@@ -831,6 +831,7 @@ const LocationAveMaria = () => {
               </p>
             </div>
           </div>
+            </div>
         </section>
 
         {/* Community Involvement Section - Participación Comunitaria */}
