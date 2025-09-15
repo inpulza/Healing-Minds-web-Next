@@ -17,6 +17,7 @@ export const generateSitemap = (req: Request, res: Response) => {
   const recentDate = '2025-08-20'; // Recent major updates (Microsoft Clarity, schema optimization)
   const contentDate = '2025-08-15'; // Service page content updates
   const oldContentDate = '2025-07-15'; // Older established content
+  const locationDate = '2025-09-15'; // New satellite location pages
   const legalDate = '2025-06-01'; // Legal pages (less frequent updates)
   
   // Define bilingual page relationships for hreflang
@@ -101,6 +102,61 @@ export const generateSitemap = (req: Request, res: Response) => {
     {
       url: '/locations/naples',
       lastmod: oldContentDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    // New satellite location pages added September 2025
+    {
+      url: '/locations/psychiatrist-bonita-springs',
+      lastmod: locationDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    {
+      url: '/locations/psychiatrist-marco-island',
+      lastmod: locationDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    {
+      url: '/locations/psychiatrist-fort-myers',
+      lastmod: locationDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    {
+      url: '/locations/psychiatrist-ave-maria',
+      lastmod: locationDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    {
+      url: '/locations/psychiatrist-estero',
+      lastmod: locationDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    {
+      url: '/locations/psychiatrist-golden-gate',
+      lastmod: locationDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    {
+      url: '/locations/psychiatrist-immokalee',
+      lastmod: locationDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    {
+      url: '/locations/psychiatrist-lely-resort',
+      lastmod: locationDate,
+      changefreq: 'monthly',
+      priority: '0.6'
+    },
+    {
+      url: '/locations/psychiatrist-vanderbilt-beach',
+      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     }
