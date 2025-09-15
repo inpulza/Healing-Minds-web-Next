@@ -410,6 +410,223 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         ]
       };
 
+    // Satellite Location Pages - Hub & Spoke Pattern
+    case '/locations/psychiatrist-bonita-springs':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-bonita-springs`,
+        schema: getServiceSchema(baseUrl, 'Bonita Springs'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Bonita Springs? Dr. Melva Reve serves Bonita Springs FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Bonita Springs FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Bonita Springs? Dr. Melva Reve serves Bonita Springs FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-bonita-springs`
+          }
+        ]
+      };
+
+    case '/locations/psychiatrist-marco-island':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-marco-island`,
+        schema: getServiceSchema(baseUrl, 'Marco Island'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Marco Island? Dr. Melva Reve serves Marco Island FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Marco Island FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Marco Island? Dr. Melva Reve serves Marco Island FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-marco-island`
+          }
+        ]
+      };
+
+    case '/locations/psychiatrist-fort-myers':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-fort-myers`,
+        schema: getServiceSchema(baseUrl, 'Fort Myers'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Fort Myers? Dr. Melva Reve serves Fort Myers FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Fort Myers FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Fort Myers? Dr. Melva Reve serves Fort Myers FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-fort-myers`
+          }
+        ]
+      };
+
+    case '/locations/psychiatrist-ave-maria':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-ave-maria`,
+        schema: getServiceSchema(baseUrl, 'Ave Maria'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Ave Maria? Dr. Melva Reve serves Ave Maria FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Ave Maria FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Ave Maria? Dr. Melva Reve serves Ave Maria FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-ave-maria`
+          }
+        ]
+      };
+
+    case '/locations/psychiatrist-estero':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-estero`,
+        schema: getServiceSchema(baseUrl, 'Estero'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Estero? Dr. Melva Reve serves Estero FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Estero FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Estero? Dr. Melva Reve serves Estero FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-estero`
+          }
+        ]
+      };
+
+    case '/locations/psychiatrist-golden-gate':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-golden-gate`,
+        schema: getServiceSchema(baseUrl, 'Golden Gate'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Golden Gate? Dr. Melva Reve serves Golden Gate FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Golden Gate FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Golden Gate? Dr. Melva Reve serves Golden Gate FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-golden-gate`
+          }
+        ]
+      };
+
+    case '/locations/psychiatrist-immokalee':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-immokalee`,
+        schema: getServiceSchema(baseUrl, 'Immokalee'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Immokalee? Dr. Melva Reve serves Immokalee FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Immokalee FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Immokalee? Dr. Melva Reve serves Immokalee FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-immokalee`
+          }
+        ]
+      };
+
+    case '/locations/psychiatrist-lely-resort':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-lely-resort`,
+        schema: getServiceSchema(baseUrl, 'Lely Resort'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Lely Resort? Dr. Melva Reve serves Lely Resort FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Lely Resort FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Lely Resort? Dr. Melva Reve serves Lely Resort FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-lely-resort`
+          }
+        ]
+      };
+
+    case '/locations/psychiatrist-vanderbilt-beach':
+      return {
+        canonical: `${baseUrl}/locations/psychiatrist-vanderbilt-beach`,
+        schema: getServiceSchema(baseUrl, 'Vanderbilt Beach'),
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Looking for expert psychiatric care in Vanderbilt Beach? Dr. Melva Reve serves Vanderbilt Beach FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+          },
+          {
+            property: 'og:title',
+            content: 'Psychiatrist Near Vanderbilt Beach FL - Dr. Melva Reve | Healing Minds'
+          },
+          {
+            property: 'og:description',
+            content: 'Looking for expert psychiatric care in Vanderbilt Beach? Dr. Melva Reve serves Vanderbilt Beach FL area with anxiety, depression, ADHD, PTSD treatment.'
+          },
+          {
+            property: 'og:url',
+            content: `${baseUrl}/locations/psychiatrist-vanderbilt-beach`
+          }
+        ]
+      };
+
     // Legal pages
     case '/privacy-policy':
       return {
@@ -834,6 +1051,74 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     default:
       return null;
   }
+}
+
+/**
+ * Generate Service schema for Hub & Spoke pattern (satellite location pages)
+ * Links to main MedicalClinic as provider while targeting specific areas
+ */
+function getServiceSchema(baseUrl: string, cityName: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${baseUrl}/locations/psychiatrist-${cityName.toLowerCase().replace(/ /g, '-')}#Service`,
+    "name": "Psychiatric Services",
+    "description": `Expert psychiatric care and mental health services for ${cityName}, FL residents. Dr. Melva Reve provides comprehensive treatment for anxiety, depression, ADHD, PTSD, and other mental health conditions.`,
+    "serviceType": "Psychiatric Care",
+    "areaServed": {
+      "@type": "City",
+      "name": cityName,
+      "addressRegion": "FL",
+      "addressCountry": "US"
+    },
+    "provider": {
+      "@type": "MedicalClinic",
+      "@id": "https://www.healingmindsp.com/#MedicalClinic"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Psychiatric Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Anxiety Treatment"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Depression Treatment"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "ADHD Treatment"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "PTSD Treatment"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Medication Management"
+          }
+        }
+      ]
+    },
+    "availableLanguage": ["English", "Spanish"],
+    "url": `${baseUrl}/locations/psychiatrist-${cityName.toLowerCase().replace(/ /g, '-')}`
+  };
 }
 
 /**
