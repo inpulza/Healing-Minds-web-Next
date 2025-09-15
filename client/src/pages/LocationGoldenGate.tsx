@@ -206,17 +206,18 @@ const LocationGoldenGate = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
-                  onClick={() => window.location.href = '/contact'}
-                  data-testid="button-schedule-consultation"
-                >
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
-                    <Calendar className="w-4 h-4 text-white" />
-                  </div>
-                  {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                </Button>
+                <Link href="/contact">
+                  <Button 
+                    size="lg" 
+                    className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
+                    data-testid="button-schedule-consultation"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
+                      <Calendar className="w-4 h-4 text-white" />
+                    </div>
+                    {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                  </Button>
+                </Link>
                 
                 <Button 
                   variant="outline" 
@@ -459,280 +460,125 @@ const LocationGoldenGate = () => {
                       {service.title}
                     </h3>
                     
-                    <p className="text-sm sm:text-base font-body leading-relaxed mb-4 sm:mb-5 flex-grow text-gray-600">
+                    <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 font-body leading-relaxed flex-grow">
                       {service.description}
                     </p>
-
+                    
                     <Link href={service.link} className="mt-auto">
-                      <Button
-                        className="group flex items-center justify-start gap-3 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 px-4 sm:px-6 w-full min-h-[4rem] sm:min-h-[4.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
-                        data-testid={`service-button-${service.id}`}
+                      <Button 
+                        className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-full group transition-all duration-300"
+                        data-testid={`button-learn-more-${service.id}`}
                       >
-                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
-                          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                        </div>
-                        <span className="text-left leading-tight flex-1 py-2">
-                          {language === 'en' 
-                            ? (() => {
-                                switch(service.id) {
-                                  case 'anxiety': return 'Learn About Anxiety Treatment';
-                                  case 'depression': return 'Learn About Depression Treatment';
-                                  case 'adhd': return 'Learn About ADHD Treatment';
-                                  case 'ptsd': return 'Learn About PTSD Treatment';
-                                  case 'bipolar': return 'Learn About Bipolar Treatment';
-                                  case 'medication-management': return 'Learn About Medication Management';
-                                  default: return 'Learn More';
-                                }
-                              })()
-                            : (() => {
-                                switch(service.id) {
-                                  case 'anxiety': return 'Conocer Tratamiento de Ansiedad';
-                                  case 'depression': return 'Conocer Tratamiento de Depresión';
-                                  case 'adhd': return 'Conocer Tratamiento de TDAH';
-                                  case 'ptsd': return 'Conocer Tratamiento de TEPT';
-                                  case 'bipolar': return 'Conocer Tratamiento Bipolar';
-                                  case 'medication-management': return 'Conocer Manejo de Medicamentos';
-                                  default: return 'Saber Más';
-                                }
-                              })()
-                          }
-                        </span>
+                        {(() => {
+                          const serviceTexts = {
+                            anxiety: {
+                              en: 'Learn About Anxiety Treatment',
+                              es: 'Aprender Sobre Tratamiento de Ansiedad'
+                            },
+                            depression: {
+                              en: 'Learn About Depression Treatment', 
+                              es: 'Aprender Sobre Tratamiento de Depresión'
+                            },
+                            adhd: {
+                              en: 'Learn About ADHD Treatment',
+                              es: 'Aprender Sobre Tratamiento de TDAH'
+                            },
+                            ptsd: {
+                              en: 'Learn About PTSD Treatment',
+                              es: 'Aprender Sobre Tratamiento de TEPT'
+                            },
+                            bipolar: {
+                              en: 'Learn About Bipolar Treatment',
+                              es: 'Aprender Sobre Tratamiento Bipolar'
+                            },
+                            'medication-management': {
+                              en: 'Learn About Medication Management',
+                              es: 'Aprender Sobre Manejo de Medicamentos'
+                            }
+                          };
+                          return serviceTexts[service.id][language];
+                        })()} 
+                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
                   </div>
                 );
               })}
             </div>
-            
-            {/* Service Areas - Enhanced with more features */}
-            <div className="mt-16 text-center">
-              <h3 className="text-2xl font-display font-bold text-green-800 mb-8">
-                {language === 'en' ? (
-                  <><span className="font-display italic text-green-700">Areas</span> We Serve</>
-                ) : (
-                  <><span className="font-display italic text-green-700">Áreas</span> que Servimos</>
-                )}
-              </h3>
-              <div className="flex flex-wrap justify-center gap-4">
-                {serviceAreas.map((area, index) => (
-                  <div key={index} className="bg-green-50 rounded-full px-4 py-2 border border-green-200">
-                    <span className="text-green-800 font-body text-sm font-medium">{area}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
         {/* How to Get Here Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
-              <div className="text-center mb-12">
-                <div className="flex items-center justify-center gap-4 mb-6">
-                  <WellnessIcon size="md" color="blue" className="opacity-70">
-                    <Navigation />
-                  </WellnessIcon>
-                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
-                    {language === 'en' ? (
-                      <>How to Get <span className="font-display italic text-green-700">Here</span></>
-                    ) : (
-                      <>Cómo <span className="font-display italic text-green-700">Llegar</span></>
-                    )}
-                  </h2>
-                  <WellnessIcon size="md" color="green" className="opacity-70">
-                    <MapPin />
-                  </WellnessIcon>
-                </div>
-                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Our Naples office is conveniently located for Golden Gate residents. Use these familiar landmarks to find us easily.'
-                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Golden Gate. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
-                </p>
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <Navigation />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <>How to <span className="font-display italic text-green-700">Get Here</span> from Golden Gate</>
+                  ) : (
+                    <>Cómo <span className="font-display italic text-green-700">Llegar Aquí</span> desde Golden Gate</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <MapPin />
+                </WellnessIcon>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-6 h-6 text-blue-800" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'From Golden Gate Community Center' : 'Desde Centro Comunitario Golden Gate'}
-                      </h3>
-                      <p className="text-sm text-gray-500 font-body">
-                        Community Recreation
-                      </p>
-                    </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Our practice is conveniently located on Tamiami Trail North in Naples, making it easily accessible for Golden Gate residents seeking quality mental health care.'
+                  : 'Nuestra práctica está convenientemente ubicada en Tamiami Trail North en Naples, haciéndola fácilmente accesible para los residentes de Golden Gate que buscan atención de salud mental de calidad.'}
+              </p>
+            </div>
+            
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+              {/* Golden Gate to Central Practice */}
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100">
+                <div className="flex items-start gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                    <Navigation className="w-8 h-8 text-green-800" />
                   </div>
                   
-                  <div className="space-y-4 mb-6 flex-grow">
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">1</span>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                      {language === 'en' ? 'From Golden Gate to Our Naples Office' : 'Desde Golden Gate a Nuestra Oficina de Naples'}
+                    </h3>
+                    <div className="mb-6">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                        <p className="text-gray-700 font-body text-sm">
+                          {language === 'en' 
+                            ? 'Head northwest on Golden Gate Blvd toward Collier Blvd'
+                            : 'Diríjase hacia el noroeste por Golden Gate Blvd hacia Collier Blvd'}
+                        </p>
                       </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'From 4701 Golden Gate Parkway, head west toward Airport Rd'
-                          : 'Desde 4701 Golden Gate Parkway, diríjase al oeste hacia Airport Rd'}
-                      </p>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">2</span>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                        <p className="text-gray-700 font-body text-sm">
+                          {language === 'en' 
+                            ? 'Turn right onto Collier Blvd (CR-951) and continue north'
+                            : 'Gire a la derecha en Collier Blvd (CR-951) y continúe hacia el norte'}
+                        </p>
                       </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Turn right on Airport Rd and continue north to Tamiami Trail'
-                          : 'Gire a la derecha en Airport Rd y continúe al norte hasta Tamiami Trail'}
-                      </p>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">3</span>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                        <p className="text-gray-700 font-body text-sm">
+                          {language === 'en' 
+                            ? 'Continue on Collier Blvd until it merges with Tamiami Trail'
+                            : 'Continúe por Collier Blvd hasta que se fusione con Tamiami Trail'}
+                        </p>
                       </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Turn left on Tamiami Trail. Our practice is at 4760 Tamiami Trl N # 25'
-                          : 'Gire a la izquierda en Tamiami Trail. Nuestra práctica está en 4760 Tamiami Trl N # 25'}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto">
-                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
-                      <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '15-20 minutes' : '15-20 minutos'}</span>
-                    </div>
-
-                    <Button 
-                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
-                      onClick={() => window.open('https://maps.google.com/?saddr=Golden+Gate+Community+Center,+Golden+Gate,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
-                      data-testid="button-directions-community-center"
-                    >
-                      <Navigation className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-6 h-6 text-blue-800" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'From Golden Gate Community Park' : 'Desde Parque Comunitario Golden Gate'}
-                      </h3>
-                      <p className="text-sm text-gray-500 font-body">
-                        Recreation & Sports
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4 mb-6 flex-grow">
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">1</span>
+                      <div className="flex items-center gap-3">
+                        <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                        <p className="text-gray-700 font-body text-sm">
+                          {language === 'en' 
+                            ? 'Arrive at 4760 Tamiami Trl N # 25, Naples, FL 34103'
+                            : 'Llegue a 4760 Tamiami Trl N # 25, Naples, FL 34103'}
+                        </p>
                       </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'From 3300 Santa Barbara Blvd, head north to Golden Gate Parkway'
-                          : 'Desde 3300 Santa Barbara Blvd, diríjase al norte hasta Golden Gate Parkway'}
-                      </p>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">2</span>
-                      </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Turn left (west) and continue to Airport Rd. Turn right north'
-                          : 'Gire a la izquierda (oeste) y continúe hasta Airport Rd. Gire a la derecha al norte'}
-                      </p>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">3</span>
-                      </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Proceed north to Tamiami Trail, turn left. Office at 4760 Tamiami Trl N # 25'
-                          : 'Proceda al norte hasta Tamiami Trail, gire a la izquierda. Oficina en 4760 Tamiami Trl N # 25'}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto">
-                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
-                      <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '18-22 minutes' : '18-22 minutos'}</span>
-                    </div>
-
-                    <Button 
-                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
-                      onClick={() => window.open('https://maps.google.com/?saddr=Golden+Gate+Community+Park,+Golden+Gate,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
-                      data-testid="button-directions-community-park"
-                    >
-                      <Navigation className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-6 h-6 text-blue-800" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'From Central Golden Gate' : 'Desde Centro de Golden Gate'}
-                      </h3>
-                      <p className="text-sm text-gray-500 font-body">
-                        Main Area Access
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4 mb-6 flex-grow">
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">1</span>
-                      </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'From central Golden Gate, take Golden Gate Parkway west toward Airport Rd'
-                          : 'Desde el centro de Golden Gate, tome Golden Gate Parkway oeste hacia Airport Rd'}
-                      </p>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">2</span>
-                      </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Turn right on Airport Rd and continue north to US-41 (Tamiami Trail)'
-                          : 'Gire a la derecha en Airport Rd y continúe al norte hasta US-41 (Tamiami Trail)'}
-                      </p>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <span className="text-green-800 font-bold text-xs">3</span>
-                      </div>
-                      <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Turn left on Tamiami Trail. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103'
-                          : 'Gire a la izquierda en Tamiami Trail. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103'}
-                      </p>
                     </div>
                   </div>
 
@@ -758,122 +604,228 @@ const LocationGoldenGate = () => {
           </div>
         </section>
 
-        {/* Community Involvement Section */}
-        <section className="py-20 bg-green-50">
+        {/* Easy Access Section */}
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12">
-              <div className="text-center mb-12">
-                <div className="flex items-center justify-center gap-4 mb-6">
-                  <WellnessIcon size="md" color="green" className="opacity-70">
-                    <Users />
-                  </WellnessIcon>
-                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
-                    {language === 'en' ? (
-                      <>Community <span className="font-display italic text-green-700">Involvement</span></>
-                    ) : (
-                      <>Participación <span className="font-display italic text-green-700">Comunitaria</span></>
-                    )}
-                  </h2>
-                  <WellnessIcon size="md" color="blue" className="opacity-70">
-                    <Heart />
-                  </WellnessIcon>
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <CheckCircle />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Easy Access</span> for Golden Gate Residents</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Fácil Acceso</span> para Residentes de Golden Gate</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <MapPin />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'We have designed our practice to be easily accessible for Golden Gate residents, with convenient parking and a welcoming environment that puts your comfort first.'
+                  : 'Hemos diseñado nuestra práctica para ser fácilmente accesible para los residentes de Golden Gate, con estacionamiento conveniente y un ambiente acogedor que pone su comodidad primero.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: <MapPin className="w-6 h-6 text-green-800" />,
+                  title: language === 'en' ? 'Prime Location' : 'Ubicación Principal',
+                  description: language === 'en' 
+                    ? 'Located on busy Tamiami Trail with easy access from Golden Gate via Collier Boulevard.' 
+                    : 'Ubicado en el concurrido Tamiami Trail con fácil acceso desde Golden Gate a través de Collier Boulevard.'
+                },
+                {
+                  icon: <CheckCircle className="w-6 h-6 text-green-800" />,
+                  title: language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento',
+                  description: language === 'en' 
+                    ? 'Free parking available directly at our building - no need to search for street parking.' 
+                    : 'Estacionamiento gratuito disponible directamente en nuestro edificio, no es necesario buscar estacionamiento en la calle.'
+                },
+                {
+                  icon: <Heart className="w-6 h-6 text-green-800" />,
+                  title: language === 'en' ? 'Welcoming Environment' : 'Ambiente Acogedor',
+                  description: language === 'en' 
+                    ? 'Comfortable, private office space designed specifically for mental health care and patient comfort.' 
+                    : 'Espacio de oficina cómodo y privado diseñado específicamente para el cuidado de la salud mental y la comodidad del paciente.'
+                }
+              ].map((feature, index) => (
+                <div 
+                  key={index}
+                  className="bg-green-50 rounded-2xl p-8 text-center border border-green-100 hover:shadow-lg transition-shadow duration-300"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mx-auto mb-6">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-4 text-green-800">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 font-body leading-relaxed">
+                    {feature.description}
+                  </p>
                 </div>
-                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Community Involvement Section - Participación Comunitaria */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <Heart />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Community</span> Involvement in Golden Gate</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Golden Gate</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <Users />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Mental health is fundamental to building a thriving community. We proudly support Golden Gate through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
+                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Golden Gate a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* Golden Gate Estates Area Civic Association */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Shield className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  {language === 'en' ? 'Golden Gate Estates Area Civic Association' : 'Asociación Cívica de Golden Gate Estates'}
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'We proudly support Golden Gate community organizations and encourage our patients to connect with local resources for holistic wellness.'
-                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Golden Gate y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                    ? 'Community advocacy organization focused on understanding the Golden Gate Estates Master Plan and supporting local residents\' needs. They work tirelessly to ensure residents have a voice in local planning and development decisions that affect their community.'
+                    : 'Organización de defensa comunitaria enfocada en comprender el Plan Maestro de Golden Gate Estates y apoyar las necesidades de los residentes locales. Trabajan incansablemente para asegurar que los residentes tengan voz en las decisiones de planificación y desarrollo local que afectan su comunidad.'}
                 </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <Shield className="w-6 h-6 text-blue-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Golden Gate Estates Area Civic Assoc.' : 'Asociación Cívica de Golden Gate Estates'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Community advocacy organization focused on understanding the Golden Gate Estates Master Plan and supporting local residents’ needs.'
-                      : 'Organización de defensa comunitaria enfocada en comprender el Plan Maestro de Golden Gate Estates y apoyar las necesidades de los residentes locales.'}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-blue-700 border-blue-200 hover:bg-blue-50 rounded-full"
-                    onClick={() => window.open('https://ggeaca.org/', '_blank')}
-                    data-testid="link-civic-association"
-                  >
-                    {language === 'en' ? 'Learn More' : 'Aprender Más'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
 
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <Heart className="w-6 h-6 text-green-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Golden Gate Community Center' : 'Centro Comunitario Golden Gate'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Full-service community center offering recreation facilities, skate park, BMX track, gymnasium, and programs for all ages in Golden Gate.'
-                      : 'Centro comunitario de servicio completo que ofrece instalaciones recreativas, parque de patinaje, pista BMX, gimnasio y programas para todas las edades en Golden Gate.'}
-                  </p>
+                <a
+                  href="https://ggeaca.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-civic-association"
+                >
                   <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-green-700 border-green-200 hover:bg-green-50 rounded-full"
-                    onClick={() => window.open('https://www.collierparks.com/collier_park/golden-gate-community-center/', '_blank')}
-                    data-testid="link-community-center"
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
                   >
-                    {language === 'en' ? 'Visit Website' : 'Visitar Sitio'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Learn About Their Mission' : 'Conocer Su Misión'}
+                    </span>
                   </Button>
-                </div>
-
-                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <Star className="w-6 h-6 text-purple-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Collier County Government' : 'Gobierno del Condado de Collier'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
-                    {language === 'en'
-                      ? 'Local government services and community resources supporting Golden Gate residents through various programs and initiatives.'
-                      : 'Servicios de gobierno local y recursos comunitarios que apoyan a los residentes de Golden Gate a través de varios programas e iniciativas.'}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-purple-700 border-purple-200 hover:bg-purple-50 rounded-full"
-                    onClick={() => window.open('https://www.colliercountyfl.gov/', '_blank')}
-                    data-testid="link-county-government"
-                  >
-                    {language === 'en' ? 'County Services' : 'Servicios Condado'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
+                </a>
               </div>
 
-              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
-                    <Heart className="w-8 h-8 text-green-700" />
-                  </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Supporting Our Golden Gate Community' : 'Apoyando Nuestra Comunidad de Golden Gate'}
-                  </h3>
-                  <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
-                    {language === 'en'
-                      ? 'Mental health is strengthened through community connection. We encourage our Golden Gate patients to engage with local organizations that promote wellness, civic involvement, and community support.'
-                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Golden Gate a participar con organizaciones locales que promueven el bienestar, involucramiento cívico y apoyo comunitario.'}
-                  </p>
+              {/* Golden Gate Community Center */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
                 </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  {language === 'en' ? 'Golden Gate Community Center' : 'Centro Comunitario Golden Gate'}
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Full-service community center offering recreation facilities, skate park, BMX track, gymnasium, and programs for all ages in Golden Gate. This vital community hub provides space for residents to connect, stay active, and build lasting relationships.'
+                    : 'Centro comunitario de servicio completo que ofrece instalaciones recreativas, parque de patinaje, pista BMX, gimnasio y programas para todas las edades en Golden Gate. Este centro comunitario vital proporciona espacio para que los residentes se conecten, se mantengan activos y construyan relaciones duraderas.'}
+                </p>
+
+                <a
+                  href="https://www.collierparks.com/collier_park/golden-gate-community-center/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-community-center"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Visit Community Center' : 'Visitar Centro Comunitario'}
+                    </span>
+                  </Button>
+                </a>
               </div>
+
+              {/* Collier County Government */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Users className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  {language === 'en' ? 'Collier County Government' : 'Gobierno del Condado de Collier'}
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Local government services and community resources supporting Golden Gate residents through various programs and initiatives. From public safety to social services, the county works to enhance quality of life for all residents.'
+                    : 'Servicios de gobierno local y recursos comunitarios que apoyan a los residentes de Golden Gate a través de varios programas e iniciativas. Desde seguridad pública hasta servicios sociales, el condado trabaja para mejorar la calidad de vida de todos los residentes.'}
+                </p>
+
+                <a
+                  href="https://www.colliercountyfl.gov/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-county-government"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Explore County Services' : 'Explorar Servicios del Condado'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="mt-16 text-center">
+              <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Just as these organizations strengthen our Golden Gate community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
+                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Golden Gate, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+              </p>
+              <Link href="/contact">
+                <Button 
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                  data-testid="button-schedule-community"
+                >
+                  <Calendar className="w-5 h-5" />
+                  <span>{language === 'en' ? 'Schedule Your Consultation Today' : 'Programar Su Consulta Hoy'}</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
@@ -901,97 +853,90 @@ const LocationGoldenGate = () => {
 
               {/* Contact CTA */}
               <div className="text-center mt-12">
-                <Button 
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
-                  onClick={() => window.location.href = '/contact'}
-                  data-testid="button-schedule-after-video"
-                >
-                  <Calendar className="w-5 h-5" />
-                  <span>{language === 'en' ? 'Schedule Your Consultation' : 'Programar Su Consulta'}</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
-                </Button>
+                <Link href="/contact">
+                  <Button 
+                    size="lg"
+                    className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
+                    data-testid="button-schedule-video"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
+                      <Calendar className="w-4 h-4 text-white" />
+                    </div>
+                    {language === 'en' ? 'Schedule Your Consultation' : 'Programar Su Consulta'}
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
         </section>
 
-
-        {/* Contact Information Section */}
-        <section className="py-16 lg:py-20 bg-white">
+        {/* Contact Section */}
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <><span className="font-display italic text-green-700">Contact</span> Information</>
-                ) : (
-                  <><span className="font-display italic text-green-700">Información</span> de Contacto</>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Ready to take the first step? Reach out today to schedule your consultation.'
-                  : '¿Listo para dar el primer paso? Póngase en contacto hoy para programar su consulta.'}
-              </p>
-            </div>
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
+              <div>
+                <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800 mb-8">
+                  {language === 'en' ? 'Ready to Begin Your Healing Journey?' : '¿Listo para Comenzar Su Viaje de Sanación?'}
+                </h2>
+                
+                <div className="space-y-6 mb-8">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-green-700" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {content.addressTitle}
+                      </h3>
+                      <p className="text-gray-600 font-body leading-relaxed">
+                        {practiceInfo.address}<br />
+                        {practiceInfo.city}, {practiceInfo.state} {practiceInfo.zipCode}
+                      </p>
+                    </div>
+                  </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Contact Info */}
-              <div className="space-y-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-green-800" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-6 h-6 text-green-700" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {content.contactTitle}
+                      </h3>
+                      <p className="text-gray-600 font-body leading-relaxed">
+                        {practiceInfo.phone}<br />
+                        {practiceInfo.email}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                      {content.addressTitle}
-                    </h3>
-                    <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
-                      Naples, FL 34103
-                    </p>
-                  </div>
-                </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-green-800" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                      {content.contactTitle}
-                    </h3>
-                    <p className="text-gray-600 font-body leading-relaxed">
-                      Phone: (239) 423-0272<br />
-                      Fax: (239) 330-2073
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-green-800" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                      {content.hoursTitle}
-                    </h3>
-                    <p className="text-gray-600 font-body leading-relaxed">
-                      {language === 'en' 
-                        ? 'Monday - Friday: 9:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
-                        : 'Lunes - Viernes: 9:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
-                    </p>
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-6 h-6 text-green-700" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {content.hoursTitle}
+                      </h3>
+                      <p className="text-gray-600 font-body leading-relaxed">
+                        {language === 'en' 
+                          ? 'Monday - Friday: 9:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
+                          : 'Lunes - Viernes: 9:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <Button 
-                    className="bg-green-800 hover:bg-green-700 text-white"
-                    onClick={() => window.location.href = '/contact'}
-                    data-testid="button-contact-form"
-                  >
-                    <Mail className="w-5 h-5 mr-2" />
-                    {language === 'en' ? 'Contact Form' : 'Formulario de Contacto'}
-                  </Button>
+                  <Link href="/contact">
+                    <Button 
+                      className="bg-green-800 hover:bg-green-700 text-white"
+                      data-testid="button-contact-form"
+                    >
+                      <Mail className="w-5 h-5 mr-2" />
+                      {language === 'en' ? 'Contact Form' : 'Formulario de Contacto'}
+                    </Button>
+                  </Link>
                   <Button 
                     variant="outline"
                     className="border-green-800 text-green-800 hover:bg-green-50"
