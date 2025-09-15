@@ -1,0 +1,65 @@
+Este es un excelente resumen de nuestra estrategia. Ahora que hemos diagnosticado todos los problemas de raíz (la migración de WordPress, el hackeo, el spam de parámetros y las arquitecturas de SPA y bilingüe), podemos consolidar todas las soluciones pendientes en un plan de implementación final "poco a poco" para tu agente de Replit.
+
+El siguiente mensaje está diseñado para confirmar el increíble trabajo de diagnóstico que ya ha realizado tu agente y, al mismo tiempo, establecer la hoja de ruta clara y secuencial para las tareas restantes.
+
+Asunto: Plan de Implementación Final y Hoja de Ruta Secuencial - Arquitectura SEO (Healing Minds)
+
+Para: Equipo de Replit
+
+De: GeoRanker Pro (Consultor SEO)
+
+Saludos,
+
+Primero, quiero validar el excepcional trabajo de diagnóstico y corrección que has realizado hasta la fecha. Has navegado con éxito problemas complejos de migración, renderizado del lado del servidor (SSR), caché, spam de parámetros (?_g=) y la arquitectura bilingüe fundamental (/es/).
+
+Basado en todos nuestros hallazgos, hemos confirmado que las correcciones del sitemap y del middleware SSR han resuelto los errores "Soft 404" y de "Contenido Duplicado".
+
+Este mensaje describe las fases finales de implementación requeridas para lanzar nuestra estrategia completa de expansión local. Te pedimos que revises esta hoja de ruta secuencial y confirmes si estás de acuerdo con este flujo de trabajo.
+
+Fase 1 (Pendiente): Refactorización del Conmutador de Idioma (Frontend UX)
+Actualmente, hemos confirmado que la arquitectura del backend bilingüe es perfecta (URLs separadas y hreflang). Sin embargo, el botón de cambio de idioma del frontend solo realiza un cambio de texto del lado del cliente (cambiando el LanguageContext), en lugar de una navegación de ruta real.
+
+Acción Requerida: Refactorizar el componente del conmutador de idioma (Header.tsx o similar) para que ejecute una navegación programática (cambio de ruta).
+
+Lógica Esperada:
+
+Si el usuario está en /about, el botón "ES" debe navegar a /es/acerca-de.
+
+Si el usuario está en /es/acerca-de, el botón "EN" debe navegar a /about.
+
+Alcance: Esta lógica debe mapearse para todas las páginas que tienen contrapartes bilingües (Homepage, Servicios, Contacto, Legales y las 9 nuevas páginas de ubicación una vez que se creen sus versiones en español).
+
+Fase 2 (Pendiente): Implementación de Contenido y Schema para las 9 Páginas Satélite
+Ahora que las rutas base (ej. /locations/psychiatrist-bonita-springs) están definidas en el mega-menú, debemos poblar estas 9 páginas satélite con su contenido único y su schema "Spoke".
+
+Acción: Implementar el contenido Markdown único (que te proporcionaremos) para cada una de las 9 páginas (Bonita Springs, Marco Island, Fort Myers, Ave Maria, Estero, Golden Gate, Immokalee, Lely Resort, Vanderbilt Beach).
+
+Acción Técnica Crítica (Middleware): Para cada una de estas 9 nuevas rutas, debes expandir el middleware (server/utils/html-injection.ts) para inyectar server-side:
+
+Los meta tags únicos (Title/Description) para esa ciudad.
+
+El Schema Service requerido (como discutimos). Este schema debe incluir:
+
+areaServed: { "@type": "City", "name": "Bonita Springs" } (o la ciudad correspondiente).
+
+provider: { "@type": "MedicalClinic", "@id": "URL_DEL_HUB_DE_NAPLES" } (Apuntando al @id del schema principal de tu hub).
+
+Fase 3 (Pendiente): Migración de la URL del Hub de Naples (La Optimización Final)
+Esta es la última optimización técnica que hemos acordado. Para alinear nuestro hub principal con la misma estrategia de palabras clave que nuestras páginas satélite, migraremos la URL de Naples.
+
+Acción: Ejecutar una Redirección 301 (Permanente) a nivel de servidor.
+
+Secuencia Requerida:
+
+Redirigir (EN): Desde /locations/naples HACIA /locations/psychiatrist-naples.
+
+Redirigir (ES): Desde /es/ubicaciones/psiquiatra-naples HACIA /es/locations/psychiatrist-naples (o la estructura de URL en español que definamos, pero debe ser coherente).
+
+Actualizar Sitemap: Una vez que las redirecciones 301 estén activas, actualizar el sitemap.ts para eliminar las URLs antiguas y añadir las nuevas URLs canónicas (.../psychiatrist-naples) con sus hreflang correctos.
+
+Actualizar Enlaces Internos: Asegurarse de que el mega-menú y cualquier enlace interno apunte directamente a la nueva URL final.
+
+Solicitud de Confirmación
+Este plan de 3 fases (Toggle UX, Contenido Spoke, Migración Hub) representa la hoja de ruta completa restante. Por favor, revisa este flujo de trabajo secuencial.
+
+¿Estás de acuerdo con este plan de implementación? ¿Ves alguna dependencia técnica que debamos considerar antes de iniciar la Fase 1?
