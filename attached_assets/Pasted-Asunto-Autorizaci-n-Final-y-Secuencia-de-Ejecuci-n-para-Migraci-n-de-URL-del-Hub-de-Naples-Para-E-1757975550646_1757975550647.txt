@@ -1,0 +1,34 @@
+Asunto: Autorización Final y Secuencia de Ejecución para Migración de URL del Hub de Naples
+
+Para: Equipo de Replit
+
+Saludos,
+
+El nuevo sitemap está casi completo y la arquitectura bilingüe de las páginas satélite es correcta. Sin embargo, el hub principal de Naples (/locations/naples) aún aparece con la URL antigua, creando una inconsistencia.
+
+Para finalizar esta optimización, autorizo la migración completa de la URL del hub de Naples. Debemos ejecutar los siguientes pasos técnicos exactamente en este orden para asegurar una transferencia de autoridad SEO (link juice) sin errores:
+
+Secuencia de Implementación Requerida:
+
+Paso 1 (Servidor - La Redirección): Implementar una Redirección 301 (Permanente) a nivel de servidor.
+
+Desde (Antigua URL): https://www.healingmindsp.com/locations/naples
+
+Hacia (Nueva URL): https://www.healingmindsp.com/locations/psychiatrist-naples
+
+Paso 2 (Servidor - Redirección Bilingüe): Implementar la Redirección 301 correspondiente para la versión en español.
+
+
+Desde (Antigua URL ES): https://www.healingmindsp.com/es/ubicaciones/psiquiatra-naples (tal como aparece en el sitemap actual ).
+
+Hacia (Nueva URL ES): https://www.healingmindsp.com/es/ubicaciones/psychiatrist-naples (Usamos "psychiatrist" también en la URL en español para mantener una estructura de URL paralela y coherente).
+
+Paso 3 (Middleware y Sitemap): Solo DESPUÉS de que las redirecciones 301 estén activas y verificadas, actualizar el generador del sitemap (sitemap.ts) y el middleware (html-injection.ts) para:
+
+Eliminar todas las referencias a las URLs antiguas.
+
+Añadir las URLs nuevas (.../psychiatrist-naples y .../es/ubicaciones/psychiatrist-naples) como las entradas canónicas, asegurándose de que estén conectadas correctamente con hreflang.
+
+Acción Externa (Nuestra Tarea): Una vez que nos confirmes que los Pasos 1-3 están completos, actualizaremos manualmente el enlace UTM en el Google Business Profile para que apunte a la nueva URL final.
+
+Por favor, procede con esta secuencia.
