@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -51,10 +51,25 @@ const LocationLelyResorts = () => {
     };
     updateSEO(seoData);
 
-    // Schema already managed by App.tsx to avoid duplication
+    // This schema points to the main MedicalClinic as provider, avoiding conflicts
+    const serviceDescription = language === 'en'
+      ? 'Expert psychiatric care serving Lely Resorts residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Lely Resorts community.'
+      : 'Atención psiquiátrica experta para residentes de Lely Resorts. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Lely Resorts.';
+
+    addLocationServiceSchema({
+      locationName: 'Lely Resorts',
+      description: serviceDescription,
+      pageId: 'lely-resorts-location',
+      language: language
+    });
 
     return () => {
-      // No cleanup needed
+      // Clean up Service schema when component unmounts
+      const serviceSchema = document.querySelector('script[type="application/ld+json"]#lely-resorts-location-service-schema');
+      if (serviceSchema) {
+        serviceSchema.remove();
+        console.log('🧹 Cleaned up Lely Resorts Service schema');
+      }
     };
   }, [language]);
 
@@ -156,13 +171,13 @@ const LocationLelyResorts = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Lely Resorts, FL</span>
+                    Compassionate Psychiatric Care for{' '}
+                    <span className="font-display italic text-green-700">Lely Resort</span> Residents
                   </>
                 ) : (
                   <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Lely Resorts, FL</span>
+                    Atención Psiquiátrica Compasiva para Residentes de{' '}
+                    <span className="font-display italic text-green-700">Lely Resort</span>
                   </>
                 )}
               </h1>
@@ -504,6 +519,214 @@ const LocationLelyResorts = () => {
                     <span className="text-green-800 font-body text-sm font-medium">{area}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How to Get Here Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Navigation />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>How to Get <span className="font-display italic text-green-700">Here</span></>
+                    ) : (
+                      <>Cómo <span className="font-display italic text-green-700">Llegar</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <MapPin />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'Our Naples office is conveniently located for Lely Resort residents. Use these familiar landmarks to find us easily.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Lely Resort. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <MapPin className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'From Players Club & Spa' : 'Desde Players Club & Spa'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Exit Lely Resort and head north on Santa Barbara Blvd. Turn right on Tamiami Trail E. Continue north for about 8 miles. Our office is on the right side.'
+                      : 'Salga de Lely Resort y diríjase al norte por Santa Barbara Blvd. Gire a la derecha en Tamiami Trail E. Continúe al norte aproximadamente 8 millas. Nuestra oficina está del lado derecho.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <MapPin className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'From Ole Village Center' : 'Desde Ole Village Center'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'From the Village Center, exit to Grand Lely Dr and continue north to US-41 (Tamiami Trail). Turn left and head north. Our office is located on the right.'
+                      : 'Desde el Village Center, salga hacia Grand Lely Dr y continúe al norte hasta US-41 (Tamiami Trail). Gire a la izquierda y diríjase al norte. Nuestra oficina está ubicada a la derecha.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Navigation className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Championship Golf Access' : 'Acceso Campo de Golf'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'From the Mustang or Flamingo Golf Courses, take Collier Blvd north to US-41. Convenient 15-minute drive with easy parking. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
+                      : 'Desde los campos de golf Mustang o Flamingo, tome Collier Blvd al norte hasta US-41. 15 minutos en auto con estacionamiento fácil. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center mt-8">
+                <Button 
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
+                  data-testid="button-directions"
+                >
+                  <Navigation className="w-5 h-5" />
+                  <span>{language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}</span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </div>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Community Involvement Section */}
+        <section className="py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <Users />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>Community <span className="font-display italic text-green-700">Involvement</span></>
+                    ) : (
+                      <>Participación <span className="font-display italic text-green-700">Comunitaria</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Heart />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'We proudly support Lely Resort community organizations and encourage our patients to connect with local resources for holistic wellness.'
+                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Lely Resort y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <Shield className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Lely Master POA' : 'POA Master de Lely'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Coordinating with 48 HOAs and condo associations within Lely Resort to maintain community standards and quality of life.'
+                      : 'Coordinando con 48 HOAs y asociaciones de condominios dentro de Lely Resort para mantener estándares comunitarios y calidad de vida.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-blue-700 border-blue-200 hover:bg-blue-50 rounded-full"
+                    onClick={() => window.open('https://lelymasterpoa.com/', '_blank')}
+                    data-testid="link-master-poa"
+                  >
+                    {language === 'en' ? 'Learn More' : 'Aprender Más'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <Heart className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Lely Community Development District' : 'Distrito Desarrollo Comunitario Lely'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Special purpose government established in 1990, managing 1,500 acres with over 9,000 approved residential units across Lely Resort.'
+                      : 'Gobierno de propósito especial establecido en 1990, gestionando 1,500 acres con más de 9,000 unidades residenciales aprobadas en Lely Resort.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-green-700 border-green-200 hover:bg-green-50 rounded-full"
+                    onClick={() => window.open('https://www.lelycdd.com/', '_blank')}
+                    data-testid="link-community-district"
+                  >
+                    {language === 'en' ? 'Visit Website' : 'Visitar Sitio'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Star className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Lely Country Club POA' : 'POA Country Club Lely'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Property Owners Association managing the exclusive country club lifestyle and amenities for Lely Resort residents.'
+                      : 'Asociación de Propietarios que gestiona el estilo de vida exclusivo del country club y amenidades para residentes de Lely Resort.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-purple-700 border-purple-200 hover:bg-purple-50 rounded-full"
+                    onClick={() => window.open('https://lelycountryclub.com/lely-country-club-property-owners-association/', '_blank')}
+                    data-testid="link-country-club-poa"
+                  >
+                    {language === 'en' ? 'Country Club Info' : 'Info Country Club'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
+                    <Heart className="w-8 h-8 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Supporting Our Lely Resort Community' : 'Apoyando Nuestra Comunidad de Lely Resort'}
+                  </h3>
+                  <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
+                    {language === 'en'
+                      ? 'Mental health is strengthened through community connection. We encourage our Lely Resort patients to engage with local organizations that promote wellness, support, and active community involvement.'
+                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Lely Resort a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento activo comunitario.'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

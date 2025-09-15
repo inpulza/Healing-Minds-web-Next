@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -51,10 +51,25 @@ const LocationVanderbiltBeach = () => {
     };
     updateSEO(seoData);
 
-    // Schema already managed by App.tsx to avoid duplication
+    // This schema points to the main MedicalClinic as provider, avoiding conflicts
+    const serviceDescription = language === 'en'
+      ? 'Expert psychiatric care serving Vanderbilt Beach residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Vanderbilt Beach community.'
+      : 'Atención psiquiátrica experta para residentes de Vanderbilt Beach. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Vanderbilt Beach.';
+
+    addLocationServiceSchema({
+      locationName: 'Vanderbilt Beach',
+      description: serviceDescription,
+      pageId: 'vanderbilt-beach-location',
+      language: language
+    });
 
     return () => {
-      // No cleanup needed
+      // Clean up Service schema when component unmounts
+      const serviceSchema = document.querySelector('script[type="application/ld+json"]#vanderbilt-beach-location-service-schema');
+      if (serviceSchema) {
+        serviceSchema.remove();
+        console.log('🧹 Cleaned up Vanderbilt Beach Service schema');
+      }
     };
   }, [language]);
 
@@ -156,13 +171,13 @@ const LocationVanderbiltBeach = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Vanderbilt Beach, FL</span>
+                    Compassionate Psychiatric Care for{' '}
+                    <span className="font-display italic text-green-700">Vanderbilt Beach</span> Residents
                   </>
                 ) : (
                   <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Vanderbilt Beach, FL</span>
+                    Atención Psiquiátrica Compasiva para Residentes de{' '}
+                    <span className="font-display italic text-green-700">Vanderbilt Beach</span>
                   </>
                 )}
               </h1>
@@ -504,6 +519,214 @@ const LocationVanderbiltBeach = () => {
                     <span className="text-green-800 font-body text-sm font-medium">{area}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How to Get Here Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Navigation />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>How to Get <span className="font-display italic text-green-700">Here</span></>
+                    ) : (
+                      <>Cómo <span className="font-display italic text-green-700">Llegar</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <MapPin />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'Our Naples office is conveniently located for Vanderbilt Beach residents. Use these familiar landmarks to find us easily.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Vanderbilt Beach. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <MapPin className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'From Vanderbilt Beach Park' : 'Desde Vanderbilt Beach Park'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Exit the beach area and head east on Vanderbilt Beach Rd. Turn right on US-41 S (Tamiami Trail). Our office is on the right side. Easy 10-minute drive.'
+                      : 'Salga del área de playa y diríjase al este por Vanderbilt Beach Rd. Gire a la derecha en US-41 S (Tamiami Trail). Nuestra oficina está del lado derecho. 10 minutos en auto.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <MapPin className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'From Delnor-Wiggins Pass' : 'Desde Delnor-Wiggins Pass'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Take Vanderbilt Dr south to Vanderbilt Beach Rd. Turn left (east) and continue to US-41. Turn right on Tamiami Trail S. Our office is ahead on the right.'
+                      : 'Tome Vanderbilt Dr al sur hacia Vanderbilt Beach Rd. Gire a la izquierda (este) y continúe hasta US-41. Gire a la derecha en Tamiami Trail S. Nuestra oficina está adelante a la derecha.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Navigation className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'North Naples Access' : 'Acceso Norte de Naples'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'From North Naples, take Vanderbilt Beach Rd east to Tamiami Trail. Quick access with ample parking at our location. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
+                      : 'Desde el Norte de Naples, tome Vanderbilt Beach Rd este hasta Tamiami Trail. Acceso rápido con amplio estacionamiento en nuestra ubicación. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center mt-8">
+                <Button 
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
+                  data-testid="button-directions"
+                >
+                  <Navigation className="w-5 h-5" />
+                  <span>{language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}</span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </div>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Community Involvement Section */}
+        <section className="py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <Users />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>Community <span className="font-display italic text-green-700">Involvement</span></>
+                    ) : (
+                      <>Participación <span className="font-display italic text-green-700">Comunitaria</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Heart />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'We proudly support Vanderbilt Beach community organizations and encourage our patients to connect with local resources for holistic wellness.'
+                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Vanderbilt Beach y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <Shield className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Vanderbilt Beach Residents Assoc.' : 'Asociación Residentes Vanderbilt Beach'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Community advocacy organization preserving quality of life in Vanderbilt Beach through active resident engagement.'
+                      : 'Organización de defensa comunitaria que preserva la calidad de vida en Vanderbilt Beach a través del compromiso activo de los residentes.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-blue-700 border-blue-200 hover:bg-blue-50 rounded-full"
+                    onClick={() => window.open('https://vbra.org/', '_blank')}
+                    data-testid="link-residents-association"
+                  >
+                    {language === 'en' ? 'Learn More' : 'Aprender Más'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <Heart className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Collier Community Foundation' : 'Fundación Comunitaria de Collier'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Supporting Collier County nonprofits and community initiatives that serve Vanderbilt Beach and surrounding areas.'
+                      : 'Apoyando organizaciones sin fines de lucro e iniciativas comunitarias del Condado de Collier que sirven a Vanderbilt Beach y áreas circundantes.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-green-700 border-green-200 hover:bg-green-50 rounded-full"
+                    onClick={() => window.open('https://colliercf.org/', '_blank')}
+                    data-testid="link-community-foundation"
+                  >
+                    {language === 'en' ? 'Visit Website' : 'Visitar Sitio'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Star className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Vanderbilt Beach MSTU' : 'MSTU de Vanderbilt Beach'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Municipal Services Taxing Unit managing landscaping and community improvements throughout Vanderbilt Beach area.'
+                      : 'Unidad de Servicios Municipales que gestiona paisajismo y mejoras comunitarias en toda el área de Vanderbilt Beach.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-purple-700 border-purple-200 hover:bg-purple-50 rounded-full"
+                    onClick={() => window.open('https://www.colliercountyfl.gov/', '_blank')}
+                    data-testid="link-mstu"
+                  >
+                    {language === 'en' ? 'County Info' : 'Info del Condado'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
+                    <Heart className="w-8 h-8 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Supporting Our Vanderbilt Beach Community' : 'Apoyando Nuestra Comunidad de Vanderbilt Beach'}
+                  </h3>
+                  <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
+                    {language === 'en'
+                      ? 'Mental health is strengthened through community connection. We encourage our Vanderbilt Beach patients to engage with local organizations that promote wellness, support, and community involvement.'
+                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Vanderbilt Beach a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento comunitario.'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

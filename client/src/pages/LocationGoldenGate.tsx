@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -51,10 +51,25 @@ const LocationGoldenGate = () => {
     };
     updateSEO(seoData);
 
-    // Schema already managed by App.tsx to avoid duplication
+    // This schema points to the main MedicalClinic as provider, avoiding conflicts
+    const serviceDescription = language === 'en'
+      ? 'Expert psychiatric care serving Golden Gate residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Golden Gate community.'
+      : 'Atención psiquiátrica experta para residentes de Golden Gate. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Golden Gate.';
+
+    addLocationServiceSchema({
+      locationName: 'Golden Gate',
+      description: serviceDescription,
+      pageId: 'golden-gate-location',
+      language: language
+    });
 
     return () => {
-      // No cleanup needed
+      // Clean up Service schema when component unmounts
+      const serviceSchema = document.querySelector('script[type="application/ld+json"]#golden-gate-location-service-schema');
+      if (serviceSchema) {
+        serviceSchema.remove();
+        console.log('🧹 Cleaned up Golden Gate Service schema');
+      }
     };
   }, [language]);
 
@@ -156,13 +171,13 @@ const LocationGoldenGate = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Golden Gate, FL</span>
+                    Compassionate Psychiatric Care for{' '}
+                    <span className="font-display italic text-green-700">Golden Gate</span> Residents
                   </>
                 ) : (
                   <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Golden Gate, FL</span>
+                    Atención Psiquiátrica Compasiva para Residentes de{' '}
+                    <span className="font-display italic text-green-700">Golden Gate</span>
                   </>
                 )}
               </h1>
@@ -504,6 +519,214 @@ const LocationGoldenGate = () => {
                     <span className="text-green-800 font-body text-sm font-medium">{area}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How to Get Here Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Navigation />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>How to Get <span className="font-display italic text-green-700">Here</span></>
+                    ) : (
+                      <>Cómo <span className="font-display italic text-green-700">Llegar</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <MapPin />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'Our Naples office is conveniently located for Golden Gate residents. Use these familiar landmarks to find us easily.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Golden Gate. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <MapPin className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'From Golden Gate Community Center' : 'Desde Centro Comunitario Golden Gate'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'From 4701 Golden Gate Parkway, head west toward Airport Rd. Turn right on Airport Rd and continue north to Tamiami Trail. Turn left and our office is on the left.'
+                      : 'Desde 4701 Golden Gate Parkway, diríjase al oeste hacia Airport Rd. Gire a la derecha en Airport Rd y continúe al norte hasta Tamiami Trail. Gire a la izquierda y nuestra oficina está a la izquierda.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <MapPin className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'From Golden Gate Community Park' : 'Desde Parque Comunitario Golden Gate'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'From 3300 Santa Barbara Blvd, head north to Golden Gate Parkway. Turn left (west) and continue to Airport Rd. Turn right and proceed north to Tamiami Trail.'
+                      : 'Desde 3300 Santa Barbara Blvd, diríjase al norte hasta Golden Gate Parkway. Gire a la izquierda (oeste) y continúe hasta Airport Rd. Gire a la derecha y proceda al norte hasta Tamiami Trail.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Navigation className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Collier County Access' : 'Acceso Condado de Collier'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'From central Golden Gate, take Golden Gate Parkway west to Airport Rd. Quick 15-minute drive to our location with ample parking. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
+                      : 'Desde el centro de Golden Gate, tome Golden Gate Parkway oeste hasta Airport Rd. 15 minutos en auto a nuestra ubicación con amplio estacionamiento. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center mt-8">
+                <Button 
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
+                  data-testid="button-directions"
+                >
+                  <Navigation className="w-5 h-5" />
+                  <span>{language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}</span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </div>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Community Involvement Section */}
+        <section className="py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <Users />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>Community <span className="font-display italic text-green-700">Involvement</span></>
+                    ) : (
+                      <>Participación <span className="font-display italic text-green-700">Comunitaria</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Heart />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'We proudly support Golden Gate community organizations and encourage our patients to connect with local resources for holistic wellness.'
+                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Golden Gate y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <Shield className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Golden Gate Estates Area Civic Assoc.' : 'Asociación Cívica de Golden Gate Estates'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Community advocacy organization focused on understanding the Golden Gate Estates Master Plan and supporting local residents’ needs.'
+                      : 'Organización de defensa comunitaria enfocada en comprender el Plan Maestro de Golden Gate Estates y apoyar las necesidades de los residentes locales.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-blue-700 border-blue-200 hover:bg-blue-50 rounded-full"
+                    onClick={() => window.open('https://ggeaca.org/', '_blank')}
+                    data-testid="link-civic-association"
+                  >
+                    {language === 'en' ? 'Learn More' : 'Aprender Más'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <Heart className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Golden Gate Community Center' : 'Centro Comunitario Golden Gate'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Full-service community center offering recreation facilities, skate park, BMX track, gymnasium, and programs for all ages in Golden Gate.'
+                      : 'Centro comunitario de servicio completo que ofrece instalaciones recreativas, parque de patinaje, pista BMX, gimnasio y programas para todas las edades en Golden Gate.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-green-700 border-green-200 hover:bg-green-50 rounded-full"
+                    onClick={() => window.open('https://www.collierparks.com/collier_park/golden-gate-community-center/', '_blank')}
+                    data-testid="link-community-center"
+                  >
+                    {language === 'en' ? 'Visit Website' : 'Visitar Sitio'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Star className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Collier County Government' : 'Gobierno del Condado de Collier'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Local government services and community resources supporting Golden Gate residents through various programs and initiatives.'
+                      : 'Servicios de gobierno local y recursos comunitarios que apoyan a los residentes de Golden Gate a través de varios programas e iniciativas.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-purple-700 border-purple-200 hover:bg-purple-50 rounded-full"
+                    onClick={() => window.open('https://www.colliercountyfl.gov/', '_blank')}
+                    data-testid="link-county-government"
+                  >
+                    {language === 'en' ? 'County Services' : 'Servicios Condado'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
+                    <Heart className="w-8 h-8 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Supporting Our Golden Gate Community' : 'Apoyando Nuestra Comunidad de Golden Gate'}
+                  </h3>
+                  <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
+                    {language === 'en'
+                      ? 'Mental health is strengthened through community connection. We encourage our Golden Gate patients to engage with local organizations that promote wellness, civic involvement, and community support.'
+                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Golden Gate a participar con organizaciones locales que promueven el bienestar, involucramiento cívico y apoyo comunitario.'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

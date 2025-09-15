@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
-import { updateSEO } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -51,10 +51,25 @@ const LocationAveMaria = () => {
     };
     updateSEO(seoData);
 
-    // Schema already managed by App.tsx to avoid duplication
+    // This schema points to the main MedicalClinic as provider, avoiding conflicts
+    const serviceDescription = language === 'en'
+      ? 'Expert psychiatric care serving Ave Maria residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Ave Maria community.'
+      : 'Atención psiquiátrica experta para residentes de Ave Maria. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Ave Maria.';
+
+    addLocationServiceSchema({
+      locationName: 'Ave Maria',
+      description: serviceDescription,
+      pageId: 'ave-maria-location',
+      language: language
+    });
 
     return () => {
-      // No cleanup needed
+      // Clean up Service schema when component unmounts
+      const serviceSchema = document.querySelector('script[type="application/ld+json"]#ave-maria-location-service-schema');
+      if (serviceSchema) {
+        serviceSchema.remove();
+        console.log('🧹 Cleaned up Ave Maria Service schema');
+      }
     };
   }, [language]);
 
@@ -156,13 +171,13 @@ const LocationAveMaria = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Ave Maria, FL</span>
+                    Compassionate Psychiatric Care for{' '}
+                    <span className="font-display italic text-green-700">Ave Maria</span> Residents
                   </>
                 ) : (
                   <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Ave Maria, FL</span>
+                    Atención Psiquiátrica Compasiva para Residentes de{' '}
+                    <span className="font-display italic text-green-700">Ave Maria</span>
                   </>
                 )}
               </h1>
@@ -504,6 +519,214 @@ const LocationAveMaria = () => {
                     <span className="text-green-800 font-body text-sm font-medium">{area}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How to Get Here Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Navigation />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>How to Get <span className="font-display italic text-green-700">Here</span></>
+                    ) : (
+                      <>Cómo <span className="font-display italic text-green-700">Llegar</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <MapPin />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'Our Naples office is conveniently located for Ave Maria residents. Use these familiar landmarks to find us easily.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Ave Maria. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <MapPin className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'From Ave Maria University' : 'Desde Ave Maria University'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Head south on Oil Well Rd toward Immokalee Rd. Take I-75 South to Exit 105 (Immokalee Rd). Turn right on Tamiami Trail N. Our office is on the right.'
+                      : 'Diríjase al sur por Oil Well Rd hacia Immokalee Rd. Tome la I-75 Sur hasta la Salida 105 (Immokalee Rd). Gire a la derecha en Tamiami Trail N. Nuestra oficina está a la derecha.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <MapPin className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'From Ave Maria Town Center' : 'Desde Ave Maria Town Center'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Exit the Town Center and head west on Ave Maria Blvd. Continue on Oil Well Rd, then take I-75 South to Exit 105. Turn right on Tamiami Trail N.'
+                      : 'Salga del Town Center y diríjase al oeste por Ave Maria Blvd. Continúe por Oil Well Rd, luego tome la I-75 Sur hasta la Salida 105. Gire a la derecha en Tamiami Trail N.'}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Navigation className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Easy Access Route' : 'Ruta de Acceso Fácil'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Approximately 25-minute drive from Ave Maria. Ample parking available at our Naples location. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
+                      : 'Aproximadamente 25 minutos en automóvil desde Ave Maria. Amplio estacionamiento disponible en nuestra ubicación de Naples. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center mt-8">
+                <Button 
+                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
+                  data-testid="button-directions"
+                >
+                  <Navigation className="w-5 h-5" />
+                  <span>{language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}</span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </div>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Community Involvement Section */}
+        <section className="py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <Users />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>Community <span className="font-display italic text-green-700">Involvement</span></>
+                    ) : (
+                      <>Participación <span className="font-display italic text-green-700">Comunitaria</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Heart />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'We proudly support Ave Maria community organizations and encourage our patients to connect with local resources for holistic wellness.'
+                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Ave Maria y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <Shield className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Ave Maria Stewardship District' : 'Distrito Administrativo de Ave Maria'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Local government providing community infrastructure and services to Ave Maria residents.'
+                      : 'Gobierno local que brinda infraestructura comunitaria y servicios a los residentes de Ave Maria.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-blue-700 border-blue-200 hover:bg-blue-50 rounded-full"
+                    onClick={() => window.open('https://avemariastewardshipcd.org/', '_blank')}
+                    data-testid="link-stewardship-district"
+                  >
+                    {language === 'en' ? 'Learn More' : 'Aprender Más'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <Heart className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Ave Maria Master Association' : 'Asociación Master de Ave Maria'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Managing community amenities and resident services to enhance the Ave Maria living experience.'
+                      : 'Gestionando amenidades comunitarias y servicios para residentes para mejorar la experiencia de vida en Ave Maria.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-green-700 border-green-200 hover:bg-green-50 rounded-full"
+                    onClick={() => window.open('https://avemariamasterassociation.com/', '_blank')}
+                    data-testid="link-master-association"
+                  >
+                    {language === 'en' ? 'Visit Website' : 'Visitar Sitio'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+
+                <div className="bg-green-50 rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                    <Star className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Ave Maria Catholic Parish' : 'Parroquia Católica Ave Maria'}
+                  </h3>
+                  <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
+                    {language === 'en'
+                      ? 'Central gathering place providing spiritual support and community connections in Ave Maria.'
+                      : 'Lugar central de reunión que brinda apoyo espiritual y conexiones comunitarias en Ave Maria.'}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-purple-700 border-purple-200 hover:bg-purple-50 rounded-full"
+                    onClick={() => window.open('https://www.avemariaparish.org/', '_blank')}
+                    data-testid="link-catholic-parish"
+                  >
+                    {language === 'en' ? 'Parish Info' : 'Info Parroquial'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl p-6 mt-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center mx-auto mb-4">
+                    <Heart className="w-8 h-8 text-green-700" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
+                    {language === 'en' ? 'Supporting Our Ave Maria Community' : 'Apoyando Nuestra Comunidad de Ave Maria'}
+                  </h3>
+                  <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
+                    {language === 'en'
+                      ? 'Mental health is strengthened through community connection. We encourage our Ave Maria patients to engage with local organizations that promote wellness, support, and community involvement.'
+                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Ave Maria a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento comunitario.'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
