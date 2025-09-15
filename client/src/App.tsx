@@ -102,6 +102,19 @@ function Router() {
       <Route path="/locations/psychiatrist-ave-maria" component={LocationAveMaria} />
       <Route path="/locations/psychiatrist-fort-myers" component={LocationFortMyers} />
       <Route path="/locations/psychiatrist-lely-resorts" component={LocationLelyResorts} />
+      
+      {/* Spanish Location Pages */}
+      <Route path="/es/ubicaciones/psiquiatra-naples" component={LocationNaples} />
+      <Route path="/es/ubicaciones/psiquiatra-bonita-springs" component={LocationBonitaSprings} />
+      <Route path="/es/ubicaciones/psiquiatra-marco-island" component={LocationMarcoIsland} />
+      <Route path="/es/ubicaciones/psiquiatra-estero" component={LocationEstero} />
+      <Route path="/es/ubicaciones/psiquiatra-golden-gate" component={LocationGoldenGate} />
+      <Route path="/es/ubicaciones/psiquiatra-immokalee" component={LocationImmokalee} />
+      <Route path="/es/ubicaciones/psiquiatra-vanderbilt-beach" component={LocationVanderbiltBeach} />
+      <Route path="/es/ubicaciones/psiquiatra-ave-maria" component={LocationAveMaria} />
+      <Route path="/es/ubicaciones/psiquiatra-fort-myers" component={LocationFortMyers} />
+      <Route path="/es/ubicaciones/psiquiatra-lely-resorts" component={LocationLelyResorts} />
+      
       <Route path="/contact" component={Contact} />
       
       {/* Spanish Main Pages */}
