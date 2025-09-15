@@ -1,4 +1,6 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { useLocation } from 'wouter';
+import { hasBilingualCounterpart } from '@/utils/urlMapping';
 
 type Language = 'en' | 'es';
 
@@ -24,6 +26,18 @@ interface LanguageProviderProps {
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
+  const [location] = useLocation();
+
+  // URL-driven language sync: automatically set language based on current URL
+  // Only for pages with bilingual counterparts to preserve manual language selection
+  useEffect(() => {
+    if (hasBilingualCounterpart(location)) {
+      const urlLanguage = location.startsWith('/es') ? 'es' : 'en';
+      if (urlLanguage !== language) {
+        setLanguage(urlLanguage);
+      }
+    }
+  }, [location, language]);
 
   const translations = {
     en: {
@@ -155,7 +169,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
 
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    return (translations[language] as any)[key] || key;
   };
 
   const value = {

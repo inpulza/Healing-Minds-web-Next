@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
+import { getCorrespondingURL, hasBilingualCounterpart } from '@/utils/urlMapping';
 import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ReactCountryFlag from 'react-country-flag';
@@ -40,9 +41,20 @@ const Header = () => {
 
   const toggleLanguage = () => {
     const newLanguage = language === 'en' ? 'es' : 'en';
-    setLanguage(newLanguage);
     
-    // Track language change with Clarity
+    // Check if current URL has a bilingual counterpart
+    const correspondingURL = getCorrespondingURL(location, newLanguage);
+    
+    if (correspondingURL && hasBilingualCounterpart(location)) {
+      // Navigate to corresponding URL in target language
+      navigate(correspondingURL);
+      // Language will be set automatically by SpanishRouteWrapper or route detection
+    } else {
+      // No bilingual counterpart exists, just change language context
+      setLanguage(newLanguage);
+    }
+    
+    // Track language change with Clarity (preserve existing functionality)
     trackEvent('language_changed');
     setTag('selected_language', newLanguage);
   };
@@ -67,7 +79,7 @@ const Header = () => {
       description: language === 'en' ? 'Comprehensive depression care' : 'Atención integral para depresión'
     },
     {
-      href: '/services/adhd-treatment',
+      href: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd',
       label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
       description: language === 'en' ? 'Specialized ADHD evaluation & care' : 'Evaluación y atención especializada de TDAH'
     },
