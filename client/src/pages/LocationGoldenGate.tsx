@@ -897,8 +897,8 @@ const LocationGoldenGate = () => {
                         {content.addressTitle}
                       </h3>
                       <p className="text-gray-600 font-body leading-relaxed">
-                        {practiceInfo.address}<br />
-                        {practiceInfo.city}, {practiceInfo.state} {practiceInfo.zipCode}
+                        {practiceInfo.address.street}<br />
+                        {practiceInfo.address.city}, {practiceInfo.address.state} {practiceInfo.address.zip}
                       </p>
                     </div>
                   </div>
