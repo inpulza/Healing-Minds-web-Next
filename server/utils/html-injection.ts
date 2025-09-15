@@ -255,6 +255,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/services/anxiety-treatment`
+          },
+          // HREFLANG: Anxiety Treatment bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/anxiety-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-ansiedad`
           }
         ]
       };
@@ -274,6 +285,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/services/depression-treatment`
+          },
+          // HREFLANG: Depression Treatment bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/depression-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-depresion`
           }
         ]
       };
@@ -293,6 +315,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/services/adhd-treatment`
+          },
+          // HREFLANG: ADHD Treatment bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/adhd-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-adhd`
           }
         ]
       };
@@ -312,6 +345,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/services/ptsd-treatment`
+          },
+          // HREFLANG: PTSD Treatment bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/ptsd-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-tept`
           }
         ]
       };
@@ -331,6 +375,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/services/bipolar-treatment`
+          },
+          // HREFLANG: Bipolar Treatment bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/bipolar-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-bipolar`
           }
         ]
       };
@@ -350,6 +405,17 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/services/medication-management`
+          },
+          // HREFLANG: Medication Management bilingual versions
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/medication-management`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/manejo-medicamentos`
           }
         ]
       };
