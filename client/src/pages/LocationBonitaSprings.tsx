@@ -553,7 +553,7 @@ const LocationBonitaSprings = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* From Bonita Springs Public Library */}
-              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <IconMapPin className="w-6 h-6 text-blue-800" />
@@ -568,7 +568,7 @@ const LocationBonitaSprings = () => {
                   </div>
                 </div>
                 
-                <div className="space-y-4 mb-6">
+                <div className="space-y-4 mb-6 flex-grow">
                   <div className="flex items-start gap-3">
                     <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                       <span className="text-green-800 font-bold text-xs">1</span>
@@ -603,23 +603,25 @@ const LocationBonitaSprings = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
-                  <Clock className="w-4 h-4" />
-                  <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
-                </div>
+                <div className="mt-auto">
+                  <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                    <Clock className="w-4 h-4" />
+                    <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
+                  </div>
 
-                <Button 
-                  className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
-                  onClick={() => window.open('https://maps.google.com/?saddr=10560+Reynolds+Street,+Bonita+Springs,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
-                  data-testid="button-directions-library"
-                >
-                  <Navigation className="w-4 h-4 mr-2" />
-                  {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
-                </Button>
+                  <Button 
+                    className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                    onClick={() => window.open('https://maps.google.com/?saddr=10560+Reynolds+Street,+Bonita+Springs,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                    data-testid="button-directions-library"
+                  >
+                    <Navigation className="w-4 h-4 mr-2" />
+                    {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                  </Button>
+                </div>
               </div>
 
               {/* From Coconut Point */}
-              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <IconMapPin className="w-6 h-6 text-blue-800" />
@@ -634,7 +636,7 @@ const LocationBonitaSprings = () => {
                   </div>
                 </div>
                 
-                <div className="space-y-4 mb-6">
+                <div className="space-y-4 mb-6 flex-grow">
                   <div className="flex items-start gap-3">
                     <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                       <span className="text-green-800 font-bold text-xs">1</span>
@@ -669,23 +671,25 @@ const LocationBonitaSprings = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
-                  <Clock className="w-4 h-4" />
-                  <span>{language === 'en' ? '20-25 minutes' : '20-25 minutos'}</span>
-                </div>
+                <div className="mt-auto">
+                  <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                    <Clock className="w-4 h-4" />
+                    <span>{language === 'en' ? '20-25 minutes' : '20-25 minutos'}</span>
+                  </div>
 
-                <Button 
-                  className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
-                  onClick={() => window.open('https://maps.google.com/?saddr=Coconut+Point,+Estero,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
-                  data-testid="button-directions-coconut-point"
-                >
-                  <Navigation className="w-4 h-4 mr-2" />
-                  {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
-                </Button>
+                  <Button 
+                    className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                    onClick={() => window.open('https://maps.google.com/?saddr=Coconut+Point,+Estero,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                    data-testid="button-directions-coconut-point"
+                  >
+                    <Navigation className="w-4 h-4 mr-2" />
+                    {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                  </Button>
+                </div>
               </div>
 
               {/* From Downtown Bonita Springs */}
-              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <IconMapPin className="w-6 h-6 text-blue-800" />
@@ -700,7 +704,7 @@ const LocationBonitaSprings = () => {
                   </div>
                 </div>
                 
-                <div className="space-y-4 mb-6">
+                <div className="space-y-4 mb-6 flex-grow">
                   <div className="flex items-start gap-3">
                     <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                       <span className="text-green-800 font-bold text-xs">1</span>
@@ -735,19 +739,21 @@ const LocationBonitaSprings = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
-                  <Clock className="w-4 h-4" />
-                  <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
-                </div>
+                <div className="mt-auto">
+                  <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                    <Clock className="w-4 h-4" />
+                    <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
+                  </div>
 
-                <Button 
-                  className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
-                  onClick={() => window.open('https://maps.google.com/?saddr=Riverside+Park,+Bonita+Springs,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
-                  data-testid="button-directions-downtown"
-                >
-                  <Navigation className="w-4 h-4 mr-2" />
-                  {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
-                </Button>
+                  <Button 
+                    className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                    onClick={() => window.open('https://maps.google.com/?saddr=Riverside+Park,+Bonita+Springs,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                    data-testid="button-directions-downtown"
+                  >
+                    <Navigation className="w-4 h-4 mr-2" />
+                    {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                  </Button>
+                </div>
               </div>
             </div>
 

@@ -552,42 +552,42 @@ const LocationGoldenGate = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
                     <MapPin className="w-6 h-6 text-blue-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'From Golden Gate Community Center' : 'Desde Centro Comunitario Golden Gate'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'From 4701 Golden Gate Parkway, head west toward Airport Rd. Turn right on Airport Rd and continue north to Tamiami Trail. Turn left and our office is on the left.'
                       : 'Desde 4701 Golden Gate Parkway, diríjase al oeste hacia Airport Rd. Gire a la derecha en Airport Rd y continúe al norte hasta Tamiami Trail. Gire a la izquierda y nuestra oficina está a la izquierda.'}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
                     <MapPin className="w-6 h-6 text-green-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'From Golden Gate Community Park' : 'Desde Parque Comunitario Golden Gate'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'From 3300 Santa Barbara Blvd, head north to Golden Gate Parkway. Turn left (west) and continue to Airport Rd. Turn right and proceed north to Tamiami Trail.'
                       : 'Desde 3300 Santa Barbara Blvd, diríjase al norte hasta Golden Gate Parkway. Gire a la izquierda (oeste) y continúe hasta Airport Rd. Gire a la derecha y proceda al norte hasta Tamiami Trail.'}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
                     <Navigation className="w-6 h-6 text-purple-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'Collier County Access' : 'Acceso Condado de Collier'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'From central Golden Gate, take Golden Gate Parkway west to Airport Rd. Quick 15-minute drive to our location with ample parking. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
                       : 'Desde el centro de Golden Gate, tome Golden Gate Parkway oeste hasta Airport Rd. 15 minutos en auto a nuestra ubicación con amplio estacionamiento. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}

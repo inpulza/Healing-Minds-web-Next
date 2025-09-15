@@ -552,42 +552,42 @@ const LocationLelyResorts = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
                     <MapPin className="w-6 h-6 text-blue-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'From Players Club & Spa' : 'Desde Players Club & Spa'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'Exit Lely Resort and head north on Santa Barbara Blvd. Turn right on Tamiami Trail E. Continue north for about 8 miles. Our office is on the right side.'
                       : 'Salga de Lely Resort y diríjase al norte por Santa Barbara Blvd. Gire a la derecha en Tamiami Trail E. Continúe al norte aproximadamente 8 millas. Nuestra oficina está del lado derecho.'}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
                     <MapPin className="w-6 h-6 text-green-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'From Ole Village Center' : 'Desde Ole Village Center'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'From the Village Center, exit to Grand Lely Dr and continue north to US-41 (Tamiami Trail). Turn left and head north. Our office is located on the right.'
                       : 'Desde el Village Center, salga hacia Grand Lely Dr y continúe al norte hasta US-41 (Tamiami Trail). Gire a la izquierda y diríjase al norte. Nuestra oficina está ubicada a la derecha.'}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
                     <Navigation className="w-6 h-6 text-purple-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'Championship Golf Access' : 'Acceso Campo de Golf'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'From the Mustang or Flamingo Golf Courses, take Collier Blvd north to US-41. Convenient 15-minute drive with easy parking. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
                       : 'Desde los campos de golf Mustang o Flamingo, tome Collier Blvd al norte hasta US-41. 15 minutos en auto con estacionamiento fácil. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}

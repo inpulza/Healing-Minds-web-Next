@@ -552,42 +552,42 @@ const LocationVanderbiltBeach = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
                     <MapPin className="w-6 h-6 text-blue-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'From Vanderbilt Beach Park' : 'Desde Vanderbilt Beach Park'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'Exit the beach area and head east on Vanderbilt Beach Rd. Turn right on US-41 S (Tamiami Trail). Our office is on the right side. Easy 10-minute drive.'
                       : 'Salga del área de playa y diríjase al este por Vanderbilt Beach Rd. Gire a la derecha en US-41 S (Tamiami Trail). Nuestra oficina está del lado derecho. 10 minutos en auto.'}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
                     <MapPin className="w-6 h-6 text-green-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'From Delnor-Wiggins Pass' : 'Desde Delnor-Wiggins Pass'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'Take Vanderbilt Dr south to Vanderbilt Beach Rd. Turn left (east) and continue to US-41. Turn right on Tamiami Trail S. Our office is ahead on the right.'
                       : 'Tome Vanderbilt Dr al sur hacia Vanderbilt Beach Rd. Gire a la izquierda (este) y continúe hasta US-41. Gire a la derecha en Tamiami Trail S. Nuestra oficina está adelante a la derecha.'}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
                     <Navigation className="w-6 h-6 text-purple-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'North Naples Access' : 'Acceso Norte de Naples'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'From North Naples, take Vanderbilt Beach Rd east to Tamiami Trail. Quick access with ample parking at our location. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
                       : 'Desde el Norte de Naples, tome Vanderbilt Beach Rd este hasta Tamiami Trail. Acceso rápido con amplio estacionamiento en nuestra ubicación. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}

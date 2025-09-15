@@ -552,42 +552,42 @@ const LocationAveMaria = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
                     <MapPin className="w-6 h-6 text-blue-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'From Ave Maria University' : 'Desde Ave Maria University'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'Head south on Oil Well Rd toward Immokalee Rd. Take I-75 South to Exit 105 (Immokalee Rd). Turn right on Tamiami Trail N. Our office is on the right.'
                       : 'Diríjase al sur por Oil Well Rd hacia Immokalee Rd. Tome la I-75 Sur hasta la Salida 105 (Immokalee Rd). Gire a la derecha en Tamiami Trail N. Nuestra oficina está a la derecha.'}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
                     <MapPin className="w-6 h-6 text-green-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'From Ave Maria Town Center' : 'Desde Ave Maria Town Center'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'Exit the Town Center and head west on Ave Maria Blvd. Continue on Oil Well Rd, then take I-75 South to Exit 105. Turn right on Tamiami Trail N.'
                       : 'Salga del Town Center y diríjase al oeste por Ave Maria Blvd. Continúe por Oil Well Rd, luego tome la I-75 Sur hasta la Salida 105. Gire a la derecha en Tamiami Trail N.'}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300">
+                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                   <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
                     <Navigation className="w-6 h-6 text-purple-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
                     {language === 'en' ? 'Easy Access Route' : 'Ruta de Acceso Fácil'}
                   </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed">
+                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
                     {language === 'en'
                       ? 'Approximately 25-minute drive from Ave Maria. Ample parking available at our Naples location. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
                       : 'Aproximadamente 25 minutos en automóvil desde Ave Maria. Amplio estacionamiento disponible en nuestra ubicación de Naples. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
