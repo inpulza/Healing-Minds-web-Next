@@ -552,62 +552,208 @@ const LocationLelyResorts = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <MapPin className="w-6 h-6 text-blue-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Players Club & Spa' : 'Desde Players Club & Spa'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Lely Resort Recreation
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'From Players Club & Spa' : 'Desde Players Club & Spa'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'Exit Lely Resort and head north on Santa Barbara Blvd. Turn right on Tamiami Trail E. Continue north for about 8 miles. Our office is on the right side.'
-                      : 'Salga de Lely Resort y diríjase al norte por Santa Barbara Blvd. Gire a la derecha en Tamiami Trail E. Continúe al norte aproximadamente 8 millas. Nuestra oficina está del lado derecho.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Exit Lely Resort and head north on Santa Barbara Blvd'
+                          : 'Salga de Lely Resort y diríjase al norte por Santa Barbara Blvd'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on Tamiami Trail E and continue north for about 8 miles'
+                          : 'Gire a la derecha en Tamiami Trail E y continúe al norte aproximadamente 8 millas'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Our psychiatric practice is at 4760 Tamiami Trl N # 25, on the right side'
+                          : 'Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25, del lado derecho'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '18-22 minutes' : '18-22 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Players+Club+%26+Spa,+Lely+Resort,+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-players-club"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <MapPin className="w-6 h-6 text-green-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Ole Village Center' : 'Desde Ole Village Center'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Shopping & Dining
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'From Ole Village Center' : 'Desde Ole Village Center'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'From the Village Center, exit to Grand Lely Dr and continue north to US-41 (Tamiami Trail). Turn left and head north. Our office is located on the right.'
-                      : 'Desde el Village Center, salga hacia Grand Lely Dr y continúe al norte hasta US-41 (Tamiami Trail). Gire a la izquierda y diríjase al norte. Nuestra oficina está ubicada a la derecha.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From the Village Center, exit to Grand Lely Dr and continue north'
+                          : 'Desde el Village Center, salga hacia Grand Lely Dr y continúe al norte'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Continue to US-41 (Tamiami Trail), turn left and head north'
+                          : 'Continúe hasta US-41 (Tamiami Trail), gire a la izquierda y diríjase al norte'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Our mental health office is located at 4760 Tamiami Trl N # 25, on the right'
+                          : 'Nuestra oficina de salud mental está ubicada en 4760 Tamiami Trl N # 25, a la derecha'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '15-18 minutes' : '15-18 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Ole+Village+Center,+Lely+Resort,+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-village-center"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <Navigation className="w-6 h-6 text-purple-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Championship Golf Courses' : 'Desde Campos de Golf Campeonato'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Mustang & Flamingo Courses
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Championship Golf Access' : 'Acceso Campo de Golf'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'From the Mustang or Flamingo Golf Courses, take Collier Blvd north to US-41. Convenient 15-minute drive with easy parking. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
-                      : 'Desde los campos de golf Mustang o Flamingo, tome Collier Blvd al norte hasta US-41. 15 minutos en auto con estacionamiento fácil. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From the Mustang or Flamingo Golf Courses, exit toward Collier Blvd'
+                          : 'Desde los campos de golf Mustang o Flamingo, salga hacia Collier Blvd'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Take Collier Blvd north to US-41 (Tamiami Trail), then turn left'
+                          : 'Tome Collier Blvd al norte hasta US-41 (Tamiami Trail), luego gire a la izquierda'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 with easy parking'
+                          : 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 con estacionamiento fácil'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '12-15 minutes' : '12-15 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Lely+Resort+Golf+%26+Country+Club,+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-golf-courses"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
               </div>
 
-              <div className="text-center mt-8">
-                <Button 
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
-                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
-                  data-testid="button-directions"
-                >
-                  <Navigation className="w-5 h-5" />
-                  <span>{language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}</span>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </div>
-                </Button>
-              </div>
             </div>
           </div>
         </section>

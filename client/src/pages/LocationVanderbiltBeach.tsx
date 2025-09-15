@@ -552,62 +552,208 @@ const LocationVanderbiltBeach = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <MapPin className="w-6 h-6 text-blue-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Vanderbilt Beach Park' : 'Desde Vanderbilt Beach Park'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Beach Recreation Area
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'From Vanderbilt Beach Park' : 'Desde Vanderbilt Beach Park'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'Exit the beach area and head east on Vanderbilt Beach Rd. Turn right on US-41 S (Tamiami Trail). Our office is on the right side. Easy 10-minute drive.'
-                      : 'Salga del área de playa y diríjase al este por Vanderbilt Beach Rd. Gire a la derecha en US-41 S (Tamiami Trail). Nuestra oficina está del lado derecho. 10 minutos en auto.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Exit the beach area and head east on Vanderbilt Beach Rd'
+                          : 'Salga del área de playa y diríjase al este por Vanderbilt Beach Rd'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on US-41 (Tamiami Trail) and head south'
+                          : 'Gire a la derecha en US-41 (Tamiami Trail) y diríjase al sur'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Our psychiatric practice is at 4760 Tamiami Trl N # 25, on the right side'
+                          : 'Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25, del lado derecho'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '8-10 minutes' : '8-10 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Vanderbilt+Beach+Park,+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-beach-park"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <MapPin className="w-6 h-6 text-green-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Delnor-Wiggins Pass' : 'Desde Delnor-Wiggins Pass'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        State Park Beach
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'From Delnor-Wiggins Pass' : 'Desde Delnor-Wiggins Pass'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'Take Vanderbilt Dr south to Vanderbilt Beach Rd. Turn left (east) and continue to US-41. Turn right on Tamiami Trail S. Our office is ahead on the right.'
-                      : 'Tome Vanderbilt Dr al sur hacia Vanderbilt Beach Rd. Gire a la izquierda (este) y continúe hasta US-41. Gire a la derecha en Tamiami Trail S. Nuestra oficina está adelante a la derecha.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Take Vanderbilt Dr south to Vanderbilt Beach Rd'
+                          : 'Tome Vanderbilt Dr al sur hacia Vanderbilt Beach Rd'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn left (east) and continue to US-41, then turn right south'
+                          : 'Gire a la izquierda (este) y continúe hasta US-41, luego gire a la derecha al sur'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Our mental health office is ahead at 4760 Tamiami Trl N # 25, on the right'
+                          : 'Nuestra oficina de salud mental está adelante en 4760 Tamiami Trl N # 25, a la derecha'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '12-15 minutes' : '12-15 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Delnor-Wiggins+Pass+State+Park,+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-wiggins-pass"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <Navigation className="w-6 h-6 text-purple-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From North Naples Area' : 'Desde Área Norte de Naples'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Residential Areas
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'North Naples Access' : 'Acceso Norte de Naples'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'From North Naples, take Vanderbilt Beach Rd east to Tamiami Trail. Quick access with ample parking at our location. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
-                      : 'Desde el Norte de Naples, tome Vanderbilt Beach Rd este hasta Tamiami Trail. Acceso rápido con amplio estacionamiento en nuestra ubicación. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From North Naples, take Vanderbilt Beach Rd east toward US-41'
+                          : 'Desde el Norte de Naples, tome Vanderbilt Beach Rd este hacia US-41'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on US-41 (Tamiami Trail) and head south briefly'
+                          : 'Gire a la derecha en US-41 (Tamiami Trail) y diríjase al sur brevemente'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 with ample parking'
+                          : 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 con amplio estacionamiento'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '5-8 minutes' : '5-8 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=North+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-north-naples"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
               </div>
 
-              <div className="text-center mt-8">
-                <Button 
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
-                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
-                  data-testid="button-directions"
-                >
-                  <Navigation className="w-5 h-5" />
-                  <span>{language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}</span>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </div>
-                </Button>
-              </div>
             </div>
           </div>
         </section>

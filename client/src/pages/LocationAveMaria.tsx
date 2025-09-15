@@ -552,62 +552,208 @@ const LocationAveMaria = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <MapPin className="w-6 h-6 text-blue-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Ave Maria University' : 'Desde Ave Maria University'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Catholic University Campus
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'From Ave Maria University' : 'Desde Ave Maria University'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'Head south on Oil Well Rd toward Immokalee Rd. Take I-75 South to Exit 105 (Immokalee Rd). Turn right on Tamiami Trail N. Our office is on the right.'
-                      : 'Diríjase al sur por Oil Well Rd hacia Immokalee Rd. Tome la I-75 Sur hasta la Salida 105 (Immokalee Rd). Gire a la derecha en Tamiami Trail N. Nuestra oficina está a la derecha.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Head south on Oil Well Rd toward Immokalee Rd'
+                          : 'Diríjase al sur por Oil Well Rd hacia Immokalee Rd'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Take I-75 South to Exit 105 (Immokalee Rd), then turn right'
+                          : 'Tome la I-75 Sur hasta la Salida 105 (Immokalee Rd), luego gire a la derecha'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on Tamiami Trail N. Our psychiatric practice is at 4760 Tamiami Trl N # 25'
+                          : 'Gire a la derecha en Tamiami Trail N. Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '22-25 minutes' : '22-25 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Ave+Maria+University,+Ave+Maria,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-university"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <MapPin className="w-6 h-6 text-green-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Ave Maria Town Center' : 'Desde Ave Maria Town Center'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Shopping & Services
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'From Ave Maria Town Center' : 'Desde Ave Maria Town Center'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'Exit the Town Center and head west on Ave Maria Blvd. Continue on Oil Well Rd, then take I-75 South to Exit 105. Turn right on Tamiami Trail N.'
-                      : 'Salga del Town Center y diríjase al oeste por Ave Maria Blvd. Continúe por Oil Well Rd, luego tome la I-75 Sur hasta la Salida 105. Gire a la derecha en Tamiami Trail N.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Exit the Town Center and head west on Ave Maria Blvd'
+                          : 'Salga del Town Center y diríjase al oeste por Ave Maria Blvd'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Continue on Oil Well Rd, then take I-75 South to Exit 105'
+                          : 'Continúe por Oil Well Rd, luego tome la I-75 Sur hasta la Salida 105'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on Tamiami Trail N. Our mental health office is at 4760 Tamiami Trl N # 25'
+                          : 'Gire a la derecha en Tamiami Trail N. Nuestra oficina de salud mental está en 4760 Tamiami Trl N # 25'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '20-23 minutes' : '20-23 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Ave+Maria+Town+Center,+Ave+Maria,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-town-center"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <Navigation className="w-6 h-6 text-purple-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Central Ave Maria' : 'Desde Centro de Ave Maria'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Residential Area
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Easy Access Route' : 'Ruta de Acceso Fácil'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'Approximately 25-minute drive from Ave Maria. Ample parking available at our Naples location. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
-                      : 'Aproximadamente 25 minutos en automóvil desde Ave Maria. Amplio estacionamiento disponible en nuestra ubicación de Naples. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From central Ave Maria, take Oil Well Rd west to I-75 South'
+                          : 'Desde el centro de Ave Maria, tome Oil Well Rd oeste hasta I-75 Sur'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Take Exit 105 (Immokalee Rd) and turn right toward Naples'
+                          : 'Tome la Salida 105 (Immokalee Rd) y gire a la derecha hacia Naples'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 with ample parking'
+                          : 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 con amplio estacionamiento'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '18-22 minutes' : '18-22 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Ave+Maria,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-central"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
               </div>
 
-              <div className="text-center mt-8">
-                <Button 
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
-                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
-                  data-testid="button-directions"
-                >
-                  <Navigation className="w-5 h-5" />
-                  <span>{language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}</span>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </div>
-                </Button>
-              </div>
             </div>
           </div>
         </section>

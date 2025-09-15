@@ -552,62 +552,208 @@ const LocationGoldenGate = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <MapPin className="w-6 h-6 text-blue-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Golden Gate Community Center' : 'Desde Centro Comunitario Golden Gate'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Community Recreation
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'From Golden Gate Community Center' : 'Desde Centro Comunitario Golden Gate'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'From 4701 Golden Gate Parkway, head west toward Airport Rd. Turn right on Airport Rd and continue north to Tamiami Trail. Turn left and our office is on the left.'
-                      : 'Desde 4701 Golden Gate Parkway, diríjase al oeste hacia Airport Rd. Gire a la derecha en Airport Rd y continúe al norte hasta Tamiami Trail. Gire a la izquierda y nuestra oficina está a la izquierda.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From 4701 Golden Gate Parkway, head west toward Airport Rd'
+                          : 'Desde 4701 Golden Gate Parkway, diríjase al oeste hacia Airport Rd'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on Airport Rd and continue north to Tamiami Trail'
+                          : 'Gire a la derecha en Airport Rd y continúe al norte hasta Tamiami Trail'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn left on Tamiami Trail. Our practice is at 4760 Tamiami Trl N # 25'
+                          : 'Gire a la izquierda en Tamiami Trail. Nuestra práctica está en 4760 Tamiami Trl N # 25'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '15-20 minutes' : '15-20 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Golden+Gate+Community+Center,+Golden+Gate,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-community-center"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <MapPin className="w-6 h-6 text-green-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Golden Gate Community Park' : 'Desde Parque Comunitario Golden Gate'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Recreation & Sports
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'From Golden Gate Community Park' : 'Desde Parque Comunitario Golden Gate'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'From 3300 Santa Barbara Blvd, head north to Golden Gate Parkway. Turn left (west) and continue to Airport Rd. Turn right and proceed north to Tamiami Trail.'
-                      : 'Desde 3300 Santa Barbara Blvd, diríjase al norte hasta Golden Gate Parkway. Gire a la izquierda (oeste) y continúe hasta Airport Rd. Gire a la derecha y proceda al norte hasta Tamiami Trail.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From 3300 Santa Barbara Blvd, head north to Golden Gate Parkway'
+                          : 'Desde 3300 Santa Barbara Blvd, diríjase al norte hasta Golden Gate Parkway'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn left (west) and continue to Airport Rd. Turn right north'
+                          : 'Gire a la izquierda (oeste) y continúe hasta Airport Rd. Gire a la derecha al norte'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Proceed north to Tamiami Trail, turn left. Office at 4760 Tamiami Trl N # 25'
+                          : 'Proceda al norte hasta Tamiami Trail, gire a la izquierda. Oficina en 4760 Tamiami Trl N # 25'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '18-22 minutes' : '18-22 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Golden+Gate+Community+Park,+Golden+Gate,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-community-park"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 border border-green-100 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                    <Navigation className="w-6 h-6 text-purple-700" />
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Central Golden Gate' : 'Desde Centro de Golden Gate'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Main Area Access
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Collier County Access' : 'Acceso Condado de Collier'}
-                  </h3>
-                  <p className="text-gray-600 font-body text-sm leading-relaxed flex-grow">
-                    {language === 'en'
-                      ? 'From central Golden Gate, take Golden Gate Parkway west to Airport Rd. Quick 15-minute drive to our location with ample parking. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'
-                      : 'Desde el centro de Golden Gate, tome Golden Gate Parkway oeste hasta Airport Rd. 15 minutos en auto a nuestra ubicación con amplio estacionamiento. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103.'}
-                  </p>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From central Golden Gate, take Golden Gate Parkway west toward Airport Rd'
+                          : 'Desde el centro de Golden Gate, tome Golden Gate Parkway oeste hacia Airport Rd'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on Airport Rd and continue north to US-41 (Tamiami Trail)'
+                          : 'Gire a la derecha en Airport Rd y continúe al norte hasta US-41 (Tamiami Trail)'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn left on Tamiami Trail. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103'
+                          : 'Gire a la izquierda en Tamiami Trail. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '12-15 minutes' : '12-15 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Golden+Gate,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-central"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
                 </div>
               </div>
 
-              <div className="text-center mt-8">
-                <Button 
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
-                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
-                  data-testid="button-directions"
-                >
-                  <Navigation className="w-5 h-5" />
-                  <span>{language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}</span>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </div>
-                </Button>
-              </div>
             </div>
           </div>
         </section>

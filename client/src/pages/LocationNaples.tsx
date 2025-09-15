@@ -511,6 +511,458 @@ const LocationNaples = () => {
           </div>
         </section>
 
+        {/* How to Get Here Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Navigation />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>How to Get <span className="font-display italic text-green-700">Here</span></>
+                    ) : (
+                      <>Cómo <span className="font-display italic text-green-700">Llegar</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <MapPin />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'Our Naples office is conveniently located in the heart of the city. Use these familiar landmarks to find us easily.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada en el corazón de la ciudad. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* From Naples Pier */}
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Naples Pier' : 'Desde Naples Pier'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Downtown Naples
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From the Naples Pier at 25 12th Ave S, head east toward 5th Avenue S'
+                          : 'Desde Naples Pier en 25 12th Ave S, diríjase al este hacia 5th Avenue S'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn left on US-41 (Tamiami Trail) and head north for about 3 miles'
+                          : 'Gire a la izquierda en US-41 (Tamiami Trail) y diríjase al norte aproximadamente 3 millas'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Our psychiatric practice is at 4760 Tamiami Trl N # 25, on the right side'
+                          : 'Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25, del lado derecho'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '8-12 minutes' : '8-12 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Naples+Pier,+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-pier"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* From Naples Municipal Airport */}
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Naples Municipal Airport' : 'Desde Aeropuerto Municipal Naples'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Airport Access
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Exit the airport and head west on Airport Pulling Road toward US-41'
+                          : 'Salga del aeropuerto y diríjase al oeste por Airport Pulling Road hacia US-41'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on US-41 (Tamiami Trail) and head north for about 2 miles'
+                          : 'Gire a la derecha en US-41 (Tamiami Trail) y diríjase al norte aproximadamente 2 millas'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Look for our mental health practice at 4760 Tamiami Trl N # 25, on the right'
+                          : 'Busque nuestra práctica de salud mental en 4760 Tamiami Trl N # 25, a la derecha'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '6-8 minutes' : '6-8 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Naples+Municipal+Airport,+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-airport"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* From Waterside Shops */}
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Waterside Shops' : 'Desde Waterside Shops'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Shopping District
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From Waterside Shops at 5415 Tamiami Trail N, head north on US-41'
+                          : 'Desde Waterside Shops en 5415 Tamiami Trail N, diríjase al norte por US-41'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Continue north on Tamiami Trail for approximately 1.5 miles past Pine Ridge Road'
+                          : 'Continúe al norte por Tamiami Trail aproximadamente 1.5 millas pasando Pine Ridge Road'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Our office is at 4760 Tamiami Trl N # 25, on the right side just before Immokalee Road'
+                          : 'Nuestra oficina está en 4760 Tamiami Trl N # 25, del lado derecho justo antes de Immokalee Road'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '4-6 minutes' : '4-6 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Waterside+Shops,+Naples,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-waterside"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Info Section */}
+              <div className="mt-16 text-center">
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
+                  <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
+                    {language === 'en' ? 'Convenient Naples Location' : 'Ubicación Conveniente en Naples'}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-green-800 mb-1">
+                            {language === 'en' ? 'Central Location' : 'Ubicación Central'}
+                          </h4>
+                          <p className="text-sm text-gray-600 font-body">
+                            {language === 'en'
+                              ? 'Located directly on US-41 in central Naples, easily accessible from all city neighborhoods and surrounding areas'
+                              : 'Ubicada directamente en US-41 en el centro de Naples, fácilmente accesible desde todos los vecindarios de la ciudad y áreas circundantes'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-green-800 mb-1">
+                            {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                          </h4>
+                          <p className="text-sm text-gray-600 font-body">
+                            {language === 'en'
+                              ? 'Free, convenient parking available for all Naples patients visiting our mental health facility'
+                              : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Naples que visiten nuestras instalaciones de salud mental'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-green-800 mb-1">
+                            {language === 'en' ? 'Professional Building' : 'Edificio Profesional'}
+                          </h4>
+                          <p className="text-sm text-gray-600 font-body">
+                            {language === 'en'
+                              ? 'Modern, comfortable office space designed to provide a welcoming environment for psychiatric consultations'
+                              : 'Espacio de oficina moderno y cómodo diseñado para proporcionar un ambiente acogedor para consultas psiquiátricas'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-green-800 mb-1">
+                            {language === 'en' ? 'Clear Signage' : 'Señalización Clara'}
+                          </h4>
+                          <p className="text-sm text-gray-600 font-body">
+                            {language === 'en'
+                              ? 'Well-marked building with clear signs to help you find our psychiatric practice easily'
+                              : 'Edificio bien marcado con señales claras para ayudarle a encontrar nuestra práctica psiquiátrica fácilmente'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 pt-6 border-t border-green-100">
+                    <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
+                      {language === 'en'
+                        ? 'Conveniently serving Naples residents with expert psychiatric care in the heart of the city. Call (239) 423-0272 for directions or appointment assistance.'
+                        : 'Sirviendo convenientemente a los residentes de Naples con atención psiquiátrica experta en el corazón de la ciudad. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Community Involvement Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <Heart />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Community</span> Involvement in Naples</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Naples</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <Users />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Mental health is fundamental to building a thriving community. We proudly support Naples through our psychiatric care services and by recognizing the vital organizations that enhance our vibrant city.'
+                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Naples a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que mejoran nuestra ciudad vibrante.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* Naples Botanical Garden */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Naples Botanical Garden
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'A 170-acre world-class botanical paradise that promotes the connection between people and plants. Their therapeutic gardens, wellness programs, and mindfulness initiatives support mental health and community well-being, serving over 400,000 visitors annually.'
+                    : 'Un paraíso botánico de clase mundial de 170 acres que promueve la conexión entre las personas y las plantas. Sus jardines terapéuticos, programas de bienestar e iniciativas de mindfulness apoyan la salud mental y el bienestar comunitario, sirviendo a más de 400,000 visitantes anualmente.'}
+                </p>
+
+                <a
+                  href="https://www.naplesgarden.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-botanical-garden"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Visit Botanical Garden' : 'Visitar Jardín Botánico'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+
+              {/* United Way of Collier County */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Users className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  United Way of Collier County
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'For over 50 years, United Way has strengthened our Naples community by funding programs that address critical needs. They support mental health initiatives, education, and family stability programs that create lasting change for over 75,000 residents annually.'
+                    : 'Por más de 50 años, United Way ha fortalecido nuestra comunidad de Naples financiando programas que abordan necesidades críticas. Apoyan iniciativas de salud mental, educación y programas de estabilidad familiar que crean cambios duraderos para más de 75,000 residentes anualmente.'}
+                </p>
+
+                <a
+                  href="https://www.unitedwayofc.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-united-way"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Learn About Their Mission' : 'Conocer Su Misión'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+
+              {/* Grace Place for Children & Families */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Grace Place for Children & Families
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Dedicated to breaking the cycle of poverty through education, family support, and community engagement. Their comprehensive programs provide academic support, family counseling, and mental health resources to over 500 children and families in Naples.'
+                    : 'Dedicados a romper el ciclo de pobreza a través de educación, apoyo familiar y participación comunitaria. Sus programas integrales proporcionan apoyo académico, consejería familiar y recursos de salud mental a más de 500 niños y familias en Naples.'}
+                </p>
+
+                <a
+                  href="https://graceplacenaples.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-grace-place"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Support Their Mission' : 'Apoyar Su Misión'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Video Section - A Conversation with Dr. Reve */}
         <section className="py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">

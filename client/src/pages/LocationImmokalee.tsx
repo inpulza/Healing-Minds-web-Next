@@ -525,6 +525,458 @@ const LocationImmokalee = () => {
           </div>
         </section>
 
+        {/* How to Get Here Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <WellnessIcon size="md" color="blue" className="opacity-70">
+                    <Navigation />
+                  </WellnessIcon>
+                  <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800">
+                    {language === 'en' ? (
+                      <>How to Get <span className="font-display italic text-green-700">Here</span></>
+                    ) : (
+                      <>Cómo <span className="font-display italic text-green-700">Llegar</span></>
+                    )}
+                  </h2>
+                  <WellnessIcon size="md" color="green" className="opacity-70">
+                    <MapPin />
+                  </WellnessIcon>
+                </div>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                  {language === 'en'
+                    ? 'Our Naples office is conveniently located for Immokalee residents. Use these familiar landmarks to find us easily.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Immokalee. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* From Immokalee Community Park */}
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Immokalee Community Park' : 'Desde Parque Comunitario Immokalee'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Recreation Area
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From the park at 321 N 9th St, head south on State Road 29 toward downtown Immokalee'
+                          : 'Desde el parque en 321 N 9th St, diríjase al sur por State Road 29 hacia el centro de Immokalee'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Continue on SR-29 South for about 25 miles to Immokalee Road, then turn right (west)'
+                          : 'Continúe por SR-29 Sur aproximadamente 25 millas hasta Immokalee Road, luego gire a la derecha (oeste)'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Follow Immokalee Road west to US-41, turn right (north). Our practice is at 4760 Tamiami Trl N # 25'
+                          : 'Siga Immokalee Road oeste hasta US-41, gire a la derecha (norte). Nuestra práctica está en 4760 Tamiami Trl N # 25'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '35-40 minutes' : '35-40 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Immokalee+Community+Park,+Immokalee,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-community-park"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* From Downtown Immokalee */}
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Downtown Immokalee' : 'Desde el Centro de Immokalee'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Main Street Area
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'From Main Street, head south on State Road 29 toward Ave Maria'
+                          : 'Desde Main Street, diríjase al sur por State Road 29 hacia Ave Maria'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on Immokalee Road (CR-846) and head west for about 30 miles'
+                          : 'Gire a la derecha en Immokalee Road (CR-846) y diríjase al oeste aproximadamente 30 millas'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn right on US-41 (Tamiami Trail) North. Our psychiatric practice is at 4760 Tamiami Trl N # 25'
+                          : 'Gire a la derecha en US-41 (Tamiami Trail) Norte. Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '40-45 minutes' : '40-45 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Downtown+Immokalee,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-downtown"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* From Immokalee Regional Airport */}
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-blue-800" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-green-800 mb-2">
+                        {language === 'en' ? 'From Immokalee Regional Airport' : 'Desde Aeropuerto Regional Immokalee'}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-body">
+                        Airport Access Route
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 mb-6 flex-grow">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">1</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Exit the airport and head east on Airport Road toward State Road 29'
+                          : 'Salga del aeropuerto y diríjase al este por Airport Road hacia State Road 29'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">2</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Turn left on SR-29 South, then right on Immokalee Road (CR-846) heading west'
+                          : 'Gire a la izquierda en SR-29 Sur, luego a la derecha en Immokalee Road (CR-846) hacia el oeste'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-green-800 font-bold text-xs">3</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">
+                        {language === 'en'
+                          ? 'Continue west to US-41, turn right north. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103'
+                          : 'Continúe al oeste hasta US-41, gire a la derecha norte. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span>{language === 'en' ? '45-50 minutes' : '45-50 minutos'}</span>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                      onClick={() => window.open('https://maps.google.com/?saddr=Immokalee+Regional+Airport,+Immokalee,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                      data-testid="button-directions-airport"
+                    >
+                      <Navigation className="w-4 h-4 mr-2" />
+                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Info Section */}
+              <div className="mt-16 text-center">
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
+                  <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
+                    {language === 'en' ? 'Easy Access for Immokalee Residents' : 'Fácil Acceso para Residentes de Immokalee'}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-green-800 mb-1">
+                            {language === 'en' ? 'Direct Highway Access' : 'Acceso Directo por Carretera'}
+                          </h4>
+                          <p className="text-sm text-gray-600 font-body">
+                            {language === 'en'
+                              ? 'Straight route via Immokalee Road and US-41 makes accessing specialized psychiatric care convenient from rural Immokalee'
+                              : 'Ruta directa vía Immokalee Road y US-41 hace conveniente el acceso a atención psiquiátrica especializada desde la zona rural de Immokalee'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-green-800 mb-1">
+                            {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                          </h4>
+                          <p className="text-sm text-gray-600 font-body">
+                            {language === 'en'
+                              ? 'Free, convenient parking available for all Immokalee patients visiting our mental health facility'
+                              : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Immokalee que visiten nuestras instalaciones de salud mental'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-green-800 mb-1">
+                            {language === 'en' ? 'Serving Rural Communities' : 'Sirviendo Comunidades Rurales'}
+                          </h4>
+                          <p className="text-sm text-gray-600 font-body">
+                            {language === 'en'
+                              ? 'Dedicated to providing accessible mental health services to underserved rural communities in Collier County'
+                              : 'Dedicados a brindar servicios de salud mental accesibles a comunidades rurales desatendidas en el Condado de Collier'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-semibold text-green-800 mb-1">
+                            {language === 'en' ? 'Bilingual Care' : 'Atención Bilingüe'}
+                          </h4>
+                          <p className="text-sm text-gray-600 font-body">
+                            {language === 'en'
+                              ? 'Culturally sensitive psychiatric care available in both English and Spanish for our diverse Immokalee community'
+                              : 'Atención psiquiátrica culturalmente sensible disponible en inglés y español para nuestra diversa comunidad de Immokalee'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 pt-6 border-t border-green-100">
+                    <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
+                      {language === 'en'
+                        ? 'Serving Immokalee residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
+                        : 'Sirviendo a los residentes de Immokalee con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Community Involvement Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <WellnessIcon size="md" color="green" className="opacity-70">
+                  <Heart />
+                </WellnessIcon>
+                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
+                  {language === 'en' ? (
+                    <><span className="font-display italic text-green-700">Community</span> Involvement in Immokalee</>
+                  ) : (
+                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Immokalee</>
+                  )}
+                </h2>
+                <WellnessIcon size="md" color="blue" className="opacity-70">
+                  <Users />
+                </WellnessIcon>
+              </div>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
+                {language === 'en'
+                  ? 'Mental health is fundamental to building a thriving community. We proudly support Immokalee through our psychiatric care services and by recognizing the vital organizations that strengthen our rural community fabric.'
+                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Immokalee a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad rural.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* RCMA (Redlands Christian Migrant Association) */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  RCMA - Redlands Christian Migrant Association
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'For over 55 years, RCMA has provided comprehensive services to farmworker families in Immokalee. They operate childcare centers, charter schools, and community programs that serve over 7,000 children and families annually, promoting education, health, and economic stability.'
+                    : 'Por más de 55 años, RCMA ha proporcionado servicios integrales a familias de trabajadores agrícolas en Immokalee. Operan centros de cuidado infantil, escuelas charter y programas comunitarios que sirven a más de 7,000 niños y familias anualmente, promoviendo educación, salud y estabilidad económica.'}
+                </p>
+
+                <a
+                  href="https://www.rcma.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-rcma"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Visit RCMA' : 'Visitar RCMA'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+
+              {/* Immokalee Community Action */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Users className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Immokalee Community Action
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'A grassroots organization dedicated to empowering the Immokalee community through advocacy, education, and social justice initiatives. They work tirelessly to improve working conditions, housing, and quality of life for farmworkers and their families.'
+                    : 'Una organización de base dedicada a empoderar a la comunidad de Immokalee a través de iniciativas de advocacy, educación y justicia social. Trabajan incansablemente para mejorar las condiciones laborales, vivienda y calidad de vida para trabajadores agrícolas y sus familias.'}
+                </p>
+
+                <a
+                  href="https://www.immokaleeca.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-community-action"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Learn About Their Mission' : 'Conocer Su Misión'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+
+              {/* Immokalee Housing & Family Services */}
+              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
+                  <Heart className="w-6 h-6 text-green-800" />
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
+                  Immokalee Housing & Family Services
+                </h3>
+                
+                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
+                  {language === 'en'
+                    ? 'Providing affordable housing solutions and comprehensive family support services to the Immokalee community. Their programs include housing assistance, family counseling, and community development initiatives that create stability and opportunity for local families.'
+                    : 'Proporcionando soluciones de vivienda asequible y servicios integrales de apoyo familiar a la comunidad de Immokalee. Sus programas incluyen asistencia de vivienda, consejería familiar e iniciativas de desarrollo comunitario que crean estabilidad y oportunidades para familias locales.'}
+                </p>
+
+                <a
+                  href="https://ihfs.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto"
+                  data-testid="link-housing-services"
+                >
+                  <Button
+                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-left leading-tight flex-1 py-2">
+                      {language === 'en' ? 'Support Their Mission' : 'Apoyar Su Misión'}
+                    </span>
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Video Section - A Conversation with Dr. Reve */}
         <section className="py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
