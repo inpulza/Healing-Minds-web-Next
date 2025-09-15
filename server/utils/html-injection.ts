@@ -579,26 +579,26 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         ]
       };
 
-    case '/locations/psychiatrist-lely-resort':
+    case '/locations/psychiatrist-lely-resorts':
       return {
-        canonical: `${baseUrl}/locations/psychiatrist-lely-resort`,
-        schema: getServiceSchema(baseUrl, 'Lely Resort'),
+        canonical: `${baseUrl}/locations/psychiatrist-lely-resorts`,
+        schema: getServiceSchema(baseUrl, 'Lely Resorts'),
         metaTags: [
           {
             name: 'description',
-            content: 'Looking for expert psychiatric care in Lely Resort? Dr. Melva Reve serves Lely Resort FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
+            content: 'Looking for expert psychiatric care in Lely Resorts? Dr. Melva Reve serves Lely Resorts FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
           },
           {
             property: 'og:title',
-            content: 'Psychiatrist Near Lely Resort FL - Dr. Melva Reve | Healing Minds'
+            content: 'Psychiatrist Near Lely Resorts FL - Dr. Melva Reve | Healing Minds'
           },
           {
             property: 'og:description',
-            content: 'Looking for expert psychiatric care in Lely Resort? Dr. Melva Reve serves Lely Resort FL area with anxiety, depression, ADHD, PTSD treatment.'
+            content: 'Looking for expert psychiatric care in Lely Resorts? Dr. Melva Reve serves Lely Resorts FL area with anxiety, depression, ADHD, PTSD treatment.'
           },
           {
             property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-lely-resort`
+            content: `${baseUrl}/locations/psychiatrist-lely-resorts`
           }
         ]
       };

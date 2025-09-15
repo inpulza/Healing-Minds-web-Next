@@ -149,7 +149,7 @@ export const generateSitemap = (req: Request, res: Response) => {
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-lely-resort',
+      url: '/locations/psychiatrist-lely-resorts',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'

@@ -182,11 +182,7 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex relative mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 md:mb-8" ref={servicesRef}>
-              <nav className={`flex items-center transition-all duration-500 ${
-                isServicesOpen || isLocationsOpen
-                  ? 'bg-gray-100/90 backdrop-blur-lg rounded-3xl p-3 shadow-lg border border-gray-200/70' 
-                  : 'bg-gray-100/80 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50'
-              }`} data-testid="desktop-nav">
+              <nav className="flex items-center transition-all duration-500 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50 bg-[#f0fdf4]" data-testid="desktop-nav">
               {navigationItems.map((item) => (
                 <div key={item.href} className="relative">
                   {item.hasDropdown ? (
@@ -380,7 +376,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 shadow-lg relative z-60" data-testid="mobile-menu">
