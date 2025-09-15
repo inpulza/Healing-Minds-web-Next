@@ -1,0 +1,53 @@
+Asunto: Implementación Final: Integración de 9 Páginas Satélite de Ubicación en el Middleware SSR y el Sitemap Dinámico
+
+Para: Equipo de Replit
+
+De: GeoRanker Pro (Consultor SEO)
+
+1. Contexto Estratégico
+El contenido de nuestras 9 nuevas páginas de área de servicio (Bonita Springs, Marco Island, Fort Myers, Ave Maria, Estero, Golden Gate, Immokalee, Lely Resort y Vanderbilt Beach) está completo y listo para su implementación.
+
+Para evitar los errores críticos ("Soft 404") que experimentamos anteriormente con las páginas en español, debemos asegurar que estas 9 nuevas páginas se integren correctamente en la infraestructura de renderizado del lado del servidor (SSR) y en el sitemap dinámico.
+
+El objetivo es asegurar que cuando Googlebot rastree estas nuevas URLs, reciba un HTML completamente renderizado, con contenido único, meta tags SEO únicos y un schema válido desde el servidor.
+
+2. Plan de Implementación Técnica (Tareas Requeridas)
+Tarea 1: Expansión del Middleware de Inyección de HTML
+Esta es la tarea más crítica para prevenir los errores "Soft 404".
+
+Archivo a Modificar: server/utils/html-injection.ts (específicamente la función getPageMetaData).
+
+Acción: Debes expandir la lógica switch/case dentro de getPageMetaData para añadir 9 case nuevos, uno para cada una de las nuevas rutas de ubicación (ej. case '/locations/psychiatrist-bonita-springs':, case '/locations/psychiatrist-marco-island':, etc.).
+
+Contenido a Inyectar: Cada case debe devolver el objeto de metadatos único para esa página, incluyendo:
+
+El title único (ej. "Psychiatrist Near Bonita Springs...").
+
+La meta description única (ej. "Looking for expert psychiatric care in Bonita Springs?...").
+
+El canonical tag auto-referenciado (ej. href: "https://www.healingmindsp.com/locations/psychiatrist-bonita-springs").
+
+Tarea 2: Implementación del Schema "Hub & Spoke"
+Acción: Dentro del mismo middleware (html-injection.ts), el objeto de metadatos para cada una de estas 9 páginas de ubicación debe inyectar también el Schema Service específico que definimos.
+
+Recordatorio del Schema: Este NO es un nuevo MedicalClinic. Es un schema Service que debe contener estas dos propiedades clave:
+
+areaServed: { "@type": "City", "name": "Bonita Springs" } (Actualizado para cada ciudad).
+
+provider: { "@type": "MedicalClinic", "@id": "https://www.healingmindsp.com/#MedicalClinic" } (Apuntando siempre de vuelta a nuestro Hub de Naples).
+
+Tarea 3: Actualización del Generador de Sitemap Dinámico
+Archivo a Modificar: server/routes/sitemap.ts (o el archivo equivalente que genera el sitemap.xml).
+
+Acción: Debes añadir las 9 nuevas URLs canónicas de las páginas de ubicación a la lógica que genera el sitemap.
+
+Validación: Asegúrate de que no incluyan hreflang a menos que hayamos creado versiones en español para ellas (lo cual no hemos hecho). Simplemente deben listarse como páginas estándar en inglés.
+
+3. Acción Final (Post-Despliegue)
+Una vez que estos cambios estén en producción, debemos hacer lo siguiente para notificar a Google:
+
+Verificar manualmente que https://www.healingmindsp.com/sitemap.xml muestre las 9 nuevas URLs.
+
+Enviar el sitemap actualizado a través de Google Search Console.
+
+Utilizar la herramienta "Inspeccionar URL" en GSC para 2-3 de las nuevas páginas (ej. Bonita Springs, Fort Myers) y hacer clic en "Solicitar Indexación" para acelerar el proceso.
