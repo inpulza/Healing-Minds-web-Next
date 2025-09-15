@@ -172,12 +172,12 @@ const LocationLelyResorts = () => {
                 {language === 'en' ? (
                   <>
                     Compassionate Psychiatric Care for{' '}
-                    <span className="font-display italic text-green-700">Lely Resort</span> Residents
+                    <span className="font-display italic text-green-700">Lely Resorts</span> Residents
                   </>
                 ) : (
                   <>
                     Atención Psiquiátrica Compasiva para Residentes de{' '}
-                    <span className="font-display italic text-green-700">Lely Resort</span>
+                    <span className="font-display italic text-green-700">Lely Resorts</span>
                   </>
                 )}
               </h1>
@@ -546,8 +546,8 @@ const LocationLelyResorts = () => {
                 </div>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
                   {language === 'en'
-                    ? 'Our Naples office is conveniently located for Lely Resort residents. Use these familiar landmarks to find us easily.'
-                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Lely Resort. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                    ? 'Our Naples office is conveniently located for Lely Resorts residents. Use these familiar landmarks to find us easily.'
+                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Lely Resorts. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
                 </p>
               </div>
               
@@ -574,8 +574,8 @@ const LocationLelyResorts = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Exit Lely Resort and head north on Santa Barbara Blvd'
-                          : 'Salga de Lely Resort y diríjase al norte por Santa Barbara Blvd'}
+                          ? 'Exit Lely Resorts and head north on Santa Barbara Blvd'
+                          : 'Salga de Lely Resorts y diríjase al norte por Santa Barbara Blvd'}
                       </p>
                     </div>
                     
@@ -780,8 +780,8 @@ const LocationLelyResorts = () => {
                 </div>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
                   {language === 'en'
-                    ? 'We proudly support Lely Resort community organizations and encourage our patients to connect with local resources for holistic wellness.'
-                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Lely Resort y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
+                    ? 'We proudly support Lely Resorts community organizations and encourage our patients to connect with local resources for holistic wellness.'
+                    : 'Apoyamos con orgullo a las organizaciones comunitarias de Lely Resorts y alentamos a nuestros pacientes a conectarse con recursos locales para el bienestar integral.'}
                 </p>
               </div>
               
@@ -795,8 +795,8 @@ const LocationLelyResorts = () => {
                   </h3>
                   <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
                     {language === 'en'
-                      ? 'Coordinating with 48 HOAs and condo associations within Lely Resort to maintain community standards and quality of life.'
-                      : 'Coordinando con 48 HOAs y asociaciones de condominios dentro de Lely Resort para mantener estándares comunitarios y calidad de vida.'}
+                      ? 'Coordinating with 48 HOAs and condo associations within Lely Resorts to maintain community standards and quality of life.'
+                      : 'Coordinando con 48 HOAs y asociaciones de condominios dentro de Lely Resorts para mantener estándares comunitarios y calidad de vida.'}
                   </p>
                   <Button
                     variant="outline"
@@ -819,8 +819,8 @@ const LocationLelyResorts = () => {
                   </h3>
                   <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
                     {language === 'en'
-                      ? 'Special purpose government established in 1990, managing 1,500 acres with over 9,000 approved residential units across Lely Resort.'
-                      : 'Gobierno de propósito especial establecido en 1990, gestionando 1,500 acres con más de 9,000 unidades residenciales aprobadas en Lely Resort.'}
+                      ? 'Special purpose government established in 1990, managing 1,500 acres with over 9,000 approved residential units across Lely Resorts.'
+                      : 'Gobierno de propósito especial establecido en 1990, gestionando 1,500 acres con más de 9,000 unidades residenciales aprobadas en Lely Resorts.'}
                   </p>
                   <Button
                     variant="outline"
@@ -843,8 +843,8 @@ const LocationLelyResorts = () => {
                   </h3>
                   <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">
                     {language === 'en'
-                      ? 'Property Owners Association managing the exclusive country club lifestyle and amenities for Lely Resort residents.'
-                      : 'Asociación de Propietarios que gestiona el estilo de vida exclusivo del country club y amenidades para residentes de Lely Resort.'}
+                      ? 'Property Owners Association managing the exclusive country club lifestyle and amenities for Lely Resorts residents.'
+                      : 'Asociación de Propietarios que gestiona el estilo de vida exclusivo del country club y amenidades para residentes de Lely Resorts.'}
                   </p>
                   <Button
                     variant="outline"
@@ -865,12 +865,12 @@ const LocationLelyResorts = () => {
                     <Heart className="w-8 h-8 text-green-700" />
                   </div>
                   <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                    {language === 'en' ? 'Supporting Our Lely Resort Community' : 'Apoyando Nuestra Comunidad de Lely Resort'}
+                    {language === 'en' ? 'Supporting Our Lely Resorts Community' : 'Apoyando Nuestra Comunidad de Lely Resorts'}
                   </h3>
                   <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
                     {language === 'en'
-                      ? 'Mental health is strengthened through community connection. We encourage our Lely Resort patients to engage with local organizations that promote wellness, support, and active community involvement.'
-                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Lely Resort a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento activo comunitario.'}
+                      ? 'Mental health is strengthened through community connection. We encourage our Lely Resorts patients to engage with local organizations that promote wellness, support, and active community involvement.'
+                      : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Lely Resorts a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento activo comunitario.'}
                   </p>
                 </div>
               </div>
