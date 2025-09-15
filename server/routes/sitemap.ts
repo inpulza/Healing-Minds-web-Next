@@ -102,73 +102,82 @@ export const generateSitemap = (req: Request, res: Response) => {
       lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
-    }
-  ];
-
-  // Pages that exist only in English (no Spanish version)
-  const englishOnlyPages = [
+    },
+    // Location pages with bilingual versions (CRITICAL for local SEO)
     {
-      url: '/locations/naples',
+      en: '/locations/naples',
+      es: '/es/ubicaciones/psiquiatra-naples',
       lastmod: oldContentDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
-    // New satellite location pages added September 2025
     {
-      url: '/locations/psychiatrist-bonita-springs',
+      en: '/locations/psychiatrist-bonita-springs',
+      es: '/es/ubicaciones/psiquiatra-bonita-springs',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-marco-island',
+      en: '/locations/psychiatrist-marco-island',
+      es: '/es/ubicaciones/psiquiatra-marco-island',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-fort-myers',
+      en: '/locations/psychiatrist-fort-myers',
+      es: '/es/ubicaciones/psiquiatra-fort-myers',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-ave-maria',
+      en: '/locations/psychiatrist-ave-maria',
+      es: '/es/ubicaciones/psiquiatra-ave-maria',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-estero',
+      en: '/locations/psychiatrist-estero',
+      es: '/es/ubicaciones/psiquiatra-estero',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-golden-gate',
+      en: '/locations/psychiatrist-golden-gate',
+      es: '/es/ubicaciones/psiquiatra-golden-gate',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-immokalee',
+      en: '/locations/psychiatrist-immokalee',
+      es: '/es/ubicaciones/psiquiatra-immokalee',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-lely-resorts',
+      en: '/locations/psychiatrist-lely-resorts',
+      es: '/es/ubicaciones/psiquiatra-lely-resorts',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
-      url: '/locations/psychiatrist-vanderbilt-beach',
+      en: '/locations/psychiatrist-vanderbilt-beach',
+      es: '/es/ubicaciones/psiquiatra-vanderbilt-beach',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     }
   ];
+
+  // Pages that exist only in English (no Spanish version) - currently empty
+  const englishOnlyPages: Array<{url: string, lastmod: string, changefreq: string, priority: string}> = [];
   
   // Define legal pages with bilingual support (lower priority as per SEO best practices)
   const legalPages = [
@@ -205,15 +214,13 @@ export const generateSitemap = (req: Request, res: Response) => {
   // Define site structure with priorities and update frequencies  
   const pages: Array<{url: string, lastmod: string, changefreq: string, priority: string}> = [];
 
-  // Generate XML sitemap with hreflang support
+  // Generate XML sitemap with hreflang support (currently unused as pages array is empty)
   const regularPagesXml = pages.map(page => `  <url>
     <loc>${baseUrl}${page.url}</loc>
     <lastmod>${page.lastmod}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
   </url>`).join('\n');
 
-  // Generate English-only pages with hreflang auto-reference
+  // Generate English-only pages (if any) with hreflang auto-reference
   const englishOnlyPagesXml = englishOnlyPages.map(page => `  <url>
     <loc>${baseUrl}${page.url}</loc>
     <xhtml:link 
@@ -222,13 +229,11 @@ export const generateSitemap = (req: Request, res: Response) => {
                 href="${baseUrl}${page.url}"
                 />
     <lastmod>${page.lastmod}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
   </url>`).join('\n');
 
-  // Generate bilingual service pages with hreflang
-  const bilingualPagesXml = bilingualPages.flatMap(page => [
-    // English version with hreflang
+  // Generate bilingual pages with optimized hreflang (cleaner, non-redundant approach)
+  const bilingualPagesXml = bilingualPages.map(page => [
+    // English version (canonical) with hreflang to both languages
     `  <url>
     <loc>${baseUrl}${page.en}</loc>
     <xhtml:link 
@@ -242,10 +247,8 @@ export const generateSitemap = (req: Request, res: Response) => {
                 href="${baseUrl}${page.es}"
                 />
     <lastmod>${page.lastmod}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
   </url>`,
-    // Spanish version with hreflang
+    // Spanish version with hreflang to both languages
     `  <url>
     <loc>${baseUrl}${page.es}</loc>
     <xhtml:link 
@@ -259,13 +262,11 @@ export const generateSitemap = (req: Request, res: Response) => {
                 href="${baseUrl}${page.es}"
                 />
     <lastmod>${page.lastmod}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
   </url>`
-  ]).join('\n');
+  ]).flat().join('\n');
 
   // Generate legal pages with hreflang (indexed for trust signals)
-  const legalPagesXml = legalPages.flatMap(page => [
+  const legalPagesXml = legalPages.map(page => [
     // English version with hreflang
     `  <url>
     <loc>${baseUrl}${page.en}</loc>
@@ -280,8 +281,6 @@ export const generateSitemap = (req: Request, res: Response) => {
                 href="${baseUrl}${page.es}"
                 />
     <lastmod>${page.lastmod}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
   </url>`,
     // Spanish version with hreflang
     `  <url>
@@ -297,10 +296,8 @@ export const generateSitemap = (req: Request, res: Response) => {
                 href="${baseUrl}${page.es}"
                 />
     <lastmod>${page.lastmod}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
   </url>`
-  ]).join('\n');
+  ]).flat().join('\n');
 
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
