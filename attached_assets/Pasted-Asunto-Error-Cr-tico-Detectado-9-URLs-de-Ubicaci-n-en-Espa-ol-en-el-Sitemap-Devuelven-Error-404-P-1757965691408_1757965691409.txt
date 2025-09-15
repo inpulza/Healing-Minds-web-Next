@@ -1,0 +1,48 @@
+Asunto: Error Crítico Detectado: 9 URLs de Ubicación en Español en el Sitemap Devuelven Error 404
+
+Para: Equipo de Replit
+
+De: GeoRanker Pro (Consultor SEO)
+
+Problema Crítico Identificado:
+Tras la última actualización del 
+
+sitemap.xml, hemos confirmado que las 9 nuevas URLs de ubicación en español (ej. /es/ubicaciones/psiquiatra-ave-maria, /es/ubicaciones/psiquiatra-bonita-springs, etc.) que se añadieron al sitemap están actualmente devolviendo Errores 404 (No Encontrado) .
+
+Diagnóstico Técnico (La Causa Raíz):
+Este problema es idéntico al error "Soft 404" que resolvimos anteriormente para las páginas principales (/es/acerca-de). El sitemap.xml se actualizó para incluir estas 9 nuevas URLs, pero la implementación técnica de la aplicación no se completó.
+
+Faltan tres componentes críticos para estas 9 rutas en español:
+
+Componentes de Página: No se crearon los componentes de React para estas páginas (ej. LocationAveMariaEspanol.tsx).
+
+Rutas de la Aplicación: Las rutas no se añadieron al Router (App.tsx).
+
+Middleware: El middleware de inyección HTML (html-injection.ts) no se expandió para manejar estas 9 nuevas rutas.
+
+Google está siguiendo nuestro mapa del sitio (Sitemap) hacia 9 páginas que literalmente no existen en la aplicación (Router), causando errores 404 masivos.
+
+Plan de Acción Requerido (Sincronización Completa)
+Por favor, ejecuten la misma secuencia de corrección que aplicaron exitosamente a las páginas principales, pero esta vez para las 9 páginas de ubicación satélite:
+
+1. Tarea 1: Crear los 9 Componentes de Página en Español:
+
+Acción: Crear los 9 archivos de componentes faltantes (ej. LocationBonitaSpringsEspanol.tsx, LocationMarcoIslandEspanol.tsx, etc.). Estos componentes deben contener el contenido traducido y localizado para cada área.
+
+2. Tarea 2: Implementar las 9 Rutas Faltantes en App.tsx:
+
+Acción: Actualizar el archivo del router (App.tsx) para importar (con lazy loading) y definir las rutas para estas 9 nuevas páginas. (ej. <Route path="/es/ubicaciones/psiquiatra-bonita-springs" component={LazyLocationBonitaSpringsEspanol} />).
+
+3. Tarea 3: Expandir el Middleware html-injection.ts:
+
+Acción: Esta es la tarea más crítica para prevenir errores. Expandir la función getPageMetaData para incluir 9 nuevos case (uno para cada nueva URL de ubicación en español).
+
+Requerimiento: Cada case debe inyectar server-side:
+
+El <title> y <meta description> únicos en español.
+
+El <link rel="canonical"> auto-referenciado (ej. .../es/ubicaciones/psiquiatra-bonita-springs).
+
+Las etiquetas hreflang bidireccionales (apuntando a su contraparte en inglés y a sí misma en español).
+
+Una vez completadas estas tres tareas, el sitemap.xml finalmente coincidirá con la arquitectura real de la aplicación, y los errores 404 desaparecerán. Por favor, procedan con esto antes de realizar cualquier cambio en la URL del hub de Naples.
