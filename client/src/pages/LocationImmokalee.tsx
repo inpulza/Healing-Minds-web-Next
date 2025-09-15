@@ -835,7 +835,6 @@ const LocationImmokalee = () => {
                 </div>
               </div>
             </div>
-          </div>
         </section>
 
         {/* Community Involvement Section */}
