@@ -512,9 +512,8 @@ const LocationNaples = () => {
         </section>
 
         {/* How to Get Here Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
               <div className="text-center mb-12">
                 <div className="flex items-center justify-center gap-4 mb-6">
                   <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -744,81 +743,80 @@ const LocationNaples = () => {
                 </div>
               </div>
 
-              {/* Additional Info Section */}
-              <div className="mt-16 text-center">
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
-                  <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
-                    {language === 'en' ? 'Convenient Naples Location' : 'Ubicación Conveniente en Naples'}
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
-                        <div>
-                          <h4 className="font-semibold text-green-800 mb-1">
-                            {language === 'en' ? 'Central Location' : 'Ubicación Central'}
-                          </h4>
-                          <p className="text-sm text-gray-600 font-body">
-                            {language === 'en'
-                              ? 'Located directly on US-41 in central Naples, easily accessible from all city neighborhoods and surrounding areas'
-                              : 'Ubicada directamente en US-41 en el centro de Naples, fácilmente accesible desde todos los vecindarios de la ciudad y áreas circundantes'}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
-                        <div>
-                          <h4 className="font-semibold text-green-800 mb-1">
-                            {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
-                          </h4>
-                          <p className="text-sm text-gray-600 font-body">
-                            {language === 'en'
-                              ? 'Free, convenient parking available for all Naples patients visiting our mental health facility'
-                              : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Naples que visiten nuestras instalaciones de salud mental'}
-                          </p>
-                        </div>
+            {/* Additional Info Section */}
+            <div className="mt-16 text-center">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
+                <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
+                  {language === 'en' ? 'Easy Access for Naples Residents' : 'Fácil Acceso para Residentes de Naples'}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Convenient Location' : 'Ubicación Conveniente'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Located directly on US-41, our Naples psychiatric practice is easily accessible from all Naples neighborhoods'
+                            : 'Ubicada directamente en US-41, nuestra práctica psiquiátrica en Naples es fácilmente accesible desde todos los vecindarios de Naples'}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
-                        <div>
-                          <h4 className="font-semibold text-green-800 mb-1">
-                            {language === 'en' ? 'Professional Building' : 'Edificio Profesional'}
-                          </h4>
-                          <p className="text-sm text-gray-600 font-body">
-                            {language === 'en'
-                              ? 'Modern, comfortable office space designed to provide a welcoming environment for psychiatric consultations'
-                              : 'Espacio de oficina moderno y cómodo diseñado para proporcionar un ambiente acogedor para consultas psiquiátricas'}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
-                        <div>
-                          <h4 className="font-semibold text-green-800 mb-1">
-                            {language === 'en' ? 'Clear Signage' : 'Señalización Clara'}
-                          </h4>
-                          <p className="text-sm text-gray-600 font-body">
-                            {language === 'en'
-                              ? 'Well-marked building with clear signs to help you find our psychiatric practice easily'
-                              : 'Edificio bien marcado con señales claras para ayudarle a encontrar nuestra práctica psiquiátrica fácilmente'}
-                          </p>
-                        </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Free, convenient parking available for all Naples patients visiting our facility'
+                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Naples que visiten nuestras instalaciones'}
+                        </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-green-100">
-                    <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                      {language === 'en'
-                        ? 'Conveniently serving Naples residents with expert psychiatric care in the heart of the city. Call (239) 423-0272 for directions or appointment assistance.'
-                        : 'Sirviendo convenientemente a los residentes de Naples con atención psiquiátrica experta en el corazón de la ciudad. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
-                    </p>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Transit Friendly' : 'Amigable para el Transporte'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Accessible by public transportation and ride-sharing services from Naples'
+                            : 'Accesible por transporte público y servicios de viajes compartidos desde Naples'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Clear Signage' : 'Señalización Clara'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Well-marked building with clear signs to help you find our mental health practice easily'
+                            : 'Edificio bien marcado con señales claras para ayudarle a encontrar nuestra práctica de salud mental fácilmente'}
+                        </p>
+                      </div>
+                    </div>
                   </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-green-100">
+                  <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Serving Naples residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
+                      : 'Sirviendo a los residentes de Naples con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                  </p>
                 </div>
               </div>
             </div>

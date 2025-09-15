@@ -600,75 +600,83 @@ const LocationGoldenGate = () => {
                 </div>
               </div>
 
-            </div>
-          </div>
-        </section>
+            {/* Additional Info Section */}
+            <div className="mt-16 text-center">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
+                <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
+                  {language === 'en' ? 'Easy Access for Golden Gate Residents' : 'Fácil Acceso para Residentes de Golden Gate'}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Convenient Location' : 'Ubicación Conveniente'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Located directly on US-41, our Naples psychiatric practice is easily accessible from all Golden Gate neighborhoods'
+                            : 'Ubicada directamente en US-41, nuestra práctica psiquiátrica en Naples es fácilmente accesible desde todos los vecindarios de Golden Gate'}
+                        </p>
+                      </div>
+                    </div>
 
-        {/* Easy Access Section */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <WellnessIcon size="md" color="green" className="opacity-70">
-                  <CheckCircle />
-                </WellnessIcon>
-                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
-                  {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Easy Access</span> for Golden Gate Residents</>
-                  ) : (
-                    <><span className="font-display italic text-green-700">Fácil Acceso</span> para Residentes de Golden Gate</>
-                  )}
-                </h2>
-                <WellnessIcon size="md" color="blue" className="opacity-70">
-                  <MapPin />
-                </WellnessIcon>
-              </div>
-              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'We have designed our practice to be easily accessible for Golden Gate residents, with convenient parking and a welcoming environment that puts your comfort first.'
-                  : 'Hemos diseñado nuestra práctica para ser fácilmente accesible para los residentes de Golden Gate, con estacionamiento conveniente y un ambiente acogedor que pone su comodidad primero.'}
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: <MapPin className="w-6 h-6 text-green-800" />,
-                  title: language === 'en' ? 'Prime Location' : 'Ubicación Principal',
-                  description: language === 'en' 
-                    ? 'Located on busy Tamiami Trail with easy access from Golden Gate via Collier Boulevard.' 
-                    : 'Ubicado en el concurrido Tamiami Trail con fácil acceso desde Golden Gate a través de Collier Boulevard.'
-                },
-                {
-                  icon: <CheckCircle className="w-6 h-6 text-green-800" />,
-                  title: language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento',
-                  description: language === 'en' 
-                    ? 'Free parking available directly at our building - no need to search for street parking.' 
-                    : 'Estacionamiento gratuito disponible directamente en nuestro edificio, no es necesario buscar estacionamiento en la calle.'
-                },
-                {
-                  icon: <Heart className="w-6 h-6 text-green-800" />,
-                  title: language === 'en' ? 'Welcoming Environment' : 'Ambiente Acogedor',
-                  description: language === 'en' 
-                    ? 'Comfortable, private office space designed specifically for mental health care and patient comfort.' 
-                    : 'Espacio de oficina cómodo y privado diseñado específicamente para el cuidado de la salud mental y la comodidad del paciente.'
-                }
-              ].map((feature, index) => (
-                <div 
-                  key={index}
-                  className="bg-green-50 rounded-2xl p-8 text-center border border-green-100 hover:shadow-lg transition-shadow duration-300"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mx-auto mb-6">
-                    {feature.icon}
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Free, convenient parking available for all Golden Gate patients visiting our facility'
+                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Golden Gate que visiten nuestras instalaciones'}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-display font-bold mb-4 text-green-800">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 font-body leading-relaxed">
-                    {feature.description}
+
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Transit Friendly' : 'Amigable para el Transporte'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Accessible by public transportation and ride-sharing services from Golden Gate'
+                            : 'Accesible por transporte público y servicios de viajes compartidos desde Golden Gate'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-green-800 mb-1">
+                          {language === 'en' ? 'Clear Signage' : 'Señalización Clara'}
+                        </h4>
+                        <p className="text-sm text-gray-600 font-body">
+                          {language === 'en'
+                            ? 'Well-marked building with clear signs to help you find our mental health practice easily'
+                            : 'Edificio bien marcado con señales claras para ayudarle a encontrar nuestra práctica de salud mental fácilmente'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-green-100">
+                  <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
+                    {language === 'en'
+                      ? 'Serving Golden Gate residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
+                      : 'Sirviendo a los residentes de Golden Gate con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
                   </p>
                 </div>
-              ))}
+              </div>
+            </div>
             </div>
           </div>
         </section>

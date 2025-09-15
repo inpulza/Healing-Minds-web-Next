@@ -526,9 +526,8 @@ const LocationImmokalee = () => {
         </section>
 
         {/* How to Get Here Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="bg-green-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
               <div className="text-center mb-12">
                 <div className="flex items-center justify-center gap-4 mb-6">
                   <WellnessIcon size="md" color="blue" className="opacity-70">
