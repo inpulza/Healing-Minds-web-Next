@@ -42,6 +42,479 @@ export const serviceAreas = [
   "Collier County",
 ];
 
+// NEW: Transactional Content Sections for Enhanced Conversion
+export const transactionalSections = {
+  // 1. "Why Book Online?" Benefits Section (Above fold)
+  whyBookOnline: {
+    en: {
+      title: "Why Book Online?",
+      titleHighlight: "Book",
+      subtitle: "Experience the convenience of modern psychiatric care booking",
+      benefits: [
+        {
+          icon: "CheckCircle",
+          title: "Instant Confirmation",
+          description: "Receive immediate appointment confirmation with no waiting for callbacks"
+        },
+        {
+          icon: "Clock",
+          title: "24/7 Availability", 
+          description: "Schedule your consultation anytime, even outside office hours"
+        },
+        {
+          icon: "Phone",
+          title: "Skip Phone Queues",
+          description: "No more waiting on hold - book directly through our secure portal"
+        },
+        {
+          icon: "Calendar",
+          title: "Same-Day Priority",
+          description: "Online bookings get priority access to same-day appointment slots"
+        },
+        {
+          icon: "Shield",
+          title: "Secure & Private",
+          description: "HIPAA-compliant booking with automatic appointment reminders"
+        },
+        {
+          icon: "Video",
+          title: "Telehealth Ready",
+          description: "Easily schedule in-person or secure video consultations"
+        }
+      ],
+      cta: "Book My Appointment Now",
+      urgencyText: "Limited same-day slots available"
+    },
+    es: {
+      title: "¿Por Qué Reservar en Línea?",
+      titleHighlight: "Reservar",
+      subtitle: "Experimente la conveniencia de la reserva moderna de atención psiquiátrica",
+      benefits: [
+        {
+          icon: "CheckCircle",
+          title: "Confirmación Instantánea",
+          description: "Reciba confirmación inmediata de cita sin esperar llamadas de respuesta"
+        },
+        {
+          icon: "Clock",
+          title: "Disponibilidad 24/7",
+          description: "Programe su consulta en cualquier momento, incluso fuera del horario de oficina"
+        },
+        {
+          icon: "Phone", 
+          title: "Evite Colas Telefónicas",
+          description: "No más esperas en línea - reserve directamente a través de nuestro portal seguro"
+        },
+        {
+          icon: "Calendar",
+          title: "Prioridad el Mismo Día",
+          description: "Las reservas en línea obtienen acceso prioritario a citas del mismo día"
+        },
+        {
+          icon: "Shield",
+          title: "Seguro y Privado",
+          description: "Reserva compatible con HIPAA con recordatorios automáticos de citas"
+        },
+        {
+          icon: "Video",
+          title: "Listo para Telesalud",
+          description: "Programe fácilmente consultas en persona o por video seguro"
+        }
+      ],
+      cta: "Reservar Mi Cita Ahora",
+      urgencyText: "Citas del mismo día limitadas disponibles"
+    }
+  },
+
+  // 2. Trust & Credibility Signals Section
+  trustCredibility: {
+    en: {
+      title: "Trusted Expertise",
+      titleHighlight: "Trusted",
+      subtitle: "Your mental health deserves the highest standard of professional care",
+      credentials: [
+        {
+          icon: "Award",
+          title: "15+ Years Experience",
+          description: "Extensive experience treating anxiety, depression, ADHD, and other mental health conditions"
+        },
+        {
+          icon: "GraduationCap",
+          title: "University of Miami",
+          description: "MD from University of Miami Miller School of Medicine"
+        },
+        {
+          icon: "Users",
+          title: "APA Member",
+          description: "Active member of the American Psychiatric Association"
+        },
+        {
+          icon: "Languages",
+          title: "Bilingual Care",
+          description: "Fluent in English and Spanish for comprehensive patient communication"
+        },
+        {
+          icon: "Shield",
+          title: "HIPAA Compliant",
+          description: "Full patient privacy protection following all medical confidentiality laws"
+        },
+        {
+          icon: "Heart",
+          title: "Patient-Centered",
+          description: "Personalized treatment plans tailored to each individual's unique needs"
+        }
+      ],
+      stats: {
+        experience: "15+",
+        patients: "1,000+",
+        satisfaction: "98%"
+      },
+      cta: "Learn About Dr. Reve"
+    },
+    es: {
+      title: "Experiencia Confiable",
+      titleHighlight: "Confiable",
+      subtitle: "Su salud mental merece el más alto estándar de atención profesional",
+      credentials: [
+        {
+          icon: "Award",
+          title: "15+ Años de Experiencia",
+          description: "Amplia experiencia tratando ansiedad, depresión, TDAH y otras condiciones de salud mental"
+        },
+        {
+          icon: "GraduationCap",
+          title: "Universidad de Miami",
+          description: "MD de la Escuela de Medicina Miller de la Universidad de Miami"
+        },
+        {
+          icon: "Users",
+          title: "Miembro APA",
+          description: "Miembro activo de la Asociación Psiquiátrica Americana"
+        },
+        {
+          icon: "Languages",
+          title: "Atención Bilingüe",
+          description: "Fluida en inglés y español para comunicación integral con pacientes"
+        },
+        {
+          icon: "Shield",
+          title: "Compatible HIPAA",
+          description: "Protección completa de privacidad del paciente siguiendo todas las leyes de confidencialidad médica"
+        },
+        {
+          icon: "Heart",
+          title: "Centrado en el Paciente",
+          description: "Planes de tratamiento personalizados adaptados a las necesidades únicas de cada individuo"
+        }
+      ],
+      stats: {
+        experience: "15+",
+        patients: "1,000+",
+        satisfaction: "98%"
+      },
+      cta: "Conocer a la Dra. Reve"
+    }
+  },
+
+  // 3. Emergency & Urgency Section
+  emergencyUrgency: {
+    en: {
+      title: "Urgent Care Available",
+      titleHighlight: "Urgent",
+      subtitle: "When you need help, we're here with immediate mental health support",
+      services: [
+        {
+          icon: "Clock",
+          title: "Same-Day Appointments",
+          description: "Emergency consultation slots available for urgent mental health needs",
+          availability: "Available Today"
+        },
+        {
+          icon: "Phone",
+          title: "Crisis Consultation",
+          description: "Immediate phone consultation for mental health emergencies",
+          availability: "Call (239) 423-0272"
+        },
+        {
+          icon: "Video",
+          title: "Urgent Telehealth",
+          description: "Secure video consultations for immediate assessment and support",
+          availability: "Within 2 Hours"
+        },
+        {
+          icon: "Heart",
+          title: "After-Hours Support",
+          description: "Emergency contact protocols and mental health crisis resources",
+          availability: "24/7 Resources"
+        }
+      ],
+      emergencyNumbers: [
+        { number: "911", description: "Life-threatening emergencies" },
+        { number: "988", description: "Suicide & Crisis Lifeline" },
+        { number: "(239) 263-7158", description: "David Lawrence Center" }
+      ],
+      cta: "Get Urgent Help Now",
+      disclaimer: "If this is a life-threatening emergency, call 911 immediately"
+    },
+    es: {
+      title: "Atención Urgente Disponible",
+      titleHighlight: "Urgente",
+      subtitle: "Cuando necesite ayuda, estamos aquí con apoyo inmediato de salud mental",
+      services: [
+        {
+          icon: "Clock",
+          title: "Citas el Mismo Día",
+          description: "Espacios de consulta de emergencia disponibles para necesidades urgentes de salud mental",
+          availability: "Disponible Hoy"
+        },
+        {
+          icon: "Phone",
+          title: "Consulta de Crisis",
+          description: "Consulta telefónica inmediata para emergencias de salud mental",
+          availability: "Llame (239) 423-0272"
+        },
+        {
+          icon: "Video",
+          title: "Telesalud Urgente",
+          description: "Consultas por video seguras para evaluación y apoyo inmediato",
+          availability: "En 2 Horas"
+        },
+        {
+          icon: "Heart",
+          title: "Apoyo Fuera de Horario",
+          description: "Protocolos de contacto de emergencia y recursos de crisis de salud mental",
+          availability: "Recursos 24/7"
+        }
+      ],
+      emergencyNumbers: [
+        { number: "911", description: "Emergencias que amenazan la vida" },
+        { number: "988", description: "Línea de Crisis y Suicidio" },
+        { number: "(239) 263-7158", description: "Centro David Lawrence" }
+      ],
+      cta: "Obtener Ayuda Urgente Ahora",
+      disclaimer: "Si esta es una emergencia que amenaza la vida, llame al 911 inmediatamente"
+    }
+  },
+
+  // 4. Local Competitive Advantages
+  competitiveAdvantages: {
+    en: {
+      title: "Why Choose Us",
+      titleHighlight: "Choose",
+      subtitle: "Discover what makes our psychiatric practice unique in Southwest Florida",
+      advantages: [
+        {
+          icon: "Languages",
+          title: "Only Bilingual Psychiatrist",
+          description: "The area's only fully bilingual psychiatric practice serving English and Spanish speakers",
+          benefit: "Cultural Understanding"
+        },
+        {
+          icon: "MapPin",
+          title: "Most Convenient Location",
+          description: "Central Naples location with easy access from all major Southwest Florida communities",
+          benefit: "Easy Access"
+        },
+        {
+          icon: "CreditCard",
+          title: "Comprehensive Insurance",
+          description: "Accept more insurance plans than any other local psychiatric practice",
+          benefit: "Affordable Care"
+        },
+        {
+          icon: "Video",
+          title: "Advanced Telemedicine",
+          description: "State-of-the-art telehealth technology for secure, convenient consultations",
+          benefit: "Modern Technology"
+        },
+        {
+          icon: "User",
+          title: "Personalized Approach",
+          description: "Individual treatment plans tailored to your unique mental health journey",
+          benefit: "Customized Care"
+        },
+        {
+          icon: "Heart",
+          title: "Community Involved",
+          description: "Active participation in local mental health awareness and community wellness",
+          benefit: "Local Commitment"
+        }
+      ],
+      cta: "Experience the Difference",
+      socialProof: "Join 1,000+ patients who trust our care"
+    },
+    es: {
+      title: "Por Qué Elegirnos",
+      titleHighlight: "Elegirnos",
+      subtitle: "Descubra qué hace única nuestra práctica psiquiátrica en el suroeste de Florida",
+      advantages: [
+        {
+          icon: "Languages",
+          title: "Único Psiquiatra Bilingüe",
+          description: "La única práctica psiquiátrica completamente bilingüe del área que sirve a hablantes de inglés y español",
+          benefit: "Comprensión Cultural"
+        },
+        {
+          icon: "MapPin", 
+          title: "Ubicación Más Conveniente",
+          description: "Ubicación central en Naples con fácil acceso desde todas las principales comunidades del suroeste de Florida",
+          benefit: "Fácil Acceso"
+        },
+        {
+          icon: "CreditCard",
+          title: "Seguro Integral",
+          description: "Aceptamos más planes de seguro que cualquier otra práctica psiquiátrica local",
+          benefit: "Atención Asequible"
+        },
+        {
+          icon: "Video",
+          title: "Telemedicina Avanzada",
+          description: "Tecnología de telesalud de vanguardia para consultas seguras y convenientes",
+          benefit: "Tecnología Moderna"
+        },
+        {
+          icon: "User",
+          title: "Enfoque Personalizado",
+          description: "Planes de tratamiento individuales adaptados a su viaje único de salud mental",
+          benefit: "Atención Personalizada"
+        },
+        {
+          icon: "Heart",
+          title: "Participación Comunitaria",
+          description: "Participación activa en conciencia local de salud mental y bienestar comunitario",
+          benefit: "Compromiso Local"
+        }
+      ],
+      cta: "Experimente la Diferencia",
+      socialProof: "Únase a 1,000+ pacientes que confían en nuestra atención"
+    }
+  },
+
+  // 5. Patient Success & Social Proof
+  patientSuccess: {
+    en: {
+      title: "Patient Success Stories",
+      titleHighlight: "Success",
+      subtitle: "Real results from real patients in our Southwest Florida community",
+      successMetrics: [
+        {
+          icon: "TrendingUp",
+          percentage: "95%",
+          title: "Treatment Satisfaction",
+          description: "Patients report significant improvement in their mental health"
+        },
+        {
+          icon: "Clock",
+          percentage: "85%",
+          title: "Faster Recovery",
+          description: "Patients see improvements within the first 30 days of treatment"
+        },
+        {
+          icon: "Heart",
+          percentage: "92%",
+          title: "Quality of Life",
+          description: "Patients report improved relationships and daily functioning"
+        }
+      ],
+      journeyExamples: [
+        {
+          condition: "Anxiety & Depression",
+          timeframe: "3-6 months",
+          improvements: ["Reduced anxiety episodes", "Better sleep quality", "Improved work performance", "Stronger relationships"]
+        },
+        {
+          condition: "ADHD Management",
+          timeframe: "1-3 months", 
+          improvements: ["Enhanced focus", "Better organization", "Improved academic/work results", "Increased confidence"]
+        },
+        {
+          condition: "PTSD Recovery",
+          timeframe: "6-12 months",
+          improvements: ["Reduced flashbacks", "Better emotional regulation", "Improved sleep", "Restored daily activities"]
+        }
+      ],
+      testimonialHighlights: [
+        {
+          quote: "Dr. Reve changed my life. Her bilingual approach made me feel truly understood.",
+          location: "Naples Patient",
+          condition: "Anxiety"
+        },
+        {
+          quote: "Same-day appointment saved me during my crisis. Professional and compassionate care.",
+          location: "Bonita Springs Patient", 
+          condition: "Depression"
+        },
+        {
+          quote: "Finally found a psychiatrist who gets our culture. My family feels supported.",
+          location: "Estero Patient",
+          condition: "Family Therapy"
+        }
+      ],
+      cta: "Start Your Success Story"
+    },
+    es: {
+      title: "Historias de Éxito de Pacientes",
+      titleHighlight: "Éxito",
+      subtitle: "Resultados reales de pacientes reales en nuestra comunidad del suroeste de Florida",
+      successMetrics: [
+        {
+          icon: "TrendingUp",
+          percentage: "95%",
+          title: "Satisfacción del Tratamiento",
+          description: "Los pacientes reportan mejora significativa en su salud mental"
+        },
+        {
+          icon: "Clock",
+          percentage: "85%",
+          title: "Recuperación Más Rápida",
+          description: "Los pacientes ven mejoras dentro de los primeros 30 días de tratamiento"
+        },
+        {
+          icon: "Heart",
+          percentage: "92%",
+          title: "Calidad de Vida",
+          description: "Los pacientes reportan relaciones mejoradas y funcionamiento diario"
+        }
+      ],
+      journeyExamples: [
+        {
+          condition: "Ansiedad y Depresión",
+          timeframe: "3-6 meses",
+          improvements: ["Episodios de ansiedad reducidos", "Mejor calidad del sueño", "Rendimiento laboral mejorado", "Relaciones más fuertes"]
+        },
+        {
+          condition: "Manejo de TDAH",
+          timeframe: "1-3 meses",
+          improvements: ["Enfoque mejorado", "Mejor organización", "Resultados académicos/laborales mejorados", "Mayor confianza"]
+        },
+        {
+          condition: "Recuperación de TEPT",
+          timeframe: "6-12 meses",
+          improvements: ["Flashbacks reducidos", "Mejor regulación emocional", "Sueño mejorado", "Actividades diarias restauradas"]
+        }
+      ],
+      testimonialHighlights: [
+        {
+          quote: "La Dra. Reve cambió mi vida. Su enfoque bilingüe me hizo sentir verdaderamente comprendido/a.",
+          location: "Paciente de Naples",
+          condition: "Ansiedad"
+        },
+        {
+          quote: "La cita del mismo día me salvó durante mi crisis. Atención profesional y compasiva.",
+          location: "Paciente de Bonita Springs",
+          condition: "Depresión"
+        },
+        {
+          quote: "Finalmente encontré un psiquiatra que entiende nuestra cultura. Mi familia se siente apoyada.",
+          location: "Paciente de Estero",
+          condition: "Terapia Familiar"
+        }
+      ],
+      cta: "Comience Su Historia de Éxito"
+    }
+  }
+};
+
 export const acceptedInsurance = [
   "Most major insurance plans",
   "Aetna",

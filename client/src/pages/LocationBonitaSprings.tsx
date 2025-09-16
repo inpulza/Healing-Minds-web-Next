@@ -5,9 +5,10 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
+import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
-import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
+import { practiceInfo, acceptedInsurance, serviceAreas, transactionalSections } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -24,7 +25,14 @@ import {
   ArrowRight,
   Navigation,
   Calendar,
-  VideoIcon
+  VideoIcon,
+  Award,
+  GraduationCap,
+  Languages,
+  User,
+  TrendingUp,
+  Video,
+  CreditCard
 } from 'lucide-react';
 import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, IconLeaf } from '@tabler/icons-react';
 import { Link } from 'wouter';
@@ -284,6 +292,9 @@ const LocationBonitaSprings = () => {
             </div>
           </div>
         </section>
+
+        {/* Transactional Content Sections */}
+        <TransactionalContent locationName="Bonita Springs" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">
