@@ -42,6 +42,128 @@ export const serviceAreas = [
   "Collier County",
 ];
 
+// NEW: Urgency and Availability Messaging for Enhanced CTAs
+export const urgencyMessaging = {
+  en: {
+    // Real-time availability indicators
+    availability: {
+      sameDayAvailable: "✅ Same-Day Appointments Available",
+      limitedSlots: "⚡ Limited Slots Remaining Today",
+      nextAvailable: "📅 Next Opening: Today 2:00 PM",
+      answeringNow: "📞 Answering Calls Now",
+      fastResponse: "⚡ Same-Day Response Guaranteed",
+      urgentCare: "🚨 Urgent Consultations Available",
+      onlineNow: "💻 Book Online 24/7",
+      callNow: "☎️ Call Now - No Wait",
+    },
+    // Urgency triggers
+    urgency: {
+      bookingFast: "🔥 Booking Fast - Only 3 Slots Left Today",
+      dontWait: "⏰ Don't Wait - Mental Health Matters",
+      limitedTime: "⚡ Book Within 15 Minutes for Same-Day Care",
+      lastChance: "⚠️ Last Same-Day Slot Available",
+      preferred: "⭐ Naples' Preferred Psychiatric Care",
+      secure: "🔒 Secure Your Spot Today",
+    },
+    // Crisis messaging
+    crisis: {
+      emergency: "🚨 Mental Health Emergency?",
+      urgent: "Urgent Consultation Available",
+      crisis988: "Crisis Support: 988",
+      emergency911: "Life-Threatening: 911",
+      davidLawrence: "Local Crisis: (239) 263-7158",
+    }
+  },
+  es: {
+    // Real-time availability indicators
+    availability: {
+      sameDayAvailable: "✅ Citas el Mismo Día Disponibles",
+      limitedSlots: "⚡ Cupos Limitados Hoy",
+      nextAvailable: "📅 Próxima Disponibilidad: Hoy 2:00 PM",
+      answeringNow: "📞 Respondiendo Llamadas Ahora",
+      fastResponse: "⚡ Respuesta el Mismo Día Garantizada",
+      urgentCare: "🚨 Consultas Urgentes Disponibles",
+      onlineNow: "💻 Reserve en Línea 24/7",
+      callNow: "☎️ Llame Ahora - Sin Espera",
+    },
+    // Urgency triggers
+    urgency: {
+      bookingFast: "🔥 Reservas Rápidas - Solo 3 Cupos Hoy",
+      dontWait: "⏰ No Espere - La Salud Mental Importa",
+      limitedTime: "⚡ Reserve en 15 Minutos para Atención Hoy",
+      lastChance: "⚠️ Último Cupo del Día Disponible",
+      preferred: "⭐ Atención Psiquiátrica Preferida en Naples",
+      secure: "🔒 Asegure su Lugar Hoy",
+    },
+    // Crisis messaging
+    crisis: {
+      emergency: "🚨 ¿Emergencia de Salud Mental?",
+      urgent: "Consulta Urgente Disponible",
+      crisis988: "Apoyo en Crisis: 988",
+      emergency911: "Peligro de Vida: 911",
+      davidLawrence: "Crisis Local: (239) 263-7158",
+    }
+  }
+};
+
+// Enhanced CTA Options for Multiple Conversion Paths
+export const ctaOptions = {
+  en: {
+    primary: {
+      text: "Book Online Now",
+      subtext: "Instant confirmation",
+      icon: "Calendar"
+    },
+    secondary: {
+      text: "Call (239) 423-0272",
+      subtext: "Speak with us directly",
+      icon: "Phone"
+    },
+    tertiary: {
+      text: "Request Callback",
+      subtext: "We'll call you back",
+      icon: "PhoneCall"
+    },
+    emergency: {
+      text: "Crisis Support",
+      subtext: "Immediate help available",
+      icon: "AlertTriangle"
+    },
+    telehealth: {
+      text: "Video Consultation",
+      subtext: "Same-day telehealth",
+      icon: "Video"
+    }
+  },
+  es: {
+    primary: {
+      text: "Reservar en Línea Ahora",
+      subtext: "Confirmación instantánea",
+      icon: "Calendar"
+    },
+    secondary: {
+      text: "Llamar (239) 423-0272",
+      subtext: "Hable directamente con nosotros",
+      icon: "Phone"
+    },
+    tertiary: {
+      text: "Solicitar Llamada",
+      subtext: "Le devolveremos la llamada",
+      icon: "PhoneCall"
+    },
+    emergency: {
+      text: "Apoyo en Crisis",
+      subtext: "Ayuda inmediata disponible",
+      icon: "AlertTriangle"
+    },
+    telehealth: {
+      text: "Consulta por Video",
+      subtext: "Telesalud el mismo día",
+      icon: "Video"
+    }
+  }
+};
+
 // NEW: Transactional Content Sections for Enhanced Conversion
 export const transactionalSections = {
   // 1. "Why Book Online?" Benefits Section (Above fold)
