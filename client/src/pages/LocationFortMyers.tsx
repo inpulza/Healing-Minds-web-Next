@@ -40,11 +40,11 @@ const LocationFortMyers = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Fort Myers FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Fort Myers FL - Dra. Melva Reve | Healing Minds',
+        ? 'Book Psychiatrist Fort Myers FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Fort Myers FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Fort Myers, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Fort Myers, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Book psychiatrist Fort Myers FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Fort Myers FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Fort Myers FL, mental health Fort Myers, Dr Melva Reve Fort Myers, psychiatric care Fort Myers FL'
         : 'psiquiatra Fort Myers FL, salud mental Fort Myers, Dra Melva Reve Fort Myers, atención psiquiátrica Fort Myers FL',
@@ -171,16 +171,16 @@ const LocationFortMyers = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
-                    <span className="font-display italic text-green-700">Fort Myers Residents</span>
+                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Fort Myers FL -{' '}
+                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
-                    <span className="font-display italic text-green-700">Residentes de Fort Myers</span>
+                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Fort Myers FL -{' '}
+                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
                   </>
                 )}
               </h1>

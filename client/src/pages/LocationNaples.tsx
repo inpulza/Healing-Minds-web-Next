@@ -40,11 +40,11 @@ const LocationNaples = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Naples FL | Dr. Melva Reve | 4760 Tamiami Trail | Book Today'
-        : 'Psiquiatra Naples FL | Dra. Melva Reve | 4760 Tamiami Trail | Reserve Hoy',
+        ? 'Book Psychiatrist Naples FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Naples FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Book psychiatrist Naples FL with Dr. Melva Reve at 4760 Tamiami Trail. Same-day appointments available. Expert anxiety, depression, ADHD, PTSD treatment. Bilingual services. Call (239) 423-0272.'
-        : 'Reserve psiquiatra Naples FL con Dra. Melva Reve en 4760 Tamiami Trail. Citas el mismo día disponibles. Tratamiento experto ansiedad, depresión, TDAH, TEPT. Servicios bilingües. Llame (239) 423-0272.',
+        ? 'Book psychiatrist Naples FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Naples FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Naples FL location, 4760 Tamiami Trail Naples # 25, psychiatric office Naples, Dr Melva Reve address, mental health Naples FL'
         : 'ubicación psiquiatra Naples FL, 4760 Tamiami Trail Naples # 25, consultorio psiquiátrico Naples, dirección Dra Melva Reve, salud mental Naples FL',

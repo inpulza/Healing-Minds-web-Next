@@ -40,11 +40,11 @@ const LocationImmokalee = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Immokalee FL | Dr. Melva Reve | Same-Day Appointments Available'
-        : 'Psiquiatra Immokalee FL | Dra. Melva Reve | Citas el Mismo Día Disponibles',
+        ? 'Book Psychiatrist Immokalee FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Immokalee FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Psychiatrist serving Immokalee FL - Dr. Melva Reve. Book same-day psychiatric appointments. Bilingual anxiety, depression, ADHD, PTSD treatment. Insurance accepted. Call (239) 423-0272.'
-        : 'Psiquiatra sirviendo Immokalee FL - Dra. Melva Reve. Reserve citas psiquiátricas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH, TEPT. Seguro aceptado. Llame (239) 423-0272.',
+        ? 'Book psychiatrist Immokalee FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Immokalee FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Immokalee FL, mental health Immokalee, Dr Melva Reve Immokalee, psychiatric care Immokalee FL'
         : 'psiquiatra Immokalee FL, salud mental Immokalee, Dra Melva Reve Immokalee, atención psiquiátrica Immokalee FL',

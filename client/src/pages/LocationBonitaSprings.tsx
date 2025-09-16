@@ -40,11 +40,11 @@ const LocationBonitaSprings = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Bonita Springs FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Bonita Springs FL - Dra. Melva Reve | Healing Minds',
+        ? 'Book Psychiatrist Bonita Springs FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Bonita Springs FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Bonita Springs, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Bonita Springs, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Book psychiatrist Bonita Springs FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Bonita Springs FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Bonita Springs FL, mental health Bonita Springs, Dr Melva Reve Bonita Springs, psychiatric care Bonita Springs FL'
         : 'psiquiatra Bonita Springs FL, salud mental Bonita Springs, Dra Melva Reve Bonita Springs, atención psiquiátrica Bonita Springs FL',
@@ -171,16 +171,16 @@ const LocationBonitaSprings = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
-                    <span className="font-display italic text-green-700">Bonita Springs Residents</span>
+                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Bonita Springs FL -{' '}
+                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
-                    <span className="font-display italic text-green-700">Residentes de Bonita Springs</span>
+                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Bonita Springs FL -{' '}
+                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
                   </>
                 )}
               </h1>

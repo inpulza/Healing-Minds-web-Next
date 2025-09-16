@@ -40,11 +40,11 @@ const LocationGoldenGate = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Golden Gate FL | Dr. Melva Reve | Book Appointment Online'
-        : 'Psiquiatra Golden Gate FL | Dra. Melva Reve | Reserve Cita en Línea',
+        ? 'Book Psychiatrist Golden Gate FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Golden Gate FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Book psychiatrist Golden Gate FL with Dr. Melva Reve. Same-day appointments available. Expert anxiety, depression, ADHD treatment. Bilingual services. Call (239) 423-0272.'
-        : 'Reserve psiquiatra Golden Gate FL con Dra. Melva Reve. Citas el mismo día disponibles. Tratamiento experto ansiedad, depresión, TDAH. Servicios bilingües. Llame (239) 423-0272.',
+        ? 'Book psychiatrist Golden Gate FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Golden Gate FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Golden Gate FL, mental health Golden Gate, Dr Melva Reve Golden Gate, psychiatric care Golden Gate FL'
         : 'psiquiatra Golden Gate FL, salud mental Golden Gate, Dra Melva Reve Golden Gate, atención psiquiátrica Golden Gate FL',
@@ -498,7 +498,7 @@ const LocationGoldenGate = () => {
                               es: 'Aprender Sobre Manejo de Medicamentos'
                             }
                           };
-                          return serviceTexts[service.id][language];
+                          return serviceTexts[service.id as keyof typeof serviceTexts]?.[language] || 'Learn More';
                         })()} 
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>

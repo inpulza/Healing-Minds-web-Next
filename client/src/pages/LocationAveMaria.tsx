@@ -40,11 +40,11 @@ const LocationAveMaria = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Ave Maria FL | Dr. Melva Reve | Same-Day Appointments'
-        : 'Reservar Psiquiatra Ave Maria FL | Dra. Melva Reve | Citas el Mismo Día',
+        ? 'Book Psychiatrist Ave Maria FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Ave Maria FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Book psychiatric appointment Ave Maria FL with Dr. Melva Reve. Same-day consultations available. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272 or schedule online.'
-        : 'Reserve cita psiquiátrica Ave Maria FL con Dra. Melva Reve. Consultas el mismo día disponibles. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272 o programe en línea.',
+        ? 'Book psychiatrist Ave Maria FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Ave Maria FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Ave Maria FL, mental health Ave Maria, Dr Melva Reve Ave Maria, psychiatric care Ave Maria FL'
         : 'psiquiatra Ave Maria FL, salud mental Ave Maria, Dra Melva Reve Ave Maria, atención psiquiátrica Ave Maria FL',

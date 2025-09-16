@@ -40,11 +40,11 @@ const LocationLelyResorts = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Lely Resort FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Lely Resort FL - Dra. Melva Reve | Healing Minds',
+        ? 'Book Psychiatrist Lely Resort FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Lely Resort FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Lely Resort, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Lely Resort, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Book psychiatrist Lely Resort FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Lely Resort FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Lely Resort FL, mental health Lely Resort, Dr Melva Reve Lely Resort, psychiatric care Lely Resort FL'
         : 'psiquiatra Lely Resort FL, salud mental Lely Resort, Dra Melva Reve Lely Resort, atención psiquiátrica Lely Resort FL',
@@ -170,16 +170,16 @@ const LocationLelyResorts = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
                 {language === 'en' ? (
                   <>
-                    Compassionate Psychiatric Care for{' '}
-                    <span className="font-display italic text-green-700">Lely Resort</span> Residents
+                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Lely Resort FL -{' '}
+                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
                   </>
                 ) : (
                   <>
-                    Atención Psiquiátrica Compasiva para Residentes de{' '}
-                    <span className="font-display italic text-green-700">Lely Resort</span>
+                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Lely Resort FL -{' '}
+                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
                   </>
                 )}
               </h1>

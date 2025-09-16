@@ -40,11 +40,11 @@ const LocationEstero = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Estero FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Estero FL - Dra. Melva Reve | Healing Minds',
+        ? 'Book Psychiatrist Estero FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Estero FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Estero, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Estero, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Book psychiatrist Estero FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Estero FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Estero FL, mental health Estero, Dr Melva Reve Estero, psychiatric care Estero FL'
         : 'psiquiatra Estero FL, salud mental Estero, Dra Melva Reve Estero, atención psiquiátrica Estero FL',
@@ -171,16 +171,16 @@ const LocationEstero = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
-                    <span className="font-display italic text-green-700">Estero Residents</span>
+                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Estero FL -{' '}
+                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
-                    <span className="font-display italic text-green-700">Residentes de Estero</span>
+                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Estero FL -{' '}
+                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
                   </>
                 )}
               </h1>

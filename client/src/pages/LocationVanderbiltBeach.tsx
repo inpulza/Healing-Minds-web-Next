@@ -40,11 +40,11 @@ const LocationVanderbiltBeach = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Near Vanderbilt Beach FL | Dr. Melva Reve | Book Today'
-        : 'Psiquiatra Cerca Vanderbilt Beach FL | Dra. Melva Reve | Reserve Hoy',
+        ? 'Book Psychiatrist Vanderbilt Beach FL | Dr. Reve | Book Today'
+        : 'Psiquiatra Vanderbilt Beach FL | Dra. Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Psychiatrist near Vanderbilt Beach FL - Dr. Melva Reve. Book same-day psychiatric appointments. Bilingual anxiety, depression, ADHD care. Insurance accepted. Call (239) 423-0272.'
-        : 'Psiquiatra cerca Vanderbilt Beach FL - Dra. Melva Reve. Reserve citas psiquiátricas el mismo día. Atención bilingüe ansiedad, depresión, TDAH. Seguro aceptado. Llame (239) 423-0272.',
+        ? 'Book psychiatrist Vanderbilt Beach FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
+        : 'Psiquiatra Vanderbilt Beach FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Vanderbilt Beach FL, mental health Vanderbilt Beach, Dr Melva Reve Vanderbilt Beach, psychiatric care Vanderbilt Beach FL'
         : 'psiquiatra Vanderbilt Beach FL, salud mental Vanderbilt Beach, Dra Melva Reve Vanderbilt Beach, atención psiquiátrica Vanderbilt Beach FL',
