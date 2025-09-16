@@ -137,7 +137,7 @@ const Header = () => {
       description: language === 'en' ? 'Professional mental health services in Immokalee' : 'Servicios profesionales de salud mental en Immokalee'
     },
     {
-      href: '/locations/psychiatrist-lely-resorts',
+      href: '/locations/psychiatrist-lely-resort',
       label: language === 'en' ? 'Lely Resort, FL' : 'Lely Resort, FL',
       description: language === 'en' ? 'Quality psychiatric care in Lely Resort' : 'Atención psiquiátrica de calidad en Lely Resort'
     },

@@ -113,7 +113,7 @@ function Router() {
       <Route path="/locations/psychiatrist-vanderbilt-beach" component={LocationVanderbiltBeach} />
       <Route path="/locations/psychiatrist-ave-maria" component={LocationAveMaria} />
       <Route path="/locations/psychiatrist-fort-myers" component={LocationFortMyers} />
-      <Route path="/locations/psychiatrist-lely-resorts" component={LocationLelyResorts} />
+      <Route path="/locations/psychiatrist-lely-resort" component={LocationLelyResorts} />
       
       {/* Spanish Location Pages - Now use English components with Spanish language wrapper */}
       <Route path="/es/ubicaciones/psiquiatra-naples" component={() => <SpanishRouteWrapper Component={LocationNaples} />} />
@@ -125,7 +125,7 @@ function Router() {
       <Route path="/es/ubicaciones/psiquiatra-vanderbilt-beach" component={() => <SpanishRouteWrapper Component={LocationVanderbiltBeach} />} />
       <Route path="/es/ubicaciones/psiquiatra-ave-maria" component={() => <SpanishRouteWrapper Component={LocationAveMaria} />} />
       <Route path="/es/ubicaciones/psiquiatra-fort-myers" component={() => <SpanishRouteWrapper Component={LocationFortMyers} />} />
-      <Route path="/es/ubicaciones/psiquiatra-lely-resorts" component={() => <SpanishRouteWrapper Component={LocationLelyResorts} />} />
+      <Route path="/es/ubicaciones/psiquiatra-lely-resort" component={() => <SpanishRouteWrapper Component={LocationLelyResorts} />} />
       
       <Route path="/contact" component={Contact} />
       

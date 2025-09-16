@@ -736,9 +736,9 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         ]
       };
 
-    case '/locations/psychiatrist-lely-resorts':
+    case '/locations/psychiatrist-lely-resort':
       return {
-        canonical: `${baseUrl}/locations/psychiatrist-lely-resorts`,
+        canonical: `${baseUrl}/locations/psychiatrist-lely-resort`,
         schema: getServiceSchema(baseUrl, 'Lely Resort'),
         metaTags: [
           {
@@ -755,18 +755,18 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           },
           {
             property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-lely-resorts`
+            content: `${baseUrl}/locations/psychiatrist-lely-resort`
           },
-          // HREFLANG: Lely Resorts bilingual versions
+          // HREFLANG: Lely Resort bilingual versions
           {
             rel: 'alternate',
             hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-lely-resorts`
+            href: `${baseUrl}/locations/psychiatrist-lely-resort`
           },
           {
             rel: 'alternate',
             hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resorts`
+            href: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resort`
           }
         ]
       };
@@ -1480,33 +1480,33 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         ]
       };
 
-    case '/es/ubicaciones/psiquiatra-lely-resorts':
+    case '/es/ubicaciones/psiquiatra-lely-resort':
       return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resorts`,
-        schema: getServiceSchema(baseUrl, 'Lely Resorts'),
+        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resort`,
+        schema: getServiceSchema(baseUrl, 'Lely Resort'),
         metaTags: [
           {
             name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Lely Resorts? La Dra. Melva Reve sirve el área de Lely Resorts FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
+            content: '¿Busca atención psiquiátrica experta en Lely Resort? La Dra. Melva Reve sirve el área de Lely Resort FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
           },
           {
             property: 'og:title',
-            content: 'Psiquiatra Cerca de Lely Resorts FL - Dra. Melva Reve | Healing Minds'
+            content: 'Psiquiatra Cerca de Lely Resort FL - Dra. Melva Reve | Healing Minds'
           },
           {
             property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resorts`
+            content: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resort`
           },
-          // HREFLANG: Lely Resorts bilingual versions
+          // HREFLANG: Lely Resort bilingual versions
           {
             rel: 'alternate',
             hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-lely-resorts`
+            href: `${baseUrl}/locations/psychiatrist-lely-resort`
           },
           {
             rel: 'alternate',
             hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resorts`
+            href: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resort`
           }
         ]
       };

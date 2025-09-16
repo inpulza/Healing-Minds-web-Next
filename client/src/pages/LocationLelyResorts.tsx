@@ -49,7 +49,7 @@ const LocationLelyResorts = () => {
         ? 'psychiatrist Lely Resort FL, mental health Lely Resort, Dr Melva Reve Lely Resort, psychiatric care Lely Resort FL'
         : 'psiquiatra Lely Resort FL, salud mental Lely Resort, Dra Melva Reve Lely Resort, atención psiquiátrica Lely Resort FL',
       lang: language,
-      canonical: '/locations/psychiatrist-lely-resorts'
+      canonical: '/locations/psychiatrist-lely-resort'
     };
     updateSEO(seoData);
 
@@ -61,13 +61,13 @@ const LocationLelyResorts = () => {
     addLocationServiceSchema({
       locationName: 'Lely Resort',
       description: serviceDescription,
-      pageId: 'lely-resorts-location',
+      pageId: 'lely-resort-location',
       language: language
     });
 
     return () => {
       // Clean up Service schema when component unmounts
-      const serviceSchema = document.querySelector('script[type="application/ld+json"]#lely-resorts-location-service-schema');
+      const serviceSchema = document.querySelector('script[type="application/ld+json"]#lely-resort-location-service-schema');
       if (serviceSchema) {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Lely Resort Service schema');
