@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,11 +40,11 @@ const LocationFortMyers = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Fort Myers FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Fort Myers FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Fort Myers FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Fort Myers FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Fort Myers FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Fort Myers FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Fort Myers, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Fort Myers, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Fort Myers FL, mental health Fort Myers, Dr Melva Reve Fort Myers, psychiatric care Fort Myers FL'
         : 'psiquiatra Fort Myers FL, salud mental Fort Myers, Dra Melva Reve Fort Myers, atención psiquiátrica Fort Myers FL',
@@ -67,9 +66,6 @@ const LocationFortMyers = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.fortMyers?.[language], 'fort-myers');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#fort-myers-location-service-schema');
@@ -77,9 +73,6 @@ const LocationFortMyers = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Fort Myers Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('fort-myers');
     };
   }, [language]);
 
@@ -178,16 +171,16 @@ const LocationFortMyers = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Fort Myers FL -{' '}
-                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
+                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
+                    <span className="font-display italic text-green-700">Fort Myers Residents</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Fort Myers FL -{' '}
-                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
+                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
+                    <span className="font-display italic text-green-700">Residentes de Fort Myers</span>
                   </>
                 )}
               </h1>
@@ -285,9 +278,6 @@ const LocationFortMyers = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Fort Myers" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">

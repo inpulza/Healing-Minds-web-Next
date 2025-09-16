@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,11 +40,11 @@ const LocationGoldenGate = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Golden Gate FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Golden Gate FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Golden Gate FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Golden Gate FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Golden Gate FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Golden Gate FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Golden Gate, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Golden Gate, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Golden Gate FL, mental health Golden Gate, Dr Melva Reve Golden Gate, psychiatric care Golden Gate FL'
         : 'psiquiatra Golden Gate FL, salud mental Golden Gate, Dra Melva Reve Golden Gate, atención psiquiátrica Golden Gate FL',
@@ -66,9 +65,6 @@ const LocationGoldenGate = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.goldenGate?.[language], 'golden-gate');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#golden-gate-location-service-schema');
@@ -76,9 +72,6 @@ const LocationGoldenGate = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Golden Gate Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('golden-gate');
     };
   }, [language]);
 
@@ -180,13 +173,13 @@ const LocationGoldenGate = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Book Psychiatrist</span> Golden Gate FL -{' '}
-                    <span className="font-display italic text-green-700">Expert Care</span> Available Now
+                    Compassionate Psychiatric Care for{' '}
+                    <span className="font-display italic text-green-700">Golden Gate</span> Residents
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Reserve Psiquiatra</span> Golden Gate FL -{' '}
-                    <span className="font-display italic text-green-700">Atención Experta</span> Disponible Ahora
+                    Atención Psiquiátrica Compasiva para Residentes de{' '}
+                    <span className="font-display italic text-green-700">Golden Gate</span>
                   </>
                 )}
               </h1>
@@ -285,9 +278,6 @@ const LocationGoldenGate = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Golden Gate" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">
@@ -508,7 +498,7 @@ const LocationGoldenGate = () => {
                               es: 'Aprender Sobre Manejo de Medicamentos'
                             }
                           };
-                          return serviceTexts[service.id as keyof typeof serviceTexts]?.[language] || 'Learn More';
+                          return serviceTexts[service.id][language];
                         })()} 
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>

@@ -5,10 +5,9 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
-import { practiceInfo, acceptedInsurance, serviceAreas, transactionalSections } from '@/data/content';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -25,14 +24,7 @@ import {
   ArrowRight,
   Navigation,
   Calendar,
-  VideoIcon,
-  Award,
-  GraduationCap,
-  Languages,
-  User,
-  TrendingUp,
-  Video,
-  CreditCard
+  VideoIcon
 } from 'lucide-react';
 import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, IconLeaf } from '@tabler/icons-react';
 import { Link } from 'wouter';
@@ -48,11 +40,11 @@ const LocationBonitaSprings = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Bonita Springs FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Bonita Springs FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Bonita Springs FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Bonita Springs FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Bonita Springs FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Bonita Springs FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Bonita Springs, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Bonita Springs, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Bonita Springs FL, mental health Bonita Springs, Dr Melva Reve Bonita Springs, psychiatric care Bonita Springs FL'
         : 'psiquiatra Bonita Springs FL, salud mental Bonita Springs, Dra Melva Reve Bonita Springs, atención psiquiátrica Bonita Springs FL',
@@ -74,9 +66,6 @@ const LocationBonitaSprings = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.bonitaSprings?.[language], 'bonita-springs');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#bonita-springs-location-service-schema');
@@ -84,9 +73,6 @@ const LocationBonitaSprings = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Bonita Springs Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('bonita-springs');
     };
   }, [language]);
 
@@ -185,16 +171,16 @@ const LocationBonitaSprings = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Bonita Springs FL -{' '}
-                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
+                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
+                    <span className="font-display italic text-green-700">Bonita Springs Residents</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Bonita Springs FL -{' '}
-                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
+                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
+                    <span className="font-display italic text-green-700">Residentes de Bonita Springs</span>
                   </>
                 )}
               </h1>
@@ -292,9 +278,6 @@ const LocationBonitaSprings = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Bonita Springs" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">

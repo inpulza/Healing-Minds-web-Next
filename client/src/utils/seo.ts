@@ -106,18 +106,18 @@ export const updateSEO = (data: SEOData) => {
 // Complete Medical Clinic Schema - Single authoritative source for Healing Minds Psychiatry
 // Optimized to prevent duplicate schemas and Google Rich Results validation issues
 export const addMedicalBusinessSchema = () => {
-  // STEP 1: Remove ONLY the main medical business schema to prevent duplicates
-  // This targeted approach preserves location Service schemas that reference MedicalClinic
+  // STEP 1: Remove ALL existing schema markup to prevent duplicates
   const existingSchemas = document.querySelectorAll('script[type="application/ld+json"]');
   existingSchemas.forEach(schema => {
-    // Only remove schemas specifically identified as our main medical business schema
-    if (schema.id === 'healing-minds-schema' || schema.getAttribute('data-schema-type') === 'medical-business') {
+    const content = schema.textContent || '';
+    // Remove any schema that mentions our business to prevent conflicts
+    if (content.includes('Healing Minds Psychiatry') || content.includes('Melva Reve') || content.includes('MedicalClinic')) {
       schema.remove();
-      console.log('🧹 Removed existing medical business schema to prevent duplicates:', schema.id || 'medical-business');
+      console.log('🧹 Removed existing schema to prevent duplicates:', schema.id || 'unnamed');
     }
   });
 
-  // STEP 2: Create single, complete, authoritative schema with enhanced local SEO features
+  // STEP 2: Create single, complete, authoritative schema
   const schema = {
     "@context": "https://schema.org",
     "@type": "MedicalClinic",
@@ -170,6 +170,18 @@ export const addMedicalBusinessSchema = () => {
         "dayOfWeek": "Friday",
         "opens": "09:00",
         "closes": "17:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "00:00",
+        "closes": "00:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification", 
+        "dayOfWeek": "Sunday",
+        "opens": "00:00",
+        "closes": "00:00"
       }
     ],
     "medicalSpecialty": "Psychiatry",
@@ -204,75 +216,6 @@ export const addMedicalBusinessSchema = () => {
       }
     ],
     "priceRange": "$$",
-    "amenityFeature": [
-      {
-        "@type": "LocationFeatureSpecification",
-        "name": "Same-Day Appointments Available",
-        "value": true
-      },
-      {
-        "@type": "LocationFeatureSpecification", 
-        "name": "Bilingual Services (English/Spanish)",
-        "value": true
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        "name": "Telehealth/Telemedicine Available",
-        "value": true
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        "name": "Free Parking Available",
-        "value": true
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        "name": "Insurance Accepted",
-        "value": true
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        "name": "Wheelchair Accessible",
-        "value": true
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        "name": "Online Appointment Booking",
-        "value": true
-      }
-    ],
-    "paymentAccepted": [
-      "Insurance",
-      "Cash", 
-      "Credit Card",
-      "Check"
-    ],
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Mental Health Services",
-      "itemListElement": [
-        {
-          "@type": "OfferCatalog",
-          "name": "Psychiatric Evaluations",
-          "description": "Comprehensive mental health assessments"
-        },
-        {
-          "@type": "OfferCatalog", 
-          "name": "Medication Management",
-          "description": "Expert psychiatric medication monitoring and adjustment"
-        },
-        {
-          "@type": "OfferCatalog",
-          "name": "Telehealth Consultations",
-          "description": "Remote psychiatric care via secure video platforms"
-        },
-        {
-          "@type": "OfferCatalog",
-          "name": "Bilingual Mental Health Care",
-          "description": "Services available in English and Spanish"
-        }
-      ]
-    },
     "member": {
       "@type": "Physician",
       "@id": "https://healingmindsp.com/about#physician",
@@ -394,57 +337,6 @@ export const addLocationServiceSchema = (serviceConfig: {
   document.head.appendChild(script);
   
   console.log(`✅ Location Service schema added for ${serviceConfig.locationName}`);
-};
-
-// FAQ Schema Generator for Rich Snippets
-// Creates FAQPage schemas for location pages to enhance SERP appearance with FAQ rich snippets
-export const addFAQSchema = (faqData: Array<{ question: string; answer: string }> | undefined, locationKey: string) => {
-  // Handle missing FAQ data gracefully
-  if (!faqData || !Array.isArray(faqData) || faqData.length === 0) {
-    console.log(`⚠️  No FAQ data available for ${locationKey}, skipping FAQ schema`);
-    return;
-  }
-
-  // Remove existing FAQ schema for this location to prevent duplicates
-  const existingFAQSchema = document.querySelector(`script[type="application/ld+json"]#faq-schema-${locationKey}`);
-  if (existingFAQSchema) {
-    existingFAQSchema.remove();
-    console.log(`🧹 Removed existing FAQ schema for ${locationKey}`);
-  }
-
-  // Create FAQPage schema following Google's structured data guidelines
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqData.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
-  // Add FAQ schema to document head with unique identifier
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.id = `faq-schema-${locationKey}`;
-  script.setAttribute('data-schema-type', 'faq-page');
-  script.setAttribute('data-location', locationKey);
-  script.textContent = JSON.stringify(faqSchema, null, 2);
-  document.head.appendChild(script);
-  
-  console.log(`✅ FAQ schema added for ${locationKey} with ${faqData.length} questions`);
-};
-
-// Cleanup function to remove FAQ schema for specific location
-export const removeFAQSchema = (locationKey: string) => {
-  const faqSchema = document.querySelector(`script[type="application/ld+json"]#faq-schema-${locationKey}`);
-  if (faqSchema) {
-    faqSchema.remove();
-    console.log(`🧹 FAQ schema removed for ${locationKey}`);
-  }
 };
 
 // Legacy function - kept for backward compatibility

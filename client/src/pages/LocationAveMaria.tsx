@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,11 +40,11 @@ const LocationAveMaria = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Ave Maria FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Ave Maria FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Ave Maria FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Ave Maria FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Ave Maria FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Ave Maria FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Ave Maria, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Ave Maria, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Ave Maria FL, mental health Ave Maria, Dr Melva Reve Ave Maria, psychiatric care Ave Maria FL'
         : 'psiquiatra Ave Maria FL, salud mental Ave Maria, Dra Melva Reve Ave Maria, atención psiquiátrica Ave Maria FL',
@@ -66,9 +65,6 @@ const LocationAveMaria = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.aveMaria?.[language], 'ave-maria');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#ave-maria-location-service-schema');
@@ -76,9 +72,6 @@ const LocationAveMaria = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Ave Maria Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('ave-maria');
     };
   }, [language]);
 
@@ -180,13 +173,13 @@ const LocationAveMaria = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Ave Maria FL -{' '}
-                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
+                    Compassionate Psychiatric Care for{' '}
+                    <span className="font-display italic text-green-700">Ave Maria</span> Residents
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Ave Maria FL -{' '}
-                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
+                    Atención Psiquiátrica Compasiva para Residentes de{' '}
+                    <span className="font-display italic text-green-700">Ave Maria</span>
                   </>
                 )}
               </h1>
@@ -284,9 +277,6 @@ const LocationAveMaria = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Ave Maria" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">

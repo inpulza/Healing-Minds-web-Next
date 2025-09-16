@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,11 +40,11 @@ const LocationVanderbiltBeach = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Vanderbilt Beach FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Vanderbilt Beach FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Vanderbilt Beach FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Vanderbilt Beach FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Vanderbilt Beach FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Vanderbilt Beach FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Vanderbilt Beach, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Vanderbilt Beach, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Vanderbilt Beach FL, mental health Vanderbilt Beach, Dr Melva Reve Vanderbilt Beach, psychiatric care Vanderbilt Beach FL'
         : 'psiquiatra Vanderbilt Beach FL, salud mental Vanderbilt Beach, Dra Melva Reve Vanderbilt Beach, atención psiquiátrica Vanderbilt Beach FL',
@@ -66,9 +65,6 @@ const LocationVanderbiltBeach = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.vanderbiltBeach?.[language], 'vanderbilt-beach');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#vanderbilt-beach-location-service-schema');
@@ -76,9 +72,6 @@ const LocationVanderbiltBeach = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Vanderbilt Beach Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('vanderbilt-beach');
     };
   }, [language]);
 
@@ -180,13 +173,13 @@ const LocationVanderbiltBeach = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Trusted Psychiatrist</span> Near{' '}
-                    <span className="font-display italic text-green-700">Vanderbilt Beach</span> FL - Book Online Today
+                    Compassionate Psychiatric Care for{' '}
+                    <span className="font-display italic text-green-700">Vanderbilt Beach</span> Residents
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra de Confianza</span> Cerca{' '}
-                    <span className="font-display italic text-green-700">Vanderbilt Beach</span> FL - Reserve en Línea Hoy
+                    Atención Psiquiátrica Compasiva para Residentes de{' '}
+                    <span className="font-display italic text-green-700">Vanderbilt Beach</span>
                   </>
                 )}
               </h1>
@@ -284,9 +277,6 @@ const LocationVanderbiltBeach = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Vanderbilt Beach" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">

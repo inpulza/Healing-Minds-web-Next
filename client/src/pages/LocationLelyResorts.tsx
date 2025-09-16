@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,11 +40,11 @@ const LocationLelyResorts = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Lely Resort FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Lely Resort FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Lely Resort FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Lely Resort FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Lely Resort FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Lely Resort FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Lely Resort, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Lely Resort, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Lely Resort FL, mental health Lely Resort, Dr Melva Reve Lely Resort, psychiatric care Lely Resort FL'
         : 'psiquiatra Lely Resort FL, salud mental Lely Resort, Dra Melva Reve Lely Resort, atención psiquiátrica Lely Resort FL',
@@ -66,9 +65,6 @@ const LocationLelyResorts = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.lelyResorts?.[language], 'lely-resort');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#lely-resort-location-service-schema');
@@ -76,9 +72,6 @@ const LocationLelyResorts = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Lely Resort Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('lely-resort');
     };
   }, [language]);
 
@@ -177,16 +170,16 @@ const LocationLelyResorts = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Lely Resort FL -{' '}
-                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
+                    Compassionate Psychiatric Care for{' '}
+                    <span className="font-display italic text-green-700">Lely Resort</span> Residents
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Lely Resort FL -{' '}
-                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
+                    Atención Psiquiátrica Compasiva para Residentes de{' '}
+                    <span className="font-display italic text-green-700">Lely Resort</span>
                   </>
                 )}
               </h1>
@@ -284,9 +277,6 @@ const LocationLelyResorts = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Lely Resorts" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">

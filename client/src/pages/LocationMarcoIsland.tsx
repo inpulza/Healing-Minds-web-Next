@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,11 +40,11 @@ const LocationMarcoIsland = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Marco Island FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Marco Island FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Marco Island FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Marco Island FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Marco Island FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Marco Island FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Marco Island, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Marco Island, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Marco Island FL, mental health Marco Island, Dr Melva Reve Marco Island, psychiatric care Marco Island FL'
         : 'psiquiatra Marco Island FL, salud mental Marco Island, Dra Melva Reve Marco Island, atención psiquiátrica Marco Island FL',
@@ -67,9 +66,6 @@ const LocationMarcoIsland = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.marcoIsland?.[language], 'marco-island');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#marco-island-location-service-schema');
@@ -77,9 +73,6 @@ const LocationMarcoIsland = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Marco Island Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('marco-island');
     };
   }, [language]);
 
@@ -178,16 +171,16 @@ const LocationMarcoIsland = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Marco Island FL -{' '}
-                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
+                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
+                    <span className="font-display italic text-green-700">Marco Island Residents</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Marco Island FL -{' '}
-                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
+                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
+                    <span className="font-display italic text-green-700">Residentes de Marco Island</span>
                   </>
                 )}
               </h1>
@@ -285,9 +278,6 @@ const LocationMarcoIsland = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Marco Island" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">

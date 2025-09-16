@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,11 +40,11 @@ const LocationImmokalee = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Immokalee FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Immokalee FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Immokalee FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Immokalee FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Immokalee FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Immokalee FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Immokalee, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Immokalee, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Immokalee FL, mental health Immokalee, Dr Melva Reve Immokalee, psychiatric care Immokalee FL'
         : 'psiquiatra Immokalee FL, salud mental Immokalee, Dra Melva Reve Immokalee, atención psiquiátrica Immokalee FL',
@@ -67,9 +66,6 @@ const LocationImmokalee = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.immokalee?.[language], 'immokalee');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#immokalee-location-service-schema');
@@ -77,9 +73,6 @@ const LocationImmokalee = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Immokalee Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('immokalee');
     };
   }, [language]);
 
@@ -181,13 +174,13 @@ const LocationImmokalee = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Bilingual Psychiatrist</span> Serving{' '}
-                    <span className="font-display italic text-green-700">Immokalee</span> - Same-Day Appointments
+                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                    <span className="font-display italic text-green-700">Immokalee, FL</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra Bilingüe</span> Sirviendo{' '}
-                    <span className="font-display italic text-green-700">Immokalee</span> - Citas el Mismo Día
+                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                    <span className="font-display italic text-green-700">Immokalee, FL</span>
                   </>
                 )}
               </h1>
@@ -285,9 +278,6 @@ const LocationImmokalee = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Immokalee" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">

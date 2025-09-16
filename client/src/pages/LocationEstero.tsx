@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
-import TransactionalContent from '@/components/TransactionalContent';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,11 +40,11 @@ const LocationEstero = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Estero FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Estero FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Estero FL - Dr. Melva Reve | Healing Minds'
+        : 'Psiquiatra Estero FL - Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Estero FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Estero FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Dr. Melva Reve serves Estero, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'La Dra. Melva Reve atiende Estero, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Estero FL, mental health Estero, Dr Melva Reve Estero, psychiatric care Estero FL'
         : 'psiquiatra Estero FL, salud mental Estero, Dra Melva Reve Estero, atención psiquiátrica Estero FL',
@@ -67,9 +66,6 @@ const LocationEstero = () => {
       language: language
     });
 
-    // Add FAQ Schema for enhanced SERP appearance
-    addFAQSchema(locationFAQs.estero?.[language], 'estero');
-
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#estero-location-service-schema');
@@ -77,9 +73,6 @@ const LocationEstero = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Estero Service schema');
       }
-      
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('estero');
     };
   }, [language]);
 
@@ -178,16 +171,16 @@ const LocationEstero = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-body font-bold text-green-800 mb-6 sm:mb-8 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Estero FL -{' '}
-                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
+                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
+                    <span className="font-display italic text-green-700">Estero Residents</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Estero FL -{' '}
-                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
+                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
+                    <span className="font-display italic text-green-700">Residentes de Estero</span>
                   </>
                 )}
               </h1>
@@ -285,9 +278,6 @@ const LocationEstero = () => {
             </div>
           </div>
         </section>
-
-        {/* Transactional Content Sections */}
-        <TransactionalContent locationName="Estero" />
 
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">

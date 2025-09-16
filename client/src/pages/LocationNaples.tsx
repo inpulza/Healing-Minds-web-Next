@@ -6,9 +6,8 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import CompactVideoCarousel from '@/components/CompactVideoCarousel';
 import Reviews from '@/components/Reviews';
-import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addFAQSchema, removeFAQSchema } from '@/utils/seo';
-import { practiceInfo, acceptedInsurance, serviceAreas, transactionalSections } from '@/data/content';
+import { updateSEO } from '@/utils/seo';
+import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -25,14 +24,7 @@ import {
   ArrowRight,
   Navigation,
   Calendar,
-  VideoIcon,
-  Award,
-  GraduationCap,
-  Languages,
-  TrendingUp,
-  User,
-  CreditCard,
-  Video
+  VideoIcon
 } from 'lucide-react';
 import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, IconLeaf } from '@tabler/icons-react';
 import { Link } from 'wouter';
@@ -48,11 +40,11 @@ const LocationNaples = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Book Psychiatrist Naples FL | Dr. Reve | Book Today'
-        : 'Psiquiatra Naples FL | Dra. Reve | Reserve Hoy',
+        ? 'Psychiatrist Naples FL - Dr. Melva Reve Location | Healing Minds'
+        : 'Psiquiatra Naples FL - Ubicación Dra. Melva Reve | Healing Minds',
       description: language === 'en'
-        ? 'Book psychiatrist Naples FL - Dr. Melva Reve. Same-day appointments. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272.'
-        : 'Psiquiatra Naples FL - Dra. Melva Reve. Citas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272.',
+        ? 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N # 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+        : 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N # 25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
       keywords: language === 'en'
         ? 'psychiatrist Naples FL location, 4760 Tamiami Trail Naples # 25, psychiatric office Naples, Dr Melva Reve address, mental health Naples FL'
         : 'ubicación psiquiatra Naples FL, 4760 Tamiami Trail Naples # 25, consultorio psiquiátrico Naples, dirección Dra Melva Reve, salud mental Naples FL',
@@ -62,13 +54,9 @@ const LocationNaples = () => {
     updateSEO(seoData);
 
     // Schema already managed by App.tsx to avoid duplication
-    
-    // Add FAQ Schema for enhanced SERP appearance (gracefully handles missing data)
-    addFAQSchema(locationFAQs.naples?.[language], 'naples');
 
     return () => {
-      // Clean up FAQ schema when component unmounts
-      removeFAQSchema('naples');
+      // No cleanup needed
     };
   }, [language]);
 
@@ -170,13 +158,13 @@ const LocationNaples = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Top-Rated Psychiatrist</span> Naples FL -{' '}
-                    <span className="font-display italic text-green-700">Book Online</span> Today
+                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                    <span className="font-display italic text-green-700">Naples, FL</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Psiquiatra de Confianza</span> Naples FL -{' '}
-                    <span className="font-display italic text-green-700">Reserve en Línea</span> Hoy
+                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                    <span className="font-display italic text-green-700">Naples, FL</span>
                   </>
                 )}
               </h1>
@@ -275,66 +263,6 @@ const LocationNaples = () => {
           </div>
         </section>
 
-        {/* Why Book Online Benefits Section - Above Fold Transactional Content */}
-        <section className="py-16 sm:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <WellnessIcon size="md" color="blue" className="opacity-70">
-                  <CheckCircle />
-                </WellnessIcon>
-                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
-                  {language === 'en' ? (
-                    <>Why <span className="font-display italic text-green-700">Book</span> Online?</>
-                  ) : (
-                    <>¿Por Qué <span className="font-display italic text-green-700">Reservar</span> en Línea?</>
-                  )}
-                </h2>
-                <WellnessIcon size="md" color="green" className="opacity-70">
-                  <Calendar />
-                </WellnessIcon>
-              </div>
-              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {transactionalSections.whyBookOnline[language].subtitle}
-              </p>
-            </div>
-
-            {/* Benefits Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {transactionalSections.whyBookOnline[language].benefits.map((benefit, index) => {
-                const IconComponent = benefit.icon === 'CheckCircle' ? CheckCircle :
-                                     benefit.icon === 'Clock' ? Clock :
-                                     benefit.icon === 'Phone' ? Phone :
-                                     benefit.icon === 'Calendar' ? Calendar :
-                                     benefit.icon === 'Shield' ? Shield :
-                                     benefit.icon === 'Video' ? Video : CheckCircle;
-                
-                return (
-                  <Card key={index} className="card-modern group hover:shadow-lg transition-all duration-300" data-testid={`benefit-card-${index}`}>
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-green-200 transition-colors">
-                        <IconComponent className="w-8 h-8 text-green-700" />
-                      </div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-3">{benefit.title}</h3>
-                      <p className="text-gray-600 font-body leading-relaxed">{benefit.description}</p>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-
-            {/* CTA with Urgency */}
-            <div className="text-center bg-green-50 border border-green-100 rounded-2xl p-8">
-              <div className="mb-4">
-                <CharmHealthBooking variant="prominent" />
-              </div>
-              <p className="text-sm text-orange-600 font-semibold bg-orange-50 border border-orange-200 rounded-full px-4 py-2 inline-block" data-testid="urgency-text">
-                ⚡ {transactionalSections.whyBookOnline[language].urgencyText}
-              </p>
-            </div>
-          </div>
-        </section>
-
         {/* Banner Image Section - Service Page Style */}
         <section className="py-16 sm:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -419,98 +347,6 @@ const LocationNaples = () => {
 
         {/* Insurance Logos Section - Moved below fold */}
         <LocationInsuranceLogos />
-
-        {/* Trust & Credibility Signals Section */}
-        <section className="py-20 bg-gradient-to-br from-green-50 to-blue-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <WellnessIcon size="md" color="green" className="opacity-70">
-                  <Award />
-                </WellnessIcon>
-                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
-                  {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Trusted</span> Expertise</>
-                  ) : (
-                    <>Experiencia <span className="font-display italic text-green-700">Confiable</span></>
-                  )}
-                </h2>
-                <WellnessIcon size="md" color="blue" className="opacity-70">
-                  <Shield />
-                </WellnessIcon>
-              </div>
-              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {transactionalSections.trustCredibility[language].subtitle}
-              </p>
-            </div>
-
-            {/* Credentials Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              {transactionalSections.trustCredibility[language].credentials.map((credential, index) => {
-                const IconComponent = credential.icon === 'Award' ? Award :
-                                     credential.icon === 'GraduationCap' ? GraduationCap :
-                                     credential.icon === 'Users' ? Users :
-                                     credential.icon === 'Languages' ? Languages :
-                                     credential.icon === 'Shield' ? Shield :
-                                     credential.icon === 'Heart' ? Heart : Award;
-                
-                return (
-                  <Card key={index} className="bg-white border border-green-100 hover:shadow-lg transition-all duration-300 group" data-testid={`credential-card-${index}`}>
-                    <div className="text-center">
-                      <div className="w-20 h-20 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-green-200 transition-colors">
-                        <IconComponent className="w-10 h-10 text-green-700" />
-                      </div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-4">{credential.title}</h3>
-                      <p className="text-gray-600 font-body leading-relaxed">{credential.description}</p>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-
-            {/* Stats Section */}
-            <div className="bg-white rounded-2xl border border-green-100 p-8 lg:p-12 shadow-lg">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div className="group" data-testid="stat-experience">
-                  <div className="text-5xl font-bold text-green-700 mb-2">
-                    {transactionalSections.trustCredibility[language].stats.experience}
-                  </div>
-                  <div className="text-gray-600 font-body text-lg">
-                    {language === 'en' ? 'Years Experience' : 'Años de Experiencia'}
-                  </div>
-                </div>
-                <div className="group" data-testid="stat-patients">
-                  <div className="text-5xl font-bold text-green-700 mb-2">
-                    {transactionalSections.trustCredibility[language].stats.patients}
-                  </div>
-                  <div className="text-gray-600 font-body text-lg">
-                    {language === 'en' ? 'Patients Served' : 'Pacientes Atendidos'}
-                  </div>
-                </div>
-                <div className="group" data-testid="stat-satisfaction">
-                  <div className="text-5xl font-bold text-green-700 mb-2">
-                    {transactionalSections.trustCredibility[language].stats.satisfaction}
-                  </div>
-                  <div className="text-gray-600 font-body text-lg">
-                    {language === 'en' ? 'Patient Satisfaction' : 'Satisfacción del Paciente'}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-center mt-8 pt-8 border-t border-green-100">
-                <Link href="/about">
-                  <Button
-                    className="bg-green-800 text-white hover:bg-green-700 px-8 py-4 rounded-full font-body font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-                    data-testid="button-learn-about-dr-reve"
-                  >
-                    <User className="w-5 h-5 mr-2" />
-                    {transactionalSections.trustCredibility[language].cta}
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Services Section */}
         <section className="py-20 bg-white">
@@ -987,95 +823,6 @@ const LocationNaples = () => {
           </div>
         </section>
 
-        {/* Emergency & Urgency Section */}
-        <section className="py-20 bg-gradient-to-br from-red-50 to-orange-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <WellnessIcon size="md" color="red" className="opacity-70">
-                  <Clock />
-                </WellnessIcon>
-                <h2 className="text-4xl lg:text-5xl font-body font-bold text-red-800">
-                  {language === 'en' ? (
-                    <><span className="font-display italic text-red-700">Urgent</span> Care Available</>
-                  ) : (
-                    <>Atención <span className="font-display italic text-red-700">Urgente</span> Disponible</>
-                  )}
-                </h2>
-                <WellnessIcon size="md" color="orange" className="opacity-70">
-                  <Heart />
-                </WellnessIcon>
-              </div>
-              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {transactionalSections.emergencyUrgency[language].subtitle}
-              </p>
-            </div>
-
-            {/* Urgent Services Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {transactionalSections.emergencyUrgency[language].services.map((service, index) => {
-                const IconComponent = service.icon === 'Clock' ? Clock :
-                                     service.icon === 'Phone' ? Phone :
-                                     service.icon === 'Video' ? Video :
-                                     service.icon === 'Heart' ? Heart : Clock;
-                
-                return (
-                  <Card key={index} className="bg-white border border-red-100 hover:shadow-lg transition-all duration-300 text-center group" data-testid={`urgent-service-${index}`}>
-                    <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-red-200 transition-colors">
-                      <IconComponent className="w-8 h-8 text-red-700" />
-                    </div>
-                    <h3 className="text-lg font-body font-bold text-red-800 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 font-body text-sm leading-relaxed mb-4">{service.description}</p>
-                    <div className="inline-block bg-green-50 border border-green-200 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-                      {service.availability}
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-
-            {/* Emergency Numbers Section */}
-            <div className="bg-white rounded-2xl border border-red-100 p-8 lg:p-12 shadow-lg">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-body font-bold text-red-800 mb-4">
-                  {language === 'en' ? 'Emergency Contact Numbers' : 'Números de Contacto de Emergencia'}
-                </h3>
-                <p className="text-gray-600 font-body leading-relaxed">
-                  {language === 'en' 
-                    ? 'If you are experiencing a mental health crisis, these resources are available 24/7'
-                    : 'Si está experimentando una crisis de salud mental, estos recursos están disponibles 24/7'}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                {transactionalSections.emergencyUrgency[language].emergencyNumbers.map((emergency, index) => (
-                  <div key={index} className="text-center p-6 bg-red-50 rounded-xl border border-red-100" data-testid={`emergency-number-${index}`}>
-                    <div className="text-2xl font-bold text-red-700 mb-2">{emergency.number}</div>
-                    <div className="text-gray-600 font-body text-sm">{emergency.description}</div>
-                    <a 
-                      href={`tel:${emergency.number.replace(/[^\d]/g, '')}`}
-                      className="inline-block mt-3 bg-red-700 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-800 transition-colors"
-                      data-testid={`call-${emergency.number.replace(/[^\d]/g, '')}`}
-                    >
-                      {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
-                    </a>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA and Disclaimer */}
-              <div className="text-center">
-                <div className="mb-6">
-                  <CharmHealthBooking variant="urgent" />
-                </div>
-                <p className="text-sm text-red-600 font-semibold bg-red-50 border border-red-200 rounded-full px-6 py-3 inline-block max-w-2xl" data-testid="emergency-disclaimer">
-                  ⚠️ {transactionalSections.emergencyUrgency[language].disclaimer}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Community Involvement Section */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -1214,78 +961,6 @@ const LocationNaples = () => {
           </div>
         </section>
 
-        {/* Local Competitive Advantages Section */}
-        <section className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <WellnessIcon size="md" color="blue" className="opacity-70">
-                  <Star />
-                </WellnessIcon>
-                <h2 className="text-4xl lg:text-5xl font-body font-bold text-blue-800">
-                  {language === 'en' ? (
-                    <>Why <span className="font-display italic text-blue-700">Choose</span> Us</>
-                  ) : (
-                    <>Por Qué <span className="font-display italic text-blue-700">Elegirnos</span></>
-                  )}
-                </h2>
-                <WellnessIcon size="md" color="purple" className="opacity-70">
-                  <CheckCircle />
-                </WellnessIcon>
-              </div>
-              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {transactionalSections.competitiveAdvantages[language].subtitle}
-              </p>
-            </div>
-
-            {/* Advantages Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {transactionalSections.competitiveAdvantages[language].advantages.map((advantage, index) => {
-                const IconComponent = advantage.icon === 'Languages' ? Languages :
-                                     advantage.icon === 'MapPin' ? MapPin :
-                                     advantage.icon === 'CreditCard' ? CreditCard :
-                                     advantage.icon === 'Video' ? Video :
-                                     advantage.icon === 'User' ? User :
-                                     advantage.icon === 'Heart' ? Heart : Star;
-                
-                return (
-                  <Card key={index} className="bg-white border border-blue-100 hover:shadow-lg transition-all duration-300 group" data-testid={`advantage-card-${index}`}>
-                    <div className="text-center">
-                      <div className="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
-                        <IconComponent className="w-10 h-10 text-blue-700" />
-                      </div>
-                      <h3 className="text-xl font-body font-bold text-blue-800 mb-3">{advantage.title}</h3>
-                      <p className="text-gray-600 font-body leading-relaxed mb-4">{advantage.description}</p>
-                      <div className="inline-block bg-blue-50 border border-blue-200 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-                        {advantage.benefit}
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-
-            {/* Social Proof and CTA */}
-            <div className="bg-white rounded-2xl border border-blue-100 p-8 lg:p-12 shadow-lg text-center">
-              <div className="mb-8">
-                <div className="text-4xl font-bold text-blue-700 mb-2">
-                  {transactionalSections.competitiveAdvantages[language].socialProof.split(' ')[1]} 
-                </div>
-                <div className="text-gray-600 font-body text-lg">
-                  {language === 'en' ? 'Satisfied Patients Trust Our Care' : 'Pacientes Satisfechos Confían en Nuestra Atención'}
-                </div>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <CharmHealthBooking variant="advantage" />
-                <div className="text-sm text-blue-600 font-semibold">
-                  {language === 'en' ? '✨ Experience the difference today' : '✨ Experimente la diferencia hoy'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Video Section - A Conversation with Dr. Reve */}
         <section className="py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
@@ -1351,108 +1026,6 @@ const LocationNaples = () => {
         </section>
 
         {/* Reviews Section */}
-        {/* Patient Success & Social Proof Section */}
-        <section className="py-20 bg-gradient-to-br from-green-50 to-teal-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <WellnessIcon size="md" color="green" className="opacity-70">
-                  <TrendingUp />
-                </WellnessIcon>
-                <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
-                  {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Real</span> Patient Success</>
-                  ) : (
-                    <>Éxito <span className="font-display italic text-green-700">Real</span> de Pacientes</>
-                  )}
-                </h2>
-                <WellnessIcon size="md" color="teal" className="opacity-70">
-                  <Heart />
-                </WellnessIcon>
-              </div>
-              <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {transactionalSections.patientSuccess[language].subtitle}
-              </p>
-            </div>
-
-            {/* Success Stories Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              {transactionalSections.patientSuccess[language].successStories.map((story, index) => {
-                const IconComponent = story.icon === 'TrendingUp' ? TrendingUp :
-                                     story.icon === 'Calendar' ? Calendar :
-                                     story.icon === 'Shield' ? Shield :
-                                     story.icon === 'Star' ? Star :
-                                     story.icon === 'Heart' ? Heart :
-                                     story.icon === 'CheckCircle' ? CheckCircle : TrendingUp;
-                
-                return (
-                  <Card key={index} className="bg-white border border-green-100 hover:shadow-lg transition-all duration-300 group" data-testid={`success-story-${index}`}>
-                    <div className="text-center">
-                      <div className="w-20 h-20 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-green-200 transition-colors">
-                        <IconComponent className="w-10 h-10 text-green-700" />
-                      </div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-3">{story.title}</h3>
-                      <p className="text-gray-600 font-body leading-relaxed mb-4">{story.description}</p>
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                        <div className="text-2xl font-bold text-green-700 mb-1">{story.timeline}</div>
-                        <div className="text-sm text-green-600 font-semibold">{story.outcome}</div>
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-
-            {/* Statistics Section */}
-            <div className="bg-white rounded-2xl border border-green-100 p-8 lg:p-12 shadow-lg">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center mb-8">
-                <div className="group" data-testid="stat-success-rate">
-                  <div className="text-4xl font-bold text-green-700 mb-2">
-                    {transactionalSections.patientSuccess[language].statistics.successRate}
-                  </div>
-                  <div className="text-gray-600 font-body">
-                    {language === 'en' ? 'Success Rate' : 'Tasa de Éxito'}
-                  </div>
-                </div>
-                <div className="group" data-testid="stat-avg-improvement">
-                  <div className="text-4xl font-bold text-green-700 mb-2">
-                    {transactionalSections.patientSuccess[language].statistics.avgImprovement}
-                  </div>
-                  <div className="text-gray-600 font-body">
-                    {language === 'en' ? 'Avg Improvement' : 'Mejora Promedio'}
-                  </div>
-                </div>
-                <div className="group" data-testid="stat-treatment-time">
-                  <div className="text-4xl font-bold text-green-700 mb-2">
-                    {transactionalSections.patientSuccess[language].statistics.treatmentTime}
-                  </div>
-                  <div className="text-gray-600 font-body">
-                    {language === 'en' ? 'Avg Treatment Time' : 'Tiempo de Tratamiento'}
-                  </div>
-                </div>
-                <div className="group" data-testid="stat-follow-up">
-                  <div className="text-4xl font-bold text-green-700 mb-2">
-                    {transactionalSections.patientSuccess[language].statistics.followUpSatisfaction}
-                  </div>
-                  <div className="text-gray-600 font-body">
-                    {language === 'en' ? 'Follow-up Satisfaction' : 'Satisfacción Seguimiento'}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-center border-t border-green-100 pt-8">
-                <p className="text-gray-600 font-body mb-6 max-w-3xl mx-auto">
-                  {transactionalSections.patientSuccess[language].callToAction}
-                </p>
-                <CharmHealthBooking variant="success" />
-                <div className="mt-4 text-sm text-green-600 font-semibold">
-                  {language === 'en' ? '🌟 Join our success stories today' : '🌟 Únase a nuestras historias de éxito hoy'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <Reviews />
 
         {/* Telehealth Services Section */}
