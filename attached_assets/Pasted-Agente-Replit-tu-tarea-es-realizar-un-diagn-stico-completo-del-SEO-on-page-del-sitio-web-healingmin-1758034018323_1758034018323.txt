@@ -1,0 +1,59 @@
+Agente Replit, tu tarea es realizar un diagnóstico completo del SEO on-page del sitio web healingmindsp.com (versiones ES y EN).
+
+Objetivo del Diagnóstico:
+Comparar el estado actual del sitio contra una estrategia avanzada de SEO Local y E-E-A-T (Pericia, Autoridad, Confianza) diseñada para un sitio YMYL (Salud).
+
+Tu objetivo es identificar las discrepancias entre este "estado ideal" (descrito a continuación) y la implementación actual. Genera una lista de tareas basada únicamente en las discrepancias que encuentres.
+
+RESTRICCIÓN OBLIGATORIA (Límite del Diagnóstico)
+Este diagnóstico se limita EXCLUSIVAMENTE al texto HTML, los metadatos (Title, Description), los encabezados (H1-H3) y los scripts JSON-LD (Schema.org).
+
+NO analices, sugieras ni modifiques ningún aspecto de la UI (Interfaz de Usuario), CSS, layout, colores, fuentes o diseño visual. Cualquier discrepancia relacionada con el diseño visual está fuera del alcance de esta auditoría.
+
+Checklist de Diagnóstico (15 Puntos de Verificación)
+Utiliza la siguiente lista como el "estado ideal" contra el cual debes auditar el sitio:
+
+Módulo 1: Fundamentos de E-E-A-T (Pericia y Confianza)
+[Diagnóstico - Biografías]: Verifica que la página "Acerca de" y/o las biografías de los proveedores (específicamente la de la Dra. Melva Reve) contengan texto detallado de sus credenciales médicas, licencias, educación formal y afiliaciones profesionales.
+
+[Diagnóstico - Schema Person]: Valida si existe un schema Person implementado para la Dra. Reve. Si existe, verifica que contenga las propiedades knowsAbout (listando especialidades como "Ansiedad", "TDAH") y alumniOf (formación).
+
+[Diagnóstico - Schema Review]: Valida si los testimonios de clientes que se muestran en el sitio están marcados individualmente con el schema Review (deben ser reseñas auténticas).
+
+Módulo 2: Ubicación Principal Verificada (Naples)
+(Página objetivo: /locations/naples y /es/ubicaciones/psiquiatra-naples)
+
+[Diagnóstico - Metadatos de Naples]: Verifica si el tag $\ sigue la fórmula estratégica: [Palabra Clave Principal (Psiquiatra) + Ubicación (Naples, FL) + Modificador Clave (Bilingüe) + Marca].
+
+[Diagnóstico - H1 de Naples]: Confirma que el $\ de la página de Naples coincide con la intención de búsqueda principal (ej. "Psiquiatra Experta en Naples, FL").
+
+[Diagnóstico - NAP HTML]: Asegura que el NAP (Nombre, Dirección, Teléfono) de la oficina de Naples esté presente como texto HTML (no imagen) y coincida 1:1 con el GBP.
+
+[Diagnóstico - Schema LocalBusiness]: Valida que SOLO esta página de ubicación física implemente el schema LocalBusiness (o su subtipo Physician / MedicalClinic). Verifica que todas las propiedades (dirección, geo, teléfono, provider) sean 100% precisas.
+
+Módulo 3: Ubicaciones Secundarias (Pivote a Telepsiquiatría)
+
+(Páginas objetivo: Las 9 restantes, incluyendo .../bonita-springs, .../marco-island, etc. )
+
+[Diagnóstico - Contenido SAP]: Verifica que el contenido de texto en estas 9 páginas esté claramente enfocado en servicios de Telepsiquiatría para los residentes de esas ciudades, y que NO implique la existencia de una oficina física.
+
+[Diagnóstico - Metadatos SAP]: Verifica si los $\ y $\ de estas 9 páginas reflejan la oferta virtual (ej. "Telepsiquiatría para Bonita Springs").
+
+[Diagnóstico - Schema Incorrecto (CRÍTICO)]: Confirma que NINGUNA de estas 9 páginas de área de servicio esté utilizando el schema LocalBusiness. Si lo están usando, esto es un error crítico de diagnóstico.
+
+[Diagnóstico - Schema Service]: Valida si estas 9 páginas implementan correctamente el schema Service. Si existe, este schema DEBE incluir las propiedades: serviceType: "Telehealth" y areaServed: "[Nombre de la Ciudad]".
+
+Módulo 4: Páginas de Servicio (YMYL + Local)
+
+(Páginas objetivo: /services/anxiety-treatment, /es/servicios/tratamiento-ansiedad, etc. )
+
+[Diagnóstico - Metadatos de Servicio]: Verifica si los $\ y $\ de las páginas de servicio están geo-modificados (es decir, incluyen "...en Naples, FL").
+
+[Diagnóstico - Contenido YMYL]: Audita el texto de estas páginas. ¿Demuestra pericia listando (con $\/$\) los tipos específicos de trastornos tratados y los enfoques de tratamiento? ¿Enlaza internamente a la biografía del proveedor (Dra. Reve)?
+
+[Diagnóstico - Schema Médico]: Valida la implementación de schema MedicalCondition (para el trastorno) y/o MedicalTherapy (para el tratamiento).
+
+[Diagnóstico - Schema FAQPage]: Valida si estas páginas de servicio utilizan schema FAQPage para responder 3-5 preguntas frecuentes sobre dicho servicio.
+
+Acción Requerida del Agente Replit:
+Realiza esta auditoría de 15 puntos y genera un informe de discrepancias (Tareas a Realizar) basado en cualquier punto que falle la verificación o esté ausente.
