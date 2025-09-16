@@ -40,11 +40,11 @@ const LocationNaples = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Naples FL - Dr. Melva Reve Location | Healing Minds'
-        : 'Psiquiatra Naples FL - Ubicación Dra. Melva Reve | Healing Minds',
+        ? 'Psychiatrist Naples FL | Dr. Melva Reve | 4760 Tamiami Trail | Book Today'
+        : 'Psiquiatra Naples FL | Dra. Melva Reve | 4760 Tamiami Trail | Reserve Hoy',
       description: language === 'en'
-        ? 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N # 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N # 25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Book psychiatrist Naples FL with Dr. Melva Reve at 4760 Tamiami Trail. Same-day appointments available. Expert anxiety, depression, ADHD, PTSD treatment. Bilingual services. Call (239) 423-0272.'
+        : 'Reserve psiquiatra Naples FL con Dra. Melva Reve en 4760 Tamiami Trail. Citas el mismo día disponibles. Tratamiento experto ansiedad, depresión, TDAH, TEPT. Servicios bilingües. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Naples FL location, 4760 Tamiami Trail Naples # 25, psychiatric office Naples, Dr Melva Reve address, mental health Naples FL'
         : 'ubicación psiquiatra Naples FL, 4760 Tamiami Trail Naples # 25, consultorio psiquiátrico Naples, dirección Dra Melva Reve, salud mental Naples FL',
@@ -158,13 +158,13 @@ const LocationNaples = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Naples, FL</span>
+                    <span className="font-display italic text-green-700">Top-Rated Psychiatrist</span> Naples FL -{' '}
+                    <span className="font-display italic text-green-700">Book Online</span> Today
                   </>
                 ) : (
                   <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Naples, FL</span>
+                    <span className="font-display italic text-green-700">Psiquiatra de Confianza</span> Naples FL -{' '}
+                    <span className="font-display italic text-green-700">Reserve en Línea</span> Hoy
                   </>
                 )}
               </h1>

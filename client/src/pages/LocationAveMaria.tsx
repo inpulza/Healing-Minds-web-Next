@@ -40,11 +40,11 @@ const LocationAveMaria = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Ave Maria FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Ave Maria FL - Dra. Melva Reve | Healing Minds',
+        ? 'Book Psychiatrist Ave Maria FL | Dr. Melva Reve | Same-Day Appointments'
+        : 'Reservar Psiquiatra Ave Maria FL | Dra. Melva Reve | Citas el Mismo Día',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Ave Maria, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Ave Maria, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Book psychiatric appointment Ave Maria FL with Dr. Melva Reve. Same-day consultations available. Bilingual anxiety, depression, ADHD treatment. Call (239) 423-0272 or schedule online.'
+        : 'Reserve cita psiquiátrica Ave Maria FL con Dra. Melva Reve. Consultas el mismo día disponibles. Tratamiento bilingüe ansiedad, depresión, TDAH. Llame (239) 423-0272 o programe en línea.',
       keywords: language === 'en'
         ? 'psychiatrist Ave Maria FL, mental health Ave Maria, Dr Melva Reve Ave Maria, psychiatric care Ave Maria FL'
         : 'psiquiatra Ave Maria FL, salud mental Ave Maria, Dra Melva Reve Ave Maria, atención psiquiátrica Ave Maria FL',
@@ -173,13 +173,13 @@ const LocationAveMaria = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Compassionate Psychiatric Care for{' '}
-                    <span className="font-display italic text-green-700">Ave Maria</span> Residents
+                    <span className="font-display italic text-green-700">Expert Psychiatrist</span> Ave Maria FL -{' '}
+                    <span className="font-display italic text-green-700">Same-Day</span> Appointments Available
                   </>
                 ) : (
                   <>
-                    Atención Psiquiátrica Compasiva para Residentes de{' '}
-                    <span className="font-display italic text-green-700">Ave Maria</span>
+                    <span className="font-display italic text-green-700">Psiquiatra Experto</span> Ave Maria FL -{' '}
+                    <span className="font-display italic text-green-700">Citas el Mismo Día</span> Disponibles
                   </>
                 )}
               </h1>

@@ -40,11 +40,11 @@ const LocationGoldenGate = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Golden Gate FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Golden Gate FL - Dra. Melva Reve | Healing Minds',
+        ? 'Psychiatrist Golden Gate FL | Dr. Melva Reve | Book Appointment Online'
+        : 'Psiquiatra Golden Gate FL | Dra. Melva Reve | Reserve Cita en Línea',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Golden Gate, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Golden Gate, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Book psychiatrist Golden Gate FL with Dr. Melva Reve. Same-day appointments available. Expert anxiety, depression, ADHD treatment. Bilingual services. Call (239) 423-0272.'
+        : 'Reserve psiquiatra Golden Gate FL con Dra. Melva Reve. Citas el mismo día disponibles. Tratamiento experto ansiedad, depresión, TDAH. Servicios bilingües. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Golden Gate FL, mental health Golden Gate, Dr Melva Reve Golden Gate, psychiatric care Golden Gate FL'
         : 'psiquiatra Golden Gate FL, salud mental Golden Gate, Dra Melva Reve Golden Gate, atención psiquiátrica Golden Gate FL',
@@ -173,13 +173,13 @@ const LocationGoldenGate = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Compassionate Psychiatric Care for{' '}
-                    <span className="font-display italic text-green-700">Golden Gate</span> Residents
+                    <span className="font-display italic text-green-700">Book Psychiatrist</span> Golden Gate FL -{' '}
+                    <span className="font-display italic text-green-700">Expert Care</span> Available Now
                   </>
                 ) : (
                   <>
-                    Atención Psiquiátrica Compasiva para Residentes de{' '}
-                    <span className="font-display italic text-green-700">Golden Gate</span>
+                    <span className="font-display italic text-green-700">Reserve Psiquiatra</span> Golden Gate FL -{' '}
+                    <span className="font-display italic text-green-700">Atención Experta</span> Disponible Ahora
                   </>
                 )}
               </h1>

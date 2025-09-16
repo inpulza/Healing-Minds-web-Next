@@ -40,11 +40,11 @@ const LocationImmokalee = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Immokalee FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Immokalee FL - Dra. Melva Reve | Healing Minds',
+        ? 'Psychiatrist Immokalee FL | Dr. Melva Reve | Same-Day Appointments Available'
+        : 'Psiquiatra Immokalee FL | Dra. Melva Reve | Citas el Mismo Día Disponibles',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Immokalee, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Immokalee, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Psychiatrist serving Immokalee FL - Dr. Melva Reve. Book same-day psychiatric appointments. Bilingual anxiety, depression, ADHD, PTSD treatment. Insurance accepted. Call (239) 423-0272.'
+        : 'Psiquiatra sirviendo Immokalee FL - Dra. Melva Reve. Reserve citas psiquiátricas el mismo día. Tratamiento bilingüe ansiedad, depresión, TDAH, TEPT. Seguro aceptado. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Immokalee FL, mental health Immokalee, Dr Melva Reve Immokalee, psychiatric care Immokalee FL'
         : 'psiquiatra Immokalee FL, salud mental Immokalee, Dra Melva Reve Immokalee, atención psiquiátrica Immokalee FL',
@@ -174,13 +174,13 @@ const LocationImmokalee = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Immokalee, FL</span>
+                    <span className="font-display italic text-green-700">Bilingual Psychiatrist</span> Serving{' '}
+                    <span className="font-display italic text-green-700">Immokalee</span> - Same-Day Appointments
                   </>
                 ) : (
                   <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Immokalee, FL</span>
+                    <span className="font-display italic text-green-700">Psiquiatra Bilingüe</span> Sirviendo{' '}
+                    <span className="font-display italic text-green-700">Immokalee</span> - Citas el Mismo Día
                   </>
                 )}
               </h1>

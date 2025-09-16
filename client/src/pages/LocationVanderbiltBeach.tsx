@@ -40,11 +40,11 @@ const LocationVanderbiltBeach = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatrist Vanderbilt Beach FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Vanderbilt Beach FL - Dra. Melva Reve | Healing Minds',
+        ? 'Psychiatrist Near Vanderbilt Beach FL | Dr. Melva Reve | Book Today'
+        : 'Psiquiatra Cerca Vanderbilt Beach FL | Dra. Melva Reve | Reserve Hoy',
       description: language === 'en'
-        ? 'Dr. Melva Reve serves Vanderbilt Beach, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Vanderbilt Beach, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Psychiatrist near Vanderbilt Beach FL - Dr. Melva Reve. Book same-day psychiatric appointments. Bilingual anxiety, depression, ADHD care. Insurance accepted. Call (239) 423-0272.'
+        : 'Psiquiatra cerca Vanderbilt Beach FL - Dra. Melva Reve. Reserve citas psiquiátricas el mismo día. Atención bilingüe ansiedad, depresión, TDAH. Seguro aceptado. Llame (239) 423-0272.',
       keywords: language === 'en'
         ? 'psychiatrist Vanderbilt Beach FL, mental health Vanderbilt Beach, Dr Melva Reve Vanderbilt Beach, psychiatric care Vanderbilt Beach FL'
         : 'psiquiatra Vanderbilt Beach FL, salud mental Vanderbilt Beach, Dra Melva Reve Vanderbilt Beach, atención psiquiátrica Vanderbilt Beach FL',
@@ -173,13 +173,13 @@ const LocationVanderbiltBeach = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Compassionate Psychiatric Care for{' '}
-                    <span className="font-display italic text-green-700">Vanderbilt Beach</span> Residents
+                    <span className="font-display italic text-green-700">Trusted Psychiatrist</span> Near{' '}
+                    <span className="font-display italic text-green-700">Vanderbilt Beach</span> FL - Book Online Today
                   </>
                 ) : (
                   <>
-                    Atención Psiquiátrica Compasiva para Residentes de{' '}
-                    <span className="font-display italic text-green-700">Vanderbilt Beach</span>
+                    <span className="font-display italic text-green-700">Psiquiatra de Confianza</span> Cerca{' '}
+                    <span className="font-display italic text-green-700">Vanderbilt Beach</span> FL - Reserve en Línea Hoy
                   </>
                 )}
               </h1>
