@@ -27,6 +27,19 @@ const Footer = () => {
     { href: '/patient-portal', label: language === 'en' ? 'Patient Portal' : 'Portal del Paciente' }
   ];
 
+  const serviceAreas = [
+    { href: language === 'en' ? '/locations/psychiatrist-naples' : '/es/ubicaciones/psiquiatra-naples', label: 'Naples, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-marco-island' : '/es/ubicaciones/psiquiatra-marco-island', label: 'Marco Island, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-bonita-springs' : '/es/ubicaciones/psiquiatra-bonita-springs', label: 'Bonita Springs, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-estero' : '/es/ubicaciones/psiquiatra-estero', label: 'Estero, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-golden-gate' : '/es/ubicaciones/psiquiatra-golden-gate', label: 'Golden Gate, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-immokalee' : '/es/ubicaciones/psiquiatra-immokalee', label: 'Immokalee, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-vanderbilt-beach' : '/es/ubicaciones/psiquiatra-vanderbilt-beach', label: 'Vanderbilt Beach, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-fort-myers' : '/es/ubicaciones/psiquiatra-fort-myers', label: 'Fort Myers, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-ave-maria' : '/es/ubicaciones/psiquiatra-ave-maria', label: 'Ave Maria, FL' },
+    { href: language === 'en' ? '/locations/psychiatrist-lely-resorts' : '/es/ubicaciones/psiquiatra-lely-resorts', label: 'Lely Resort, FL' }
+  ];
+
   const charmHealthUrl = "https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2";
 
   const socialLinks = [
@@ -138,22 +151,18 @@ const Footer = () => {
                   {language === 'en' ? <>Service <span className="font-display italic text-green-200">Areas</span></> : <><span className="font-display italic text-green-200">Áreas</span> de Servicio</>}
                 </h3>
                 <ul className="space-y-3" data-testid="footer-areas-list">
-                  <li className="text-green-200 text-base flex items-center">
-                    <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                    Naples, FL
-                  </li>
-                  <li className="text-green-200 text-base flex items-center">
-                    <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                    Marco Island, FL
-                  </li>
-                  <li className="text-green-200 text-base flex items-center">
-                    <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                    Bonita Springs, FL
-                  </li>
-                  <li className="text-green-200 text-base flex items-center">
-                    <ArrowRight className="w-3 h-3 mr-2 opacity-60" />
-                    Estero, FL
-                  </li>
+                  {serviceAreas.map((area, index) => (
+                    <li key={index}>
+                      <Link 
+                        href={area.href}
+                        className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
+                        data-testid={`footer-area-${index}`}
+                      >
+                        <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        {area.label}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
