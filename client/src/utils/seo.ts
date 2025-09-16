@@ -106,18 +106,18 @@ export const updateSEO = (data: SEOData) => {
 // Complete Medical Clinic Schema - Single authoritative source for Healing Minds Psychiatry
 // Optimized to prevent duplicate schemas and Google Rich Results validation issues
 export const addMedicalBusinessSchema = () => {
-  // STEP 1: Remove ALL existing schema markup to prevent duplicates
+  // STEP 1: Remove ONLY the main medical business schema to prevent duplicates
+  // This targeted approach preserves location Service schemas that reference MedicalClinic
   const existingSchemas = document.querySelectorAll('script[type="application/ld+json"]');
   existingSchemas.forEach(schema => {
-    const content = schema.textContent || '';
-    // Remove any schema that mentions our business to prevent conflicts
-    if (content.includes('Healing Minds Psychiatry') || content.includes('Melva Reve') || content.includes('MedicalClinic')) {
+    // Only remove schemas specifically identified as our main medical business schema
+    if (schema.id === 'healing-minds-schema' || schema.getAttribute('data-schema-type') === 'medical-business') {
       schema.remove();
-      console.log('🧹 Removed existing schema to prevent duplicates:', schema.id || 'unnamed');
+      console.log('🧹 Removed existing medical business schema to prevent duplicates:', schema.id || 'medical-business');
     }
   });
 
-  // STEP 2: Create single, complete, authoritative schema
+  // STEP 2: Create single, complete, authoritative schema with enhanced local SEO features
   const schema = {
     "@context": "https://schema.org",
     "@type": "MedicalClinic",
@@ -170,18 +170,6 @@ export const addMedicalBusinessSchema = () => {
         "dayOfWeek": "Friday",
         "opens": "09:00",
         "closes": "17:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": "Saturday",
-        "opens": "00:00",
-        "closes": "00:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification", 
-        "dayOfWeek": "Sunday",
-        "opens": "00:00",
-        "closes": "00:00"
       }
     ],
     "medicalSpecialty": "Psychiatry",
@@ -216,6 +204,75 @@ export const addMedicalBusinessSchema = () => {
       }
     ],
     "priceRange": "$$",
+    "amenityFeature": [
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Same-Day Appointments Available",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification", 
+        "name": "Bilingual Services (English/Spanish)",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Telehealth/Telemedicine Available",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Free Parking Available",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Insurance Accepted",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Wheelchair Accessible",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Online Appointment Booking",
+        "value": true
+      }
+    ],
+    "paymentAccepted": [
+      "Insurance",
+      "Cash", 
+      "Credit Card",
+      "Check"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Mental Health Services",
+      "itemListElement": [
+        {
+          "@type": "OfferCatalog",
+          "name": "Psychiatric Evaluations",
+          "description": "Comprehensive mental health assessments"
+        },
+        {
+          "@type": "OfferCatalog", 
+          "name": "Medication Management",
+          "description": "Expert psychiatric medication monitoring and adjustment"
+        },
+        {
+          "@type": "OfferCatalog",
+          "name": "Telehealth Consultations",
+          "description": "Remote psychiatric care via secure video platforms"
+        },
+        {
+          "@type": "OfferCatalog",
+          "name": "Bilingual Mental Health Care",
+          "description": "Services available in English and Spanish"
+        }
+      ]
+    },
     "member": {
       "@type": "Physician",
       "@id": "https://healingmindsp.com/about#physician",
