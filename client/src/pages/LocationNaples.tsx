@@ -6,7 +6,8 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import CompactVideoCarousel from '@/components/CompactVideoCarousel';
 import Reviews from '@/components/Reviews';
-import { updateSEO } from '@/utils/seo';
+import { locationFAQs } from '@/data/locationFAQs';
+import { updateSEO, addFAQSchema, removeFAQSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -54,9 +55,13 @@ const LocationNaples = () => {
     updateSEO(seoData);
 
     // Schema already managed by App.tsx to avoid duplication
+    
+    // Add FAQ Schema for enhanced SERP appearance (gracefully handles missing data)
+    addFAQSchema(locationFAQs.naples?.[language], 'naples');
 
     return () => {
-      // No cleanup needed
+      // Clean up FAQ schema when component unmounts
+      removeFAQSchema('naples');
     };
   }, [language]);
 

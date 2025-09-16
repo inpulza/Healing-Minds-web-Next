@@ -339,6 +339,57 @@ export const addLocationServiceSchema = (serviceConfig: {
   console.log(`✅ Location Service schema added for ${serviceConfig.locationName}`);
 };
 
+// FAQ Schema Generator for Rich Snippets
+// Creates FAQPage schemas for location pages to enhance SERP appearance with FAQ rich snippets
+export const addFAQSchema = (faqData: Array<{ question: string; answer: string }> | undefined, locationKey: string) => {
+  // Handle missing FAQ data gracefully
+  if (!faqData || !Array.isArray(faqData) || faqData.length === 0) {
+    console.log(`⚠️  No FAQ data available for ${locationKey}, skipping FAQ schema`);
+    return;
+  }
+
+  // Remove existing FAQ schema for this location to prevent duplicates
+  const existingFAQSchema = document.querySelector(`script[type="application/ld+json"]#faq-schema-${locationKey}`);
+  if (existingFAQSchema) {
+    existingFAQSchema.remove();
+    console.log(`🧹 Removed existing FAQ schema for ${locationKey}`);
+  }
+
+  // Create FAQPage schema following Google's structured data guidelines
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqData.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
+  // Add FAQ schema to document head with unique identifier
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = `faq-schema-${locationKey}`;
+  script.setAttribute('data-schema-type', 'faq-page');
+  script.setAttribute('data-location', locationKey);
+  script.textContent = JSON.stringify(faqSchema, null, 2);
+  document.head.appendChild(script);
+  
+  console.log(`✅ FAQ schema added for ${locationKey} with ${faqData.length} questions`);
+};
+
+// Cleanup function to remove FAQ schema for specific location
+export const removeFAQSchema = (locationKey: string) => {
+  const faqSchema = document.querySelector(`script[type="application/ld+json"]#faq-schema-${locationKey}`);
+  if (faqSchema) {
+    faqSchema.remove();
+    console.log(`🧹 FAQ schema removed for ${locationKey}`);
+  }
+};
+
 // Legacy function - kept for backward compatibility
 export const addServiceSchema = (serviceConfig: {
   serviceType: string;

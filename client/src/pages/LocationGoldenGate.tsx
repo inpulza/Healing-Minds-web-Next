@@ -6,7 +6,7 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { updateSEO, addLocationServiceSchema, addFAQSchema, removeFAQSchema } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -65,6 +65,9 @@ const LocationGoldenGate = () => {
       language: language
     });
 
+    // Add FAQ Schema for enhanced SERP appearance
+    addFAQSchema(locationFAQs.goldenGate?.[language], 'golden-gate');
+
     return () => {
       // Clean up Service schema when component unmounts
       const serviceSchema = document.querySelector('script[type="application/ld+json"]#golden-gate-location-service-schema');
@@ -72,6 +75,9 @@ const LocationGoldenGate = () => {
         serviceSchema.remove();
         console.log('🧹 Cleaned up Golden Gate Service schema');
       }
+      
+      // Clean up FAQ schema when component unmounts
+      removeFAQSchema('golden-gate');
     };
   }, [language]);
 
