@@ -161,8 +161,8 @@ export const generateSitemap = (req: Request, res: Response) => {
       priority: '0.6'
     },
     {
-      en: '/locations/psychiatrist-lely-resorts',
-      es: '/es/ubicaciones/psiquiatra-lely-resorts',
+      en: '/locations/psychiatrist-lely-resort',
+      es: '/es/ubicaciones/psiquiatra-lely-resort',
       lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'

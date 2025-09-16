@@ -17,7 +17,7 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
   - `/es/ubicaciones/psiquiatra-vanderbilt-beach`
   - `/es/ubicaciones/psiquiatra-ave-maria`
   - `/es/ubicaciones/psiquiatra-fort-myers`
-  - `/es/ubicaciones/psiquiatra-lely-resorts`
+  - `/es/ubicaciones/psiquiatra-lely-resort`
 - **Architecture**: The existing bilingual component infrastructure was already in place; only the route definitions were missing
 - **SEO Impact**: All URLs declared in sitemap.xml now have complete implementation, ensuring proper indexing and user experience
 

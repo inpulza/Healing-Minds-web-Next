@@ -37,7 +37,7 @@ const Footer = () => {
     { href: language === 'en' ? '/locations/psychiatrist-vanderbilt-beach' : '/es/ubicaciones/psiquiatra-vanderbilt-beach', label: 'Vanderbilt Beach, FL' },
     { href: language === 'en' ? '/locations/psychiatrist-fort-myers' : '/es/ubicaciones/psiquiatra-fort-myers', label: 'Fort Myers, FL' },
     { href: language === 'en' ? '/locations/psychiatrist-ave-maria' : '/es/ubicaciones/psiquiatra-ave-maria', label: 'Ave Maria, FL' },
-    { href: language === 'en' ? '/locations/psychiatrist-lely-resorts' : '/es/ubicaciones/psiquiatra-lely-resorts', label: 'Lely Resort, FL' }
+    { href: language === 'en' ? '/locations/psychiatrist-lely-resort' : '/es/ubicaciones/psiquiatra-lely-resort', label: 'Lely Resort, FL' }
   ];
 
   const charmHealthUrl = "https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2";

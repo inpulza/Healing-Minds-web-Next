@@ -52,8 +52,8 @@ const bilingualURLMapping: Record<string, string> = {
   '/es/ubicaciones/psiquiatra-golden-gate': '/locations/psychiatrist-golden-gate',
   '/locations/psychiatrist-immokalee': '/es/ubicaciones/psiquiatra-immokalee',
   '/es/ubicaciones/psiquiatra-immokalee': '/locations/psychiatrist-immokalee',
-  '/locations/psychiatrist-lely-resorts': '/es/ubicaciones/psiquiatra-lely-resorts',
-  '/es/ubicaciones/psiquiatra-lely-resorts': '/locations/psychiatrist-lely-resorts',
+  '/locations/psychiatrist-lely-resort': '/es/ubicaciones/psiquiatra-lely-resort',
+  '/es/ubicaciones/psiquiatra-lely-resort': '/locations/psychiatrist-lely-resort',
   '/locations/psychiatrist-vanderbilt-beach': '/es/ubicaciones/psiquiatra-vanderbilt-beach',
   '/es/ubicaciones/psiquiatra-vanderbilt-beach': '/locations/psychiatrist-vanderbilt-beach',
   
