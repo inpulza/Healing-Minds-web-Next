@@ -49,6 +49,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/locations/naples', (req, res) => {
     res.redirect(301, '/locations/psychiatrist-naples');
   });
+
+  // 301 redirects from old Lely Resort URLs with 's' to new consistent URLs without 's'
+  app.get('/locations/psychiatrist-lely-resorts', (req, res) => {
+    res.redirect(301, '/locations/psychiatrist-lely-resort');
+  });
+
+  app.get('/es/ubicaciones/psiquiatra-lely-resorts', (req, res) => {
+    res.redirect(301, '/es/ubicaciones/psiquiatra-lely-resort');
+  });
+
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {
