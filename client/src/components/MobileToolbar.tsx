@@ -95,7 +95,7 @@ const MobileToolbar = () => {
                 }
               >
                 <IconComponent 
-                  className="w-8 h-8 mb-1" 
+                  className="w-6 h-6 mb-1" 
                   strokeWidth={1.5}
                 />
                 <span className="text-xs font-medium leading-tight text-center">
