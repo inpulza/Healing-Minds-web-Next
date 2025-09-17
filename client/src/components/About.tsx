@@ -5,11 +5,17 @@ import { ArrowRight, Heart, Users, CheckCircle, Play, Linkedin, Facebook, Instag
 import WellnessIcon from '@/components/WellnessIcon';
 import Reviews from '@/components/Reviews';
 import { useTikTokVideos } from '@/hooks/useTikTokVideos';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import doctorProfileImage from '@assets/doctor-profile-v2.webp';
 
 const About = () => {
   const { language } = useLanguage();
-  const { data: tikTokVideos, isLoading: isLoadingVideos } = useTikTokVideos();
+  const { ref: videoSectionRef, isIntersecting } = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '0px 0px',
+    triggerOnce: true,
+  });
+  const { data: tikTokVideos, isLoading: isLoadingVideos } = useTikTokVideos(isIntersecting);
 
   return (
     <div className="min-h-screen bg-green-50">
@@ -83,7 +89,7 @@ const About = () => {
       </section>
 
       {/* Sección 2: Videos de la Doctora - Una Conversación con la Dra. Reve */}
-      <section className="py-16 lg:py-20 bg-green-50">
+      <section ref={videoSectionRef} className="py-16 lg:py-20 bg-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
             {/* Encabezado de sección */}
