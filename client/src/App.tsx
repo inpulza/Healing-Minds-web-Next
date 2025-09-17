@@ -10,11 +10,14 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useClarity } from '@/hooks/use-clarity';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { initGA, handleConsentChange } from '@/lib/analytics';
 import { addMedicalBusinessSchema } from '@/utils/seo';
 import CookieBanner from '@/components/CookieBanner';
-import MobileToolbar from '@/components/MobileToolbar';
 import Home from '@/pages/Home';
+
+// Mobile Toolbar - Lazy loaded only for mobile viewports to optimize desktop performance
+const MobileToolbar = lazy(() => import('@/components/MobileToolbar'));
 
 // All non-critical pages lazy loaded for performance optimization
 const About = lazy(() => import('@/pages/About'));
@@ -172,6 +175,9 @@ function Router() {
 }
 
 function App() {
+  // Detect mobile viewport for conditional MobileToolbar rendering
+  const isMobile = useIsMobile();
+  
   // Initialize analytics and handle consent changes
   useEffect(() => {
     // Verify required environment variable is present
@@ -212,7 +218,12 @@ function App() {
         <CookieConsentProvider>
           <LanguageProvider>
             <Router />
-            <MobileToolbar />
+            {/* Conditionally render MobileToolbar only on mobile viewports for performance */}
+            {isMobile && (
+              <Suspense fallback={null}>
+                <MobileToolbar />
+              </Suspense>
+            )}
             <Toaster />
             <Suspense fallback={null}>
               <CookieBanner />
