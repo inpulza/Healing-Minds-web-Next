@@ -11,7 +11,7 @@ import { useAnalytics } from '@/hooks/use-analytics';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useClarity } from '@/hooks/use-clarity';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { initGA, handleConsentChange } from '@/lib/analytics';
+import { initGA, handleConsentChange, updateGoogleConsent } from '@/lib/analytics';
 import { addMedicalBusinessSchema } from '@/utils/seo';
 import CookieBanner from '@/components/CookieBanner';
 import Home from '@/pages/Home';
@@ -178,14 +178,16 @@ function App() {
   // Detect mobile viewport for conditional MobileToolbar rendering
   const isMobile = useIsMobile();
   
-  // Initialize analytics and handle consent changes
+  // Initialize analytics and handle consent changes with deferred loading
   useEffect(() => {
     // Verify required environment variable is present
     if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
       console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
     } else {
-      // Initialize GA with consent check (it will check internally)
-      initGA();
+      // Setup deferred GA initialization (only loads on user interaction)
+      if (!import.meta.env.DEV) {
+        initGA();
+      }
     }
 
     // Add structured data schemas
