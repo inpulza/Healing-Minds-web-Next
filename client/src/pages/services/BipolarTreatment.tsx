@@ -7,7 +7,7 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO, addServiceSchema } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain, Heart, ChevronUp, ChevronDown } from 'lucide-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain, Heart, ChevronUp, ChevronDown } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images

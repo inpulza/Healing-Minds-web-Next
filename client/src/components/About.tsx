@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Heart, Shield, Users, Clock, CheckCircle, FileText, Play, Linkedin, Facebook, Instagram, Brain, Stethoscope } from 'lucide-react';
+import { ArrowRight, Heart, Users, CheckCircle, Play, Linkedin, Facebook, Instagram, Brain } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import Reviews from '@/components/Reviews';
 import { useTikTokVideos } from '@/hooks/useTikTokVideos';
