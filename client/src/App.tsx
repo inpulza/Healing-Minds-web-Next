@@ -13,6 +13,7 @@ import { useClarity } from '@/hooks/use-clarity';
 import { initGA, handleConsentChange } from '@/lib/analytics';
 import { addMedicalBusinessSchema } from '@/utils/seo';
 import CookieBanner from '@/components/CookieBanner';
+import MobileToolbar from '@/components/MobileToolbar';
 import Home from '@/pages/Home';
 
 // All non-critical pages lazy loaded for performance optimization
@@ -207,6 +208,7 @@ function App() {
         <CookieConsentProvider>
           <LanguageProvider>
             <Router />
+            <MobileToolbar />
             <Toaster />
             <Suspense fallback={null}>
               <CookieBanner />
