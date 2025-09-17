@@ -14,11 +14,11 @@ import champvaLogo from '../assets/insurance-champva.webp';       // 36KB vs 95K
 import sunshineHealthLogo from '../assets/insurance-sunshine.webp'; // 44KB vs 116KB PNG
 import avmedLogo from '../assets/insurance-avmed.webp';           // 39KB vs 91KB PNG
 import wellcareLogo from '../assets/insurance-wellcare.webp';     // 30KB vs 67KB PNG
-// Now all insurance logos use WebP optimization (98% size reduction from PNG)
-import doctorsHealthcareLogo from '../assets/insurance-doctors-healthcare.webp';  // 4.3KB vs 197KB PNG
-import floridaBlueLogo from '../assets/insurance-florida-blue.webp';              // 3.7KB vs 201KB PNG
-import unitedHealthcareLogo from '../assets/insurance-united-healthcare.webp';    // 4.1KB vs 173KB PNG
-import oscarLogo from '../assets/insurance-oscar.webp';                          // 3.1KB vs 91KB PNG
+// Keep PNG for logos without WebP equivalents (no quality loss)
+import doctorsHealthcareLogo from '@assets/3_1755868276797.png';
+import floridaBlueLogo from '@assets/6_1755868276798.png';
+import unitedHealthcareLogo from '@assets/8_1755868276798.png';
+import oscarLogo from '@assets/10_1755868276798.png';
 
 const LocationInsuranceLogos = () => {
   const { language } = useLanguage();

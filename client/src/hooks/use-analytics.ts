@@ -1,31 +1,22 @@
 import { useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { trackPageView } from '@/lib/analytics';
 
-// Lightweight analytics hook with dynamic loading for bundle optimization
+// Hook to track page views automatically
 export function useAnalytics(): void {
   const [location] = useLocation();
 
   useEffect(() => {
-    // Skip analytics in development for better performance
-    if (import.meta.env.DEV) {
-      return;
-    }
-    
-    // Dynamic import for analytics to reduce initial bundle size
-    const trackPage = async () => {
-      try {
-        const { trackPageView } = await import('@/lib/analytics');
-        trackPageView(location, document.title);
-      } catch (error) {
-        console.error('Failed to load analytics module:', error);
-      }
+    // Defer page tracking to avoid blocking critical rendering
+    const trackPage = () => {
+      trackPageView(location, document.title);
     };
     
     // Use requestIdleCallback to defer analytics calls
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(trackPage, { timeout: 2000 });
+      requestIdleCallback(trackPage);
     } else {
-      setTimeout(trackPage, 150);
+      setTimeout(trackPage, 100);
     }
   }, [location]);
 }

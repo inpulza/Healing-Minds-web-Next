@@ -1,14 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
+import Clarity from '@microsoft/clarity';
 import { useLanguage } from './useLanguage';
-
-// Dynamic import for Microsoft Clarity to reduce initial bundle size
-let ClarityModule: any = null;
-const loadClarity = async () => {
-  if (!ClarityModule) {
-    ClarityModule = await import('@microsoft/clarity');
-  }
-  return ClarityModule.default;
-};
 
 const CLARITY_PROJECT_ID = 'sxayts0dzk';
 
@@ -62,8 +54,8 @@ export function useClarity() {
   const initialized = useRef(false);
   const consentRevoked = useRef(false);
 
-  // Initialize Clarity when consent is available with dynamic loading
-  const initClarity = useCallback(async () => {
+  // Initialize Clarity when consent is available
+  const initClarity = useCallback(() => {
     if (import.meta.env.MODE === 'development') {
       if (import.meta.env.DEV) {
         console.log('🔍 Microsoft Clarity disabled in development mode');
@@ -101,7 +93,6 @@ export function useClarity() {
         return;
       }
 
-      const Clarity = await loadClarity();
       Clarity.init(CLARITY_PROJECT_ID);
       globalClarityInitialized = true;
       initialized.current = true;
@@ -128,21 +119,18 @@ export function useClarity() {
   // Handle consent revocation with cookie cleanup
   const revokeClarity = useCallback(() => {
     if (initialized.current && !consentRevoked.current) {
-      (async () => {
-        try {
-          // Disable further tracking
-          const Clarity = await loadClarity();
-          Clarity.consent(false);
-          consentRevoked.current = true;
-          
-          // Clear Clarity cookies for FDBR compliance
-          clearClarityCookies();
-          
-          console.log('🚫 Microsoft Clarity consent revoked - tracking disabled and cookies cleared');
-        } catch (error) {
-          console.error('Error revoking Microsoft Clarity consent:', error);
-        }
-      })();
+      try {
+        // Disable further tracking
+        Clarity.consent(false);
+        consentRevoked.current = true;
+        
+        // Clear Clarity cookies for FDBR compliance
+        clearClarityCookies();
+        
+        console.log('🚫 Microsoft Clarity consent revoked - tracking disabled and cookies cleared');
+      } catch (error) {
+        console.error('Error revoking Microsoft Clarity consent:', error);
+      }
     }
   }, []);
 
@@ -175,17 +163,14 @@ export function useClarity() {
           initClarity();
         } else {
           // Re-enable tracking if it was previously revoked
-          (async () => {
-            try {
-              if (globalClarityInitialized) {
-                const Clarity = await loadClarity();
-                Clarity.consent(true);
-                console.log('🔍 Microsoft Clarity consent restored - analytics tracking enabled');
-              }
-            } catch (error) {
-              console.error('Error restoring Microsoft Clarity consent:', error);
+          try {
+            if (globalClarityInitialized) {
+              Clarity.consent(true);
+              console.log('🔍 Microsoft Clarity consent restored - analytics tracking enabled');
             }
-          })();
+          } catch (error) {
+            console.error('Error restoring Microsoft Clarity consent:', error);
+          }
         }
       } else {
         revokeClarity();
@@ -208,9 +193,8 @@ export function useClarity() {
     if (globalClarityInitialized && initialized.current) {
       // Use requestIdleCallback to prevent forced reflows
       if ('requestIdleCallback' in window) {
-        requestIdleCallback(async () => {
+        requestIdleCallback(() => {
           try {
-            const Clarity = await loadClarity();
             Clarity.setTag('language', language);
           } catch (error) {
             if (import.meta.env.DEV) {
@@ -219,9 +203,8 @@ export function useClarity() {
           }
         });
       } else {
-        setTimeout(async () => {
+        setTimeout(() => {
           try {
-            const Clarity = await loadClarity();
             Clarity.setTag('language', language);
           } catch (error) {
             if (import.meta.env.DEV) {
@@ -233,39 +216,34 @@ export function useClarity() {
     }
   }, [language]); // Keep language dependency but check global state before execution
 
-  // Return optimized Clarity API methods with dynamic loading
+  // Return Clarity API methods for custom tracking
   return {
-    setTag: async (key: string, value: string | string[]) => {
+    setTag: (key: string, value: string | string[]) => {
       if (initialized.current) {
-        const Clarity = await loadClarity();
         Clarity.setTag(key, value);
       }
     },
     
-    trackEvent: async (eventName: string) => {
+    trackEvent: (eventName: string) => {
       if (initialized.current) {
-        const Clarity = await loadClarity();
         Clarity.event(eventName);
       }
     },
     
-    identify: async (customId: string, sessionId?: string, pageId?: string, friendlyName?: string) => {
+    identify: (customId: string, sessionId?: string, pageId?: string, friendlyName?: string) => {
       if (initialized.current) {
-        const Clarity = await loadClarity();
         Clarity.identify(customId, sessionId, pageId, friendlyName);
       }
     },
     
-    consent: async (hasConsent: boolean = true) => {
+    consent: (hasConsent: boolean = true) => {
       if (initialized.current) {
-        const Clarity = await loadClarity();
         Clarity.consent(hasConsent);
       }
     },
     
-    upgrade: async (reason: string) => {
+    upgrade: (reason: string) => {
       if (initialized.current) {
-        const Clarity = await loadClarity();
         Clarity.upgrade(reason);
       }
     }

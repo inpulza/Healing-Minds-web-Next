@@ -1,19 +1,13 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokVideos } from '@/hooks/useTikTokVideos';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { Play } from 'lucide-react';
 
 const CompactVideoCarousel = () => {
   const { language } = useLanguage();
-  const { ref, isIntersecting } = useIntersectionObserver({
-    threshold: 0.1,
-    rootMargin: '0px 0px',
-    triggerOnce: true,
-  });
-  const { data: tikTokVideos, isLoading: isLoadingVideos } = useTikTokVideos(isIntersecting);
+  const { data: tikTokVideos, isLoading: isLoadingVideos } = useTikTokVideos();
 
   return (
-    <div ref={ref} className="mt-8 pt-8 border-t border-green-200">
+    <div className="mt-8 pt-8 border-t border-green-200">
       {/* Grid de Videos Compacto */}
       {isLoadingVideos ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">

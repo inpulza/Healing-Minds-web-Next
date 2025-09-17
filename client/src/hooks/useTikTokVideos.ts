@@ -28,10 +28,9 @@ const targetVideoIds = [
   '7543327515486506253'   // ¿El Rechazo te Duele Físicamente? DSR
 ];
 
-export function useTikTokVideos(enabled: boolean = true) {
+export function useTikTokVideos() {
   return useQuery({
     queryKey: ['/api/tiktok'],
-    enabled,
     select: (data: TikTokAPIResponse) => {
       const allVideos = data?.data?.data?.map(item => {
         const video = item.root.element;

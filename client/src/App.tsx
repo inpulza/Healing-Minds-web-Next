@@ -11,13 +11,13 @@ import { useAnalytics } from '@/hooks/use-analytics';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useClarity } from '@/hooks/use-clarity';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { initGA, handleConsentChange, updateGoogleConsent } from '@/lib/analytics';
+import { initGA, handleConsentChange } from '@/lib/analytics';
 import { addMedicalBusinessSchema } from '@/utils/seo';
 import CookieBanner from '@/components/CookieBanner';
 import Home from '@/pages/Home';
 
-// Mobile Toolbar - Import directly to fix lazy loading issue
-import MobileToolbar from '@/components/MobileToolbar';
+// Mobile Toolbar - Lazy loaded only for mobile viewports to optimize desktop performance
+const MobileToolbar = lazy(() => import('@/components/MobileToolbar'));
 
 // All non-critical pages lazy loaded for performance optimization
 const About = lazy(() => import('@/pages/About'));
@@ -178,16 +178,14 @@ function App() {
   // Detect mobile viewport for conditional MobileToolbar rendering
   const isMobile = useIsMobile();
   
-  // Initialize analytics and handle consent changes with deferred loading
+  // Initialize analytics and handle consent changes
   useEffect(() => {
     // Verify required environment variable is present
     if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
       console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
     } else {
-      // Setup deferred GA initialization (only loads on user interaction)
-      if (!import.meta.env.DEV) {
-        initGA();
-      }
+      // Initialize GA with consent check (it will check internally)
+      initGA();
     }
 
     // Add structured data schemas
@@ -221,7 +219,11 @@ function App() {
           <LanguageProvider>
             <Router />
             {/* Conditionally render MobileToolbar only on mobile viewports for performance */}
-            {isMobile && <MobileToolbar />}
+            {isMobile && (
+              <Suspense fallback={null}>
+                <MobileToolbar />
+              </Suspense>
+            )}
             <Toaster />
             <Suspense fallback={null}>
               <CookieBanner />

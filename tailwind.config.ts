@@ -47,6 +47,8 @@ export default {
         ring: "var(--ring)",
         'primary-green': 'hsl(142, 69%, 28%)',
         'primary-green-hover': 'hsl(142, 69%, 24%)',
+        'light-green': 'var(--light-green)',
+        'light-green-secondary': 'var(--light-green-secondary)',
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],

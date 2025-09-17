@@ -95,13 +95,8 @@ export function updateGoogleConsent(analyticsConsent: boolean, marketingConsent:
   }
 }
 
-// Initialize Google Analytics with deferred loading and performance optimization
+// Initialize Google Analytics with performance optimization and consent checking
 export function initGA(): void {
-  // Skip if already initialized or in development mode
-  if (import.meta.env.DEV) {
-    console.log('📊 Google Analytics initialization skipped in development mode');
-    return;
-  }
   const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
   
   if (!measurementId) {
@@ -195,61 +190,21 @@ export function initGA(): void {
     document.head.appendChild(script);
   };
   
-  // Defer GA initialization until user interaction or after delay
+  // Initialize GA immediately (consent mode is already set up)
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      setupDeferredGA(initializeGA);
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(initializeGA, { timeout: 3000 });
+      } else {
+        setTimeout(initializeGA, 200);
+      }
     });
   } else {
-    setupDeferredGA(initializeGA);
-  }
-}
-
-// Setup deferred Google Analytics loading to eliminate initial bundle bloat
-function setupDeferredGA(initializeGA: () => void): void {
-  let gaInitialized = false;
-  
-  const triggerGA = () => {
-    if (gaInitialized) return;
-    gaInitialized = true;
-    
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(initializeGA, { timeout: 2000 });
+      requestIdleCallback(initializeGA, { timeout: 3000 });
     } else {
-      setTimeout(initializeGA, 100);
+      setTimeout(initializeGA, 200);
     }
-  };
-  
-  // Strategy 1: Load on first user interaction (scroll, click, keydown)
-  const interactionEvents = ['scroll', 'click', 'keydown', 'touchstart', 'mousemove'];
-  const handleFirstInteraction = () => {
-    triggerGA();
-    // Remove listeners after first interaction
-    interactionEvents.forEach(event => {
-      document.removeEventListener(event, handleFirstInteraction);
-    });
-  };
-  
-  // Add passive listeners for performance
-  interactionEvents.forEach(event => {
-    document.addEventListener(event, handleFirstInteraction, { passive: true });
-  });
-  
-  // Strategy 2: Fallback - Load after 5 seconds if no interaction
-  setTimeout(() => {
-    if (!gaInitialized) {
-      triggerGA();
-    }
-  }, 5000);
-  
-  // Strategy 3: Load when page becomes visible (if user switches tabs)
-  if ('requestIdleCallback' in window) {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && !gaInitialized) {
-        triggerGA();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
   }
 }
 
@@ -304,35 +259,28 @@ export function trackEvent(action: string, category: string, label?: string, val
   }
 }
 
-// Lightweight tracking functions with lazy loading
-export const trackServicePageView = (serviceName: string, language: 'en' | 'es' = 'en'): void => {
-  if (!hasAnalyticsConsent()) return;
+// Track specific medical practice events
+export function trackServicePageView(serviceName: string, language: 'en' | 'es' = 'en'): void {
+  trackEvent('service_page_view', 'medical_services', serviceName, undefined);
   
-  // Use dynamic loading for performance
-  requestIdleCallback(() => {
-    trackEvent('service_page_view', 'medical_services', serviceName, undefined);
-    
-    // Track language preference
-    window.gtag?.('event', 'language_selection', {
-      event_category: 'user_preference',
-      event_label: language,
-      custom_1: serviceName,
-      custom_2: language
-    });
+  // Track language preference
+  window.gtag?.('event', 'language_selection', {
+    event_category: 'user_preference',
+    event_label: language,
+    custom_1: serviceName,
+    custom_2: language
   });
-};
+}
 
-// Optimized contact form tracking
-export const trackContactFormEvent = (action: 'start' | 'submit' | 'error', formType: string = 'general'): void => {
-  if (!hasAnalyticsConsent()) return;
-  requestIdleCallback(() => trackEvent(`contact_form_${action}`, 'lead_generation', formType));
-};
+// Track contact form interactions
+export function trackContactFormEvent(action: 'start' | 'submit' | 'error', formType: string = 'general'): void {
+  trackEvent(`contact_form_${action}`, 'lead_generation', formType);
+}
 
-// Optimized insurance click tracking
-export const trackInsuranceClick = (insuranceName: string): void => {
-  if (!hasAnalyticsConsent()) return;
-  requestIdleCallback(() => trackEvent('insurance_logo_click', 'user_engagement', insuranceName));
-};
+// Track insurance logo clicks
+export function trackInsuranceClick(insuranceName: string): void {
+  trackEvent('insurance_logo_click', 'user_engagement', insuranceName);
+}
 
 // Handle granular consent changes for FDBR compliance
 export function handleConsentChange(analyticsConsent: boolean, marketingConsent: boolean): void {
@@ -366,21 +314,6 @@ export function handleConsentChange(analyticsConsent: boolean, marketingConsent:
     } else {
       console.log('🚫 Marketing consent revoked - ad tracking disabled');
     }
-  }
-}
-
-// Lightweight analytics loader with dynamic import for bundle optimization
-export async function loadAnalyticsModule(): Promise<void> {
-  if (window.hmp_analytics_initialized) {
-    return;
-  }
-  
-  try {
-    // Dynamic import reduces initial bundle size
-    const { initGA: dynamicInitGA } = await import('./analytics');
-    dynamicInitGA();
-  } catch (error) {
-    console.error('Failed to load analytics module:', error);
   }
 }
 
