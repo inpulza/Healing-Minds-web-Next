@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
-import { Button } from '@/components/ui/button';
 import ContactFormModal from '@/components/ContactFormModal';
 import { Calendar, Phone, MapPin, MessageSquare } from 'lucide-react';
 
@@ -46,28 +45,24 @@ const MobileToolbar = () => {
       icon: Calendar,
       label: language === 'en' ? 'Book Now' : 'Reservar Ahora',
       onClick: handleBookingClick,
-      className: 'bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-200 border border-gray-200',
       testId: 'mobile-button-book'
     },
     {
       icon: Phone,
       label: language === 'en' ? 'Call Now' : 'Llamar Ahora',
       onClick: handleCallClick,
-      className: 'bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-200 border border-gray-200',
       testId: 'mobile-button-call'
     },
     {
       icon: MapPin,
       label: language === 'en' ? 'Directions' : 'Direcciones',
       onClick: handleDirectionsClick,
-      className: 'bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-200 border border-gray-200',
       testId: 'mobile-button-directions'
     },
     {
       icon: MessageSquare,
       label: language === 'en' ? 'Contact' : 'Contacto',
       onClick: handleContactClick,
-      className: 'bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-200 border border-gray-200',
       testId: 'mobile-button-contact'
     }
   ];
@@ -80,21 +75,14 @@ const MobileToolbar = () => {
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
         data-testid="mobile-toolbar"
       >
-        <div className="grid grid-cols-4 gap-0 p-2">
+        <div className="grid grid-cols-4 gap-0 px-2 py-3">
           {buttons.map((button, index) => {
             const IconComponent = button.icon;
             return (
-              <Button
+              <button
                 key={index}
                 onClick={button.onClick}
-                className={`
-                  ${button.className}
-                  flex flex-col items-center justify-center
-                  h-16 rounded-lg transition-all duration-200
-                  hover:scale-105 active:scale-95
-                  shadow-sm hover:shadow-md
-                  mx-1
-                `}
+                className="flex flex-col items-center justify-center p-2 text-gray-600 hover:text-gray-800 active:text-gray-900 transition-colors duration-200 active:scale-95"
                 data-testid={button.testId}
                 aria-label={
                   button.label === 'Book Now' || button.label === 'Reservar Ahora'
@@ -107,13 +95,13 @@ const MobileToolbar = () => {
                 }
               >
                 <IconComponent 
-                  className="w-8 h-8 mb-0.5" 
-                  strokeWidth={2}
+                  className="w-10 h-10 mb-1" 
+                  strokeWidth={1.5}
                 />
                 <span className="text-xs font-medium leading-tight text-center">
                   {button.label}
                 </span>
-              </Button>
+              </button>
             );
           })}
         </div>
