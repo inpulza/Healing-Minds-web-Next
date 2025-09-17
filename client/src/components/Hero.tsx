@@ -60,8 +60,8 @@ const Hero = React.memo(() => {
         <div className="block md:hidden">
           {/* Mobile SEO Pills - Above photo container */}
           <div className="flex flex-wrap justify-center gap-2 mb-4 px-4">
-            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Board Certified</span>
-            <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Naples FL</span>
+            <span className="mobile-seo-pill px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Board Certified</span>
+            <span className="mobile-seo-pill px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Naples FL</span>
           </div>
 
           {/* Photo Container */}
@@ -149,9 +149,9 @@ const Hero = React.memo(() => {
               <div className="max-w-5xl ml-2 md:ml-4" style={{maxWidth: "65%"}}>
                 {/* SEO Pills */}
                 <div className="flex flex-wrap gap-3 mb-6">
-                  <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-base font-medium">Board Certified Psychiatrist</span>
-                  <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-base font-medium">Naples Mental Health</span>
-                  <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-base font-medium">Southwest Florida</span>
+                  <span className="seo-pill px-4 py-2 bg-green-100 text-green-800 rounded-full text-base font-medium">Board Certified Psychiatrist</span>
+                  <span className="seo-pill px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-base font-medium">Naples Mental Health</span>
+                  <span className="seo-pill px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-base font-medium">Southwest Florida</span>
                 </div>
                 
                 <h1 className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-relaxed text-green-700 text-left mb-6 md:mb-8" data-testid="hero-title">
