@@ -91,7 +91,7 @@ function Router() {
   // Track page views when routes change
   useAnalytics();
   
-  // Initialize Microsoft Clarity
+  // Initialize Microsoft Clarity (guards prevent multiple initializations)
   useClarity();
   
   // Scroll to top on route changes
@@ -183,9 +183,13 @@ function App() {
     }
 
     // Add structured data schemas
-    console.log('🔧 Executing addMedicalBusinessSchema...');
+    if (import.meta.env.DEV) {
+      console.log('🔧 Executing addMedicalBusinessSchema...');
+    }
     addMedicalBusinessSchema();
-    console.log('✅ Schema executed - NAP should be updated to # 25');
+    if (import.meta.env.DEV) {
+      console.log('✅ Schema executed - NAP should be updated to # 25');
+    }
     
     // Listen for granular consent changes
     const handleConsentChangeEvent = (event: CustomEvent) => {

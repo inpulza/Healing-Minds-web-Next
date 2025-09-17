@@ -7,6 +7,11 @@ interface SEOData {
   ogImage?: string;
 }
 
+// Global guards for schema initialization to prevent duplicates
+let globalSchemaInitialized = false;
+let globalSchemaTimestamp: number | null = null;
+const SCHEMA_COOLDOWN_MS = 5000; // 5 second cooldown between schema additions
+
 // Helper function to create new meta tags (used after deduplication)
 function createMetaTag(name: string, content: string, attribute: string = 'name') {
   const tag = document.createElement('meta');
@@ -106,6 +111,28 @@ export const updateSEO = (data: SEOData) => {
 // Complete Medical Clinic Schema - Single authoritative source for Healing Minds Psychiatry
 // Optimized to prevent duplicate schemas and Google Rich Results validation issues
 export const addMedicalBusinessSchema = () => {
+  // Enhanced global guard to prevent multiple schema additions
+  const currentTimestamp = Date.now();
+  const recentSchemaAddition = globalSchemaTimestamp && 
+    (currentTimestamp - globalSchemaTimestamp) < SCHEMA_COOLDOWN_MS;
+  
+  const existingHealingMindsSchema = document.querySelector('script[id="healing-minds-schema"]');
+  
+  if (globalSchemaInitialized || existingHealingMindsSchema || recentSchemaAddition) {
+    if (import.meta.env.DEV) {
+      console.log('✅ Medical Business Schema already exists or recently added, skipping');
+    }
+    return;
+  }
+
+  // Set global guards
+  globalSchemaInitialized = true;
+  globalSchemaTimestamp = currentTimestamp;
+
+  if (import.meta.env.DEV) {
+    console.log('🔧 Executing addMedicalBusinessSchema...');
+  }
+
   // STEP 1: Remove ALL existing schema markup to prevent duplicates
   const existingSchemas = document.querySelectorAll('script[type="application/ld+json"]');
   existingSchemas.forEach(schema => {
@@ -113,7 +140,9 @@ export const addMedicalBusinessSchema = () => {
     // Remove any schema that mentions our business to prevent conflicts
     if (content.includes('Healing Minds Psychiatry') || content.includes('Melva Reve') || content.includes('MedicalClinic')) {
       schema.remove();
-      console.log('🧹 Removed existing schema to prevent duplicates:', schema.id || 'unnamed');
+      if (import.meta.env.DEV) {
+        console.log('🧹 Removed existing schema to prevent duplicates:', schema.id || 'unnamed');
+      }
     }
   });
 
@@ -261,7 +290,9 @@ export const addMedicalBusinessSchema = () => {
   script.textContent = JSON.stringify(schema, null, 2);
   document.head.appendChild(script);
   
-  console.log('✅ Single authoritative schema added for Healing Minds Psychiatry');
+  if (import.meta.env.DEV) {
+    console.log('✅ Single authoritative schema added for Healing Minds Psychiatry');
+  }
 };
 
 // FUNCTION PERMANENTLY REMOVED: addPhysicianSchema

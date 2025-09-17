@@ -4,6 +4,11 @@ import { useLanguage } from './useLanguage';
 
 const CLARITY_PROJECT_ID = 'sxayts0dzk';
 
+// Global guards to prevent multiple initializations across all hook instances
+let globalClarityInitialized = false;
+let globalInitializationTimestamp: number | null = null;
+let globalConsentRevoked = false;
+
 // Check if analytics consent is granted for Microsoft Clarity
 function hasAnalyticsConsent(): boolean {
   try {
@@ -30,30 +35,73 @@ function clearClarityCookies(): void {
   console.log('🧹 Microsoft Clarity cookies cleared for compliance');
 }
 
+// Safe hook to get language, returns 'en' if provider is not available
+function useSafeLanguage(): string {
+  try {
+    const { language } = useLanguage();
+    return language;
+  } catch (error) {
+    // If LanguageProvider is not available, default to 'en'
+    if (import.meta.env.DEV) {
+      console.warn('🔍 useLanguage not available in Clarity hook, defaulting to English');
+    }
+    return 'en';
+  }
+}
+
 export function useClarity() {
-  const { language } = useLanguage();
+  const language = useSafeLanguage();
   const initialized = useRef(false);
   const consentRevoked = useRef(false);
 
   // Initialize Clarity when consent is available
   const initClarity = useCallback(() => {
     if (import.meta.env.MODE === 'development') {
-      console.log('🔍 Microsoft Clarity disabled in development mode');
+      if (import.meta.env.DEV) {
+        console.log('🔍 Microsoft Clarity disabled in development mode');
+      }
       return;
     }
 
-    if (initialized.current || consentRevoked.current) {
-      return; // Already initialized or consent was revoked
+    // Enhanced global guards to prevent multiple initializations
+    const currentTimestamp = Date.now();
+    const recentInitialization = globalInitializationTimestamp && 
+      (currentTimestamp - globalInitializationTimestamp) < 3000; // 3 second cooldown
+    
+    if (globalClarityInitialized || 
+        initialized.current || 
+        globalConsentRevoked || 
+        consentRevoked.current ||
+        recentInitialization) {
+      if (import.meta.env.DEV) {
+        console.log('🔍 Microsoft Clarity already initialized or blocked, skipping');
+      }
+      return;
     }
 
+    // Set initialization timestamp to prevent rapid re-initialization
+    globalInitializationTimestamp = currentTimestamp;
+
     try {
+      // Check if Clarity is already loaded in the page
+      if ((window as any).clarity && typeof (window as any).clarity === 'function') {
+        if (import.meta.env.DEV) {
+          console.log('🔍 Microsoft Clarity already loaded in page, skipping init');
+        }
+        globalClarityInitialized = true;
+        initialized.current = true;
+        return;
+      }
+
       Clarity.init(CLARITY_PROJECT_ID);
+      globalClarityInitialized = true;
       initialized.current = true;
       consentRevoked.current = false;
+      globalConsentRevoked = false;
       
       // Set initial language tag after idle callback to prevent reflows
       requestIdleCallback(() => {
-        if (initialized.current) {
+        if (globalClarityInitialized && initialized.current) {
           Clarity.setTag('language', language);
           Clarity.setTag('site_type', 'psychiatry_practice');
           Clarity.setTag('practice_location', 'naples_fl');
@@ -63,6 +111,8 @@ export function useClarity() {
       console.log('🔍 Microsoft Clarity initialized successfully with ID:', CLARITY_PROJECT_ID);
     } catch (error) {
       console.error('Failed to initialize Microsoft Clarity:', error);
+      globalClarityInitialized = false;
+      globalInitializationTimestamp = null;
     }
   }, [language]);
 
@@ -90,9 +140,13 @@ export function useClarity() {
     if (import.meta.env.MODE === 'production' && hasAnalyticsConsent()) {
       initClarity();
     } else if (import.meta.env.MODE === 'development') {
-      console.log('🔍 Microsoft Clarity disabled in development mode');
+      if (import.meta.env.DEV) {
+        console.log('🔍 Microsoft Clarity disabled in development mode');
+      }
     } else if (import.meta.env.MODE === 'production') {
-      console.log('🚫 Microsoft Clarity not initialized - no analytics consent');
+      if (import.meta.env.DEV) {
+        console.log('🚫 Microsoft Clarity not initialized - no analytics consent');
+      }
     }
 
     // Listen for granular consent changes
@@ -104,13 +158,16 @@ export function useClarity() {
       if (analyticsGranted) {
         // Reset revoked state and initialize if not already done
         consentRevoked.current = false;
-        if (!initialized.current) {
+        globalConsentRevoked = false;
+        if (!initialized.current && !globalClarityInitialized) {
           initClarity();
         } else {
           // Re-enable tracking if it was previously revoked
           try {
-            Clarity.consent(true);
-            console.log('🔍 Microsoft Clarity consent restored - analytics tracking enabled');
+            if (globalClarityInitialized) {
+              Clarity.consent(true);
+              console.log('🔍 Microsoft Clarity consent restored - analytics tracking enabled');
+            }
           } catch (error) {
             console.error('Error restoring Microsoft Clarity consent:', error);
           }
@@ -127,23 +184,37 @@ export function useClarity() {
     return () => {
       window.removeEventListener('consentChanged', handleConsentChange as EventListener);
     };
+    // OPTIMIZED DEPENDENCIES: Remove language from dependencies to prevent unnecessary re-runs
+    // initClarity already has language in its useCallback dependencies
   }, [initClarity, revokeClarity]);
 
   // Update language tag when language changes - with throttling to prevent reflows
   useEffect(() => {
-    if (initialized.current) {
+    if (globalClarityInitialized && initialized.current) {
       // Use requestIdleCallback to prevent forced reflows
       if ('requestIdleCallback' in window) {
         requestIdleCallback(() => {
-          Clarity.setTag('language', language);
+          try {
+            Clarity.setTag('language', language);
+          } catch (error) {
+            if (import.meta.env.DEV) {
+              console.warn('Failed to update Clarity language tag:', error);
+            }
+          }
         });
       } else {
         setTimeout(() => {
-          Clarity.setTag('language', language);
+          try {
+            Clarity.setTag('language', language);
+          } catch (error) {
+            if (import.meta.env.DEV) {
+              console.warn('Failed to update Clarity language tag:', error);
+            }
+          }
         }, 50);
       }
     }
-  }, [language]);
+  }, [language]); // Keep language dependency but check global state before execution
 
   // Return Clarity API methods for custom tracking
   return {

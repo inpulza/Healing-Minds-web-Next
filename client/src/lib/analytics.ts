@@ -5,6 +5,8 @@ declare global {
     dataLayer: any[];
     hmp_analytics_initialized?: boolean;
     hmp_consent_mode_initialized?: boolean;
+    hmp_ga_script_loaded?: boolean;
+    hmp_init_timestamp?: number;
   }
 }
 
@@ -38,7 +40,12 @@ function hasMarketingConsent(): boolean {
 
 // Initialize Google Consent Mode v2 with default denied state
 function initConsentMode(): void {
-  if (window.hmp_consent_mode_initialized) {
+  // Enhanced guard: Check multiple conditions to prevent duplicate initialization
+  if (window.hmp_consent_mode_initialized || 
+      (window.dataLayer && window.gtag && typeof window.gtag === 'function')) {
+    if (import.meta.env.DEV) {
+      console.log('🔒 Google Consent Mode already initialized, skipping');
+    }
     return;
   }
 
@@ -97,27 +104,54 @@ export function initGA(): void {
     return;
   }
 
-  // Initialize consent mode first
-  initConsentMode();
-
-  // Prevent duplicate initialization
-  if (window.hmp_analytics_initialized) {
-    console.log('📊 Google Analytics already initialized');
+  // Enhanced guard: Multiple checks to prevent duplicate initialization
+  const currentTimestamp = Date.now();
+  const existingScript = document.querySelector(`script[src*="gtag/js?id=${measurementId}"]`);
+  const recentInitialization = window.hmp_init_timestamp && 
+    (currentTimestamp - window.hmp_init_timestamp) < 5000; // 5 second cooldown
+  
+  if (window.hmp_analytics_initialized || 
+      window.hmp_ga_script_loaded || 
+      existingScript || 
+      recentInitialization) {
+    if (import.meta.env.DEV) {
+      console.log('📊 Google Analytics already initialized or in progress, skipping');
+    }
     return;
   }
 
+  // Mark initialization timestamp to prevent rapid re-initialization
+  window.hmp_init_timestamp = currentTimestamp;
+
+  // Initialize consent mode first
+  initConsentMode();
+
   // Defer GA initialization to avoid blocking critical rendering path
   const initializeGA = () => {
+    // Final check before script creation
+    if (window.hmp_ga_script_loaded || document.querySelector(`script[src*="gtag/js?id=${measurementId}"]`)) {
+      return;
+    }
+    
+    // Mark script as being loaded
+    window.hmp_ga_script_loaded = true;
+    
     // Create script tag for Google Analytics
     const script = document.createElement('script');
     script.async = true;
     script.defer = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+    script.setAttribute('data-hmp-analytics', 'true'); // Identify our script
     
     // Load script after DOM is interactive
     script.onload = () => {
       // Use requestIdleCallback to defer configuration
       const configureGA = () => {
+        // Final check before configuration
+        if (window.hmp_analytics_initialized) {
+          return;
+        }
+        
         window.gtag('js', new Date());
         window.gtag('config', measurementId, {
           page_title: document.title,
@@ -146,6 +180,11 @@ export function initGA(): void {
       } else {
         setTimeout(configureGA, 100);
       }
+    };
+    
+    script.onerror = () => {
+      console.error('Failed to load Google Analytics script');
+      window.hmp_ga_script_loaded = false;
     };
     
     document.head.appendChild(script);
@@ -250,7 +289,7 @@ export function handleConsentChange(analyticsConsent: boolean, marketingConsent:
 
   if (analyticsConsent) {
     // Initialize analytics if consent is granted and not already initialized
-    if (!window.hmp_analytics_initialized) {
+    if (!window.hmp_analytics_initialized && !window.hmp_ga_script_loaded) {
       console.log('🔄 Initializing Google Analytics after analytics consent granted');
       initGA();
     } else {
@@ -268,11 +307,13 @@ export function handleConsentChange(analyticsConsent: boolean, marketingConsent:
     }
   }
   
-  // Log marketing consent changes for compliance tracking
-  if (marketingConsent) {
-    console.log('🔄 Marketing consent granted - ad tracking enabled');
-  } else {
-    console.log('🚫 Marketing consent revoked - ad tracking disabled');
+  // Log marketing consent changes for compliance tracking (only in dev for debugging)
+  if (import.meta.env.DEV) {
+    if (marketingConsent) {
+      console.log('🔄 Marketing consent granted - ad tracking enabled');
+    } else {
+      console.log('🚫 Marketing consent revoked - ad tracking disabled');
+    }
   }
 }
 
