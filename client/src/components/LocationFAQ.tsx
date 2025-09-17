@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
-import { ChevronDown } from 'lucide-react';
-import { IconHelp } from '@tabler/icons-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import { BilingualLocationFAQs } from '@/data/locationFAQs';
 
@@ -36,7 +35,7 @@ const LocationFAQ = ({ locationFAQs, title, description }: LocationFAQProps) => 
         <div className="text-center mb-12 sm:mb-16">
           <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
             <WellnessIcon size="md" color="green" className="opacity-80">
-              <IconHelp />
+              <HelpCircle />
             </WellnessIcon>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-green-800" data-testid="location-faq-title">
               {title || defaultTitle}

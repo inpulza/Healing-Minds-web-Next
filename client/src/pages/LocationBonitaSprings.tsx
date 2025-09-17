@@ -24,9 +24,13 @@ import {
   ArrowRight,
   Navigation,
   Calendar,
-  VideoIcon
+  VideoIcon,
+  Sun,
+  Brain,
+  Smile,
+  User,
+  Leaf
 } from 'lucide-react';
-import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, IconLeaf } from '@tabler/icons-react';
 import { Link } from 'wouter';
 
 // Import office photo
@@ -164,7 +168,7 @@ const LocationBonitaSprings = () => {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-3 mb-6">
                 <WellnessIcon size="sm" color="blue">
-                  <IconMapPin />
+                  <MapPin />
                 </WellnessIcon>
                 <span className="text-blue-700 font-body font-semibold text-lg">
                   {language === 'en' ? 'Serving Bonita Springs' : 'Sirviendo a Bonita Springs'}
@@ -370,7 +374,7 @@ const LocationBonitaSprings = () => {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-4 mb-6">
                 <WellnessIcon size="md" color="green" className="opacity-70">
-                  <IconBrain />
+                  <Brain />
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
@@ -380,7 +384,7 @@ const LocationBonitaSprings = () => {
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
-                  <IconHeart />
+                  <Heart />
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
@@ -398,7 +402,7 @@ const LocationBonitaSprings = () => {
                   description: language === 'en' 
                     ? 'Specialized anxiety treatment in Naples FL for Bonita Springs residents. Expert care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments.'
                     : 'Tratamiento especializado de ansiedad para residentes de Bonita Springs. Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.',
-                  icon: IconBrain,
+                  icon: Brain,
                   link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
                 },
                 {
@@ -407,7 +411,7 @@ const LocationBonitaSprings = () => {
                   description: language === 'en'
                     ? 'Depression treatment Bonita Springs FL with comprehensive care for major depression. Personalized treatment plans and ongoing support designed specifically for the Bonita Springs community.'
                     : 'Tratamiento de depresión con atención integral para depresión mayor. Planes de tratamiento personalizados y apoyo continuo diseñados específicamente para la comunidad de Bonita Springs.',
-                  icon: IconSun,
+                  icon: Sun,
                   link: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
                 },
                 {
@@ -416,7 +420,7 @@ const LocationBonitaSprings = () => {
                   description: language === 'en'
                     ? 'ADHD evaluation and treatment Bonita Springs FL. Specialized assessment and treatment for adults and teens to improve focus and daily functioning with medication management near me.'
                     : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
-                  icon: IconMoodHappy,
+                  icon: Smile,
                   link: '/services/adhd-treatment'
                 },
                 {
@@ -425,7 +429,7 @@ const LocationBonitaSprings = () => {
                   description: language === 'en'
                     ? 'PTSD treatment near Bonita Springs with trauma-informed psychiatric care to help you heal and reclaim your life from traumatic experiences.'
                     : 'Atención psiquiátrica informada en trauma para ayudarle a sanar y reclamar su vida de experiencias traumáticas.',
-                  icon: IconLeaf,
+                  icon: Leaf,
                   link: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'
                 },
                 {
@@ -434,7 +438,7 @@ const LocationBonitaSprings = () => {
                   description: language === 'en'
                     ? 'Bipolar disorder treatment Bonita Springs with expert mood stabilization to help achieve emotional balance and prevent future episodes.'
                     : 'Estabilización experta del ánimo para lograr equilibrio emocional y prevenir episodios futuros.',
-                  icon: IconHeart,
+                  icon: Heart,
                   link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
                 },
                 {
@@ -443,7 +447,7 @@ const LocationBonitaSprings = () => {
                   description: language === 'en'
                     ? 'Psychiatric medication management near me for Bonita Springs residents. Expert evaluation, monitoring, and medication adjustments with comprehensive safety assessments and ongoing follow-up.'
                     : 'Manejo de medicamentos psiquiátricos para residentes de Bonita Springs. Evaluación experta, monitoreo y ajustes de medicación con evaluaciones de seguridad integrales y seguimiento continuo.',
-                  icon: IconUser,
+                  icon: User,
                   link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
                 }
               ].map((service, index) => {
@@ -558,7 +562,7 @@ const LocationBonitaSprings = () => {
               <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <IconMapPin className="w-6 h-6 text-blue-800" />
+                    <MapPin className="w-6 h-6 text-blue-800" />
                   </div>
                   <div>
                     <h3 className="text-xl font-display font-bold text-green-800 mb-2">
@@ -626,7 +630,7 @@ const LocationBonitaSprings = () => {
               <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <IconMapPin className="w-6 h-6 text-blue-800" />
+                    <MapPin className="w-6 h-6 text-blue-800" />
                   </div>
                   <div>
                     <h3 className="text-xl font-display font-bold text-green-800 mb-2">
@@ -694,7 +698,7 @@ const LocationBonitaSprings = () => {
               <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <IconMapPin className="w-6 h-6 text-blue-800" />
+                    <MapPin className="w-6 h-6 text-blue-800" />
                   </div>
                   <div>
                     <h3 className="text-xl font-display font-bold text-green-800 mb-2">

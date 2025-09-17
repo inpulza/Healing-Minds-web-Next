@@ -1,9 +1,7 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Heart, Shield, Users, Clock, CheckCircle, FileText, Play } from 'lucide-react';
-import { FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
-import { IconUserHeart, IconBrain, IconStethoscope } from '@tabler/icons-react';
+import { ArrowRight, Heart, Shield, Users, Clock, CheckCircle, FileText, Play, Linkedin, Facebook, Instagram, Brain, Stethoscope } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import Reviews from '@/components/Reviews';
 import { useTikTokVideos } from '@/hooks/useTikTokVideos';
@@ -344,7 +342,7 @@ const About = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <FaLinkedin className="w-5 h-5 text-blue-600" />
+                      <Linkedin className="w-5 h-5 text-blue-600" />
                     </a>
                     <a 
                       href="https://facebook.com/healingmindspsychiatry" 
@@ -354,7 +352,7 @@ const About = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <FaFacebook className="w-5 h-5 text-blue-700" />
+                      <Facebook className="w-5 h-5 text-blue-700" />
                     </a>
                     <a 
                       href="https://instagram.com/healingmindspsychiatry" 
@@ -364,7 +362,7 @@ const About = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <FaInstagram className="w-5 h-5 text-pink-600" />
+                      <Instagram className="w-5 h-5 text-pink-600" />
                     </a>
                   </div>
                 </div>
@@ -483,7 +481,7 @@ const About = () => {
               {/* Pilar 1: Diagnóstico Preciso */}
               <div className="bg-white rounded-2xl p-8 shadow-sm border text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <IconBrain className="w-8 h-8 text-green-600" />
+                  <Brain className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
                   {language === 'en' 

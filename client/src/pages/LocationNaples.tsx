@@ -25,9 +25,13 @@ import {
   ArrowRight,
   Navigation,
   Calendar,
-  VideoIcon
+  VideoIcon,
+  Sun,
+  Brain,
+  Smile,
+  User,
+  Leaf
 } from 'lucide-react';
-import { IconSun, IconMapPin, IconBrain, IconHeart, IconMoodHappy, IconUser, IconLeaf } from '@tabler/icons-react';
 import { Link } from 'wouter';
 
 // Import office photo
@@ -149,7 +153,7 @@ const LocationNaples = () => {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-3 mb-6">
                 <WellnessIcon size="sm" color="blue">
-                  <IconMapPin />
+                  <MapPin />
                 </WellnessIcon>
                 <span className="text-blue-700 font-body font-semibold text-lg">
                   {language === 'en' ? 'Find Us in Naples' : 'Encuéntranos en Naples'}
@@ -355,7 +359,7 @@ const LocationNaples = () => {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-4 mb-6">
                 <WellnessIcon size="md" color="green" className="opacity-70">
-                  <IconBrain />
+                  <Brain />
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
@@ -365,7 +369,7 @@ const LocationNaples = () => {
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
-                  <IconHeart />
+                  <Heart />
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
@@ -383,7 +387,7 @@ const LocationNaples = () => {
                   description: language === 'en' 
                     ? 'Expert care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments.'
                     : 'Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.',
-                  icon: IconBrain,
+                  icon: Brain,
                   link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
                 },
                 {
@@ -392,7 +396,7 @@ const LocationNaples = () => {
                   description: language === 'en'
                     ? 'Comprehensive care for major depression with personalized treatment plans and ongoing support.'
                     : 'Atención integral para depresión mayor con planes de tratamiento personalizados y apoyo continuo.',
-                  icon: IconSun,
+                  icon: Sun,
                   link: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
                 },
                 {
@@ -401,7 +405,7 @@ const LocationNaples = () => {
                   description: language === 'en'
                     ? 'Specialized evaluation and treatment for adults and teens to improve focus and daily functioning.'
                     : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
-                  icon: IconMoodHappy,
+                  icon: Smile,
                   link: '/services/adhd-treatment'
                 },
                 {
@@ -410,7 +414,7 @@ const LocationNaples = () => {
                   description: language === 'en'
                     ? 'Trauma-informed psychiatric care to help you heal and reclaim your life from traumatic experiences.'
                     : 'Atención psiquiátrica informada en trauma para ayudarle a sanar y reclamar su vida de experiencias traumáticas.',
-                  icon: IconLeaf,
+                  icon: Leaf,
                   link: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'
                 },
                 {
@@ -419,7 +423,7 @@ const LocationNaples = () => {
                   description: language === 'en'
                     ? 'Expert mood stabilization to help achieve emotional balance and prevent future episodes.'
                     : 'Estabilización experta del ánimo para lograr equilibrio emocional y prevenir episodios futuros.',
-                  icon: IconHeart,
+                  icon: Heart,
                   link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
                 },
                 {
@@ -428,7 +432,7 @@ const LocationNaples = () => {
                   description: language === 'en'
                     ? 'Expert psychiatric medication evaluation, monitoring, and adjustment with comprehensive safety assessments.'
                     : 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales.',
-                  icon: IconUser,
+                  icon: User,
                   link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
                 }
               ].map((service, index) => {

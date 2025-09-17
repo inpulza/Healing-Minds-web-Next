@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO, addServiceSchema } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Brain, Activity, Sparkles, HelpCircle, Users, MessageSquare, ChevronDown } from 'lucide-react';
-import { IconBrain, IconHeart, IconMoodHappy, IconTarget } from '@tabler/icons-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images

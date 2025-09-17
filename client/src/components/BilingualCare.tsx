@@ -1,8 +1,7 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
-import { IconHeart, IconSun } from '@tabler/icons-react';
+import { Check, Heart, Sun } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import bilingualImage from '@assets/bilingual-consultation-updated.webp';
 
@@ -40,7 +39,7 @@ const BilingualCare = () => {
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-green-800 leading-tight" data-testid="bilingual-title">
                 <span className="font-display italic text-green-700">Guided</span> by passion.
                 <WellnessIcon size="md" color="orange" className="inline-flex mx-2 sm:mx-3 mb-1 sm:mb-2">
-                  <IconHeart />
+                  <Heart />
                 </WellnessIcon>
                 <span className="font-display italic text-green-700">Driven</span> by purpose.
               </h2>

@@ -7,8 +7,7 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO, addServiceSchema } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Zap, Info } from 'lucide-react';
-import { IconBrain, IconHeart, IconMoodHappy, IconBolt, IconTarget } from '@tabler/icons-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Zap, Info, Bolt } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
@@ -533,7 +532,7 @@ const MedicationManagement = () => {
               <div className="text-center lg:text-left">
                 <div className="bg-white rounded-2xl shadow-lg p-8">
                   <WellnessIcon size="lg" color="green" className="mx-auto lg:mx-0 mb-6">
-                    <IconBolt />
+                    <Bolt />
                   </WellnessIcon>
                   <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
                     {language === 'en' ? 'Ready to Optimize Your Medications?' : '¿Listo para Optimizar sus Medicamentos?'}

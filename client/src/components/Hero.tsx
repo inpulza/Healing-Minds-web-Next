@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Phone } from 'lucide-react';
-import { IconBrain, IconHeart } from '@tabler/icons-react';
+import { ArrowRight, Phone, Brain, Heart } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import heroImage from '@assets/hero-doctor-hq.webp';
 import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
@@ -91,7 +90,7 @@ const Hero = React.memo(() => {
                   <div className="font-display italic font-bold">
                     Naples, FL
                     <WellnessIcon size="sm" color="green" className="inline-flex mx-1 align-middle">
-                      <IconBrain />
+                      <Brain />
                     </WellnessIcon>
                   </div>
                 </h1>
@@ -159,14 +158,14 @@ const Hero = React.memo(() => {
                   <div className="font-display italic font-bold mb-2 md:mb-3 lg:mb-4">
                     {language === 'en' ? 'Expert psychiatric' : 'Atención psiquiátrica experta'}
                     <WellnessIcon size="md" color="blue" className="inline-flex mx-1 md:mx-2 align-middle">
-                      <IconHeart />
+                      <Heart />
                     </WellnessIcon>
                     {language === 'en' ? ' care in' : ' en'}
                   </div>
                   <div className="font-display italic font-bold">
                     Naples, FL
                     <WellnessIcon size="md" color="green" className="inline-flex mx-1 md:mx-2 align-middle">
-                      <IconBrain />
+                      <Brain />
                     </WellnessIcon>
                   </div>
                 </h1>

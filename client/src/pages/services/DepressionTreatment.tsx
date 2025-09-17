@@ -7,8 +7,7 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO, addServiceSchema } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Heart } from 'lucide-react';
-import { IconBrain, IconHeart, IconMoodHappy, IconSun } from '@tabler/icons-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Heart, Brain, Smile, Sun } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
@@ -357,7 +356,7 @@ const DepressionTreatment = () => {
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="blue">
-                      <IconBrain />
+                      <Brain />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
@@ -374,7 +373,7 @@ const DepressionTreatment = () => {
                   
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="purple">
-                      <IconMoodHappy />
+                      <Smile />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
@@ -391,7 +390,7 @@ const DepressionTreatment = () => {
                   
                   <div className="flex items-start gap-4">
                     <WellnessIcon size="sm" color="green">
-                      <IconSun />
+                      <Sun />
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">

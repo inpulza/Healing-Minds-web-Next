@@ -7,8 +7,7 @@ import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { updateSEO, addServiceSchema } from '@/utils/seo';
-import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain } from 'lucide-react';
-import { IconBrain, IconHeart, IconMoodHappy, IconMoodUp, IconMoodSad } from '@tabler/icons-react';
+import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain, Heart, ChevronUp, ChevronDown } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
@@ -52,7 +51,7 @@ const BipolarTreatment = () => {
   const symptoms = language === 'en' ? [
     {
       type: 'Manic Episodes',
-      icon: IconMoodUp,
+      icon: ChevronUp,
       items: [
         'Elevated, euphoric mood',
         'Decreased need for sleep',
@@ -64,7 +63,7 @@ const BipolarTreatment = () => {
     },
     {
       type: 'Depressive Episodes',
-      icon: IconMoodSad,
+      icon: ChevronDown,
       items: [
         'Persistent sadness or emptiness',
         'Loss of interest in activities',
@@ -77,7 +76,7 @@ const BipolarTreatment = () => {
   ] : [
     {
       type: 'Episodios Maníacos',
-      icon: IconMoodUp,
+      icon: ChevronUp,
       items: [
         'Estado de ánimo elevado, eufórico',
         'Disminución de la necesidad de dormir',
@@ -89,7 +88,7 @@ const BipolarTreatment = () => {
     },
     {
       type: 'Episodios Depresivos',
-      icon: IconMoodSad,
+      icon: ChevronDown,
       items: [
         'Tristeza persistente o vacío',
         'Pérdida de interés en actividades',
@@ -411,7 +410,7 @@ const BipolarTreatment = () => {
             <div className="text-center mb-12 sm:mb-16">
               <div className="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-6">
                 <WellnessIcon size="md" color="green" className="opacity-70">
-                  <IconBrain />
+                  <Brain />
                 </WellnessIcon>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center">
                   {language === 'en' ? (
@@ -421,7 +420,7 @@ const BipolarTreatment = () => {
                   )}
                 </h2>
                 <WellnessIcon size="md" color="green" className="opacity-70">
-                  <IconHeart />
+                  <Heart />
                 </WellnessIcon>
               </div>
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed px-4 sm:px-0">
