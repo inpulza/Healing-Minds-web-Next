@@ -371,37 +371,37 @@ const Contact = () => {
             </form>
           </Card>
         </div>
-      </div>
 
-      {/* Google Maps Section - Full Width */}
-      <div className="mt-16 lg:mt-20">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl sm:text-3xl font-body font-bold text-green-800 mb-4" data-testid="map-section-title">
-            {language === 'en' ? (
-              <>Find Us on the <span className="font-display italic text-green-700">Map</span></>
-            ) : (
-              <>Encuéntranos en el <span className="font-display italic text-green-700">Mapa</span></>
-            )}
-          </h3>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-            {language === 'en'
-              ? 'Visit our Naples office conveniently located on Tamiami Trail. Easy access with ample parking available.'
-              : 'Visite nuestra oficina de Naples convenientemente ubicada en Tamiami Trail. Fácil acceso con amplio estacionamiento disponible.'
-            }
-          </p>
-        </div>
-        
-        <div className="rounded-2xl overflow-hidden shadow-lg">
-          <GoogleMapsEmbed
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3579.759886892454!2d-81.80207962458476!3d26.204488077076398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88db1f6ec4e7fe17%3A0x3b7682b63395c87f!2sHealing%20Minds%20Psychiatry!5e0!3m2!1sen!2sus!4v1758100640962!5m2!1sen!2sus"
-            title={language === 'en' 
-              ? 'Healing Minds Psychiatry Naples Location - Interactive Map'
-              : 'Ubicación Naples Healing Minds Psychiatry - Mapa Interactivo'
-            }
-            className="w-full"
-            minHeight="450px"
-            context="contact"
-          />
+        {/* Google Maps Section - Within Container */}
+        <div className="mt-16 lg:mt-20">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl sm:text-3xl font-body font-bold text-green-800 mb-4" data-testid="map-section-title">
+              {language === 'en' ? (
+                <>Find Us on the <span className="font-display italic text-green-700">Map</span></>
+              ) : (
+                <>Encuéntranos en el <span className="font-display italic text-green-700">Mapa</span></>
+              )}
+            </h3>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+              {language === 'en'
+                ? 'Visit our Naples office conveniently located on Tamiami Trail. Easy access with ample parking available.'
+                : 'Visite nuestra oficina de Naples convenientemente ubicada en Tamiami Trail. Fácil acceso con amplio estacionamiento disponible.'
+              }
+            </p>
+          </div>
+          
+          <div className="rounded-2xl overflow-hidden shadow-lg">
+            <GoogleMapsEmbed
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3579.759886892454!2d-81.80207962458476!3d26.204488077076398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88db1f6ec4e7fe17%3A0x3b7682b63395c87f!2sHealing%20Minds%20Psychiatry!5e0!3m2!1sen!2sus!4v1758100640962!5m2!1sen!2sus"
+              title={language === 'en' 
+                ? 'Healing Minds Psychiatry Naples Location - Interactive Map'
+                : 'Ubicación Naples Healing Minds Psychiatry - Mapa Interactivo'
+              }
+              className="w-full"
+              minHeight="450px"
+              context="contact"
+            />
+          </div>
         </div>
       </div>
     </section>
