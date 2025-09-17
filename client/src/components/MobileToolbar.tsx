@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import ContactFormModal from '@/components/ContactFormModal';
-import { Calendar, Phone, MapPin, MessageSquare } from 'lucide-react';
+import { Calendar, Phone, MapPin, FileText } from 'lucide-react';
 
 const MobileToolbar = () => {
   const { language } = useLanguage();
@@ -60,7 +60,7 @@ const MobileToolbar = () => {
       testId: 'mobile-button-directions'
     },
     {
-      icon: MessageSquare,
+      icon: FileText,
       label: language === 'en' ? 'Contact' : 'Contacto',
       onClick: handleContactClick,
       testId: 'mobile-button-contact'
@@ -82,7 +82,7 @@ const MobileToolbar = () => {
               <button
                 key={index}
                 onClick={button.onClick}
-                className="flex flex-col items-center justify-center p-2 text-gray-600 hover:text-gray-800 active:text-gray-900 transition-colors duration-200 active:scale-95"
+                className="flex flex-col items-center justify-center p-2 text-green-600 hover:text-green-700 active:text-green-800 transition-colors duration-200 active:scale-95"
                 data-testid={button.testId}
                 aria-label={
                   button.label === 'Book Now' || button.label === 'Reservar Ahora'
@@ -95,7 +95,7 @@ const MobileToolbar = () => {
                 }
               >
                 <IconComponent 
-                  className="w-10 h-10 mb-1" 
+                  className="w-8 h-8 mb-1" 
                   strokeWidth={1.5}
                 />
                 <span className="text-xs font-medium leading-tight text-center">
