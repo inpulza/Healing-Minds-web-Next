@@ -1,0 +1,117 @@
+
+Improve image delivery Est savings of 207 KiB
+Reducing the download time of images can improve the perceived load time of the page and LCP. Learn more about optimizing image sizeLCPFCP
+URL
+Resource Size
+Est Savings
+healingmindsp.com 1st party
+209.3 KiB	206.9 KiB
+/assets/8_1755868….png(www.healingmindsp.com)
+172.1 KiB
+170.1 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (208x117). Use responsive images to reduce the image download size.
+170.1 KiB
+/assets/insurance….webp(www.healingmindsp.com)
+37.2 KiB
+36.7 KiB
+This image file is larger than it needs to be (1920x1080) for its displayed dimensions (208x117). Use responsive images to reduce the image download size.
+36.7 KiB
+Layout shift culprits
+Layout shifts occur when elements move absent any user interaction. Investigate the causes of layout shifts, such as elements being added, removed, or their fonts changing as the page loads.CLS
+Element
+Layout shift score
+Total
+0.226
+Board Certified Psychiatrist Naples Mental Health Southwest Florida Expert psyc…
+<div class="relative z-10 w-full px-8 lg:px-16 py-8 text-left">
+0.226
+…v4/pxiTypc9v….woff2(fonts.gstatic.com)
+Web font
+…v40/nuFkD-vYS….woff2(fonts.gstatic.com)
+Web font
+Forced reflow
+A forced reflow occurs when JavaScript queries geometric properties (such as offsetWidth) after styles have been invalidated by a change to the DOM state. This can result in poor performance. Learn more about forced reflows and possible mitigations.
+Source
+Total reflow time
+[unattributed]
+33 ms
+LCP request discovery
+Optimize LCP by making the LCP image discoverable from the HTML immediately, and avoiding lazy-loadingLCP
+lazy load not applied
+fetchpriority=high applied
+Request is discoverable in initial document
+Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate menta…
+<img src="/assets/hero-doctor-hq-DmmoWv9t.webp" alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate …" class="absolute inset-0 w-full h-full object-cover object-center hero-image" width="1200" height="800" loading="eager" decoding="sync" sizes="(min-width: 1200px) 1200px, 100vw" fetchpriority="high">
+Network dependency tree
+Avoid chaining critical requests by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.LCP
+Maximum critical path latency: 1,345 ms
+Initial Navigation
+https://www.healingmindsp.com - 136 ms, 6.92 KiB
+/assets/index-4xDrjcQt.js(www.healingmindsp.com) - 263 ms, 115.33 KiB
+/assets/DoctorSec….js(www.healingmindsp.com) - 493 ms, 1.74 KiB
+/assets/doctor-co….js(www.healingmindsp.com) - 455 ms, 0.61 KiB
+/assets/CompactVi….js(www.healingmindsp.com) - 456 ms, 1.68 KiB
+/assets/useTikTokVideos-DBftGSQz.js(www.healingmindsp.com) - 491 ms, 1.49 KiB
+/assets/useQuery-Dd7CA-Gs.js(www.healingmindsp.com) - 455 ms, 4.14 KiB
+/api/tiktok(www.healingmindsp.com) - 1,345 ms, 36.50 KiB
+/assets/Services-CzoJP9Z9.js(www.healingmindsp.com) - 453 ms, 2.96 KiB
+/assets/sun-BprGo1Yf.js(www.healingmindsp.com) - 454 ms, 0.82 KiB
+/assets/smile-m1mNQyam.js(www.healingmindsp.com) - 454 ms, 0.99 KiB
+/assets/user-CThOTB65.js(www.healingmindsp.com) - 454 ms, 0.86 KiB
+/assets/index-Cs3F18Tf.css(www.healingmindsp.com) - 203 ms, 16.01 KiB
+Preconnected origins
+preconnect hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.
+no origins were preconnected
+Preconnect candidates
+Add preconnect hints to your most important origins, but try to use no more than 4.
+No additional origins are good candidates for preconnecting
+Use efficient cache lifetimes Est savings of 2 KiB
+A long cache lifetime can speed up repeat visits to your page. Learn more.LCPFCP
+Request
+Cache TTL
+Transfer Size
+JSDelivr CDN cdn 
+16 KiB
+…4x3/es.svg(cdn.jsdelivr.net)
+7d
+16 KiB
+Render blocking requests Est savings of 20 ms
+Requests are blocking the page's initial render, which may delay LCP. Deferring or inlining can move these network requests out of the critical path.LCPFCP
+URL
+Transfer Size
+Duration
+healingmindsp.com 1st party
+16.0 KiB	110 ms
+/assets/index-Cs3F18Tf.css(www.healingmindsp.com)
+16.0 KiB
+110 ms
+LCP breakdown
+3rd parties
+These insights are also available in the Chrome DevTools Performance Panel - record a trace to view more detailed information.
+Diagnostics
+Reduce unused JavaScript Est savings of 99 KiB
+Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. Learn how to reduce unused JavaScript.LCPFCP
+URL
+Transfer Size
+Est Savings
+Google Tag Manager tag-manager 
+152.7 KiB	55.6 KiB
+/gtag/js?id=G-WMRK41PX2E(www.googletagmanager.com)
+152.7 KiB
+55.6 KiB
+healingmindsp.com 1st party
+114.7 KiB	43.5 KiB
+/assets/index-4xDrjcQt.js(www.healingmindsp.com)
+114.7 KiB
+43.5 KiB
+Reduce unused CSS Est savings of 12 KiB
+Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. Learn how to reduce unused CSS.LCPFCP
+URL
+Transfer Size
+Est Savings
+healingmindsp.com 1st party
+15.5 KiB	11.6 KiB
+/assets/index-Cs3F18Tf.css(www.healingmindsp.com)
+15.5 KiB
+11.6 KiB
+Avoid long main-thread tasks 1 long task found
