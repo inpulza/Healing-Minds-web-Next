@@ -6,6 +6,7 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import CompactVideoCarousel from '@/components/CompactVideoCarousel';
 import Reviews from '@/components/Reviews';
+import GoogleMapsEmbed from '@/components/GoogleMapsEmbed';
 import { updateSEO } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
@@ -1152,17 +1153,16 @@ const LocationNaples = () => {
                     )}
                   </h2>
                   <div className="flex-1 rounded-2xl overflow-hidden bg-gray-100 min-h-[400px]">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.123456789!2d-81.8057!3d26.2540!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s4760%20Tamiami%20Trl%20N%20%2325%2C%20Naples%2C%20FL%2034103!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, minHeight: '400px' }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Healing Minds Psychiatry Location Map"
-                      data-testid="map-google"
-                    ></iframe>
+                    <GoogleMapsEmbed
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3579.759886892454!2d-81.80207962458476!3d26.204488077076398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88db1f6ec4e7fe17%3A0x3b7682b63395c87f!2sHealing%20Minds%20Psychiatry!5e0!3m2!1sen!2sus!4v1758100640962!5m2!1sen!2sus"
+                      title={language === 'en' 
+                        ? 'Healing Minds Psychiatry Naples Location - Interactive Map'
+                        : 'Ubicación Naples Healing Minds Psychiatry - Mapa Interactivo'
+                      }
+                      className="w-full h-full"
+                      minHeight="400px"
+                      context="location"
+                    />
                   </div>
                 </div>
               </div>
