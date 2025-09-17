@@ -16,8 +16,8 @@ import { addMedicalBusinessSchema } from '@/utils/seo';
 import CookieBanner from '@/components/CookieBanner';
 import Home from '@/pages/Home';
 
-// Mobile Toolbar - Lazy loaded only for mobile viewports to optimize desktop performance
-const MobileToolbar = lazy(() => import('@/components/MobileToolbar'));
+// Mobile Toolbar - Import directly to fix lazy loading issue
+import MobileToolbar from '@/components/MobileToolbar';
 
 // All non-critical pages lazy loaded for performance optimization
 const About = lazy(() => import('@/pages/About'));
@@ -221,11 +221,7 @@ function App() {
           <LanguageProvider>
             <Router />
             {/* Conditionally render MobileToolbar only on mobile viewports for performance */}
-            {isMobile && (
-              <Suspense fallback={null}>
-                <MobileToolbar />
-              </Suspense>
-            )}
+            {isMobile && <MobileToolbar />}
             <Toaster />
             <Suspense fallback={null}>
               <CookieBanner />
