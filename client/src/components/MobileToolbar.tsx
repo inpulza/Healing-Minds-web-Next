@@ -46,28 +46,28 @@ const MobileToolbar = () => {
       icon: Calendar,
       label: language === 'en' ? 'Book Now' : 'Reservar Ahora',
       onClick: handleBookingClick,
-      className: 'bg-green-600 hover:bg-green-700 active:bg-green-800 text-white',
+      className: 'bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-200 border border-gray-200',
       testId: 'mobile-button-book'
     },
     {
       icon: Phone,
       label: language === 'en' ? 'Call Now' : 'Llamar Ahora',
       onClick: handleCallClick,
-      className: 'bg-green-600 hover:bg-green-700 active:bg-green-800 text-white',
+      className: 'bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-200 border border-gray-200',
       testId: 'mobile-button-call'
     },
     {
       icon: MapPin,
       label: language === 'en' ? 'Directions' : 'Direcciones',
       onClick: handleDirectionsClick,
-      className: 'bg-green-600 hover:bg-green-700 active:bg-green-800 text-white',
+      className: 'bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-200 border border-gray-200',
       testId: 'mobile-button-directions'
     },
     {
       icon: MessageSquare,
       label: language === 'en' ? 'Contact' : 'Contacto',
       onClick: handleContactClick,
-      className: 'bg-green-600 hover:bg-green-700 active:bg-green-800 text-white',
+      className: 'bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-200 border border-gray-200',
       testId: 'mobile-button-contact'
     }
   ];
@@ -107,7 +107,7 @@ const MobileToolbar = () => {
                 }
               >
                 <IconComponent 
-                  className="w-6 h-6 mb-1" 
+                  className="w-8 h-8 mb-0.5" 
                   strokeWidth={2}
                 />
                 <span className="text-xs font-medium leading-tight text-center">

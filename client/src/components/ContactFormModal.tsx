@@ -126,7 +126,11 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto" data-testid="contact-form-modal">
+      <DialogContent 
+        className="sm:max-w-md max-h-[85vh] overflow-y-auto mx-4 sm:mx-auto my-8" 
+        data-testid="contact-form-modal"
+        aria-describedby="contact-form-description"
+      >
         <DialogHeader>
           <DialogTitle className="text-xl font-body font-semibold text-gray-900" data-testid="contact-form-modal-title">
             {language === 'en' ? (
@@ -135,6 +139,12 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
               <>Envíanos un <span className="font-display italic text-green-700">mensaje</span></>
             )}
           </DialogTitle>
+          <p id="contact-form-description" className="sr-only">
+            {language === 'en' 
+              ? 'Contact form to send a message to Healing Minds Psychiatry. Fill out the required fields and submit your inquiry.'
+              : 'Formulario de contacto para enviar un mensaje a Healing Minds Psychiatry. Complete los campos requeridos y envíe su consulta.'
+            }
+          </p>
           <DialogClose className="absolute right-4 top-4" data-testid="close-contact-modal">
             <X className="h-4 w-4" />
             <span className="sr-only">{language === 'en' ? 'Close' : 'Cerrar'}</span>
