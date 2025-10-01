@@ -203,10 +203,15 @@ const Header = () => {
     }, 100); // Small delay to allow navigation
   };
 
+  // Apply background when scrolled OR when any dropdown/menu is open
+  const hasOverlay = isScrolled || isServicesOpen || isLocationsOpen || isMobileMenuOpen;
+
   return (
     <>
-    <header ref={headerRef} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-      isScrolled 
+    <header ref={headerRef} className={`fixed top-0 left-0 right-0 z-50 transition-[padding,height] ${
+      !isScrolled && (isServicesOpen || isLocationsOpen || isMobileMenuOpen) ? 'duration-0' : 'duration-500'
+    } ${
+      hasOverlay 
         ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
         : 'bg-transparent'
     } ${isServicesOpen || isLocationsOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-20 sm:h-24 md:h-28 lg:h-32'}`}>
