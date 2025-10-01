@@ -176,7 +176,8 @@ const Header = () => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 mb-4 ${
+    <>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isScrolled 
         ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
         : 'bg-transparent'
@@ -193,7 +194,7 @@ const Header = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex relative mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 md:mb-8" ref={servicesRef}>
+            <div className="hidden md:flex relative" ref={servicesRef}>
               <nav className="flex items-center transition-all duration-500 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50 bg-[#f0fdf4]" data-testid="desktop-nav">
               {navigationItems.map((item) => (
                 <div key={item.href} className="relative">
@@ -390,7 +391,7 @@ const Header = () => {
       </div>
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 shadow-lg relative z-60" data-testid="mobile-menu">
+        <div className="md:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 shadow-lg relative z-50" data-testid="mobile-menu">
           <div className="px-6 pt-4 pb-6 space-y-3 max-h-[80vh] overflow-y-auto">
             {navigationItems.map((item) => (
               <div key={item.href}>
@@ -518,6 +519,9 @@ const Header = () => {
         </div>
       )}
     </header>
+    {/* Spacer to prevent content from being hidden behind fixed header */}
+    <div aria-hidden="true" className="h-20 sm:h-24 md:h-28 lg:h-32" />
+    </>
   );
 };
 
