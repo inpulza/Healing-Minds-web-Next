@@ -181,7 +181,7 @@ const Hero = React.memo(() => {
                       data-testid="hero-book-consultation"
                     >
                       <span>{language === 'en' ? 'Our Services' : 'Nuestros Servicios'}</span>
-                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2 border-green-700">
                         <ArrowRight className="w-5 h-5 text-green-800" />
                       </div>
                     </Button>
@@ -192,8 +192,8 @@ const Hero = React.memo(() => {
                       data-testid="hero-call-now"
                     >
                       <span>{language === 'en' ? 'Call Now' : 'Llamar Ahora'}</span>
-                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white">
-                        <Phone className="w-5 h-5 text-green-800" />
+                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2 border-white">
+                        <Phone className="w-5 h-5 text-white" />
                       </div>
                     </Button>
                   </a>
