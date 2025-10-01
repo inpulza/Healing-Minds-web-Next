@@ -107,7 +107,7 @@ const Hero = React.memo(() => {
           <div className="flex flex-col gap-3 px-4">
             <Link href="/services">
               <Button
-                className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg border border-green-800"
+                className="whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg border border-green-800 pt-[24px] pb-[24px]"
                 data-testid="hero-book-consultation-mobile"
               >
                 <span>{language === 'en' ? 'Our Services' : 'Nuestros Servicios'}</span>
@@ -116,7 +116,7 @@ const Hero = React.memo(() => {
             </Link>
             <a href="tel:(239) 423-0272">
               <Button
-                className="w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 py-4 shadow-lg"
+                className="whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 py-4 shadow-lg pt-[24px] pb-[24px]"
                 data-testid="hero-call-now-mobile"
               >
                 <span>{language === 'en' ? 'Call Now' : 'Llamar Ahora'}</span>
