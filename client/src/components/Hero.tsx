@@ -167,7 +167,7 @@ const Hero = React.memo(() => {
                   </div>
                 </h1>
                 
-                <div className="text-lg md:text-xl lg:text-xl xl:text-2xl leading-relaxed font-body mb-8 md:mb-10 lg:mb-12 text-[#1e6b3b]" data-testid="hero-description">
+                <div className="text-lg md:text-xl lg:text-xl xl:text-2xl leading-relaxed font-body mb-8 md:mb-10 lg:mb-12 text-[#1e6b3b] lg:mr-20 xl:mr-32 2xl:mr-40" data-testid="hero-description">
                   <span>{t('hero.description')}</span>
                 </div>
                 
