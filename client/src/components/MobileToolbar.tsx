@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import ContactFormModal from '@/components/ContactFormModal';
-import { Calendar, Phone, MessageCircle, FileText } from 'lucide-react';
+import { Calendar, Phone, FileText } from 'lucide-react';
+import { SiWhatsapp } from 'react-icons/si';
 
 const MobileToolbar = () => {
   const { language } = useLanguage();
@@ -54,7 +55,7 @@ const MobileToolbar = () => {
       testId: 'mobile-button-call'
     },
     {
-      icon: MessageCircle,
+      icon: SiWhatsapp,
       label: language === 'en' ? 'WhatsApp' : 'WhatsApp',
       onClick: handleWhatsAppClick,
       testId: 'mobile-button-whatsapp'
