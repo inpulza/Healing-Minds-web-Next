@@ -207,10 +207,10 @@ const Header = () => {
                         setIsServicesOpen(false);
                       }
                     }}
-                    className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 flex items-center gap-2 ${
+                    className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 flex items-center gap-2 after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
                       isActive(item.href) || (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen)
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-green-700 hover:text-primary hover:bg-white/50'
+                        ? 'bg-white text-primary shadow-sm after:w-0'
+                        : 'text-green-700 hover:text-primary after:w-0 hover:after:w-3/4'
                     }`}
                     data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
                     aria-label={
