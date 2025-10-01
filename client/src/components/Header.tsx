@@ -51,10 +51,8 @@ const Header = () => {
       // Services panel has max-h-[500px]
       panelHeight = Math.min(servicesPanelRef.current.scrollHeight, 500);
     } else if (isLocationsOpen && locationsPanelRef.current) {
-      // Locations panel has max-h-[calc(100vh-8rem)]
-      const remSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-      const maxHeight = Math.max(0, window.innerHeight - (remSize * 8));
-      panelHeight = Math.min(locationsPanelRef.current.scrollHeight, maxHeight);
+      // Locations panel has max-h-[600px]
+      panelHeight = Math.min(locationsPanelRef.current.scrollHeight, 600);
     } else if (isMobileMenuOpen && headerRef.current) {
       // For mobile menu, measure the entire header
       panelHeight = Math.max(0, headerRef.current.scrollHeight - baseHeight);
@@ -76,9 +74,7 @@ const Header = () => {
       if (isServicesOpen && servicesPanelRef.current) {
         panelHeight = Math.min(servicesPanelRef.current.scrollHeight, 500);
       } else if (isLocationsOpen && locationsPanelRef.current) {
-        const remSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        const maxHeight = Math.max(0, window.innerHeight - (remSize * 8));
-        panelHeight = Math.min(locationsPanelRef.current.scrollHeight, maxHeight);
+        panelHeight = Math.min(locationsPanelRef.current.scrollHeight, 600);
       } else if (isMobileMenuOpen && headerRef.current) {
         panelHeight = Math.max(0, headerRef.current.scrollHeight - baseHeight);
       }
@@ -413,12 +409,12 @@ const Header = () => {
         {/* Expanded Locations Menu - Now inside header */}
         <div ref={locationsPanelRef} className={`transition-all duration-500 ease-in-out ${
           isLocationsOpen 
-            ? 'max-h-[calc(100vh-8rem)] opacity-100 py-4 md:py-6 overflow-y-auto overscroll-contain' 
+            ? 'max-h-[600px] opacity-100 py-4 md:py-6 overflow-hidden' 
             : 'max-h-0 opacity-0 py-0 pointer-events-none'
         }`}>
           <div className="hidden md:block">
-            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 md:p-8 mx-4 md:mx-6 relative z-50">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 md:p-8 mx-2 relative z-50 max-w-[95vw]">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-5">
                 {locationItems.map((location, index) => (
                   <Link
                     key={location.href}
