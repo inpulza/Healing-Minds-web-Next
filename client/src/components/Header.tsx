@@ -195,7 +195,7 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex relative" ref={servicesRef}>
-              <nav className="flex items-center transition-all duration-500 backdrop-blur-sm rounded-full p-2 shadow-sm border border-gray-200/50 bg-[#f0fdf4]" data-testid="desktop-nav">
+              <nav className="flex items-center transition-all duration-500 backdrop-blur-sm rounded-full p-2 border border-green-600/30" data-testid="desktop-nav">
               {navigationItems.map((item) => (
                 <div key={item.href} className="relative">
                   {item.hasDropdown ? (
@@ -212,7 +212,7 @@ const Header = () => {
                       className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 flex items-center gap-2 ${
                         isActive(item.href) || (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen)
                           ? 'bg-white text-primary shadow-sm'
-                          : 'text-gray-700 hover:text-primary hover:bg-white/50'
+                          : 'text-green-700 hover:text-primary hover:bg-white/50'
                       }`}
                       data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
                       aria-label={
@@ -235,7 +235,7 @@ const Header = () => {
                       className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 ${
                         isActive(item.href)
                           ? 'bg-white text-primary shadow-sm'
-                          : 'text-gray-700 hover:text-primary hover:bg-white/50'
+                          : 'text-green-700 hover:text-primary hover:bg-white/50'
                       }`}
                       data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
                     >
@@ -254,7 +254,7 @@ const Header = () => {
               variant="ghost"
               size="sm"
               onClick={toggleLanguage}
-              className="text-xs text-gray-700 bg-gray-100/80 hover:bg-gray-200/80 hover:text-green-700 transition-all duration-200 rounded-full px-3 py-2 font-body border border-gray-200/50 shadow-sm flex items-center gap-1.5"
+              className="text-xs text-green-700 hover:text-green-800 transition-all duration-200 rounded-full px-3 py-2 font-body border border-green-600/30 flex items-center gap-1.5"
               data-testid="language-toggle"
               aria-label={language === 'en' ? 'Cambiar a español' : 'Switch to English'}
             >
