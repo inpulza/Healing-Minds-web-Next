@@ -188,7 +188,7 @@ const Header = () => {
           <div className="flex items-center gap-6">
             {/* Logo */}
             <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'}>
-              <div className="text-base sm:text-lg md:text-xl font-body font-bold text-green-800">
+              <div className="text-sm sm:text-base md:text-lg font-body font-bold text-green-800">
                 Healing Minds <span className="text-green-700">Psychiatry</span>
               </div>
             </Link>
