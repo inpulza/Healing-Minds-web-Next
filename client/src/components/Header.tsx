@@ -183,73 +183,70 @@ const Header = () => {
         : 'bg-transparent'
     } ${isServicesOpen || isLocationsOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-20 sm:h-24 md:h-28 lg:h-32'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-        <div className="flex items-center h-20 sm:h-24 md:h-28 lg:h-32">
-          {/* Logo + Navigation Group */}
-          <div className="flex items-center gap-6">
-            {/* Logo */}
-            <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'}>
-              <div className="text-sm sm:text-base md:text-lg font-body font-bold text-green-800">
-                Healing Minds <span className="text-green-700">Psychiatry</span>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex relative" ref={servicesRef}>
-              <nav className="flex items-center transition-all duration-500 backdrop-blur-sm rounded-full p-2 border border-green-600/30" data-testid="desktop-nav">
-              {navigationItems.map((item) => (
-                <div key={item.href} className="relative">
-                  {item.hasDropdown ? (
-                    <button
-                      onClick={() => {
-                        if (item.dropdownType === 'services') {
-                          setIsServicesOpen(!isServicesOpen);
-                          setIsLocationsOpen(false);
-                        } else if (item.dropdownType === 'locations') {
-                          setIsLocationsOpen(!isLocationsOpen);
-                          setIsServicesOpen(false);
-                        }
-                      }}
-                      className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 flex items-center gap-2 ${
-                        isActive(item.href) || (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen)
-                          ? 'bg-white text-primary shadow-sm'
-                          : 'text-green-700 hover:text-primary hover:bg-white/50'
-                      }`}
-                      data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
-                      aria-label={
-                        item.dropdownType === 'services'
-                          ? (isServicesOpen ? (language === 'en' ? 'Close services menu' : 'Cerrar menú de servicios') : (language === 'en' ? 'Open services menu' : 'Abrir menú de servicios'))
-                          : item.dropdownType === 'locations'
-                          ? (isLocationsOpen ? (language === 'en' ? 'Close locations menu' : 'Cerrar menú de ubicaciones') : (language === 'en' ? 'Open locations menu' : 'Abrir menú de ubicaciones'))
-                          : ''
-                      }
-                      aria-expanded={item.dropdownType === 'services' ? isServicesOpen : item.dropdownType === 'locations' ? isLocationsOpen : false}
-                    >
-                      {item.label}
-                      <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${
-                        (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen) ? 'rotate-180' : ''
-                      }`} />
-                    </button>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 ${
-                        isActive(item.href)
-                          ? 'bg-white text-primary shadow-sm'
-                          : 'text-green-700 hover:text-primary hover:bg-white/50'
-                      }`}
-                      data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </div>
-              ))}
-              </nav>
+        <div className="flex items-center justify-between h-20 sm:h-24 md:h-28 lg:h-32 relative">
+          {/* Logo */}
+          <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'}>
+            <div className="text-sm sm:text-base md:text-lg font-body font-bold text-green-800">
+              Healing Minds <span className="text-green-700">Psychiatry</span>
             </div>
+          </Link>
+
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2" ref={servicesRef}>
+            <nav className="flex items-center transition-all duration-500 backdrop-blur-sm rounded-full p-2 border border-green-600/30" data-testid="desktop-nav">
+            {navigationItems.map((item) => (
+              <div key={item.href} className="relative">
+                {item.hasDropdown ? (
+                  <button
+                    onClick={() => {
+                      if (item.dropdownType === 'services') {
+                        setIsServicesOpen(!isServicesOpen);
+                        setIsLocationsOpen(false);
+                      } else if (item.dropdownType === 'locations') {
+                        setIsLocationsOpen(!isLocationsOpen);
+                        setIsServicesOpen(false);
+                      }
+                    }}
+                    className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 flex items-center gap-2 ${
+                      isActive(item.href) || (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen)
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-green-700 hover:text-primary hover:bg-white/50'
+                    }`}
+                    data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
+                    aria-label={
+                      item.dropdownType === 'services'
+                        ? (isServicesOpen ? (language === 'en' ? 'Close services menu' : 'Cerrar menú de servicios') : (language === 'en' ? 'Open services menu' : 'Abrir menú de servicios'))
+                        : item.dropdownType === 'locations'
+                        ? (isLocationsOpen ? (language === 'en' ? 'Close locations menu' : 'Cerrar menú de ubicaciones') : (language === 'en' ? 'Open locations menu' : 'Abrir menú de ubicaciones'))
+                        : ''
+                    }
+                    aria-expanded={item.dropdownType === 'services' ? isServicesOpen : item.dropdownType === 'locations' ? isLocationsOpen : false}
+                  >
+                    {item.label}
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${
+                      (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen) ? 'rotate-180' : ''
+                    }`} />
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 ${
+                      isActive(item.href)
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-green-700 hover:text-primary hover:bg-white/50'
+                    }`}
+                    data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </div>
+            ))}
+            </nav>
           </div>
 
           {/* Language Toggle & CTA */}
-          <div className="hidden md:flex items-center space-x-4 ml-auto">
+          <div className="hidden md:flex items-center space-x-4">
             <Button
               variant="ghost"
               size="sm"
