@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import ContactFormModal from '@/components/ContactFormModal';
-import { Calendar, Phone, MapPin, FileText } from 'lucide-react';
+import { Calendar, Phone, MessageCircle, FileText } from 'lucide-react';
 
 const MobileToolbar = () => {
   const { language } = useLanguage();
@@ -14,7 +14,7 @@ const MobileToolbar = () => {
   
   // Practice contact information
   const phoneNumber = 'tel:+12394230272';
-  const directionsUrl = 'https://maps.google.com/?q=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103';
+  const whatsappNumber = 'https://wa.me/12399201019';
 
   const handleBookingClick = () => {
     trackEvent('mobile_toolbar_booking_clicked');
@@ -28,10 +28,10 @@ const MobileToolbar = () => {
     window.location.href = phoneNumber;
   };
 
-  const handleDirectionsClick = () => {
-    trackEvent('mobile_toolbar_directions_clicked');
-    setTag('toolbar_action', 'directions');
-    window.open(directionsUrl, '_blank', 'noopener,noreferrer');
+  const handleWhatsAppClick = () => {
+    trackEvent('mobile_toolbar_whatsapp_clicked');
+    setTag('toolbar_action', 'whatsapp');
+    window.open(whatsappNumber, '_blank', 'noopener,noreferrer');
   };
 
   const handleContactClick = () => {
@@ -54,10 +54,10 @@ const MobileToolbar = () => {
       testId: 'mobile-button-call'
     },
     {
-      icon: MapPin,
-      label: language === 'en' ? 'Directions' : 'Direcciones',
-      onClick: handleDirectionsClick,
-      testId: 'mobile-button-directions'
+      icon: MessageCircle,
+      label: language === 'en' ? 'WhatsApp' : 'WhatsApp',
+      onClick: handleWhatsAppClick,
+      testId: 'mobile-button-whatsapp'
     },
     {
       icon: FileText,
@@ -89,8 +89,8 @@ const MobileToolbar = () => {
                     ? (language === 'en' ? 'Book telehealth appointment' : 'Reservar cita de telesalud')
                     : button.label === 'Call Now' || button.label === 'Llamar Ahora'
                       ? (language === 'en' ? 'Call (239) 423-0272' : 'Llamar (239) 423-0272')
-                      : button.label === 'Directions' || button.label === 'Direcciones'
-                        ? (language === 'en' ? 'Get directions to office' : 'Obtener direcciones a la oficina')
+                      : button.label === 'WhatsApp'
+                        ? (language === 'en' ? 'Chat on WhatsApp' : 'Chatear por WhatsApp')
                         : (language === 'en' ? 'Open contact form' : 'Abrir formulario de contacto')
                 }
               >
