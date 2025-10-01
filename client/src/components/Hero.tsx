@@ -171,28 +171,25 @@ const Hero = React.memo(() => {
                   <span>{t('hero.description')}</span>
                 </div>
                 
-                <div className="ml-0 flex flex-col sm:flex-row gap-4">
+                <div className="ml-0 flex flex-row items-center gap-6">
                   <Link href="/services">
                     <Button
-                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg"
+                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg"
                       data-testid="hero-book-consultation"
                     >
                       <span>{language === 'en' ? 'Our Services' : 'Nuestros Servicios'}</span>
-                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 border border-green-700">
-                        <ArrowRight className="w-5 h-5 text-green-800" />
+                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 border border-white">
+                        <ArrowRight className="w-5 h-5 text-white" />
                       </div>
                     </Button>
                   </Link>
-                  <a href="tel:(239) 423-0272">
-                    <Button
-                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg"
-                      data-testid="hero-call-now"
-                    >
-                      <span>{language === 'en' ? 'Call Now' : 'Llamar Ahora'}</span>
-                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 border border-white">
-                        <Phone className="w-5 h-5 text-white" />
-                      </div>
-                    </Button>
+                  <a 
+                    href="tel:(239) 423-0272" 
+                    className="inline-flex items-center gap-2 text-base md:text-lg font-semibold text-green-800 hover:text-green-900 transition-colors duration-300"
+                    data-testid="hero-call-now"
+                  >
+                    <span>{language === 'en' ? 'Call Now' : 'Llamar Ahora'}</span>
+                    <Phone className="w-5 h-5" />
                   </a>
                 </div>
               </div>
