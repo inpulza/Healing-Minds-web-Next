@@ -18,6 +18,8 @@ const Header = () => {
   const [isLocationsOpen, setIsLocationsOpen] = useState(false);
   const [isMobileLocationsOpen, setIsMobileLocationsOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [spacerHeight, setSpacerHeight] = useState(80); // Default height for mobile
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +31,32 @@ const Header = () => {
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Dynamic spacer height using ResizeObserver
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    // Set initial height
+    setSpacerHeight(header.offsetHeight);
+
+    // Create ResizeObserver to watch header height changes
+    const resizeObserver = new ResizeObserver((entries) => {
+      // Use requestAnimationFrame for smooth updates
+      requestAnimationFrame(() => {
+        if (entries[0]) {
+          const newHeight = entries[0].contentRect.height;
+          setSpacerHeight(newHeight);
+        }
+      });
+    });
+
+    resizeObserver.observe(header);
+
+    return () => {
+      resizeObserver.disconnect();
     };
   }, []);
 
@@ -177,7 +205,7 @@ const Header = () => {
 
   return (
     <>
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+    <header ref={headerRef} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isScrolled 
         ? 'bg-white/80 backdrop-blur-xl border-b border-gray-200/60 shadow-sm' 
         : 'bg-transparent'
@@ -516,8 +544,16 @@ const Header = () => {
         </div>
       )}
     </header>
-    {/* Spacer to prevent content from being hidden behind fixed header */}
-    <div aria-hidden="true" className="h-20 sm:h-24 md:h-28 lg:h-32" />
+    {/* Dynamic spacer to prevent content from being hidden behind fixed header */}
+    <div 
+      aria-hidden="true" 
+      style={{ 
+        height: `${spacerHeight}px`, 
+        transition: 'height 500ms ease-in-out',
+        willChange: 'height'
+      }} 
+      className="w-full" 
+    />
     </>
   );
 };
