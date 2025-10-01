@@ -155,15 +155,12 @@ const Hero = React.memo(() => {
                 </div>
                 
                 <h1 className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-relaxed text-green-700 text-left mb-6 md:mb-8" data-testid="hero-title">
-                  <div className="font-display italic font-bold mb-2 md:mb-3 lg:mb-4">
+                  <div className="font-display italic font-bold">
                     {language === 'en' ? 'Expert psychiatric' : 'Atención psiquiátrica experta'}
                     <WellnessIcon size="md" color="blue" className="inline-flex mx-1 md:mx-2 align-middle">
                       <Heart />
                     </WellnessIcon>
-                    {language === 'en' ? ' care in' : ' en'}
-                  </div>
-                  <div className="font-display italic font-bold">
-                    Naples, FL
+                    {language === 'en' ? ' care in Naples, FL' : ' en Naples, FL'}
                     <WellnessIcon size="md" color="green" className="inline-flex mx-1 md:mx-2 align-middle">
                       <Brain />
                     </WellnessIcon>
