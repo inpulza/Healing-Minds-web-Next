@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
@@ -19,6 +19,9 @@ const Header = () => {
   const [isMobileLocationsOpen, setIsMobileLocationsOpen] = useState(false);
   const servicesRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const servicesPanelRef = useRef<HTMLDivElement>(null);
+  const locationsPanelRef = useRef<HTMLDivElement>(null);
+  const baseBarRef = useRef<HTMLDivElement>(null);
   const [spacerHeight, setSpacerHeight] = useState(80); // Default height for mobile
 
   useEffect(() => {
@@ -34,31 +37,58 @@ const Header = () => {
     };
   }, []);
 
-  // Dynamic spacer height using ResizeObserver
+  // Predictive height calculation for synchronized accordion animation
+  useLayoutEffect(() => {
+    const baseBar = baseBarRef.current;
+    if (!baseBar) return;
+
+    // Calculate base height (logo + nav bar)
+    const baseHeight = baseBar.offsetHeight;
+
+    // Calculate panel height if open, clamped to CSS max-height
+    let panelHeight = 0;
+    if (isServicesOpen && servicesPanelRef.current) {
+      // Services panel has max-h-[500px]
+      panelHeight = Math.min(servicesPanelRef.current.scrollHeight, 500);
+    } else if (isLocationsOpen && locationsPanelRef.current) {
+      // Locations panel has max-h-[calc(100vh-8rem)]
+      const remSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const maxHeight = Math.max(0, window.innerHeight - (remSize * 8));
+      panelHeight = Math.min(locationsPanelRef.current.scrollHeight, maxHeight);
+    } else if (isMobileMenuOpen && headerRef.current) {
+      // For mobile menu, measure the entire header
+      panelHeight = Math.max(0, headerRef.current.scrollHeight - baseHeight);
+    }
+
+    // Set target height immediately for synchronized animation
+    setSpacerHeight(baseHeight + panelHeight);
+  }, [isServicesOpen, isLocationsOpen, isMobileMenuOpen]);
+
+  // Update on window resize
   useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
-
-    // Set initial height
-    setSpacerHeight(header.offsetHeight);
-
-    // Create ResizeObserver to watch header height changes
-    const resizeObserver = new ResizeObserver((entries) => {
-      // Use requestAnimationFrame for smooth updates
-      requestAnimationFrame(() => {
-        if (entries[0]) {
-          const newHeight = entries[0].contentRect.height;
-          setSpacerHeight(newHeight);
-        }
-      });
-    });
-
-    resizeObserver.observe(header);
-
-    return () => {
-      resizeObserver.disconnect();
+    const handleResize = () => {
+      const baseBar = baseBarRef.current;
+      if (!baseBar) return;
+      
+      const baseHeight = baseBar.offsetHeight;
+      let panelHeight = 0;
+      
+      if (isServicesOpen && servicesPanelRef.current) {
+        panelHeight = Math.min(servicesPanelRef.current.scrollHeight, 500);
+      } else if (isLocationsOpen && locationsPanelRef.current) {
+        const remSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const maxHeight = Math.max(0, window.innerHeight - (remSize * 8));
+        panelHeight = Math.min(locationsPanelRef.current.scrollHeight, maxHeight);
+      } else if (isMobileMenuOpen && headerRef.current) {
+        panelHeight = Math.max(0, headerRef.current.scrollHeight - baseHeight);
+      }
+      
+      setSpacerHeight(baseHeight + panelHeight);
     };
-  }, []);
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isServicesOpen, isLocationsOpen, isMobileMenuOpen]);
 
   // Close mobile menu when navigation occurs (but keep dropdowns open)
   useEffect(() => {
@@ -216,7 +246,7 @@ const Header = () => {
         : 'bg-transparent'
     } ${isServicesOpen || isLocationsOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-20 sm:h-24 md:h-28 lg:h-32'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-        <div className="flex items-center justify-between h-20 sm:h-24 md:h-28 lg:h-32 relative">
+        <div ref={baseBarRef} className="flex items-center justify-between h-20 sm:h-24 md:h-28 lg:h-32 relative">
           {/* Logo */}
           <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'}>
             <div className="text-sm sm:text-base md:text-lg font-body font-bold text-green-800">
@@ -333,7 +363,7 @@ const Header = () => {
         </div>
 
         {/* Expanded Services Menu - Now inside header */}
-        <div className={`transition-all duration-500 ease-in-out ${
+        <div ref={servicesPanelRef} className={`transition-all duration-500 ease-in-out ${
           isServicesOpen 
             ? 'max-h-[500px] opacity-100 py-8' 
             : 'max-h-0 opacity-0 py-0 pointer-events-none'
@@ -381,7 +411,7 @@ const Header = () => {
         </div>
 
         {/* Expanded Locations Menu - Now inside header */}
-        <div className={`transition-all duration-500 ease-in-out ${
+        <div ref={locationsPanelRef} className={`transition-all duration-500 ease-in-out ${
           isLocationsOpen 
             ? 'max-h-[calc(100vh-8rem)] opacity-100 py-4 md:py-6 overflow-y-auto overscroll-contain' 
             : 'max-h-0 opacity-0 py-0 pointer-events-none'
