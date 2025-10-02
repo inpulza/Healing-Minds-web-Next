@@ -128,7 +128,7 @@ const FloatingVideoBubble = () => {
                     transition={{ delay: 0.5 }}
                     className="mt-3"
                   >
-                    <span className="text-[10px] lg:text-xs font-medium text-white bg-black/60 px-2 py-1 rounded-full shadow-md whitespace-nowrap">
+                    <span className="text-[10px] lg:text-xs font-medium text-green-600 bg-white/90 px-2 py-1 rounded-full shadow-md whitespace-nowrap">
                       {language === 'es' ? '¡Haz clic para ver!' : 'Click to watch!'}
                     </span>
                   </motion.div>
