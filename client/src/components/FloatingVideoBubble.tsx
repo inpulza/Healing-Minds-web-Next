@@ -68,7 +68,7 @@ const FloatingVideoBubble = () => {
               damping: 20,
               duration: 0.4 
             }}
-            className="fixed bottom-6 right-6 z-[9998] lg:bottom-8 lg:right-8"
+            className="fixed bottom-20 right-6 z-[9998] lg:bottom-8 lg:right-8"
             style={{
               marginBottom: 'env(safe-area-inset-bottom, 0px)'
             }}
@@ -125,10 +125,10 @@ const FloatingVideoBubble = () => {
               </motion.button>
 
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap pointer-events-none"
+                className="absolute -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap pointer-events-none"
               >
                 <span className="text-xs font-medium text-gray-700 dark:text-gray-300 bg-white/90 dark:bg-gray-800/90 px-3 py-1 rounded-full shadow-md">
                   {language === 'es' ? '¡Haz clic para ver!' : 'Click to watch!'}
