@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, type KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Play, Volume2, VolumeX } from 'lucide-react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { useLanguage } from '@/hooks/useLanguage';
 
 const FloatingVideoBubble = () => {
@@ -34,6 +34,7 @@ const FloatingVideoBubble = () => {
 
   const handleBubbleClick = () => {
     setIsExpanded(true);
+    setIsMuted(false);
   };
 
   const handleDialogClose = () => {
@@ -140,19 +141,25 @@ const FloatingVideoBubble = () => {
 
       <Dialog open={isExpanded} onOpenChange={handleDialogClose}>
         <DialogContent 
-          className="max-w-md lg:max-w-2xl p-0 overflow-hidden bg-black border-none"
+          className="max-w-[95vw] sm:max-w-lg p-0 overflow-hidden bg-black border-none"
           aria-describedby="video-description"
         >
-          <div className="relative w-full" style={{ paddingBottom: '177.78%' }}>
+          <DialogTitle className="sr-only">
+            {language === 'es' 
+              ? 'Video de presentación de la Dra. Melva Reve' 
+              : 'Dr. Melva Reve Introduction Video'}
+          </DialogTitle>
+
+          <div className="relative w-full aspect-[9/16] max-h-[85vh]">
             <span id="video-description" className="sr-only">
               {language === 'es' 
-                ? 'Video de presentación de la Dra. Melva Reve' 
-                : 'Introduction video from Dr. Melva Reve'}
+                ? 'Video de presentación de la Dra. Melva Reve donde habla sobre sus servicios' 
+                : 'Introduction video from Dr. Melva Reve talking about her services'}
             </span>
             
             <iframe
               src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=${isMuted ? 1 : 0}&rel=0&modestbranding=1&playsinline=1`}
-              className="absolute inset-0 w-full h-full"
+              className="w-full h-full"
               allow="autoplay; encrypted-media; fullscreen"
               allowFullScreen
               title={language === 'es' 
