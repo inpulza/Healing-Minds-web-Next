@@ -178,13 +178,13 @@ const LocationEstero = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    <span className="font-display italic text-green-700">Compassionate Psychiatric Care</span> for{' '}
-                    <span className="font-display italic text-green-700">Estero Residents</span>
+                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                    <span className="font-display italic text-green-700">Estero, FL</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-display italic text-green-700">Atención Psiquiátrica Compasiva</span> para{' '}
-                    <span className="font-display italic text-green-700">Residentes de Estero</span>
+                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                    <span className="font-display italic text-green-700">Estero, FL</span>
                   </>
                 )}
               </h1>

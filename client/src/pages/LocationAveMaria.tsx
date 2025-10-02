@@ -177,13 +177,13 @@ const LocationAveMaria = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Compassionate Psychiatric Care for{' '}
-                    <span className="font-display italic text-green-700">Ave Maria</span> Residents
+                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                    <span className="font-display italic text-green-700">Ave Maria, FL</span>
                   </>
                 ) : (
                   <>
-                    Atención Psiquiátrica Compasiva para Residentes de{' '}
-                    <span className="font-display italic text-green-700">Ave Maria</span>
+                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                    <span className="font-display italic text-green-700">Ave Maria, FL</span>
                   </>
                 )}
               </h1>
