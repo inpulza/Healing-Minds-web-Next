@@ -13,11 +13,13 @@ import { useClarity } from '@/hooks/use-clarity';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { initGA, handleConsentChange } from '@/lib/analytics';
 import CookieBanner from '@/components/CookieBanner';
-import FloatingVideoBubble from '@/components/FloatingVideoBubble';
 import Home from '@/pages/Home';
 
 // Mobile Toolbar - Lazy loaded only for mobile viewports to optimize desktop performance
 const MobileToolbar = lazy(() => import('@/components/MobileToolbar'));
+
+// Floating Video Bubble - Lazy loaded for performance optimization
+const FloatingVideoBubble = lazy(() => import('@/components/FloatingVideoBubble'));
 
 // All non-critical pages lazy loaded for performance optimization
 const About = lazy(() => import('@/pages/About'));
@@ -219,7 +221,9 @@ function App() {
             <Suspense fallback={null}>
               <CookieBanner />
             </Suspense>
-            <FloatingVideoBubble />
+            <Suspense fallback={null}>
+              <FloatingVideoBubble />
+            </Suspense>
           </LanguageProvider>
         </CookieConsentProvider>
       </TooltipProvider>
