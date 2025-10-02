@@ -16,7 +16,7 @@ export const practiceInfo = {
   },
   hours: "Monday - Friday: 9:00 AM - 5:00 PM",
   googleMapsUrl:
-    "https://maps.google.com/?q=4760+Tamiami+Trl+N,+Ste+25,+Naples,+FL+34103",
+    "https://www.google.com/maps/dir/?api=1&destination=Healing+Minds+Psychiatry,4760+Tamiami+Trl+N+%23+25,Naples,FL+34103",
   emergencyNumbers: [
     { number: "911", description: "Emergency services" },
     { number: "988", description: "Suicide & Crisis Lifeline" },

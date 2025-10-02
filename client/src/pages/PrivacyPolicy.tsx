@@ -169,7 +169,7 @@ const PrivacyPolicy = () => {
                     </p>
                     <div className="mt-4 space-y-2 text-green-800 dark:text-green-300">
                       <p className="font-semibold">Healing Minds Psychiatry</p>
-                      <p>4760 Tamiami Trl N #25</p>
+                      <p>4760 Tamiami Trl N # 25</p>
                       <p>Naples, FL 34103</p>
                       <p>Email: info@healingmindsp.com</p>
                     </div>
@@ -312,7 +312,7 @@ const PrivacyPolicy = () => {
                     </p>
                     <div className="mt-4 space-y-2 text-green-800 dark:text-green-300">
                       <p className="font-semibold">Healing Minds Psychiatry</p>
-                      <p>4760 Tamiami Trl N #25</p>
+                      <p>4760 Tamiami Trl N # 25</p>
                       <p>Naples, FL 34103</p>
                       <p>Correo electrónico: info@healingmindsp.com</p>
                     </div>
