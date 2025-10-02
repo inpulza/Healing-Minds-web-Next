@@ -107,7 +107,7 @@ const FloatingVideoBubble = () => {
                   tabIndex={-1}
                 />
 
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-all duration-300 pointer-events-none">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 group-hover:bg-black/30 transition-all duration-300 pointer-events-none">
                   <motion.div
                     animate={{ 
                       scale: [1, 1.1, 1],
@@ -121,19 +121,19 @@ const FloatingVideoBubble = () => {
                   >
                     <Play className="w-5 h-5 lg:w-6 lg:h-6 text-green-600 ml-0.5" fill="currentColor" />
                   </motion.div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="mt-3"
+                  >
+                    <span className="text-[10px] lg:text-xs font-medium text-white bg-black/60 px-2 py-1 rounded-full shadow-md whitespace-nowrap">
+                      {language === 'es' ? '¡Haz clic para ver!' : 'Click to watch!'}
+                    </span>
+                  </motion.div>
                 </div>
               </motion.button>
-
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="absolute -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap pointer-events-none"
-              >
-                <span className="text-xs font-medium text-gray-700 dark:text-gray-300 bg-white/90 dark:bg-gray-800/90 px-3 py-1 rounded-full shadow-md">
-                  {language === 'es' ? '¡Haz clic para ver!' : 'Click to watch!'}
-                </span>
-              </motion.div>
             </div>
           </motion.div>
         )}
