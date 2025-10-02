@@ -12,7 +12,6 @@ import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useClarity } from '@/hooks/use-clarity';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { initGA, handleConsentChange } from '@/lib/analytics';
-import { addMedicalBusinessSchema } from '@/utils/seo';
 import CookieBanner from '@/components/CookieBanner';
 import Home from '@/pages/Home';
 
@@ -186,15 +185,6 @@ function App() {
     } else {
       // Initialize GA with consent check (it will check internally)
       initGA();
-    }
-
-    // Add structured data schemas
-    if (import.meta.env.DEV) {
-      console.log('🔧 Executing addMedicalBusinessSchema...');
-    }
-    addMedicalBusinessSchema();
-    if (import.meta.env.DEV) {
-      console.log('✅ Schema executed - NAP should be updated to # 25');
     }
     
     // Listen for granular consent changes
