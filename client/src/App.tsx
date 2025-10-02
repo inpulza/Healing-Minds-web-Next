@@ -13,6 +13,7 @@ import { useClarity } from '@/hooks/use-clarity';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { initGA, handleConsentChange } from '@/lib/analytics';
 import CookieBanner from '@/components/CookieBanner';
+import FloatingVideoBubble from '@/components/FloatingVideoBubble';
 import Home from '@/pages/Home';
 
 // Mobile Toolbar - Lazy loaded only for mobile viewports to optimize desktop performance
@@ -218,6 +219,7 @@ function App() {
             <Suspense fallback={null}>
               <CookieBanner />
             </Suspense>
+            <FloatingVideoBubble />
           </LanguageProvider>
         </CookieConsentProvider>
       </TooltipProvider>
