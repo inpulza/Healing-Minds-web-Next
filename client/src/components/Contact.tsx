@@ -10,7 +10,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import GoogleMapsEmbed from '@/components/GoogleMapsEmbed';
+import OptimizedImage from '@/components/OptimizedImage';
 import { Phone, Mail, MapPin, AlertTriangle } from 'lucide-react';
+import aetnaLogo from '../assets/insurance-aetna.webp';
+import ambetterLogo from '../assets/insurance-ambetter.webp';
+import cignaLogo from '../assets/insurance-cigna.webp';
+import medicareLogo from '../assets/insurance-medicare.webp';
+import firstHealthLogo from '../assets/insurance-first-health.webp';
+import medicaidLogo from '../assets/insurance-medicaid.webp';
+import floridaMedicaidLogo from '../assets/insurance-florida-medicaid.webp';
+import champvaLogo from '../assets/insurance-champva.webp';
+import sunshineHealthLogo from '../assets/insurance-sunshine.webp';
+import avmedLogo from '../assets/insurance-avmed.webp';
+import wellcareLogo from '../assets/insurance-wellcare.webp';
+import doctorsHealthcareLogo from '@assets/3_1755868276797.png';
+import floridaBlueLogo from '@assets/6_1755868276798.png';
+import unitedHealthcareLogo from '@assets/8_1755868276798.png';
+import oscarLogo from '@assets/10_1755868276798.png';
 
 interface FormData {
   firstName: string;
@@ -142,16 +158,60 @@ const Contact = () => {
     }
   ];
 
+  const insuranceLogos = [
+    { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
+    { src: unitedHealthcareLogo, alt: 'United Healthcare', name: 'United Healthcare' },
+    { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
+    { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
+    { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
+    { src: floridaBlueLogo, alt: 'Florida Blue', name: 'Florida Blue' },
+    { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' },
+    { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
+    { src: oscarLogo, alt: 'Oscar Health', name: 'Oscar' },
+    { src: wellcareLogo, alt: 'WellCare', name: 'WellCare' },
+    { src: sunshineHealthLogo, alt: 'Sunshine Health', name: 'Sunshine Health' },
+    { src: avmedLogo, alt: 'AvMed', name: 'AvMed' },
+    { src: doctorsHealthcareLogo, alt: 'Doctors Healthcare Plans', name: 'Doctors Healthcare' },
+    { src: champvaLogo, alt: 'CHAMPVA', name: 'CHAMPVA' },
+    { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' }
+  ];
+
   return (
     <section id="contact" className="py-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
             Get in <span className="font-display italic text-green-700">touch</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="contact-description">
             {t('contact.description')}
           </p>
+        </div>
+
+        {/* Insurance Section */}
+        <div className="mb-12">
+          <p className="text-center text-xs text-gray-500 mb-4 font-body uppercase tracking-wide">
+            {language === 'en' ? 'Insurance We Accept' : 'Seguros que Aceptamos'}
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
+            {insuranceLogos.map((logo, index) => (
+              <div 
+                key={index} 
+                className="flex items-center justify-center"
+                data-testid={`contact-insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <OptimizedImage
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-12 sm:h-14 md:h-16 w-auto object-contain filter grayscale opacity-70"
+                  width={80}
+                  height={64}
+                  priority={false}
+                  sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
