@@ -214,100 +214,9 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
-          {/* Contact Information */}
-          <div className="flex flex-col h-full">
-            <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-info-title">
-              {language === 'en' ? <>Contact <span className="font-display italic text-green-700">Information</span></> : <>Información de <span className="font-display italic text-green-700">Contacto</span></>}
-            </h3>
-            
-            <div className="space-y-6 mb-8">
-              {contactInfo.map((info, index) => {
-                const IconComponent = info.icon;
-                return (
-                  <div key={index} className="flex items-start" data-testid={`contact-info-${index}`}>
-                    <IconComponent className="w-6 h-6 text-primary-green mr-4 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-gray-900">{info.title}</h4>
-                      {info.link ? (
-                        <a 
-                          href={info.link} 
-                          className="text-primary-green hover:text-primary-green-hover"
-                          target={info.link.startsWith('http') ? '_blank' : undefined}
-                          rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                          aria-label={
-                            info.link?.startsWith('tel:') 
-                              ? (language === 'en' ? `Call us at ${info.value}` : `Llamarnos al ${info.value}`)
-                              : info.link?.startsWith('mailto:') 
-                                ? (language === 'en' ? `Send email to ${info.value}` : `Enviar email a ${info.value}`)
-                                : info.link?.startsWith('http')
-                                  ? (language === 'en' ? `View address on Google Maps - ${info.value}` : `Ver dirección en Google Maps - ${info.value}`)
-                                  : undefined
-                          }
-                          onClick={() => {
-                            if (info.link?.startsWith('tel:')) {
-                              trackEvent('phone_call_initiated');
-                              setTag('phone_click_location', 'contact_page');
-                            } else if (info.link?.startsWith('mailto:')) {
-                              trackEvent('email_initiated');
-                              setTag('email_click_location', 'contact_page');
-                            }
-                          }}
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <div className="text-gray-700 whitespace-pre-line">{info.value}</div>
-                      )}
-                      <p className="text-sm text-gray-600 mt-1">{info.subtext}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Emergency Services */}
-            <Card className="bg-yellow-50 border border-yellow-200 p-4" data-testid="emergency-info">
-              <div className="flex items-start">
-                <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">
-                    {t('contact.emergency')}
-                  </h4>
-                  <p className="text-sm text-gray-700 mb-2">
-                    {language === 'en' 
-                      ? 'If you are experiencing a mental health emergency, please call:'
-                      : 'Si está experimentando una emergencia de salud mental, por favor llame:'
-                    }
-                  </p>
-                  <div className="space-y-1 text-sm">
-                    <div><strong>911</strong> - {language === 'en' ? 'Emergency services' : 'Servicios de emergencia'}</div>
-                    <div><strong>988</strong> - {language === 'en' ? 'Suicide & Crisis Lifeline' : 'Línea de Vida de Suicidio y Crisis'}</div>
-                    <div><strong>(239) 263-7158</strong> - {language === 'en' ? 'David Lawrence Center Crisis Line' : 'Línea de Crisis del Centro David Lawrence'}</div>
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            {/* Telehealth Booking */}
-            <div className="mt-8 md:mt-auto">
-              <h3 className="text-xl font-body font-semibold text-gray-900 mb-4">
-                {language === 'en' ? (
-                  <>
-                    <span className="font-display italic text-blue-700">Telehealth</span> Appointments
-                  </>
-                ) : (
-                  <>
-                    Citas de <span className="font-display italic text-blue-700">Telesalud</span>
-                  </>
-                )}
-              </h3>
-              <CharmHealthBooking variant="default" showDescription={false} />
-            </div>
-          </div>
-
-          {/* Contact Form */}
-          <Card className="bg-white p-8 shadow-sm" data-testid="contact-form-card">
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
+          {/* Contact Form - Order 1 on mobile, right column on desktop */}
+          <Card className="bg-white p-8 shadow-sm order-1 md:order-2" data-testid="contact-form-card">
             <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-form-title">
               {language === 'en' ? <>Send us a <span className="font-display italic text-green-700">message</span></> : <>Envíanos un <span className="font-display italic text-green-700">mensaje</span></>}
             </h3>
@@ -430,6 +339,97 @@ const Contact = () => {
               </Button>
             </form>
           </Card>
+
+          {/* Contact Information - Order 2 on mobile, left column on desktop */}
+          <div className="order-2 md:order-1">
+            <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-info-title">
+              {language === 'en' ? <>Contact <span className="font-display italic text-green-700">Information</span></> : <>Información de <span className="font-display italic text-green-700">Contacto</span></>}
+            </h3>
+            
+            <div className="space-y-6">
+              {contactInfo.map((info, index) => {
+                const IconComponent = info.icon;
+                return (
+                  <div key={index} className="flex items-start" data-testid={`contact-info-${index}`}>
+                    <IconComponent className="w-6 h-6 text-primary-green mr-4 mt-1" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{info.title}</h4>
+                      {info.link ? (
+                        <a 
+                          href={info.link} 
+                          className="text-primary-green hover:text-primary-green-hover"
+                          target={info.link.startsWith('http') ? '_blank' : undefined}
+                          rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          aria-label={
+                            info.link?.startsWith('tel:') 
+                              ? (language === 'en' ? `Call us at ${info.value}` : `Llamarnos al ${info.value}`)
+                              : info.link?.startsWith('mailto:') 
+                                ? (language === 'en' ? `Send email to ${info.value}` : `Enviar email a ${info.value}`)
+                                : info.link?.startsWith('http')
+                                  ? (language === 'en' ? `View address on Google Maps - ${info.value}` : `Ver dirección en Google Maps - ${info.value}`)
+                                  : undefined
+                          }
+                          onClick={() => {
+                            if (info.link?.startsWith('tel:')) {
+                              trackEvent('phone_call_initiated');
+                              setTag('phone_click_location', 'contact_page');
+                            } else if (info.link?.startsWith('mailto:')) {
+                              trackEvent('email_initiated');
+                              setTag('email_click_location', 'contact_page');
+                            }
+                          }}
+                        >
+                          {info.value}
+                        </a>
+                      ) : (
+                        <div className="text-gray-700 whitespace-pre-line">{info.value}</div>
+                      )}
+                      <p className="text-sm text-gray-600 mt-1">{info.subtext}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Emergency Services - Order 3 on mobile, left column on desktop */}
+          <Card className="bg-yellow-50 border border-yellow-200 p-4 order-3 md:order-1" data-testid="emergency-info">
+            <div className="flex items-start">
+              <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  {t('contact.emergency')}
+                </h4>
+                <p className="text-sm text-gray-700 mb-2">
+                  {language === 'en' 
+                    ? 'If you are experiencing a mental health emergency, please call:'
+                    : 'Si está experimentando una emergencia de salud mental, por favor llame:'
+                  }
+                </p>
+                <div className="space-y-1 text-sm">
+                  <div><strong>911</strong> - {language === 'en' ? 'Emergency services' : 'Servicios de emergencia'}</div>
+                  <div><strong>988</strong> - {language === 'en' ? 'Suicide & Crisis Lifeline' : 'Línea de Vida de Suicidio y Crisis'}</div>
+                  <div><strong>(239) 263-7158</strong> - {language === 'en' ? 'David Lawrence Center Crisis Line' : 'Línea de Crisis del Centro David Lawrence'}</div>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Telehealth Booking - Order 4 on mobile, left column on desktop */}
+          <div className="order-4 md:order-1">
+            <h3 className="text-xl font-body font-semibold text-gray-900 mb-4">
+              {language === 'en' ? (
+                <>
+                  <span className="font-display italic text-blue-700">Telehealth</span> Appointments
+                </>
+              ) : (
+                <>
+                  Citas de <span className="font-display italic text-blue-700">Telesalud</span>
+                </>
+              )}
+            </h3>
+            <CharmHealthBooking variant="default" showDescription={false} />
+          </div>
         </div>
 
         {/* Google Maps Section - Within Container */}
