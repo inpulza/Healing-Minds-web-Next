@@ -5,6 +5,13 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### October 6, 2025 - TikTok Pixel Integration
+- **Implementation**: Added TikTok Pixel tracking with ID D3HT9QRC77UAH4NB96KG
+- **Architecture**: Created use-tiktok-pixel.ts hook following the same pattern as Clarity and Google Analytics
+- **Consent Integration**: TikTok Pixel requires marketing consent and integrates with existing GDPR-compliant consent management
+- **Features**: Automatic page view tracking on route changes, consent-based initialization, cookie cleanup on revocation
+- **Development Mode**: Disabled in development to prevent test data pollution, enabled only in production
+
 ### September 15, 2025 - Spanish Location URLs 404 Resolution
 - **Critical Fix**: Resolved 404 errors for Spanish location URLs that were present in sitemap.xml but not implemented in the application
 - **Implementation**: Added 10 Spanish location routes in App.tsx to complete the bilingual routing architecture:
@@ -54,7 +61,7 @@ Preferred communication style: Simple, everyday language.
 
 ### SEO and Analytics
 - **SEO Utilities**: Dynamic meta tag updates, server-side HTML injection for canonical tags and comprehensive MedicalClinic schema JSON-LD, and language-specific meta tags. Optimized robots.txt to prevent URL parameter spam.
-- **Analytics**: Google Analytics and Microsoft Clarity integration for behavioral tracking, including custom event tracking for phone calls, form submissions, and language changes.
+- **Analytics**: Google Analytics, Microsoft Clarity, and TikTok Pixel integration for comprehensive behavioral tracking, including custom event tracking for phone calls, form submissions, and language changes. All analytics services follow consistent pattern with development mode detection and GDPR-compliant consent integration.
 - **Multilingual SEO**: Language-specific meta tags and canonical URLs.
 - **Local SEO**: NAP consistency, geo-specific titles, Google Business Profile integration, and comprehensive Physician schema for Dr. Melva Reve.
 
@@ -93,5 +100,6 @@ Preferred communication style: Simple, everyday language.
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### Analytics and Monitoring
-- **Google Analytics**: Website analytics.
+- **Google Analytics**: Website analytics with consent-based initialization.
 - **Microsoft Clarity**: Behavioral analytics with session recordings, heatmaps, custom event tracking, and contextual tagging.
+- **TikTok Pixel**: Marketing conversion tracking with automatic page view tracking and consent-based initialization (marketing consent required).
