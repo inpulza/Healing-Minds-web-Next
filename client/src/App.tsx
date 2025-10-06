@@ -10,6 +10,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useClarity } from '@/hooks/use-clarity';
+import { useTikTokPixel } from '@/hooks/use-tiktok-pixel';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { initGA, handleConsentChange } from '@/lib/analytics';
 import CookieBanner from '@/components/CookieBanner';
@@ -98,6 +99,9 @@ function Router() {
   
   // Initialize Microsoft Clarity (guards prevent multiple initializations)
   useClarity();
+  
+  // Initialize TikTok Pixel (guards prevent multiple initializations)
+  useTikTokPixel();
   
   // Scroll to top on route changes
   useScrollToTop();
