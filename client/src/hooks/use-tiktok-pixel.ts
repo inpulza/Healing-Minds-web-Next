@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'wouter';
 
-const TIKTOK_PIXEL_ID = 'D3HT9QRC77UAH4NB96KG';
+const TIKTOK_PIXEL_ID = 'D3IKI7BC77UEJB9HBO0G';
 
 // Global guards to prevent multiple initializations
 let globalTikTokInitialized = false;
