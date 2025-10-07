@@ -5,6 +5,15 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### October 7, 2025 - TikTok Pixel Event Tracking System
+- **Enhanced Event Tracking**: Implemented comprehensive TikTok Pixel event tracking system with custom hook (useTikTokEvents.ts)
+- **Lead Events**: Integrated on contact form submissions (main contact page and modal) to track lead generation
+- **Contact Events**: Added on phone number clicks (Footer, Contact page, MobileToolbar) to track direct engagement
+- **ViewContent Events**: Implemented on all 6 service pages (Anxiety, Depression, ADHD, PTSD, Bipolar, Medication Management) with specific service names and content IDs
+- **ClickButton Events**: Added for telehealth booking buttons (CharmHealthBooking component with 3 variants, Footer, MobileToolbar)
+- **HIPAA Compliance**: All TikTok events use anonymous tracking without PII collection - no ttq.identify() used
+- **Consent Integration**: All events respect marketing consent requirement and integrate with GDPR-compliant consent management
+
 ### October 6, 2025 - TikTok Pixel Integration
 - **Implementation**: Added TikTok Pixel tracking with ID D3HT9QRC77UAH4NB96KG
 - **Architecture**: Created use-tiktok-pixel.ts hook following the same pattern as Clarity and Google Analytics
