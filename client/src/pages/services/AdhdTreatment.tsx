@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
@@ -18,6 +19,7 @@ import focusImage from "@assets/dfb74c06-cc22-4bd4-a763-984d9e0fb151_17552526343
 
 const AdhdTreatment = () => {
   const { language } = useLanguage();
+  const { trackServiceView } = useTikTokEvents();
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
   useEffect(() => {
@@ -47,7 +49,10 @@ const AdhdTreatment = () => {
         : "Tratamiento experto de TDAH para adultos con evaluación integral, manejo de medicamentos y estrategias conductuales para mejorar el enfoque y funcionamiento diario.",
       pageId: "adhd"
     });
-  }, [language]);
+
+    // Track TikTok ViewContent event
+    trackServiceView('ADHD Treatment', 'adhd');
+  }, [language, trackServiceView]);
 
   const symptoms = language === 'en' ? [
     {

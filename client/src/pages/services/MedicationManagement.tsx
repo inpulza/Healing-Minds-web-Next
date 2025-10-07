@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
@@ -18,6 +19,7 @@ import medicationCapsules from "@assets/e4031136-1b10-4229-8e1d-2c74e4186617_175
 
 const MedicationManagement = () => {
   const { language } = useLanguage();
+  const { trackServiceView } = useTikTokEvents();
 
   useEffect(() => {
     const seoData = {
@@ -46,7 +48,10 @@ const MedicationManagement = () => {
         : "Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales y planes de tratamiento personalizados.",
       pageId: "medication-management"
     });
-  }, [language]);
+
+    // Track TikTok ViewContent event
+    trackServiceView('Medication Management', 'medication-management');
+  }, [language, trackServiceView]);
 
   const benefits = language === 'en' ? [
     'Expert evaluation and monitoring',

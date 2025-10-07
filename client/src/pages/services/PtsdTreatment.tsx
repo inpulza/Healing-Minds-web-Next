@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
@@ -25,6 +26,7 @@ import consultationImage from "@assets/d7b136b4-35bd-482a-b24a-98a1c5bb1abf_1755
 
 const PtsdTreatment = () => {
   const { language } = useLanguage();
+  const { trackServiceView } = useTikTokEvents();
 
   useEffect(() => {
     const seoData = {
@@ -53,7 +55,10 @@ const PtsdTreatment = () => {
         : "Atención psiquiátrica informada en trauma para trastorno de estrés postraumático usando tratamientos basados en evidencia para ayudar a sanar de experiencias traumáticas.",
       pageId: "ptsd"
     });
-  }, [language]);
+
+    // Track TikTok ViewContent event
+    trackServiceView('PTSD Treatment', 'ptsd');
+  }, [language, trackServiceView]);
 
   const symptoms = language === 'en' ? [
     'Intrusive memories or flashbacks',

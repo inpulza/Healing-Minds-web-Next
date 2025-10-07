@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
@@ -18,6 +19,7 @@ import consultationImage from "../../assets/consultation-image.webp";
 
 const DepressionTreatment = () => {
   const { language } = useLanguage();
+  const { trackServiceView } = useTikTokEvents();
 
   useEffect(() => {
     const seoData = {
@@ -46,7 +48,10 @@ const DepressionTreatment = () => {
         : "Atención psiquiátrica integral para depresión mayor, depresión posparto y depresión estacional con planes de tratamiento personalizados y manejo de medicamentos.",
       pageId: "depression"
     });
-  }, [language]);
+
+    // Track TikTok ViewContent event
+    trackServiceView('Depression Treatment', 'depression');
+  }, [language, trackServiceView]);
 
   const symptoms = language === 'en' ? [
     'Persistent sadness or emptiness',

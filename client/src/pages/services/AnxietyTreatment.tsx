@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
@@ -18,6 +19,7 @@ import zenStonesImage from "@assets/2b5aedce-1c8b-495c-a402-1c0a19a1633b_1755211
 
 const AnxietyTreatment = () => {
   const { language } = useLanguage();
+  const { trackServiceView } = useTikTokEvents();
 
   useEffect(() => {
     const seoData = {
@@ -46,7 +48,10 @@ const AnxietyTreatment = () => {
         : "Atención psiquiátrica experta para trastornos de ansiedad incluyendo ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.",
       pageId: "anxiety"
     });
-  }, [language]);
+
+    // Track TikTok ViewContent event
+    trackServiceView('Anxiety Treatment', 'anxiety');
+  }, [language, trackServiceView]);
 
   const symptoms = language === 'en' ? [
     'Persistent worry or fear',

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
@@ -18,6 +19,7 @@ import drMelvaOfficeImage from "../../assets/dr-melva-office.webp";
 
 const BipolarTreatment = () => {
   const { language } = useLanguage();
+  const { trackServiceView } = useTikTokEvents();
 
   useEffect(() => {
     const seoData = {
@@ -46,7 +48,10 @@ const BipolarTreatment = () => {
         : "Atención psiquiátrica experta para trastorno bipolar con estabilización del ánimo, manejo de medicamentos y apoyo integral para bipolar I, II y ciclotimia.",
       pageId: "bipolar"
     });
-  }, [language]);
+
+    // Track TikTok ViewContent event
+    trackServiceView('Bipolar Treatment', 'bipolar');
+  }, [language, trackServiceView]);
 
   const symptoms = language === 'en' ? [
     {
