@@ -12,7 +12,7 @@ export function useTikTokEvents() {
     });
   };
 
-  const trackPhoneClick = (phoneNumber: string, location: 'header' | 'footer' | 'contact_page' = 'header') => {
+  const trackPhoneClick = (phoneNumber: string, location: string = 'header') => {
     track('Contact', {
       contents: [{
         content_type: 'service',
@@ -31,7 +31,7 @@ export function useTikTokEvents() {
     });
   };
 
-  const trackTelehealthClick = (source: 'header' | 'footer' | 'button' = 'button') => {
+  const trackTelehealthClick = (source: string = 'button') => {
     track('ClickButton', {
       contents: [{
         content_type: 'service',

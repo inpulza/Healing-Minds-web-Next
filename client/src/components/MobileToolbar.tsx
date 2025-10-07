@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import ContactFormModal from '@/components/ContactFormModal';
 import { Calendar, Phone, FileText } from 'lucide-react';
 import { SiWhatsapp } from 'react-icons/si';
@@ -8,6 +9,7 @@ import { SiWhatsapp } from 'react-icons/si';
 const MobileToolbar = () => {
   const { language } = useLanguage();
   const { trackEvent, setTag } = useClarity();
+  const { trackPhoneClick, trackTelehealthClick } = useTikTokEvents();
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   // CharmHealth booking URL from existing component
@@ -20,12 +22,14 @@ const MobileToolbar = () => {
   const handleBookingClick = () => {
     trackEvent('mobile_toolbar_booking_clicked');
     setTag('toolbar_action', 'booking');
+    trackTelehealthClick('mobile-toolbar');
     window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleCallClick = () => {
     trackEvent('mobile_toolbar_call_clicked');
     setTag('toolbar_action', 'call');
+    trackPhoneClick('(239) 423-0272', 'mobile-toolbar');
     window.location.href = phoneNumber;
   };
 

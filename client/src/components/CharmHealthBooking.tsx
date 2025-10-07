@@ -1,4 +1,5 @@
 import { useLanguage } from '@/hooks/useLanguage';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +17,7 @@ const CharmHealthBooking = ({
   className = '' 
 }: CharmHealthBookingProps) => {
   const { language } = useLanguage();
+  const { trackTelehealthClick } = useTikTokEvents();
 
   const charmHealthUrl = "https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2";
 
@@ -58,7 +60,10 @@ const CharmHealthBooking = ({
           {currentContent.badge}
         </Badge>
         <Button
-          onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
+          onClick={() => {
+            trackTelehealthClick('charm-health-compact');
+            window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
+          }}
           className="bg-blue-600 hover:bg-blue-700 text-white h-10 px-4 text-sm font-semibold"
           data-testid="button-charm-health-compact"
         >
@@ -110,7 +115,10 @@ const CharmHealthBooking = ({
           )}
           
           <Button
-            onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
+            onClick={() => {
+              trackTelehealthClick('charm-health-prominent');
+              window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
+            }}
             className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
             data-testid="button-charm-health-prominent"
           >
@@ -162,7 +170,10 @@ const CharmHealthBooking = ({
           )}
           
           <Button
-            onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
+            onClick={() => {
+              trackTelehealthClick('charm-health-default');
+              window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
+            }}
             className="bg-blue-600 hover:bg-blue-700 text-white"
             data-testid="button-charm-health-default"
           >
