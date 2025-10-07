@@ -1,5 +1,6 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Mail, Phone, MapPin, ArrowRight, Calendar, Linkedin, Facebook, Instagram } from 'lucide-react';
@@ -9,6 +10,7 @@ import TikTokIcon from '@/components/TikTokIcon';
 const Footer = () => {
   const { language } = useLanguage();
   const { trackEvent, setTag } = useClarity();
+  const { trackPhoneClick, trackTelehealthClick } = useTikTokEvents();
   const [email, setEmail] = useState('');
 
   const services = [
@@ -84,7 +86,10 @@ const Footer = () => {
                 }
               </p>
               <Button
-                onClick={() => window.open(charmHealthUrl, '_blank', 'noopener,noreferrer')}
+                onClick={() => {
+                  trackTelehealthClick('footer');
+                  window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
+                }}
                 size="sm"
                 className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold"
                 data-testid="footer-telehealth-button"
@@ -210,6 +215,7 @@ const Footer = () => {
                   onClick={() => {
                     trackEvent('phone_call_initiated');
                     setTag('phone_click_location', 'footer');
+                    trackPhoneClick('(239) 423-0272', 'footer');
                   }}
                 >
                   (239) 423-0272
