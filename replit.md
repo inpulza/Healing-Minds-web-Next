@@ -5,6 +5,11 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### October 7, 2025 - TikTok Pixel Update
+- **Pixel ID Updated**: Changed from D3HT9QRC77UAH4NB96KG to D3IKI7BC77UEJB9HBO0G
+- **Event Tracking Active**: All existing events (Lead, Contact, ViewContent, ClickButton) continue working with new pixel
+- **Integration Points**: Contact forms, phone clicks, service pages, telehealth buttons all tracking correctly
+
 ### October 7, 2025 - TikTok Pixel Event Tracking System
 - **Enhanced Event Tracking**: Implemented comprehensive TikTok Pixel event tracking system with custom hook (useTikTokEvents.ts)
 - **Lead Events**: Integrated on contact form submissions (main contact page and modal) to track lead generation
@@ -15,7 +20,7 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 - **Consent Integration**: All events respect marketing consent requirement and integrate with GDPR-compliant consent management
 
 ### October 6, 2025 - TikTok Pixel Integration
-- **Implementation**: Added TikTok Pixel tracking with ID D3HT9QRC77UAH4NB96KG
+- **Implementation**: Added TikTok Pixel tracking infrastructure
 - **Architecture**: Created use-tiktok-pixel.ts hook following the same pattern as Clarity and Google Analytics
 - **Consent Integration**: TikTok Pixel requires marketing consent and integrates with existing GDPR-compliant consent management
 - **Features**: Automatic page view tracking on route changes, consent-based initialization, cookie cleanup on revocation
@@ -111,4 +116,4 @@ Preferred communication style: Simple, everyday language.
 ### Analytics and Monitoring
 - **Google Analytics**: Website analytics with consent-based initialization.
 - **Microsoft Clarity**: Behavioral analytics with session recordings, heatmaps, custom event tracking, and contextual tagging.
-- **TikTok Pixel**: Marketing conversion tracking with automatic page view tracking and consent-based initialization (marketing consent required).
+- **TikTok Pixel**: Marketing conversion tracking with ID D3IKI7BC77UEJB9HBO0G, automatic page view tracking, and consent-based initialization (marketing consent required).
