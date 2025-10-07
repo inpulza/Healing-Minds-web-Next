@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,6 +42,7 @@ const Contact = () => {
   const { language, t } = useLanguage();
   const { toast } = useToast();
   const { trackEvent, setTag } = useClarity();
+  const { trackContactFormSubmission, trackPhoneClick } = useTikTokEvents();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -102,6 +104,9 @@ const Contact = () => {
       trackEvent('contact_form_submitted');
       setTag('contact_language', formData.preferredLanguage);
       setTag('contact_form_type', 'main_contact');
+
+      // Track TikTok Lead event
+      trackContactFormSubmission('contact');
 
       toast({
         title: language === 'en' ? 'Success!' : '¡Éxito!',
@@ -248,6 +253,7 @@ const Contact = () => {
                             if (info.link?.startsWith('tel:')) {
                               trackEvent('phone_call_initiated');
                               setTag('phone_click_location', 'contact_page');
+                              trackPhoneClick(info.value, 'contact_page');
                             } else if (info.link?.startsWith('mailto:')) {
                               trackEvent('email_initiated');
                               setTag('email_click_location', 'contact_page');

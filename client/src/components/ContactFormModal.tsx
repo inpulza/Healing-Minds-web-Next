@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -28,6 +29,7 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
   const { language, t } = useLanguage();
   const { toast } = useToast();
   const { trackEvent, setTag } = useClarity();
+  const { trackContactFormSubmission } = useTikTokEvents();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -89,6 +91,9 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
       trackEvent('contact_form_submitted');
       setTag('contact_language', formData.preferredLanguage);
       setTag('contact_form_type', 'mobile_modal');
+
+      // Track TikTok Lead event
+      trackContactFormSubmission('contact');
 
       toast({
         title: language === 'en' ? 'Success!' : '¡Éxito!',
