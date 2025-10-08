@@ -63,8 +63,8 @@ const CharmHealthBooking = ({
 
   if (variant === 'compact') {
     return (
-      <div className={`flex items-center gap-3 ${className}`}>
-        <Badge variant="outline" className="bg-[#ffffff] text-blue-700 border-blue-200 h-10 px-4 flex items-center text-sm">
+      <div className={`flex flex-col sm:flex-row items-stretch sm:items-center gap-3 ${className}`}>
+        <Badge variant="outline" className="bg-[#ffffff] text-blue-700 border-blue-200 h-12 sm:h-10 px-4 py-3 sm:py-0 flex items-center justify-center text-sm w-full sm:w-auto">
           <VideoIcon className="w-4 h-4 mr-2" />
           {currentContent.badge}
         </Badge>
@@ -73,7 +73,7 @@ const CharmHealthBooking = ({
             trackTelehealthClick('charm-health-compact');
             window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
           }}
-          className="bg-blue-600 hover:bg-blue-700 text-white h-10 px-4 text-sm font-semibold"
+          className="bg-blue-600 hover:bg-blue-700 text-white h-12 sm:h-10 px-4 py-3 sm:py-0 text-sm font-semibold w-full sm:w-auto"
           data-testid="button-charm-health-compact"
         >
           <Calendar className="w-4 h-4 mr-2" />
