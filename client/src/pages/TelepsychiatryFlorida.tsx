@@ -500,8 +500,8 @@ const TelepsychiatryFlorida = () => {
           </div>
         </section>
 
-        {/* Services Section - Cards with Image Placeholders */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        {/* Services Section - Cards with Image Placeholders and Mobile Carousel */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="services-title">
@@ -515,31 +515,87 @@ const TelepsychiatryFlorida = () => {
                 {currentContent.services.description}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {currentContent.services.list.map((service, index) => (
-                <div key={index} className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300" data-testid={`service-${index}`}>
-                  {/* Image Placeholder */}
-                  <div className="h-48 bg-gradient-to-br from-green-50 to-green-100">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <CheckCircle className="w-6 h-6 text-green-600" />
+            
+            {/* Desktop Grid / Mobile Carousel */}
+            <div className="relative">
+              {/* Carousel for Mobile */}
+              <div className="md:hidden">
+                <div className="overflow-hidden" ref={emblaRef2}>
+                  <div className="flex">
+                    {currentContent.services.list.map((service, index) => (
+                      <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
+                        <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
+                          {/* Image Placeholder */}
+                          <div className="h-48 bg-gradient-to-br from-green-50 to-green-100">
+                            <div className="w-full h-full flex items-center justify-center">
+                              <div className="text-center">
+                                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                  <CheckCircle className="w-6 h-6 text-green-600" />
+                                </div>
+                                <p className="text-green-600 font-body text-sm">Image Coming Soon</p>
+                              </div>
+                            </div>
+                          </div>
+                          {/* Content */}
+                          <div className="p-6">
+                            <h3 className="text-lg font-body font-bold text-green-800 mb-3">
+                              {service.title}
+                            </h3>
+                            <p className="text-gray-600 font-body text-sm leading-relaxed">
+                              {service.description}
+                            </p>
+                          </div>
                         </div>
-                        <p className="text-green-600 font-body text-sm">Image Coming Soon</p>
                       </div>
-                    </div>
-                  </div>
-                  {/* Content */}
-                  <div className="p-6">
-                    <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-600 font-body text-sm leading-relaxed">
-                      {service.description}
-                    </p>
+                    ))}
                   </div>
                 </div>
-              ))}
+                {/* Carousel Controls */}
+                <div className="flex items-center justify-center gap-4 mt-6">
+                  <button
+                    onClick={scrollPrev2}
+                    className="w-10 h-10 rounded-full bg-green-800 hover:bg-green-700 text-white flex items-center justify-center transition-colors"
+                    aria-label="Previous"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={scrollNext2}
+                    className="w-10 h-10 rounded-full bg-green-800 hover:bg-green-700 text-white flex items-center justify-center transition-colors"
+                    aria-label="Next"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Desktop Grid */}
+              <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {currentContent.services.list.map((service, index) => (
+                  <div key={index} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`service-${index}`}>
+                    {/* Image Placeholder */}
+                    <div className="h-48 bg-gradient-to-br from-green-50 to-green-100">
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <CheckCircle className="w-6 h-6 text-green-600" />
+                          </div>
+                          <p className="text-green-600 font-body text-sm">Image Coming Soon</p>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Content */}
+                    <div className="p-6">
+                      <h3 className="text-lg font-body font-bold text-green-800 mb-3">
+                        {service.title}
+                      </h3>
+                      <p className="text-gray-600 font-body text-sm leading-relaxed">
+                        {service.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
