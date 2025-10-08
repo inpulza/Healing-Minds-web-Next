@@ -1139,32 +1139,6 @@ const LocationImmokalee = () => {
           </div>
         </section>
 
-        {/* Telehealth Services Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
-                {language === 'en' ? (
-                  <>
-                    <span className="font-display italic text-green-800">Telehealth</span> Services Available
-                  </>
-                ) : (
-                  <>
-                    Servicios de <span className="font-display italic text-green-800">Telesalud</span> Disponibles
-                  </>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                {language === 'en' 
-                  ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
-                  : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
-                }
-              </p>
-              <CharmHealthBooking variant="prominent" />
-            </div>
-          </div>
-        </section>
-
         {/* FAQ Section */}
         <LocationFAQ locationFAQs={locationFAQs.immokalee} />
       </main>
