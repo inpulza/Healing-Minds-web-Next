@@ -142,12 +142,17 @@ const CharmHealthBooking = ({
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           
           {/* Icono y subtítulo en el borde inferior izquierdo */}
-          <div className="absolute bottom-10 left-8 sm:left-12 lg:left-16 flex items-center gap-3">
-            <div className={`w-12 h-12 ${colorScheme === 'green' ? 'bg-green-100' : 'bg-blue-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
-              <VideoIcon className={`w-6 h-6 ${colorScheme === 'green' ? 'text-green-600' : 'text-blue-600'}`} />
+          <div className="absolute bottom-10 left-8 sm:left-12 lg:left-16">
+            <div className="flex items-center gap-3 mb-2">
+              <div className={`w-12 h-12 ${colorScheme === 'green' ? 'bg-green-100' : 'bg-blue-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
+                <VideoIcon className={`w-6 h-6 ${colorScheme === 'green' ? 'text-green-600' : 'text-blue-600'}`} />
+              </div>
+              <p className={`${colorScheme === 'green' ? 'text-green-700' : 'text-blue-700'} font-medium sm:text-base text-[18px]`} data-testid="telehealth-subtitle-desktop">
+                {currentContent.subtitle}
+              </p>
             </div>
-            <p className={`${colorScheme === 'green' ? 'text-green-700' : 'text-blue-700'} font-medium sm:text-base text-[18px]`} data-testid="telehealth-subtitle-desktop">
-              {currentContent.subtitle}
+            <p className="text-gray-900 font-body font-bold text-xl ml-[60px]">
+              {currentContent.title}
             </p>
           </div>
           
@@ -170,29 +175,6 @@ const CharmHealthBooking = ({
                 <div className="mb-6">
                   {heroDescription}
                 </div>
-              )}
-              
-              {!heroDescription && (
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="telehealth-title-desktop">
-                  {currentContent.title}
-                </h3>
-              )}
-              
-              {showDescription && !heroDescription && (
-                <>
-                  <p className="text-gray-600 mb-6 leading-relaxed" data-testid="telehealth-description">
-                    {currentContent.description}
-                  </p>
-                  
-                  <div className="grid md:grid-cols-2 gap-3 mb-8">
-                    {currentContent.features.map((feature, index) => (
-                      <div key={index} className="flex items-center text-sm text-gray-700">
-                        <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
-                </>
               )}
               
               <Button
