@@ -251,9 +251,9 @@ const Header = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation - Centered */}
-          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2" ref={servicesRef}>
-            <nav className="flex items-center transition-all duration-500 backdrop-blur-sm rounded-full p-2 border border-green-600/30" data-testid="desktop-nav">
+          {/* Desktop Navigation - Full Width */}
+          <div className="hidden md:flex flex-1 justify-center px-8" ref={servicesRef}>
+            <nav className="flex items-center gap-2 lg:gap-4" data-testid="desktop-nav">
             {navigationItems.map((item) => (
               <div key={item.href} className="relative">
                 {item.hasDropdown ? (
@@ -267,7 +267,7 @@ const Header = () => {
                         setIsServicesOpen(false);
                       }
                     }}
-                    className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 flex items-center gap-2 after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
+                    className={`relative px-4 lg:px-6 py-3 rounded-full font-body font-medium text-sm lg:text-base transition-all duration-500 flex items-center gap-2 whitespace-nowrap after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
                       isActive(item.href) || (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen)
                         ? 'text-primary after:w-3/4'
                         : 'text-green-700 hover:text-primary after:w-0 hover:after:w-3/4'
@@ -290,7 +290,7 @@ const Header = () => {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`relative px-5 py-3 rounded-full font-body font-medium text-sm transition-all duration-500 after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
+                    className={`relative px-4 lg:px-6 py-3 rounded-full font-body font-medium text-sm lg:text-base transition-all duration-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
                       isActive(item.href)
                         ? 'text-primary after:w-3/4'
                         : 'text-green-700 hover:text-primary after:w-0 hover:after:w-3/4'
