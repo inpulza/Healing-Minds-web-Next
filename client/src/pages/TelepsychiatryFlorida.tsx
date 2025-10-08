@@ -432,28 +432,28 @@ const TelepsychiatryFlorida = () => {
                 {currentContent.benefits.description}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {currentContent.benefits.items.map((benefit, index) => (
                 <Card key={index} className="bg-green-50 border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
                   {benefit.image && (
-                    <div className="w-full aspect-square bg-white">
+                    <div className="w-full aspect-square bg-white p-4">
                       <img 
                         src={benefit.image} 
                         alt={benefit.title}
-                        className="w-full h-full object-contain p-4"
+                        className="w-full h-full object-contain rounded-2xl"
                       />
                     </div>
                   )}
-                  <div className="p-6 sm:p-8">
+                  <div className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <WellnessIcon size="sm" color="green">
                         <benefit.icon />
                       </WellnessIcon>
-                      <h3 className="text-xl font-body font-bold text-green-800">
+                      <h3 className="text-lg font-body font-bold text-green-800">
                         {benefit.title}
                       </h3>
                     </div>
-                    <p className="text-gray-700 font-body leading-relaxed">
+                    <p className="text-gray-700 font-body leading-relaxed text-sm">
                       {benefit.description}
                     </p>
                   </div>
@@ -593,11 +593,11 @@ const TelepsychiatryFlorida = () => {
                 return (
                   <Card key={index} className="bg-white border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`service-${index}`}>
                     {service.image && (
-                      <div className="w-full aspect-square bg-green-50">
+                      <div className="w-full aspect-square bg-green-50 p-4">
                         <img 
                           src={service.image} 
                           alt={service.title}
-                          className="w-full h-full object-contain p-4"
+                          className="w-full h-full object-contain rounded-2xl"
                         />
                       </div>
                     )}
@@ -608,7 +608,7 @@ const TelepsychiatryFlorida = () => {
                       <h3 className="text-lg font-body font-bold text-green-800 mb-2 text-center">
                         {service.title}
                       </h3>
-                      <p className="text-gray-600 font-body leading-relaxed text-center">
+                      <p className="text-gray-600 font-body leading-relaxed text-center text-sm">
                         {service.description}
                       </p>
                     </div>
