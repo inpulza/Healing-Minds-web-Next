@@ -80,8 +80,8 @@ const CharmHealthBooking = ({
       <Card className={`w-full overflow-hidden border-blue-200 ${className}`}>
         {/* Mobile Layout - Stacked */}
         <div className="md:hidden">
-          {/* Mobile Image - 9:16 aspect ratio, framed right-top to show lady and avoid watermark */}
-          <div className="relative aspect-[9/16]">
+          {/* Mobile Image - Shorter aspect ratio to crop bottom and remove watermark */}
+          <div className="relative aspect-[4/5]">
             <img 
               src={telehealthHeroBg} 
               alt="Telehealth Background"
