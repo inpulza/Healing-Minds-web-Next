@@ -170,10 +170,16 @@ const Hero = React.memo(() => {
                   </div>
                 </div>
                 
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight text-green-700 text-left mb-5" data-testid="hero-title">
-                  <div className="font-display italic font-bold">
-                    {language === 'en' ? 'Expert psychiatric care in Naples, FL' : 'Atención psiquiátrica experta en Naples, FL'}
-                  </div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight text-green-800 text-left mb-5 font-body font-bold" data-testid="hero-title">
+                  {language === 'en' ? (
+                    <>
+                      Expert <span className="font-display italic text-green-700">psychiatric care</span> in Naples, FL
+                    </>
+                  ) : (
+                    <>
+                      Atención <span className="font-display italic text-green-700">psiquiátrica experta</span> en Naples, FL
+                    </>
+                  )}
                 </h1>
                 
                 <div className="text-base md:text-lg lg:text-xl leading-relaxed font-body mb-6 text-[#1e6b3b]" data-testid="hero-description">
