@@ -261,7 +261,7 @@ const TelepsychiatryFlorida = () => {
       <Header />
       <main>
         {/* Hero Section - Without Doctor Image */}
-        <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-green-50">
+        <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-[#ffffff]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <div className="flex items-center justify-center gap-3 mb-6">
