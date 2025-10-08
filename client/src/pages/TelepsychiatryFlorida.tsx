@@ -24,6 +24,14 @@ const TelepsychiatryFlorida = () => {
     }
   });
 
+  const [emblaRef2, emblaApi2] = useEmblaCarousel({ 
+    loop: true,
+    align: 'start',
+    breakpoints: {
+      '(min-width: 768px)': { active: false }
+    }
+  });
+
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
@@ -48,6 +56,14 @@ const TelepsychiatryFlorida = () => {
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
+
+  const scrollPrev2 = useCallback(() => {
+    if (emblaApi2) emblaApi2.scrollPrev();
+  }, [emblaApi2]);
+
+  const scrollNext2 = useCallback(() => {
+    if (emblaApi2) emblaApi2.scrollNext();
+  }, [emblaApi2]);
 
   const content = {
     en: {
