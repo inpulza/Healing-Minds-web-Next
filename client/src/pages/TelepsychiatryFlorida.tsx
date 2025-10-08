@@ -80,7 +80,7 @@ const TelepsychiatryFlorida = () => {
       hero: {
         title: "Expert Psychiatric Care from Anywhere in Florida",
         subtitle: "Telepsychiatry Services Throughout Florida",
-        description: "At Healing Minds Psychiatry, we believe that access to exceptional mental health care should have no boundaries. Our Telepsychiatry (Telehealth) service eliminates distance and time barriers, connecting you with Dr. Melva Reve from the comfort and privacy of your home, wherever you are in Florida."
+        description: "Professional psychiatric care from the comfort of your home, wherever you are in Florida."
       },
       benefits: {
         title: "Why Choose Telepsychiatry?",
@@ -168,7 +168,7 @@ const TelepsychiatryFlorida = () => {
       hero: {
         title: "Atención Psiquiátrica Experta desde Cualquier Lugar de Florida",
         subtitle: "Servicios de Telepsiquiatría en Toda Florida",
-        description: "En Healing Minds Psychiatry, creemos que el acceso a un cuidado de salud mental excepcional no debería tener fronteras. Nuestro servicio de Telepsiquiatría (Telehealth) elimina las barreras de la distancia y el tiempo, conectándote con la Dra. Melva Reve desde la comodidad y privacidad de tu hogar, estés donde estés en Florida."
+        description: "Atención psiquiátrica profesional desde la comodidad de su hogar, esté donde esté en Florida."
       },
       benefits: {
         title: "¿Por Qué Elegir Telepsiquiatría?",
@@ -313,7 +313,7 @@ const TelepsychiatryFlorida = () => {
                     </h1>
                   }
                   heroDescription={
-                    <p className="text-base md:text-lg lg:text-xl leading-relaxed font-body text-[#1e6b3b]">
+                    <p className="text-sm md:text-base leading-relaxed font-body text-[#1e6b3b] max-w-md">
                       {currentContent.hero.description}
                     </p>
                   }
