@@ -811,7 +811,7 @@ const LocationGoldenGate = () => {
         </section>
 
         {/* Contact Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid lg:grid-cols-3 gap-12">
               <div className="lg:col-span-2">
