@@ -813,8 +813,8 @@ const LocationGoldenGate = () => {
         {/* Contact Section */}
         <section className="py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid lg:grid-cols-3 gap-12">
-              <div className="lg:col-span-2">
+            <div className="grid lg:grid-cols-2 gap-12">
+              <div className="lg:col-span-1">
                 <h2 className="text-3xl lg:text-4xl font-body font-bold text-green-800 mb-8">
                   {language === 'en' ? 'Ready to Begin Your Healing Journey?' : '¿Listo para Comenzar Su Viaje de Sanación?'}
                 </h2>
