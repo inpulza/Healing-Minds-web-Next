@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, VideoIcon, Smartphone, Monitor, CheckCircle } from 'lucide-react';
-import telehealthHeroBg from '../assets/telehealth-hero-bg.png?v=2';
+import telehealthHeroBg from '../assets/telehealth-hero-bg.png';
 
 interface CharmHealthBookingProps {
   variant?: 'default' | 'compact' | 'prominent';
