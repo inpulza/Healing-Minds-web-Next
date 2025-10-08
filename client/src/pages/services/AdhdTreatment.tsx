@@ -714,10 +714,10 @@ const AdhdTreatment = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <a 
                   href="tel:+12394230272"
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-4"
+                  className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-8 py-3 sm:py-4"
                   data-testid="button-call-now"
                 >
-                  <Phone className="w-5 h-5" />
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>
                     {language === 'en' ? 'Call Now: (239) 423-0272' : 'Llamar Ahora: (239) 423-0272'}
                   </span>
@@ -726,10 +726,10 @@ const AdhdTreatment = () => {
                 <Link href="/contact">
                   <Button 
                     variant="outline" 
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 border-2 border-green-700 text-green-700 hover:bg-green-50 px-8 py-4"
+                    className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 border-2 border-green-700 text-green-700 hover:bg-green-50 px-4 sm:px-8 py-3 sm:py-4"
                     data-testid="button-schedule-online"
                   >
-                    <Calendar className="w-5 h-5" />
+                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                     <span>
                       {language === 'en' ? 'Schedule Online' : 'Programar en Línea'}
                     </span>
