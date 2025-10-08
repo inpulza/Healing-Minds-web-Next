@@ -4,7 +4,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone, Brain, Heart } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
-import heroImage from '@assets/hero-doctor-new.webp';
+import heroImage from '@assets/hero-doctor-new.png';
 import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
 
 // Optimized Hero component with performance improvements
