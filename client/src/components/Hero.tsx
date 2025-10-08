@@ -71,7 +71,7 @@ const Hero = React.memo(() => {
               src={mobileHeroImage}
               alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in Naples, FL"
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ objectPosition: '85% top' }}
+              style={{ objectPosition: '95% top' }}
               width={768}
               height={450}
               loading="eager"
