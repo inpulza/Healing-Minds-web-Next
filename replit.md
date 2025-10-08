@@ -5,6 +5,12 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### October 8, 2025 - Location Pages Telehealth Section Removal
+- **Removed Section**: Completely eliminated Telehealth Services section from all Location pages to reduce friction
+- **Pages Updated**: Naples, Marco Island, Vanderbilt Beach, and Lely Resort
+- **Rationale**: Telehealth functionality is already prominently featured on dedicated TelepsychiatryFlorida page and in main navigation
+- **Clean Design**: Location pages now focus on local office information, services, and contact details
+
 ### October 8, 2025 - Location Pages Features Repositioning
 - **Layout Update**: Moved features/stats from inside hero container to horizontal badges below on all 10 Location pages
 - **Compact Hero**: Hero container now more square and compact without internal features grid
