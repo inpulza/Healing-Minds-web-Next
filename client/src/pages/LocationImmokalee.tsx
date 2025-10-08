@@ -161,79 +161,66 @@ const LocationImmokalee = () => {
     <div className="min-h-screen">
       <Header />
       <main>
-        {/* Hero Section - Service Page Style */}
+        {/* Hero Section */}
         <section className="pt-20 pb-8 sm:pb-12 lg:pb-16 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Text Content Section - Full Width */}
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <WellnessIcon size="sm" color="blue">
-                  <MapPin />
-                </WellnessIcon>
-                <span className="text-blue-700 font-body font-semibold text-lg">
-                  {language === 'en' ? 'Serving Immokalee' : 'Sirviendo a Immokalee'}
-                </span>
+            <div className="relative aspect-[18/9] rounded-3xl overflow-hidden border border-blue-200 shadow-2xl">
+              <div className="absolute inset-0">
+                <OptimizedImage
+                  src={heroLocationImage}
+                  alt="Dr. Melva Reve serving Immokalee - Professional mental health care in a welcoming environment"
+                  className="w-full h-full object-cover"
+                  width={1200}
+                  height={600}
+                  priority={true}
+                  sizes="(max-width: 640px) 600px, (max-width: 1024px) 800px, 1200px"
+                />
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Immokalee, FL</span>
-                  </>
-                ) : (
-                  <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Immokalee, FL</span>
-                  </>
-                )}
-              </h1>
-
-              {/* Hero Image - Dr. Melva at Practice */}
-              <div className="mb-8">
-                <div className="max-w-4xl mx-auto">
-                  <div className="w-full aspect-[1200/667] rounded-2xl overflow-hidden shadow-lg">
-                    <OptimizedImage
-                      src={heroLocationImage}
-                      alt="Dr. Melva Reve serving Immokalee - Professional mental health care in a welcoming environment"
-                      className="w-full h-full object-cover object-center"
-                      width={1200}
-                      height={675}
-                      priority={true}
-                      sizes="(max-width: 640px) 600px, (max-width: 1024px) 800px, 1200px"
-                    />
+              <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-white/15 to-transparent" />
+              
+              <div className="relative h-full flex flex-col items-start justify-start pt-12 px-6 sm:px-12 lg:px-16">
+                <div className="flex flex-wrap gap-3 mb-6">
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-3 h-3 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                      {language === 'en' ? 'Serving Immokalee' : 'Sirviendo a Immokalee'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-3 h-3 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                      {language === 'en' ? 'Bilingual Services' : 'Servicios Bilingües'}
+                    </span>
                   </div>
                 </div>
-              </div>
-              
-              <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto font-body">
-                {language === 'en' 
-                  ? 'Serving residents of Immokalee with expert psychiatric care from our conveniently located Naples practice. Expert mental health care with bilingual services, modern facilities, and comprehensive treatment options for anxiety, depression, ADHD, PTSD, and more.'
-                  : 'Sirviendo a los residentes de Immokalee con atención psiquiátrica experta desde nuestra práctica convenientemente ubicada en Naples. Atención experta de salud mental con servicios bilingües, instalaciones modernas y opciones de tratamiento integral para ansiedad, depresión, TDAH, TEPT y más.'}
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
+
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-4 max-w-3xl">
+                  {language === 'en' ? (
+                    <>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in Immokalee</>
+                  ) : (
+                    <>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en Immokalee</>
+                  )}
+                </h1>
+
+                <p className="text-sm md:text-base text-gray-700 mb-6 max-w-md font-body leading-relaxed">
+                  {language === 'en' 
+                    ? 'Expert mental health care for Immokalee residents with bilingual services and comprehensive treatment options.'
+                    : 'Atención experta de salud mental para residentes de Immokalee con servicios bilingües y opciones de tratamiento integral.'}
+                </p>
+
+                <Button
+                  size="lg"
+                  className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300 shadow-lg"
                   onClick={() => window.location.href = '/contact'}
                   data-testid="button-schedule-consultation"
                 >
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
-                    <Calendar className="w-4 h-4 text-white" />
-                  </div>
+                  <Calendar className="w-5 h-5" />
                   {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
-                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
-                  data-testid="button-get-directions"
-                >
-                  <Navigation className="w-5 h-5" />
-                  {content.getDirections}
                 </Button>
               </div>
             </div>

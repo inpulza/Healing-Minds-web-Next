@@ -4,7 +4,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { updateSEO } from '@/utils/seo';
 import { Button } from '@/components/ui/button';
-import { VideoIcon, CheckCircle, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { VideoIcon, CheckCircle, MapPin, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import InsuranceLogos from '@/components/InsuranceLogos';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
@@ -26,6 +27,7 @@ import medicationManagementImg from '@assets/generated_images/Medication_managem
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
+  const { trackTelehealthClick } = useTikTokEvents();
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true,
     align: 'start',
@@ -672,51 +674,31 @@ const TelepsychiatryFlorida = () => {
 
         {/* Final CTA Section */}
         <section className="py-16 sm:py-20 lg:py-24 bg-green-50">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="cta-title">
-                {language === 'en' ? (
-                  <>Ready to Get <span className="font-display italic text-green-700">Started</span>?</>
-                ) : (
-                  <>¿Listo para <span className="font-display italic text-green-700">Comenzar</span>?</>
-                )}
-              </h2>
-              <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed" data-testid="cta-description">
-                {language === 'en' 
-                  ? 'Quality mental health care is just a click away.'
-                  : 'La atención de salud mental de calidad está a solo un clic de distancia.'
-                }
-              </p>
-            </div>
-            <CharmHealthBooking variant="prominent" showDescription={false} />
-            
-            {/* Badges below the card */}
-            <div className="flex flex-wrap gap-3 justify-center mt-6">
-              <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <VideoIcon className="w-3 h-3 text-blue-600" />
-                </div>
-                <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                  {language === 'en' ? 'Telehealth Available' : 'Telesalud Disponible'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-3 h-3 text-blue-600" />
-                </div>
-                <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                  {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-3 h-3 text-blue-600" />
-                </div>
-                <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                  {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
-                </span>
-              </div>
-            </div>
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="cta-title">
+              {language === 'en' ? (
+                <>Ready to Get <span className="font-display italic text-green-700">Started</span>?</>
+              ) : (
+                <>¿Listo para <span className="font-display italic text-green-700">Comenzar</span>?</>
+              )}
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed mb-8" data-testid="cta-description">
+              {language === 'en' 
+                ? 'Quality mental health care is just a click away.'
+                : 'La atención de salud mental de calidad está a solo un clic de distancia.'
+              }
+            </p>
+            <Button
+              onClick={() => {
+                trackTelehealthClick('cta-section');
+                window.open("https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2", '_blank', 'noopener,noreferrer');
+              }}
+              className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+              data-testid="cta-schedule-button"
+            >
+              <Calendar className="w-5 h-5 mr-2 inline" />
+              {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
+            </Button>
           </div>
         </section>
       </main>
