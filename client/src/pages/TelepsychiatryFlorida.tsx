@@ -80,7 +80,7 @@ const TelepsychiatryFlorida = () => {
       hero: {
         title: "Expert Psychiatric Care from Anywhere in Florida",
         subtitle: "Telepsychiatry Services Throughout Florida",
-        description: "Professional psychiatric care from the comfort of your home, wherever you are in Florida."
+        description: "Connect with Dr. Melva Reve from the comfort of your home. Professional psychiatric care designed to eliminate distance barriers, wherever you are in Florida."
       },
       benefits: {
         title: "Why Choose Telepsychiatry?",
@@ -168,7 +168,7 @@ const TelepsychiatryFlorida = () => {
       hero: {
         title: "Atención Psiquiátrica Experta desde Cualquier Lugar de Florida",
         subtitle: "Servicios de Telepsiquiatría en Toda Florida",
-        description: "Atención psiquiátrica profesional desde la comodidad de su hogar, esté donde esté en Florida."
+        description: "Conéctese con la Dra. Melva Reve desde la comodidad de su hogar. Atención psiquiátrica profesional diseñada para eliminar barreras de distancia, esté donde esté en Florida."
       },
       benefits: {
         title: "¿Por Qué Elegir Telepsiquiatría?",
