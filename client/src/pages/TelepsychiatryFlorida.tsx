@@ -34,7 +34,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import floridaMap from '@/assets/florida-map.webp';
-import floridaStateImage from '@/assets/telepsychiatry-florida-state.webp';
+import doctorImage from '@/assets/doctor-consultation.webp';
 // Generated benefit images
 import statewideAccessImg from '@assets/generated_images/Statewide_telepsychiatry_access_concept_b85ef47e.png';
 import saveTimeImg from '@assets/generated_images/Time_saving_telehealth_concept_4adac1c8.png';
@@ -397,14 +397,14 @@ const TelepsychiatryFlorida = () => {
               </div>
             </div>
 
-            {/* Hero Image - Solo mapa de Florida */}
-            <div className="mb-12 max-w-4xl mx-auto">
+            {/* Hero Image - Dr. Melva Reve */}
+            <div className="mb-12">
               <Card className="overflow-hidden border-green-100">
                 <img 
-                  src={floridaStateImage} 
-                  alt="Florida state coverage for telepsychiatry services"
-                  className="w-full h-[400px] object-cover"
-                  data-testid="hero-image-florida"
+                  src={doctorImage} 
+                  alt="Dr. Melva Reve providing telepsychiatry services in Florida"
+                  className="w-full h-[400px] sm:h-[450px] md:h-[500px] object-cover"
+                  data-testid="hero-image-doctor"
                 />
               </Card>
             </div>
