@@ -85,7 +85,8 @@ const CharmHealthBooking = ({
             <img 
               src={telehealthHeroBg} 
               alt="Telehealth Background"
-              className="absolute inset-0 w-full h-full object-cover object-right-top"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ objectPosition: '75% top' }}
             />
           </div>
           
