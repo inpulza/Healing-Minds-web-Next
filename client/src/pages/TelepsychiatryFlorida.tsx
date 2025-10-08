@@ -551,12 +551,12 @@ const TelepsychiatryFlorida = () => {
                 </div>
 
                 {/* Doctor Image */}
-                <div className="relative order-1 md:order-2">
-                  <div className="w-full h-full min-h-[400px] md:min-h-full rounded-xl sm:rounded-2xl overflow-hidden">
+                <div className="relative order-1 md:order-2 flex items-center justify-center">
+                  <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden">
                     <img
                       src={drMelvaOffice}
                       alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing telepsychiatry services"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top"
                       loading="lazy"
                       decoding="async"
                       data-testid="doctor-about-image"
