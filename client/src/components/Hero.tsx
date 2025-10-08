@@ -3,7 +3,6 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone, Brain, Heart } from 'lucide-react';
-import WellnessIcon from '@/components/WellnessIcon';
 import heroImage from '../assets/hero-doctor-latest.png';
 import mobileHeroImage from '../assets/hero-doctor-latest.png';
 
@@ -84,27 +83,29 @@ const Hero = React.memo(() => {
             <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
               <div className="max-w-sm mx-auto">
                 {/* Mobile Title */}
-                <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center mb-3" data-testid="hero-title-mobile">
-                  <div className="font-display italic font-bold mb-2">
-                    {language === 'en' ? 'Expert psychiatric care in' : 'Atención psiquiátrica experta en'}
-                  </div>
-                  <div className="font-display italic font-bold">
-                    Naples, FL
-                    <WellnessIcon size="sm" color="green" className="inline-flex mx-1 align-middle">
-                      <Brain />
-                    </WellnessIcon>
-                  </div>
+                <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
+                  {language === 'en' ? (
+                    <>
+                      Expert <span className="font-display italic">psychiatric care</span> in Naples, FL
+                    </>
+                  ) : (
+                    <>
+                      Atención <span className="font-display italic">psiquiátrica experta</span> en Naples, FL
+                    </>
+                  )}
                 </h1>
-                
-                {/* Mobile Description */}
-                <div className="text-sm leading-relaxed font-body text-white/90" data-testid="hero-description-mobile">
-                  <span>{t('hero.description')}</span>
-                </div>
               </div>
             </div>
           </div>
 
-          {/* Mobile Action Buttons - Below photo container */}
+          {/* Mobile Description - Above buttons */}
+          <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
+            {language === 'en' 
+              ? 'Compassionate care for your mental well-being in Naples, FL.' 
+              : 'Atención compasiva para su bienestar mental en Naples, FL.'}
+          </p>
+
+          {/* Mobile Action Buttons - Below description */}
           <div className="flex flex-col gap-3 px-4">
             <Link href="/services">
               <Button
