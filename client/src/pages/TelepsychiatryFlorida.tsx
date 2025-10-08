@@ -119,22 +119,26 @@ const TelepsychiatryFlorida = () => {
           {
             icon: Brain,
             title: "Comprehensive Evaluations",
-            description: "Initial psychiatric assessments for accurate diagnosis"
+            description: "Initial psychiatric assessments for accurate diagnosis",
+            image: null
           },
           {
             icon: Heart,
             title: "Medication Management",
-            description: "Expert treatment for anxiety, depression, ADHD, and more"
+            description: "Expert treatment for anxiety, depression, ADHD, and more",
+            image: null
           },
           {
             icon: CheckCircle,
             title: "Follow-Up Care",
-            description: "Ongoing support and prescription management"
+            description: "Ongoing support and prescription management",
+            image: patientCareImage
           },
           {
             icon: Users,
             title: "Bilingual Services",
-            description: "Professional care in English or Spanish"
+            description: "Professional care in English or Spanish",
+            image: null
           }
         ]
       },
@@ -244,22 +248,26 @@ const TelepsychiatryFlorida = () => {
           {
             icon: Brain,
             title: "Evaluaciones Integrales",
-            description: "Evaluaciones psiquiátricas iniciales para diagnóstico preciso"
+            description: "Evaluaciones psiquiátricas iniciales para diagnóstico preciso",
+            image: null
           },
           {
             icon: Heart,
             title: "Manejo de Medicamentos",
-            description: "Tratamiento experto para ansiedad, depresión, TDAH y más"
+            description: "Tratamiento experto para ansiedad, depresión, TDAH y más",
+            image: null
           },
           {
             icon: CheckCircle,
             title: "Atención de Seguimiento",
-            description: "Apoyo continuo y manejo de prescripciones"
+            description: "Apoyo continuo y manejo de prescripciones",
+            image: patientCareImage
           },
           {
             icon: Users,
             title: "Servicios Bilingües",
-            description: "Atención profesional en inglés o español"
+            description: "Atención profesional en inglés o español",
+            image: null
           }
         ]
       },
@@ -310,21 +318,21 @@ const TelepsychiatryFlorida = () => {
     <div className="min-h-screen">
       <Header />
       <main className="pt-16">
-        {/* Hero Section - Modern Design with Images */}
-        <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-gradient-to-b from-blue-50 to-white">
+        {/* Hero Section */}
+        <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-gradient-to-b from-green-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Hero Content */}
             <div className="text-center mb-12">
               <div className="flex items-center justify-center gap-3 mb-6">
-                <WellnessIcon size="sm" color="blue">
+                <WellnessIcon size="sm" color="green">
                   <VideoIcon />
                 </WellnessIcon>
-                <span className="text-blue-700 font-body font-semibold text-lg" data-testid="hero-tagline">
+                <span className="text-green-700 font-body font-semibold text-lg" data-testid="hero-tagline">
                   {currentContent.hero.tagline}
                 </span>
               </div>
               
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-blue-800 mb-6" data-testid="telepsychiatry-title">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="telepsychiatry-title">
                 {currentContent.hero.title}
               </h1>
               
@@ -336,10 +344,10 @@ const TelepsychiatryFlorida = () => {
                 <Link href="/contact">
                   <Button 
                     size="lg" 
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
+                    className="bg-green-600 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
                     data-testid="button-schedule-virtual"
                   >
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-blue-500">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
                       <Calendar className="w-4 h-4 text-white" />
                     </div>
                     {currentContent.hero.ctaPrimary}
@@ -350,11 +358,11 @@ const TelepsychiatryFlorida = () => {
                   <Button 
                     variant="outline" 
                     size="lg" 
-                    className="border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
+                    className="border-green-600 text-green-600 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
                     data-testid="button-call-info"
                   >
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-blue-100">
-                      <Phone className="w-4 h-4 text-blue-600" />
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
+                      <Phone className="w-4 h-4 text-green-600" />
                     </div>
                     {currentContent.hero.ctaSecondary}
                   </Button>
@@ -362,21 +370,13 @@ const TelepsychiatryFlorida = () => {
               </div>
             </div>
 
-            {/* Hero Images Grid */}
-            <div className="grid md:grid-cols-2 gap-6 mb-12">
-              <Card className="overflow-hidden border-blue-100">
-                <img 
-                  src={patientCareImage} 
-                  alt="Patient receiving compassionate mental health care"
-                  className="w-full h-[300px] object-cover"
-                  data-testid="hero-image-patient"
-                />
-              </Card>
-              <Card className="overflow-hidden border-blue-100">
+            {/* Hero Image - Solo mapa de Florida */}
+            <div className="mb-12 max-w-4xl mx-auto">
+              <Card className="overflow-hidden border-green-100">
                 <img 
                   src={floridaStateImage} 
                   alt="Florida state coverage for telepsychiatry services"
-                  className="w-full h-[300px] object-cover"
+                  className="w-full h-[400px] object-cover"
                   data-testid="hero-image-florida"
                 />
               </Card>
@@ -385,11 +385,11 @@ const TelepsychiatryFlorida = () => {
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               {currentContent.stats.map((stat, index) => (
-                <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-blue-100 shadow-sm" data-testid={`stat-${index}`}>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <stat.icon className="w-6 h-6 text-blue-600" />
+                <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-green-100 shadow-sm" data-testid={`stat-${index}`}>
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <stat.icon className="w-6 h-6 text-green-600" />
                   </div>
-                  <div className="text-2xl font-bold text-blue-800 whitespace-nowrap">{stat.value}</div>
+                  <div className="text-2xl font-bold text-green-800 whitespace-nowrap">{stat.value}</div>
                   <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
                 </div>
               ))}
@@ -401,8 +401,12 @@ const TelepsychiatryFlorida = () => {
         <section className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="benefits-title">
-                {currentContent.benefits.title}
+              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="benefits-title">
+                {language === 'en' ? (
+                  <>Why Choose <span className="font-display italic text-green-700">Telepsychiatry</span>?</>
+                ) : (
+                  <>¿Por Qué Elegir <span className="font-display italic text-green-700">Telepsiquiatría</span>?</>
+                )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="benefits-description">
                 {currentContent.benefits.description}
@@ -410,15 +414,15 @@ const TelepsychiatryFlorida = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {currentContent.benefits.items.map((benefit, index) => (
-                <Card key={index} className="bg-blue-50 border-blue-100 p-6 sm:p-8 hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
+                <Card key={index} className="bg-green-50 border-green-100 p-6 sm:p-8 hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
-                      <WellnessIcon size="md" color="blue">
+                      <WellnessIcon size="md" color="green">
                         <benefit.icon />
                       </WellnessIcon>
                     </div>
                     <div>
-                      <h3 className="text-xl font-body font-bold text-blue-800 mb-3">
+                      <h3 className="text-xl font-body font-bold text-green-800 mb-3">
                         {benefit.title}
                       </h3>
                       <p className="text-gray-700 font-body leading-relaxed">
@@ -433,18 +437,22 @@ const TelepsychiatryFlorida = () => {
         </section>
 
         {/* Florida Map Section */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-blue-50">
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="map-title">
-                {currentContent.mapSection.title}
+              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="map-title">
+                {language === 'en' ? (
+                  <>Serving <span className="font-display italic text-green-700">All</span> of Florida</>
+                ) : (
+                  <>Sirviendo a <span className="font-display italic text-green-700">Toda</span> Florida</>
+                )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="map-description">
                 {currentContent.mapSection.description}
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-blue-100">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-green-100">
               <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
                 {/* Florida Map */}
                 <div className="absolute inset-0">
@@ -456,19 +464,19 @@ const TelepsychiatryFlorida = () => {
                 </div>
 
                 {/* Coverage Overlay */}
-                <div className="absolute inset-0 bg-blue-500 bg-opacity-5 border-2 border-blue-400 border-opacity-20 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-green-500 bg-opacity-5 border-2 border-green-400 border-opacity-20 rounded-2xl"></div>
 
                 {/* Compass */}
                 <div className="absolute top-4 right-4 z-10">
                   <div className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-200">
-                    <Navigation className="w-5 h-5 text-blue-600" />
+                    <Navigation className="w-5 h-5 text-green-600" />
                   </div>
                 </div>
 
                 {/* Coverage Badge */}
                 <div className="absolute bottom-4 left-4 z-10">
-                  <div className="bg-white bg-opacity-95 rounded-lg shadow-lg px-4 py-2 border border-blue-200">
-                    <div className="flex items-center gap-2 text-sm text-blue-700 font-medium">
+                  <div className="bg-white bg-opacity-95 rounded-lg shadow-lg px-4 py-2 border border-green-200">
+                    <div className="flex items-center gap-2 text-sm text-green-700 font-medium">
                       <VideoIcon className="w-4 h-4" />
                       <span>{currentContent.mapSection.statewideLabel}</span>
                     </div>
@@ -485,7 +493,7 @@ const TelepsychiatryFlorida = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   <span className="text-sm font-medium text-gray-700">
                     {currentContent.mapSection.telehealthLabel}
                   </span>
@@ -499,8 +507,12 @@ const TelepsychiatryFlorida = () => {
         <section className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="process-title">
-                {currentContent.process.title}
+              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="process-title">
+                {language === 'en' ? (
+                  <>How It <span className="font-display italic text-green-700">Works</span></>
+                ) : (
+                  <>Cómo <span className="font-display italic text-green-700">Funciona</span></>
+                )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="process-description">
                 {currentContent.process.description}
@@ -509,12 +521,12 @@ const TelepsychiatryFlorida = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
               {currentContent.process.steps.map((step, index) => (
                 <div key={index} className="relative" data-testid={`process-step-${index}`}>
-                  <Card className="bg-blue-50 border-blue-100 p-6 sm:p-8 h-full hover:shadow-lg transition-shadow duration-300">
+                  <Card className="bg-green-50 border-green-100 p-6 sm:p-8 h-full hover:shadow-lg transition-shadow duration-300">
                     <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-green-600 text-white flex items-center justify-center text-2xl font-bold flex-shrink-0">
                         {step.number}
                       </div>
-                      <h3 className="text-xl font-body font-bold text-blue-800">
+                      <h3 className="text-xl font-body font-bold text-green-800">
                         {step.title}
                       </h3>
                     </div>
@@ -524,7 +536,7 @@ const TelepsychiatryFlorida = () => {
                   </Card>
                   {index < currentContent.process.steps.length - 1 && (
                     <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                      <ArrowRight className="w-8 h-8 text-blue-300" />
+                      <ArrowRight className="w-8 h-8 text-green-300" />
                     </div>
                   )}
                 </div>
@@ -533,12 +545,16 @@ const TelepsychiatryFlorida = () => {
           </div>
         </section>
 
-        {/* Services Section */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-blue-50">
+        {/* Services Section - Con imagen de patient care */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="services-title">
-                {currentContent.services.title}
+              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="services-title">
+                {language === 'en' ? (
+                  <>Complete <span className="font-display italic text-green-700">Psychiatric</span> Services via Telehealth</>
+                ) : (
+                  <>Servicios <span className="font-display italic text-green-700">Psiquiátricos</span> Completos vía Telesalud</>
+                )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="services-description">
                 {currentContent.services.description}
@@ -548,14 +564,23 @@ const TelepsychiatryFlorida = () => {
               {currentContent.services.items.map((service, index) => {
                 const IconComponent = service.icon;
                 return (
-                  <Card key={index} className="bg-white border-blue-100 p-6 text-center hover:shadow-lg transition-shadow duration-300" data-testid={`service-${index}`}>
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <IconComponent className="w-8 h-8 text-blue-600" />
+                  <Card key={index} className="bg-white border-green-100 p-6 hover:shadow-lg transition-shadow duration-300 overflow-hidden" data-testid={`service-${index}`}>
+                    {service.image && (
+                      <div className="mb-4 -mx-6 -mt-6">
+                        <img 
+                          src={service.image} 
+                          alt={service.title}
+                          className="w-full h-32 object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <IconComponent className="w-8 h-8 text-green-600" />
                     </div>
-                    <h3 className="text-lg font-body font-bold text-blue-800 mb-2">
+                    <h3 className="text-lg font-body font-bold text-green-800 mb-2 text-center">
                       {service.title}
                     </h3>
-                    <p className="text-gray-600 font-body leading-relaxed">
+                    <p className="text-gray-600 font-body leading-relaxed text-center">
                       {service.description}
                     </p>
                   </Card>
@@ -570,14 +595,14 @@ const TelepsychiatryFlorida = () => {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
               <div className="flex items-center justify-center gap-3 mb-6">
-                <WellnessIcon size="md" color="blue" className="opacity-80">
+                <WellnessIcon size="md" color="green" className="opacity-80">
                   <HelpCircle />
                 </WellnessIcon>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-blue-800" data-testid="faq-title">
+                <h2 className="text-5xl font-body font-bold text-green-800" data-testid="faq-title">
                   {language === 'en' ? (
-                    <>Frequently <span className="font-display italic text-blue-700">Asked</span> Questions</>
+                    <>Frequently <span className="font-display italic text-green-700">Asked</span> Questions</>
                   ) : (
-                    <>Preguntas <span className="font-display italic text-blue-700">Frecuentes</span></>
+                    <>Preguntas <span className="font-display italic text-green-700">Frecuentes</span></>
                   )}
                 </h2>
               </div>
@@ -593,27 +618,27 @@ const TelepsychiatryFlorida = () => {
               {currentContent.faqs.map((faq, index) => (
                 <div
                   key={index}
-                  className="bg-blue-50 rounded-2xl shadow-sm border border-blue-100 overflow-hidden"
+                  className="bg-green-50 rounded-2xl shadow-sm border border-green-100 overflow-hidden"
                   data-testid={`faq-item-${index}`}
                 >
                   <button
                     onClick={() => setOpenFaqItem(openFaqItem === index ? null : index)}
-                    className="w-full px-6 lg:px-8 py-6 text-left flex items-center justify-between hover:bg-blue-100 transition-colors duration-200"
+                    className="w-full px-6 lg:px-8 py-6 text-left flex items-center justify-between hover:bg-green-100 transition-colors duration-200"
                     data-testid={`faq-question-${index}`}
                   >
-                    <h3 className="text-lg sm:text-xl font-display font-semibold text-blue-900 pr-8">
+                    <h3 className="text-lg sm:text-xl font-display font-semibold text-green-900 pr-8">
                       {faq.question}
                     </h3>
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
                       openFaqItem === index 
-                        ? 'bg-blue-600' 
-                        : 'bg-blue-200'
+                        ? 'bg-green-600' 
+                        : 'bg-green-200'
                     }`}>
                       <ChevronDown 
                         className={`w-5 h-5 transition-all duration-300 ${
                           openFaqItem === index 
                             ? 'text-white rotate-180' 
-                            : 'text-blue-700'
+                            : 'text-green-700'
                         }`} 
                       />
                     </div>
@@ -621,7 +646,7 @@ const TelepsychiatryFlorida = () => {
                   
                   {openFaqItem === index && (
                     <div className="px-6 lg:px-8 pb-6">
-                      <div className="pt-2 border-t border-blue-200">
+                      <div className="pt-2 border-t border-green-200">
                         <p 
                           className="text-gray-700 font-body leading-relaxed text-lg"
                           data-testid={`faq-answer-${index}`}
@@ -641,10 +666,14 @@ const TelepsychiatryFlorida = () => {
         <InsuranceLogos />
 
         {/* Final CTA Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-50 to-blue-100">
+        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-green-50 to-green-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="cta-title">
-              {currentContent.cta.title}
+            <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="cta-title">
+              {language === 'en' ? (
+                <>Ready to <span className="font-display italic text-green-700">Get Started</span>?</>
+              ) : (
+                <>¿Listo para <span className="font-display italic text-green-700">Comenzar</span>?</>
+              )}
             </h2>
             <p className="text-lg sm:text-xl text-gray-700 mb-8 font-body leading-relaxed" data-testid="cta-description">
               {currentContent.cta.description}
@@ -652,7 +681,7 @@ const TelepsychiatryFlorida = () => {
             <Link href="/contact">
               <Button 
                 size="lg"
-                className="group inline-flex items-center justify-center gap-3 rounded-full text-xl font-semibold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700 px-12 py-8"
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-xl font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-12 py-8"
                 data-testid="button-schedule-final"
               >
                 <VideoIcon className="w-6 h-6" />
