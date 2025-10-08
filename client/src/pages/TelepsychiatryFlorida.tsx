@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/carousel";
 import floridaMap from '@/assets/florida-map.webp';
 import doctorImage from '@/assets/doctor-consultation.webp';
+import heroLocationImage from '@/assets/dr-melva-location-hero.webp';
 // Generated benefit images
 import statewideAccessImg from '@assets/generated_images/Statewide_telepsychiatry_access_concept_b85ef47e.png';
 import saveTimeImg from '@assets/generated_images/Time_saving_telehealth_concept_4adac1c8.png';
@@ -399,14 +400,14 @@ const TelepsychiatryFlorida = () => {
 
             {/* Hero Image - Dr. Melva Reve */}
             <div className="mb-12">
-              <Card className="overflow-hidden border-green-100">
+              <div className="w-full aspect-[1200/667] rounded-2xl overflow-hidden shadow-lg border border-green-100">
                 <img 
-                  src={doctorImage} 
+                  src={heroLocationImage} 
                   alt="Dr. Melva Reve providing telepsychiatry services in Florida"
-                  className="w-full h-[400px] sm:h-[450px] md:h-[500px] object-cover"
+                  className="w-full h-full object-contain bg-white"
                   data-testid="hero-image-doctor"
                 />
-              </Card>
+              </div>
             </div>
 
             {/* Stats */}
