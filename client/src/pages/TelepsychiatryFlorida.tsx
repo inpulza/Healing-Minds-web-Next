@@ -23,6 +23,7 @@ import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_manageme
 import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d71.png';
 import bipolarTreatmentImg from '@assets/generated_images/Bipolar_balance_stability_da9b84ed.png';
 import medicationManagementImg from '@assets/generated_images/Medication_management_studio_556b9569.png';
+import telehealthHeroBg from '../assets/telehealth-hero-bg.png';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
