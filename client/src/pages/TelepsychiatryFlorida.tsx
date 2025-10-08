@@ -482,7 +482,7 @@ const TelepsychiatryFlorida = () => {
             {/* Desktop Grid */}
             <div className="hidden lg:grid lg:grid-cols-4 gap-6">
               {currentContent.benefits.items.map((benefit, index) => (
-                <Card key={index} className="bg-green-50 border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
+                <Card key={index} className="bg-[#ffffff] border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
                   {benefit.image && (
                     <div className="w-full aspect-square bg-white p-4">
                       <img 
