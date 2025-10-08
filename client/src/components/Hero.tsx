@@ -4,7 +4,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone, Brain, Heart } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
-import heroImage from '@assets/hero-doctor-new.png';
+import heroImage from '@assets/hero-doctor-new.webp';
 import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
 
 // Optimized Hero component with performance improvements
@@ -133,7 +133,7 @@ const Hero = React.memo(() => {
             <img 
               src={heroImage}
               alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
-              className="absolute inset-0 w-full h-full object-cover object-top hero-image"
+              className="absolute inset-0 w-full h-full object-contain object-top hero-image"
               width={1200}
               height={800}
               loading="eager"
