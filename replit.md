@@ -5,21 +5,6 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
-### October 8, 2025 - CharmHealthBooking Upgrade to Prominent CTA Across All Location Pages
-- **Implementation**: Upgraded CharmHealthBooking from small widget to prominent full-width CTA section on all 9 Location pages (Ave Maria, Bonita Springs, Estero, Fort Myers, Golden Gate, Immokalee, Lely Resorts, Marco Island, Vanderbilt Beach)
-- **Layout Changes**: 
-  - Removed small CharmHealth booking widget from contact information grid
-  - Added dedicated "Telehealth Services" section before FAQ
-- **Visual Design**:
-  - Full-width section with py-16 padding and blue gradient background (from-blue-50 to-indigo-50)
-  - Centered max-w-4xl layout for content
-  - Bilingual heading with font-display italic blue-700 accent for "Telehealth/Telesalud"
-  - Descriptive text about scheduling online consultations from anywhere in Florida
-  - CharmHealthBooking component using variant="prominent"
-- **Positioning**: Consistent placement after Contact section and before FAQ section across all pages
-- **Consistency**: All 9 pages now match Naples pattern for telehealth CTA prominence
-- **Conversion Optimization**: Prominent telehealth booking CTA positioned strategically to maximize appointment bookings
-
 ### October 8, 2025 - Location Pages Features Repositioning
 - **Layout Update**: Moved features/stats from inside hero container to horizontal badges below on all 10 Location pages
 - **Compact Hero**: Hero container now more square and compact without internal features grid
