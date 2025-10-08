@@ -263,23 +263,27 @@ const TelepsychiatryFlorida = () => {
         {/* Hero Section - Simplified */}
         <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-[#ffffff]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-blue-800 mb-6">
-                {language === 'en' ? (
-                  <>
-                    Expert <span className="font-display italic text-blue-600">Psychiatric Care</span> from Anywhere in{' '}
-                    <span className="font-display italic text-blue-600">Florida</span>
-                  </>
-                ) : (
-                  <>
-                    Atención <span className="font-display italic text-blue-600">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
-                    <span className="font-display italic text-blue-600">Florida</span>
-                  </>
-                )}
-              </h1>
-              
-              <div className="max-w-5xl mx-auto mb-10">
-                <CharmHealthBooking variant="prominent" showDescription={false} />
+            <div className="mb-12">
+              <div className="max-w-7xl mx-auto mb-10">
+                <CharmHealthBooking 
+                  variant="prominent" 
+                  showDescription={false}
+                  heroTitle={
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-body font-bold text-blue-800 text-left">
+                      {language === 'en' ? (
+                        <>
+                          Expert <span className="font-display italic text-blue-600">Psychiatric Care</span> from Anywhere in{' '}
+                          <span className="font-display italic text-blue-600">Florida</span>
+                        </>
+                      ) : (
+                        <>
+                          Atención <span className="font-display italic text-blue-600">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
+                          <span className="font-display italic text-blue-600">Florida</span>
+                        </>
+                      )}
+                    </h1>
+                  }
+                />
                 
                 {/* Badges below the card */}
                 <div className="flex flex-wrap gap-3 justify-center mt-6">

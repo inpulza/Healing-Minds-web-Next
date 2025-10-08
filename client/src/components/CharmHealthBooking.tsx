@@ -10,12 +10,14 @@ interface CharmHealthBookingProps {
   variant?: 'default' | 'compact' | 'prominent';
   showDescription?: boolean;
   className?: string;
+  heroTitle?: React.ReactNode;
 }
 
 const CharmHealthBooking = ({ 
   variant = 'default', 
   showDescription = true, 
-  className = '' 
+  className = '',
+  heroTitle
 }: CharmHealthBookingProps) => {
   const { language } = useLanguage();
   const { trackTelehealthClick } = useTikTokEvents();
@@ -92,6 +94,12 @@ const CharmHealthBooking = ({
           
           {/* Mobile Content - Overlaps image to crop bottom */}
           <div className="p-6 bg-white -mt-12 relative z-10 rounded-t-3xl">
+            {heroTitle && (
+              <div className="mb-6">
+                {heroTitle}
+              </div>
+            )}
+            
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <VideoIcon className="w-6 h-6 text-blue-600" />
@@ -127,8 +135,14 @@ const CharmHealthBooking = ({
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           
-          <div className="relative h-full flex items-start pt-8 px-6 sm:px-8 lg:px-12">
-            <div className="max-w-xl text-left">
+          <div className="relative h-full flex items-start pt-12 px-8 sm:px-12 lg:px-16">
+            <div className="max-w-2xl text-left">
+              {heroTitle && (
+                <div className="mb-8">
+                  {heroTitle}
+                </div>
+              )}
+              
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <VideoIcon className="w-6 h-6 text-blue-600" />
