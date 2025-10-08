@@ -23,7 +23,7 @@ import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_manageme
 import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d71.png';
 import bipolarTreatmentImg from '@assets/generated_images/Bipolar_balance_stability_da9b84ed.png';
 import medicationManagementImg from '@assets/generated_images/Medication_management_studio_556b9569.png';
-import telehealthHeroBg from '../assets/telehealth-hero-bg.png';
+import telehealthHeroBg from '@assets/Generated Image October 08, 2025 - 8_20PM_1759949272611.png';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 
 const TelepsychiatryFlorida = () => {
