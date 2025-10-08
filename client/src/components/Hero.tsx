@@ -150,9 +150,24 @@ const Hero = React.memo(() => {
               <div className="max-w-2xl">
                 {/* SEO Pills */}
                 <div className="flex flex-wrap gap-3 mb-6">
-                  <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-base font-medium">Board Certified Psychiatrist</span>
-                  <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-base font-medium">Naples Mental Health</span>
-                  <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-base font-medium">Southwest Florida</span>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
+                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Brain className="w-3 h-3 text-green-600" />
+                    </div>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">Board Certified Psychiatrist</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Heart className="w-3 h-3 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">Naples Mental Health</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-purple-100">
+                    <div className="w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Heart className="w-3 h-3 text-purple-600" />
+                    </div>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">Southwest Florida</span>
+                  </div>
                 </div>
                 
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight text-green-700 text-left mb-5" data-testid="hero-title">
