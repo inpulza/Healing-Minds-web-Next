@@ -321,25 +321,6 @@ const LocationBonitaSprings = () => {
                       <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                   </Button>
-
-                  {/* Features Grid - moved below button */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                    {[
-                      { en: 'Easy Parking Available', es: 'Estacionamiento Fácil Disponible' },
-                      { en: 'Accessible Location', es: 'Ubicación Accesible' },
-                      { en: 'Private & Confidential', es: 'Privado y Confidencial' },
-                      { en: 'Modern Facilities', es: 'Instalaciones Modernas' },
-                      { en: 'Welcoming Environment', es: 'Ambiente Acogedor' },
-                      { en: 'Professional Care', es: 'Atención Profesional' }
-                    ].map((feature, index) => (
-                      <div key={index} className="p-4">
-                        <div className="flex items-center gap-3">
-                          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                          <span className="text-gray-700 font-body text-sm">{language === 'en' ? feature.en : feature.es}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
                 {/* Photo Side */}
@@ -357,6 +338,29 @@ const LocationBonitaSprings = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          
+          {/* Features Badges */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+            <div className="flex flex-wrap justify-center gap-3">
+              {[
+                { en: 'Easy Parking Available', es: 'Estacionamiento Fácil Disponible' },
+                { en: 'Accessible Location', es: 'Ubicación Accesible' },
+                { en: 'Private & Confidential', es: 'Privado y Confidencial' },
+                { en: 'Modern Facilities', es: 'Instalaciones Modernas' },
+                { en: 'Welcoming Environment', es: 'Ambiente Acogedor' },
+                { en: 'Professional Care', es: 'Atención Profesional' }
+              ].map((feature, index) => (
+                <div key={index} className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-3 h-3 text-blue-600" />
+                  </div>
+                  <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                    {language === 'en' ? feature.en : feature.es}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
