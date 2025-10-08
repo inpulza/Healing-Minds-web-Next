@@ -13,6 +13,16 @@ import floridaMap from '../assets/florida-map.webp';
 import useEmblaCarousel from 'embla-carousel-react';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import DoctorSection from '@/components/DoctorSection';
+import accessFromHomeImg from '@assets/generated_images/Telepsychiatry_access_from_home_6fa39397.png';
+import convenientSchedulingImg from '@assets/generated_images/Convenient_telehealth_scheduling_ac361d13.png';
+import securePrivateImg from '@assets/generated_images/Secure_private_telehealth_efb2884f.png';
+import continuityCareImg from '@assets/generated_images/Continuity_of_care_telehealth_da164143.png';
+import initialEvaluationImg from '@assets/generated_images/Initial_psychiatric_evaluation_e760bee4.png';
+import anxietyDepressionImg from '@assets/generated_images/Anxiety_depression_treatment_2e784480.png';
+import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_management_50e393dc.png';
+import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_e5b6cf92.png';
+import bipolarTreatmentImg from '@assets/generated_images/Bipolar_disorder_treatment_97fd8ce2.png';
+import medicationManagementImg from '@assets/generated_images/Medication_management_renewal_8552e703.png';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
@@ -385,32 +395,32 @@ const TelepsychiatryFlorida = () => {
               <div className="md:hidden">
                 <div className="overflow-hidden" ref={emblaRef}>
                   <div className="flex">
-                    {currentContent.benefits.items.map((benefit, index) => (
-                      <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
-                        <div className="bg-white rounded-2xl overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
-                          {/* Image Placeholder */}
-                          <div className="h-48 bg-gradient-to-br from-green-50 to-green-100">
-                            <div className="w-full h-full flex items-center justify-center">
-                              <div className="text-center">
-                                <WellnessIcon size="lg" color="green" className="mx-auto mb-3">
-                                  <VideoIcon />
-                                </WellnessIcon>
-                                <p className="text-green-600 font-body text-sm">Image Coming Soon</p>
-                              </div>
+                    {currentContent.benefits.items.map((benefit, index) => {
+                      const benefitImages = [accessFromHomeImg, convenientSchedulingImg, securePrivateImg, continuityCareImg];
+                      return (
+                        <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
+                          <div className="bg-white rounded-2xl overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
+                            {/* Benefit Image */}
+                            <div className="h-48 overflow-hidden">
+                              <img 
+                                src={benefitImages[index]} 
+                                alt={benefit.title}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            {/* Content */}
+                            <div className="p-6">
+                              <h3 className="text-lg font-body font-bold text-green-800 mb-3">
+                                {benefit.title}
+                              </h3>
+                              <p className="text-gray-700 font-body leading-relaxed text-sm">
+                                {benefit.description}
+                              </p>
                             </div>
                           </div>
-                          {/* Content */}
-                          <div className="p-6">
-                            <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                              {benefit.title}
-                            </h3>
-                            <p className="text-gray-700 font-body leading-relaxed text-sm">
-                              {benefit.description}
-                            </p>
-                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
                 {/* Carousel Controls */}
@@ -434,30 +444,30 @@ const TelepsychiatryFlorida = () => {
 
               {/* Desktop Grid */}
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {currentContent.benefits.items.map((benefit, index) => (
-                  <div key={index} className="bg-white rounded-2xl overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`benefit-${index}`}>
-                    {/* Image Placeholder */}
-                    <div className="h-48 bg-gradient-to-br from-green-50 to-green-100">
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center">
-                          <WellnessIcon size="lg" color="green" className="mx-auto mb-3">
-                            <VideoIcon />
-                          </WellnessIcon>
-                          <p className="text-green-600 font-body text-sm">Image Coming Soon</p>
-                        </div>
+                {currentContent.benefits.items.map((benefit, index) => {
+                  const benefitImages = [accessFromHomeImg, convenientSchedulingImg, securePrivateImg, continuityCareImg];
+                  return (
+                    <div key={index} className="bg-white rounded-2xl overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`benefit-${index}`}>
+                      {/* Benefit Image */}
+                      <div className="h-48 overflow-hidden">
+                        <img 
+                          src={benefitImages[index]} 
+                          alt={benefit.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {/* Content */}
+                      <div className="p-6">
+                        <h3 className="text-lg font-body font-bold text-green-800 mb-3">
+                          {benefit.title}
+                        </h3>
+                        <p className="text-gray-700 font-body leading-relaxed text-sm">
+                          {benefit.description}
+                        </p>
                       </div>
                     </div>
-                    {/* Content */}
-                    <div className="p-6">
-                      <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                        {benefit.title}
-                      </h3>
-                      <p className="text-gray-700 font-body leading-relaxed text-sm">
-                        {benefit.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -522,32 +532,39 @@ const TelepsychiatryFlorida = () => {
               <div className="md:hidden">
                 <div className="overflow-hidden" ref={emblaRef2}>
                   <div className="flex">
-                    {currentContent.services.list.map((service, index) => (
-                      <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
-                        <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
-                          {/* Image Placeholder */}
-                          <div className="h-48 bg-gradient-to-br from-green-50 to-green-100">
-                            <div className="w-full h-full flex items-center justify-center">
-                              <div className="text-center">
-                                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                                  <CheckCircle className="w-6 h-6 text-green-600" />
-                                </div>
-                                <p className="text-green-600 font-body text-sm">Image Coming Soon</p>
-                              </div>
+                    {currentContent.services.list.map((service, index) => {
+                      const serviceImages = [
+                        initialEvaluationImg, 
+                        anxietyDepressionImg, 
+                        adhdManagementImg, 
+                        ptsdTherapyImg, 
+                        bipolarTreatmentImg, 
+                        medicationManagementImg
+                      ];
+                      return (
+                        <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
+                          <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
+                            {/* Service Image */}
+                            <div className="h-48 overflow-hidden">
+                              <img 
+                                src={serviceImages[index]} 
+                                alt={service.title}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            {/* Content */}
+                            <div className="p-6">
+                              <h3 className="text-lg font-body font-bold text-green-800 mb-3">
+                                {service.title}
+                              </h3>
+                              <p className="text-gray-600 font-body text-sm leading-relaxed">
+                                {service.description}
+                              </p>
                             </div>
                           </div>
-                          {/* Content */}
-                          <div className="p-6">
-                            <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                              {service.title}
-                            </h3>
-                            <p className="text-gray-600 font-body text-sm leading-relaxed">
-                              {service.description}
-                            </p>
-                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
                 {/* Carousel Controls */}
@@ -571,30 +588,37 @@ const TelepsychiatryFlorida = () => {
 
               {/* Desktop Grid */}
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {currentContent.services.list.map((service, index) => (
-                  <div key={index} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`service-${index}`}>
-                    {/* Image Placeholder */}
-                    <div className="h-48 bg-gradient-to-br from-green-50 to-green-100">
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <CheckCircle className="w-6 h-6 text-green-600" />
-                          </div>
-                          <p className="text-green-600 font-body text-sm">Image Coming Soon</p>
-                        </div>
+                {currentContent.services.list.map((service, index) => {
+                  const serviceImages = [
+                    initialEvaluationImg, 
+                    anxietyDepressionImg, 
+                    adhdManagementImg, 
+                    ptsdTherapyImg, 
+                    bipolarTreatmentImg, 
+                    medicationManagementImg
+                  ];
+                  return (
+                    <div key={index} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`service-${index}`}>
+                      {/* Service Image */}
+                      <div className="h-48 overflow-hidden">
+                        <img 
+                          src={serviceImages[index]} 
+                          alt={service.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {/* Content */}
+                      <div className="p-6">
+                        <h3 className="text-lg font-body font-bold text-green-800 mb-3">
+                          {service.title}
+                        </h3>
+                        <p className="text-gray-600 font-body text-sm leading-relaxed">
+                          {service.description}
+                        </p>
                       </div>
                     </div>
-                    {/* Content */}
-                    <div className="p-6">
-                      <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                        {service.title}
-                      </h3>
-                      <p className="text-gray-600 font-body text-sm leading-relaxed">
-                        {service.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

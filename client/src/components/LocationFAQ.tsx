@@ -32,9 +32,11 @@ const LocationFAQ = ({ locationFAQs, title, description }: LocationFAQProps) => 
     <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-green-800 mb-4 sm:mb-6" data-testid="location-faq-title">
-            {title || defaultTitle}
-          </h2>
+          {title || (
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-green-800 mb-4 sm:mb-6" data-testid="location-faq-title">
+              {defaultTitle}
+            </h2>
+          )}
           <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto font-body leading-relaxed" data-testid="location-faq-description">
             {description || defaultDescription}
           </p>
