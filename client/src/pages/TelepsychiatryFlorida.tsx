@@ -260,78 +260,60 @@ const TelepsychiatryFlorida = () => {
     <div className="min-h-screen">
       <Header />
       <main>
-        {/* Hero Section - Home Style Layout */}
-        <section className="pt-8 pb-16 bg-white">
-          <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[90%] mx-auto px-2 sm:px-4">
-            <div className="relative rounded-3xl overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] flex items-center justify-center">
-              {/* Background Image */}
-              <CharmHealthBooking variant="prominent" showDescription={false} />
+        {/* Hero Section - Simplified */}
+        <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-[#ffffff]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-blue-800 mb-6">
+                {language === 'en' ? (
+                  <>
+                    Expert <span className="font-display italic text-blue-600">Psychiatric Care</span> from Anywhere in{' '}
+                    <span className="font-display italic text-blue-600">Florida</span>
+                  </>
+                ) : (
+                  <>
+                    Atención <span className="font-display italic text-blue-600">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
+                    <span className="font-display italic text-blue-600">Florida</span>
+                  </>
+                )}
+              </h1>
               
-              {/* Left-Aligned Content Overlay */}
-              <div className="absolute inset-0 z-10 flex items-start pt-8 px-8 lg:px-16">
-                <div className="max-w-5xl" style={{maxWidth: "65%"}}>
-                  {/* SEO Pills with brown brand colors */}
-                  <div className="flex flex-wrap gap-3 mb-6">
-                    <span className="px-4 py-2 bg-amber-100 text-amber-900 rounded-full text-base font-medium">Telehealth Available</span>
-                    <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-base font-medium">Statewide Florida</span>
-                    <span className="px-4 py-2 bg-amber-100 text-amber-900 rounded-full text-base font-medium">Board Certified</span>
-                  </div>
-                  
-                  <h1 className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-relaxed text-blue-700 mb-6 md:mb-8">
-                    <div className="font-display italic font-bold">
-                      {language === 'en' ? (
-                        <>
-                          Expert <span className="text-blue-600">Psychiatric Care</span> from Anywhere in{' '}
-                          <span className="text-amber-700">Florida</span>
-                        </>
-                      ) : (
-                        <>
-                          Atención <span className="text-blue-600">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
-                          <span className="text-amber-700">Florida</span>
-                        </>
-                      )}
+              <div className="max-w-5xl mx-auto mb-10">
+                <CharmHealthBooking variant="prominent" showDescription={false} />
+                
+                {/* Badges below the card */}
+                <div className="flex flex-wrap gap-3 justify-center mt-6">
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <VideoIcon className="w-3 h-3 text-blue-600" />
                     </div>
-                  </h1>
-                  
-                  <div className="text-lg md:text-xl lg:text-xl xl:text-2xl leading-relaxed font-body mb-8 md:mb-10 lg:mb-12 text-gray-700 lg:mr-20 xl:mr-32 2xl:mr-40">
-                    <span>{currentContent.hero.description}</span>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                      {language === 'en' ? 'Telehealth Available' : 'Telesalud Disponible'}
+                    </span>
                   </div>
-                  
-                  <div className="flex flex-row items-center gap-6">
-                    <Button
-                      onClick={() => {
-                        window.open('https://healingmindspsychiatry.charmtracker.com/', '_blank', 'noopener,noreferrer');
-                      }}
-                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base md:text-lg font-semibold transition-all duration-300 text-white hover:bg-blue-700 px-6 md:px-8 lg:px-10 py-4 md:py-5 lg:py-6 xl:py-7 shadow-lg bg-blue-600"
-                      data-testid="hero-telehealth-cta"
-                    >
-                      <Calendar className="w-5 h-5" />
-                      <span>{language === 'en' ? 'Book Telehealth Appointment' : 'Reservar Cita de Telesalud'}</span>
-                      <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all duration-300 border border-white">
-                        <ArrowRight className="w-5 h-5 text-white" />
-                      </div>
-                    </Button>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-3 h-3 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                      {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-3 h-3 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                      {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
+                    </span>
                   </div>
                 </div>
-              </div>
-              
-              {/* Feature badges carousel at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 py-4 sm:py-6 overflow-hidden z-20 bg-gradient-to-t from-black/20 to-transparent">
-                <div className="flex justify-center gap-6 text-white/90 font-body font-medium text-base">
-                  <div className="flex items-center gap-2">
-                    <VideoIcon className="w-4 h-4" />
-                    <span>{language === 'en' ? 'Telehealth Available' : 'Telesalud Disponible'}</span>
-                  </div>
-                  <span>•</span>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4" />
-                    <span>{language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}</span>
-                  </div>
-                  <span>•</span>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4" />
-                    <span>{language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}</span>
-                  </div>
+                
+                {/* Description below hero image */}
+                <div className="max-w-3xl mx-auto mt-10">
+                  <p className="text-base sm:text-lg text-gray-600 font-body leading-relaxed text-center">
+                    {currentContent.hero.description}
+                  </p>
                 </div>
               </div>
             </div>
