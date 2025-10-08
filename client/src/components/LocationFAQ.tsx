@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -6,7 +6,7 @@ import { BilingualLocationFAQs } from '@/data/locationFAQs';
 
 interface LocationFAQProps {
   locationFAQs?: BilingualLocationFAQs;
-  title?: string;
+  title?: ReactNode;
   description?: string;
 }
 

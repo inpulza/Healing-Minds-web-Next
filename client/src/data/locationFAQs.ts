@@ -791,5 +791,92 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
         answer: "Ofrecemos estacionamiento gratuito y conveniente directamente en nuestra ubicación de oficina. Es mucho más fácil que las citas médicas típicas, y muchos pacientes de Lely Resort comentan sobre qué tan conveniente y libre de estrés es el estacionamiento."
       }
     ]
+  },
+
+  telehealth: {
+    en: [
+      {
+        question: "What is telepsychiatry and how does it work?",
+        answer: "Telepsychiatry is psychiatric care delivered through secure video sessions. You meet with Dr. Reve virtually from your home or private space using a HIPAA-compliant platform. It's just as effective as in-person visits for medication management, evaluations, and therapy."
+      },
+      {
+        question: "Do I need any special equipment for telehealth sessions?",
+        answer: "All you need is a device with a camera and microphone (smartphone, tablet, or computer), a stable internet connection, and a private space. We use CharmHealth's secure platform that works directly in your web browser - no downloads required."
+      },
+      {
+        question: "Is telepsychiatry as effective as in-person appointments?",
+        answer: "Yes! Research shows telepsychiatry is equally effective for most psychiatric conditions including anxiety, depression, ADHD, PTSD, and bipolar disorder. Dr. Reve can assess symptoms, adjust medications, and provide comprehensive care virtually."
+      },
+      {
+        question: "Can Dr. Reve prescribe medications through telehealth?",
+        answer: "Absolutely. Dr. Reve can prescribe and manage psychiatric medications during virtual appointments. Prescriptions are sent electronically to your pharmacy of choice, making it convenient and efficient."
+      },
+      {
+        question: "What areas of Florida does Dr. Reve serve through telehealth?",
+        answer: "Dr. Reve provides telepsychiatry services to patients throughout the entire state of Florida. As long as you are physically located in Florida during the appointment, you can receive care from anywhere in the state."
+      },
+      {
+        question: "How do I schedule a telehealth appointment?",
+        answer: "You can schedule online 24/7 through our CharmHealth booking system or call our office at (239) 423-0272. We offer flexible scheduling with same-day appointments often available."
+      },
+      {
+        question: "Is my privacy protected during telehealth sessions?",
+        answer: "Yes, completely. We use a HIPAA-compliant, encrypted video platform that meets all federal privacy standards. Your session is confidential and secure, just like in-person visits."
+      },
+      {
+        question: "Does insurance cover telepsychiatry services?",
+        answer: "Most insurance plans now cover telepsychiatry the same as in-person visits. We accept Aetna, Cigna, Medicare, Florida Blue, and most major insurance plans. Contact us to verify your specific coverage."
+      },
+      {
+        question: "Can I switch between telehealth and in-person visits?",
+        answer: "Yes! Many patients prefer a hybrid approach - some appointments virtual, others in-person at our Naples office. You can choose what works best for your schedule and needs."
+      },
+      {
+        question: "What if I have technical issues during my telehealth appointment?",
+        answer: "Our team is here to help! We provide technical support and can troubleshoot any issues. If needed, we can switch to a phone call to ensure you receive your care without interruption."
+      }
+    ],
+    es: [
+      {
+        question: "¿Qué es la telepsiquiatría y cómo funciona?",
+        answer: "La telepsiquiatría es atención psiquiátrica brindada a través de sesiones de video seguras. Se reúne con la Dra. Reve virtualmente desde su hogar o espacio privado usando una plataforma compatible con HIPAA. Es tan efectiva como las visitas en persona para manejo de medicamentos, evaluaciones y terapia."
+      },
+      {
+        question: "¿Necesito algún equipo especial para las sesiones de telesalud?",
+        answer: "Todo lo que necesita es un dispositivo con cámara y micrófono (teléfono inteligente, tableta o computadora), una conexión a internet estable y un espacio privado. Usamos la plataforma segura CharmHealth que funciona directamente en su navegador web - no se requieren descargas."
+      },
+      {
+        question: "¿Es la telepsiquiatría tan efectiva como las citas en persona?",
+        answer: "¡Sí! La investigación muestra que la telepsiquiatría es igualmente efectiva para la mayoría de las condiciones psiquiátricas incluyendo ansiedad, depresión, TDAH, TEPT y trastorno bipolar. La Dra. Reve puede evaluar síntomas, ajustar medicamentos y proporcionar atención integral virtualmente."
+      },
+      {
+        question: "¿Puede la Dra. Reve recetar medicamentos a través de telesalud?",
+        answer: "Absolutamente. La Dra. Reve puede recetar y manejar medicamentos psiquiátricos durante citas virtuales. Las recetas se envían electrónicamente a la farmacia de su elección, haciéndolo conveniente y eficiente."
+      },
+      {
+        question: "¿Qué áreas de Florida atiende la Dra. Reve a través de telesalud?",
+        answer: "La Dra. Reve proporciona servicios de telepsiquiatría a pacientes en todo el estado de Florida. Siempre que esté físicamente ubicado en Florida durante la cita, puede recibir atención desde cualquier lugar del estado."
+      },
+      {
+        question: "¿Cómo programo una cita de telesalud?",
+        answer: "Puede programar en línea 24/7 a través de nuestro sistema de reservas CharmHealth o llamar a nuestra oficina al (239) 423-0272. Ofrecemos horarios flexibles con citas el mismo día a menudo disponibles."
+      },
+      {
+        question: "¿Está protegida mi privacidad durante las sesiones de telesalud?",
+        answer: "Sí, completamente. Usamos una plataforma de video encriptada compatible con HIPAA que cumple con todos los estándares federales de privacidad. Su sesión es confidencial y segura, igual que las visitas en persona."
+      },
+      {
+        question: "¿El seguro cubre los servicios de telepsiquiatría?",
+        answer: "La mayoría de los planes de seguro ahora cubren la telepsiquiatría igual que las visitas en persona. Aceptamos Aetna, Cigna, Medicare, Florida Blue y la mayoría de los principales planes de seguro. Contáctenos para verificar su cobertura específica."
+      },
+      {
+        question: "¿Puedo alternar entre visitas de telesalud y en persona?",
+        answer: "¡Sí! Muchos pacientes prefieren un enfoque híbrido - algunas citas virtuales, otras en persona en nuestra oficina de Naples. Puede elegir lo que funcione mejor para su horario y necesidades."
+      },
+      {
+        question: "¿Qué pasa si tengo problemas técnicos durante mi cita de telesalud?",
+        answer: "¡Nuestro equipo está aquí para ayudar! Proporcionamos soporte técnico y podemos solucionar cualquier problema. Si es necesario, podemos cambiar a una llamada telefónica para asegurar que reciba su atención sin interrupción."
+      }
+    ]
   }
 };
