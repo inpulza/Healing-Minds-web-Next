@@ -243,16 +243,16 @@ const Header = () => {
         : 'bg-transparent'
     } ${isServicesOpen || isLocationsOpen ? 'h-auto' : isMobileMenuOpen ? 'h-auto' : 'h-20 sm:h-24 md:h-28 lg:h-32'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
-        <div ref={baseBarRef} className="flex items-center justify-between h-20 sm:h-24 md:h-28 lg:h-32 relative">
+        <div ref={baseBarRef} className="flex items-center justify-between h-20 sm:h-24 md:h-28 lg:h-32 relative gap-4 lg:gap-6">
           {/* Logo */}
-          <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'}>
-            <div className="text-sm sm:text-base md:text-lg font-body font-bold text-green-800">
+          <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'} className="flex-shrink-0">
+            <div className="text-sm sm:text-base md:text-lg lg:text-xl font-body font-bold text-green-800 whitespace-nowrap">
               Healing Minds <span className="text-green-700">Psychiatry</span>
             </div>
           </Link>
 
           {/* Desktop Navigation - Full Width */}
-          <div className="hidden md:flex flex-1 justify-center px-8" ref={servicesRef}>
+          <div className="hidden md:flex flex-1 justify-center px-4 lg:px-8" ref={servicesRef}>
             <nav className="flex items-center gap-1 lg:gap-2" data-testid="desktop-nav">
             {navigationItems.map((item) => (
               <div key={item.href} className="relative">
@@ -306,12 +306,12 @@ const Header = () => {
           </div>
 
           {/* Language Toggle & CTA */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center gap-3 lg:gap-4 flex-shrink-0">
             <Button
               variant="ghost"
               size="sm"
               onClick={toggleLanguage}
-              className="text-xs text-green-700 hover:text-green-800 transition-all duration-200 rounded-full px-3 py-2 font-body border border-green-600/30 flex items-center gap-1.5"
+              className="text-xs text-green-700 hover:text-green-800 transition-all duration-200 rounded-full px-3 py-2 font-body border border-green-600/30 flex items-center gap-1.5 whitespace-nowrap"
               data-testid="language-toggle"
               aria-label={language === 'en' ? 'Cambiar a español' : 'Switch to English'}
             >
@@ -329,10 +329,10 @@ const Header = () => {
             </Button>
             <Link href="/contact">
               <Button
-                className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-8 py-6"
+                className="group inline-flex items-center justify-center gap-2 rounded-full text-sm lg:text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 lg:px-8 py-5 lg:py-6 whitespace-nowrap"
                 data-testid="book-now-button"
               >
-                <div className="w-6 h-6 min-w-[1.5rem] min-h-[1.5rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
+                <div className="w-5 h-5 lg:w-6 lg:h-6 min-w-[1.25rem] lg:min-w-[1.5rem] min-h-[1.25rem] lg:min-h-[1.5rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
                   <ArrowRight className="w-3 h-3 text-white" />
                 </div>
                 <span>Book Now</span>
