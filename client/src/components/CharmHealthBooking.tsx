@@ -164,7 +164,7 @@ const CharmHealthBooking = ({
                 </div>
               )}
               
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4" data-testid="telehealth-title-desktop">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="telehealth-title-desktop">
                 {currentContent.title}
               </h3>
               
