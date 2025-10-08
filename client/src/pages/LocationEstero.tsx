@@ -161,122 +161,45 @@ const LocationEstero = () => {
     <div className="min-h-screen">
       <Header />
       <main>
-        {/* Hero Section - Service Page Style */}
-        <section className="pt-20 pb-8 sm:pb-12 lg:pb-16 bg-green-50">
+        {/* Hero Section - Location Page Style */}
+        <section className="pt-20 pb-8 sm:pb-12 lg:pb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Text Content Section - Full Width */}
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <WellnessIcon size="sm" color="blue">
-                  <MapPin />
-                </WellnessIcon>
-                <span className="text-blue-700 font-body font-semibold text-lg">
-                  {language === 'en' ? 'Serving Estero' : 'Sirviendo a Estero'}
-                </span>
-              </div>
-              
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>
-                    Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
-                    <span className="font-display italic text-green-700">Estero, FL</span>
-                  </>
-                ) : (
-                  <>
-                    Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
-                    <span className="font-display italic text-green-700">Estero, FL</span>
-                  </>
-                )}
-              </h1>
-
-              {/* Hero Image - Dr. Melva at Practice */}
-              <div className="mb-8">
-                <div className="max-w-4xl mx-auto">
-                  <div className="w-full aspect-[1200/667] rounded-2xl overflow-hidden shadow-lg">
-                    <OptimizedImage
-                      src={heroLocationImage}
-                      alt="Dr. Melva Reve serving Estero - Professional mental health care in a welcoming environment"
-                      className="w-full h-full object-cover object-center"
-                      width={1200}
-                      height={675}
-                      priority={true}
-                      sizes="(max-width: 640px) 600px, (max-width: 1024px) 800px, 1200px"
-                    />
+            <div className="md:hidden">
+              <div className="relative aspect-[4/5] mb-4 rounded-2xl overflow-hidden">
+                <OptimizedImage src={heroLocationImage} alt="Dr. Melva Reve serving Estero" className="w-full h-full object-cover object-center" width={800} height={1000} priority={true} sizes="100vw" />
+                <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
+                  <div className="max-w-sm mx-auto">
+                    <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
+                      {language === 'en' ? (<>Your Trusted <span className="font-display italic">Psychiatrist</span> in Estero, FL</>) : (<>Su <span className="font-display italic">Psiquiatra</span> de Confianza en Estero, FL</>)}
+                    </h1>
                   </div>
                 </div>
               </div>
-              
-              <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl mx-auto font-body">
-                {language === 'en' 
-                  ? 'Expert mental health and telepsychiatry services for the Estero community. Whether you need a psychiatrist in Estero for an ADHD evaluation or are seeking compassionate depression treatment Estero FL, our clinic is a short drive from your home. We offer bilingual care specializing in anxiety treatment in Naples FL, depression, PTSD, and psychiatric medication management for Estero residents.'
-                  : 'Servicios expertos de salud mental y telepsiquiatría para la comunidad de Estero. Ya sea que necesite un psiquiatra en Estero para una evaluación de TDAH o esté buscando tratamiento de depresión compasivo, nuestra clínica está a un corto viaje desde su hogar. Ofrecemos atención bilingüe especializada en ansiedad, depresión, TEPT y manejo de medicamentos psiquiátricos para residentes de Estero.'}
+              <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
+                {language === 'en' ? 'Quality mental health care in Estero.' : 'Atención de salud mental de calidad en Estero.'}
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
-                  onClick={() => window.location.href = '/contact'}
-                  data-testid="button-schedule-consultation"
-                >
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
-                    <Calendar className="w-4 h-4 text-white" />
-                  </div>
-                  {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
-                  onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
-                  data-testid="button-get-directions"
-                >
-                  <Navigation className="w-5 h-5" />
-                  {content.getDirections}
-                </Button>
+              <div className="flex flex-col gap-3 px-4">
+                <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 w-full" onClick={() => window.location.href = '/contact'} data-testid="button-schedule-consultation-mobile"><Calendar className="w-5 h-5" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
+                <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 w-full" onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')} data-testid="button-get-directions-mobile"><Navigation className="w-5 h-5" />{content.getDirections}</Button>
               </div>
             </div>
-
-            {/* Stats Tags - Service Page Style */}
-            <div className="mt-16">
-              <div className="max-w-4xl mx-auto">
-                <div className="flex flex-wrap gap-4 justify-center">
-                  {[
-                    {
-                      en: '15+ Years Experience',
-                      es: '15+ Años de Experiencia'
-                    },
-                    {
-                      en: 'Bilingual Care Available',
-                      es: 'Atención Bilingüe Disponible'
-                    },
-                    {
-                      en: 'Modern Facilities',
-                      es: 'Instalaciones Modernas'
-                    },
-                    {
-                      en: 'Serving Estero',
-                      es: 'Sirviendo a Estero'
-                    },
-                    {
-                      en: 'Insurance Accepted',
-                      es: 'Se Acepta Seguro'
-                    },
-                    {
-                      en: 'Same Day Appointments',
-                      es: 'Citas el Mismo Día'
-                    }
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-3 bg-white rounded-full px-5 py-2.5 shadow-md hover:shadow-lg transition-shadow duration-200 border border-green-100">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <CheckCircle className="w-3.5 h-3.5 text-green-600" />
-                      </div>
-                      <span className="text-gray-700 font-body font-medium text-sm">
-                        {language === 'en' ? item.en : item.es}
-                      </span>
+            <div className="hidden md:block">
+              <div className="relative aspect-[18/9] rounded-2xl overflow-hidden border border-blue-200">
+                <OptimizedImage src={heroLocationImage} alt="Dr. Melva Reve serving Estero" className="absolute inset-0 w-full h-full object-cover object-center" width={1800} height={900} priority={true} sizes="(max-width: 1024px) 100vw, 1800px" />
+                <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>
+                <div className="relative h-full flex items-start px-8 sm:px-12 lg:px-16 pt-12">
+                  <div className="max-w-2xl text-left">
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? '15+ Years Experience' : '15+ Años de Experiencia'}</span></div>
+                      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Bilingual Care' : 'Atención Bilingüe'}</span></div>
+                      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Serving Estero' : 'Sirviendo Estero'}</span></div>
                     </div>
-                  ))}
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
+                      {language === 'en' ? (<>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Estero, FL</span></>) : (<>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Estero, FL</span></>)}
+                    </h1>
+                    <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{language === 'en' ? 'Quality mental health care in Estero.' : 'Atención de salud mental de calidad en Estero.'}</p>
+                    <Button onClick={() => window.location.href = '/contact'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
+                  </div>
                 </div>
               </div>
             </div>
