@@ -552,18 +552,6 @@ const TelepsychiatryFlorida = () => {
                 {/* Coverage Overlay */}
                 <div className="absolute inset-0 bg-green-500 bg-opacity-5 border-2 border-green-400 border-opacity-20 rounded-2xl"></div>
 
-                {/* Naples Main Office Marker */}
-                <div className="absolute" style={{top: '68%', left: '26%', transform: 'translate(-50%, -50%)'}}>
-                  <div className="relative">
-                    <div className="w-5 h-5 bg-green-700 rounded-full shadow-lg animate-pulse border-2 border-white"></div>
-                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-                      <span className="text-xs font-bold text-white bg-green-700 px-2 py-1 rounded-md shadow-lg inline-block">
-                        Naples ⭐
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Compass */}
                 <div className="absolute top-4 right-4 z-10">
                   <div className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-200">
