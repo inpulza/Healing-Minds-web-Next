@@ -1064,6 +1064,32 @@ const LocationNaples = () => {
         {/* Reviews Section */}
         <Reviews />
 
+        {/* Telehealth Services Section */}
+        <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
+          <div className="max-w-4xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
+                {language === 'en' ? (
+                  <>
+                    <span className="font-display italic text-blue-700">Telehealth</span> Services Available
+                  </>
+                ) : (
+                  <>
+                    Servicios de <span className="font-display italic text-blue-700">Telesalud</span> Disponibles
+                  </>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                {language === 'en' 
+                  ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
+                  : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
+                }
+              </p>
+            </div>
+            <CharmHealthBooking variant="prominent" />
+          </div>
+        </section>
+
         {/* NAP Information Section */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -1175,6 +1201,48 @@ const LocationNaples = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+
+        {/* Call to Action */}
+        <section className="py-20 bg-white">
+          <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
+            <h2 className="text-4xl lg:text-5xl font-body font-bold text-gray-900 mb-6">
+              {language === 'en' ? (
+                <>
+                  <span className="font-display italic text-green-700">Ready to Begin</span> Your <span className="font-display italic text-green-700">Journey?</span>
+                </>
+              ) : (
+                <>
+                  <span className="font-display italic text-green-700">¿Listo para Comenzar</span> su <span className="font-display italic text-green-700">Viaje?</span>
+                </>
+              )}
+            </h2>
+            <p className="text-xl text-gray-600 font-body mb-8 leading-relaxed">
+              {language === 'en' 
+                ? 'Take the first step towards better mental health. Contact us today to schedule your consultation.'
+                : 'Dé el primer paso hacia una mejor salud mental. Contáctenos hoy para programar su consulta.'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button 
+                className="bg-green-800 text-white hover:bg-green-700 px-8 py-6 rounded-full font-body font-semibold text-lg min-w-[240px]"
+                onClick={() => window.location.href = '/contact'}
+                data-testid="button-schedule-consultation"
+              >
+                <Heart className="w-5 h-5 mr-2" />
+                {content.bookNow}
+              </Button>
+              <Button 
+                variant="outline"
+                className="border-2 border-green-800 text-green-800 hover:bg-green-800 hover:text-white px-8 py-6 rounded-full font-body font-semibold text-lg min-w-[240px]"
+                onClick={() => window.location.href = `tel:${practiceInfo.phone}`}
+                data-testid="button-call-now"
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                {content.callNow}
+              </Button>
             </div>
           </div>
         </section>
