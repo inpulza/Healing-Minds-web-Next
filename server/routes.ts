@@ -323,6 +323,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     next();
   });
 
+  // TODO: Re-implement HTML injection in production
+  // Currently disabled to fix MIME type errors in deployment
+  // The catch-all middleware was conflicting with express.static()
+  
   const httpServer = createServer(app);
   return httpServer;
 }
