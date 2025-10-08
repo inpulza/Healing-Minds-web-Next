@@ -320,7 +320,7 @@ const TelepsychiatryFlorida = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      <main className="pt-16">
+      <main>
         {/* Hero Section */}
         <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-gradient-to-b from-green-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
