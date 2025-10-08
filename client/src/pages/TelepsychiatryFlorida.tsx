@@ -36,6 +36,7 @@ import {
 import floridaMap from '@/assets/florida-map.webp';
 import doctorImage from '@/assets/doctor-consultation.webp';
 import heroLocationImage from '@/assets/dr-melva-location-hero.webp';
+import drMelvaOffice from '@/assets/dr-melva-office.webp';
 // Generated benefit images
 import statewideAccessImg from '@assets/generated_images/Statewide_telepsychiatry_access_concept_b85ef47e.png';
 import saveTimeImg from '@assets/generated_images/Time_saving_telehealth_concept_4adac1c8.png';
@@ -550,10 +551,10 @@ const TelepsychiatryFlorida = () => {
                 </div>
 
                 {/* Doctor Image */}
-                <div className="relative order-1 md:order-2">
-                  <div className="aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden">
+                <div className="relative order-1 md:order-2 flex items-center">
+                  <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden">
                     <img
-                      src={doctorImage}
+                      src={drMelvaOffice}
                       alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing telepsychiatry services"
                       className="w-full h-full object-cover"
                       loading="lazy"
