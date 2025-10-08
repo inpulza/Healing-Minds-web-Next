@@ -321,7 +321,7 @@ const TelepsychiatryFlorida = () => {
         </section>
 
         {/* Statewide Coverage Section with Map */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white">
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-green-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4">
@@ -530,7 +530,7 @@ const TelepsychiatryFlorida = () => {
         </section>
 
         {/* Services Section - Cards with Image Placeholders and Mobile Carousel */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-gray-50">
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="services-title">

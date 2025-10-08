@@ -78,13 +78,13 @@ const CharmHealthBooking = ({
   if (variant === 'prominent') {
     return (
       <Card className={`relative w-full overflow-hidden border-blue-200 ${className}`}>
-        <div className="relative aspect-[21/9]">
+        <div className="relative aspect-[18/9]">
           <img 
             src={telehealthHeroBg} 
             alt="Telehealth Background"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/70 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/60 to-transparent"></div>
           
           <div className="relative h-full flex items-center px-6 sm:px-8 lg:px-12">
             <div className="max-w-xl text-left">
