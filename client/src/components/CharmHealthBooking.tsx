@@ -141,12 +141,36 @@ const CharmHealthBooking = ({
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>
           
-          {/* Contenido centrado */}
-          <div className="relative h-full flex items-center justify-center px-8">
-            <div className="text-center">
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-8">
-                {language === 'en' ? 'Get Ready To Start' : 'Prepárese para Comenzar'}
-              </h2>
+          {/* Icono y subtítulo en el borde inferior izquierdo */}
+          <div className="absolute bottom-10 left-8 sm:left-12 lg:left-16 flex items-center gap-3">
+            <div className={`w-12 h-12 ${colorScheme === 'green' ? 'bg-green-100' : 'bg-blue-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
+              <VideoIcon className={`w-6 h-6 ${colorScheme === 'green' ? 'text-green-600' : 'text-blue-600'}`} />
+            </div>
+            <p className={`${colorScheme === 'green' ? 'text-green-700' : 'text-blue-700'} font-medium sm:text-base text-[18px]`} data-testid="telehealth-subtitle-desktop">
+              {currentContent.subtitle}. {currentContent.title}
+            </p>
+          </div>
+          
+          {/* Contenido principal - posicionado arriba */}
+          <div className="relative h-full flex items-start px-8 sm:px-12 lg:px-16 pt-12">
+            <div className="max-w-2xl text-left">
+              {heroBadges && (
+                <div className="mb-6">
+                  {heroBadges}
+                </div>
+              )}
+              
+              {heroTitle && (
+                <div className="mb-5">
+                  {heroTitle}
+                </div>
+              )}
+              
+              {heroDescription && (
+                <div className="mb-6">
+                  {heroDescription}
+                </div>
+              )}
               
               <Button
                 onClick={() => {
