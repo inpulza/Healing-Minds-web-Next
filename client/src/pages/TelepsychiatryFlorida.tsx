@@ -26,6 +26,13 @@ import {
 import InsuranceLogos from '@/components/InsuranceLogos';
 import WellnessIcon from '@/components/WellnessIcon';
 import { useState } from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import floridaMap from '@/assets/florida-map.webp';
 import patientCareImage from '@/assets/telepsychiatry-patient-care.webp';
 import floridaStateImage from '@/assets/telepsychiatry-florida-state.webp';
@@ -432,7 +439,46 @@ const TelepsychiatryFlorida = () => {
                 {currentContent.benefits.description}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Mobile Carousel */}
+            <div className="lg:hidden">
+              <Carousel opts={{ align: "start", loop: true }} className="w-full">
+                <CarouselContent>
+                  {currentContent.benefits.items.map((benefit, index) => (
+                    <CarouselItem key={index}>
+                      <Card className="bg-green-50 border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
+                        {benefit.image && (
+                          <div className="w-full aspect-square bg-white p-4">
+                            <img 
+                              src={benefit.image} 
+                              alt={benefit.title}
+                              className="w-full h-full object-contain rounded-2xl"
+                            />
+                          </div>
+                        )}
+                        <div className="p-6">
+                          <div className="flex items-center gap-3 mb-4">
+                            <WellnessIcon size="sm" color="green">
+                              <benefit.icon />
+                            </WellnessIcon>
+                            <h3 className="text-lg font-body font-bold text-green-800">
+                              {benefit.title}
+                            </h3>
+                          </div>
+                          <p className="text-gray-700 font-body leading-relaxed text-sm">
+                            {benefit.description}
+                          </p>
+                        </div>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2 bg-white/90 hover:bg-white border-green-200" />
+                <CarouselNext className="right-2 bg-white/90 hover:bg-white border-green-200" />
+              </Carousel>
+            </div>
+
+            {/* Desktop Grid */}
+            <div className="hidden lg:grid lg:grid-cols-4 gap-6">
               {currentContent.benefits.items.map((benefit, index) => (
                 <Card key={index} className="bg-green-50 border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
                   {benefit.image && (
@@ -587,7 +633,47 @@ const TelepsychiatryFlorida = () => {
                 {currentContent.services.description}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Mobile Carousel */}
+            <div className="lg:hidden">
+              <Carousel opts={{ align: "start", loop: true }} className="w-full">
+                <CarouselContent>
+                  {currentContent.services.items.map((service, index) => {
+                    const IconComponent = service.icon;
+                    return (
+                      <CarouselItem key={index}>
+                        <Card className="bg-white border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`service-${index}`}>
+                          {service.image && (
+                            <div className="w-full aspect-square bg-green-50 p-4">
+                              <img 
+                                src={service.image} 
+                                alt={service.title}
+                                className="w-full h-full object-contain rounded-2xl"
+                              />
+                            </div>
+                          )}
+                          <div className="p-6">
+                            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                              <IconComponent className="w-6 h-6 text-green-600" />
+                            </div>
+                            <h3 className="text-lg font-body font-bold text-green-800 mb-2 text-center">
+                              {service.title}
+                            </h3>
+                            <p className="text-gray-600 font-body leading-relaxed text-center text-sm">
+                              {service.description}
+                            </p>
+                          </div>
+                        </Card>
+                      </CarouselItem>
+                    );
+                  })}
+                </CarouselContent>
+                <CarouselPrevious className="left-2 bg-white/90 hover:bg-white border-green-200" />
+                <CarouselNext className="right-2 bg-white/90 hover:bg-white border-green-200" />
+              </Carousel>
+            </div>
+
+            {/* Desktop Grid */}
+            <div className="hidden lg:grid lg:grid-cols-4 gap-6">
               {currentContent.services.items.map((service, index) => {
                 const IconComponent = service.icon;
                 return (
