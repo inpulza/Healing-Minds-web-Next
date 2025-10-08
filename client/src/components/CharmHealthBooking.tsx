@@ -142,17 +142,12 @@ const CharmHealthBooking = ({
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           
           {/* Icono y subtítulo en el borde inferior izquierdo */}
-          <div className="absolute bottom-10 left-8 sm:left-12 lg:left-16">
-            <div className="flex items-center gap-3 mb-2">
-              <div className={`w-12 h-12 ${colorScheme === 'green' ? 'bg-green-100' : 'bg-blue-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
-                <VideoIcon className={`w-6 h-6 ${colorScheme === 'green' ? 'text-green-600' : 'text-blue-600'}`} />
-              </div>
-              <p className={`${colorScheme === 'green' ? 'text-green-700' : 'text-blue-700'} font-medium sm:text-base text-[18px]`} data-testid="telehealth-subtitle-desktop">
-                {currentContent.subtitle}
-              </p>
+          <div className="absolute bottom-10 left-8 sm:left-12 lg:left-16 flex items-center gap-3">
+            <div className={`w-12 h-12 ${colorScheme === 'green' ? 'bg-green-100' : 'bg-blue-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
+              <VideoIcon className={`w-6 h-6 ${colorScheme === 'green' ? 'text-green-600' : 'text-blue-600'}`} />
             </div>
-            <p className="text-gray-900 font-body font-bold text-xl ml-[60px]">
-              {currentContent.title}
+            <p className={`${colorScheme === 'green' ? 'text-green-700' : 'text-blue-700'} font-medium sm:text-base text-[18px]`} data-testid="telehealth-subtitle-desktop">
+              {currentContent.subtitle}. {currentContent.title}
             </p>
           </div>
           
