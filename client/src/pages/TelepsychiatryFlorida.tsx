@@ -12,7 +12,7 @@ import { locationFAQs } from '@/data/locationFAQs';
 import WellnessIcon from '@/components/WellnessIcon';
 import heroLocationImage from '@assets/dr-melva-location-hero.webp';
 import OptimizedImage from '@/components/OptimizedImage';
-import floridaMap from '@assets/florida-map.webp';
+import floridaMap from '../assets/florida-map.webp';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
