@@ -90,7 +90,7 @@ const CharmHealthBooking = ({
           </div>
           
           {/* Mobile Content - Overlaps image to crop bottom */}
-          <div className="p-6 bg-white -mt-16 relative z-10 rounded-t-3xl">
+          <div className="p-6 bg-white -mt-12 relative z-10 rounded-t-3xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <VideoIcon className="w-6 h-6 text-blue-600" />
