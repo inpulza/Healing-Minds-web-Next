@@ -891,7 +891,7 @@ const LocationGoldenGate = () => {
 
               {/* CharmHealth Booking Widget */}
               <div className="lg:pl-8">
-                <CharmHealthBooking variant="prominent" />
+                <CharmHealthBooking />
               </div>
             </div>
           </div>
