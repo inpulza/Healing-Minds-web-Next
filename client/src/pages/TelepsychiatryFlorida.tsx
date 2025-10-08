@@ -278,14 +278,7 @@ const TelepsychiatryFlorida = () => {
                 )}
               </h1>
               
-              {/* Simplified description */}
-              <div className="max-w-3xl mx-auto mb-10">
-                <p className="text-base sm:text-lg text-gray-600 font-body leading-relaxed">
-                  {currentContent.hero.description}
-                </p>
-              </div>
-              
-              <div className="max-w-5xl mx-auto">
+              <div className="max-w-5xl mx-auto mb-10">
                 <CharmHealthBooking variant="prominent" showDescription={false} />
                 
                 {/* Badges below the card */}
@@ -314,6 +307,13 @@ const TelepsychiatryFlorida = () => {
                       {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
                     </span>
                   </div>
+                </div>
+                
+                {/* Description below hero image */}
+                <div className="max-w-3xl mx-auto mt-10">
+                  <p className="text-base sm:text-lg text-gray-600 font-body leading-relaxed text-center">
+                    {currentContent.hero.description}
+                  </p>
                 </div>
               </div>
             </div>
