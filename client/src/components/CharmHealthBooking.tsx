@@ -128,7 +128,7 @@ const CharmHealthBooking = ({
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           
-          <div className="relative h-full flex items-center px-6 sm:px-8 lg:px-12">
+          <div className="relative h-full flex items-start pt-8 px-6 sm:px-8 lg:px-12">
             <div className="max-w-xl text-left">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
