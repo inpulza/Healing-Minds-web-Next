@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, VideoIcon, Smartphone, Monitor, CheckCircle } from 'lucide-react';
-import telehealthHeroBg from '../assets/telehealth-hero-bg.webp';
+import telehealthHeroBg from '../assets/telehealth-hero-bg.png?v=2';
 
 interface CharmHealthBookingProps {
   variant?: 'default' | 'compact' | 'prominent';
@@ -135,7 +135,7 @@ const CharmHealthBooking = ({
           <img 
             src={telehealthHeroBg} 
             alt="Telehealth Background"
-            className="absolute inset-0 w-full h-full object-contain object-top"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           

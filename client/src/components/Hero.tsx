@@ -4,7 +4,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone, Brain, Heart } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
-import heroImage from '@assets/hero-doctor-new.webp';
+import heroImage from '@assets/hero-doctor-hq.webp';
 import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
 
 // Optimized Hero component with performance improvements
@@ -128,12 +128,12 @@ const Hero = React.memo(() => {
 
         {/* Tablet & Desktop: Original single container layout */}
         <div className="hidden md:block">
-          <div className="relative rounded-3xl overflow-hidden aspect-[7/4] flex items-center hero-container">
+          <div className="relative rounded-3xl overflow-hidden aspect-[18/9] flex items-center hero-container">
             {/* Background Image */}
             <img 
               src={heroImage}
               alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
-              className="absolute inset-0 w-full h-full object-contain object-top hero-image"
+              className="absolute inset-0 w-full h-full object-cover object-center hero-image"
               width={1200}
               height={800}
               loading="eager"
