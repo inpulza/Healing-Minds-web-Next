@@ -509,6 +509,63 @@ const TelepsychiatryFlorida = () => {
           </div>
         </section>
 
+        {/* About Dr. Melva Reve Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 shadow-lg border border-green-100">
+              <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center">
+                {/* Content */}
+                <div className="text-green-800 order-2 md:order-1">
+                  <h2 className="text-5xl font-body font-bold mb-4 sm:mb-6" data-testid="doctor-about-title">
+                    {language === 'en' 
+                      ? <>Dedicated to your <span className="font-display italic text-green-700">mental health</span>, every day</>
+                      : <>Dedicados a su <span className="font-display italic text-green-700">salud mental</span>, todos los días</>
+                    }
+                  </h2>
+                  
+                  <div className="mb-6 sm:mb-8">
+                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600" data-testid="experience-years">15+</div>
+                    <div className="text-gray-600 font-body text-sm sm:text-base">
+                      {language === 'en' ? 'Years of experience' : 'Años de experiencia'}
+                    </div>
+                  </div>
+
+                  <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Dr. Melva Reve provides compassionate telepsychiatry care with the same expertise and attention you would receive in person. As a board-certified psychiatrist, she brings years of experience directly to your home through secure video consultations.'
+                      : 'La Dra. Melva Reve brinda atención de telepsiquiatría compasiva con la misma experiencia y atención que recibiría en persona. Como psiquiatra certificada, aporta años de experiencia directamente a su hogar a través de consultas de video seguras.'
+                    }
+                  </p>
+
+                  <a href={charmHealthBookingUrl} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7"
+                      data-testid="button-meet-doctor"
+                    >
+                      <span>{language === 'en' ? 'Book Your Consultation' : 'Reserve Su Consulta'}</span>
+                      <ArrowRight className="w-8 h-8 sm:w-9 sm:h-9 p-2 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full transition-all duration-300 bg-green-500 text-white flex-shrink-0" />
+                    </Button>
+                  </a>
+                </div>
+
+                {/* Doctor Image */}
+                <div className="relative order-1 md:order-2">
+                  <div className="aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden">
+                    <img
+                      src={doctorImage}
+                      alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing telepsychiatry services"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      data-testid="doctor-about-image"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Florida Map Section */}
         <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
