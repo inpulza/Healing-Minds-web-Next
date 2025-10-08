@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { updateSEO } from '@/utils/seo';
 import { Button } from '@/components/ui/button';
-import { VideoIcon, CheckCircle, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { VideoIcon, CheckCircle, MapPin, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import InsuranceLogos from '@/components/InsuranceLogos';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
@@ -24,9 +24,11 @@ import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d7
 import bipolarTreatmentImg from '@assets/generated_images/Bipolar_balance_stability_da9b84ed.png';
 import medicationManagementImg from '@assets/generated_images/Medication_management_studio_556b9569.png';
 import telehealthHeroBg from '../assets/telehealth-hero-bg.png';
+import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
+  const { trackTelehealthClick } = useTikTokEvents();
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true,
     align: 'start',
@@ -296,8 +298,23 @@ const TelepsychiatryFlorida = () => {
                     <span>{currentContent.hero.description}</span>
                   </div>
                   
+                  {/* Booking Button */}
+                  <div className="mb-8">
+                    <Button
+                      onClick={() => {
+                        trackTelehealthClick('telepsychiatry-hero');
+                        window.open('https://patient.charmtracker.com/login.jsp?PID=7a4f7f03d9f44ac4ba3d28c9fda4c99a', '_blank', 'noopener,noreferrer');
+                      }}
+                      className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+                      data-testid="button-telehealth-hero"
+                    >
+                      <Calendar className="w-5 h-5 mr-2" />
+                      {language === 'en' ? 'Book Telehealth Appointment' : 'Reservar Cita de Telesalud'}
+                    </Button>
+                  </div>
+                  
                   {/* Badges */}
-                  <div className="flex flex-wrap gap-3 mb-8">
+                  <div className="flex flex-wrap gap-3">
                     <div className="flex items-center gap-2 bg-white/95 rounded-full px-4 py-2 shadow-sm border border-green-100">
                       <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                         <VideoIcon className="w-3 h-3 text-green-600" />
@@ -332,11 +349,6 @@ const TelepsychiatryFlorida = () => {
         {/* Statewide Coverage Section with Map */}
         <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Booking CTA */}
-            <div className="max-w-5xl mx-auto mb-16">
-              <CharmHealthBooking variant="prominent" showDescription={false} />
-            </div>
-            
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4">
                 {language === 'en' ? (
