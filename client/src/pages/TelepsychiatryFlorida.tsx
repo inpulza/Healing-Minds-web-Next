@@ -4,56 +4,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { updateSEO } from '@/utils/seo';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Link } from 'wouter';
-import { 
-  VideoIcon, 
-  Shield, 
-  Clock, 
-  Users, 
-  CheckCircle, 
-  MapPin, 
-  Monitor, 
-  ArrowRight,
-  Calendar,
-  Phone,
-  Navigation,
-  ChevronDown,
-  HelpCircle,
-  Brain,
-  Heart
-} from 'lucide-react';
+import { VideoIcon, Shield, Clock, Users, CheckCircle, MapPin, Monitor, ArrowRight } from 'lucide-react';
 import InsuranceLogos from '@/components/InsuranceLogos';
+import LocationFAQ from '@/components/LocationFAQ';
 import WellnessIcon from '@/components/WellnessIcon';
-import { useState } from 'react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import floridaMap from '@/assets/florida-map.webp';
-import doctorImage from '@/assets/doctor-consultation.webp';
-import heroLocationImage from '@/assets/dr-melva-location-hero.webp';
-import drMelvaSquare from '@assets/e534f45f-8c35-4c68-853b-c0dc841a0387_1759923307601.png';
-// Generated benefit images
-import statewideAccessImg from '@assets/generated_images/Statewide_telepsychiatry_access_concept_b85ef47e.png';
-import saveTimeImg from '@assets/generated_images/Time_saving_telehealth_concept_4adac1c8.png';
-import privacyImg from '@assets/generated_images/Privacy_and_confidentiality_concept_e1fc7f17.png';
-import continuityImg from '@assets/generated_images/Continuity_of_care_concept_3152cd39.png';
-// Generated service images
-import evaluationImg from '@assets/generated_images/Comprehensive_psychiatric_evaluation_concept_72248a38.png';
-import medicationImg from '@assets/generated_images/Medication_management_service_concept_5aec039c.png';
-import followUpCareImg from '@assets/generated_images/Follow-up_psychiatric_care_concept_281a1466.png';
-import bilingualImg from '@assets/generated_images/Bilingual_psychiatric_services_concept_405e7f7c.png';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
-  const [openFaqItem, setOpenFaqItem] = useState<number | null>(0);
-  
-  // Charm Health booking URL
-  const charmHealthBookingUrl = "https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2";
 
   useEffect(() => {
     const seoData = {
@@ -75,268 +33,164 @@ const TelepsychiatryFlorida = () => {
   const content = {
     en: {
       hero: {
-        tagline: "Professional Virtual Care",
         title: "Expert Psychiatric Care from Anywhere in Florida",
-        subtitle: "Connect with Dr. Melva Reve through secure video sessions. No travel required - receive compassionate, bilingual care from the comfort of your home.",
-        ctaPrimary: "Schedule Virtual Appointment",
-        ctaSecondary: "Call (239) 423-0272"
+        subtitle: "Receive medication management and confidential consultations with Dr. Melva Reve, board-certified psychiatrist, through our secure Telepsychiatry service.",
+        description: "At Healing Minds Psychiatry, we believe that access to exceptional mental health care should have no boundaries. Our Telepsychiatry (Telehealth) service eliminates distance and time barriers, connecting you with Dr. Melva Reve from the comfort and privacy of your home, wherever you are in Florida.",
+        ctaPrimary: "Schedule Virtual Appointment Now",
+        ctaSecondary: "Call for Information: (239) 423-0272"
       },
-      stats: [
-        { icon: Users, value: '22M+', label: 'Florida Residents' },
-        { icon: VideoIcon, value: '24/7', label: 'Online Scheduling' },
-        { icon: Monitor, value: '100%', label: 'HIPAA Secure' }
-      ],
       benefits: {
-        title: "Why Choose Telepsychiatry?",
-        description: "Experience mental health care designed around your life, not the other way around.",
+        title: "The Benefits of Telepsychiatry",
+        description: "Our virtual care service is designed with you in mind, offering a combination of convenience, privacy, and access to expert care.",
         items: [
           {
             icon: MapPin,
-            title: "Statewide Access",
-            description: "Whether in Miami, Orlando, Tampa, or rural Florida, connect with Dr. Reve from anywhere in the state.",
-            image: statewideAccessImg
+            title: "Direct Access to an Expert, Without Barriers",
+            description: "Whether you live in Miami, Orlando, Tampa, or a rural community, our Telehealth service gives you direct access to a board-certified psychiatrist with over 15 years of experience, without the need to search for a local provider."
           },
           {
             icon: Clock,
-            title: "Save Time & Energy",
-            description: "No traffic, no waiting rooms. Virtual appointments fit seamlessly into your schedule.",
-            image: saveTimeImg
+            title: "Maximum Convenience and Time Savings",
+            description: "Eliminate the stress of traffic, long wait times, and the need to take time off work or leave home. Our virtual appointments fit your schedule, allowing you to receive the care you need efficiently."
           },
           {
             icon: Shield,
-            title: "Complete Privacy",
-            description: "Receive care in the comfort and privacy of your own space with HIPAA-compliant security.",
-            image: privacyImg
+            title: "Absolute Privacy and Comfort",
+            description: "Receive care in a space where you feel completely safe and comfortable: your own home. Telepsychiatry consultations offer a level of privacy that many patients prefer."
           },
           {
             icon: Users,
             title: "Continuity of Care",
-            description: "Perfect for seasonal residents, students, or travelers. Your treatment continues wherever you are.",
-            image: continuityImg
+            description: "Ideal for seasonal residents (\"snowbirds\"), college students, or anyone traveling within Florida. Telepsychiatry ensures your treatment is never interrupted, no matter where you are."
           }
         ]
       },
       process: {
-        title: "How It Works",
-        description: "Book your appointment through our secure CharmHealth platform and connect with Dr. Reve from anywhere in Florida.",
+        title: "Our Process: Simple, Secure, and Centered on You",
+        description: "Getting started with telepsychiatry is a simple and straightforward process.",
         steps: [
           {
             number: "1",
-            title: "Choose Your Appointment Type",
-            description: "Visit our CharmHealth booking portal and select from: New Patient Telehealth (60 mins), Follow-up Telehealth (20 mins), or in-person options if preferred."
+            title: "Easy Contact and Scheduling",
+            description: "Call us or use our online booking portal to schedule your first Telehealth consultation. Our team will guide you through the initial forms digitally."
           },
           {
             number: "2",
-            title: "Complete Secure Check-In",
-            description: "Fill out your information through CharmHealth's HIPAA-compliant platform. You'll receive a confirmation email with your encrypted video session link."
+            title: "Confirmation and Secure Link",
+            description: "You will receive a confirmation email with a unique and secure link for your video session. Our platform is completely private and HIPAA compliant."
           },
           {
             number: "3",
-            title: "Meet Dr. Reve Virtually",
-            description: "Join your session from any device - smartphone, tablet, or computer. Have your full psychiatric evaluation in English or Spanish."
+            title: "Your Confidential Consultation with Dr. Reve",
+            description: "At your appointment time, simply click the link from your smartphone, tablet, or computer. You'll have your complete psychiatric evaluation or follow-up appointment directly with Dr. Reve, in English or Spanish."
           }
         ]
       },
       services: {
-        title: "Complete Psychiatric Services via Telehealth",
-        description: "Our virtual platform provides the full range of psychiatric care for adults (18+).",
-        items: [
-          {
-            icon: Brain,
-            title: "Comprehensive Evaluations",
-            description: "Initial psychiatric assessments for accurate diagnosis",
-            image: evaluationImg
-          },
-          {
-            icon: Heart,
-            title: "Medication Management",
-            description: "Expert treatment for anxiety, depression, ADHD, and more",
-            image: medicationImg
-          },
-          {
-            icon: CheckCircle,
-            title: "Follow-Up Care",
-            description: "Ongoing support and prescription management",
-            image: followUpCareImg
-          },
-          {
-            icon: Users,
-            title: "Bilingual Services",
-            description: "Professional care in English or Spanish",
-            image: bilingualImg
-          }
+        title: "Complete Psychiatry Services via Telemedicine",
+        description: "Our virtual platform allows us to offer our full range of diagnostic and medication management services for adults (18+).",
+        subtitle: "All our telepsychiatry services are available completely in Spanish or English, ensuring clear communication and culturally sensitive care.",
+        list: [
+          "Initial Psychiatric Evaluation: A comprehensive consultation to establish an accurate diagnosis.",
+          "Medication Management for Anxiety and Depression: Expert treatment and follow-up for these conditions.",
+          "ADHD Treatment: Evaluation and medication management for ADHD in adults.",
+          "Care for Bipolar Disorder and PTSD: Continuous follow-up for complex conditions.",
+          "Follow-up Consultations and Prescription Renewals: Efficient appointments to ensure continuity of your treatment. Prescriptions are sent electronically to your pharmacy of choice anywhere in Florida."
         ]
       },
-      faqs: [
-        {
-          question: "Is telepsychiatry as effective as in-person visits?",
-          answer: "Yes! Research shows telepsychiatry is equally effective for most psychiatric conditions. Dr. Reve provides the same comprehensive evaluation, diagnosis, and treatment planning through secure video sessions."
-        },
-        {
-          question: "What technology do I need?",
-          answer: "You only need a smartphone, tablet, or computer with a camera, microphone, and internet connection. Our platform is user-friendly and works on all devices - no special software required."
-        },
-        {
-          question: "Can prescriptions be sent to my pharmacy?",
-          answer: "Absolutely. Dr. Reve can electronically send prescriptions to any pharmacy in Florida. You'll receive your medications the same day at your chosen location."
-        },
-        {
-          question: "Is my video session private and secure?",
-          answer: "Yes. We use CharmHealth, a fully HIPAA-compliant platform. All sessions are encrypted end-to-end, ensuring your privacy and confidentiality are protected at all times."
-        },
-        {
-          question: "Do you accept insurance for telehealth?",
-          answer: "Yes, we accept most major insurance plans for telepsychiatry services. Our team will verify your benefits before your appointment. We also offer flexible payment options."
-        },
-        {
-          question: "What conditions can be treated via telepsychiatry?",
-          answer: "We treat anxiety disorders, depression, ADHD, PTSD, bipolar disorder, OCD, and other mental health conditions. Dr. Reve will assess if telepsychiatry is appropriate for your specific needs."
-        }
-      ],
-      mapSection: {
-        title: "Serving All of Florida",
-        description: "Professional telepsychiatry services available throughout the state",
-        statewideLabel: "Statewide Coverage",
-        mainOfficeLabel: "Main Office - Naples",
-        telehealthLabel: "Telehealth Available"
+      platform: {
+        title: "A Secure Platform You Can Trust",
+        description: "The confidentiality of your information is our top priority. At Healing Minds Psychiatry, we use the leading CharmHealth platform, a fully secure electronic health records (EHR) and telemedicine system. All your communications, records, and video sessions are encrypted and comply with the strictest HIPAA privacy regulations."
+      },
+      doctor: {
+        title: "Meet Your Virtual Psychiatrist: Dr. Melva Reve",
+        description: "When you schedule a Telehealth appointment, you're not talking to a random provider. You're connecting directly with Dr. Melva Reve, a board-certified psychiatrist with over 15 years of experience. Her compassionate and bilingual approach, combined with her expertise in psychiatric medicine, ensures you receive the highest standard of care, regardless of distance."
       },
       cta: {
-        title: "Ready to Get Started?",
-        description: "Quality mental health care is just one click away. Schedule your virtual appointment today.",
-        button: "Book Your Telehealth Session"
+        title: "Ready to Take the First Step?",
+        description: "Quality mental health care is just a click away.",
+        button: "Schedule My Virtual Appointment"
       }
     },
     es: {
       hero: {
-        tagline: "Atención Virtual Profesional",
         title: "Atención Psiquiátrica Experta desde Cualquier Lugar de Florida",
-        subtitle: "Conéctese con la Dra. Melva Reve a través de sesiones de video seguras. Sin necesidad de viajar - reciba atención compasiva y bilingüe desde la comodidad de su hogar.",
-        ctaPrimary: "Programar Cita Virtual",
-        ctaSecondary: "Llamar (239) 423-0272"
+        subtitle: "Reciba manejo de medicamentos y consultas confidenciales con la Dra. Melva Reve, psiquiatra certificada, a través de nuestro servicio seguro de Telepsiquiatría.",
+        description: "En Healing Minds Psychiatry, creemos que el acceso a un cuidado de salud mental excepcional no debería tener fronteras. Nuestro servicio de Telepsiquiatría (Telehealth) elimina las barreras de la distancia y el tiempo, conectándote con la Dra. Melva Reve desde la comodidad y privacidad de tu hogar, estés donde estés en Florida.",
+        ctaPrimary: "Agendar Cita Virtual Ahora",
+        ctaSecondary: "Llamar para Información: (239) 423-0272"
       },
-      stats: [
-        { icon: Users, value: '22M+', label: 'Residentes de FL' },
-        { icon: VideoIcon, value: '24/7', label: 'Reserva Online' },
-        { icon: Monitor, value: '100%', label: 'Seguro HIPAA' }
-      ],
       benefits: {
-        title: "¿Por Qué Elegir Telepsiquiatría?",
-        description: "Experimente atención de salud mental diseñada alrededor de su vida, no al revés.",
+        title: "Los Beneficios de la Telepsiquiatría",
+        description: "Nuestro servicio de atención virtual está diseñado pensando en ti, ofreciendo una combinación de conveniencia, privacidad y acceso a cuidado experto.",
         items: [
           {
             icon: MapPin,
-            title: "Acceso Estatal",
-            description: "Ya sea en Miami, Orlando, Tampa o la Florida rural, conéctese con la Dra. Reve desde cualquier lugar del estado.",
-            image: statewideAccessImg
+            title: "Acceso Directo a un Experto, Sin Barreras",
+            description: "No importa si vives en Miami, Orlando, Tampa o en una comunidad rural. Nuestro servicio de Telehealth te da acceso directo a una psiquiatra certificada con más de 15 años de experiencia, sin necesidad de buscar un proveedor local."
           },
           {
             icon: Clock,
-            title: "Ahorre Tiempo y Energía",
-            description: "Sin tráfico, sin salas de espera. Las citas virtuales se adaptan perfectamente a su agenda.",
-            image: saveTimeImg
+            title: "Máxima Conveniencia y Ahorro de Tiempo",
+            description: "Elimina el estrés del tráfico, los largos tiempos de espera y la necesidad de ausentarte del trabajo o de casa. Nuestras citas virtuales se adaptan a tu agenda, permitiéndote recibir la atención que necesitas de manera eficiente."
           },
           {
             icon: Shield,
-            title: "Privacidad Completa",
-            description: "Reciba atención en la comodidad y privacidad de su propio espacio con seguridad compatible con HIPAA.",
-            image: privacyImg
+            title: "Privacidad y Comodidad Absolutas",
+            description: "Recibe atención en un espacio donde te sientas completamente seguro y cómodo: tu propio hogar. Las consultas de telepsiquiatría ofrecen un nivel de privacidad que muchos pacientes prefieren."
           },
           {
             icon: Users,
-            title: "Continuidad del Cuidado",
-            description: "Perfecto para residentes estacionales, estudiantes o viajeros. Su tratamiento continúa donde quiera que esté.",
-            image: continuityImg
+            title: "Continuidad de la Atención",
+            description: "Ideal para residentes estacionales (\"snowbirds\"), estudiantes universitarios o cualquier persona que viaje dentro de Florida. La telepsiquiatría asegura que tu tratamiento nunca se interrumpa, sin importar dónde te encuentres."
           }
         ]
       },
       process: {
-        title: "Cómo Funciona",
-        description: "Reserve su cita a través de nuestra plataforma segura CharmHealth y conéctese con la Dra. Reve desde cualquier lugar de Florida.",
+        title: "Nuestro Proceso: Simple, Seguro y Centrado en Ti",
+        description: "Comenzar con la telepsiquiatría es un proceso sencillo y directo.",
         steps: [
           {
             number: "1",
-            title: "Elija su Tipo de Cita",
-            description: "Visite nuestro portal de reservas CharmHealth y seleccione: Nuevo Paciente Telesalud (60 min), Seguimiento Telesalud (20 min), o opciones presenciales si lo prefiere."
+            title: "Contacto y Programación Sencillos",
+            description: "Llámanos o utiliza nuestro portal de reservas en línea para programar tu primera consulta de Telehealth. Nuestro equipo te guiará a través de los formularios iniciales de manera digital."
           },
           {
             number: "2",
-            title: "Complete el Registro Seguro",
-            description: "Complete su información a través de la plataforma compatible con HIPAA de CharmHealth. Recibirá un correo de confirmación con su enlace de sesión de video encriptado."
+            title: "Confirmación y Enlace Seguro",
+            description: "Recibirás un correo electrónico de confirmación con un enlace único y seguro para tu sesión de video. Nuestra plataforma es completamente privada y compatible con las regulaciones de HIPAA."
           },
           {
             number: "3",
-            title: "Conozca a la Dra. Reve Virtualmente",
-            description: "Únase a su sesión desde cualquier dispositivo - teléfono, tableta o computadora. Tenga su evaluación psiquiátrica completa en inglés o español."
+            title: "Tu Consulta Confidencial con la Dra. Reve",
+            description: "A la hora de tu cita, simplemente haz clic en el enlace desde tu smartphone, tablet o computadora. Tendrás tu evaluación psiquiátrica completa o tu cita de seguimiento directamente con la Dra. Reve, en inglés o español."
           }
         ]
       },
       services: {
-        title: "Servicios Psiquiátricos Completos vía Telesalud",
-        description: "Nuestra plataforma virtual proporciona toda la gama de atención psiquiátrica para adultos (18+).",
-        items: [
-          {
-            icon: Brain,
-            title: "Evaluaciones Integrales",
-            description: "Evaluaciones psiquiátricas iniciales para diagnóstico preciso",
-            image: evaluationImg
-          },
-          {
-            icon: Heart,
-            title: "Manejo de Medicamentos",
-            description: "Tratamiento experto para ansiedad, depresión, TDAH y más",
-            image: medicationImg
-          },
-          {
-            icon: CheckCircle,
-            title: "Atención de Seguimiento",
-            description: "Apoyo continuo y manejo de prescripciones",
-            image: followUpCareImg
-          },
-          {
-            icon: Users,
-            title: "Servicios Bilingües",
-            description: "Atención profesional en inglés o español",
-            image: bilingualImg
-          }
+        title: "Servicios Completos de Psiquiatría a través de Telemedicina",
+        description: "Nuestra plataforma virtual nos permite ofrecer nuestra gama completa de servicios de diagnóstico y manejo de medicamentos para adultos (18+).",
+        subtitle: "Todos nuestros servicios de telepsiquiatría están disponibles completamente en español o inglés, garantizando una comunicación clara y una atención culturalmente sensible.",
+        list: [
+          "Evaluación Psiquiátrica Inicial: Una consulta integral para establecer un diagnóstico preciso.",
+          "Manejo de Medicamentos para Ansiedad y Depresión: Tratamiento y seguimiento experto para estas condiciones.",
+          "Tratamiento de TDAH: Evaluación y manejo de medicación para el TDAH en adultos.",
+          "Cuidado para Trastorno Bipolar y TEPT (PTSD): Seguimiento continuo para condiciones complejas.",
+          "Consultas de Seguimiento y Renovación de Recetas: Citas eficientes para asegurar la continuidad de tu tratamiento. Las recetas se envían electrónicamente a tu farmacia de preferencia en cualquier lugar de Florida."
         ]
       },
-      faqs: [
-        {
-          question: "¿Es la telepsiquiatría tan efectiva como las visitas en persona?",
-          answer: "¡Sí! La investigación muestra que la telepsiquiatría es igualmente efectiva para la mayoría de las condiciones psiquiátricas. La Dra. Reve proporciona la misma evaluación integral, diagnóstico y planificación de tratamiento a través de sesiones de video seguras."
-        },
-        {
-          question: "¿Qué tecnología necesito?",
-          answer: "Solo necesita un teléfono inteligente, tableta o computadora con cámara, micrófono y conexión a internet. Nuestra plataforma es fácil de usar y funciona en todos los dispositivos - no se requiere software especial."
-        },
-        {
-          question: "¿Pueden enviar las recetas a mi farmacia?",
-          answer: "Absolutamente. La Dra. Reve puede enviar recetas electrónicamente a cualquier farmacia en Florida. Recibirá sus medicamentos el mismo día en la ubicación que elija."
-        },
-        {
-          question: "¿Es mi sesión de video privada y segura?",
-          answer: "Sí. Usamos CharmHealth, una plataforma totalmente compatible con HIPAA. Todas las sesiones están encriptadas de extremo a extremo, asegurando que su privacidad y confidencialidad estén protegidas en todo momento."
-        },
-        {
-          question: "¿Aceptan seguro para telesalud?",
-          answer: "Sí, aceptamos la mayoría de los planes de seguro principales para servicios de telepsiquiatría. Nuestro equipo verificará sus beneficios antes de su cita. También ofrecemos opciones de pago flexibles."
-        },
-        {
-          question: "¿Qué condiciones pueden tratarse vía telepsiquiatría?",
-          answer: "Tratamos trastornos de ansiedad, depresión, TDAH, TEPT, trastorno bipolar, TOC y otras condiciones de salud mental. La Dra. Reve evaluará si la telepsiquiatría es apropiada para sus necesidades específicas."
-        }
-      ],
-      mapSection: {
-        title: "Sirviendo a Toda Florida",
-        description: "Servicios de telepsiquiatría profesional disponibles en todo el estado",
-        statewideLabel: "Cobertura Estatal",
-        mainOfficeLabel: "Oficina Principal - Naples",
-        telehealthLabel: "Telesalud Disponible"
+      platform: {
+        title: "Una Plataforma Segura en la que Puedes Confiar",
+        description: "La confidencialidad de tu información es nuestra máxima prioridad. En Healing Minds Psychiatry, utilizamos la plataforma líder CharmHealth, un sistema de registros médicos electrónicos (EHR) y telemedicina completamente seguro. Todas tus comunicaciones, registros y sesiones de video están encriptados y cumplen con las más estrictas regulaciones de privacidad de HIPAA."
+      },
+      doctor: {
+        title: "Conozca a su Psiquiatra Virtual: Dra. Melva Reve",
+        description: "Cuando agendas una cita de Telehealth, no estás hablando con un proveedor al azar. Estás conectando directamente con la Dra. Melva Reve, una psiquiatra certificada con más de 15 años de experiencia. Su enfoque compasivo y bilingüe, combinado con su pericia en medicina psiquiátrica, asegura que recibas el más alto estándar de atención, sin importar la distancia."
       },
       cta: {
-        title: "¿Listo para Comenzar?",
-        description: "Atención de salud mental de calidad está a solo un clic de distancia. Programe su cita virtual hoy.",
-        button: "Reservar su Sesión de Telesalud"
+        title: "¿Listo para Dar el Primer Paso?",
+        description: "La atención de salud mental de calidad está a solo un clic de distancia.",
+        button: "Agendar Mi Cita Virtual"
       }
     }
   };
@@ -346,82 +200,45 @@ const TelepsychiatryFlorida = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      <main>
+      <main className="pt-16">
         {/* Hero Section */}
-        <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-gradient-to-b from-green-50 to-white">
+        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Hero Content */}
-            <div className="text-center mb-12">
+            <div className="text-center mb-8 sm:mb-12">
               <div className="flex items-center justify-center gap-3 mb-6">
-                <WellnessIcon size="sm" color="green">
+                <WellnessIcon size="lg" color="blue" className="opacity-80">
                   <VideoIcon />
                 </WellnessIcon>
-                <span className="text-green-700 font-body font-semibold text-lg" data-testid="hero-tagline">
-                  {currentContent.hero.tagline}
-                </span>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-blue-800" data-testid="telepsychiatry-title">
+                  {currentContent.hero.title}
+                </h1>
               </div>
-              
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="telepsychiatry-title">
-                {currentContent.hero.title}
-              </h1>
-              
-              <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed max-w-4xl mx-auto" data-testid="telepsychiatry-subtitle">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl text-gray-700 mb-6 max-w-4xl mx-auto font-body leading-relaxed" data-testid="telepsychiatry-subtitle">
                 {currentContent.hero.subtitle}
+              </h2>
+              <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto mb-8 font-body leading-relaxed" data-testid="telepsychiatry-description">
+                {currentContent.hero.description}
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                <a href={charmHealthBookingUrl} target="_blank" rel="noopener noreferrer">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link href="/contact">
                   <Button 
-                    size="lg" 
-                    className="bg-green-600 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full text-lg font-semibold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700 px-8 py-6"
                     data-testid="button-schedule-virtual"
                   >
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
-                      <Calendar className="w-4 h-4 text-white" />
-                    </div>
-                    {currentContent.hero.ctaPrimary}
+                    <VideoIcon className="w-5 h-5" />
+                    <span>{currentContent.hero.ctaPrimary}</span>
                   </Button>
-                </a>
-                
+                </Link>
                 <a href="tel:+12394230272">
                   <Button 
-                    variant="outline" 
-                    size="lg" 
-                    className="border-green-600 text-green-600 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3"
+                    variant="outline"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full text-lg font-semibold transition-all duration-300 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-6"
                     data-testid="button-call-info"
                   >
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
-                      <Phone className="w-4 h-4 text-green-600" />
-                    </div>
-                    {currentContent.hero.ctaSecondary}
+                    <span>{currentContent.hero.ctaSecondary}</span>
                   </Button>
                 </a>
               </div>
-            </div>
-
-            {/* Hero Image - Dr. Melva Reve */}
-            <div className="mb-12">
-              <div className="w-full aspect-[1200/667] rounded-2xl overflow-hidden shadow-lg border border-green-100">
-                <img 
-                  src={heroLocationImage} 
-                  alt="Dr. Melva Reve providing telepsychiatry services in Florida"
-                  className="w-full h-full object-contain bg-white"
-                  data-testid="hero-image-doctor"
-                />
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              {currentContent.stats.map((stat, index) => (
-                <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-green-100 shadow-sm" data-testid={`stat-${index}`}>
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <stat.icon className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div className="text-2xl font-bold text-green-800 whitespace-nowrap">{stat.value}</div>
-                  <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
@@ -430,270 +247,67 @@ const TelepsychiatryFlorida = () => {
         <section className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="benefits-title">
-                {language === 'en' ? (
-                  <>Why Choose <span className="font-display italic text-green-700">Telepsychiatry</span>?</>
-                ) : (
-                  <>¿Por Qué Elegir <span className="font-display italic text-green-700">Telepsiquiatría</span>?</>
-                )}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="benefits-title">
+                {currentContent.benefits.title}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="benefits-description">
                 {currentContent.benefits.description}
               </p>
             </div>
-            {/* Mobile Carousel */}
-            <div className="lg:hidden">
-              <Carousel opts={{ align: "start", loop: true }} className="w-full">
-                <CarouselContent>
-                  {currentContent.benefits.items.map((benefit, index) => (
-                    <CarouselItem key={index}>
-                      <Card className="bg-green-50 border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
-                        {benefit.image && (
-                          <div className="w-full aspect-square bg-white p-4">
-                            <img 
-                              src={benefit.image} 
-                              alt={benefit.title}
-                              className="w-full h-full object-contain rounded-2xl"
-                            />
-                          </div>
-                        )}
-                        <div className="p-6">
-                          <div className="flex items-center gap-3 mb-4">
-                            <WellnessIcon size="sm" color="green">
-                              <benefit.icon />
-                            </WellnessIcon>
-                            <h3 className="text-lg font-body font-bold text-green-800">
-                              {benefit.title}
-                            </h3>
-                          </div>
-                          <p className="text-gray-700 font-body leading-relaxed text-sm">
-                            {benefit.description}
-                          </p>
-                        </div>
-                      </Card>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-2 bg-white/90 hover:bg-white border-green-200" />
-                <CarouselNext className="right-2 bg-white/90 hover:bg-white border-green-200" />
-              </Carousel>
-            </div>
-
-            {/* Desktop Grid */}
-            <div className="hidden lg:grid lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {currentContent.benefits.items.map((benefit, index) => (
-                <Card key={index} className="bg-[#ffffff] border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
-                  {benefit.image && (
-                    <div className="w-full aspect-square bg-white p-4">
-                      <img 
-                        src={benefit.image} 
-                        alt={benefit.title}
-                        className="w-full h-full object-contain rounded-2xl"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <WellnessIcon size="sm" color="green">
+                <div key={index} className="bg-blue-50 rounded-2xl p-8 border border-blue-100" data-testid={`benefit-${index}`}>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <WellnessIcon size="md" color="blue">
                         <benefit.icon />
                       </WellnessIcon>
-                      <h3 className="text-lg font-body font-bold text-green-800">
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-body font-bold text-blue-800 mb-3">
                         {benefit.title}
                       </h3>
+                      <p className="text-gray-700 font-body leading-relaxed">
+                        {benefit.description}
+                      </p>
                     </div>
-                    <p className="text-gray-700 font-body leading-relaxed text-sm">
-                      {benefit.description}
-                    </p>
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* About Dr. Melva Reve Section */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-stretch">
-                {/* Content */}
-                <div className="text-green-800 order-2 md:order-1">
-                  <h2 className="text-5xl font-body font-bold mb-4 sm:mb-6" data-testid="doctor-about-title">
-                    {language === 'en' 
-                      ? <>Dedicated to your <span className="font-display italic text-green-700">mental health</span>, every day</>
-                      : <>Dedicados a su <span className="font-display italic text-green-700">salud mental</span>, todos los días</>
-                    }
-                  </h2>
-                  
-                  <div className="mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600" data-testid="experience-years">15+</div>
-                    <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Years of experience' : 'Años de experiencia'}
-                    </div>
-                  </div>
-
-                  <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Dr. Melva Reve provides compassionate telepsychiatry care with the same expertise and attention you would receive in person. As a board-certified psychiatrist, she brings years of experience directly to your home through secure video consultations.'
-                      : 'La Dra. Melva Reve brinda atención de telepsiquiatría compasiva con la misma experiencia y atención que recibiría en persona. Como psiquiatra certificada, aporta años de experiencia directamente a su hogar a través de consultas de video seguras.'
-                    }
-                  </p>
-
-                  <a href={charmHealthBookingUrl} target="_blank" rel="noopener noreferrer">
-                    <Button
-                      className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 sm:px-8 py-6 sm:py-7"
-                      data-testid="button-meet-doctor"
-                    >
-                      <span>{language === 'en' ? 'Book Your Consultation' : 'Reserve Su Consulta'}</span>
-                      <ArrowRight className="w-8 h-8 sm:w-9 sm:h-9 p-2 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full transition-all duration-300 bg-green-500 text-white flex-shrink-0" />
-                    </Button>
-                  </a>
-                </div>
-
-                {/* Doctor Image */}
-                <div className="relative order-1 md:order-2 flex items-center justify-center">
-                  <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden">
-                    <img
-                      src={drMelvaSquare}
-                      alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing telepsychiatry services"
-                      className="w-full h-full object-cover object-center"
-                      width={800}
-                      height={800}
-                      loading="lazy"
-                      decoding="async"
-                      data-testid="doctor-about-image"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Florida Map Section */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-green-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="map-title">
-                {language === 'en' ? (
-                  <>Serving <span className="font-display italic text-green-700">All</span> of Florida</>
-                ) : (
-                  <>Sirviendo a <span className="font-display italic text-green-700">Toda</span> Florida</>
-                )}
-              </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="map-description">
-                {currentContent.mapSection.description}
-              </p>
-            </div>
-
-            {/* Stats - Above Map */}
-            <div className="mb-8 sm:mb-12">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                {currentContent.stats.map((stat, index) => (
-                  <div key={index} className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
-                    <stat.icon className="w-12 h-12 p-3 bg-green-100 rounded-lg text-green-600 flex-shrink-0" />
-                    <div className="text-2xl font-bold text-green-800 whitespace-nowrap">{stat.value}</div>
-                    <div className="text-sm text-gray-600 font-medium whitespace-nowrap">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-green-100">
-              <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
-                {/* Florida Map */}
-                <div className="absolute inset-0">
-                  <img 
-                    src={floridaMap}
-                    alt="Florida State Map - Telehealth Services Available"
-                    className="w-full h-full object-cover rounded-2xl"
-                  />
-                </div>
-
-                {/* Coverage Overlay */}
-                <div className="absolute inset-0 bg-green-500 bg-opacity-5 border-2 border-green-400 border-opacity-20 rounded-2xl"></div>
-
-                {/* Compass */}
-                <div className="absolute top-4 right-4 z-10">
-                  <div className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-200">
-                    <Navigation className="w-5 h-5 text-green-600" />
-                  </div>
-                </div>
-
-                {/* Coverage Badge */}
-                <div className="absolute bottom-4 left-4 z-10">
-                  <div className="bg-white bg-opacity-95 rounded-lg shadow-lg px-4 py-2 border border-green-200">
-                    <div className="flex items-center gap-2 text-sm text-green-700 font-medium">
-                      <VideoIcon className="w-4 h-4" />
-                      <span>{currentContent.mapSection.statewideLabel}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Office Location Badge */}
-                <div className="absolute top-4 left-4 z-10">
-                  <div className="bg-white bg-opacity-95 rounded-lg shadow-lg px-3 py-2 border border-green-200">
-                    <div className="flex items-center gap-2 text-xs text-gray-700 font-medium">
-                      <MapPin className="w-3 h-3 text-green-600" />
-                      <span>Naples, FL 34103</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Map Legend */}
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-700 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium text-gray-700">
-                    {currentContent.mapSection.mainOfficeLabel}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-sm font-medium text-gray-700">
-                    {currentContent.mapSection.telehealthLabel}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Process Section */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-blue-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="process-title">
-                {language === 'en' ? (
-                  <>How It <span className="font-display italic text-green-700">Works</span></>
-                ) : (
-                  <>Cómo <span className="font-display italic text-green-700">Funciona</span></>
-                )}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="process-title">
+                {currentContent.process.title}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="process-description">
                 {currentContent.process.description}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {currentContent.process.steps.map((step, index) => (
                 <div key={index} className="relative" data-testid={`process-step-${index}`}>
-                  <Card className="bg-green-50 border-green-100 p-6 sm:p-8 h-full hover:shadow-lg transition-shadow duration-300">
+                  <div className="bg-white rounded-2xl p-8 border border-blue-100 h-full">
                     <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-green-600 text-white flex items-center justify-center text-2xl font-bold flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold">
                         {step.number}
                       </div>
-                      <h3 className="text-xl font-body font-bold text-green-800">
+                      <h3 className="text-xl font-body font-bold text-blue-800">
                         {step.title}
                       </h3>
                     </div>
                     <p className="text-gray-700 font-body leading-relaxed">
                       {step.description}
                     </p>
-                  </Card>
+                  </div>
                   {index < currentContent.process.steps.length - 1 && (
-                    <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                      <ArrowRight className="w-8 h-8 text-green-300" />
+                    <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                      <ArrowRight className="w-8 h-8 text-blue-300" />
                     </div>
                   )}
                 </div>
@@ -702,156 +316,64 @@ const TelepsychiatryFlorida = () => {
           </div>
         </section>
 
-        {/* Services Section - Con imagen de patient care */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-green-50">
+        {/* Services Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="services-title">
-                {language === 'en' ? (
-                  <>Complete <span className="font-display italic text-green-700">Psychiatric</span> Services via Telehealth</>
-                ) : (
-                  <>Servicios <span className="font-display italic text-green-700">Psiquiátricos</span> Completos vía Telesalud</>
-                )}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="services-title">
+                {currentContent.services.title}
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="services-description">
+              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-6 font-body leading-relaxed" data-testid="services-description">
                 {currentContent.services.description}
               </p>
+              <p className="text-lg sm:text-xl text-blue-700 font-semibold max-w-3xl mx-auto font-body leading-relaxed" data-testid="services-subtitle">
+                {currentContent.services.subtitle}
+              </p>
             </div>
-            {/* Mobile Carousel */}
-            <div className="lg:hidden">
-              <Carousel opts={{ align: "start", loop: true }} className="w-full">
-                <CarouselContent>
-                  {currentContent.services.items.map((service, index) => {
-                    const IconComponent = service.icon;
-                    return (
-                      <CarouselItem key={index}>
-                        <Card className="bg-white border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`service-${index}`}>
-                          {service.image && (
-                            <div className="w-full aspect-square bg-green-50 p-4">
-                              <img 
-                                src={service.image} 
-                                alt={service.title}
-                                className="w-full h-full object-contain rounded-2xl"
-                              />
-                            </div>
-                          )}
-                          <div className="p-6">
-                            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                              <IconComponent className="w-6 h-6 text-green-600" />
-                            </div>
-                            <h3 className="text-lg font-body font-bold text-green-800 mb-2 text-center">
-                              {service.title}
-                            </h3>
-                            <p className="text-gray-600 font-body leading-relaxed text-center text-sm">
-                              {service.description}
-                            </p>
-                          </div>
-                        </Card>
-                      </CarouselItem>
-                    );
-                  })}
-                </CarouselContent>
-                <CarouselPrevious className="left-2 bg-white/90 hover:bg-white border-green-200" />
-                <CarouselNext className="right-2 bg-white/90 hover:bg-white border-green-200" />
-              </Carousel>
-            </div>
-
-            {/* Desktop Grid */}
-            <div className="hidden lg:grid lg:grid-cols-4 gap-6">
-              {currentContent.services.items.map((service, index) => {
-                const IconComponent = service.icon;
-                return (
-                  <Card key={index} className="bg-white border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`service-${index}`}>
-                    {service.image && (
-                      <div className="w-full aspect-square p-4 bg-[#ffffff]">
-                        <img 
-                          src={service.image} 
-                          alt={service.title}
-                          className="w-full h-full object-contain rounded-2xl"
-                        />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <IconComponent className="w-6 h-6 text-green-600" />
-                      </div>
-                      <h3 className="text-lg font-body font-bold text-green-800 mb-2 text-center">
-                        {service.title}
-                      </h3>
-                      <p className="text-gray-600 font-body leading-relaxed text-center text-sm">
-                        {service.description}
-                      </p>
-                    </div>
-                  </Card>
-                );
-              })}
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
+                <ul className="space-y-4">
+                  {currentContent.services.list.map((service, index) => (
+                    <li key={index} className="flex items-start gap-3" data-testid={`service-${index}`}>
+                      <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+                      <span className="text-gray-700 font-body leading-relaxed">{service}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="faq-title">
-                {language === 'en' ? (
-                  <>Frequently <span className="font-display italic text-green-700">Asked</span> Questions</>
-                ) : (
-                  <>Preguntas <span className="font-display italic text-green-700">Frecuentes</span></>
-                )}
-              </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto font-body leading-relaxed" data-testid="faq-description">
-                {language === 'en'
-                  ? 'Common questions about our telepsychiatry services answered.'
-                  : 'Preguntas comunes sobre nuestros servicios de telepsiquiatría respondidas.'
-                }
+        {/* Platform Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-blue-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-3xl p-8 sm:p-12 border border-blue-100 shadow-lg">
+              <div className="flex items-center gap-4 mb-6">
+                <WellnessIcon size="lg" color="blue">
+                  <Shield />
+                </WellnessIcon>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800" data-testid="platform-title">
+                  {currentContent.platform.title}
+                </h2>
+              </div>
+              <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed" data-testid="platform-description">
+                {currentContent.platform.description}
               </p>
             </div>
+          </div>
+        </section>
 
-            <div className="space-y-4">
-              {currentContent.faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="bg-green-50 rounded-2xl shadow-sm border border-green-100 overflow-hidden"
-                  data-testid={`faq-item-${index}`}
-                >
-                  <button
-                    onClick={() => setOpenFaqItem(openFaqItem === index ? null : index)}
-                    className="w-full px-6 lg:px-8 py-6 text-left flex items-center justify-between hover:bg-green-100 transition-colors duration-200"
-                    data-testid={`faq-question-${index}`}
-                  >
-                    <h3 className="text-lg sm:text-xl font-display font-semibold text-green-900 pr-8">
-                      {faq.question}
-                    </h3>
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
-                      openFaqItem === index 
-                        ? 'bg-green-600' 
-                        : 'bg-green-200'
-                    }`}>
-                      <ChevronDown 
-                        className={`w-5 h-5 transition-all duration-300 ${
-                          openFaqItem === index 
-                            ? 'text-white rotate-180' 
-                            : 'text-green-700'
-                        }`} 
-                      />
-                    </div>
-                  </button>
-                  
-                  {openFaqItem === index && (
-                    <div className="px-6 lg:px-8 pb-6">
-                      <div className="pt-2 border-t border-green-200">
-                        <p 
-                          className="text-gray-700 font-body leading-relaxed text-lg"
-                          data-testid={`faq-answer-${index}`}
-                        >
-                          {faq.answer}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+        {/* Doctor Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-blue-50 rounded-3xl p-8 sm:p-12 border border-blue-100">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-6" data-testid="doctor-title">
+                {currentContent.doctor.title}
+              </h2>
+              <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed" data-testid="doctor-description">
+                {currentContent.doctor.description}
+              </p>
             </div>
           </div>
         </section>
@@ -859,30 +381,28 @@ const TelepsychiatryFlorida = () => {
         {/* Insurance Section */}
         <InsuranceLogos />
 
+        {/* FAQ Section - Will be populated with FAQs */}
+        {/* <LocationFAQ locationFAQs={telepsychiatryFAQs} /> */}
+
         {/* Final CTA Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-green-50 to-green-100">
+        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-blue-50 to-blue-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="cta-title">
-              {language === 'en' ? (
-                <>Ready to <span className="font-display italic text-green-700">Get Started</span>?</>
-              ) : (
-                <>¿Listo para <span className="font-display italic text-green-700">Comenzar</span>?</>
-              )}
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-blue-800 mb-4" data-testid="cta-title">
+              {currentContent.cta.title}
             </h2>
             <p className="text-lg sm:text-xl text-gray-700 mb-8 font-body leading-relaxed" data-testid="cta-description">
               {currentContent.cta.description}
             </p>
-            <a href={charmHealthBookingUrl} target="_blank" rel="noopener noreferrer">
+            <Link href="/contact">
               <Button 
                 size="lg"
-                className="group inline-flex items-center justify-center gap-3 rounded-full text-xl font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-12 py-8"
+                className="group inline-flex items-center justify-center gap-3 rounded-full text-xl font-semibold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700 px-12 py-8"
                 data-testid="button-schedule-final"
               >
                 <VideoIcon className="w-6 h-6" />
                 <span>{currentContent.cta.button}</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
               </Button>
-            </a>
+            </Link>
           </div>
         </section>
       </main>

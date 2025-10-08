@@ -1630,13 +1630,6 @@ function getMedicalBusinessSchema(baseUrl: string) {
     "logo": `${baseUrl}/favicon.svg`,
     "image": `${baseUrl}/doctor-profile-v2.webp`,
     "description": "Board certified psychiatrist Dr. Melva Reve providing expert psychiatric care in Naples, FL. Specializing in anxiety, depression, ADHD, PTSD, and comprehensive mental health services.",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": 5.0,
-      "reviewCount": 17,
-      "bestRating": 5,
-      "worstRating": 1
-    },
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "4760 Tamiami Trl N # 25",
@@ -1667,13 +1660,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
     "paymentAccepted": ["Insurance", "Credit Card", "Cash"],
     "currenciesAccepted": "USD",
     "sameAs": [
-      "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
-      "https://www.instagram.com/hmpsychiatry/",
-      "https://www.facebook.com/profile.php?id=61578845287836",
-      "https://www.tiktok.com/@dra.melvavidal",
-      "https://www.youtube.com/@healingmindsp",
-      "https://www.healthgrades.com/physician/dr-melva-reve-urgelles-1dgbqeci76",
-      "https://www.yelp.com/biz/healing-minds-psychiatry-naples"
+      "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z"
     ],
     "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
     "isAcceptingNewPatients": true,

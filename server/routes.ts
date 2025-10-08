@@ -1,7 +1,5 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import fs from "fs";
-import path from "path";
 import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
 import { generateSitemap, generateRobotsTxt } from "./routes/sitemap";
@@ -12,12 +10,14 @@ import { emailService } from "./services/email";
 import { injectMetaTags } from "./utils/html-injection";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // CRÍTICO: HTML Meta Tags Injection Middleware para DESARROLLO (Vite)
-  // Este middleware intercepta res.end() solo en desarrollo cuando Vite transforma el HTML
+  // CRÍTICO: HTML Meta Tags Injection Middleware 
+  // Este middleware intercepta responses HTML para inyectar meta tags server-side
+  // Compatible con desarrollo (Vite) y producción (static files)
   app.use((req, res, next) => {
     // Solo procesar requests que podrían ser páginas HTML (no APIs, no assets)
     if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
       const originalEnd = res.end;
+      
       res.end = function(chunk: any, encoding?: any) {
         if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html')) {
           console.log(`🔧 SEO: Injecting meta tags for ${req.originalUrl}`);
@@ -323,10 +323,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     next();
   });
 
-  // TODO: Re-implement HTML injection in production
-  // Currently disabled to fix MIME type errors in deployment
-  // The catch-all middleware was conflicting with express.static()
-  
   const httpServer = createServer(app);
   return httpServer;
 }

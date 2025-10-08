@@ -74,9 +74,6 @@ const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
 const HipaaNotice = lazy(() => import('@/pages/HipaaNotice'));
 const CookiePolicy = lazy(() => import('@/pages/CookiePolicy'));
 
-// Thank You Page - Lazy loaded for performance
-const ThankYou = lazy(() => import('@/pages/ThankYou'));
-
 
 // Loading component for lazy routes
 const PageLoader = () => (
@@ -145,11 +142,9 @@ function Router() {
       <Route path="/es/ubicaciones/psiquiatra-lely-resort" component={() => <SpanishRouteWrapper Component={LocationLelyResorts} />} />
       
       <Route path="/contact" component={Contact} />
-      <Route path="/thank-you" component={ThankYou} />
       
       {/* Spanish Main Pages */}
       <Route path="/es" component={HomeEspanol} />
-      <Route path="/es/gracias" component={() => <SpanishRouteWrapper Component={ThankYou} />} />
       <Route path="/es/acerca-de" component={AcercaEspanol} />
       <Route path="/es/contacto" component={ContactoEspanol} />
       <Route path="/es/para-pacientes" component={ParaPacientesEspanol} />
