@@ -664,7 +664,7 @@ const TelepsychiatryFlorida = () => {
                 : 'La atención de salud mental de calidad está a solo un clic de distancia.'
               }
             </p>
-            <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
+            <CharmHealthBooking variant="prominent" showDescription={false} className="mx-auto" />
           </div>
         </section>
       </main>
