@@ -129,7 +129,7 @@ const Hero = React.memo(() => {
 
         {/* Tablet & Desktop: Original single container layout */}
         <div className="hidden md:block">
-          <div className="relative rounded-3xl overflow-hidden aspect-[18/9] flex items-center hero-container">
+          <div className="relative rounded-3xl overflow-hidden aspect-[18/9] flex items-start hero-container">
             {/* Background Image */}
             <img 
               src={heroImage}
@@ -142,11 +142,11 @@ const Hero = React.memo(() => {
               sizes="(min-width: 1200px) 1200px, 100vw"
               {...({'fetchpriority': 'high'} as any)}
             />
-            
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
 
             
             {/* Left-Aligned Content */}
-            <div className="relative z-10 w-full px-8 sm:px-12 lg:px-16 py-8 text-left">
+            <div className="relative z-10 w-full px-8 sm:px-12 lg:px-16 pt-12 text-left">
               <div className="max-w-2xl">
                 {/* SEO Pills */}
                 <div className="flex flex-wrap gap-3 mb-6">
