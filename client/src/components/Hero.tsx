@@ -128,7 +128,7 @@ const Hero = React.memo(() => {
 
         {/* Tablet & Desktop: Original single container layout */}
         <div className="hidden md:block">
-          <div className="relative rounded-3xl overflow-hidden aspect-[18/9] flex items-center hero-container">
+          <div className="relative rounded-3xl overflow-hidden aspect-[7/4] flex items-center hero-container">
             {/* Background Image */}
             <img 
               src={heroImage}
