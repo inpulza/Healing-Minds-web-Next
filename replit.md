@@ -5,6 +5,14 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### October 8, 2025 - Location Pages Features Repositioning
+- **Layout Update**: Moved features/stats from inside hero container to horizontal badges below on all 10 Location pages
+- **Compact Hero**: Hero container now more square and compact without internal features grid
+- **Feature Badges**: New horizontal badges section at full viewport width (max-w-7xl) with centered flex-wrap layout
+- **Styling**: Badges use blue accent colors (border-blue-100, bg-blue-100, text-blue-600) for visual distinction
+- **Consistency**: Applied identical pattern across Naples, Ave Maria, Bonita Springs, Estero, Fort Myers, Golden Gate, Immokalee, Lely Resort, Marco Island, and Vanderbilt Beach
+- **Responsive Design**: Badges wrap naturally on smaller screens with gap-3 spacing
+
 ### October 8, 2025 - Telepsychiatry Page Redesign
 - **Visual Redesign**: Complete overhaul of TelehealthSection to match location pages design system
 - **Color Palette Update**: Changed from blue theme to brand green (green-800, green-700, green-50) for consistency
