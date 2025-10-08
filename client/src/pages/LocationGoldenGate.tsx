@@ -868,18 +868,8 @@ const LocationGoldenGate = () => {
                 </div>
 
                 <div className="flex gap-4">
-                  <Link href="/contact">
-                    <Button 
-                      className="bg-green-800 hover:bg-green-700 text-white"
-                      data-testid="button-contact-form"
-                    >
-                      <Mail className="w-5 h-5 mr-2" />
-                      {language === 'en' ? 'Contact Form' : 'Formulario de Contacto'}
-                    </Button>
-                  </Link>
                   <Button 
-                    variant="outline"
-                    className="border-green-800 text-green-800 hover:bg-green-50"
+                    className="bg-green-800 hover:bg-green-700 text-white"
                     onClick={() => window.open(`tel:${practiceInfo.phone}`, '_self')}
                     data-testid="button-call-now"
                   >
@@ -889,33 +879,63 @@ const LocationGoldenGate = () => {
                 </div>
               </div>
 
+              {/* Quick Contact */}
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-green-100">
+                  <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
+                    {language === 'en' ? 'Send Us a Message' : 'Envíanos un Mensaje'}
+                  </h3>
+                  <Button 
+                    className="w-full bg-green-800 hover:bg-green-700 text-white"
+                    onClick={() => window.location.href = '/contact'}
+                    data-testid="button-contact-form"
+                  >
+                    <Mail className="w-5 h-5 mr-2" />
+                    {language === 'en' ? 'Contact Form' : 'Formulario de Contacto'}
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Telehealth Services Section */}
-        <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
-                {language === 'en' ? (
-                  <>
-                    <span className="font-display italic text-blue-700">Telehealth</span> Services Available
-                  </>
-                ) : (
-                  <>
-                    Servicios de <span className="font-display italic text-blue-700">Telesalud</span> Disponibles
-                  </>
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                {language === 'en' 
-                  ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
-                  : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
-                }
-              </p>
+        <section className="py-20 bg-gradient-to-br from-green-50 to-green-100">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left: Info */}
+              <div>
+                <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
+                  {language === 'en' ? (
+                    <>
+                      <span className="font-display italic text-green-800">Telehealth</span> Services Available
+                    </>
+                  ) : (
+                    <>
+                      Servicios de <span className="font-display italic text-green-800">Telesalud</span> Disponibles
+                    </>
+                  )}
+                </h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  {language === 'en' 
+                    ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
+                    : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
+                  }
+                </p>
+                <CharmHealthBooking variant="prominent" />
+              </div>
+
+              {/* Right: Doctor Image */}
+              <div className="relative">
+                <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
+                  <OptimizedImage
+                    src={heroLocationImage}
+                    alt="Dr. Melva Reve - Telehealth Services"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
             </div>
-            <CharmHealthBooking variant="prominent" />
           </div>
         </section>
 
