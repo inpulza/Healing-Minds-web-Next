@@ -1102,21 +1102,23 @@ const LocationVanderbiltBeach = () => {
                 </Button>
               </div>
 
-              {/* Quick Contact */}
+              {/* Telehealth Booking */}
               <div className="lg:col-span-1">
-                <div className="bg-white rounded-2xl shadow-lg p-8 border border-green-100">
-                  <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
-                    {language === 'en' ? 'Send Us a Message' : 'Envíanos un Mensaje'}
-                  </h3>
-                  <Button 
-                    className="w-full bg-green-800 hover:bg-green-700 text-white"
-                    onClick={() => window.location.href = '/contact'}
-                    data-testid="button-contact-form"
-                  >
-                    <Mail className="w-5 h-5 mr-2" />
-                    {language === 'en' ? 'Contact Form' : 'Formulario de Contacto'}
-                  </Button>
-                </div>
+                <Card className="p-6 sm:p-8 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
+                  <div className="text-center">
+                    <VideoIcon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+                    <h3 className="text-2xl sm:text-3xl font-bold text-blue-800 mb-3">
+                      {language === 'en' ? 'Book Your Telehealth Session' : 'Reserve su Sesión de Telesalud'}
+                    </h3>
+                    <p className="text-lg sm:text-xl text-blue-700 mb-6">
+                      {language === 'en' 
+                        ? 'Schedule with Dr. Melva Reve from anywhere in Florida'
+                        : 'Programe con la Dra. Melva Reve desde cualquier lugar de Florida'
+                      }
+                    </p>
+                    <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
+                  </div>
+                </Card>
               </div>
             </div>
           </div>
