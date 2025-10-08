@@ -135,7 +135,7 @@ const CharmHealthBooking = ({
           <img 
             src={telehealthHeroBg} 
             alt="Telehealth Background"
-            className="absolute inset-0 w-full h-full object-contain object-top"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           
