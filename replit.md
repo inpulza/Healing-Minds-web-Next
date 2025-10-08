@@ -5,6 +5,20 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### October 8, 2025 - Telepsychiatry Page Redesign
+- **Visual Redesign**: Complete overhaul of TelehealthSection to match location pages design system
+- **Color Palette Update**: Changed from blue theme to brand green (green-800, green-700, green-50) for consistency
+- **Hero Section**: Implemented location-page style hero with doctor image, green typography, and feature badges
+- **Typography**: Updated titles to consistent sizing (text-4xl sm:text-5xl lg:text-6xl) matching rest of site
+- **New Sections Added**: 
+  - Statewide coverage map with Florida visualization
+  - "Why Choose Telepsychiatry?" benefits grid with 4 key advantages
+  - "How It Works" 4-step process guide
+  - Dedicated FAQ section with 10 bilingual Q&A pairs
+- **FAQ Integration**: Added telehealth-specific FAQs to locationFAQs.ts, integrated with LocationFAQ component
+- **Component Updates**: Modified LocationFAQ to accept ReactNode titles for styled headings
+- **Testing**: Added data-testid attributes for automated testing support
+
 ### October 7, 2025 - TikTok Pixel Update
 - **Pixel ID Updated**: Changed from D3HT9QRC77UAH4NB96KG to D3IKI7BC77UEJB9HBO0G
 - **Event Tracking Active**: All existing events (Lead, Contact, ViewContent, ClickButton) continue working with new pixel
