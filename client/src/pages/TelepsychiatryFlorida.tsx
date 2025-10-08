@@ -33,6 +33,9 @@ import floridaStateImage from '@/assets/telepsychiatry-florida-state.webp';
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
   const [openFaqItem, setOpenFaqItem] = useState<number | null>(0);
+  
+  // Charm Health booking URL
+  const charmHealthBookingUrl = "https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2";
 
   useEffect(() => {
     const seoData = {
@@ -93,22 +96,22 @@ const TelepsychiatryFlorida = () => {
       },
       process: {
         title: "How It Works",
-        description: "Starting your telepsychiatry journey is simple and secure.",
+        description: "Book your appointment through our secure CharmHealth platform and connect with Dr. Reve from anywhere in Florida.",
         steps: [
           {
             number: "1",
-            title: "Book Your Session",
-            description: "Schedule online or call us. We'll guide you through the simple intake process digitally."
+            title: "Choose Your Appointment Type",
+            description: "Visit our CharmHealth booking portal and select from: New Patient Telehealth (60 mins), Follow-up Telehealth (20 mins), or in-person options if preferred."
           },
           {
             number: "2",
-            title: "Receive Secure Link",
-            description: "Get a confirmation email with your private, encrypted video session link."
+            title: "Complete Secure Check-In",
+            description: "Fill out your information through CharmHealth's HIPAA-compliant platform. You'll receive a confirmation email with your encrypted video session link."
           },
           {
             number: "3",
-            title: "Meet Dr. Reve",
-            description: "Connect from any device. Have your full psychiatric evaluation in English or Spanish."
+            title: "Meet Dr. Reve Virtually",
+            description: "Join your session from any device - smartphone, tablet, or computer. Have your full psychiatric evaluation in English or Spanish."
           }
         ]
       },
@@ -222,22 +225,22 @@ const TelepsychiatryFlorida = () => {
       },
       process: {
         title: "Cómo Funciona",
-        description: "Comenzar su viaje de telepsiquiatría es simple y seguro.",
+        description: "Reserve su cita a través de nuestra plataforma segura CharmHealth y conéctese con la Dra. Reve desde cualquier lugar de Florida.",
         steps: [
           {
             number: "1",
-            title: "Reserve su Sesión",
-            description: "Programe en línea o llámenos. Le guiaremos a través del proceso de admisión digital."
+            title: "Elija su Tipo de Cita",
+            description: "Visite nuestro portal de reservas CharmHealth y seleccione: Nuevo Paciente Telesalud (60 min), Seguimiento Telesalud (20 min), o opciones presenciales si lo prefiere."
           },
           {
             number: "2",
-            title: "Reciba Enlace Seguro",
-            description: "Obtenga un correo de confirmación con su enlace privado y encriptado para la sesión de video."
+            title: "Complete el Registro Seguro",
+            description: "Complete su información a través de la plataforma compatible con HIPAA de CharmHealth. Recibirá un correo de confirmación con su enlace de sesión de video encriptado."
           },
           {
             number: "3",
-            title: "Conozca a la Dra. Reve",
-            description: "Conéctese desde cualquier dispositivo. Tenga su evaluación psiquiátrica completa en inglés o español."
+            title: "Conozca a la Dra. Reve Virtualmente",
+            description: "Únase a su sesión desde cualquier dispositivo - teléfono, tableta o computadora. Tenga su evaluación psiquiátrica completa en inglés o español."
           }
         ]
       },
@@ -341,7 +344,7 @@ const TelepsychiatryFlorida = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                <Link href="/contact">
+                <a href={charmHealthBookingUrl} target="_blank" rel="noopener noreferrer">
                   <Button 
                     size="lg" 
                     className="bg-green-600 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"
@@ -352,7 +355,7 @@ const TelepsychiatryFlorida = () => {
                     </div>
                     {currentContent.hero.ctaPrimary}
                   </Button>
-                </Link>
+                </a>
                 
                 <a href="tel:+12394230272">
                   <Button 
@@ -678,7 +681,7 @@ const TelepsychiatryFlorida = () => {
             <p className="text-lg sm:text-xl text-gray-700 mb-8 font-body leading-relaxed" data-testid="cta-description">
               {currentContent.cta.description}
             </p>
-            <Link href="/contact">
+            <a href={charmHealthBookingUrl} target="_blank" rel="noopener noreferrer">
               <Button 
                 size="lg"
                 className="group inline-flex items-center justify-center gap-3 rounded-full text-xl font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-12 py-8"
@@ -688,7 +691,7 @@ const TelepsychiatryFlorida = () => {
                 <span>{currentContent.cta.button}</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
               </Button>
-            </Link>
+            </a>
           </div>
         </section>
       </main>
