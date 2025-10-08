@@ -117,6 +117,7 @@ const Header = () => {
     { href: '/', label: t('nav.home') },
     { href: '/about', label: t('nav.about') },
     { href: '/services', label: t('nav.services'), hasDropdown: true, dropdownType: 'services' },
+    { href: language === 'en' ? '/telepsychiatry-florida' : '/es/telepsiquiatria-florida', label: language === 'en' ? 'Telepsychiatry' : 'Telepsiquiatría' },
     { href: '/locations', label: language === 'en' ? 'Locations We Serve' : 'Áreas de Servicio', hasDropdown: true, dropdownType: 'locations' },
     { href: '/contact', label: t('nav.contact') },
   ];

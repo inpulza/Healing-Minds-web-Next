@@ -65,6 +65,9 @@ const PtsdTreatment = lazy(() => import('@/pages/services/PtsdTreatment'));
 const BipolarTreatment = lazy(() => import('@/pages/services/BipolarTreatment'));
 const MedicationManagement = lazy(() => import('@/pages/services/MedicationManagement'));
 
+// Telepsychiatry Page - Lazy loaded for performance
+const TelepsychiatryFlorida = lazy(() => import('@/pages/TelepsychiatryFlorida'));
+
 // Legal Pages - Lazy loaded for performance
 const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
@@ -113,6 +116,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/services" component={Services} />
       <Route path="/for-patients" component={ForPatients} />
+      <Route path="/telepsychiatry-florida" component={TelepsychiatryFlorida} />
       <Route path="/locations/naples" component={RedirectToNaplesLocation} />
       <Route path="/locations/psychiatrist-naples" component={LocationNaples} />
       <Route path="/locations/psychiatrist-bonita-springs" component={LocationBonitaSprings} />
@@ -145,6 +149,7 @@ function Router() {
       <Route path="/es/contacto" component={ContactoEspanol} />
       <Route path="/es/para-pacientes" component={ParaPacientesEspanol} />
       <Route path="/es/servicios" component={ServiciosEspanol} />
+      <Route path="/es/telepsiquiatria-florida" component={() => <SpanishRouteWrapper Component={TelepsychiatryFlorida} />} />
       
       {/* Individual Service Pages */}
       <Route path="/services/anxiety-treatment" component={AnxietyTreatment} />

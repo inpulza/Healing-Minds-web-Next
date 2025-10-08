@@ -52,6 +52,13 @@ export const generateSitemap = (req: Request, res: Response) => {
       changefreq: 'monthly',
       priority: '0.6'
     },
+    {
+      en: '/telepsychiatry-florida',
+      es: '/es/telepsiquiatria-florida',
+      lastmod: recentDate,
+      changefreq: 'monthly',
+      priority: '0.8'
+    },
     // Main service pages with bilingual versions
     {
       en: '/services',
