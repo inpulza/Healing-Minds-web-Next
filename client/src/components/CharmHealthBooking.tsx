@@ -149,8 +149,8 @@ const CharmHealthBooking = ({
             </p>
           </div>
           
-          {/* Contenido principal centrado verticalmente */}
-          <div className="relative h-full flex items-center px-8 sm:px-12 lg:px-16">
+          {/* Contenido principal - posicionado arriba */}
+          <div className="relative h-full flex items-start px-8 sm:px-12 lg:px-16 pt-12">
             <div className="max-w-2xl text-left">
               {heroBadges && (
                 <div className="mb-6">
