@@ -1073,11 +1073,33 @@ const LocationMarcoIsland = () => {
                 </div>
               </div>
 
-              {/* CharmHealth Booking Widget */}
-              <div className="lg:pl-8">
-                <CharmHealthBooking />
-              </div>
             </div>
+          </div>
+        </section>
+
+        {/* Telehealth Services Section */}
+        <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
+          <div className="max-w-4xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
+                {language === 'en' ? (
+                  <>
+                    <span className="font-display italic text-blue-700">Telehealth</span> Services Available
+                  </>
+                ) : (
+                  <>
+                    Servicios de <span className="font-display italic text-blue-700">Telesalud</span> Disponibles
+                  </>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                {language === 'en' 
+                  ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
+                  : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
+                }
+              </p>
+            </div>
+            <CharmHealthBooking variant="prominent" />
           </div>
         </section>
 
