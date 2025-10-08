@@ -264,16 +264,16 @@ const TelepsychiatryFlorida = () => {
         <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-[#ffffff]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-blue-800 mb-6">
                 {language === 'en' ? (
                   <>
-                    Expert <span className="font-display italic text-green-700">Psychiatric Care</span> from Anywhere in{' '}
-                    <span className="font-display italic text-green-700">Florida</span>
+                    Expert <span className="font-display italic text-blue-600">Psychiatric Care</span> from Anywhere in{' '}
+                    <span className="font-display italic text-blue-600">Florida</span>
                   </>
                 ) : (
                   <>
-                    Atención <span className="font-display italic text-green-700">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
-                    <span className="font-display italic text-green-700">Florida</span>
+                    Atención <span className="font-display italic text-blue-600">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
+                    <span className="font-display italic text-blue-600">Florida</span>
                   </>
                 )}
               </h1>
@@ -321,7 +321,7 @@ const TelepsychiatryFlorida = () => {
         </section>
 
         {/* Statewide Coverage Section with Map */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-green-50 to-white">
+        <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4">
@@ -396,7 +396,7 @@ const TelepsychiatryFlorida = () => {
         </section>
 
         {/* Benefits Section - Cards with Image Placeholders and Mobile Carousel */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-green-50">
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="benefits-title">
@@ -668,7 +668,7 @@ const TelepsychiatryFlorida = () => {
         />
 
         {/* Final CTA Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-green-50 to-green-100">
+        <section className="py-16 sm:py-20 lg:py-24 bg-green-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="cta-title">
