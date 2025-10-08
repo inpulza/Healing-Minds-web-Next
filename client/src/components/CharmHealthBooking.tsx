@@ -12,6 +12,7 @@ interface CharmHealthBookingProps {
   className?: string;
   heroTitle?: React.ReactNode;
   heroBadges?: React.ReactNode;
+  colorScheme?: 'blue' | 'green';
 }
 
 const CharmHealthBooking = ({ 
@@ -19,7 +20,8 @@ const CharmHealthBooking = ({
   showDescription = true, 
   className = '',
   heroTitle,
-  heroBadges
+  heroBadges,
+  colorScheme = 'blue'
 }: CharmHealthBookingProps) => {
   const { language } = useLanguage();
   const { trackTelehealthClick } = useTikTokEvents();
@@ -139,10 +141,10 @@ const CharmHealthBooking = ({
           
           {/* Icono y subtítulo en el borde inferior izquierdo */}
           <div className="absolute bottom-6 left-8 sm:left-12 lg:left-16 flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <VideoIcon className="w-6 h-6 text-blue-600" />
+            <div className={`w-12 h-12 ${colorScheme === 'green' ? 'bg-green-100' : 'bg-blue-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
+              <VideoIcon className={`w-6 h-6 ${colorScheme === 'green' ? 'text-green-600' : 'text-blue-600'}`} />
             </div>
-            <p className="text-blue-700 font-medium sm:text-base text-[18px]" data-testid="telehealth-subtitle-desktop">
+            <p className={`${colorScheme === 'green' ? 'text-green-700' : 'text-blue-700'} font-medium sm:text-base text-[18px]`} data-testid="telehealth-subtitle-desktop">
               {currentContent.subtitle}
             </p>
           </div>
@@ -188,7 +190,7 @@ const CharmHealthBooking = ({
                   trackTelehealthClick('charm-health-prominent');
                   window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
                 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+                className={`${colorScheme === 'green' ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200`}
                 data-testid="button-charm-health-prominent-desktop"
               >
                 <Calendar className="w-5 h-5 mr-2" />
