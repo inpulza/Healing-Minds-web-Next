@@ -208,8 +208,8 @@ const LocationVanderbiltBeach = () => {
 
                 <p className="text-sm md:text-base text-gray-700 mb-6 max-w-md font-body leading-relaxed">
                   {language === 'en' 
-                    ? 'Expert mental health care for Vanderbilt Beach residents with bilingual services and comprehensive treatment options.'
-                    : 'Atención experta de salud mental para residentes de Vanderbilt Beach con servicios bilingües y opciones de tratamiento integral.'}
+                    ? 'Professional psychiatric services in Vanderbilt Beach.'
+                    : 'Servicios psiquiátricos profesionales en Vanderbilt Beach.'}
                 </p>
 
                 <Button

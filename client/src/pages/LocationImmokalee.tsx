@@ -209,8 +209,8 @@ const LocationImmokalee = () => {
 
                 <p className="text-sm md:text-base text-gray-700 mb-6 max-w-md font-body leading-relaxed">
                   {language === 'en' 
-                    ? 'Expert mental health care for Immokalee residents with bilingual services and comprehensive treatment options.'
-                    : 'Atención experta de salud mental para residentes de Immokalee con servicios bilingües y opciones de tratamiento integral.'}
+                    ? 'Professional mental health services in Immokalee.'
+                    : 'Servicios profesionales de salud mental en Immokalee.'}
                 </p>
 
                 <Button

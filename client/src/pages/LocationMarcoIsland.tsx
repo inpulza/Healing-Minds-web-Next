@@ -209,8 +209,8 @@ const LocationMarcoIsland = () => {
 
                 <p className="text-sm md:text-base text-gray-700 mb-6 max-w-md font-body leading-relaxed">
                   {language === 'en' 
-                    ? 'Expert mental health care for Marco Island residents with bilingual services and comprehensive treatment options.'
-                    : 'Atención experta de salud mental para residentes de Marco Island con servicios bilingües y opciones de tratamiento integral.'}
+                    ? 'Expert psychiatric treatment on Marco Island.'
+                    : 'Tratamiento psiquiátrico experto en Marco Island.'}
                 </p>
 
                 <Button
