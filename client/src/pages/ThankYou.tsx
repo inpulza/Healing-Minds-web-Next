@@ -22,7 +22,8 @@ const ThankYou = () => {
         ? 'thank you, contact confirmation, psychiatry Naples'
         : 'gracias, confirmación contacto, psiquiatría Naples',
       lang: language,
-      canonical: language === 'en' ? '/thank-you' : '/es/gracias'
+      canonical: language === 'en' ? '/thank-you' : '/es/gracias',
+      robots: 'noindex, nofollow'
     };
     updateSEO(seoData);
   }, [language]);

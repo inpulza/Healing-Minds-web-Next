@@ -5,6 +5,7 @@ interface SEOData {
   lang?: string;
   canonical?: string;
   ogImage?: string;
+  robots?: string;
 }
 
 // Global guards for schema initialization to prevent duplicates
@@ -35,7 +36,8 @@ export const updateSEO = (data: SEOData) => {
   // Step 1: Remove existing meta tags that we're about to update
   const metaTags = [
     'meta[name="description"]',
-    'meta[name="keywords"]', 
+    'meta[name="keywords"]',
+    'meta[name="robots"]',
     'meta[property="og:title"]',
     'meta[property="og:description"]',
     'meta[property="og:url"]',
@@ -64,6 +66,10 @@ export const updateSEO = (data: SEOData) => {
   
   if (data.keywords) {
     createMetaTag('keywords', data.keywords);
+  }
+  
+  if (data.robots) {
+    createMetaTag('robots', data.robots);
   }
   
   // Step 5: Create canonical URL - ALWAYS absolute for consistency
