@@ -260,60 +260,68 @@ const TelepsychiatryFlorida = () => {
     <div className="min-h-screen">
       <Header />
       <main>
-        {/* Hero Section - Simplified */}
-        <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-[#ffffff]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-blue-800 mb-6">
-                {language === 'en' ? (
-                  <>
-                    Expert <span className="font-display italic text-blue-600">Psychiatric Care</span> from Anywhere in{' '}
-                    <span className="font-display italic text-blue-600">Florida</span>
-                  </>
-                ) : (
-                  <>
-                    Atención <span className="font-display italic text-blue-600">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
-                    <span className="font-display italic text-blue-600">Florida</span>
-                  </>
-                )}
-              </h1>
+        {/* Hero Section - Home Style */}
+        <section className="pt-8 pb-16 bg-white">
+          <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[90%] mx-auto px-2 sm:px-4">
+            <div className="relative rounded-3xl overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] flex items-center justify-center">
+              {/* Background Image */}
+              <img 
+                src={telehealthHeroBg} 
+                alt="Dr. Melva Reve - Telepsychiatry Services Throughout Florida"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
               
-              <div className="max-w-5xl mx-auto mb-10">
-                <CharmHealthBooking variant="prominent" showDescription={false} />
-                
-                {/* Badges below the card */}
-                <div className="flex flex-wrap gap-3 justify-center mt-6">
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <VideoIcon className="w-3 h-3 text-blue-600" />
-                    </div>
-                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                      {language === 'en' ? 'Telehealth Available' : 'Telesalud Disponible'}
-                    </span>
+              {/* Left-Aligned Content */}
+              <div className="relative z-10 w-full px-8 lg:px-16 py-8 text-left">
+                <div className="max-w-5xl ml-2 md:ml-4" style={{maxWidth: "65%"}}>
+                  {/* SEO Pills */}
+                  <div className="flex flex-wrap gap-3 mb-6">
+                    <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-base font-medium">Telepsychiatry</span>
+                    <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-base font-medium">Statewide Florida</span>
+                    <span className="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-base font-medium">Virtual Care</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-3 h-3 text-blue-600" />
+                  
+                  <h1 className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-relaxed text-green-700 text-left mb-6 md:mb-8" data-testid="hero-title">
+                    <div className="font-display italic font-bold">
+                      {language === 'en' ? (
+                        <>Expert <span className="text-green-600">Psychiatric Care</span> from Anywhere in <span className="text-green-600">Florida</span></>
+                      ) : (
+                        <>Atención <span className="text-green-600">Psiquiátrica Experta</span> desde Cualquier Lugar de <span className="text-green-600">Florida</span></>
+                      )}
                     </div>
-                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                      {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}
-                    </span>
+                  </h1>
+                  
+                  <div className="text-lg md:text-xl lg:text-xl xl:text-2xl leading-relaxed font-body mb-8 md:mb-10 lg:mb-12 text-[#1e6b3b] lg:mr-20 xl:mr-32 2xl:mr-40" data-testid="hero-description">
+                    <span>{currentContent.hero.description}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-3 h-3 text-blue-600" />
+                  
+                  {/* Badges */}
+                  <div className="flex flex-wrap gap-3 mb-8">
+                    <div className="flex items-center gap-2 bg-white/95 rounded-full px-4 py-2 shadow-sm border border-green-100">
+                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <VideoIcon className="w-3 h-3 text-green-600" />
+                      </div>
+                      <span className="text-gray-700 font-body font-medium text-sm">
+                        {language === 'en' ? 'Telehealth Available' : 'Telesalud Disponible'}
+                      </span>
                     </div>
-                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                      {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
-                    </span>
+                    <div className="flex items-center gap-2 bg-white/95 rounded-full px-4 py-2 shadow-sm border border-green-100">
+                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-3 h-3 text-green-600" />
+                      </div>
+                      <span className="text-gray-700 font-body font-medium text-sm">
+                        {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white/95 rounded-full px-4 py-2 shadow-sm border border-green-100">
+                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-3 h-3 text-green-600" />
+                      </div>
+                      <span className="text-gray-700 font-body font-medium text-sm">
+                        {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                
-                {/* Description below hero image */}
-                <div className="max-w-3xl mx-auto mt-10">
-                  <p className="text-base sm:text-lg text-gray-600 font-body leading-relaxed text-center">
-                    {currentContent.hero.description}
-                  </p>
                 </div>
               </div>
             </div>
@@ -323,6 +331,11 @@ const TelepsychiatryFlorida = () => {
         {/* Statewide Coverage Section with Map */}
         <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Booking CTA */}
+            <div className="max-w-5xl mx-auto mb-16">
+              <CharmHealthBooking variant="prominent" showDescription={false} />
+            </div>
+            
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4">
                 {language === 'en' ? (
