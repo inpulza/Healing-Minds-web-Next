@@ -4,8 +4,8 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone, Brain, Heart } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
-import heroImage from '@assets/hero-doctor-latest.webp';
-import mobileHeroImage from '@assets/hero-doctor-mobile-optimized.webp';
+import heroImage from '../assets/hero-doctor-latest.png';
+import mobileHeroImage from '../assets/hero-doctor-latest.png';
 
 // Optimized Hero component with performance improvements
 const Hero = React.memo(() => {
