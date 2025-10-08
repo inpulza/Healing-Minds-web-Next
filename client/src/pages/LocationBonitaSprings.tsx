@@ -170,7 +170,8 @@ const LocationBonitaSprings = () => {
                 <OptimizedImage
                   src={heroLocationImage}
                   alt="Dr. Melva Reve serving Bonita Springs"
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: '95% top' }}
                   width={800}
                   height={1000}
                   priority={true}
