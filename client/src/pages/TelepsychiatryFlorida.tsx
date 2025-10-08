@@ -23,7 +23,7 @@ import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_manageme
 import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d71.png';
 import bipolarTreatmentImg from '@assets/generated_images/Bipolar_balance_stability_da9b84ed.png';
 import medicationManagementImg from '@assets/generated_images/Medication_management_studio_556b9569.png';
-import telehealthHeroBg from '../assets/telehealth-hero-bg.png';
+import drMelvaHero from '../assets/dr-melva-location-hero.webp';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 
 const TelepsychiatryFlorida = () => {
@@ -83,7 +83,7 @@ const TelepsychiatryFlorida = () => {
       hero: {
         title: "Expert Psychiatric Care from Anywhere in Florida",
         subtitle: "Telepsychiatry Services Throughout Florida",
-        description: "At Healing Minds Psychiatry, we believe that access to exceptional mental health care should have no boundaries. Our Telepsychiatry (Telehealth) service eliminates distance and time barriers, connecting you with Dr. Melva Reve from the comfort and privacy of your home, wherever you are in Florida."
+        description: "Connect with Dr. Melva Reve from the comfort and privacy of your home, wherever you are in Florida."
       },
       benefits: {
         title: "Why Choose Telepsychiatry?",
@@ -171,7 +171,7 @@ const TelepsychiatryFlorida = () => {
       hero: {
         title: "Atención Psiquiátrica Experta desde Cualquier Lugar de Florida",
         subtitle: "Servicios de Telepsiquiatría en Toda Florida",
-        description: "En Healing Minds Psychiatry, creemos que el acceso a un cuidado de salud mental excepcional no debería tener fronteras. Nuestro servicio de Telepsiquiatría (Telehealth) elimina las barreras de la distancia y el tiempo, conectándote con la Dra. Melva Reve desde la comodidad y privacidad de tu hogar, estés donde estés en Florida."
+        description: "Conéctese con la Dra. Melva Reve desde la comodidad y privacidad de su hogar, donde quiera que esté en Florida."
       },
       benefits: {
         title: "¿Por Qué Elegir Telepsiquiatría?",
@@ -269,7 +269,7 @@ const TelepsychiatryFlorida = () => {
             <div className="relative rounded-3xl overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] flex items-center justify-center">
               {/* Background Image */}
               <img 
-                src={telehealthHeroBg} 
+                src={drMelvaHero} 
                 alt="Dr. Melva Reve - Telepsychiatry Services Throughout Florida"
                 className="absolute inset-0 w-full h-full object-cover object-center"
               />
