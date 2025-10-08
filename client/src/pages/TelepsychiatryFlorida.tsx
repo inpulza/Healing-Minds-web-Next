@@ -29,6 +29,15 @@ import { useState } from 'react';
 import floridaMap from '@/assets/florida-map.webp';
 import patientCareImage from '@/assets/telepsychiatry-patient-care.webp';
 import floridaStateImage from '@/assets/telepsychiatry-florida-state.webp';
+// Generated benefit images
+import statewideAccessImg from '@assets/generated_images/Statewide_telepsychiatry_access_concept_b85ef47e.png';
+import saveTimeImg from '@assets/generated_images/Time_saving_telehealth_concept_4adac1c8.png';
+import privacyImg from '@assets/generated_images/Privacy_telepsychiatry_session_concept_04dda350.png';
+import continuityImg from '@assets/generated_images/Continuity_of_care_concept_60d68e2a.png';
+// Generated service images
+import evaluationImg from '@assets/generated_images/Comprehensive_psychiatric_evaluation_concept_72248a38.png';
+import medicationImg from '@assets/generated_images/Medication_management_service_concept_5aec039c.png';
+import bilingualImg from '@assets/generated_images/Bilingual_psychiatric_services_concept_405e7f7c.png';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
@@ -75,22 +84,26 @@ const TelepsychiatryFlorida = () => {
           {
             icon: MapPin,
             title: "Statewide Access",
-            description: "Whether in Miami, Orlando, Tampa, or rural Florida, connect with Dr. Reve from anywhere in the state."
+            description: "Whether in Miami, Orlando, Tampa, or rural Florida, connect with Dr. Reve from anywhere in the state.",
+            image: statewideAccessImg
           },
           {
             icon: Clock,
             title: "Save Time & Energy",
-            description: "No traffic, no waiting rooms. Virtual appointments fit seamlessly into your schedule."
+            description: "No traffic, no waiting rooms. Virtual appointments fit seamlessly into your schedule.",
+            image: saveTimeImg
           },
           {
             icon: Shield,
             title: "Complete Privacy",
-            description: "Receive care in the comfort and privacy of your own space with HIPAA-compliant security."
+            description: "Receive care in the comfort and privacy of your own space with HIPAA-compliant security.",
+            image: privacyImg
           },
           {
             icon: Users,
             title: "Continuity of Care",
-            description: "Perfect for seasonal residents, students, or travelers. Your treatment continues wherever you are."
+            description: "Perfect for seasonal residents, students, or travelers. Your treatment continues wherever you are.",
+            image: continuityImg
           }
         ]
       },
@@ -123,13 +136,13 @@ const TelepsychiatryFlorida = () => {
             icon: Brain,
             title: "Comprehensive Evaluations",
             description: "Initial psychiatric assessments for accurate diagnosis",
-            image: null
+            image: evaluationImg
           },
           {
             icon: Heart,
             title: "Medication Management",
             description: "Expert treatment for anxiety, depression, ADHD, and more",
-            image: null
+            image: medicationImg
           },
           {
             icon: CheckCircle,
@@ -141,7 +154,7 @@ const TelepsychiatryFlorida = () => {
             icon: Users,
             title: "Bilingual Services",
             description: "Professional care in English or Spanish",
-            image: null
+            image: bilingualImg
           }
         ]
       },
@@ -204,22 +217,26 @@ const TelepsychiatryFlorida = () => {
           {
             icon: MapPin,
             title: "Acceso Estatal",
-            description: "Ya sea en Miami, Orlando, Tampa o la Florida rural, conéctese con la Dra. Reve desde cualquier lugar del estado."
+            description: "Ya sea en Miami, Orlando, Tampa o la Florida rural, conéctese con la Dra. Reve desde cualquier lugar del estado.",
+            image: statewideAccessImg
           },
           {
             icon: Clock,
             title: "Ahorre Tiempo y Energía",
-            description: "Sin tráfico, sin salas de espera. Las citas virtuales se adaptan perfectamente a su agenda."
+            description: "Sin tráfico, sin salas de espera. Las citas virtuales se adaptan perfectamente a su agenda.",
+            image: saveTimeImg
           },
           {
             icon: Shield,
             title: "Privacidad Completa",
-            description: "Reciba atención en la comodidad y privacidad de su propio espacio con seguridad compatible con HIPAA."
+            description: "Reciba atención en la comodidad y privacidad de su propio espacio con seguridad compatible con HIPAA.",
+            image: privacyImg
           },
           {
             icon: Users,
             title: "Continuidad del Cuidado",
-            description: "Perfecto para residentes estacionales, estudiantes o viajeros. Su tratamiento continúa donde quiera que esté."
+            description: "Perfecto para residentes estacionales, estudiantes o viajeros. Su tratamiento continúa donde quiera que esté.",
+            image: continuityImg
           }
         ]
       },
@@ -252,13 +269,13 @@ const TelepsychiatryFlorida = () => {
             icon: Brain,
             title: "Evaluaciones Integrales",
             description: "Evaluaciones psiquiátricas iniciales para diagnóstico preciso",
-            image: null
+            image: evaluationImg
           },
           {
             icon: Heart,
             title: "Manejo de Medicamentos",
             description: "Tratamiento experto para ansiedad, depresión, TDAH y más",
-            image: null
+            image: medicationImg
           },
           {
             icon: CheckCircle,
@@ -270,7 +287,7 @@ const TelepsychiatryFlorida = () => {
             icon: Users,
             title: "Servicios Bilingües",
             description: "Atención profesional en inglés o español",
-            image: null
+            image: bilingualImg
           }
         ]
       },
@@ -417,21 +434,28 @@ const TelepsychiatryFlorida = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {currentContent.benefits.items.map((benefit, index) => (
-                <Card key={index} className="bg-green-50 border-green-100 p-6 sm:p-8 hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
-                      <WellnessIcon size="md" color="green">
+                <Card key={index} className="bg-green-50 border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`benefit-${index}`}>
+                  {benefit.image && (
+                    <div className="w-full aspect-square bg-white">
+                      <img 
+                        src={benefit.image} 
+                        alt={benefit.title}
+                        className="w-full h-full object-contain p-4"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6 sm:p-8">
+                    <div className="flex items-center gap-3 mb-4">
+                      <WellnessIcon size="sm" color="green">
                         <benefit.icon />
                       </WellnessIcon>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-body font-bold text-green-800 mb-3">
+                      <h3 className="text-xl font-body font-bold text-green-800">
                         {benefit.title}
                       </h3>
-                      <p className="text-gray-700 font-body leading-relaxed">
-                        {benefit.description}
-                      </p>
                     </div>
+                    <p className="text-gray-700 font-body leading-relaxed">
+                      {benefit.description}
+                    </p>
                   </div>
                 </Card>
               ))}
@@ -567,25 +591,27 @@ const TelepsychiatryFlorida = () => {
               {currentContent.services.items.map((service, index) => {
                 const IconComponent = service.icon;
                 return (
-                  <Card key={index} className="bg-white border-green-100 p-6 hover:shadow-lg transition-shadow duration-300 overflow-hidden" data-testid={`service-${index}`}>
+                  <Card key={index} className="bg-white border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`service-${index}`}>
                     {service.image && (
-                      <div className="mb-4 -mx-6 -mt-6">
+                      <div className="w-full aspect-square bg-green-50">
                         <img 
                           src={service.image} 
                           alt={service.title}
-                          className="w-full h-32 object-cover"
+                          className="w-full h-full object-contain p-4"
                         />
                       </div>
                     )}
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <IconComponent className="w-8 h-8 text-green-600" />
+                    <div className="p-6">
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <IconComponent className="w-6 h-6 text-green-600" />
+                      </div>
+                      <h3 className="text-lg font-body font-bold text-green-800 mb-2 text-center">
+                        {service.title}
+                      </h3>
+                      <p className="text-gray-600 font-body leading-relaxed text-center">
+                        {service.description}
+                      </p>
                     </div>
-                    <h3 className="text-lg font-body font-bold text-green-800 mb-2 text-center">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-600 font-body leading-relaxed text-center">
-                      {service.description}
-                    </p>
                   </Card>
                 );
               })}
