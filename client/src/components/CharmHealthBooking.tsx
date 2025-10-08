@@ -77,14 +77,55 @@ const CharmHealthBooking = ({
 
   if (variant === 'prominent') {
     return (
-      <Card className={`relative w-full overflow-hidden border-blue-200 ${className}`}>
-        <div className="relative aspect-[18/9]">
+      <Card className={`w-full overflow-hidden border-blue-200 ${className}`}>
+        {/* Mobile Layout - Stacked */}
+        <div className="md:hidden">
+          {/* Mobile Image - 9:16 aspect ratio, centered */}
+          <div className="relative aspect-[9/16]">
+            <img 
+              src={telehealthHeroBg} 
+              alt="Telehealth Background"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+          </div>
+          
+          {/* Mobile Content */}
+          <div className="p-6 bg-white">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <VideoIcon className="w-6 h-6 text-blue-600" />
+              </div>
+              <p className="text-blue-700 font-medium text-sm" data-testid="telehealth-subtitle">
+                {currentContent.subtitle}
+              </p>
+            </div>
+            
+            <h3 className="text-2xl font-body font-bold text-gray-900 mb-4" data-testid="telehealth-title">
+              {currentContent.title}
+            </h3>
+            
+            <Button
+              onClick={() => {
+                trackTelehealthClick('charm-health-prominent');
+                window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200 w-full"
+              data-testid="button-charm-health-prominent"
+            >
+              <Calendar className="w-5 h-5 mr-2" />
+              {currentContent.button}
+            </Button>
+          </div>
+        </div>
+
+        {/* Desktop Layout - Horizontal */}
+        <div className="hidden md:block relative aspect-[18/9]">
           <img 
             src={telehealthHeroBg} 
             alt="Telehealth Background"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           
           <div className="relative h-full flex items-center px-6 sm:px-8 lg:px-12">
             <div className="max-w-xl text-left">
@@ -92,12 +133,12 @@ const CharmHealthBooking = ({
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <VideoIcon className="w-6 h-6 text-blue-600" />
                 </div>
-                <p className="text-blue-700 font-medium text-sm sm:text-base" data-testid="telehealth-subtitle">
+                <p className="text-blue-700 font-medium text-sm sm:text-base" data-testid="telehealth-subtitle-desktop">
                   {currentContent.subtitle}
                 </p>
               </div>
               
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="telehealth-title">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="telehealth-title-desktop">
                 {currentContent.title}
               </h3>
               
@@ -124,7 +165,7 @@ const CharmHealthBooking = ({
                   window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
                 }}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
-                data-testid="button-charm-health-prominent"
+                data-testid="button-charm-health-prominent-desktop"
               >
                 <Calendar className="w-5 h-5 mr-2" />
                 {currentContent.button}
