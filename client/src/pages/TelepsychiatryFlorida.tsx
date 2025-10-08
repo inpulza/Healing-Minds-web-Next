@@ -261,67 +261,22 @@ const TelepsychiatryFlorida = () => {
                 )}
               </h1>
               
-              {/* Description with better design */}
+              {/* Description without white container */}
               <div className="max-w-4xl mx-auto mb-10">
-                <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-green-100">
-                  <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed">
-                    {currentContent.hero.description}
-                  </p>
-                </div>
+                <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed">
+                  {currentContent.hero.description}
+                </p>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <CharmHealthBooking variant="compact" showDescription={false} />
-              </div>
-            </div>
-
-            {/* Feature Tags */}
-            <div className="mt-12">
-              <div className="max-w-4xl mx-auto">
-                <div className="flex flex-wrap gap-4 justify-center">
-                  {[
-                    {
-                      en: '15+ Years Experience',
-                      es: '15+ Años de Experiencia'
-                    },
-                    {
-                      en: 'Board-Certified Psychiatrist',
-                      es: 'Psiquiatra Certificada'
-                    },
-                    {
-                      en: 'Bilingual Services',
-                      es: 'Servicios Bilingües'
-                    },
-                    {
-                      en: 'Statewide Coverage',
-                      es: 'Cobertura Estatal'
-                    },
-                    {
-                      en: 'HIPAA Compliant',
-                      es: 'Compatible con HIPAA'
-                    },
-                    {
-                      en: 'Secure Platform',
-                      es: 'Plataforma Segura'
-                    }
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-3 bg-white rounded-full px-5 py-2.5 shadow-md hover:shadow-lg transition-shadow duration-200 border border-green-100">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <CheckCircle className="w-3.5 h-3.5 text-green-600" />
-                      </div>
-                      <span className="text-gray-700 font-body font-medium text-sm">
-                        {language === 'en' ? item.en : item.es}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <CharmHealthBooking variant="prominent" showDescription={false} className="max-w-md" />
               </div>
             </div>
           </div>
         </section>
 
         {/* Statewide Coverage Section with Map */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4">
@@ -331,9 +286,48 @@ const TelepsychiatryFlorida = () => {
                   <>Cobertura <span className="font-display italic text-green-700">Estatal</span></>
                 )}
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed mb-8">
                 {currentContent.coverage.description}
               </p>
+              
+              {/* Feature Tags */}
+              <div className="flex flex-wrap gap-3 justify-center max-w-4xl mx-auto">
+                {[
+                  {
+                    en: '15+ Years Experience',
+                    es: '15+ Años de Experiencia'
+                  },
+                  {
+                    en: 'Board-Certified Psychiatrist',
+                    es: 'Psiquiatra Certificada'
+                  },
+                  {
+                    en: 'Bilingual Services',
+                    es: 'Servicios Bilingües'
+                  },
+                  {
+                    en: 'Statewide Coverage',
+                    es: 'Cobertura Estatal'
+                  },
+                  {
+                    en: 'HIPAA Compliant',
+                    es: 'Compatible con HIPAA'
+                  },
+                  {
+                    en: 'Secure Platform',
+                    es: 'Plataforma Segura'
+                  }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100" data-testid={`feature-tag-${index}`}>
+                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-3 h-3 text-green-600" />
+                    </div>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                      {language === 'en' ? item.en : item.es}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="max-w-4xl mx-auto">
               <div className="bg-green-50 rounded-3xl p-8 border border-green-100">
