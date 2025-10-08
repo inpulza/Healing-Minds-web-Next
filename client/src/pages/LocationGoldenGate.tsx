@@ -164,8 +164,8 @@ const LocationGoldenGate = () => {
         <section className="pt-20 pb-8 sm:pb-12 lg:pb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="md:hidden">
-              <div className="relative aspect-[4/5] mb-4 rounded-2xl overflow-hidden">
-                <OptimizedImage src={heroLocationImage} alt="Dr. Melva Reve serving Golden Gate" className="w-full h-full object-cover" style={{ objectPosition: '95% top' }} width={800} height={1000} priority={true} sizes="100vw" />
+              <div className="relative h-[400px] sm:h-[450px] mb-4 rounded-2xl overflow-hidden">
+                <OptimizedImage src={heroLocationImage} alt="Dr. Melva Reve serving Golden Gate" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: '95% top' }} width={800} height={1000} priority={true} sizes="100vw" />
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">
                     <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">

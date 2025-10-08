@@ -166,11 +166,11 @@ const LocationAveMaria = () => {
             {/* Mobile Hero */}
             <div className="md:hidden">
               {/* Mobile Image */}
-              <div className="relative aspect-[4/5] mb-4 rounded-2xl overflow-hidden">
+              <div className="relative h-[400px] sm:h-[450px] mb-4 rounded-2xl overflow-hidden">
                 <OptimizedImage
                   src={heroLocationImage}
                   alt="Dr. Melva Reve serving Ave Maria"
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                   style={{ objectPosition: '95% top' }}
                   width={800}
                   height={1000}
