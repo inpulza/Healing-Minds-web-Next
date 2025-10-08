@@ -12,6 +12,7 @@ interface CharmHealthBookingProps {
   className?: string;
   heroTitle?: React.ReactNode;
   heroBadges?: React.ReactNode;
+  heroDescription?: React.ReactNode;
   colorScheme?: 'blue' | 'green';
 }
 
@@ -21,6 +22,7 @@ const CharmHealthBooking = ({
   className = '',
   heroTitle,
   heroBadges,
+  heroDescription,
   colorScheme = 'blue'
 }: CharmHealthBookingProps) => {
   const { language } = useLanguage();
@@ -164,11 +166,19 @@ const CharmHealthBooking = ({
                 </div>
               )}
               
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="telehealth-title-desktop">
-                {currentContent.title}
-              </h3>
+              {heroDescription && (
+                <div className="mb-6">
+                  {heroDescription}
+                </div>
+              )}
               
-              {showDescription && (
+              {!heroDescription && (
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="telehealth-title-desktop">
+                  {currentContent.title}
+                </h3>
+              )}
+              
+              {showDescription && !heroDescription && (
                 <>
                   <p className="text-gray-600 mb-6 leading-relaxed" data-testid="telehealth-description">
                     {currentContent.description}

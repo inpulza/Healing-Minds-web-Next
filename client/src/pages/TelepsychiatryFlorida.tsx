@@ -312,14 +312,12 @@ const TelepsychiatryFlorida = () => {
                       )}
                     </h1>
                   }
+                  heroDescription={
+                    <p className="text-base md:text-lg lg:text-xl leading-relaxed font-body text-[#1e6b3b]">
+                      {currentContent.hero.description}
+                    </p>
+                  }
                 />
-                
-                {/* Description below hero image */}
-                <div className="max-w-3xl mx-auto mt-10">
-                  <p className="text-base sm:text-lg text-gray-600 font-body leading-relaxed text-center">
-                    {currentContent.hero.description}
-                  </p>
-                </div>
               </div>
             </div>
           </div>
