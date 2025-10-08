@@ -253,7 +253,7 @@ const Header = () => {
 
           {/* Desktop Navigation - Full Width */}
           <div className="hidden md:flex flex-1 justify-center px-8" ref={servicesRef}>
-            <nav className="flex items-center gap-2 lg:gap-4" data-testid="desktop-nav">
+            <nav className="flex items-center gap-1 lg:gap-2" data-testid="desktop-nav">
             {navigationItems.map((item) => (
               <div key={item.href} className="relative">
                 {item.hasDropdown ? (
@@ -267,7 +267,7 @@ const Header = () => {
                         setIsServicesOpen(false);
                       }
                     }}
-                    className={`relative px-4 lg:px-6 py-3 rounded-full font-body font-medium text-sm lg:text-base transition-all duration-500 flex items-center gap-2 whitespace-nowrap after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
+                    className={`relative px-3 lg:px-4 py-3 rounded-full font-body font-medium text-xs lg:text-sm transition-all duration-500 flex items-center gap-1.5 whitespace-nowrap after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
                       isActive(item.href) || (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen)
                         ? 'text-primary after:w-3/4'
                         : 'text-green-700 hover:text-primary after:w-0 hover:after:w-3/4'
@@ -283,14 +283,14 @@ const Header = () => {
                     aria-expanded={item.dropdownType === 'services' ? isServicesOpen : item.dropdownType === 'locations' ? isLocationsOpen : false}
                   >
                     {item.label}
-                    <ChevronDown className={`w-4 h-4 transition-transform duration-500 ${
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-500 ${
                       (item.dropdownType === 'services' && isServicesOpen) || (item.dropdownType === 'locations' && isLocationsOpen) ? 'rotate-180' : ''
                     }`} />
                   </button>
                 ) : (
                   <Link
                     href={item.href}
-                    className={`relative px-4 lg:px-6 py-3 rounded-full font-body font-medium text-sm lg:text-base transition-all duration-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
+                    className={`relative px-3 lg:px-4 py-3 rounded-full font-body font-medium text-xs lg:text-sm transition-all duration-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-primary after:transition-all after:duration-300 ${
                       isActive(item.href)
                         ? 'text-primary after:w-3/4'
                         : 'text-green-700 hover:text-primary after:w-0 hover:after:w-3/4'
