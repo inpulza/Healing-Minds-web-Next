@@ -515,7 +515,7 @@ const TelepsychiatryFlorida = () => {
         <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 shadow-lg border border-green-100">
-              <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-center">
+              <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 items-stretch">
                 {/* Content */}
                 <div className="text-green-800 order-2 md:order-1">
                   <h2 className="text-5xl font-body font-bold mb-4 sm:mb-6" data-testid="doctor-about-title">
@@ -551,8 +551,8 @@ const TelepsychiatryFlorida = () => {
                 </div>
 
                 {/* Doctor Image */}
-                <div className="relative order-1 md:order-2 flex items-center">
-                  <div className="w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden">
+                <div className="relative order-1 md:order-2">
+                  <div className="w-full h-full min-h-[400px] md:min-h-full rounded-xl sm:rounded-2xl overflow-hidden">
                     <img
                       src={drMelvaOffice}
                       alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing telepsychiatry services"
