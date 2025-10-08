@@ -1,5 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import fs from "fs";
+import path from "path";
 import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
 import { generateSitemap, generateRobotsTxt } from "./routes/sitemap";
@@ -10,14 +12,12 @@ import { emailService } from "./services/email";
 import { injectMetaTags } from "./utils/html-injection";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // CRÍTICO: HTML Meta Tags Injection Middleware 
-  // Este middleware intercepta responses HTML para inyectar meta tags server-side
-  // Compatible con desarrollo (Vite) y producción (static files)
+  // CRÍTICO: HTML Meta Tags Injection Middleware para DESARROLLO (Vite)
+  // Este middleware intercepta res.end() solo en desarrollo cuando Vite transforma el HTML
   app.use((req, res, next) => {
     // Solo procesar requests que podrían ser páginas HTML (no APIs, no assets)
     if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
       const originalEnd = res.end;
-      
       res.end = function(chunk: any, encoding?: any) {
         if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html')) {
           console.log(`🔧 SEO: Injecting meta tags for ${req.originalUrl}`);
@@ -321,6 +321,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     // 4. URLs legítimas → continuar al SPA routing normal
     next();
+  });
+
+  // CRÍTICO: HTML Injection Handler para PRODUCCIÓN
+  // Este handler se ejecuta ANTES de serveStatic, solo en producción
+  // Lee index.html, lo cachea en memoria, inyecta meta tags dinámicamente, y lo sirve
+  let cachedIndexHtml: string | null = null;
+  
+  app.use('*', async (req, res, next) => {
+    // Solo ejecutar en producción
+    if (process.env.NODE_ENV === 'development') {
+      return next();
+    }
+
+    // Solo procesar rutas que podrían ser páginas HTML (no assets con extensión)
+    if (req.method !== 'GET' || req.path.startsWith('/api') || req.path.includes('.')) {
+      return next();
+    }
+
+    try {
+      // Cachear index.html en memoria (solo se lee una vez en producción)
+      if (!cachedIndexHtml) {
+        const indexPath = path.resolve(import.meta.dirname, 'public', 'index.html');
+        cachedIndexHtml = await fs.promises.readFile(indexPath, 'utf-8');
+        console.log(`📦 SEO: Cached index.html template in memory (${cachedIndexHtml.length} bytes)`);
+      }
+      
+      // Inyectar meta tags dinámicamente según la ruta
+      const modifiedHtml = injectMetaTags(cachedIndexHtml, req);
+      
+      console.log(`🔧 SEO (PRODUCTION): Injecting meta tags for ${req.originalUrl}`);
+      
+      // Enviar con headers apropiados (respetando la caché configurada en index.ts)
+      res.status(200).set({ 'Content-Type': 'text/html; charset=utf-8' }).send(modifiedHtml);
+    } catch (error) {
+      console.error(`❌ Error serving HTML in production: ${error}`);
+      // Si falla, invalidar caché y pasar al siguiente middleware (serveStatic)
+      cachedIndexHtml = null;
+      next();
+    }
   });
 
   const httpServer = createServer(app);
