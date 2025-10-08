@@ -763,7 +763,7 @@ const TelepsychiatryFlorida = () => {
                 return (
                   <Card key={index} className="bg-white border-green-100 overflow-hidden hover:shadow-lg transition-shadow duration-300" data-testid={`service-${index}`}>
                     {service.image && (
-                      <div className="w-full aspect-square bg-green-50 p-4">
+                      <div className="w-full aspect-square p-4 bg-[#ffffff]">
                         <img 
                           src={service.image} 
                           alt={service.title}
