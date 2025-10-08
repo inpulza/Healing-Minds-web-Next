@@ -525,6 +525,19 @@ const TelepsychiatryFlorida = () => {
               </p>
             </div>
 
+            {/* Stats - Above Map */}
+            <div className="mb-8 sm:mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                {currentContent.stats.map((stat, index) => (
+                  <div key={index} className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
+                    <stat.icon className="w-12 h-12 p-3 bg-green-100 rounded-lg text-green-600 flex-shrink-0" />
+                    <div className="text-2xl font-bold text-green-800 whitespace-nowrap">{stat.value}</div>
+                    <div className="text-sm text-gray-600 font-medium whitespace-nowrap">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-green-100">
               <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
                 {/* Florida Map */}
@@ -539,6 +552,18 @@ const TelepsychiatryFlorida = () => {
                 {/* Coverage Overlay */}
                 <div className="absolute inset-0 bg-green-500 bg-opacity-5 border-2 border-green-400 border-opacity-20 rounded-2xl"></div>
 
+                {/* Naples Main Office Marker */}
+                <div className="absolute" style={{top: '68%', left: '26%', transform: 'translate(-50%, -50%)'}}>
+                  <div className="relative">
+                    <div className="w-5 h-5 bg-green-700 rounded-full shadow-lg animate-pulse border-2 border-white"></div>
+                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+                      <span className="text-xs font-bold text-white bg-green-700 px-2 py-1 rounded-md shadow-lg inline-block">
+                        Naples ⭐
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Compass */}
                 <div className="absolute top-4 right-4 z-10">
                   <div className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-200">
@@ -552,6 +577,16 @@ const TelepsychiatryFlorida = () => {
                     <div className="flex items-center gap-2 text-sm text-green-700 font-medium">
                       <VideoIcon className="w-4 h-4" />
                       <span>{currentContent.mapSection.statewideLabel}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Office Location Badge */}
+                <div className="absolute top-4 left-4 z-10">
+                  <div className="bg-white bg-opacity-95 rounded-lg shadow-lg px-3 py-2 border border-green-200">
+                    <div className="flex items-center gap-2 text-xs text-gray-700 font-medium">
+                      <MapPin className="w-3 h-3 text-green-600" />
+                      <span>Naples, FL 34103</span>
                     </div>
                   </div>
                 </div>
@@ -709,18 +744,13 @@ const TelepsychiatryFlorida = () => {
         <section className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16">
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <WellnessIcon size="md" color="green" className="opacity-80">
-                  <HelpCircle />
-                </WellnessIcon>
-                <h2 className="text-5xl font-body font-bold text-green-800" data-testid="faq-title">
-                  {language === 'en' ? (
-                    <>Frequently <span className="font-display italic text-green-700">Asked</span> Questions</>
-                  ) : (
-                    <>Preguntas <span className="font-display italic text-green-700">Frecuentes</span></>
-                  )}
-                </h2>
-              </div>
+              <h2 className="text-5xl font-body font-bold text-green-800 mb-4" data-testid="faq-title">
+                {language === 'en' ? (
+                  <>Frequently <span className="font-display italic text-green-700">Asked</span> Questions</>
+                ) : (
+                  <>Preguntas <span className="font-display italic text-green-700">Frecuentes</span></>
+                )}
+              </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto font-body leading-relaxed" data-testid="faq-description">
                 {language === 'en'
                   ? 'Common questions about our telepsychiatry services answered.'
