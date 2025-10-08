@@ -18,11 +18,11 @@ import convenientSchedulingImg from '@assets/generated_images/Convenient_time_sa
 import securePrivateImg from '@assets/generated_images/Private_secure_platform_a7ed7a02.png';
 import continuityCareImg from '@assets/generated_images/Continuity_of_care_87991256.png';
 import initialEvaluationImg from '@assets/generated_images/Initial_psychiatric_evaluation_99ae51a4.png';
-import anxietyDepressionImg from '@assets/generated_images/Anxiety_depression_treatment_48a1ec91.png';
+import anxietyDepressionImg from '@assets/generated_images/Anxiety_depression_calm_bdd7c98f.png';
 import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_management_b7a38ebf.png';
 import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d71.png';
-import bipolarTreatmentImg from '@assets/generated_images/Bipolar_disorder_treatment_c02c9d87.png';
-import medicationManagementImg from '@assets/generated_images/Medication_management_cbae213f.png';
+import bipolarTreatmentImg from '@assets/generated_images/Bipolar_balance_stability_da9b84ed.png';
+import medicationManagementImg from '@assets/generated_images/Medication_management_studio_556b9569.png';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
@@ -294,8 +294,8 @@ const TelepsychiatryFlorida = () => {
                 </p>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <CharmHealthBooking variant="prominent" showDescription={false} className="max-w-md" />
+              <div className="max-w-5xl mx-auto">
+                <CharmHealthBooking variant="prominent" showDescription={false} />
               </div>
             </div>
           </div>
@@ -650,21 +650,23 @@ const TelepsychiatryFlorida = () => {
 
         {/* Final CTA Section */}
         <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-green-50 to-green-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="cta-title">
-              {language === 'en' ? (
-                <>Ready to Get <span className="font-display italic text-green-700">Started</span>?</>
-              ) : (
-                <>¿Listo para <span className="font-display italic text-green-700">Comenzar</span>?</>
-              )}
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-700 mb-8 font-body leading-relaxed" data-testid="cta-description">
-              {language === 'en' 
-                ? 'Quality mental health care is just a click away.'
-                : 'La atención de salud mental de calidad está a solo un clic de distancia.'
-              }
-            </p>
-            <CharmHealthBooking variant="prominent" showDescription={false} className="mx-auto" />
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="cta-title">
+                {language === 'en' ? (
+                  <>Ready to Get <span className="font-display italic text-green-700">Started</span>?</>
+                ) : (
+                  <>¿Listo para <span className="font-display italic text-green-700">Comenzar</span>?</>
+                )}
+              </h2>
+              <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed" data-testid="cta-description">
+                {language === 'en' 
+                  ? 'Quality mental health care is just a click away.'
+                  : 'La atención de salud mental de calidad está a solo un clic de distancia.'
+                }
+              </p>
+            </div>
+            <CharmHealthBooking variant="prominent" showDescription={false} />
           </div>
         </section>
       </main>

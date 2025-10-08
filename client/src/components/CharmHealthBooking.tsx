@@ -76,7 +76,7 @@ const CharmHealthBooking = ({
 
   if (variant === 'prominent') {
     return (
-      <Card className={`bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-8 ${className}`}>
+      <Card className={`bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-6 sm:p-8 w-full ${className}`}>
         <div className="text-center">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
@@ -84,16 +84,11 @@ const CharmHealthBooking = ({
             </div>
           </div>
           
-          <Badge className="bg-slate-500 text-white mb-4 px-6 py-3 text-base font-medium rounded-full" data-testid="telehealth-badge">
-            <Monitor className="w-4 h-4 mr-2" />
-            {currentContent.badge}
-          </Badge>
-          
           <h3 className="text-2xl font-body font-bold text-gray-900 mb-2" data-testid="telehealth-title">
             {currentContent.title}
           </h3>
           
-          <p className="text-blue-700 font-medium mb-4" data-testid="telehealth-subtitle">
+          <p className="text-blue-700 font-medium mb-6" data-testid="telehealth-subtitle">
             {currentContent.subtitle}
           </p>
           
@@ -126,14 +121,18 @@ const CharmHealthBooking = ({
             {currentContent.button}
           </Button>
           
-          <div className="flex items-center justify-center gap-4 mt-6 text-sm text-gray-600">
-            <div className="flex items-center">
-              <Clock className="w-4 h-4 mr-1" />
-              {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}
+          <div className="flex items-center justify-center gap-6 mt-6 text-sm text-gray-500">
+            <div className="flex items-center gap-1">
+              <VideoIcon className="w-4 h-4" />
+              <span>{currentContent.badge}</span>
             </div>
-            <div className="flex items-center">
-              <Smartphone className="w-4 h-4 mr-1" />
-              {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
+            <div className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              <span>{language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Smartphone className="w-4 h-4" />
+              <span>{language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}</span>
             </div>
           </div>
         </div>
