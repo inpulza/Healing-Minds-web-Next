@@ -1025,7 +1025,7 @@ const LocationLelyResorts = () => {
 
 
         {/* Contact Information Section */}
-        <section className="py-16 lg:py-20 bg-green-50">
+        <section className="py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
