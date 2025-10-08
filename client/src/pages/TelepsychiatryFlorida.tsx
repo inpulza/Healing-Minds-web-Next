@@ -34,16 +34,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import floridaMap from '@/assets/florida-map.webp';
-import patientCareImage from '@/assets/telepsychiatry-patient-care.webp';
 import floridaStateImage from '@/assets/telepsychiatry-florida-state.webp';
 // Generated benefit images
 import statewideAccessImg from '@assets/generated_images/Statewide_telepsychiatry_access_concept_b85ef47e.png';
 import saveTimeImg from '@assets/generated_images/Time_saving_telehealth_concept_4adac1c8.png';
-import privacyImg from '@assets/generated_images/Privacy_telepsychiatry_session_concept_04dda350.png';
-import continuityImg from '@assets/generated_images/Continuity_of_care_concept_60d68e2a.png';
+import privacyImg from '@assets/generated_images/Privacy_and_confidentiality_concept_e1fc7f17.png';
+import continuityImg from '@assets/generated_images/Continuity_of_care_concept_3152cd39.png';
 // Generated service images
 import evaluationImg from '@assets/generated_images/Comprehensive_psychiatric_evaluation_concept_72248a38.png';
 import medicationImg from '@assets/generated_images/Medication_management_service_concept_5aec039c.png';
+import followUpCareImg from '@assets/generated_images/Follow-up_psychiatric_care_concept_281a1466.png';
 import bilingualImg from '@assets/generated_images/Bilingual_psychiatric_services_concept_405e7f7c.png';
 
 const TelepsychiatryFlorida = () => {
@@ -155,7 +155,7 @@ const TelepsychiatryFlorida = () => {
             icon: CheckCircle,
             title: "Follow-Up Care",
             description: "Ongoing support and prescription management",
-            image: patientCareImage
+            image: followUpCareImg
           },
           {
             icon: Users,
@@ -288,7 +288,7 @@ const TelepsychiatryFlorida = () => {
             icon: CheckCircle,
             title: "Atención de Seguimiento",
             description: "Apoyo continuo y manejo de prescripciones",
-            image: patientCareImage
+            image: followUpCareImg
           },
           {
             icon: Users,
