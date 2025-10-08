@@ -23,7 +23,7 @@ import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_manageme
 import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d71.png';
 import bipolarTreatmentImg from '@assets/generated_images/Bipolar_balance_stability_da9b84ed.png';
 import medicationManagementImg from '@assets/generated_images/Medication_management_studio_556b9569.png';
-import drMelvaHero from '../assets/dr-melva-location-hero.webp';
+import telehealthHeroBg from '../assets/telehealth-hero-bg.png';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 
 const TelepsychiatryFlorida = () => {
@@ -269,7 +269,7 @@ const TelepsychiatryFlorida = () => {
             <div className="relative rounded-3xl overflow-hidden h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] flex items-center justify-center">
               {/* Background Image */}
               <img 
-                src={drMelvaHero} 
+                src={telehealthHeroBg} 
                 alt="Dr. Melva Reve - Telepsychiatry Services Throughout Florida"
                 className="absolute inset-0 w-full h-full object-cover object-center"
               />
