@@ -208,8 +208,8 @@ const LocationLelyResorts = () => {
 
                 <p className="text-sm md:text-base text-gray-700 mb-6 max-w-md font-body leading-relaxed">
                   {language === 'en' 
-                    ? 'Quality psychiatric care in Lely Resort.'
-                    : 'Atención psiquiátrica de calidad en Lely Resort.'}
+                    ? 'Expert mental health care for Lely Resort residents with bilingual services and comprehensive treatment options.'
+                    : 'Atención experta de salud mental para residentes de Lely Resort con servicios bilingües y opciones de tratamiento integral.'}
                 </p>
 
                 <Button
