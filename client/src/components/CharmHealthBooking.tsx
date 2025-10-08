@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, VideoIcon, Smartphone, Monitor, CheckCircle } from 'lucide-react';
+import telehealthHeroBg from '../assets/telehealth-hero-bg.png';
 
 interface CharmHealthBookingProps {
   variant?: 'default' | 'compact' | 'prominent';
@@ -76,63 +77,59 @@ const CharmHealthBooking = ({
 
   if (variant === 'prominent') {
     return (
-      <Card className={`bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-6 sm:p-8 w-full ${className}`}>
-        <div className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-              <VideoIcon className="w-8 h-8 text-blue-600" />
-            </div>
-          </div>
+      <Card className={`relative w-full overflow-hidden border-blue-200 ${className}`}>
+        <div className="relative aspect-[16/9]">
+          <img 
+            src={telehealthHeroBg} 
+            alt="Telehealth Background"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent"></div>
           
-          <h3 className="text-2xl font-body font-bold text-gray-900 mb-2" data-testid="telehealth-title">
-            {currentContent.title}
-          </h3>
-          
-          <p className="text-blue-700 font-medium mb-6" data-testid="telehealth-subtitle">
-            {currentContent.subtitle}
-          </p>
-          
-          {showDescription && (
-            <>
-              <p className="text-gray-600 mb-6 leading-relaxed" data-testid="telehealth-description">
-                {currentContent.description}
+          <div className="relative h-full flex items-center px-6 sm:px-8 lg:px-12">
+            <div className="max-w-xl text-left">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <VideoIcon className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+              
+              <h3 className="text-2xl sm:text-3xl font-body font-bold text-gray-900 mb-2" data-testid="telehealth-title">
+                {currentContent.title}
+              </h3>
+              
+              <p className="text-blue-700 font-medium mb-6" data-testid="telehealth-subtitle">
+                {currentContent.subtitle}
               </p>
               
-              <div className="grid md:grid-cols-2 gap-3 mb-8">
-                {currentContent.features.map((feature, index) => (
-                  <div key={index} className="flex items-center text-sm text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
-                    {feature}
+              {showDescription && (
+                <>
+                  <p className="text-gray-600 mb-6 leading-relaxed" data-testid="telehealth-description">
+                    {currentContent.description}
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 gap-3 mb-8">
+                    {currentContent.features.map((feature, index) => (
+                      <div key={index} className="flex items-center text-sm text-gray-700">
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                        {feature}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </>
-          )}
-          
-          <Button
-            onClick={() => {
-              trackTelehealthClick('charm-health-prominent');
-              window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
-            }}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
-            data-testid="button-charm-health-prominent"
-          >
-            <Calendar className="w-5 h-5 mr-2" />
-            {currentContent.button}
-          </Button>
-          
-          <div className="flex items-center justify-center gap-6 mt-6 text-sm text-gray-500">
-            <div className="flex items-center gap-1">
-              <VideoIcon className="w-4 h-4" />
-              <span>{currentContent.badge}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>{language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Smartphone className="w-4 h-4" />
-              <span>{language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}</span>
+                </>
+              )}
+              
+              <Button
+                onClick={() => {
+                  trackTelehealthClick('charm-health-prominent');
+                  window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+                data-testid="button-charm-health-prominent"
+              >
+                <Calendar className="w-5 h-5 mr-2" />
+                {currentContent.button}
+              </Button>
             </div>
           </div>
         </div>
