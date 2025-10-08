@@ -131,7 +131,7 @@ const CharmHealthBooking = ({
           </div>
         </div>
         {/* Desktop Layout - Horizontal */}
-        <div className="hidden md:block relative aspect-[7/4]">
+        <div className="hidden md:block relative aspect-[18/9]">
           <img 
             src={telehealthHeroBg} 
             alt="Telehealth Background"
@@ -140,7 +140,7 @@ const CharmHealthBooking = ({
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           
           {/* Icono y subtítulo en el borde inferior izquierdo */}
-          <div className="absolute bottom-6 left-8 sm:left-12 lg:left-16 flex items-center gap-3">
+          <div className="absolute bottom-10 left-8 sm:left-12 lg:left-16 flex items-center gap-3">
             <div className={`w-12 h-12 ${colorScheme === 'green' ? 'bg-green-100' : 'bg-blue-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
               <VideoIcon className={`w-6 h-6 ${colorScheme === 'green' ? 'text-green-600' : 'text-blue-600'}`} />
             </div>
