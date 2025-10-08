@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
@@ -28,6 +29,7 @@ interface ContactFormModalProps {
 const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
   const { language, t } = useLanguage();
   const { toast } = useToast();
+  const [, navigate] = useLocation();
   const { trackEvent, setTag } = useClarity();
   const { trackContactFormSubmission } = useTikTokEvents();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -95,25 +97,9 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
       // Track TikTok Lead event
       trackContactFormSubmission('contact');
 
-      toast({
-        title: language === 'en' ? 'Success!' : '¡Éxito!',
-        description: language === 'en' 
-          ? 'Thank you for your message! We will get back to you within 24 hours.'
-          : '¡Gracias por su mensaje! Le responderemos dentro de 24 horas.',
-      });
-
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        preferredLanguage: 'english',
-        message: ''
-      });
-
-      // Close modal after successful submission
+      // Close modal and redirect to thank you page
       onClose();
+      navigate(language === 'en' ? '/thank-you' : '/es/gracias');
 
     } catch (error) {
       console.error('Error submitting form:', error);
