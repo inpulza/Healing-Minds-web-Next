@@ -81,7 +81,7 @@ const CharmHealthBooking = ({
         {/* Mobile Layout - Stacked */}
         <div className="md:hidden">
           {/* Mobile Image - Shorter aspect ratio to crop bottom and remove watermark */}
-          <div className="relative aspect-[4/5]">
+          <div className="relative aspect-[5/6]">
             <img 
               src={telehealthHeroBg} 
               alt="Telehealth Background"
