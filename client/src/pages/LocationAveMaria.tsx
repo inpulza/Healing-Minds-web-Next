@@ -1083,9 +1083,9 @@ const LocationAveMaria = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
               {/* Contact Info */}
-              <div className="space-y-8">
+              <div className="lg:col-span-2 space-y-8">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <MapPin className="w-6 h-6 text-green-800" />
@@ -1132,31 +1132,59 @@ const LocationAveMaria = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4">
+                <Button 
+                  variant="outline"
+                  className="border-green-800 text-green-800 hover:bg-green-50"
+                  onClick={() => window.open(`tel:${practiceInfo.phone}`, '_self')}
+                  data-testid="button-call-now"
+                >
+                  <Phone className="w-5 h-5 mr-2" />
+                  {content.callNow}
+                </Button>
+              </div>
+
+              {/* Quick Contact */}
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-green-100">
+                  <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
+                    {language === 'en' ? 'Send Us a Message' : 'Envíanos un Mensaje'}
+                  </h3>
                   <Button 
-                    className="bg-green-800 hover:bg-green-700 text-white"
+                    className="w-full bg-green-800 hover:bg-green-700 text-white"
                     onClick={() => window.location.href = '/contact'}
                     data-testid="button-contact-form"
                   >
                     <Mail className="w-5 h-5 mr-2" />
                     {language === 'en' ? 'Contact Form' : 'Formulario de Contacto'}
                   </Button>
-                  <Button 
-                    variant="outline"
-                    className="border-green-800 text-green-800 hover:bg-green-50"
-                    onClick={() => window.open(`tel:${practiceInfo.phone}`, '_self')}
-                    data-testid="button-call-now"
-                  >
-                    <Phone className="w-5 h-5 mr-2" />
-                    {content.callNow}
-                  </Button>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
 
-              {/* CharmHealth Booking Widget */}
-              <div className="lg:pl-8">
-                <CharmHealthBooking />
-              </div>
+        {/* Telehealth Services Section */}
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center">
+              <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
+                {language === 'en' ? (
+                  <>
+                    <span className="font-display italic text-green-800">Telehealth</span> Services Available
+                  </>
+                ) : (
+                  <>
+                    Servicios de <span className="font-display italic text-green-800">Telesalud</span> Disponibles
+                  </>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                {language === 'en' 
+                  ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
+                  : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
+                }
+              </p>
+              <CharmHealthBooking variant="prominent" />
             </div>
           </div>
         </section>
