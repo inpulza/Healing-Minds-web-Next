@@ -2,8 +2,7 @@ import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import doctorImage from '@assets/doctor-consultation.webp';
-import CompactVideoCarousel from './CompactVideoCarousel';
+import doctorImage from '@assets/doctor-consultation-square.png';
 
 const DoctorSection = () => {
   const { language } = useLanguage();
@@ -49,13 +48,13 @@ const DoctorSection = () => {
 
             {/* Doctor Image */}
             <div className="relative order-1 lg:order-2">
-              <div className="aspect-[4/5] sm:aspect-[5/6] md:aspect-[4/5] lg:aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden">
+              <div className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden">
                 <img
                   src={doctorImage}
                   alt="Dr. Melva Reve, MD - Engaged in consultation with a patient, demonstrating compassionate psychiatric care approach"
                   className="w-full h-full object-cover"
                   width={800}
-                  height={600}
+                  height={800}
                   loading="lazy"
                   decoding="async"
                   data-testid="doctor-section-image"
@@ -63,9 +62,6 @@ const DoctorSection = () => {
               </div>
             </div>
           </div>
-
-          {/* Compact Video Carousel */}
-          <CompactVideoCarousel />
         </div>
       </div>
     </section>
