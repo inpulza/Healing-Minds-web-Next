@@ -80,12 +80,12 @@ const CharmHealthBooking = ({
       <Card className={`w-full overflow-hidden border-blue-200 ${className}`}>
         {/* Mobile Layout - Stacked */}
         <div className="md:hidden">
-          {/* Mobile Image - 9:16 aspect ratio, centered */}
+          {/* Mobile Image - 9:16 aspect ratio, framed right to show lady */}
           <div className="relative aspect-[9/16]">
             <img 
               src={telehealthHeroBg} 
               alt="Telehealth Background"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover object-right"
             />
           </div>
           
