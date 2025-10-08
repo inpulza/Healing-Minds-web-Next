@@ -428,7 +428,7 @@ const LocationGoldenGate = () => {
                               es: 'Aprender Sobre Manejo de Medicamentos'
                             }
                           };
-                          return serviceTexts[service.id][language];
+                          return serviceTexts[service.id as keyof typeof serviceTexts][language];
                         })()} 
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
