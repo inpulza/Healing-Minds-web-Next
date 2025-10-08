@@ -13,16 +13,16 @@ import floridaMap from '../assets/florida-map.webp';
 import useEmblaCarousel from 'embla-carousel-react';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import DoctorSection from '@/components/DoctorSection';
-import accessFromHomeImg from '@assets/generated_images/Telepsychiatry_access_from_home_6fa39397.png';
-import convenientSchedulingImg from '@assets/generated_images/Convenient_telehealth_scheduling_ac361d13.png';
-import securePrivateImg from '@assets/generated_images/Secure_private_telehealth_efb2884f.png';
-import continuityCareImg from '@assets/generated_images/Continuity_of_care_telehealth_da164143.png';
-import initialEvaluationImg from '@assets/generated_images/Initial_psychiatric_evaluation_e760bee4.png';
-import anxietyDepressionImg from '@assets/generated_images/Anxiety_depression_treatment_2e784480.png';
-import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_management_50e393dc.png';
-import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_e5b6cf92.png';
-import bipolarTreatmentImg from '@assets/generated_images/Bipolar_disorder_treatment_97fd8ce2.png';
-import medicationManagementImg from '@assets/generated_images/Medication_management_renewal_8552e703.png';
+import accessFromHomeImg from '@assets/generated_images/Access_from_anywhere_Florida_325859e3.png';
+import convenientSchedulingImg from '@assets/generated_images/Convenient_time_saving_66f1475e.png';
+import securePrivateImg from '@assets/generated_images/Private_secure_platform_a7ed7a02.png';
+import continuityCareImg from '@assets/generated_images/Continuity_of_care_87991256.png';
+import initialEvaluationImg from '@assets/generated_images/Initial_psychiatric_evaluation_99ae51a4.png';
+import anxietyDepressionImg from '@assets/generated_images/Anxiety_depression_treatment_48a1ec91.png';
+import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_management_b7a38ebf.png';
+import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d71.png';
+import bipolarTreatmentImg from '@assets/generated_images/Bipolar_disorder_treatment_c02c9d87.png';
+import medicationManagementImg from '@assets/generated_images/Medication_management_cbae213f.png';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
