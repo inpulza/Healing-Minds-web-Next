@@ -142,7 +142,7 @@ const Hero = React.memo(() => {
               sizes="(min-width: 1200px) 1200px, 100vw"
               {...({'fetchpriority': 'high'} as any)}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>
 
             
             {/* Left-Aligned Content */}

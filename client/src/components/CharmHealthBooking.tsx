@@ -139,7 +139,7 @@ const CharmHealthBooking = ({
             alt="Telehealth Background"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>
           
           {/* Icono y subtítulo en el borde inferior izquierdo */}
           <div className="absolute bottom-10 left-8 sm:left-12 lg:left-16 flex items-center gap-3">
