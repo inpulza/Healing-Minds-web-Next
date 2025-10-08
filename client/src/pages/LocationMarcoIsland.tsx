@@ -1085,11 +1085,10 @@ const LocationMarcoIsland = () => {
         </section>
 
         {/* Telehealth Services Section */}
-        <section className="py-20 bg-gradient-to-br from-green-50 to-green-100">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Left: Info */}
-              <div>
+        <section className="py-16 bg-green-50">
+          <div className="max-w-4xl mx-auto px-6 lg:px-8">
+            <div className="bg-white rounded-2xl shadow-lg p-8 lg:p-12 border border-green-100">
+              <div className="text-center">
                 <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
                   {language === 'en' ? (
                     <>
@@ -1101,24 +1100,13 @@ const LocationMarcoIsland = () => {
                     </>
                   )}
                 </h2>
-                <p className="text-lg text-gray-600 mb-8">
+                <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
                   {language === 'en' 
                     ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
                     : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
                   }
                 </p>
                 <CharmHealthBooking variant="prominent" />
-              </div>
-
-              {/* Right: Doctor Image */}
-              <div className="relative">
-                <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
-                  <OptimizedImage
-                    src={heroLocationImage}
-                    alt="Dr. Melva Reve - Telehealth Services"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
               </div>
             </div>
           </div>

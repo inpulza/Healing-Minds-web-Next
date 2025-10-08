@@ -1137,41 +1137,27 @@ const LocationBonitaSprings = () => {
         </section>
 
         {/* Telehealth Services Section */}
-        <section className="py-20 bg-gradient-to-br from-green-50 to-green-100">
+        <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Left: Info */}
-              <div>
-                <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
-                  {language === 'en' ? (
-                    <>
-                      <span className="font-display italic text-green-800">Telehealth</span> Services Available
-                    </>
-                  ) : (
-                    <>
-                      Servicios de <span className="font-display italic text-green-800">Telesalud</span> Disponibles
-                    </>
-                  )}
-                </h2>
-                <p className="text-lg text-gray-600 mb-8">
-                  {language === 'en' 
-                    ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
-                    : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
-                  }
-                </p>
-                <CharmHealthBooking variant="prominent" />
-              </div>
-
-              {/* Right: Doctor Image */}
-              <div className="relative">
-                <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
-                  <OptimizedImage
-                    src={heroLocationImage}
-                    alt="Dr. Melva Reve - Telehealth Services"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
+            <div className="text-center">
+              <h2 className="text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4">
+                {language === 'en' ? (
+                  <>
+                    <span className="font-display italic text-green-800">Telehealth</span> Services Available
+                  </>
+                ) : (
+                  <>
+                    Servicios de <span className="font-display italic text-green-800">Telesalud</span> Disponibles
+                  </>
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                {language === 'en' 
+                  ? 'Unable to visit our Naples office? Schedule secure online consultations from anywhere in Florida.'
+                  : '¿No puede visitar nuestra oficina de Naples? Programe consultas seguras en línea desde cualquier lugar de Florida.'
+                }
+              </p>
+              <CharmHealthBooking variant="prominent" />
             </div>
           </div>
         </section>
