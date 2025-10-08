@@ -78,29 +78,28 @@ const CharmHealthBooking = ({
   if (variant === 'prominent') {
     return (
       <Card className={`relative w-full overflow-hidden border-blue-200 ${className}`}>
-        <div className="relative aspect-[16/9]">
+        <div className="relative aspect-[21/9]">
           <img 
             src={telehealthHeroBg} 
             alt="Telehealth Background"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-top"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/70 to-transparent"></div>
           
           <div className="relative h-full flex items-center px-6 sm:px-8 lg:px-12">
             <div className="max-w-xl text-left">
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <VideoIcon className="w-6 h-6 text-blue-600" />
                 </div>
+                <p className="text-blue-700 font-medium text-sm sm:text-base" data-testid="telehealth-subtitle">
+                  {currentContent.subtitle}
+                </p>
               </div>
               
-              <h3 className="text-2xl sm:text-3xl font-body font-bold text-gray-900 mb-2" data-testid="telehealth-title">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="telehealth-title">
                 {currentContent.title}
               </h3>
-              
-              <p className="text-blue-700 font-medium mb-6" data-testid="telehealth-subtitle">
-                {currentContent.subtitle}
-              </p>
               
               {showDescription && (
                 <>

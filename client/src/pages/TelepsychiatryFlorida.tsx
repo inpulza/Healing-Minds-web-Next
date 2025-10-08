@@ -260,20 +260,11 @@ const TelepsychiatryFlorida = () => {
     <div className="min-h-screen">
       <Header />
       <main>
-        {/* Hero Section - Without Doctor Image */}
+        {/* Hero Section - Simplified */}
         <section className="pt-20 pb-12 sm:pb-16 lg:pb-20 bg-[#ffffff]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <WellnessIcon size="sm" color="green">
-                  <VideoIcon />
-                </WellnessIcon>
-                <span className="text-green-700 font-body font-semibold text-lg">
-                  {currentContent.hero.subtitle}
-                </span>
-              </div>
-              
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-8">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6">
                 {language === 'en' ? (
                   <>
                     Expert <span className="font-display italic text-green-700">Psychiatric Care</span> from Anywhere in{' '}
@@ -287,9 +278,9 @@ const TelepsychiatryFlorida = () => {
                 )}
               </h1>
               
-              {/* Description without white container */}
-              <div className="max-w-4xl mx-auto mb-10">
-                <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed">
+              {/* Simplified description */}
+              <div className="max-w-3xl mx-auto mb-10">
+                <p className="text-base sm:text-lg text-gray-600 font-body leading-relaxed">
                   {currentContent.hero.description}
                 </p>
               </div>
