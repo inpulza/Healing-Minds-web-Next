@@ -11,13 +11,15 @@ interface CharmHealthBookingProps {
   showDescription?: boolean;
   className?: string;
   heroTitle?: React.ReactNode;
+  heroBadges?: React.ReactNode;
 }
 
 const CharmHealthBooking = ({ 
   variant = 'default', 
   showDescription = true, 
   className = '',
-  heroTitle
+  heroTitle,
+  heroBadges
 }: CharmHealthBookingProps) => {
   const { language } = useLanguage();
   const { trackTelehealthClick } = useTikTokEvents();
@@ -148,6 +150,12 @@ const CharmHealthBooking = ({
           {/* Contenido principal centrado verticalmente */}
           <div className="relative h-full flex items-center px-8 sm:px-12 lg:px-16">
             <div className="max-w-2xl text-left">
+              {heroBadges && (
+                <div className="mb-6">
+                  {heroBadges}
+                </div>
+              )}
+              
               {heroTitle && (
                 <div className="mb-5">
                   {heroTitle}

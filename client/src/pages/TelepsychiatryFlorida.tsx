@@ -268,6 +268,34 @@ const TelepsychiatryFlorida = () => {
                 <CharmHealthBooking 
                   variant="prominent" 
                   showDescription={false}
+                  heroBadges={
+                    <div className="flex flex-wrap gap-3">
+                      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                        <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <VideoIcon className="w-3 h-3 text-blue-600" />
+                        </div>
+                        <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                          {language === 'en' ? 'Telehealth Available' : 'Telesalud Disponible'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                        <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-3 h-3 text-blue-600" />
+                        </div>
+                        <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                          {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
+                        <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-3 h-3 text-blue-600" />
+                        </div>
+                        <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
+                          {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
+                        </span>
+                      </div>
+                    </div>
+                  }
                   heroTitle={
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-body font-bold text-blue-800 text-left">
                       {language === 'en' ? (
@@ -284,34 +312,6 @@ const TelepsychiatryFlorida = () => {
                     </h1>
                   }
                 />
-                
-                {/* Badges below the card */}
-                <div className="flex flex-wrap gap-3 justify-center mt-6">
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <VideoIcon className="w-3 h-3 text-blue-600" />
-                    </div>
-                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                      {language === 'en' ? 'Telehealth Available' : 'Telesalud Disponible'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-3 h-3 text-blue-600" />
-                    </div>
-                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                      {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
-                    <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-3 h-3 text-blue-600" />
-                    </div>
-                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                      {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
-                    </span>
-                  </div>
-                </div>
                 
                 {/* Description below hero image */}
                 <div className="max-w-3xl mx-auto mt-10">
