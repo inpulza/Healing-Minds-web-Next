@@ -187,7 +187,7 @@ const LocationGoldenGate = () => {
                 <OptimizedImage src={heroLocationImage} alt="Dr. Melva Reve serving Golden Gate" className="absolute inset-0 w-full h-full object-cover object-center" width={1800} height={900} priority={true} sizes="(max-width: 1024px) 100vw, 1800px" />
                 <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>
                 <div className="relative h-full flex items-start px-8 sm:px-12 lg:px-16 pt-12">
-                  <div className="max-w-2xl text-left">
+                  <div className="max-w-3xl text-left">
                     <div className="flex flex-wrap gap-2 mb-6">
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? '15+ Years Experience' : '15+ Años de Experiencia'}</span></div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Bilingual Care' : 'Atención Bilingüe'}</span></div>

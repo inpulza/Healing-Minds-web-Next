@@ -243,7 +243,7 @@ const LocationLelyResorts = () => {
                 
                 {/* Content positioned at top */}
                 <div className="relative h-full flex items-start px-8 sm:px-12 lg:px-16 pt-12">
-                  <div className="max-w-2xl text-left">
+                  <div className="max-w-3xl text-left">
                     {/* Badges */}
                     <div className="flex flex-wrap gap-2 mb-6">
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
