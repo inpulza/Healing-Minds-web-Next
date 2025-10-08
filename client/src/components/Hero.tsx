@@ -133,7 +133,7 @@ const Hero = React.memo(() => {
             <img 
               src={heroImage}
               alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
-              className="absolute inset-0 w-full h-full object-cover object-top hero-image"
+              className="absolute inset-0 w-full h-full object-contain object-center hero-image"
               width={1200}
               height={800}
               loading="eager"
