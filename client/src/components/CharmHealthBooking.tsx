@@ -135,24 +135,26 @@ const CharmHealthBooking = ({
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent"></div>
           
-          <div className="relative h-full flex items-start pt-12 px-8 sm:px-12 lg:px-16">
+          {/* Icono y subtítulo en el borde inferior izquierdo */}
+          <div className="absolute bottom-6 left-8 sm:left-12 lg:left-16 flex items-center gap-3">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <VideoIcon className="w-6 h-6 text-blue-600" />
+            </div>
+            <p className="text-blue-700 font-medium sm:text-base text-[18px]" data-testid="telehealth-subtitle-desktop">
+              {currentContent.subtitle}
+            </p>
+          </div>
+          
+          {/* Contenido principal centrado verticalmente */}
+          <div className="relative h-full flex items-center px-8 sm:px-12 lg:px-16">
             <div className="max-w-2xl text-left">
               {heroTitle && (
-                <div className="mb-8">
+                <div className="mb-5">
                   {heroTitle}
                 </div>
               )}
               
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <VideoIcon className="w-6 h-6 text-blue-600" />
-                </div>
-                <p className="text-blue-700 font-medium sm:text-base text-[18px]" data-testid="telehealth-subtitle-desktop">
-                  {currentContent.subtitle}
-                </p>
-              </div>
-              
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-6" data-testid="telehealth-title-desktop">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-gray-900 mb-4" data-testid="telehealth-title-desktop">
                 {currentContent.title}
               </h3>
               
