@@ -239,7 +239,7 @@ const LocationFortMyers = () => {
                   </p>
 
                   <Button 
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7"
+                    className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7"
                     onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
                     data-testid="button-view-location"
                   >
@@ -871,13 +871,13 @@ const LocationFortMyers = () => {
                   : 'Así como estas organizaciones fortalecen nuestra comunidad de Fort Myers, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
               </p>
               <Button 
-                className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-8 py-4 sm:py-6"
                 onClick={() => window.location.href = '/contact'}
                 data-testid="button-schedule-community"
               >
-                <Calendar className="w-5 h-5" />
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>{language === 'en' ? 'Schedule Your Consultation Today' : 'Programar Su Consulta Hoy'}</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-200" />
               </Button>
             </div>
           </div>
@@ -907,13 +907,13 @@ const LocationFortMyers = () => {
               {/* Contact CTA */}
               <div className="text-center mt-12">
                 <Button 
-                  className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
+                  className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-8 py-4 sm:py-6"
                   onClick={() => window.location.href = '/contact'}
                   data-testid="button-schedule-after-video"
                 >
-                  <Calendar className="w-5 h-5" />
+                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>{language === 'en' ? 'Schedule Your Consultation' : 'Programar Su Consulta'}</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-200" />
                 </Button>
               </div>
             </div>

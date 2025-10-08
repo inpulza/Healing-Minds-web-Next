@@ -178,8 +178,8 @@ const LocationGoldenGate = () => {
                 {language === 'en' ? 'Expert psychiatric care in Golden Gate.' : 'Atención psiquiátrica experta en Golden Gate.'}
               </p>
               <div className="flex flex-col gap-3 px-4">
-                <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 w-full" onClick={() => window.location.href = '/contact'} data-testid="button-schedule-consultation-mobile"><Calendar className="w-5 h-5" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
-                <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 w-full" onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')} data-testid="button-get-directions-mobile"><Navigation className="w-5 h-5" />{content.getDirections}</Button>
+                <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-4 sm:py-6 px-4 sm:px-8 rounded-full inline-flex items-center justify-center gap-2 sm:gap-3 w-full text-sm sm:text-base" onClick={() => window.location.href = '/contact'} data-testid="button-schedule-consultation-mobile"><Calendar className="w-4 h-4 sm:w-5 sm:h-5" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
+                <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-4 sm:py-6 px-4 sm:px-8 rounded-full inline-flex items-center justify-center gap-2 sm:gap-3 w-full text-sm sm:text-base" onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')} data-testid="button-get-directions-mobile"><Navigation className="w-4 h-4 sm:w-5 sm:h-5" />{content.getDirections}</Button>
               </div>
             </div>
             <div className="hidden md:block">
@@ -238,7 +238,7 @@ const LocationGoldenGate = () => {
                   </p>
 
                   <Button 
-                    className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7"
+                    className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-8 py-4 sm:py-7"
                     onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
                     data-testid="button-view-location"
                   >
