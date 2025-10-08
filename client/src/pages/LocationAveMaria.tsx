@@ -1155,7 +1155,7 @@ const LocationAveMaria = () => {
 
               {/* CharmHealth Booking Widget */}
               <div className="lg:pl-8">
-                <CharmHealthBooking />
+                <CharmHealthBooking variant="prominent" />
               </div>
             </div>
           </div>
