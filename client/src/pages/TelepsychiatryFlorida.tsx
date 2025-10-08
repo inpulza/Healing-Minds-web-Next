@@ -298,18 +298,8 @@ const TelepsychiatryFlorida = () => {
                     </div>
                   }
                   heroTitle={
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-body font-bold text-green-800 text-left">
-                      {language === 'en' ? (
-                        <>
-                          Expert <span className="font-display italic text-green-700">Psychiatric Care</span> from Anywhere in{' '}
-                          <span className="font-display italic text-green-700">Florida</span>
-                        </>
-                      ) : (
-                        <>
-                          Atención <span className="font-display italic text-green-700">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
-                          <span className="font-display italic text-green-700">Florida</span>
-                        </>
-                      )}
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-display italic font-bold text-green-700 text-left">
+                      {language === 'en' ? 'Expert Psychiatric Care from Anywhere in Florida' : 'Atención Psiquiátrica Experta desde Cualquier Lugar de Florida'}
                     </h1>
                   }
                 />
