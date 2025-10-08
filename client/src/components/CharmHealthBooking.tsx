@@ -118,7 +118,6 @@ const CharmHealthBooking = ({
             </Button>
           </div>
         </div>
-
         {/* Desktop Layout - Horizontal */}
         <div className="hidden md:block relative aspect-[18/9]">
           <img 
@@ -134,7 +133,7 @@ const CharmHealthBooking = ({
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <VideoIcon className="w-6 h-6 text-blue-600" />
                 </div>
-                <p className="text-blue-700 font-medium text-sm sm:text-base" data-testid="telehealth-subtitle-desktop">
+                <p className="text-blue-700 font-medium sm:text-base text-[18px]" data-testid="telehealth-subtitle-desktop">
                   {currentContent.subtitle}
                 </p>
               </div>
