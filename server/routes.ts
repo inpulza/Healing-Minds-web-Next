@@ -20,7 +20,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Solo procesar GET requests para páginas HTML (no APIs, no assets estáticos)
       if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
         try {
-          const indexPath = path.resolve(process.cwd(), "dist/public/index.html");
+          // Use path.resolve with __dirname to ensure correct path in production
+          // This matches the path used in serveStatic() from server/vite.ts
+          const indexPath = path.resolve(__dirname, "public", "index.html");
+          
+          // Verify file exists before reading
+          if (!fs.existsSync(indexPath)) {
+            console.error(`❌ index.html not found at ${indexPath}, falling back to static handler`);
+            return next();
+          }
+          
           let html = await fs.promises.readFile(indexPath, "utf-8");
           
           console.log(`🔧 SEO [PRODUCTION]: Injecting meta tags for ${req.originalUrl}`);
@@ -28,8 +37,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           return res.status(200).set({ "Content-Type": "text/html" }).end(html);
         } catch (error) {
-          console.error("Error serving HTML with injections:", error);
-          return next(error);
+          console.error("❌ Error serving HTML with injections, falling back to static handler:", error);
+          // SAFETY: If anything fails, pass to next middleware (static handler)
+          return next();
         }
       }
       next();
