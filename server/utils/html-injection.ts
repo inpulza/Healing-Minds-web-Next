@@ -1905,6 +1905,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
     "review": [
       {
         "@type": "Review",
+        "name": "A Positive and Reassuring Experience",
         "author": {
           "@type": "Person",
           "name": "Julio Gonzalez"
@@ -1919,6 +1920,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
       },
       {
         "@type": "Review",
+        "name": "Truly Life-Changing Care",
         "author": {
           "@type": "Person",
           "name": "Ismael Gonzalez"
@@ -1932,6 +1934,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
       },
       {
         "@type": "Review",
+        "name": "Best Bilingual Psychiatrist",
         "author": {
           "@type": "Person",
           "name": "Maylin Garcia Gonzalez"
@@ -1958,6 +1961,14 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "image": `${baseUrl}/doctor-profile-v2.webp`,
       "telephone": "+1-239-423-0272",
       "email": "info@healingmindsp.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "4760 Tamiami Trl N # 25",
+        "addressLocality": "Naples",
+        "addressRegion": "FL",
+        "postalCode": "34103",
+        "addressCountry": "US"
+      },
       "medicalSpecialty": "Psychiatry",
       "identifier": {
         "@type": "PropertyValue",

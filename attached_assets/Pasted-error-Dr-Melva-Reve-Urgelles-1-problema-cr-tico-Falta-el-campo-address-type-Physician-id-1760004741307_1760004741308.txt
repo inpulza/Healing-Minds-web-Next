@@ -1,0 +1,324 @@
+error
+Dr. Melva Reve Urgelles
+1 problema crítico
+?
+Falta el campo "address"
+type
+Physician
+id
+https://www.healingmindsp.com/#physician
+name
+Dr. Melva Reve Urgelles
+honorificPrefix
+Dr.
+givenName
+Melva
+additionalName
+Reve
+familyName
+Urgelles
+gender
+http://schema.org/Female
+jobTitle
+Board Certified Psychiatrist
+description
+Board-certified psychiatrist specializing in anxiety, depression, ADHD, and PTSD treatment. Bilingual in English and Spanish.
+image
+https://www.healingmindsp.com/doctor-profile-v2.webp
+telephone
++1-239-423-0272
+email
+info@healingmindsp.com
+medicalSpecialty
+Psychiatry
+identifier
+type
+PropertyValue
+propertyID
+NPI
+value
+1982233631
+sameAs
+https://www.healthgrades.com/physician/dr-melva-reve-urgelles-1dgbqeci76
+sameAs
+https://weprevent.org/listing/dr-melva-reve-urgelles-md-vc998mp/
+sameAs
+https://providers.sharecare.com/doctor/dr-melva-reve-urgelles-1dgbqeci76
+sameAs
+https://npidb.org/doctors/allopathic_osteopathic_physicians/psychiatry_2084p0800x/1982233631.aspx
+knowsLanguage
+type
+Language
+name
+English
+knowsLanguage
+type
+Language
+name
+Spanish
+worksFor
+type
+MedicalOrganization
+type
+LocalBusiness
+type
+MedicalClinic
+id
+https://www.healingmindsp.com/#organization
+name
+Healing Minds Psychiatry
+alternateName
+Healing Minds Psychiatry - Dr. Melva Reve
+url
+https://www.healingmindsp.com/
+logo
+type
+ImageObject
+url
+https://www.healingmindsp.com/favicon.svg
+width
+512
+height
+512
+image
+type
+ImageObject
+url
+https://www.healingmindsp.com/doctor-profile-v2.webp
+width
+800
+height
+800
+description
+Healing Minds Psychiatry, led by board-certified psychiatrist Dr. Melva Reve, provides compassionate mental health care in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD, and bipolar disorder. Bilingual services in English and Spanish. Telepsychiatry available throughout Florida.
+slogan
+Compassionate Mental Health Care in Naples, FL
+address
+type
+PostalAddress
+streetAddress
+4760 Tamiami Trl N # 25
+addressLocality
+Naples
+addressRegion
+FL
+postalCode
+34103
+addressCountry
+type
+Country
+name
+US
+geo
+type
+GeoCoordinates
+latitude
+26.2044803
+longitude
+-81.8021344
+telephone
++1-239-423-0272
+email
+info@healingmindsp.com
+openingHoursSpecification
+type
+OpeningHoursSpecification
+dayOfWeek
+http://schema.org/Monday
+dayOfWeek
+http://schema.org/Tuesday
+dayOfWeek
+http://schema.org/Wednesday
+dayOfWeek
+http://schema.org/Thursday
+dayOfWeek
+http://schema.org/Friday
+opens
+T09:00
+closes
+T17:00
+medicalSpecialty
+type
+MedicalSpecialty
+name
+Psychiatry
+availableService
+type
+MedicalTherapy
+name
+Anxiety Treatment
+description
+Comprehensive treatment for anxiety disorders
+availableService
+type
+MedicalTherapy
+name
+Depression Treatment
+description
+Expert care for depression and mood disorders
+availableService
+type
+MedicalTherapy
+name
+ADHD Treatment
+description
+Specialized ADHD diagnosis and treatment
+availableService
+type
+MedicalTherapy
+name
+PTSD Treatment
+description
+Trauma-focused psychiatric care
+availableService
+type
+MedicalTherapy
+name
+Bipolar Disorder Treatment
+description
+Expert bipolar disorder management
+availableService
+type
+MedicalProcedure
+name
+Medication Management
+description
+Psychiatric medication evaluation and management
+availableService
+type
+MedicalProcedure
+name
+Telepsychiatry
+description
+Virtual psychiatric consultations throughout Florida
+availableLanguage
+type
+Language
+name
+English
+availableLanguage
+type
+Language
+name
+Spanish
+areaServed
+type
+City
+name
+Naples
+containedInPlace
+type
+State
+name
+Florida
+areaServed
+type
+State
+name
+Florida
+paymentAccepted
+Insurance
+paymentAccepted
+Credit Card
+paymentAccepted
+Cash
+currenciesAccepted
+USD
+priceRange
+$
+isAcceptingNewPatients
+http://schema.org/True
+sameAs
+https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z
+sameAs
+https://www.instagram.com/hmpsychiatry/
+sameAs
+https://www.facebook.com/profile.php?id=61578845287836
+sameAs
+https://www.youtube.com/@healingmindsp
+sameAs
+https://www.yelp.com/biz/healing-minds-psychiatry-naples
+sameAs
+https://www.tiktok.com/@dra.melvavidal
+hasMap
+https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z
+aggregateRating
+type
+AggregateRating
+ratingValue
+5.0
+bestRating
+5
+worstRating
+1
+ratingCount
+17
+review
+type
+Review
+author
+type
+Person
+name
+Julio Gonzalez
+reviewRating
+type
+Rating
+ratingValue
+5
+bestRating
+5
+datePublished
+2025-10-07
+reviewBody
+My visit was genuinely a positive and reassuring experience. The provider was compassionate, patient, and really took the time to listen and understand what I was going through.
+review
+type
+Review
+author
+type
+Person
+name
+Ismael Gonzalez
+reviewRating
+type
+Rating
+ratingValue
+5
+bestRating
+5
+reviewBody
+My experience with Dr Reve has been truly life-changing. Her compassionate approach and expertise have made a significant difference in my mental health journey.
+review
+type
+Review
+author
+type
+Person
+name
+Maylin Garcia Gonzalez
+reviewRating
+type
+Rating
+ratingValue
+5
+bestRating
+5
+reviewBody
+The best bilingual psychiatrist I've ever met! Finding professional mental health care in both English and Spanish has been invaluable for my family.
+workLocation
+type
+PostalAddress
+streetAddress
+4760 Tamiami Trl N # 25
+addressLocality
+Naples
+addressRegion
+FL
+postalCode
+34103
+addressCountry
+type
+Country
+name
+US
