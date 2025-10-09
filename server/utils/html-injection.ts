@@ -1887,9 +1887,63 @@ function getMedicalBusinessSchema(baseUrl: string) {
     "priceRange": "$$",
     "isAcceptingNewPatients": "True",
     "sameAs": [
-      "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z"
+      "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
+      "https://www.instagram.com/hmpsychiatry/",
+      "https://www.facebook.com/profile.php?id=61578845287836",
+      "https://www.youtube.com/@healingmindsp",
+      "https://www.yelp.com/biz/healing-minds-psychiatry-naples",
+      "https://www.tiktok.com/@dra.melvavidal"
     ],
     "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "bestRating": "5",
+      "worstRating": "1",
+      "ratingCount": "17"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Julio Gonzalez"
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "datePublished": "2025-10-07",
+        "reviewBody": "My visit was genuinely a positive and reassuring experience. The provider was compassionate, patient, and really took the time to listen and understand what I was going through."
+      },
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Ismael Gonzalez"
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "reviewBody": "My experience with Dr Reve has been truly life-changing. Her compassionate approach and expertise have made a significant difference in my mental health journey."
+      },
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Maylin Garcia Gonzalez"
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "reviewBody": "The best bilingual psychiatrist I've ever met! Finding professional mental health care in both English and Spanish has been invaluable for my family."
+      }
+    ],
     "founder": {
       "@type": "Physician",
       "@id": `${baseUrl}/#physician`,
@@ -1903,35 +1957,8 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "telephone": "+1-239-423-0272",
       "email": "info@healingmindsp.com",
       "medicalSpecialty": "Psychiatry",
-      "hasCredential": [
-        {
-          "@type": "EducationalOccupationalCredential",
-          "credentialCategory": "Medical Degree",
-          "educationalLevel": "Doctor of Medicine (MD)",
-          "recognizedBy": {
-            "@type": "CollegeOrUniversity",
-            "name": "University of Miami Miller School of Medicine"
-          }
-        },
-        {
-          "@type": "EducationalOccupationalCredential",
-          "credentialCategory": "Board Certification",
-          "name": "Board Certified in Psychiatry"
-        }
-      ],
-      "alumniOf": {
-        "@type": "CollegeOrUniversity",
-        "name": "University of Miami Miller School of Medicine"
-      },
-      "memberOf": [
-        {
-          "@type": "Organization",
-          "name": "American Psychiatric Association"
-        },
-        {
-          "@type": "MedicalOrganization",
-          "@id": `${baseUrl}/#organization`
-        }
+      "sameAs": [
+        "https://www.healthgrades.com/physician/dr-melva-reve-urgelles-1dgbqeci76"
       ],
       "knowsLanguage": [
         {
