@@ -8,27 +8,55 @@ import { reviewsCache } from "./cache/reviews-cache";
 import { staticReviews, staticStats } from "./data/static-reviews";
 import { emailService } from "./services/email";
 import { injectMetaTags } from "./utils/html-injection";
+import fs from "fs";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // CRÍTICO: HTML Meta Tags Injection Middleware 
-  // Este middleware intercepta responses HTML para inyectar meta tags server-side
-  // Compatible con desarrollo (Vite) y producción (static files)
-  app.use((req, res, next) => {
-    // Solo procesar requests que podrían ser páginas HTML (no APIs, no assets)
-    if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
-      const originalEnd = res.end;
-      
-      res.end = function(chunk: any, encoding?: any) {
-        if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html')) {
-          console.log(`🔧 SEO: Injecting meta tags for ${req.originalUrl}`);
-          const modifiedHtml = injectMetaTags(chunk, req);
-          return originalEnd.call(this, modifiedHtml, encoding);
+  // CRÍTICO: Production HTML Injection Middleware
+  // Este middleware sirve index.html manualmente en producción para inyectar schemas
+  // DEBE ejecutarse ANTES del static file handler
+  if (process.env.NODE_ENV === 'production') {
+    app.use(async (req, res, next) => {
+      // Solo procesar GET requests para páginas HTML (no APIs, no assets estáticos)
+      if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
+        try {
+          const indexPath = path.resolve(process.cwd(), "dist/public/index.html");
+          let html = await fs.promises.readFile(indexPath, "utf-8");
+          
+          console.log(`🔧 SEO [PRODUCTION]: Injecting meta tags for ${req.originalUrl}`);
+          html = injectMetaTags(html, req);
+          
+          return res.status(200).set({ "Content-Type": "text/html" }).end(html);
+        } catch (error) {
+          console.error("Error serving HTML with injections:", error);
+          return next(error);
         }
-        return originalEnd.call(this, chunk, encoding);
-      };
-    }
-    next();
-  });
+      }
+      next();
+    });
+  }
+
+  // CRÍTICO: Development HTML Meta Tags Injection Middleware 
+  // Este middleware intercepta responses HTML para inyectar meta tags server-side en desarrollo
+  // En desarrollo, Vite envía el HTML como string, así que podemos interceptar res.end()
+  if (process.env.NODE_ENV === 'development') {
+    app.use((req, res, next) => {
+      // Solo procesar requests que podrían ser páginas HTML (no APIs, no assets)
+      if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
+        const originalEnd = res.end;
+        
+        res.end = function(chunk: any, encoding?: any) {
+          if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html')) {
+            console.log(`🔧 SEO [DEV]: Injecting meta tags for ${req.originalUrl}`);
+            const modifiedHtml = injectMetaTags(chunk, req);
+            return originalEnd.call(this, modifiedHtml, encoding);
+          }
+          return originalEnd.call(this, chunk, encoding);
+        };
+      }
+      next();
+    });
+  }
 
   // CRÍTICO: Redirect non-www to www for domain consistency
   app.use((req, res, next) => {
