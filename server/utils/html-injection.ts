@@ -1969,6 +1969,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
         "postalCode": "34103",
         "addressCountry": "US"
       },
+      "priceRange": "$$",
       "medicalSpecialty": "Psychiatry",
       "identifier": {
         "@type": "PropertyValue",
