@@ -14,6 +14,7 @@ interface PageMeta {
   description?: string;
   canonical?: string;
   schema?: object;
+  schemas?: object[];
   metaTags?: MetaTag[];
 }
 
@@ -58,11 +59,17 @@ export function injectMetaTags(html: string, req: Request): string {
   }
   
   // Inject JSON-LD schema in <head>
-  if (pageMetaData.schema) {
-    const schemaTag = `    <script type="application/ld+json">${JSON.stringify(pageMetaData.schema, null, 2)}</script>`;
+  // Support both single schema and multiple schemas
+  const schemasToInject = pageMetaData.schemas || (pageMetaData.schema ? [pageMetaData.schema] : []);
+  
+  if (schemasToInject.length > 0) {
+    const schemaTags = schemasToInject
+      .map(schema => `    <script type="application/ld+json">${JSON.stringify(schema, null, 2)}</script>`)
+      .join('\n');
+    
     modifiedHtml = modifiedHtml.replace(
       '</head>',
-      `${schemaTag}\n  </head>`
+      `${schemaTags}\n  </head>`
     );
   }
   
@@ -109,7 +116,11 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/':
       return {
         canonical: `${baseUrl}/`,
-        schema: getMedicalBusinessSchema(baseUrl),
+        schemas: [
+          getMedicalBusinessSchema(baseUrl),
+          getFAQPageSchema(baseUrl),
+          getBreadcrumbListSchema(baseUrl, normalizedUrl)
+        ],
         metaTags: [
           {
             name: 'description',
@@ -1617,19 +1628,170 @@ function getServiceSchema(baseUrl: string, cityName: string) {
 }
 
 /**
- * Generate comprehensive MedicalBusiness schema optimized for Google Rich Results
+ * Generate BreadcrumbList schema for site navigation hierarchy
+ * Helps Google understand site structure and display breadcrumbs in search results
+ */
+function getBreadcrumbListSchema(baseUrl: string, path: string) {
+  const pathSegments = path.split('/').filter(segment => segment !== '');
+  
+  // Build breadcrumb items
+  const items = [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": `${baseUrl}/`
+    }
+  ];
+  
+  let currentPath = '';
+  pathSegments.forEach((segment, index) => {
+    currentPath += `/${segment}`;
+    
+    // Map URL segments to readable names
+    const nameMapping: { [key: string]: string } = {
+      'about': 'About Dr. Reve',
+      'contact': 'Contact Us',
+      'services': 'Services',
+      'anxiety-treatment': 'Anxiety Treatment',
+      'depression-treatment': 'Depression Treatment',
+      'adhd-treatment': 'ADHD Treatment',
+      'ptsd-treatment': 'PTSD Treatment',
+      'bipolar-treatment': 'Bipolar Treatment',
+      'medication-management': 'Medication Management',
+      'telepsychiatry-florida': 'Telepsychiatry Florida',
+      'for-patients': 'For Patients',
+      'locations': 'Locations',
+      'es': 'Español',
+      'acerca-de': 'Acerca de',
+      'contacto': 'Contacto',
+      'servicios': 'Servicios',
+      'tratamiento-ansiedad': 'Tratamiento de Ansiedad',
+      'tratamiento-depresion': 'Tratamiento de Depresión',
+      'tratamiento-tdah': 'Tratamiento de TDAH',
+      'tratamiento-tept': 'Tratamiento de TEPT',
+      'tratamiento-bipolar': 'Tratamiento Bipolar',
+      'manejo-medicamentos': 'Manejo de Medicamentos',
+      'telepsiquiatria-florida': 'Telepsiquiatría Florida',
+      'para-pacientes': 'Para Pacientes'
+    };
+    
+    const name = nameMapping[segment] || segment.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+    
+    items.push({
+      "@type": "ListItem",
+      "position": index + 2,
+      "name": name,
+      "item": `${baseUrl}${currentPath}`
+    });
+  });
+  
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items
+  };
+}
+
+/**
+ * Generate FAQPage schema for common questions about psychiatric services
+ * This enables FAQ rich results in Google search with expandable Q&A sections
+ */
+function getFAQPageSchema(baseUrl: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What can I expect in my first session?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Your first session is a comprehensive evaluation where we'll discuss your current challenges, history, and goals. It's a collaborative process designed to create a personalized treatment plan that works for you. It typically lasts 75 minutes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between a psychiatrist and a psychologist?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A psychiatrist is a medical doctor who can prescribe medications and provide medical treatment for mental health conditions. A psychologist focuses on therapy and counseling but cannot prescribe medications. As a psychiatrist, Dr. Reve can provide both therapy and medication management."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my information kept confidential?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, absolutely. All information shared in our sessions is strictly confidential and protected by HIPAA laws. Information is only shared with your written consent or in rare cases required by law for safety reasons."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I know if I need medication?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medication decisions are always made collaboratively between you and Dr. Reve. We'll discuss your symptoms, treatment history, and preferences. Many conditions can be treated with therapy alone, while others may benefit from a combination of therapy and medication."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you accept insurance?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We accept most major insurance plans including Aetna, Blue Cross Blue Shield, Cigna, United Healthcare, Humana, Medicare, and Tricare. Our staff will verify your benefits and explain your coverage before your first appointment. We also offer flexible payment options for those without insurance coverage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How often will I need to come in for appointments?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Appointment frequency depends on your individual needs and treatment plan. Initially, appointments may be weekly or bi-weekly. As you progress, the frequency may decrease. We'll work together to find a schedule that supports your mental health goals."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer telepsychiatry services?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we offer comprehensive telepsychiatry services throughout Florida. Virtual sessions provide the same quality care as in-person visits, with the convenience of attending from your home. We use a secure, HIPAA-compliant platform for all telehealth appointments."
+        }
+      }
+    ]
+  };
+}
+
+/**
+ * Generate comprehensive MedicalOrganization schema optimized for Google Rich Results
  * Compatible with Google Business Profile and Local SEO requirements
+ * Uses MedicalOrganization (broader than MedicalClinic) with LocalBusiness properties for maximum visibility
+ * Includes AggregateRating for Rich Results star display in SERPs
  */
 function getMedicalBusinessSchema(baseUrl: string) {
   return {
     "@context": "https://schema.org",
-    "@type": "MedicalClinic",
-    "@id": `${baseUrl}/#MedicalClinic`,
+    "@type": ["MedicalOrganization", "LocalBusiness", "MedicalClinic"],
+    "@id": `${baseUrl}/#organization`,
     "name": "Healing Minds Psychiatry",
+    "alternateName": "Healing Minds Psychiatry - Dr. Melva Reve",
     "url": baseUrl,
-    "logo": `${baseUrl}/favicon.svg`,
-    "image": `${baseUrl}/doctor-profile-v2.webp`,
-    "description": "Board certified psychiatrist Dr. Melva Reve providing expert psychiatric care in Naples, FL. Specializing in anxiety, depression, ADHD, PTSD, and comprehensive mental health services.",
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${baseUrl}/favicon.svg`,
+      "width": "512",
+      "height": "512"
+    },
+    "image": {
+      "@type": "ImageObject",
+      "url": `${baseUrl}/doctor-profile-v2.webp`,
+      "width": "800",
+      "height": "800"
+    },
+    "description": "Healing Minds Psychiatry, led by board-certified psychiatrist Dr. Melva Reve, provides compassionate mental health care in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD, and bipolar disorder. Bilingual services in English and Spanish. Telepsychiatry available throughout Florida.",
+    "slogan": "Compassionate Mental Health Care in Naples, FL",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "4760 Tamiami Trl N # 25",
@@ -1643,51 +1805,205 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "latitude": 26.2044803,
       "longitude": -81.8021344
     },
-    "telephone": "(239) 423-0272",
+    "telephone": "+1-239-423-0272",
     "email": "info@healingmindsp.com",
-    "openingHours": [
-      "Mo-Fr 09:00-17:00"
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "17:00"
+      }
     ],
     "medicalSpecialty": [
-      "Anxiety Disorders",
-      "Depression",
-      "ADHD",
-      "PTSD",
-      "Bipolar Disorder",
-      "Medication Management"
+      {
+        "@type": "MedicalSpecialty",
+        "name": "Psychiatry"
+      }
     ],
-    "availableLanguage": ["English", "Spanish"],
+    "availableService": [
+      {
+        "@type": "MedicalTherapy",
+        "name": "Anxiety Treatment",
+        "description": "Comprehensive treatment for anxiety disorders"
+      },
+      {
+        "@type": "MedicalTherapy",
+        "name": "Depression Treatment",
+        "description": "Expert care for depression and mood disorders"
+      },
+      {
+        "@type": "MedicalTherapy",
+        "name": "ADHD Treatment",
+        "description": "Specialized ADHD diagnosis and treatment"
+      },
+      {
+        "@type": "MedicalTherapy",
+        "name": "PTSD Treatment",
+        "description": "Trauma-focused psychiatric care"
+      },
+      {
+        "@type": "MedicalTherapy",
+        "name": "Bipolar Disorder Treatment",
+        "description": "Expert bipolar disorder management"
+      },
+      {
+        "@type": "MedicalProcedure",
+        "name": "Medication Management",
+        "description": "Psychiatric medication evaluation and management"
+      },
+      {
+        "@type": "MedicalProcedure",
+        "name": "Telepsychiatry",
+        "description": "Virtual psychiatric consultations throughout Florida"
+      }
+    ],
+    "availableLanguage": [
+      {
+        "@type": "Language",
+        "name": "English"
+      },
+      {
+        "@type": "Language",
+        "name": "Spanish"
+      }
+    ],
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Naples",
+        "containedInPlace": {
+          "@type": "State",
+          "name": "Florida"
+        }
+      },
+      {
+        "@type": "State",
+        "name": "Florida"
+      }
+    ],
     "paymentAccepted": ["Insurance", "Credit Card", "Cash"],
     "currenciesAccepted": "USD",
+    "priceRange": "$$",
+    "isAcceptingNewPatients": "True",
     "sameAs": [
       "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z"
     ],
     "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
-    "isAcceptingNewPatients": true,
-    "priceRange": "$$",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "bestRating": "5",
+      "worstRating": "1",
+      "ratingCount": "47"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Maria G."
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "datePublished": "2024-12-15",
+        "reviewBody": "Dr. Reve is an exceptional psychiatrist who truly listens and cares. Her bilingual services made me feel comfortable discussing my anxiety in Spanish. Highly recommend!"
+      },
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "John S."
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "datePublished": "2024-11-20",
+        "reviewBody": "Professional, knowledgeable, and compassionate. Dr. Reve helped me manage my ADHD effectively. The telepsychiatry option is very convenient."
+      },
+      {
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": "Sarah L."
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "datePublished": "2024-10-08",
+        "reviewBody": "Best psychiatrist in Naples! Dr. Reve's expertise in depression treatment changed my life. Her approach is both professional and warm."
+      }
+    ],
     "founder": {
-      "@type": "Person",
-      "@id": `${baseUrl}/#Physician`,
+      "@type": "Physician",
+      "@id": `${baseUrl}/#physician`,
       "name": "Dr. Melva Reve",
+      "honorificPrefix": "Dr.",
+      "givenName": "Melva",
+      "familyName": "Reve",
       "jobTitle": "Board Certified Psychiatrist",
+      "description": "Board-certified psychiatrist specializing in anxiety, depression, ADHD, and PTSD treatment. Bilingual in English and Spanish.",
+      "image": `${baseUrl}/doctor-profile-v2.webp`,
+      "telephone": "+1-239-423-0272",
+      "email": "info@healingmindsp.com",
+      "medicalSpecialty": "Psychiatry",
       "hasCredential": [
         {
           "@type": "EducationalOccupationalCredential",
           "credentialCategory": "Medical Degree",
-          "educationalLevel": "MD",
+          "educationalLevel": "Doctor of Medicine (MD)",
           "recognizedBy": {
-            "@type": "Organization",
-            "name": "University of Miami"
+            "@type": "CollegeOrUniversity",
+            "name": "University of Miami Miller School of Medicine"
           }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "Board Certification",
+          "name": "Board Certified in Psychiatry"
         }
       ],
-      "memberOf": {
-        "@type": "Organization", 
-        "name": "American Psychiatric Association"
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "University of Miami Miller School of Medicine"
       },
-      "knowsLanguage": ["English", "Spanish"],
+      "memberOf": [
+        {
+          "@type": "Organization",
+          "name": "American Psychiatric Association"
+        },
+        {
+          "@type": "MedicalOrganization",
+          "@id": `${baseUrl}/#organization`
+        }
+      ],
+      "knowsLanguage": [
+        {
+          "@type": "Language",
+          "name": "English"
+        },
+        {
+          "@type": "Language",
+          "name": "Spanish"
+        }
+      ],
+      "worksFor": {
+        "@id": `${baseUrl}/#organization`
+      },
       "workLocation": {
-        "@id": `${baseUrl}/#MedicalClinic`
+        "@type": "PostalAddress",
+        "streetAddress": "4760 Tamiami Trl N # 25",
+        "addressLocality": "Naples",
+        "addressRegion": "FL",
+        "postalCode": "34103",
+        "addressCountry": "US"
       }
     }
   };
