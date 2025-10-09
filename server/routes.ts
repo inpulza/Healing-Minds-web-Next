@@ -15,7 +15,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // CRÍTICO: Production HTML Injection Middleware
   // Este middleware sirve index.html manualmente en producción para inyectar schemas
   // DEBE ejecutarse ANTES del static file handler
-  if (process.env.NODE_ENV === 'production') {
+  // NOTE: Replit sets REPLIT_DEPLOYMENT=1 when deployed, not NODE_ENV=production
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.REPLIT_DEPLOYMENT === '1';
+  
+  if (isProduction) {
     app.use(async (req, res, next) => {
       // Solo procesar GET requests para páginas HTML (no APIs, no assets estáticos)
       if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
@@ -49,7 +52,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // CRÍTICO: Development HTML Meta Tags Injection Middleware 
   // Este middleware intercepta responses HTML para inyectar meta tags server-side en desarrollo
   // En desarrollo, Vite envía el HTML como string, así que podemos interceptar res.end()
-  if (process.env.NODE_ENV === 'development') {
+  if (!isProduction) {
     app.use((req, res, next) => {
       // Solo procesar requests que podrían ser páginas HTML (no APIs, no assets)
       if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
