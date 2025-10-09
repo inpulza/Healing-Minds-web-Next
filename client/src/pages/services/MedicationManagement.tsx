@@ -12,10 +12,10 @@ import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Zap, Info, Bol
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
-import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
-import medicationImage from "@assets/generated_images/Medical_assessment_tools_78e50118.png";
-import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
-import medicationCapsules from "@assets/e4031136-1b10-4229-8e1d-2c74e4186617_1755210913815.png";
+import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp";
+import medicationImage from "@assets/generated_images/Medical_assessment_tools_78e50118.webp";
+import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.webp";
+import medicationCapsules from "@assets/e4031136-1b10-4229-8e1d-2c74e4186617_1755210913815.webp";
 
 const MedicationManagement = () => {
   const { language } = useLanguage();

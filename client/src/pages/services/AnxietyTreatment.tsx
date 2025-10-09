@@ -12,10 +12,10 @@ import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Brain, Heart, 
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
-import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
-import anxietyImage from "@assets/generated_images/Anxiety_representation_efc2b954.png";
-import therapyRoomImage from "@assets/generated_images/Wellness_meditation_space_ae6f4d77.png";
-import zenStonesImage from "@assets/2b5aedce-1c8b-495c-a402-1c0a19a1633b_1755211366855.png";
+import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp";
+import anxietyImage from "@assets/generated_images/Anxiety_representation_efc2b954.webp";
+import therapyRoomImage from "@assets/generated_images/Wellness_meditation_space_ae6f4d77.webp";
+import zenStonesImage from "@assets/2b5aedce-1c8b-495c-a402-1c0a19a1633b_1755211366855.webp";
 
 const AnxietyTreatment = () => {
   const { language } = useLanguage();

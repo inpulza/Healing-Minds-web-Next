@@ -14,16 +14,16 @@ import floridaMap from '../assets/florida-map.webp';
 import useEmblaCarousel from 'embla-carousel-react';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import DoctorSection from '@/components/DoctorSection';
-import accessFromHomeImg from '@assets/generated_images/Access_from_anywhere_Florida_325859e3.png';
-import convenientSchedulingImg from '@assets/generated_images/Convenient_time_saving_66f1475e.png';
-import securePrivateImg from '@assets/generated_images/Private_secure_platform_a7ed7a02.png';
-import continuityCareImg from '@assets/generated_images/Continuity_of_care_87991256.png';
-import initialEvaluationImg from '@assets/generated_images/Initial_psychiatric_evaluation_99ae51a4.png';
-import anxietyDepressionImg from '@assets/generated_images/Anxiety_depression_calm_bdd7c98f.png';
-import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_management_b7a38ebf.png';
-import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d71.png';
-import bipolarTreatmentImg from '@assets/generated_images/Bipolar_balance_stability_da9b84ed.png';
-import medicationManagementImg from '@assets/generated_images/Medication_management_studio_556b9569.png';
+import accessFromHomeImg from '@assets/generated_images/Access_from_anywhere_Florida_325859e3.webp';
+import convenientSchedulingImg from '@assets/generated_images/Convenient_time_saving_66f1475e.webp';
+import securePrivateImg from '@assets/generated_images/Private_secure_platform_a7ed7a02.webp';
+import continuityCareImg from '@assets/generated_images/Continuity_of_care_87991256.webp';
+import initialEvaluationImg from '@assets/generated_images/Initial_psychiatric_evaluation_99ae51a4.webp';
+import anxietyDepressionImg from '@assets/generated_images/Anxiety_depression_calm_bdd7c98f.webp';
+import adhdManagementImg from '@assets/generated_images/ADHD_evaluation_management_b7a38ebf.webp';
+import ptsdTherapyImg from '@assets/generated_images/PTSD_trauma_therapy_61fd2d71.webp';
+import bipolarTreatmentImg from '@assets/generated_images/Bipolar_balance_stability_da9b84ed.webp';
+import medicationManagementImg from '@assets/generated_images/Medication_management_studio_556b9569.webp';
 
 const TelepsychiatryFlorida = () => {
   const { language } = useLanguage();
@@ -421,6 +421,12 @@ const TelepsychiatryFlorida = () => {
                   <div className="flex">
                     {currentContent.benefits.items.map((benefit, index) => {
                       const benefitImages = [accessFromHomeImg, convenientSchedulingImg, securePrivateImg, continuityCareImg];
+                      const benefitAltTexts = [
+                        "Patient accessing telepsychiatry services from home in Florida - Dr. Melva Reve",
+                        "Convenient online psychiatry scheduling - time-saving telehealth appointments in Florida",
+                        "Secure and private HIPAA-compliant telepsychiatry platform for mental health care",
+                        "Continuity of psychiatric care through telehealth - consistent treatment in Florida"
+                      ];
                       return (
                         <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
                           <div className="bg-white rounded-2xl overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
@@ -428,7 +434,7 @@ const TelepsychiatryFlorida = () => {
                             <div className="h-48 overflow-hidden">
                               <img 
                                 src={benefitImages[index]} 
-                                alt={benefit.title}
+                                alt={benefitAltTexts[index]}
                                 className="w-full h-full object-cover"
                               />
                             </div>
@@ -470,13 +476,19 @@ const TelepsychiatryFlorida = () => {
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {currentContent.benefits.items.map((benefit, index) => {
                   const benefitImages = [accessFromHomeImg, convenientSchedulingImg, securePrivateImg, continuityCareImg];
+                  const benefitAltTexts = [
+                    "Patient accessing telepsychiatry services from home in Florida - Dr. Melva Reve",
+                    "Convenient online psychiatry scheduling - time-saving telehealth appointments in Florida",
+                    "Secure and private HIPAA-compliant telepsychiatry platform for mental health care",
+                    "Continuity of psychiatric care through telehealth - consistent treatment in Florida"
+                  ];
                   return (
                     <div key={index} className="bg-white rounded-2xl overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`benefit-${index}`}>
                       {/* Benefit Image */}
                       <div className="h-48 overflow-hidden">
                         <img 
                           src={benefitImages[index]} 
-                          alt={benefit.title}
+                          alt={benefitAltTexts[index]}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -565,6 +577,14 @@ const TelepsychiatryFlorida = () => {
                         bipolarTreatmentImg, 
                         medicationManagementImg
                       ];
+                      const serviceAltTexts = [
+                        "Initial psychiatric evaluation via telepsychiatry - Dr. Melva Reve conducting online mental health assessment in Florida",
+                        "Online anxiety and depression treatment through telehealth - virtual psychiatric care in Florida",
+                        "ADHD evaluation and management via telepsychiatry - online focus and attention disorder treatment",
+                        "PTSD and trauma therapy through telehealth - secure online psychiatric treatment in Florida",
+                        "Bipolar disorder treatment via telepsychiatry - mood stabilization through virtual psychiatric care",
+                        "Medication management through telehealth - online prescription monitoring in Florida"
+                      ];
                       return (
                         <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
                           <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
@@ -572,7 +592,7 @@ const TelepsychiatryFlorida = () => {
                             <div className="h-48 overflow-hidden">
                               <img 
                                 src={serviceImages[index]} 
-                                alt={service.title}
+                                alt={serviceAltTexts[index]}
                                 className="w-full h-full object-cover"
                               />
                             </div>
@@ -621,13 +641,21 @@ const TelepsychiatryFlorida = () => {
                     bipolarTreatmentImg, 
                     medicationManagementImg
                   ];
+                  const serviceAltTexts = [
+                    "Initial psychiatric evaluation via telepsychiatry - Dr. Melva Reve conducting online mental health assessment in Florida",
+                    "Online anxiety and depression treatment through telehealth - virtual psychiatric care in Florida",
+                    "ADHD evaluation and management via telepsychiatry - online focus and attention disorder treatment",
+                    "PTSD and trauma therapy through telehealth - secure online psychiatric treatment in Florida",
+                    "Bipolar disorder treatment via telepsychiatry - mood stabilization through virtual psychiatric care",
+                    "Medication management through telehealth - online prescription monitoring in Florida"
+                  ];
                   return (
                     <div key={index} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`service-${index}`}>
                       {/* Service Image */}
                       <div className="h-48 overflow-hidden">
                         <img 
                           src={serviceImages[index]} 
-                          alt={service.title}
+                          alt={serviceAltTexts[index]}
                           className="w-full h-full object-cover"
                         />
                       </div>

@@ -12,17 +12,17 @@ import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Shield, Brain 
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
-import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
-import ptsdImage from "@assets/generated_images/Hope_and_growth_symbolism_978bb907.png";
-import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
+import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp";
+import ptsdImage from "@assets/generated_images/Hope_and_growth_symbolism_978bb907.webp";
+import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.webp";
 // Import trauma type images
-import militaryImage from "@assets/f91b2e9a-8ab0-4719-b4c9-15edc522f27f_1755211669104.png";
-import childhoodImage from "@assets/e8202da4-08bf-45d6-b0b6-392795b53874_1755211669105.png";
-import vehicleImage from "@assets/f01c7d7e-f4d9-4a02-b3e0-d02f5f47a354_1755211669105.png";
-import naturalDisasterImage from "@assets/f9744cdb-4b98-4681-9f74-b6f4692a2ced (1)_1755211836264.png";
-import assaultImage from "@assets/6180c64d-fa53-4c88-8339-6aa0b06bdc93_1755211836265.png";
-import medicalImage from "@assets/4142165d-97e6-4e50-8313-f705c8e6e93f_1755212013126.png";
-import consultationImage from "@assets/d7b136b4-35bd-482a-b24a-98a1c5bb1abf_1755212133166.png";
+import militaryImage from "@assets/f91b2e9a-8ab0-4719-b4c9-15edc522f27f_1755211669104.webp";
+import childhoodImage from "@assets/e8202da4-08bf-45d6-b0b6-392795b53874_1755211669105.webp";
+import vehicleImage from "@assets/f01c7d7e-f4d9-4a02-b3e0-d02f5f47a354_1755211669105.webp";
+import naturalDisasterImage from "@assets/f9744cdb-4b98-4681-9f74-b6f4692a2ced (1)_1755211836264.webp";
+import assaultImage from "@assets/6180c64d-fa53-4c88-8339-6aa0b06bdc93_1755211836265.webp";
+import medicalImage from "@assets/4142165d-97e6-4e50-8313-f705c8e6e93f_1755212013126.webp";
+import consultationImage from "@assets/d7b136b4-35bd-482a-b24a-98a1c5bb1abf_1755212133166.webp";
 
 const PtsdTreatment = () => {
   const { language } = useLanguage();

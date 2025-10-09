@@ -24,10 +24,10 @@ import champvaLogo from '../assets/insurance-champva.webp';
 import sunshineHealthLogo from '../assets/insurance-sunshine.webp';
 import avmedLogo from '../assets/insurance-avmed.webp';
 import wellcareLogo from '../assets/insurance-wellcare.webp';
-import doctorsHealthcareLogo from '@assets/3_1755868276797.png';
-import floridaBlueLogo from '@assets/6_1755868276798.png';
-import unitedHealthcareLogo from '@assets/8_1755868276798.png';
-import oscarLogo from '@assets/10_1755868276798.png';
+import doctorsHealthcareLogo from '@assets/3_1755868276797.webp';
+import floridaBlueLogo from '@assets/6_1755868276798.webp';
+import unitedHealthcareLogo from '@assets/8_1755868276798.webp';
+import oscarLogo from '@assets/10_1755868276798.webp';
 
 interface FormData {
   firstName: string;

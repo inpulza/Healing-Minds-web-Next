@@ -12,9 +12,9 @@ import { ArrowRight, CheckCircle, Phone, Calendar, Activity, TrendingUp, Trendin
 import WellnessIcon from '@/components/WellnessIcon';
 
 // Import generated images
-import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.png";
-import bipolarImage from "@assets/generated_images/Wellness_meditation_space_ae6f4d77.png";
-import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.png";
+import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp";
+import bipolarImage from "@assets/generated_images/Wellness_meditation_space_ae6f4d77.webp";
+import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.webp";
 import drMelvaOfficeImage from "../../assets/dr-melva-office.webp";
 
 const BipolarTreatment = () => {

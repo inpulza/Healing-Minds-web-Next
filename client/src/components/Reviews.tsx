@@ -188,7 +188,7 @@ const Reviews = () => {
                   {review.image ? (
                     <img 
                       src={review.image} 
-                      alt={review.name}
+                      alt={`Patient testimonial photo from ${review.name} - Healing Minds Psychiatry review`}
                       className="w-10 h-10 rounded-full object-cover"
                       loading="lazy"
                     />
@@ -265,7 +265,7 @@ const Reviews = () => {
                     {review.image ? (
                       <img 
                         src={review.image} 
-                        alt={review.name}
+                        alt={`Patient testimonial photo from ${review.name} - Healing Minds Psychiatry review`}
                         className="w-10 h-10 rounded-full object-cover"
                         loading="lazy"
                       />

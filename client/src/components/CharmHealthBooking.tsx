@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, VideoIcon, Smartphone, Monitor, CheckCircle } from 'lucide-react';
-import telehealthHeroBg from '../assets/telehealth-hero-bg.png?v=2';
+import telehealthHeroBg from '../assets/telehealth-hero-bg.webp?v=2';
 
 interface CharmHealthBookingProps {
   variant?: 'default' | 'compact' | 'prominent';
@@ -92,7 +92,7 @@ const CharmHealthBooking = ({
           <div className="relative aspect-[4/5]">
             <img 
               src={telehealthHeroBg} 
-              alt="Telehealth Background"
+              alt="Dr. Melva Reve providing secure telehealth psychiatric consultations from modern medical office in Florida"
               className="absolute inset-0 w-full h-full object-cover"
               style={{ objectPosition: '75% top' }}
             />
@@ -136,7 +136,7 @@ const CharmHealthBooking = ({
         <div className="hidden md:block relative aspect-[18/9]">
           <img 
             src={telehealthHeroBg} 
-            alt="Telehealth Background"
+            alt="Professional telehealth psychiatric care - Dr. Melva Reve's secure virtual consultation platform in Florida"
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>
