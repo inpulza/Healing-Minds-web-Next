@@ -10,6 +10,8 @@ import { emailService } from "./services/email";
 import { injectMetaTags } from "./utils/html-injection";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // CRÍTICO: Production HTML Injection Middleware
@@ -23,9 +25,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Solo procesar GET requests para páginas HTML (no APIs, no assets estáticos)
       if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
         try {
-          // Use path.resolve with __dirname to ensure correct path in production
+          // ES modules compatible path resolution (no __dirname)
           // This matches the path used in serveStatic() from server/vite.ts
-          const indexPath = path.resolve(__dirname, "public", "index.html");
+          const moduleDir = dirname(fileURLToPath(import.meta.url));
+          const indexPath = path.resolve(moduleDir, "public", "index.html");
           
           // Verify file exists before reading
           if (!fs.existsSync(indexPath)) {
