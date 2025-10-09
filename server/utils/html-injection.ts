@@ -1890,57 +1890,6 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z"
     ],
     "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "bestRating": "5",
-      "worstRating": "1",
-      "ratingCount": "47"
-    },
-    "review": [
-      {
-        "@type": "Review",
-        "author": {
-          "@type": "Person",
-          "name": "Maria G."
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-        },
-        "datePublished": "2024-12-15",
-        "reviewBody": "Dr. Reve is an exceptional psychiatrist who truly listens and cares. Her bilingual services made me feel comfortable discussing my anxiety in Spanish. Highly recommend!"
-      },
-      {
-        "@type": "Review",
-        "author": {
-          "@type": "Person",
-          "name": "John S."
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-        },
-        "datePublished": "2024-11-20",
-        "reviewBody": "Professional, knowledgeable, and compassionate. Dr. Reve helped me manage my ADHD effectively. The telepsychiatry option is very convenient."
-      },
-      {
-        "@type": "Review",
-        "author": {
-          "@type": "Person",
-          "name": "Sarah L."
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-        },
-        "datePublished": "2024-10-08",
-        "reviewBody": "Best psychiatrist in Naples! Dr. Reve's expertise in depression treatment changed my life. Her approach is both professional and warm."
-      }
-    ],
     "founder": {
       "@type": "Physician",
       "@id": `${baseUrl}/#physician`,
