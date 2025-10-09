@@ -22,8 +22,11 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
   - TikTok: @dra.melvavidal
   - Yelp: Verified business listing
   - Google Maps: Official location
-- **Physician Entity**: Dr. Melva Reve basic info with Healthgrades profile link (verified)
-- **Credentials**: Removed unverified credentials (hasCredential, alumniOf, memberOf) per Google's "DO NOT markup credentials you cannot verify" policy
+- **Physician Entity**: Dr. Melva Reve Urgelles complete verified profile
+  - NPI: 1982233631 (official National Provider Identifier)
+  - 4 verified medical directory profiles (Healthgrades, WePrevent, Sharecare, NPIDB)
+  - Complete name structure, gender, specialty
+- **Credentials**: Removed unverified credentials per Google's "DO NOT markup credentials you cannot verify" policy; added verified NPI identifier instead
 - **Duplicate Prevention**: Disabled client-side schema injection to ensure single authoritative source
 
 ### October 8, 2025 - Location Pages Telehealth Section Simplification

@@ -1947,18 +1947,28 @@ function getMedicalBusinessSchema(baseUrl: string) {
     "founder": {
       "@type": "Physician",
       "@id": `${baseUrl}/#physician`,
-      "name": "Dr. Melva Reve",
+      "name": "Dr. Melva Reve Urgelles",
       "honorificPrefix": "Dr.",
       "givenName": "Melva",
-      "familyName": "Reve",
+      "additionalName": "Reve",
+      "familyName": "Urgelles",
+      "gender": "Female",
       "jobTitle": "Board Certified Psychiatrist",
       "description": "Board-certified psychiatrist specializing in anxiety, depression, ADHD, and PTSD treatment. Bilingual in English and Spanish.",
       "image": `${baseUrl}/doctor-profile-v2.webp`,
       "telephone": "+1-239-423-0272",
       "email": "info@healingmindsp.com",
       "medicalSpecialty": "Psychiatry",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "NPI",
+        "value": "1982233631"
+      },
       "sameAs": [
-        "https://www.healthgrades.com/physician/dr-melva-reve-urgelles-1dgbqeci76"
+        "https://www.healthgrades.com/physician/dr-melva-reve-urgelles-1dgbqeci76",
+        "https://weprevent.org/listing/dr-melva-reve-urgelles-md-vc998mp/",
+        "https://providers.sharecare.com/doctor/dr-melva-reve-urgelles-1dgbqeci76",
+        "https://npidb.org/doctors/allopathic_osteopathic_physicians/psychiatry_2084p0800x/1982233631.aspx"
       ],
       "knowsLanguage": [
         {
