@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, AlertTriangle } from 'lucide-react';
+import { Check, AlertTriangle, FileText, Shield, DollarSign, Phone } from 'lucide-react';
+import { Link } from 'wouter';
 
 const ForPatients = () => {
   const { language } = useLanguage();
@@ -16,7 +17,7 @@ const ForPatients = () => {
 
   const expectations = [
     {
-      title: language === 'en' ? 'Initial Consultation (60 minutes)' : 'Consulta Inicial (60 minutos)',
+      title: language === 'en' ? 'Initial Consultation (15 minutes)' : 'Consulta Inicial (15 minutos)',
       description: language === 'en' 
         ? 'Comprehensive evaluation of your mental health history, current symptoms, and treatment goals.'
         : 'Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento.'
@@ -100,6 +101,77 @@ const ForPatients = () => {
           </Card>
         </div>
 
+        {/* Important Policies Section */}
+        <div className="mt-12">
+          <h3 className="text-2xl font-semibold text-gray-900 mb-8 text-center">
+            {language === 'en' ? 'Important Policies' : 'Políticas Importantes'}
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Link href={language === 'en' ? '/cancellation-policy' : '/es/politica-cancelacion'} data-testid="link-cancellation-policy">
+              <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <div className="flex flex-col items-center text-center">
+                  <FileText className="w-8 h-8 text-primary-green mb-4" />
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    {language === 'en' ? 'Cancellation Policy' : 'Política de Cancelación'}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {language === 'en' 
+                      ? '24-hour notice required' 
+                      : 'Aviso de 24 horas requerido'}
+                  </p>
+                </div>
+              </Card>
+            </Link>
+
+            <Link href={language === 'en' ? '/billing-policy' : '/es/politica-facturacion'} data-testid="link-billing-policy">
+              <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <div className="flex flex-col items-center text-center">
+                  <DollarSign className="w-8 h-8 text-primary-green mb-4" />
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    {language === 'en' ? 'Billing Policy' : 'Política de Facturación'}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {language === 'en' 
+                      ? 'Insurance & payment information' 
+                      : 'Información de seguro y pagos'}
+                  </p>
+                </div>
+              </Card>
+            </Link>
+
+            <Link href={language === 'en' ? '/emergency-policy' : '/es/politica-emergencias'} data-testid="link-emergency-policy">
+              <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <div className="flex flex-col items-center text-center">
+                  <Phone className="w-8 h-8 text-primary-green mb-4" />
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    {language === 'en' ? 'Emergency Policy' : 'Política de Emergencias'}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {language === 'en' 
+                      ? 'Crisis & emergency resources' 
+                      : 'Recursos de crisis y emergencia'}
+                  </p>
+                </div>
+              </Card>
+            </Link>
+
+            <Link href={language === 'en' ? '/patient-rights' : '/es/derechos-paciente'} data-testid="link-patient-rights">
+              <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <div className="flex flex-col items-center text-center">
+                  <Shield className="w-8 h-8 text-primary-green mb-4" />
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    {language === 'en' ? 'Patient Rights' : 'Derechos del Paciente'}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {language === 'en' 
+                      ? 'Your rights & responsibilities' 
+                      : 'Sus derechos y responsabilidades'}
+                  </p>
+                </div>
+              </Card>
+            </Link>
+          </div>
+        </div>
 
       </div>
     </section>
