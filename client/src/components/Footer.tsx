@@ -135,7 +135,7 @@ const Footer = () => {
           {/* Right Section - Links */}
           <div className="md:col-span-5 lg:col-span-7">
             {/* Links Grid */}
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-8">
               {/* Our Services */}
               <div>
                 <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-services-title">
@@ -178,46 +178,53 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Quick Links */}
+              {/* Quick Links & Patient Resources */}
               <div>
-                <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
-                  {language === 'en' ? <>Quick <span className="font-display italic text-green-200">Links</span></> : <>Enlaces <span className="font-display italic text-green-200">Rápidos</span></>}
-                </h3>
-                <ul className="space-y-3" data-testid="footer-quick-links-list">
-                  {quickLinks.map((link, index) => (
-                    <li key={index}>
-                      <Link 
-                        href={link.href}
-                        className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
-                        data-testid={`footer-quick-link-${index}`}
-                      >
-                        <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                {/* Quick Links Section */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-quick-links-title">
+                    {language === 'en' ? <>Quick <span className="font-display italic text-green-200">Links</span></> : <>Enlaces <span className="font-display italic text-green-200">Rápidos</span></>}
+                  </h3>
+                  <ul className="space-y-3" data-testid="footer-quick-links-list">
+                    {quickLinks.map((link, index) => (
+                      <li key={index}>
+                        <Link 
+                          href={link.href}
+                          className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
+                          data-testid={`footer-quick-link-${index}`}
+                        >
+                          <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-              {/* Patient Resources */}
-              <div>
-                <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-patient-resources-title">
-                  {language === 'en' ? <>Patient <span className="font-display italic text-green-200">Resources</span></> : <>Recursos del <span className="font-display italic text-green-200">Paciente</span></>}
-                </h3>
-                <ul className="space-y-3" data-testid="footer-patient-resources-list">
-                  {patientResources.map((resource, index) => (
-                    <li key={index}>
-                      <Link 
-                        href={resource.href}
-                        className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
-                        data-testid={`footer-patient-resource-${index}`}
-                      >
-                        <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                        {resource.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {/* Patient Resources Section */}
+                <div>
+                  <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-patient-resources-title">
+                    {language === 'en' ? (
+                      <>Patient <span className="font-display italic text-green-200">Resources</span></>
+                    ) : (
+                      <><span className="font-display italic text-green-200">Recursos</span> del Paciente</>
+                    )}
+                  </h3>
+                  <ul className="space-y-3" data-testid="footer-patient-resources-list">
+                    {patientResources.map((resource, index) => (
+                      <li key={index}>
+                        <Link 
+                          href={resource.href}
+                          className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
+                          data-testid={`footer-patient-resource-${index}`}
+                        >
+                          <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                          {resource.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
 
