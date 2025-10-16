@@ -36,6 +36,13 @@ const Footer = () => {
     { href: language === 'en' ? '/patient-rights' : '/es/derechos-paciente', label: language === 'en' ? 'Patient Rights' : 'Derechos del Paciente' }
   ];
 
+  const legalPolicies = [
+    { href: language === 'en' ? '/privacy-policy' : '/es/politica-privacidad', label: language === 'en' ? 'Privacy Policy' : 'Política de Privacidad' },
+    { href: language === 'en' ? '/terms-of-service' : '/es/terminos-servicio', label: language === 'en' ? 'Terms of Service' : 'Términos de Servicio' },
+    { href: language === 'en' ? '/hipaa-notice' : '/es/aviso-hipaa', label: language === 'en' ? 'HIPAA Notice' : 'Aviso HIPAA' },
+    { href: language === 'en' ? '/cookie-policy' : '/es/politica-cookies', label: language === 'en' ? 'Cookie Policy' : 'Política de Cookies' }
+  ];
+
   const serviceAreas = [
     { href: language === 'en' ? '/locations/psychiatrist-naples' : '/es/ubicaciones/psiquiatra-naples', label: 'Naples, FL' },
     { href: language === 'en' ? '/locations/psychiatrist-marco-island' : '/es/ubicaciones/psiquiatra-marco-island', label: 'Marco Island, FL' },
@@ -225,6 +232,31 @@ const Footer = () => {
                     ))}
                   </ul>
                 </div>
+
+                {/* Legal Policies Section - Mobile Only */}
+                <div className="md:hidden mt-8">
+                  <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-legal-policies-title">
+                    {language === 'en' ? (
+                      <>Legal <span className="font-display italic text-green-200">Policies</span></>
+                    ) : (
+                      <>Políticas <span className="font-display italic text-green-200">Legales</span></>
+                    )}
+                  </h3>
+                  <ul className="space-y-3" data-testid="footer-legal-policies-list">
+                    {legalPolicies.map((policy, index) => (
+                      <li key={index}>
+                        <Link 
+                          href={policy.href}
+                          className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
+                          data-testid={`footer-legal-policy-${index}`}
+                        >
+                          <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                          {policy.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -271,7 +303,7 @@ const Footer = () => {
 
             {/* Legal Links & Copyright */}
             <div className="text-right">
-              <div className="flex flex-wrap gap-4 text-sm text-green-300 mb-2" data-testid="footer-legal-links">
+              <div className="hidden md:flex flex-wrap gap-4 text-sm text-green-300 mb-2" data-testid="footer-legal-links">
                 <Link 
                   href={language === 'en' ? '/privacy-policy' : '/es/politica-privacidad'} 
                   className="hover:text-white transition-colors"
