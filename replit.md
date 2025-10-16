@@ -1,7 +1,43 @@
 # Healing Minds Psychiatry Website
 
 ## Overview
-This project is a professional, bilingual (English/Spanish) website for Healing Minds Psychiatry, Dr. Melva Reve's practice in Naples, FL. Its core purpose is to establish a strong online presence, attract new patients, and provide accessible, high-quality information on mental health services (anxiety, depression, ADHD, PTSD, etc.). The site emphasizes modern design, optimal search engine visibility in the Naples, FL area, and compliance with medical transparency requirements, including detailed billing, payment, and cancellation policies.
+This project is a professional, bilingual (English/Spanish) website for Healing Minds Psychiatry, Dr. Melva Reve's practice in Naples, FL. Its core purpose is to establish a strong online presence, attract new patients, and provide accessible, high-quality information on mental health services (anxiety, depression, ADHD, PTSD, etc.). The site emphasizes modern design, optimal search engine visibility in the Naples, FL area, and compliance with medical transparency requirements, including detailed billing, payment, cancellation, and emergency policies.
+
+## Recent Changes
+
+### October 16, 2025 - Emergency and Crisis Policy Page Implementation
+- **New Legal Page**: Created comprehensive bilingual Emergency and Crisis Policy page to protect patients and the practice by clearly defining scope of emergency services
+- **URLs Implemented**: `/emergency-policy` (English) and `/es/politica-emergencias` (Spanish)
+- **Policy Details**: Clear disclaimer that practice is NOT an emergency service, operates by appointment only, staff unavailable for crisis situations outside office hours
+- **Florida Crisis Resources 2025**: Complete listing of emergency contacts including 911, 988 Suicide & Crisis Lifeline (call/text), Crisis Text Line (text "HELLO" to 741741), David Lawrence Center (239) 455-8500, Mobile Response Teams (MRTs), and 211 general information
+- **Baker Act Information**: Educational content about Florida's involuntary examination law (Chapter 394), 72-hour evaluation period, patient rights, and when it applies
+- **Visual Design**: Prominent red alert banner at top of page emphasizing "NOT an emergency service" with clear call-to-action for immediate crisis resources
+- **Legal Protection**: Essential disclaimer for psychiatry practice operating in mental health sector, clearly delineating emergency vs. routine care boundaries
+- **Footer Integration**: Added link alongside other legal pages with high visibility per user request for important safety information
+- **SEO Implementation**: Complete sitemap.xml integration with proper hreflang tags for bilingual support
+- **URL Mapping**: Bidirectional language switching enabled via urlMapping.ts updates
+- **Content Standards**: Professional medical language, life-threatening crisis definition, immediate action steps, post-crisis communication protocol, and policy acknowledgment requirement
+
+### October 16, 2025 - Billing and Payment Policy Page Implementation
+- **New Legal Page**: Created comprehensive bilingual Billing and Payment Policy page to address patient questions about fees and payment procedures
+- **URLs Implemented**: `/billing-policy` (English) and `/es/politica-facturacion` (Spanish)
+- **Policy Details**: Complete coverage of insurance acceptance, copayment requirements, self-pay rates with good faith estimates, credit card processing fees (3% with clear disclosure and avoidance options), insurance claims processing timelines, payment plans, and financial assistance options
+- **Florida Compliance 2025**: Policy reviewed against Florida medical billing transparency requirements (§395.301) and credit card surcharge regulations - fully compliant with all state and federal requirements
+- **Credit Card Fee Disclosure**: Clear 3% processing fee disclosure with examples and alternatives (cash, check, debit card) to meet legal transparency requirements
+- **Footer Integration**: Added link alongside other legal pages (Privacy Policy, Terms of Service, HIPAA Notice, Cookie Policy, Cancellation Policy)
+- **SEO Implementation**: Complete sitemap.xml integration with proper hreflang tags for bilingual support
+- **URL Mapping**: Bidirectional language switching enabled via urlMapping.ts updates
+- **Content Standards**: Professional medical language, transparent fee structure, good faith estimate availability, insurance claim timelines (2-6 weeks), payment plan options, and billing questions contact information
+
+### October 16, 2025 - Cancellation and No-Show Policy Page Implementation
+- **New Legal Page**: Created comprehensive bilingual Cancellation and No-Show Policy page addressing patient appointment expectations and fees
+- **URLs Implemented**: `/cancellation-policy` (English) and `/es/politica-cancelacion` (Spanish)
+- **Policy Details**: 24 business hours cancellation requirement with $50 late cancellation/no-show fee, including clear exceptions for medical emergencies
+- **Compliance Verification**: Policy reviewed against Florida medical practice regulations and industry best practices - fully compliant with no state-mandated specific requirements
+- **Footer Integration**: Added link alongside other legal pages (Privacy Policy, Terms of Service, HIPAA Notice, Cookie Policy)
+- **SEO Implementation**: Complete sitemap.xml integration with proper hreflang tags for bilingual support
+- **URL Mapping**: Bidirectional language switching enabled via urlMapping.ts updates
+- **Content Standards**: Professional medical language, clear fee structure, patient responsibility acknowledgment, emergency exceptions, and policy acknowledgment requirement
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
