@@ -5,6 +5,18 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### October 16, 2025 - Patient Rights and Responsibilities Page Implementation
+- **New Legal Page**: Created comprehensive bilingual Patient Rights and Responsibilities page to educate patients about their legal rights and obligations under Florida law
+- **URLs Implemented**: `/patient-rights` (English) and `/es/derechos-paciente` (Spanish)
+- **Florida Statutory Compliance 2025**: Full compliance with Florida Statutes §394.459 (Mental Health Patient Rights), §394.4615 (Additional Rights for Mental Health Patients), and §381.026 (Patient's Bill of Rights and Responsibilities)
+- **Patient Rights Coverage**: Complete listing including respectful care, confidential records (enhanced Florida privacy protections beyond HIPAA), informed consent, right to refuse treatment, access to medical records, second opinion, interpreter services, emergency treatment, legal communications, and complaint filing procedures
+- **Patient Responsibilities**: Clear outline of patient obligations including providing accurate information, keeping appointments, following treatment plans, meeting financial obligations, and maintaining respectful behavior
+- **Complaint Filing Resources**: Complete contact information for Florida Department of Health Consumer Services Unit (1-850-245-4444, business hours, mailing address, website) and AHCA Health Care Complaint Hotline (1-888-419-3456 24/7, TTY 1-800-955-8771 Florida Relay, mailing address, website, online complaint form)
+- **Footer Integration**: Added link alongside other legal pages (Privacy Policy, Terms of Service, HIPAA Notice, Cookie Policy, Cancellation Policy, Billing Policy, Emergency Policy)
+- **SEO Implementation**: Complete sitemap.xml integration with proper hreflang tags for bilingual support
+- **URL Mapping**: Bidirectional language switching enabled via urlMapping.ts updates
+- **Content Standards**: Professional medical language, comprehensive rights listing, clear responsibilities, accessible complaint procedures, and policy acknowledgment requirement
+
 ### October 16, 2025 - Emergency and Crisis Policy Page Implementation
 - **New Legal Page**: Created comprehensive bilingual Emergency and Crisis Policy page to protect patients and the practice by clearly defining scope of emergency services
 - **URLs Implemented**: `/emergency-policy` (English) and `/es/politica-emergencias` (Spanish)
