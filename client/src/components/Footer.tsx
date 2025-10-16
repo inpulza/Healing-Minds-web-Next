@@ -29,6 +29,13 @@ const Footer = () => {
     { href: '/patient-portal', label: language === 'en' ? 'Patient Portal' : 'Portal del Paciente' }
   ];
 
+  const patientResources = [
+    { href: language === 'en' ? '/cancellation-policy' : '/es/politica-cancelacion', label: language === 'en' ? 'Cancellation Policy' : 'Política de Cancelación' },
+    { href: language === 'en' ? '/billing-policy' : '/es/politica-facturacion', label: language === 'en' ? 'Billing Policy' : 'Política de Facturación' },
+    { href: language === 'en' ? '/emergency-policy' : '/es/politica-emergencias', label: language === 'en' ? 'Emergency Policy' : 'Política de Emergencias' },
+    { href: language === 'en' ? '/patient-rights' : '/es/derechos-paciente', label: language === 'en' ? 'Patient Rights' : 'Derechos del Paciente' }
+  ];
+
   const serviceAreas = [
     { href: language === 'en' ? '/locations/psychiatrist-naples' : '/es/ubicaciones/psiquiatra-naples', label: 'Naples, FL' },
     { href: language === 'en' ? '/locations/psychiatrist-marco-island' : '/es/ubicaciones/psiquiatra-marco-island', label: 'Marco Island, FL' },
@@ -128,7 +135,7 @@ const Footer = () => {
           {/* Right Section - Links */}
           <div className="md:col-span-5 lg:col-span-7">
             {/* Links Grid */}
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-8">
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8">
               {/* Our Services */}
               <div>
                 <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-services-title">
@@ -186,6 +193,27 @@ const Footer = () => {
                       >
                         <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                         {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Patient Resources */}
+              <div>
+                <h3 className="text-lg font-body font-bold text-white mb-6" data-testid="footer-patient-resources-title">
+                  {language === 'en' ? <>Patient <span className="font-display italic text-green-200">Resources</span></> : <>Recursos del <span className="font-display italic text-green-200">Paciente</span></>}
+                </h3>
+                <ul className="space-y-3" data-testid="footer-patient-resources-list">
+                  {patientResources.map((resource, index) => (
+                    <li key={index}>
+                      <Link 
+                        href={resource.href}
+                        className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
+                        data-testid={`footer-patient-resource-${index}`}
+                      >
+                        <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        {resource.label}
                       </Link>
                     </li>
                   ))}
@@ -260,30 +288,6 @@ const Footer = () => {
                   className="hover:text-white transition-colors"
                 >
                   {language === 'en' ? 'Cookie Policy' : 'Política de Cookies'}
-                </Link>
-                <Link 
-                  href={language === 'en' ? '/cancellation-policy' : '/es/politica-cancelacion'} 
-                  className="hover:text-white transition-colors"
-                >
-                  {language === 'en' ? 'Cancellation Policy' : 'Política de Cancelación'}
-                </Link>
-                <Link 
-                  href={language === 'en' ? '/billing-policy' : '/es/politica-facturacion'} 
-                  className="hover:text-white transition-colors"
-                >
-                  {language === 'en' ? 'Billing Policy' : 'Política de Facturación'}
-                </Link>
-                <Link 
-                  href={language === 'en' ? '/emergency-policy' : '/es/politica-emergencias'} 
-                  className="hover:text-white transition-colors"
-                >
-                  {language === 'en' ? 'Emergency Policy' : 'Política de Emergencias'}
-                </Link>
-                <Link 
-                  href={language === 'en' ? '/patient-rights' : '/es/derechos-paciente'} 
-                  className="hover:text-white transition-colors"
-                >
-                  {language === 'en' ? 'Patient Rights' : 'Derechos del Paciente'}
                 </Link>
                 <button 
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
