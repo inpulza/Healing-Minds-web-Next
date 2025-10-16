@@ -67,7 +67,9 @@ const bilingualURLMapping: Record<string, string> = {
   '/cookie-policy': '/es/politica-cookies',
   '/es/politica-cookies': '/cookie-policy',
   '/cancellation-policy': '/es/politica-cancelacion',
-  '/es/politica-cancelacion': '/cancellation-policy'
+  '/es/politica-cancelacion': '/cancellation-policy',
+  '/billing-policy': '/es/politica-facturacion',
+  '/es/politica-facturacion': '/billing-policy'
 };
 
 /**

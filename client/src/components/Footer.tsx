@@ -267,6 +267,12 @@ const Footer = () => {
                 >
                   {language === 'en' ? 'Cancellation Policy' : 'Política de Cancelación'}
                 </Link>
+                <Link 
+                  href={language === 'en' ? '/billing-policy' : '/es/politica-facturacion'} 
+                  className="hover:text-white transition-colors"
+                >
+                  {language === 'en' ? 'Billing Policy' : 'Política de Facturación'}
+                </Link>
                 <button 
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="hover:text-white transition-colors cursor-pointer"
