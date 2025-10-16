@@ -65,7 +65,9 @@ const bilingualURLMapping: Record<string, string> = {
   '/hipaa-notice': '/es/aviso-hipaa',
   '/es/aviso-hipaa': '/hipaa-notice',
   '/cookie-policy': '/es/politica-cookies',
-  '/es/politica-cookies': '/cookie-policy'
+  '/es/politica-cookies': '/cookie-policy',
+  '/cancellation-policy': '/es/politica-cancelacion',
+  '/es/politica-cancelacion': '/cancellation-policy'
 };
 
 /**

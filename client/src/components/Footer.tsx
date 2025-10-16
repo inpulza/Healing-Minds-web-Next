@@ -261,6 +261,12 @@ const Footer = () => {
                 >
                   {language === 'en' ? 'Cookie Policy' : 'Política de Cookies'}
                 </Link>
+                <Link 
+                  href={language === 'en' ? '/cancellation-policy' : '/es/politica-cancelacion'} 
+                  className="hover:text-white transition-colors"
+                >
+                  {language === 'en' ? 'Cancellation Policy' : 'Política de Cancelación'}
+                </Link>
                 <button 
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="hover:text-white transition-colors cursor-pointer"

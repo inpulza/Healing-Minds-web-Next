@@ -73,6 +73,7 @@ const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
 const HipaaNotice = lazy(() => import('@/pages/HipaaNotice'));
 const CookiePolicy = lazy(() => import('@/pages/CookiePolicy'));
+const CancellationPolicy = lazy(() => import('@/pages/CancellationPolicy'));
 
 
 // Loading component for lazy routes
@@ -172,12 +173,14 @@ function Router() {
       <Route path="/terms-of-service" component={TermsOfService} />
       <Route path="/hipaa-notice" component={HipaaNotice} />
       <Route path="/cookie-policy" component={CookiePolicy} />
+      <Route path="/cancellation-policy" component={CancellationPolicy} />
       
       {/* Legal Pages - Spanish */}
       <Route path="/es/politica-privacidad" component={PrivacyPolicy} />
       <Route path="/es/terminos-servicio" component={TermsOfService} />
       <Route path="/es/aviso-hipaa" component={HipaaNotice} />
       <Route path="/es/politica-cookies" component={CookiePolicy} />
+      <Route path="/es/politica-cancelacion" component={CancellationPolicy} />
       
         <Route component={NotFound} />
       </Switch>

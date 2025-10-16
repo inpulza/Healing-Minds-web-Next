@@ -215,6 +215,13 @@ export const generateSitemap = (req: Request, res: Response) => {
       lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
+    },
+    {
+      en: '/cancellation-policy',
+      es: '/es/politica-cancelacion',
+      lastmod: legalDate,
+      changefreq: 'yearly',
+      priority: '0.3'
     }
   ];
   
