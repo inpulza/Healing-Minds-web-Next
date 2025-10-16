@@ -229,6 +229,13 @@ export const generateSitemap = (req: Request, res: Response) => {
       lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
+    },
+    {
+      en: '/emergency-policy',
+      es: '/es/politica-emergencias',
+      lastmod: legalDate,
+      changefreq: 'yearly',
+      priority: '0.3'
     }
   ];
   

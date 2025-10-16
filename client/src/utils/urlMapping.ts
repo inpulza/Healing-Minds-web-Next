@@ -69,7 +69,9 @@ const bilingualURLMapping: Record<string, string> = {
   '/cancellation-policy': '/es/politica-cancelacion',
   '/es/politica-cancelacion': '/cancellation-policy',
   '/billing-policy': '/es/politica-facturacion',
-  '/es/politica-facturacion': '/billing-policy'
+  '/es/politica-facturacion': '/billing-policy',
+  '/emergency-policy': '/es/politica-emergencias',
+  '/es/politica-emergencias': '/emergency-policy'
 };
 
 /**
