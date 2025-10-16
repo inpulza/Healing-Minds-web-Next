@@ -71,7 +71,9 @@ const bilingualURLMapping: Record<string, string> = {
   '/billing-policy': '/es/politica-facturacion',
   '/es/politica-facturacion': '/billing-policy',
   '/emergency-policy': '/es/politica-emergencias',
-  '/es/politica-emergencias': '/emergency-policy'
+  '/es/politica-emergencias': '/emergency-policy',
+  '/patient-rights': '/es/derechos-paciente',
+  '/es/derechos-paciente': '/patient-rights'
 };
 
 /**

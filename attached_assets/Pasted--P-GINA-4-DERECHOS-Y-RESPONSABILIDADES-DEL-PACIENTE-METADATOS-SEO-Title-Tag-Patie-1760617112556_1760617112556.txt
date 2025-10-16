@@ -1,0 +1,32 @@
+### PÁGINA 4: DERECHOS Y RESPONSABILIDADES DEL PACIENTE ###
+
+[METADATOS SEO]
+**Title Tag:** Patient Rights & Responsibilities | Healing Minds Psychiatry
+**Meta Description:** Learn about your rights and responsibilities as a patient at Healing Minds Psychiatry, ensuring a respectful and collaborative therapeutic relationship.
+**URL Slug (EN):** /patient-rights
+**URL Slug (ES):** /es/derechos-paciente
+[FIN METADATOS]
+
+# [H1] Derechos y Responsabilidades del Paciente
+
+Creemos que una relación terapéutica exitosa se basa en el respeto mutuo y la colaboración. A continuación, se describen sus derechos como paciente y las responsabilidades que le pedimos que asuma para asegurar el mejor resultado posible de su tratamiento.
+
+### Sus Derechos como Paciente
+Usted tiene derecho a:
+* Recibir un trato respetuoso, compasivo y digno en todo momento.
+* Una total confidencialidad de su información médica, de acuerdo con las leyes de HIPAA.
+* Participar activamente en las decisiones sobre su plan de tratamiento.
+* Recibir información clara sobre su diagnóstico, opciones de tratamiento, y los riesgos y beneficios de la medicación.
+* Hacer preguntas y recibir respuestas claras sobre nuestras políticas y tarifas.
+* Rechazar cualquier tratamiento recomendado.
+
+### Sus Responsabilidades como Paciente
+Le pedimos que:
+* Proporcione información precisa y completa sobre su historial médico y sus síntomas actuales.
+* Asista a sus citas a tiempo o las cancele con la antelación requerida por nuestra política.
+* Cumpla con el plan de tratamiento acordado, incluyendo la toma de medicamentos según lo prescrito.
+* Comunique cualquier problema o efecto secundario de su medicación de manera oportuna.
+* Realice los pagos por los servicios recibidos, incluyendo copagos y cargos por cancelación, de acuerdo con nuestra política de facturación.
+* Trate a nuestro personal y a otros pacientes con cortesía y respeto.
+
+**[DISCLAIMER A REVISAR POR LA DUEÑA: Esta página ayuda a establecer expectativas claras desde el principio. Es una buena práctica que forme parte de la documentación inicial que se entrega a los nuevos pacientes.]**

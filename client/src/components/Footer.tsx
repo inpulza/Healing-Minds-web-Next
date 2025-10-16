@@ -279,6 +279,12 @@ const Footer = () => {
                 >
                   {language === 'en' ? 'Emergency Policy' : 'Política de Emergencias'}
                 </Link>
+                <Link 
+                  href={language === 'en' ? '/patient-rights' : '/es/derechos-paciente'} 
+                  className="hover:text-white transition-colors"
+                >
+                  {language === 'en' ? 'Patient Rights' : 'Derechos del Paciente'}
+                </Link>
                 <button 
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="hover:text-white transition-colors cursor-pointer"
