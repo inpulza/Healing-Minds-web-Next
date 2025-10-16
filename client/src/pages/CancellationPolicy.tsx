@@ -84,12 +84,6 @@ const CancellationPolicy = () => {
                     By scheduling an appointment with Healing Minds Psychiatry, you acknowledge and agree to the terms of our Cancellation and No-Show Policy.
                   </p>
                 </div>
-
-                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 p-6 rounded-lg mt-8">
-                  <p className="text-amber-800 dark:text-amber-300 text-sm">
-                    <strong>Note:</strong> This policy text should be reviewed by legal counsel to ensure compliance with Florida regulations. The form that patients sign should reflect this exact text.
-                  </p>
-                </div>
               </div>
             ) : (
               <div className="space-y-8">
@@ -140,12 +134,6 @@ const CancellationPolicy = () => {
                   <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Reconocimiento de la Política</h2>
                   <p className="text-gray-700 dark:text-gray-300">
                     Al agendar una cita con Healing Minds Psychiatry, usted reconoce y acepta los términos de nuestra Política de Cancelación y No Asistencia.
-                  </p>
-                </div>
-
-                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 p-6 rounded-lg mt-8">
-                  <p className="text-amber-800 dark:text-amber-300 text-sm">
-                    <strong>Nota:</strong> Se recomienda que este texto sea revisado por un asesor legal para asegurar el cumplimiento con las regulaciones de Florida. El formulario que los pacientes firman debe reflejar este texto exacto.
                   </p>
                 </div>
               </div>

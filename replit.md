@@ -5,6 +5,16 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### October 16, 2025 - Cancellation and No-Show Policy Page Implementation
+- **New Legal Page**: Created comprehensive bilingual Cancellation and No-Show Policy page addressing patient appointment expectations and fees
+- **URLs Implemented**: `/cancellation-policy` (English) and `/es/politica-cancelacion` (Spanish)
+- **Policy Details**: 24 business hours cancellation requirement with $50 late cancellation/no-show fee, including clear exceptions for medical emergencies
+- **Compliance Verification**: Policy reviewed against Florida medical practice regulations and industry best practices - fully compliant with no state-mandated specific requirements
+- **Footer Integration**: Added link alongside other legal pages (Privacy Policy, Terms of Service, HIPAA Notice, Cookie Policy)
+- **SEO Implementation**: Complete sitemap.xml integration with proper hreflang tags for bilingual support
+- **URL Mapping**: Bidirectional language switching enabled via urlMapping.ts updates
+- **Content Standards**: Professional medical language, clear fee structure, patient responsibility acknowledgment, emergency exceptions, and policy acknowledgment requirement
+
 ### October 9, 2025 - Comprehensive Schema.org Implementation with REAL Data for Google Rich Results
 - **Schema Architecture**: All schema markup server-side injected in HTML `<head>` for optimal Google crawling
 - **MedicalOrganization Primary Schema**: Multiple types ["MedicalOrganization", "LocalBusiness", "MedicalClinic"] for maximum search visibility
