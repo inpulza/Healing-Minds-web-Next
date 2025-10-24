@@ -17,60 +17,60 @@ import medicationImage from "@assets/generated_images/Medical_assessment_tools_7
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.webp";
 import medicationCapsules from "@assets/e4031136-1b10-4229-8e1d-2c74e4186617_1755210913815.webp";
 
-const TreatmentPlanning = () => {
+const MedicationManagement = () => {
   const { language } = useLanguage();
   const { trackServiceView } = useTikTokEvents();
 
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Psychiatric Treatment Planning Naples FL - Mental Health Care | Dr. Melva Reve'
-        : 'Planificación de Tratamiento Psiquiátrico Naples FL - Atención de Salud Mental | Dra. Melva Reve',
+        ? 'Medication Management Naples FL - Psychiatric Medications | Dr. Melva Reve'
+        : 'Manejo de Medicamentos Naples FL - Medicamentos Psiquiátricos | Dra. Melva Reve',
       description: language === 'en'
-        ? 'Expert psychiatric treatment planning in Naples, FL. Dr. Melva Reve provides comprehensive psychiatric evaluation, ongoing monitoring, and personalized care for mental health conditions. Bilingual services.'
-        : 'Planificación experta de tratamiento psiquiátrico en Naples, FL. La Dra. Melva Reve brinda evaluación psiquiátrica integral, monitoreo continuo y atención personalizada para condiciones de salud mental. Servicios bilingües.',
+        ? 'Expert psychiatric medication management in Naples, FL. Dr. Melva Reve provides comprehensive medication evaluation, monitoring, and adjustment for mental health conditions. Bilingual services.'
+        : 'Manejo experto de medicamentos psiquiátricos en Naples, FL. La Dra. Melva Reve brinda evaluación, monitoreo y ajuste integral de medicamentos para condiciones de salud mental. Servicios bilingües.',
       keywords: language === 'en'
-        ? 'treatment planning Naples FL, psychiatric care Naples, mental health treatment Naples, psychiatrist Naples, psychiatric evaluation Naples, ongoing psychiatric care Naples'
-        : 'planificación tratamiento Naples FL, atención psiquiátrica Naples, tratamiento salud mental Naples, psiquiatra Naples, evaluación psiquiátrica Naples, atención psiquiátrica continua Naples',
+        ? 'medication management Naples FL, psychiatric medications Naples, antidepressants Naples, mood stabilizers Naples, psychiatrist medication Naples, medication monitoring Naples'
+        : 'manejo medicamentos Naples FL, medicamentos psiquiátricos Naples, antidepresivos Naples, estabilizadores ánimo Naples, psiquiatra medicamentos Naples, monitoreo medicamentos Naples',
       lang: language,
-      canonical: language === 'en' ? '/services/treatment-planning' : '/es/servicios/planificacion-tratamiento'
+      canonical: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
     };
     updateSEO(seoData);
     
     // Add Service Schema (SPOKE) - connects to MedicalClinic HUB
     addServiceSchema({
-      serviceType: "Psychiatric Treatment Planning",
+      serviceType: "Medication Management",
       name: language === 'en' 
-        ? "Psychiatric Treatment Planning in Naples, FL"
-        : "Planificación de Tratamiento Psiquiátrico en Naples, FL",
+        ? "Manejo de Medicamentos en Naples, FL"
+        : "Medication Management in Naples, FL",
       description: language === 'en'
-        ? "Expert psychiatric evaluation, ongoing monitoring, and personalized treatment planning with comprehensive care and individualized support."
-        : "Evaluación psiquiátrica experta, monitoreo continuo y planificación de tratamiento personalizada con atención integral y apoyo individualizado.",
-      pageId: "treatment-planning"
+        ? "Expert psychiatric medication evaluation, monitoring, and adjustment with comprehensive safety assessments and personalized treatment plans."
+        : "Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales y planes de tratamiento personalizados.",
+      pageId: "medication-management"
     });
 
     // Track TikTok ViewContent event
-    trackServiceView('Treatment Planning', 'treatment-planning');
+    trackServiceView('Medication Management', 'medication-management');
   }, [language, trackServiceView]);
 
   const benefits = language === 'en' ? [
     'Expert evaluation and monitoring',
-    'Personalized treatment plans',
-    'Regular progress assessments',
-    'Comprehensive symptom management',
-    'Treatment coordination review',
-    'Therapy optimization',
+    'Personalized medication plans',
+    'Regular safety assessments',
+    'Side effect management',
+    'Medication interactions review',
+    'Dosage optimization',
     'Insurance accepted',
-    'Evidence-based care approach'
+    'Evidence-based prescribing'
   ] : [
     'Evaluación y monitoreo experto',
-    'Planes de tratamiento personalizados',
-    'Evaluaciones regulares de progreso',
-    'Manejo integral de síntomas',
-    'Revisión de coordinación del tratamiento',
-    'Optimización de terapia',
+    'Planes de medicación personalizados',
+    'Evaluaciones regulares de seguridad',
+    'Manejo de efectos secundarios',
+    'Revisión de interacciones medicamentosas',
+    'Optimización de dosis',
     'Se acepta seguro',
-    'Enfoque de atención basado en evidencia'
+    'Prescripción basada en evidencia'
   ];
 
   const candidatesCriteria = language === 'en' ? [
@@ -79,24 +79,24 @@ const TreatmentPlanning = () => {
       description: 'Recently diagnosed with depression, anxiety, bipolar disorder, or other mental health conditions.'
     },
     {
-      title: 'Treatment Adjustment',
-      description: 'Current treatment approach isn\'t working effectively or you need a different care strategy.'
+      title: 'Medication Adjustment',
+      description: 'Current medications aren\'t working effectively or are causing unwanted side effects.'
     },
     {
-      title: 'Comprehensive Care Needs',
-      description: 'Managing multiple aspects of mental health that need careful coordination and monitoring.'
+      title: 'Multiple Medications',
+      description: 'Taking several psychiatric medications that need careful coordination and monitoring.'
     },
     {
       title: 'Complex Medical History',
-      description: 'Have other medical conditions that may affect your psychiatric treatment approach.'
+      description: 'Have other medical conditions that may interact with psychiatric medications.'
     },
     {
-      title: 'Treatment Support',
-      description: 'Need guidance and support to maintain consistent treatment routines.'
+      title: 'Treatment Compliance',
+      description: 'Need support and guidance to maintain consistent medication routines.'
     },
     {
       title: 'Ongoing Monitoring',
-      description: 'Require regular assessment of treatment effectiveness and symptom management.'
+      description: 'Require regular assessment of medication effectiveness and side effects.'
     }
   ] : [
     {
@@ -104,24 +104,24 @@ const TreatmentPlanning = () => {
       description: 'Recientemente diagnosticado con depresión, ansiedad, trastorno bipolar u otras condiciones de salud mental.'
     },
     {
-      title: 'Ajuste de Tratamiento',
-      description: 'El enfoque de tratamiento actual no funciona efectivamente o necesita una estrategia de atención diferente.'
+      title: 'Ajuste de Medicación',
+      description: 'Los medicamentos actuales no funcionan efectivamente o están causando efectos secundarios no deseados.'
     },
     {
-      title: 'Necesidades de Atención Integral',
-      description: 'Manejo de múltiples aspectos de salud mental que necesitan coordinación y monitoreo cuidadosos.'
+      title: 'Múltiples Medicamentos',
+      description: 'Tomando varios medicamentos psiquiátricos que necesitan coordinación y monitoreo cuidadosos.'
     },
     {
       title: 'Historia Médica Compleja',
-      description: 'Tiene otras condiciones médicas que pueden afectar su enfoque de tratamiento psiquiátrico.'
+      description: 'Tiene otras condiciones médicas que pueden interactuar con medicamentos psiquiátricos.'
     },
     {
-      title: 'Apoyo de Tratamiento',
-      description: 'Necesita orientación y apoyo para mantener rutinas de tratamiento consistentes.'
+      title: 'Cumplimiento del Tratamiento',
+      description: 'Necesita apoyo y orientación para mantener rutinas de medicación consistentes.'
     },
     {
       title: 'Monitoreo Continuo',
-      description: 'Requiere evaluación regular de efectividad del tratamiento y manejo de síntomas.'
+      description: 'Requiere evaluación regular de efectividad de medicamentos y efectos secundarios.'
     }
   ];
 
@@ -129,63 +129,63 @@ const TreatmentPlanning = () => {
     {
       step: '1',
       title: 'Initial Assessment',
-      description: 'Comprehensive psychiatric evaluation including medical history, current symptoms, and previous treatment experiences.'
+      description: 'Comprehensive psychiatric evaluation including medical history, current symptoms, and previous medication experiences.'
     },
     {
       step: '2',
-      title: 'Treatment Approach Selection',
-      description: 'Evidence-based treatment approach considering your specific diagnosis, medical history, and treatment goals.'
+      title: 'Medication Selection',
+      description: 'Evidence-based medication choice considering your specific diagnosis, medical history, and treatment goals.'
     },
     {
       step: '3',
       title: 'Treatment Initiation',
-      description: 'Beginning treatment with careful treatment strategy, clear instructions, and side effect monitoring plan.'
+      description: 'Starting medication with careful dosing strategy, clear instructions, and side effect monitoring plan.'
     },
     {
       step: '4',
       title: 'Regular Monitoring',
-      description: 'Scheduled follow-up appointments to assess effectiveness, monitor treatment response, and adjust treatment as needed.'
+      description: 'Scheduled follow-up appointments to assess effectiveness, monitor side effects, and adjust dosages as needed.'
     },
     {
       step: '5',
       title: 'Optimization',
-      description: 'Fine-tuning treatment regimen based on your response, lifestyle factors, and treatment goals.'
+      description: 'Fine-tuning medication regimen based on your response, lifestyle factors, and treatment goals.'
     },
     {
       step: '6',
       title: 'Long-term Management',
-      description: 'Ongoing treatment management with regular reviews, preventive care, and coordination with other providers.'
+      description: 'Ongoing medication management with regular reviews, preventive care, and coordination with other providers.'
     }
   ] : [
     {
       step: '1',
       title: 'Evaluación Inicial',
-      description: 'Evaluación psiquiátrica integral incluyendo historia médica, síntomas actuales y experiencias previas de tratamiento.'
+      description: 'Evaluación psiquiátrica integral incluyendo historia médica, síntomas actuales y experiencias previas con medicamentos.'
     },
     {
       step: '2',
-      title: 'Selección del Enfoque de Tratamiento',
-      description: 'Enfoque de tratamiento basado en evidencia considerando su diagnóstico específico, historia médica y objetivos de tratamiento.'
+      title: 'Selección de Medicación',
+      description: 'Elección de medicamento basada en evidencia considerando su diagnóstico específico, historia médica y objetivos de tratamiento.'
     },
     {
       step: '3',
       title: 'Inicio del Tratamiento',
-      description: 'Inicio del tratamiento con estrategia de tratamiento cuidadosa, instrucciones claras y plan de monitoreo de respuesta al tratamiento.'
+      description: 'Inicio de medicación con estrategia de dosis cuidadosa, instrucciones claras y plan de monitoreo de efectos secundarios.'
     },
     {
       step: '4',
       title: 'Monitoreo Regular',
-      description: 'Citas de seguimiento programadas para evaluar efectividad, monitorear respuesta al tratamiento y ajustar tratamiento según sea necesario.'
+      description: 'Citas de seguimiento programadas para evaluar efectividad, monitorear efectos secundarios y ajustar dosis según sea necesario.'
     },
     {
       step: '5',
       title: 'Optimización',
-      description: 'Ajuste fino del régimen de tratamiento basado en su respuesta, factores de estilo de vida y objetivos de tratamiento.'
+      description: 'Ajuste fino del régimen de medicación basado en su respuesta, factores de estilo de vida y objetivos de tratamiento.'
     },
     {
       step: '6',
       title: 'Manejo a Largo Plazo',
-      description: 'Manejo continuo del tratamiento con revisiones regulares, atención preventiva y coordinación con otros proveedores.'
+      description: 'Manejo continuo de medicación con revisiones regulares, atención preventiva y coordinación con otros proveedores.'
     }
   ];
 
@@ -197,29 +197,29 @@ const TreatmentPlanning = () => {
         {/* Hero Section with Masonry Layout */}
         <ServiceHeroMasonry
           tagline={{
-            en: 'Expert Psychiatric Care',
-            es: 'Atención Psiquiátrica Experta'
+            en: 'Expert Medication Care',
+            es: 'Cuidado Experto de Medicación'
           }}
           title={{
-            en: 'Psychiatric Treatment Planning in Naples, FL',
-            es: 'Planificación de Tratamiento Psiquiátrico en Naples, FL'
+            en: 'Medication Management in Naples, FL',
+            es: 'Manejo de Medicamentos en Naples, FL'
           }}
           description={{
-            en: 'Expert psychiatric treatment planning for optimal mental health outcomes. Dr. Melva Reve provides comprehensive psychiatric evaluation, ongoing monitoring, and personalized care coordination to ensure safe, effective treatment tailored to your individual needs.',
-            es: 'Planificación experta de tratamiento psiquiátrico para resultados óptimos de salud mental. La Dra. Melva Reve brinda evaluación psiquiátrica integral, monitoreo continuo y coordinación de atención personalizada para asegurar tratamiento seguro y efectivo adaptado a sus necesidades individuales.'
+            en: 'Expert psychiatric medication management for optimal mental health outcomes. Dr. Melva Reve provides comprehensive medication evaluation, monitoring, and adjustment to ensure safe, effective treatment tailored to your individual needs.',
+            es: 'Manejo experto de medicación psiquiátrica para resultados óptimos de salud mental. La Dra. Melva Reve brinda evaluación, monitoreo y ajuste integral de medicamentos para asegurar tratamiento seguro y efectivo adaptado a sus necesidades individuales.'
           }}
           specialNote={{
-            es: '<strong>La planificación adecuada del tratamiento es fundamental para el éxito terapéutico.</strong> Nuestra experiencia garantiza que reciba el enfoque de tratamiento correcto, con atención personalizada y monitoreo continuo para optimizar su bienestar.'
+            es: '<strong>El manejo adecuado de medicamentos es fundamental para el éxito del tratamiento.</strong> Nuestra experiencia garantiza que reciba la medicación correcta, en la dosis adecuada, con monitoreo continuo para optimizar su bienestar y minimizar efectos secundarios.'
           }}
           facts={{
             title: {
-              en: 'Treatment Planning',
-              es: 'Planificación de Tratamiento'
+              en: 'Medication Management',
+              es: 'Manejo de Medicamentos'
             },
             items: [
               {
-                en: 'Evidence-based care practices',
-                es: 'Prácticas de atención basadas en evidencia'
+                en: 'Evidence-based prescribing practices',
+                es: 'Prácticas de prescripción basadas en evidencia'
               },
               {
                 en: 'Comprehensive safety monitoring',
@@ -230,8 +230,8 @@ const TreatmentPlanning = () => {
                 es: 'Planes de tratamiento personalizados'
               },
               {
-                en: 'Regular progress reviews',
-                es: 'Revisiones regulares de progreso'
+                en: 'Regular medication reviews',
+                es: 'Revisiones regulares de medicación'
               }
             ]
           }}
@@ -270,9 +270,9 @@ const TreatmentPlanning = () => {
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                     {language === 'en' ? (
-                      <>Benefits of Expert <span className="font-display italic text-green-700">Treatment Planning</span></>
+                      <>Benefits of Expert <span className="font-display italic text-green-700">Medication Management</span></>
                     ) : (
-                      <>Beneficios de la <span className="font-display italic text-green-700">Planificación Experta</span> del Tratamiento</>
+                      <>Beneficios del <span className="font-display italic text-green-700">Manejo Experto</span> de Medicamentos</>
                     )}
                   </h2>
                   
@@ -280,14 +280,14 @@ const TreatmentPlanning = () => {
                   <div className="mb-6 sm:mb-8">
                     <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">98%</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Patient satisfaction with personalized treatment approach' : 'Satisfacción del paciente con enfoque de tratamiento personalizado'}
+                      {language === 'en' ? 'Patient satisfaction with medication optimization' : 'Satisfacción del paciente con optimización de medicamentos'}
                     </div>
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
                     {language === 'en'
-                      ? 'Professional treatment planning ensures safe, effective psychiatric care with personalized support and ongoing monitoring for optimal mental health outcomes.'
-                      : 'La planificación profesional del tratamiento asegura atención psiquiátrica segura y efectiva con apoyo personalizado y monitoreo continuo para resultados óptimos de salud mental.'
+                      ? 'Professional medication management ensures safe, effective treatment with personalized care and ongoing monitoring for optimal mental health outcomes.'
+                      : 'El manejo profesional de medicamentos asegura tratamiento seguro y efectivo con atención personalizada y monitoreo continuo para resultados óptimos de salud mental.'
                     }
                   </p>
 
@@ -372,14 +372,14 @@ const TreatmentPlanning = () => {
                       </div>
                       <div className="space-y-2">
                         {(language === 'en' ? [
-                          'Comprehensive treatment needs',
+                          'Multiple psychiatric medications',
                           'Complex medication interactions',
                           'Side effect management needed',
                           'Treatment optimization required'
                         ] : [
                           'Múltiples medicamentos psiquiátricos',
                           'Interacciones medicamentosas complejas',
-                          'Necesita manejo de respuesta al tratamiento',
+                          'Necesita manejo de efectos secundarios',
                           'Requiere optimización del tratamiento'
                         ]).map((item, index) => (
                           <div key={index} className="flex items-start gap-2">

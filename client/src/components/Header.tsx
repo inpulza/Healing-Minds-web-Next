@@ -149,9 +149,9 @@ const Header = () => {
       description: language === 'en' ? 'Expert mood stabilization' : 'Estabilización experta del ánimo'
     },
     {
-      href: language === 'en' ? '/services/treatment-planning' : '/es/servicios/planificacion-tratamiento',
-      label: language === 'en' ? 'Treatment Planning' : 'Planificación de Tratamiento',
-      description: language === 'en' ? 'Expert psychiatric treatment coordination' : 'Coordinación experta de tratamiento psiquiátrico'
+      href: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos',
+      label: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos',
+      description: language === 'en' ? 'Expert psychiatric medication care' : 'Cuidado experto de medicación psiquiátrica'
     }
   ];
 

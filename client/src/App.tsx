@@ -63,7 +63,7 @@ const DepressionTreatment = lazy(() => import('@/pages/services/DepressionTreatm
 const AdhdTreatment = lazy(() => import('@/pages/services/AdhdTreatment'));
 const PtsdTreatment = lazy(() => import('@/pages/services/PtsdTreatment'));
 const BipolarTreatment = lazy(() => import('@/pages/services/BipolarTreatment'));
-const TreatmentPlanning = lazy(() => import('@/pages/services/TreatmentPlanning'));
+const MedicationManagement = lazy(() => import('@/pages/services/MedicationManagement'));
 
 // Telepsychiatry Page - Lazy loaded for performance
 const TelepsychiatryFlorida = lazy(() => import('@/pages/TelepsychiatryFlorida'));
@@ -161,8 +161,7 @@ function Router() {
       <Route path="/services/adhd-treatment" component={AdhdTreatment} />
       <Route path="/services/ptsd-treatment" component={PtsdTreatment} />
       <Route path="/services/bipolar-treatment" component={BipolarTreatment} />
-      <Route path="/services/treatment-planning" component={TreatmentPlanning} />
-      <Route path="/services/medication-management" component={TreatmentPlanning} />
+      <Route path="/services/medication-management" component={MedicationManagement} />
       
       {/* Spanish Service Pages */}
       <Route path="/es/servicios/tratamiento-ansiedad" component={AnxietyTreatment} />
@@ -170,8 +169,7 @@ function Router() {
       <Route path="/es/servicios/tratamiento-adhd" component={AdhdTreatment} />
       <Route path="/es/servicios/tratamiento-tept" component={PtsdTreatment} />
       <Route path="/es/servicios/tratamiento-bipolar" component={BipolarTreatment} />
-      <Route path="/es/servicios/planificacion-tratamiento" component={TreatmentPlanning} />
-      <Route path="/es/servicios/manejo-medicamentos" component={TreatmentPlanning} />
+      <Route path="/es/servicios/manejo-medicamentos" component={MedicationManagement} />
       
       {/* Legal Pages - English */}
       <Route path="/privacy-policy" component={PrivacyPolicy} />
