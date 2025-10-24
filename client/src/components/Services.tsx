@@ -59,14 +59,14 @@ const Services = () => {
       link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
     },
     {
-      id: 'medication-management',
-      title: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos',
+      id: 'treatment-planning',
+      title: language === 'en' ? 'Treatment Planning' : 'Planificación de Tratamiento',
       description: language === 'en'
-        ? 'Expert psychiatric medication evaluation, monitoring, and adjustment. Personalized medication plans with comprehensive safety assessments and ongoing care.'
-        : 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos. Planes de medicación personalizados con evaluaciones de seguridad integrales y atención continua.',
+        ? 'Expert psychiatric evaluation, ongoing monitoring, and personalized treatment coordination. Comprehensive care plans with regular assessments and supportive guidance.'
+        : 'Evaluación psiquiátrica experta, monitoreo continuo y coordinación de tratamiento personalizada. Planes de atención integrales con evaluaciones regulares y orientación de apoyo.',
       icon: User,
       featured: false,
-      link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
+      link: language === 'en' ? '/services/treatment-planning' : '/es/servicios/planificacion-tratamiento'
     }
   ];
 
@@ -154,7 +154,7 @@ const Services = () => {
                               case 'adhd': return 'Learn About ADHD Treatment';
                               case 'ptsd': return 'Learn About PTSD Treatment';
                               case 'bipolar': return 'Learn About Bipolar Treatment';
-                              case 'medication-management': return 'Learn About Medication Management';
+                              case 'treatment-planning': return 'Learn About Treatment Planning';
                               default: return 'Learn More';
                             }
                           })()
@@ -165,7 +165,7 @@ const Services = () => {
                               case 'adhd': return 'Conocer Tratamiento de TDAH';
                               case 'ptsd': return 'Conocer Tratamiento de TEPT';
                               case 'bipolar': return 'Conocer Tratamiento Bipolar';
-                              case 'medication-management': return 'Conocer Manejo de Medicamentos';
+                              case 'treatment-planning': return 'Conocer Planificación de Tratamiento';
                               default: return 'Saber Más';
                             }
                           })()
