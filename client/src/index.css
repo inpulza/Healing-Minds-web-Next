@@ -220,24 +220,13 @@
 
   @keyframes whatsapp-pulse-ring {
     0% {
-      transform: scale(1);
-      opacity: 0.45;
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
     }
-    45% {
-      transform: scale(1.28);
-      opacity: 0.32;
-    }
-    70% {
-      transform: scale(1.52);
-      opacity: 0.14;
-    }
-    90% {
-      transform: scale(1.68);
-      opacity: 0.05;
+    50% {
+      box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
     }
     100% {
-      transform: scale(1.75);
-      opacity: 0;
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
     }
   }
 
@@ -250,9 +239,10 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background-color: #25D366;
+    pointer-events: none;
     z-index: -1;
-    animation: whatsapp-pulse-ring 2.6s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+    animation: whatsapp-pulse-ring 2s ease-in-out infinite;
   }
 
   .animate-scroll {
