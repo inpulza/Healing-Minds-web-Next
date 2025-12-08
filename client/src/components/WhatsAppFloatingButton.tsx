@@ -22,7 +22,7 @@ const WhatsAppFloatingButton = () => {
       onClick={handleClick}
       aria-label={language === 'es' ? 'Contactar por WhatsApp' : 'Contact via WhatsApp'}
       data-testid="button-whatsapp-floating"
-      className="hidden lg:flex fixed bottom-[30px] left-[30px] w-[75px] h-[75px] bg-[#25D366] rounded-full items-center justify-center shadow-[0_4px_15px_rgba(0,0,0,0.25)] z-[1000] cursor-pointer border-none transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-[0_6px_15px_rgba(0,0,0,0.25)] animate-whatsapp-pulse"
+      className="whatsapp-floating-button hidden lg:flex fixed bottom-[30px] left-[30px] w-[75px] h-[75px] bg-[#25D366] rounded-full items-center justify-center shadow-[0_4px_15px_rgba(0,0,0,0.25)] z-[1000] cursor-pointer border-none transition-transform duration-300 ease-in-out hover:scale-110"
     >
       <svg viewBox="0 0 48 48" className="w-12 h-12">
         <path fill="#fff" d="M4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98c-0.001,0,0,0,0,0h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303z"/>
