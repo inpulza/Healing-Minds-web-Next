@@ -22,6 +22,9 @@ const MobileToolbar = lazy(() => import('@/components/MobileToolbar'));
 // Floating Video Bubble - Lazy loaded for performance optimization
 const FloatingVideoBubble = lazy(() => import('@/components/FloatingVideoBubble'));
 
+// WhatsApp Floating Button - Desktop only, lazy loaded
+const WhatsAppFloatingButton = lazy(() => import('@/components/WhatsAppFloatingButton'));
+
 // All non-critical pages lazy loaded for performance optimization
 const About = lazy(() => import('@/pages/About'));
 const Services = lazy(() => import('@/pages/Services'));
@@ -244,6 +247,9 @@ function App() {
             </Suspense>
             <Suspense fallback={null}>
               <FloatingVideoBubble />
+            </Suspense>
+            <Suspense fallback={null}>
+              <WhatsAppFloatingButton />
             </Suspense>
           </LanguageProvider>
         </CookieConsentProvider>
