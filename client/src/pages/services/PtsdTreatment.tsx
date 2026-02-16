@@ -562,7 +562,7 @@ const PtsdTreatment = () => {
               <div>
                 <div className="space-y-6">
                   {(language === 'en' ? [
-                    'Board-certified psychiatrist with specialized trauma training',
+                    'Experienced psychiatrist with specialized trauma training',
                     'Bilingual services in English and Spanish',
                     'Trauma-informed care approach',
                     'Collaborative treatment with specialized therapists',

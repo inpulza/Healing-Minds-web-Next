@@ -50,7 +50,7 @@ const TelepsychiatryFlorida = () => {
         ? 'Telepsychiatry Florida | Online Psychiatrist (Bilingual) | Healing Minds'
         : 'Telepsiquiatría Florida | Psiquiatra Online (Bilingüe) | Healing Minds',
       description: language === 'en'
-        ? 'Access a board-certified psychiatrist from anywhere in Florida. Dr. Melva Reve offers expert telepsychiatry for anxiety, depression & ADHD. Secure & confidential. Book online.'
+        ? 'Access an expert psychiatrist from anywhere in Florida. Dr. Melva Reve offers expert telepsychiatry for anxiety, depression & ADHD. Secure & confidential. Book online.'
         : 'Acceda a una psiquiatra certificada desde cualquier lugar de Florida. La Dra. Melva Reve ofrece telepsiquiatría experta para ansiedad, depresión y TDAH. Segura y confidencial. Reserve en línea.',
       keywords: language === 'en'
         ? 'telepsychiatry Florida, online psychiatrist Florida, telehealth psychiatry FL, virtual psychiatrist Florida, telepsiquiatria Florida'
@@ -89,7 +89,7 @@ const TelepsychiatryFlorida = () => {
         items: [
           {
             title: "Access from Anywhere in Florida",
-            description: "Whether you're in Miami, Orlando, Tampa, or a rural community, connect with a board-certified psychiatrist without the need to travel."
+            description: "Whether you're in Miami, Orlando, Tampa, or a rural community, connect with an expert psychiatrist without the need to travel."
           },
           {
             title: "Convenient & Time-Saving",
@@ -348,8 +348,8 @@ const TelepsychiatryFlorida = () => {
                     es: '15+ Años de Experiencia'
                   },
                   {
-                    en: 'Board-Certified Psychiatrist',
-                    es: 'Psiquiatra Certificada'
+                    en: 'Expert Psychiatrist',
+                    es: 'Psiquiatra Experta'
                   },
                   {
                     en: 'Bilingual Services',

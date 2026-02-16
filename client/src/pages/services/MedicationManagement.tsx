@@ -510,7 +510,7 @@ const MedicationManagement = () => {
               <div>
                 <div className="space-y-6">
                   {(language === 'en' ? [
-                    'Board-certified psychiatrist with medication expertise',
+                    'Experienced psychiatrist with medication expertise',
                     'Comprehensive medication monitoring and adjustments',
                     'Bilingual services in English and Spanish',
                     'Insurance coverage assistance',

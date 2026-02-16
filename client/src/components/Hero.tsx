@@ -59,7 +59,7 @@ const Hero = React.memo(() => {
         <div className="block md:hidden">
           {/* Mobile SEO Pills - Above photo container */}
           <div className="flex flex-wrap justify-center gap-2 mb-4 px-4">
-            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Board Certified</span>
+            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Expert Psychiatrist</span>
             <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Naples FL</span>
           </div>
 
@@ -68,7 +68,7 @@ const Hero = React.memo(() => {
             {/* Mobile Background Image */}
             <img 
               src={mobileHeroImage}
-              alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in Naples, FL"
+              alt="Dr. Melva Reve, MD - Psychiatrist providing compassionate mental health care in Naples, FL"
               className="absolute inset-0 w-full h-full object-cover"
               style={{ objectPosition: '95% top' }}
               width={768}
@@ -134,7 +134,7 @@ const Hero = React.memo(() => {
             {/* Background Image */}
             <img 
               src={heroImage}
-              alt="Dr. Melva Reve, MD - Board-certified psychiatrist providing compassionate mental health care in her modern Naples office"
+              alt="Dr. Melva Reve, MD - Psychiatrist providing compassionate mental health care in her modern Naples office"
               className="absolute inset-0 w-full h-full object-cover object-top hero-image"
               width={1200}
               height={800}
@@ -155,7 +155,7 @@ const Hero = React.memo(() => {
                     <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <Brain className="w-3 h-3 text-green-600" />
                     </div>
-                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">Board Certified Psychiatrist</span>
+                    <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">Expert Psychiatrist</span>
                   </div>
                   <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
                     <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">

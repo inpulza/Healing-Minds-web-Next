@@ -62,7 +62,7 @@ const EmergencyPolicy = () => {
                     Healing Minds Psychiatry is an outpatient psychiatric care clinic that operates <strong>by appointment only</strong>. We are not equipped to handle emergencies or mental health crises. Our staff is not available outside of office hours for crisis situations.
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
-                    <strong>Office Hours:</strong> Monday through Friday, 9:00 AM to 5:00 PM. We are closed on weekends and holidays.
+                    <strong>Office Hours:</strong> Monday through Friday, 8:00 AM to 5:00 PM. We are closed on weekends and holidays.
                   </p>
                 </div>
 
@@ -173,7 +173,7 @@ const EmergencyPolicy = () => {
                     Healing Minds Psychiatry es una clínica de atención psiquiátrica ambulatoria que opera <strong>únicamente con citas programadas</strong>. No estamos equipados para manejar emergencias o crisis de salud mental. Nuestro personal no está disponible fuera del horario de oficina para situaciones de crisis.
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
-                    <strong>Horario de Oficina:</strong> Lunes a viernes, 9:00 AM a 5:00 PM. Estamos cerrados los fines de semana y días festivos.
+                    <strong>Horario de Oficina:</strong> Lunes a viernes, 8:00 AM a 5:00 PM. Estamos cerrados los fines de semana y días festivos.
                   </p>
                 </div>
 

@@ -666,7 +666,7 @@ const BipolarTreatment = () => {
               <div>
                 <div className="space-y-6">
                   {(language === 'en' ? [
-                    'Board-certified psychiatrist with mood disorder expertise',
+                    'Experienced psychiatrist with mood disorder expertise',
                     'Bilingual services in English and Spanish',
                     'Evidence-based medication management',
                     'Collaborative approach with therapists and support teams',

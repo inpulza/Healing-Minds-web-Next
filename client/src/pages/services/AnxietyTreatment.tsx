@@ -305,7 +305,7 @@ const AnxietyTreatment = () => {
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Board-Certified Expertise' : 'Experiencia Certificada'}
+                        {language === 'en' ? 'Professional Expertise' : 'Experiencia Profesional'}
                       </h3>
                       <p className="text-gray-600 font-body leading-relaxed">
                         {language === 'en'

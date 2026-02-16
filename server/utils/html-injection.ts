@@ -124,7 +124,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         metaTags: [
           {
             name: 'description',
-            content: 'Dr. Melva Reve - Board certified psychiatrist in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD. Bilingual care in English & Spanish. Call (239) 423-0272.'
+            content: 'Dr. Melva Reve - Expert psychiatrist in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD. Bilingual care in English & Spanish. Call (239) 423-0272.'
           },
           {
             property: 'og:title',
@@ -132,7 +132,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           },
           {
             property: 'og:description',
-            content: 'Board certified psychiatrist in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD. Bilingual care available.'
+            content: 'Expert psychiatrist in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD. Bilingual care available.'
           },
           {
             property: 'og:url',
@@ -164,7 +164,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         metaTags: [
           {
             name: 'description',
-            content: 'Meet Dr. Melva Reve, board-certified psychiatrist in Naples, FL. University of Miami trained, fluent in English & Spanish. Expert in anxiety, depression, ADHD treatment.'
+            content: 'Meet Dr. Melva Reve, expert psychiatrist in Naples, FL. University of Miami trained, fluent in English & Spanish. Expert in anxiety, depression, ADHD treatment.'
           },
           {
             property: 'og:title',
@@ -1790,7 +1790,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "width": "800",
       "height": "800"
     },
-    "description": "Healing Minds Psychiatry, led by board-certified psychiatrist Dr. Melva Reve, provides compassionate mental health care in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD, and bipolar disorder. Bilingual services in English and Spanish. Telepsychiatry available throughout Florida.",
+    "description": "Healing Minds Psychiatry, led by Dr. Melva Reve, provides compassionate mental health care in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD, and bipolar disorder. Bilingual services in English and Spanish. Telepsychiatry available throughout Florida.",
     "slogan": "Compassionate Mental Health Care in Naples, FL",
     "address": {
       "@type": "PostalAddress",
@@ -1811,7 +1811,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
       {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        "opens": "09:00",
+        "opens": "08:00",
         "closes": "17:00"
       }
     ],
@@ -1956,8 +1956,8 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "additionalName": "Reve",
       "familyName": "Urgelles",
       "gender": "Female",
-      "jobTitle": "Board Certified Psychiatrist",
-      "description": "Board-certified psychiatrist specializing in anxiety, depression, ADHD, and PTSD treatment. Bilingual in English and Spanish.",
+      "jobTitle": "Psychiatrist",
+      "description": "Psychiatrist specializing in anxiety, depression, ADHD, and PTSD treatment. Bilingual in English and Spanish.",
       "image": `${baseUrl}/doctor-profile-v2.webp`,
       "telephone": "+1-239-423-0272",
       "email": "info@healingmindsp.com",

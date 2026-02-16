@@ -30,10 +30,10 @@ const Home = () => {
         ? 'Expert Psychiatric Care in Naples, FL - Anxiety, Depression, ADHD, Therapy | Dr. Melva Reve'
         : 'Atención Psiquiátrica Experta en Naples, FL - Ansiedad, Depresión, TDAH, Terapia | Dra. Melva Reve',
       description: language === 'en'
-        ? 'Board certified psychiatrist Dr. Melva Reve provides expert psychiatric care in Naples, FL. Specializing in anxiety, depression, ADHD, and therapy. Mental health services for Southwest Florida. Call (239) 423-0272.'
+        ? 'Dr. Melva Reve provides expert psychiatric care in Naples, FL. Specializing in anxiety, depression, ADHD, and therapy. Mental health services for Southwest Florida. Call (239) 423-0272.'
         : 'La psiquiatra certificada Dra. Melva Reve brinda atención psiquiátrica experta en Naples, FL. Especializada en ansiedad, depresión, TDAH y terapia. Servicios de salud mental para el suroeste de Florida. Llame (239) 423-0272.',
       keywords: language === 'en'
-        ? 'expert psychiatric care Naples FL, board certified psychiatrist Naples, anxiety treatment Naples FL, depression treatment Naples FL, ADHD therapy Naples, Naples mental health, Southwest Florida psychiatrist, Dr Melva Reve psychiatrist'
+        ? 'expert psychiatric care Naples FL, psychiatrist Naples, anxiety treatment Naples FL, depression treatment Naples FL, ADHD therapy Naples, Naples mental health, Southwest Florida psychiatrist, Dr Melva Reve psychiatrist'
         : 'atención psiquiátrica experta Naples FL, psiquiatra certificada Naples, tratamiento ansiedad Naples FL, tratamiento depresión Naples FL, terapia TDAH Naples, salud mental Naples, psiquiatra suroeste Florida, Dra Melva Reve psiquiatra',
       lang: language,
       canonical: language === 'en' ? '/' : '/es'

@@ -22,7 +22,7 @@ const About = () => {
               <div className="relative bg-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
                 <img
                   src={doctorProfileImage}
-                  alt="Dr. Melva Reve, MD - Professional headshot of board-certified psychiatrist specializing in anxiety, depression, and ADHD treatment in Naples"
+                  alt="Dr. Melva Reve, MD - Professional headshot of psychiatrist specializing in anxiety, depression, and ADHD treatment in Naples"
                   className="w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover object-top"
                   width={600}
                   height={600}
@@ -61,7 +61,7 @@ const About = () => {
                   {language === 'en' ? 'Bilingual' : 'Bilingüe'}
                 </span>
                 <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium border border-purple-200">
-                  {language === 'en' ? 'Board Certified' : 'Certificada'}
+                  {language === 'en' ? 'Licensed Psychiatrist' : 'Psiquiatra Licenciada'}
                 </span>
               </div>
 
@@ -273,12 +273,12 @@ const About = () => {
                   <div className="space-y-6">
                     <div>
                       <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Board Certification' : 'Certificación Médica'}
+                        {language === 'en' ? 'Professional Certification' : 'Certificación Profesional'}
                       </h4>
                       <p className="text-gray-700">
                         {language === 'en' 
-                          ? 'Board Certified in Adult Psychiatry'
-                          : 'Certificada en Psiquiatría de Adultos'
+                          ? 'Specializing in Adult Psychiatry'
+                          : 'Especializada en Psiquiatría de Adultos'
                         }
                       </p>
                     </div>

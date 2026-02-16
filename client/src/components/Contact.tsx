@@ -145,7 +145,7 @@ const Contact = () => {
       title: t('contact.phone'),
       value: '(239) 423-0272',
       link: 'tel:+12394230272',
-      subtext: language === 'en' ? 'Monday - Friday: 9:00 AM - 5:00 PM' : 'Lunes - Viernes: 9:00 AM - 5:00 PM'
+      subtext: language === 'en' ? 'Monday - Friday: 8:00 AM - 5:00 PM' : 'Lunes - Viernes: 8:00 AM - 5:00 PM'
     },
     {
       icon: Mail,

@@ -418,7 +418,7 @@ const AdhdTreatment = () => {
                 <div>
                   <p className="text-lg text-gray-600 mb-8 font-body leading-relaxed">
                     {language === 'en'
-                      ? 'Many adults discover they have ADHD later in life. Dr. Melva Reve, M.D., a board-certified psychiatrist, provides comprehensive evaluation and treatment specifically designed for adults 18+ with ADHD. She sees you not just as a set of symptoms, but as a complete person with unique goals and challenges.'
+                      ? 'Many adults discover they have ADHD later in life. Dr. Melva Reve, M.D., provides comprehensive evaluation and treatment specifically designed for adults 18+ with ADHD. She sees you not just as a set of symptoms, but as a complete person with unique goals and challenges.'
                       : 'Muchos adultos descubren que tienen TDAH más tarde en la vida. La Dra. Melva Reve, M.D., una psiquiatra certificada, brinda evaluación integral y tratamiento específicamente diseñado para adultos de 18+ con TDAH. Ella no solo te ve como un conjunto de síntomas, sino como una persona completa con metas y desafíos únicos.'
                     }
                   </p>

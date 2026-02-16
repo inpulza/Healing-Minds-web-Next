@@ -14,7 +14,7 @@ export const practiceInfo = {
     zip: "34103",
     full: "4760 Tamiami Trl N # 25, Naples, FL 34103",
   },
-  hours: "Monday - Friday: 9:00 AM - 5:00 PM",
+  hours: "Monday - Friday: 8:00 AM - 5:00 PM",
   googleMapsUrl:
     "https://www.google.com/maps/dir/?api=1&destination=Healing+Minds+Psychiatry,4760+Tamiami+Trl+N+%23+25,Naples,FL+34103",
   emergencyNumbers: [

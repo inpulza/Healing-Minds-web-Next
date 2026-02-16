@@ -24,7 +24,7 @@ const DepressionTreatment = () => {
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
-        ? 'Depression Treatment Naples FL - Board-Certified Psychiatrist | Dr. Melva Reve'
+        ? 'Depression Treatment Naples FL - Expert Psychiatrist | Dr. Melva Reve'
         : 'Tratamiento para la Depresión Naples FL - Psiquiatra Certificada | Dra. Melva Reve',
       description: language === 'en'
         ? 'Expert depression treatment in Naples, FL. Dr. Melva Reve provides compassionate psychiatric care for major depression, postpartum depression, seasonal depression. Bilingual services available.'
