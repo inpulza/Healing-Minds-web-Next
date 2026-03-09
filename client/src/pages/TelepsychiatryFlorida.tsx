@@ -700,6 +700,50 @@ const TelepsychiatryFlorida = () => {
           }
         />
 
+        {/* Compliance & Credentials Section */}
+        <section className="py-10 bg-gray-50 border-t border-gray-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+              <div className="flex items-start gap-3 mb-4">
+                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-body font-semibold text-gray-800 text-sm mb-1">
+                    {language === 'en' ? 'Licensed & Board-Certified Psychiatrist' : 'Psiquiatra Certificada y con Licencia'}
+                  </h3>
+                  <p className="text-xs text-gray-600 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'Dr. Melva Reve is a board-certified psychiatrist licensed in the State of Florida (License ME165518). All virtual appointments are clinical consultations and psychiatric evaluations conducted by a licensed medical professional. Treatment plans are determined individually after a comprehensive clinical evaluation. This is not an online pharmacy service.'
+                      : 'La Dra. Melva Reve es una psiquiatra certificada con licencia en el Estado de Florida (Licencia ME165518). Todas las citas virtuales son consultas clínicas y evaluaciones psiquiátricas realizadas por una profesional médica con licencia. Los planes de tratamiento se determinan individualmente después de una evaluación clínica integral. Este no es un servicio de farmacia en línea.'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 mb-4">
+                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-body font-semibold text-gray-800 text-sm mb-1">
+                    {language === 'en' ? 'HIPAA-Compliant & Confidential' : 'Compatible con HIPAA y Confidencial'}
+                  </h3>
+                  <p className="text-xs text-gray-600 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'All sessions are conducted through a secure, HIPAA-compliant video platform. Your health information is fully protected under federal privacy regulations.'
+                      : 'Todas las sesiones se realizan a través de una plataforma de video segura y compatible con HIPAA. Su información de salud está completamente protegida bajo las regulaciones federales de privacidad.'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs text-gray-500 font-body leading-relaxed">
+                    {language === 'en'
+                      ? 'This service is not intended for medical emergencies. If you are experiencing a mental health crisis, please call 988 (Suicide & Crisis Lifeline) or 911.'
+                      : 'Este servicio no está destinado a emergencias médicas. Si está experimentando una crisis de salud mental, llame al 988 (Línea de Crisis) o al 911.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Final CTA Section */}
         <section className="py-16 sm:py-20 lg:py-24 bg-green-50">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
