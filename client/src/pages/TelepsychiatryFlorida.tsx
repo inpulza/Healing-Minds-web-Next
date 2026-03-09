@@ -219,7 +219,7 @@ const TelepsychiatryFlorida = () => {
           {
             number: "4",
             title: "Atención Continua",
-            description: "Reciba recetas electrónicamente y programe seguimientos según sea necesario, todo desde la comodidad de su hogar."
+            description: "Reciba órdenes de medicamentos electrónicamente y programe seguimientos según sea necesario, todo desde la comodidad de su hogar."
           }
         ]
       },

@@ -119,7 +119,7 @@ const AdhdTreatment = () => {
     },
     {
       title: 'Medication Management',
-      description: 'Careful selection and monitoring of ADHD medications including stimulants and non-stimulants, tailored to individual needs.'
+      description: 'Careful selection and monitoring of ADHD medications across all approved treatment classes, tailored to individual needs.'
     },
     {
       title: 'Behavioral Strategies',
@@ -144,7 +144,7 @@ const AdhdTreatment = () => {
     },
     {
       title: 'Manejo de Medicamentos',
-      description: 'Selección cuidadosa y monitoreo de medicamentos para TDAH incluyendo estimulantes y no estimulantes, adaptados a necesidades individuales.'
+      description: 'Selección cuidadosa y monitoreo de medicamentos para TDAH en todas las clases de tratamiento aprobadas, adaptados a necesidades individuales.'
     },
     {
       title: 'Estrategias Conductuales',
@@ -350,8 +350,8 @@ const AdhdTreatment = () => {
                   step: 3,
                   title: language === 'en' ? 'Effective Medication Management' : 'Manejo Efectivo de Medicamentos',
                   description: language === 'en'
-                    ? 'When medication is appropriate, Dr. Reve works with you to find the optimal type and dose, whether stimulants or non-stimulants. We provide careful monitoring to maximize benefits and minimize side effects, adjusting the plan as needed.'
-                    : 'Cuando la medicación es apropiada, la Dra. Reve trabaja contigo para encontrar el tipo y la dosis óptima, ya sean estimulantes o no estimulantes. Realizamos un seguimiento cuidadoso para maximizar los beneficios y minimizar los efectos secundarios, ajustando el plan según sea necesario.'
+                    ? 'When medication is appropriate, Dr. Reve works with you to find the optimal type and dose across all approved ADHD treatment options. We provide careful monitoring to maximize benefits and minimize side effects, adjusting the plan as needed.'
+                    : 'Cuando la medicación es apropiada, la Dra. Reve trabaja contigo para encontrar el tipo y la dosis óptima entre todas las opciones de tratamiento aprobadas para el TDAH. Realizamos un seguimiento cuidadoso para maximizar los beneficios y minimizar los efectos secundarios, ajustando el plan según sea necesario.'
                 },
                 {
                   step: 4,

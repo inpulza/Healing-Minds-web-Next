@@ -308,7 +308,7 @@ const MedicationManagement = () => {
                     <div className="w-full h-48 rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                       <img 
                         src={medicationCapsules} 
-                        alt="Medication capsules on green background representing pharmaceutical care"
+                        alt="Medication capsules on green background representing psychiatric care"
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
@@ -453,7 +453,7 @@ const MedicationManagement = () => {
                   <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <img 
                       src={medicationCapsules} 
-                      alt="Medication capsules on green background representing pharmaceutical care"
+                      alt="Medication capsules on green background representing psychiatric care"
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />

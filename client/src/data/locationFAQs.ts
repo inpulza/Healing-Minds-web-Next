@@ -171,7 +171,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo funciona el manejo de medicamentos por telemedicina?",
-        answer: "Después de su evaluación inicial (que también puede ser virtual), las citas de seguimiento para el manejo de medicamentos se realizan por videollamada segura. Si se necesita una receta, se envía electrónicamente a su farmacia preferida en Marco Island."
+        answer: "Después de su evaluación inicial (que también puede ser virtual), las citas de seguimiento para el manejo de medicamentos se realizan por videollamada segura. Las órdenes de medicamentos se envían electrónicamente a su farmacia preferida en Marco Island."
       },
       {
         question: "¿Tratan el TEPT (PTSD) en su clínica?",
@@ -345,7 +345,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo funciona el manejo de medicamentos para pacientes de Golden Gate?",
-        answer: "Ofrecemos citas de manejo de medicamentos tanto en persona como virtuales. El monitoreo regular asegura un tratamiento óptimo mientras minimiza los efectos secundarios, con recetas enviadas a su farmacia preferida en el área de Golden Gate."
+        answer: "Ofrecemos citas de manejo de medicamentos tanto en persona como virtuales. El monitoreo regular asegura un tratamiento óptimo mientras minimiza los efectos secundarios, con órdenes de medicamentos enviadas a su farmacia preferida en el área de Golden Gate."
       },
       {
         question: "¿Tratan TEPT y trauma para residentes de Golden Gate?",
@@ -527,7 +527,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo funciona el manejo de medicamentos para pacientes de Fort Myers?",
-        answer: "Proporcionamos manejo continuo de medicamentos con citas regulares de seguimiento (en persona o virtuales). Las recetas pueden enviarse directamente a su farmacia preferida en el área de Fort Myers, haciendo el proceso sin problemas."
+        answer: "Proporcionamos manejo continuo de medicamentos con citas regulares de seguimiento (en persona o virtuales). Las órdenes de medicamentos pueden enviarse directamente a su farmacia preferida en el área de Fort Myers, haciendo el proceso sin problemas."
       }
     ]
   },
@@ -850,8 +850,8 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
         answer: "¡Sí! La investigación muestra que la telepsiquiatría es igualmente efectiva para la mayoría de las condiciones psiquiátricas incluyendo ansiedad, depresión, TDAH, TEPT y trastorno bipolar. La Dra. Reve puede evaluar síntomas, ajustar medicamentos y proporcionar atención integral virtualmente."
       },
       {
-        question: "¿Puede la Dra. Reve recetar medicamentos a través de telesalud?",
-        answer: "Absolutamente. La Dra. Reve puede recetar y manejar medicamentos psiquiátricos durante citas virtuales. Las recetas se envían electrónicamente a la farmacia de su elección, haciéndolo conveniente y eficiente."
+        question: "¿Puede la Dra. Reve manejar medicamentos a través de telesalud?",
+        answer: "Absolutamente. La Dra. Reve puede ordenar y manejar medicamentos psiquiátricos durante citas virtuales. Las órdenes de medicamentos se envían electrónicamente a la farmacia de su elección, haciéndolo conveniente y eficiente."
       },
       {
         question: "¿Qué áreas de Florida atiende la Dra. Reve a través de telesalud?",
