@@ -101,7 +101,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "Is telepsychiatry the best option for Marco Island patients?",
-        answer: "It's our most popular option for Marco Island residents! Our secure, HIPAA-compliant Telehealth system eliminates the need to drive (and cross the Jolley bridge), allowing you to receive expert psychiatric care and medication management from your home."
+        answer: "It's our most popular option for Marco Island residents! Our secure, HIPAA-compliant Telehealth system eliminates the need to drive (and cross the Jolley bridge), allowing you to receive expert psychiatric care and ongoing treatment support from your home."
       },
       {
         question: "How do I get to your Naples office from Marco Island?",
@@ -143,7 +143,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Es la telepsiquiatría la mejor opción para los pacientes de Marco Island?",
-        answer: "¡Es nuestra opción más popular para residentes de Marco Island! Nuestro sistema de Telehealth, seguro y compatible con HIPAA, elimina la necesidad de conducir (y cruzar el puente Jolley), permitiéndole recibir atención psiquiátrica experta y manejo de medicamentos desde su hogar."
+        answer: "¡Es nuestra opción más popular para residentes de Marco Island! Nuestro sistema de Telehealth, seguro y compatible con HIPAA, elimina la necesidad de conducir (y cruzar el puente Jolley), permitiéndole recibir atención psiquiátrica experta y apoyo continuo de tratamiento desde su hogar."
       },
       {
         question: "¿Cómo llego a su oficina de Naples desde Marco Island?",
@@ -797,7 +797,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "What is telepsychiatry and how does it work?",
-        answer: "Telepsychiatry is psychiatric care delivered through secure video sessions. You meet with Dr. Reve virtually from your home or private space using a HIPAA-compliant platform. It's just as effective as in-person visits for medication management, evaluations, and therapy."
+        answer: "Telepsychiatry is psychiatric care delivered through secure video sessions. You meet with Dr. Reve virtually from your home or private space using a HIPAA-compliant platform. It's just as effective as in-person visits for psychiatric evaluations, therapy, and ongoing treatment."
       },
       {
         question: "Do I need any special equipment for telehealth sessions?",
@@ -805,11 +805,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Is telepsychiatry as effective as in-person appointments?",
-        answer: "Yes! Research shows telepsychiatry is equally effective for most psychiatric conditions including anxiety, depression, ADHD, PTSD, and bipolar disorder. Dr. Reve can assess symptoms, adjust medications, and provide comprehensive care virtually."
+        answer: "Yes! Research shows telepsychiatry is equally effective for most psychiatric conditions including anxiety, depression, ADHD, PTSD, and bipolar disorder. Dr. Reve can assess symptoms and provide comprehensive psychiatric care virtually."
       },
       {
-        question: "Can Dr. Reve manage medications through telehealth?",
-        answer: "Absolutely. Dr. Reve can order and manage psychiatric medications during virtual appointments. Medication orders are sent electronically to your pharmacy of choice, making it convenient and efficient."
+        question: "What types of psychiatric conditions can be treated via telehealth?",
+        answer: "Dr. Reve treats a wide range of conditions virtually, including anxiety, depression, ADHD, PTSD, bipolar disorder, and other mental health concerns. Virtual sessions offer the same comprehensive evaluation and ongoing psychiatric support as in-person visits."
       },
       {
         question: "What areas of Florida does Dr. Reve serve through telehealth?",
@@ -839,7 +839,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Qué es la telepsiquiatría y cómo funciona?",
-        answer: "La telepsiquiatría es atención psiquiátrica brindada a través de sesiones de video seguras. Se reúne con la Dra. Reve virtualmente desde su hogar o espacio privado usando una plataforma compatible con HIPAA. Es tan efectiva como las visitas en persona para manejo de medicamentos, evaluaciones y terapia."
+        answer: "La telepsiquiatría es atención psiquiátrica brindada a través de sesiones de video seguras. Se reúne con la Dra. Reve virtualmente desde su hogar o espacio privado usando una plataforma compatible con HIPAA. Es tan efectiva como las visitas en persona para evaluaciones psiquiátricas, terapia y tratamiento continuo."
       },
       {
         question: "¿Necesito algún equipo especial para las sesiones de telesalud?",
@@ -847,11 +847,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Es la telepsiquiatría tan efectiva como las citas en persona?",
-        answer: "¡Sí! La investigación muestra que la telepsiquiatría es igualmente efectiva para la mayoría de las condiciones psiquiátricas incluyendo ansiedad, depresión, TDAH, TEPT y trastorno bipolar. La Dra. Reve puede evaluar síntomas, ajustar medicamentos y proporcionar atención integral virtualmente."
+        answer: "¡Sí! La investigación muestra que la telepsiquiatría es igualmente efectiva para la mayoría de las condiciones psiquiátricas incluyendo ansiedad, depresión, TDAH, TEPT y trastorno bipolar. La Dra. Reve puede evaluar síntomas y proporcionar atención psiquiátrica integral virtualmente."
       },
       {
-        question: "¿Puede la Dra. Reve manejar medicamentos a través de telesalud?",
-        answer: "Absolutamente. La Dra. Reve puede ordenar y manejar medicamentos psiquiátricos durante citas virtuales. Las órdenes de medicamentos se envían electrónicamente a la farmacia de su elección, haciéndolo conveniente y eficiente."
+        question: "¿Qué tipos de condiciones psiquiátricas se pueden tratar por telesalud?",
+        answer: "La Dra. Reve trata una amplia gama de condiciones virtualmente, incluyendo ansiedad, depresión, TDAH, TEPT, trastorno bipolar y otras afecciones de salud mental. Las sesiones virtuales ofrecen la misma evaluación integral y apoyo psiquiátrico continuo que las visitas en persona."
       },
       {
         question: "¿Qué áreas de Florida atiende la Dra. Reve a través de telesalud?",

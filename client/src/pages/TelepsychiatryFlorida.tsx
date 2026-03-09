@@ -131,13 +131,13 @@ const TelepsychiatryFlorida = () => {
           {
             number: "4",
             title: "Ongoing Care",
-            description: "Receive medication orders electronically and schedule follow-ups as needed, all from the comfort of home."
+            description: "Schedule follow-up appointments as needed and receive continuous psychiatric support, all from the comfort of home."
           }
         ]
       },
       services: {
         title: "Complete Psychiatry Services via Telemedicine",
-        description: "Our virtual platform allows us to offer our full range of diagnostic and medication management services for adults (18+).",
+        description: "Our virtual platform allows us to offer our full range of diagnostic and psychiatric services for adults (18+).",
         list: [
           {
             title: "Initial Psychiatric Evaluation",
@@ -145,23 +145,23 @@ const TelepsychiatryFlorida = () => {
           },
           {
             title: "Anxiety & Depression Treatment",
-            description: "Expert medication management and ongoing support for anxiety disorders and depression."
+            description: "Expert psychiatric evaluation and ongoing support for anxiety disorders and depression."
           },
           {
             title: "ADHD Evaluation & Management",
-            description: "Thorough ADHD assessment and medication management for adults seeking focus and productivity."
+            description: "Thorough ADHD assessment and personalized psychiatric care for adults seeking focus and productivity."
           },
           {
             title: "PTSD & Trauma Therapy",
-            description: "Trauma-informed care and medication support for post-traumatic stress disorder."
+            description: "Trauma-informed psychiatric care and coordinated support for post-traumatic stress disorder."
           },
           {
             title: "Bipolar Disorder Treatment",
             description: "Specialized mood stabilization and comprehensive bipolar disorder management."
           },
           {
-            title: "Medication Management & Renewals",
-            description: "Ongoing medication management with electronic medication orders sent directly to your pharmacy."
+            title: "Ongoing Psychiatric Care",
+            description: "Regular follow-up appointments and continuous psychiatric support to optimize your treatment plan."
           }
         ]
       }
@@ -219,13 +219,13 @@ const TelepsychiatryFlorida = () => {
           {
             number: "4",
             title: "Atención Continua",
-            description: "Reciba órdenes de medicamentos electrónicamente y programe seguimientos según sea necesario, todo desde la comodidad de su hogar."
+            description: "Programe citas de seguimiento según sea necesario y reciba apoyo psiquiátrico continuo, todo desde la comodidad de su hogar."
           }
         ]
       },
       services: {
         title: "Servicios Completos de Psiquiatría a través de Telemedicina",
-        description: "Nuestra plataforma virtual nos permite ofrecer nuestra gama completa de servicios de diagnóstico y manejo de medicamentos para adultos (18+).",
+        description: "Nuestra plataforma virtual nos permite ofrecer nuestra gama completa de servicios de diagnóstico y atención psiquiátrica para adultos (18+).",
         list: [
           {
             title: "Evaluación Psiquiátrica Inicial",
@@ -233,23 +233,23 @@ const TelepsychiatryFlorida = () => {
           },
           {
             title: "Tratamiento de Ansiedad y Depresión",
-            description: "Manejo experto de medicamentos y apoyo continuo para trastornos de ansiedad y depresión."
+            description: "Evaluación psiquiátrica experta y apoyo continuo para trastornos de ansiedad y depresión."
           },
           {
             title: "Evaluación y Manejo de TDAH",
-            description: "Evaluación exhaustiva de TDAH y manejo de medicación para adultos que buscan enfoque y productividad."
+            description: "Evaluación exhaustiva de TDAH y atención psiquiátrica personalizada para adultos que buscan enfoque y productividad."
           },
           {
             title: "Terapia de TEPT y Trauma",
-            description: "Atención informada en trauma y apoyo con medicamentos para trastorno de estrés postraumático."
+            description: "Atención psiquiátrica informada en trauma y apoyo coordinado para trastorno de estrés postraumático."
           },
           {
             title: "Tratamiento de Trastorno Bipolar",
             description: "Estabilización del estado de ánimo especializada y manejo integral del trastorno bipolar."
           },
           {
-            title: "Manejo y Renovación de Medicamentos",
-            description: "Manejo continuo de medicamentos con órdenes electrónicas enviadas directamente a su farmacia."
+            title: "Atención Psiquiátrica Continua",
+            description: "Citas de seguimiento regulares y apoyo psiquiátrico continuo para optimizar su plan de tratamiento."
           }
         ]
       }
@@ -583,7 +583,7 @@ const TelepsychiatryFlorida = () => {
                         "ADHD evaluation and management via telepsychiatry - online focus and attention disorder treatment",
                         "PTSD and trauma therapy through telehealth - secure online psychiatric treatment in Florida",
                         "Bipolar disorder treatment via telepsychiatry - mood stabilization through virtual psychiatric care",
-                        "Medication management through telehealth - online treatment monitoring in Florida"
+                        "Ongoing psychiatric care through telehealth - continuous mental health support in Florida"
                       ];
                       return (
                         <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
@@ -647,7 +647,7 @@ const TelepsychiatryFlorida = () => {
                     "ADHD evaluation and management via telepsychiatry - online focus and attention disorder treatment",
                     "PTSD and trauma therapy through telehealth - secure online psychiatric treatment in Florida",
                     "Bipolar disorder treatment via telepsychiatry - mood stabilization through virtual psychiatric care",
-                    "Medication management through telehealth - online treatment monitoring in Florida"
+                    "Ongoing psychiatric care through telehealth - continuous mental health support in Florida"
                   ];
                   return (
                     <div key={index} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`service-${index}`}>
