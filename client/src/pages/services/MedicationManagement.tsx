@@ -61,7 +61,7 @@ const MedicationManagement = () => {
     'Medication interactions review',
     'Dosage optimization',
     'Insurance accepted',
-    'Evidence-based prescribing'
+    'Evidence-based pharmacotherapy'
   ] : [
     'Evaluación y monitoreo experto',
     'Planes de medicación personalizados',
@@ -70,7 +70,7 @@ const MedicationManagement = () => {
     'Revisión de interacciones medicamentosas',
     'Optimización de dosis',
     'Se acepta seguro',
-    'Prescripción basada en evidencia'
+    'Farmacoterapia basada en evidencia'
   ];
 
   const candidatesCriteria = language === 'en' ? [
@@ -218,8 +218,8 @@ const MedicationManagement = () => {
             },
             items: [
               {
-                en: 'Evidence-based prescribing practices',
-                es: 'Prácticas de prescripción basadas en evidencia'
+                en: 'Evidence-based pharmacotherapy practices',
+                es: 'Prácticas de farmacoterapia basadas en evidencia'
               },
               {
                 en: 'Comprehensive safety monitoring',

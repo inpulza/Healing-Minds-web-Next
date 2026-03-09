@@ -176,7 +176,7 @@ const BipolarTreatment = () => {
     },
     {
       title: 'Mood Stabilizer Management',
-      description: 'Expert prescribing and monitoring of mood stabilizers like lithium, anticonvulsants, and atypical antipsychotics.'
+      description: 'Expert ordering and monitoring of mood stabilizers like lithium, anticonvulsants, and atypical antipsychotics.'
     },
     {
       title: 'Episode Prevention Planning',
@@ -201,7 +201,7 @@ const BipolarTreatment = () => {
     },
     {
       title: 'Manejo de Estabilizadores del Ánimo',
-      description: 'Prescripción experta y monitoreo de estabilizadores del ánimo como litio, anticonvulsivos y antipsicóticos atípicos.'
+      description: 'Manejo experto y monitoreo de estabilizadores del ánimo como litio, anticonvulsivos y antipsicóticos atípicos.'
     },
     {
       title: 'Planificación de Prevención de Episodios',

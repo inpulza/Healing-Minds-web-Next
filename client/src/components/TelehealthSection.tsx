@@ -134,8 +134,8 @@ const TelehealthSection = () => {
                   icon: Clock
                 },
                 {
-                  title: language === 'en' ? 'Prescription Management' : 'Manejo de Prescripciones', 
-                  description: language === 'en' ? 'Digital prescriptions sent directly' : 'Prescripciones digitales enviadas directamente',
+                  title: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos', 
+                  description: language === 'en' ? 'Medication orders sent directly' : 'Órdenes de medicamentos enviadas directamente',
                   icon: CheckCircle
                 },
                 {

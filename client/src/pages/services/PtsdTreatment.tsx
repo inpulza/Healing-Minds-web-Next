@@ -139,7 +139,7 @@ const PtsdTreatment = () => {
     },
     {
       title: 'Medication Management',
-      description: 'Careful prescribing of medications to manage PTSD symptoms, including antidepressants and anxiety medications.'
+      description: 'Careful selection and management of medications to address PTSD symptoms, including antidepressants and anxiety medications.'
     },
     {
       title: 'Evidence-Based Therapy Coordination',
@@ -164,7 +164,7 @@ const PtsdTreatment = () => {
     },
     {
       title: 'Manejo de Medicamentos',
-      description: 'Prescripción cuidadosa de medicamentos para manejar síntomas de TEPT, incluyendo antidepresivos y medicamentos para ansiedad.'
+      description: 'Selección y manejo cuidadoso de medicamentos para abordar síntomas de TEPT, incluyendo antidepresivos y medicamentos para ansiedad.'
     },
     {
       title: 'Coordinación de Terapia Basada en Evidencia',

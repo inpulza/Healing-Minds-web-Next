@@ -21,8 +21,8 @@ const FAQ = () => {
         ? 'What is the difference between a psychiatrist and a psychologist?'
         : '¿Cuál es la diferencia entre un psiquiatra y un psicólogo?',
       answer: language === 'en'
-        ? 'A psychiatrist is a medical doctor who can prescribe medications and provide medical treatment for mental health conditions. A psychologist focuses on therapy and counseling but cannot prescribe medications. As a psychiatrist, Dr. Reve can provide both therapy and medication management.'
-        : 'Un psiquiatra es un médico que puede recetar medicamentos y proporcionar tratamiento médico para condiciones de salud mental. Un psicólogo se enfoca en terapia y consejería pero no puede recetar medicamentos. Como psiquiatra, la Dra. Reve puede proporcionar tanto terapia como manejo de medicamentos.'
+        ? 'A psychiatrist is a medical doctor who is authorized to order and manage medications for mental health conditions. A psychologist focuses on therapy and counseling but is not authorized to order medications. As a psychiatrist, Dr. Reve can provide both therapy and medication management.'
+        : 'Un psiquiatra es un médico autorizado para ordenar y manejar medicamentos para condiciones de salud mental. Un psicólogo se enfoca en terapia y consejería pero no está autorizado para ordenar medicamentos. Como psiquiatra, la Dra. Reve puede proporcionar tanto terapia como manejo de medicamentos.'
     },
     {
       question: language === 'en'

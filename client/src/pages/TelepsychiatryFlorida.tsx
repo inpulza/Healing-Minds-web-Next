@@ -131,7 +131,7 @@ const TelepsychiatryFlorida = () => {
           {
             number: "4",
             title: "Ongoing Care",
-            description: "Receive prescriptions electronically and schedule follow-ups as needed, all from the comfort of home."
+            description: "Receive medication orders electronically and schedule follow-ups as needed, all from the comfort of home."
           }
         ]
       },
@@ -161,7 +161,7 @@ const TelepsychiatryFlorida = () => {
           },
           {
             title: "Medication Management & Renewals",
-            description: "Ongoing prescription management with electronic prescriptions sent directly to your pharmacy."
+            description: "Ongoing medication management with electronic medication orders sent directly to your pharmacy."
           }
         ]
       }
@@ -249,7 +249,7 @@ const TelepsychiatryFlorida = () => {
           },
           {
             title: "Manejo y Renovación de Medicamentos",
-            description: "Manejo continuo de recetas con prescripciones electrónicas enviadas directamente a su farmacia."
+            description: "Manejo continuo de medicamentos con órdenes electrónicas enviadas directamente a su farmacia."
           }
         ]
       }
@@ -583,7 +583,7 @@ const TelepsychiatryFlorida = () => {
                         "ADHD evaluation and management via telepsychiatry - online focus and attention disorder treatment",
                         "PTSD and trauma therapy through telehealth - secure online psychiatric treatment in Florida",
                         "Bipolar disorder treatment via telepsychiatry - mood stabilization through virtual psychiatric care",
-                        "Medication management through telehealth - online prescription monitoring in Florida"
+                        "Medication management through telehealth - online treatment monitoring in Florida"
                       ];
                       return (
                         <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
@@ -647,7 +647,7 @@ const TelepsychiatryFlorida = () => {
                     "ADHD evaluation and management via telepsychiatry - online focus and attention disorder treatment",
                     "PTSD and trauma therapy through telehealth - secure online psychiatric treatment in Florida",
                     "Bipolar disorder treatment via telepsychiatry - mood stabilization through virtual psychiatric care",
-                    "Medication management through telehealth - online prescription monitoring in Florida"
+                    "Medication management through telehealth - online treatment monitoring in Florida"
                   ];
                   return (
                     <div key={index} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`service-${index}`}>

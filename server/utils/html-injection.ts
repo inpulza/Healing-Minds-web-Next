@@ -1717,7 +1717,7 @@ function getFAQPageSchema(baseUrl: string) {
         "name": "What is the difference between a psychiatrist and a psychologist?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "A psychiatrist is a medical doctor who can prescribe medications and provide medical treatment for mental health conditions. A psychologist focuses on therapy and counseling but cannot prescribe medications. As a psychiatrist, Dr. Reve can provide both therapy and medication management."
+          "text": "A psychiatrist is a medical doctor who is authorized to order and manage medications for mental health conditions. A psychologist focuses on therapy and counseling but is not authorized to order medications. As a psychiatrist, Dr. Reve can provide both therapy and medication management."
         }
       },
       {

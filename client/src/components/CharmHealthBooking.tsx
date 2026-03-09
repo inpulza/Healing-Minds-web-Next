@@ -38,7 +38,7 @@ const CharmHealthBooking = ({
       features: [
         "Real-time availability",
         "Secure video sessions", 
-        "Prescription management",
+        "Medication management",
         "24/7 scheduling access"
       ],
       button: "Schedule Now",
@@ -51,7 +51,7 @@ const CharmHealthBooking = ({
       features: [
         "Disponibilidad en tiempo real",
         "Sesiones de video seguras",
-        "Manejo de prescripciones", 
+        "Manejo de medicamentos", 
         "Acceso de programación 24/7"
       ],
       button: "Programar Ahora",

@@ -129,7 +129,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "How does medication management work through telemedicine?",
-        answer: "After your initial evaluation (which can also be virtual), follow-up appointments for medication management are conducted via secure video call. If a prescription is needed, it's sent electronically to your preferred pharmacy on Marco Island."
+        answer: "After your initial evaluation (which can also be virtual), follow-up appointments for medication management are conducted via secure video call. Medication orders are sent electronically to your preferred pharmacy on Marco Island."
       },
       {
         question: "Do you treat PTSD at your clinic?",
@@ -303,7 +303,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "How does medication management work for Golden Gate patients?",
-        answer: "We offer both in-person and virtual medication management appointments. Regular monitoring ensures optimal treatment while minimizing side effects, with prescriptions sent to your preferred Golden Gate area pharmacy."
+        answer: "We offer both in-person and virtual medication management appointments. Regular monitoring ensures optimal treatment while minimizing side effects, with medication orders sent to your preferred Golden Gate area pharmacy."
       },
       {
         question: "Do you treat PTSD and trauma for Golden Gate residents?",
@@ -485,7 +485,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "How does medication management work for Fort Myers patients?",
-        answer: "We provide ongoing medication management with regular follow-up appointments (in-person or virtual). Prescriptions can be sent directly to your preferred pharmacy in the Fort Myers area, making the process seamless."
+        answer: "We provide ongoing medication management with regular follow-up appointments (in-person or virtual). Medication orders can be sent directly to your preferred pharmacy in the Fort Myers area, making the process seamless."
       }
     ],
     es: [
@@ -808,8 +808,8 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
         answer: "Yes! Research shows telepsychiatry is equally effective for most psychiatric conditions including anxiety, depression, ADHD, PTSD, and bipolar disorder. Dr. Reve can assess symptoms, adjust medications, and provide comprehensive care virtually."
       },
       {
-        question: "Can Dr. Reve prescribe medications through telehealth?",
-        answer: "Absolutely. Dr. Reve can prescribe and manage psychiatric medications during virtual appointments. Prescriptions are sent electronically to your pharmacy of choice, making it convenient and efficient."
+        question: "Can Dr. Reve manage medications through telehealth?",
+        answer: "Absolutely. Dr. Reve can order and manage psychiatric medications during virtual appointments. Medication orders are sent electronically to your pharmacy of choice, making it convenient and efficient."
       },
       {
         question: "What areas of Florida does Dr. Reve serve through telehealth?",

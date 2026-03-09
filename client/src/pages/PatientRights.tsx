@@ -108,7 +108,7 @@ const PatientRights = () => {
                       <strong>Attend Appointments:</strong> Arrive on time for scheduled appointments or cancel with the required advance notice as outlined in our <a href="/cancellation-policy" className="text-green-600 hover:text-green-700 underline">Cancellation Policy</a>.
                     </li>
                     <li>
-                      <strong>Follow Treatment Plan:</strong> Comply with the agreed-upon treatment plan, including taking medications as prescribed and following recommended lifestyle modifications.
+                      <strong>Follow Treatment Plan:</strong> Comply with the agreed-upon treatment plan, including taking medications as directed by your provider and following recommended lifestyle modifications.
                     </li>
                     <li>
                       <strong>Communicate Changes:</strong> Promptly report any problems, side effects, or changes in your condition to your healthcare provider.
@@ -233,7 +233,7 @@ const PatientRights = () => {
                       <strong>Asista a las Citas:</strong> Llegue a tiempo a las citas programadas o cancele con el aviso previo requerido según se describe en nuestra <a href="/es/politica-cancelacion" className="text-green-600 hover:text-green-700 underline">Política de Cancelación</a>.
                     </li>
                     <li>
-                      <strong>Siga el Plan de Tratamiento:</strong> Cumpla con el plan de tratamiento acordado, incluyendo tomar medicamentos según lo prescrito y seguir las modificaciones de estilo de vida recomendadas.
+                      <strong>Siga el Plan de Tratamiento:</strong> Cumpla con el plan de tratamiento acordado, incluyendo tomar medicamentos según las indicaciones de su proveedor y seguir las modificaciones de estilo de vida recomendadas.
                     </li>
                     <li>
                       <strong>Comunique Cambios:</strong> Reporte de inmediato cualquier problema, efecto secundario o cambio en su condición a su proveedor de atención médica.
