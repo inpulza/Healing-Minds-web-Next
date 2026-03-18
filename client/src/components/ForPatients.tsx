@@ -23,7 +23,7 @@ const ForPatients = () => {
         : 'Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento.'
     },
     {
-      title: language === 'en' ? 'Follow-up Appointments (30-45 minutes)' : 'Citas de Seguimiento (30-45 minutos)',
+      title: language === 'en' ? 'Follow-up Appointments (20-30 minutes)' : 'Citas de Seguimiento (20-30 minutos)',
       description: language === 'en'
         ? 'Regular check-ins to monitor progress, adjust medications, and provide ongoing support.'
         : 'Controles regulares para monitorear el progreso, ajustar medicamentos y brindar apoyo continuo.'
