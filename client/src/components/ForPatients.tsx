@@ -17,7 +17,7 @@ const ForPatients = () => {
 
   const expectations = [
     {
-      title: language === 'en' ? 'Initial Consultation (15 minutes)' : 'Consulta Inicial (15 minutos)',
+      title: language === 'en' ? 'Initial Consultation (40-60 minutes)' : 'Consulta Inicial (40-60 minutos)',
       description: language === 'en' 
         ? 'Comprehensive evaluation of your mental health history, current symptoms, and treatment goals.'
         : 'Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento.'
