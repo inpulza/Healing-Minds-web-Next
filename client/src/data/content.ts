@@ -292,12 +292,12 @@ export const bilingualFeatures = {
 export const treatmentExpectations = {
   en: [
     {
-      title: "Initial Consultation (60 minutes)",
+      title: "Initial Consultation (40-60 minutes)",
       description:
         "Comprehensive evaluation of your mental health history, current symptoms, and treatment goals.",
     },
     {
-      title: "Follow-up Appointments (30-45 minutes)",
+      title: "Follow-up Appointments (20-30 minutes)",
       description:
         "Regular check-ins to monitor progress, adjust medications, and provide ongoing support.",
     },
@@ -314,12 +314,12 @@ export const treatmentExpectations = {
   ],
   es: [
     {
-      title: "Consulta Inicial (60 minutos)",
+      title: "Consulta Inicial (40-60 minutos)",
       description:
         "Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento.",
     },
     {
-      title: "Citas de Seguimiento (30-45 minutos)",
+      title: "Citas de Seguimiento (20-30 minutos)",
       description:
         "Controles regulares para monitorear el progreso, ajustar medicamentos y brindar apoyo continuo.",
     },
