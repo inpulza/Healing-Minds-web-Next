@@ -50,7 +50,7 @@ const LocationLelyResorts = () => {
       description: local.seo.description[language],
       keywords: local.seo.keywords[language],
       lang: language,
-      canonical: '/locations/psychiatrist-lely-resorts'
+      canonical: '/locations/psychiatrist-lely-resort'
     };
     updateSEO(seoData);
 
