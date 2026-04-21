@@ -44,15 +44,15 @@ const LocationNaples = () => {
 
   useEffect(() => {
     const seoData = {
-      title: language === 'en' 
-        ? 'Psychiatrist Naples FL - Dr. Melva Reve Location | Healing Minds'
-        : 'Psiquiatra Naples FL - Ubicación Dra. Melva Reve | Healing Minds',
+      title: language === 'en'
+        ? 'Psychiatrist in Naples, FL — Bilingual Care in Park Shore | Dr. Melva Reve'
+        : 'Psiquiatra en Naples, FL — Atención Bilingüe en Park Shore | Dra. Melva Reve',
       description: language === 'en'
-        ? 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N # 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N # 25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
+        ? 'Bilingual psychiatrist Dr. Melva Reve at 4760 Tamiami Trl N #25, in the Park Shore corridor of Naples (ZIP 34103). In-person and secure telehealth for anxiety, depression, ADHD, PTSD and bipolar care. Call (239) 423-0272.'
+        : 'Psiquiatra bilingüe Dra. Melva Reve en 4760 Tamiami Trl N #25, en el corredor de Park Shore en Naples (CP 34103). Atención presencial y telesalud segura para ansiedad, depresión, TDAH, TEPT y trastorno bipolar. (239) 423-0272.',
       keywords: language === 'en'
-        ? 'psychiatrist Naples FL location, 4760 Tamiami Trail Naples # 25, psychiatric office Naples, Dr Melva Reve address, mental health Naples FL'
-        : 'ubicación psiquiatra Naples FL, 4760 Tamiami Trail Naples # 25, consultorio psiquiátrico Naples, dirección Dra Melva Reve, salud mental Naples FL',
+        ? 'psychiatrist Naples FL, bilingual psychiatrist Naples, Park Shore psychiatrist, Tamiami Trail psychiatrist, anxiety treatment Naples, ADHD adults Naples, Spanish speaking psychiatrist Collier County'
+        : 'psiquiatra Naples FL, psiquiatra bilingüe Naples, psiquiatra Park Shore, psiquiatra en Tamiami Trail, tratamiento ansiedad Naples, TDAH adultos Naples, psiquiatra en español Collier County',
       lang: language,
       canonical: '/locations/psychiatrist-naples'
     };

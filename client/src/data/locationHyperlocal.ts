@@ -361,7 +361,7 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
   goldenGate: {
     seo: {
       title: {
-        en: 'Psiquiatra para Golden Gate, FL — Atención Bilingüe en Español | Healing Minds',
+        en: 'Psychiatrist for Golden Gate, FL — Bilingual Anxiety, Depression & ADHD Care | Healing Minds',
         es: 'Psiquiatra para Golden Gate, FL — Atención Bilingüe en Español | Healing Minds',
       },
       description: {
