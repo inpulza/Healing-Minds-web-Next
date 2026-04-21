@@ -7,6 +7,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,27 +42,19 @@ import OptimizedImage from '@/components/OptimizedImage';
 const LocationBonitaSprings = () => {
   const { language } = useLanguage();
 
+  const local = cityHyperlocal.bonitaSprings;
+
   useEffect(() => {
     const seoData = {
-      title: language === 'en' 
-        ? 'Psychiatrist Bonita Springs FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Bonita Springs FL - Dra. Melva Reve | Healing Minds',
-      description: language === 'en'
-        ? 'Dr. Melva Reve serves Bonita Springs, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Bonita Springs, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
-      keywords: language === 'en'
-        ? 'psychiatrist Bonita Springs FL, mental health Bonita Springs, Dr Melva Reve Bonita Springs, psychiatric care Bonita Springs FL'
-        : 'psiquiatra Bonita Springs FL, salud mental Bonita Springs, Dra Melva Reve Bonita Springs, atención psiquiátrica Bonita Springs FL',
+      title: local.seo.title[language],
+      description: local.seo.description[language],
+      keywords: local.seo.keywords[language],
       lang: language,
       canonical: '/locations/psychiatrist-bonita-springs'
     };
     updateSEO(seoData);
 
-    // Add Service Schema for Bonita Springs location (Hub & Spoke Model)
-    // This schema points to the main MedicalClinic as provider, avoiding conflicts
-    const serviceDescription = language === 'en'
-      ? 'Expert psychiatric care serving Bonita Springs residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Bonita Springs community.'
-      : 'Atención psiquiátrica experta para residentes de Bonita Springs. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Bonita Springs.';
+    const serviceDescription = local.seo.serviceDescription[language];
 
     addLocationServiceSchema({
       locationName: 'Bonita Springs',
@@ -190,7 +183,7 @@ const LocationBonitaSprings = () => {
                 </div>
               </div>
               <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
-                {language === 'en' ? 'Professional psychiatric services in Bonita Springs.' : 'Servicios psiquiátricos profesionales en Bonita Springs.'}
+                {local.heroDescription[language]}
               </p>
               <div className="flex flex-col gap-3 px-4">
                 <Button 
@@ -263,7 +256,7 @@ const LocationBonitaSprings = () => {
                       )}
                     </h1>
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">
-                      {language === 'en' ? 'Professional psychiatric services in Bonita Springs.' : 'Servicios psiquiátricos profesionales en Bonita Springs.'}
+                      {local.heroDescription[language]}
                     </p>
                     <Button
                       onClick={() => window.location.href = '/contact'}
@@ -307,9 +300,7 @@ const LocationBonitaSprings = () => {
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'As a psychiatrist near you in the Bonita Springs area, I offer specialized mental health services from our Naples practice on Tamiami Trail. Our modern facilities provide a welcoming environment specifically designed for anxiety treatment in Naples FL and psychiatric medication management near you. The proximity to Bonita Springs makes accessing compassionate psychiatric care convenient and private.'
-                      : 'Como psiquiatra cerca de usted en el área de Bonita Springs, ofrezco servicios especializados de salud mental desde nuestra práctica en Naples en Tamiami Trail. Nuestras instalaciones modernas brindan un ambiente acogedor específicamente diseñado para tratamientos de ansiedad y manejo de medicamentos psiquiátricos cerca de usted. La proximidad a Bonita Springs hace que el acceso a atención psiquiátrica compasiva sea conveniente y privado.'}
+                    {local.healingParagraph[language]}
                   </p>
 
                   <Button 
@@ -389,9 +380,7 @@ const LocationBonitaSprings = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Specialized psychiatric services for Bonita Springs residents, including depression treatment Bonita Springs FL, ADHD evaluations, and expert psychiatric medication management. Our compassionate care is designed specifically for the Southwest Florida community.'
-                  : 'Servicios psiquiátricos especializados para residentes de Bonita Springs, incluyendo tratamiento de depresión, evaluaciones de TDAH, y manejo experto de medicamentos psiquiátricos. Nuestra atención compasiva está diseñada específicamente para la comunidad del Suroeste de Florida.'}
+                {local.servicesIntro[language]}
               </p>
             </div>
             
@@ -552,9 +541,7 @@ const LocationBonitaSprings = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Easy directions from popular Bonita Springs locations to our Naples psychiatric practice. Just 20-30 minutes via US-41 North (Tamiami Trail).'
-                  : 'Direcciones fáciles desde ubicaciones populares de Bonita Springs a nuestra práctica psiquiátrica en Naples. Solo 20-30 minutos por US-41 Norte (Tamiami Trail).'}
+                {local.routeIntro[language]}
               </p>
             </div>
 
@@ -834,9 +821,7 @@ const LocationBonitaSprings = () => {
 
                 <div className="mt-8 pt-6 border-t border-green-100">
                   <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                    {language === 'en'
-                      ? 'Serving Bonita Springs residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                      : 'Sirviendo a los residentes de Bonita Springs con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    {local.bottomNote[language]}
                   </p>
                 </div>
               </div>

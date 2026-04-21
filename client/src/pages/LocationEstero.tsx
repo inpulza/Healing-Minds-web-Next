@@ -7,6 +7,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,27 +42,19 @@ import OptimizedImage from '@/components/OptimizedImage';
 const LocationEstero = () => {
   const { language } = useLanguage();
 
+  const local = cityHyperlocal.estero;
+
   useEffect(() => {
     const seoData = {
-      title: language === 'en' 
-        ? 'Psychiatrist Estero FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Estero FL - Dra. Melva Reve | Healing Minds',
-      description: language === 'en'
-        ? 'Dr. Melva Reve serves Estero, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Estero, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
-      keywords: language === 'en'
-        ? 'psychiatrist Estero FL, mental health Estero, Dr Melva Reve Estero, psychiatric care Estero FL'
-        : 'psiquiatra Estero FL, salud mental Estero, Dra Melva Reve Estero, atención psiquiátrica Estero FL',
+      title: local.seo.title[language],
+      description: local.seo.description[language],
+      keywords: local.seo.keywords[language],
       lang: language,
       canonical: '/locations/psychiatrist-estero'
     };
     updateSEO(seoData);
 
-    // Add Service Schema for Estero location (Hub & Spoke Model)
-    // This schema points to the main MedicalClinic as provider, avoiding conflicts
-    const serviceDescription = language === 'en'
-      ? 'Expert psychiatric care serving Estero residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Estero community.'
-      : 'Atención psiquiátrica experta para residentes de Estero. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Estero.';
+    const serviceDescription = local.seo.serviceDescription[language];
 
     addLocationServiceSchema({
       locationName: 'Estero',
@@ -176,7 +169,7 @@ const LocationEstero = () => {
                 </div>
               </div>
               <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
-                {language === 'en' ? 'Quality mental health care in Estero.' : 'Atención de salud mental de calidad en Estero.'}
+                {local.heroDescription[language]}
               </p>
               <div className="flex flex-col gap-3 px-4">
                 <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-4 sm:py-6 px-4 sm:px-8 rounded-full inline-flex items-center justify-center gap-2 sm:gap-3 w-full text-sm sm:text-base" onClick={() => window.location.href = '/contact'} data-testid="button-schedule-consultation-mobile"><Calendar className="w-4 h-4 sm:w-5 sm:h-5" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
@@ -197,7 +190,7 @@ const LocationEstero = () => {
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (<>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Estero, FL</span></>) : (<>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Estero, FL</span></>)}
                     </h1>
-                    <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{language === 'en' ? 'Quality mental health care in Estero.' : 'Atención de salud mental de calidad en Estero.'}</p>
+                    <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{local.heroDescription[language]}</p>
                     <Button onClick={() => window.location.href = '/contact'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
                   </div>
                 </div>
@@ -233,9 +226,7 @@ const LocationEstero = () => {
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'As a psychiatrist near you in the Estero area, I offer specialized mental health services from our Naples practice on Tamiami Trail. Our modern facilities provide a welcoming environment specifically designed for anxiety treatment in Naples FL and psychiatric medication management near you. The convenient proximity to Estero makes accessing compassionate psychiatric care comfortable and confidential.'
-                      : 'Como psiquiatra cerca de usted en el área de Estero, ofrezco servicios especializados de salud mental desde nuestra práctica en Naples en Tamiami Trail. Nuestras instalaciones modernas brindan un ambiente acogedor específicamente diseñado para tratamientos de ansiedad y manejo de medicamentos psiquiátricos cerca de usted. La proximidad conveniente a Estero hace que el acceso a atención psiquiátrica compasiva sea cómodo y confidencial.'}
+                    {local.healingParagraph[language]}
                   </p>
 
                   <Button 
@@ -315,9 +306,7 @@ const LocationEstero = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Specialized psychiatric services for Estero residents, including depression treatment Estero FL, ADHD evaluations, and expert psychiatric medication management. Our compassionate care is designed specifically for the Southwest Florida community near Florida Gulf Coast University.'
-                  : 'Servicios psiquiátricos especializados para residentes de Estero, incluyendo tratamiento de depresión, evaluaciones de TDAH, y manejo experto de medicamentos psiquiátricos. Nuestra atención compasiva está diseñada específicamente para la comunidad del Suroeste de Florida cerca de Florida Gulf Coast University.'}
+                {local.servicesIntro[language]}
               </p>
             </div>
             
@@ -435,9 +424,7 @@ const LocationEstero = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Our Naples psychiatric practice is conveniently located for Estero residents. Here are easy directions from popular Estero landmarks to our mental health facility on Tamiami Trail.'
-                  : 'Nuestra práctica psiquiátrica en Naples está convenientemente ubicada para residentes de Estero. Aquí tiene direcciones fáciles desde puntos de referencia populares de Estero hasta nuestras instalaciones de salud mental en Tamiami Trail.'}
+                {local.routeIntro[language]}
               </p>
             </div>
             
@@ -717,9 +704,7 @@ const LocationEstero = () => {
 
                 <div className="mt-8 pt-6 border-t border-green-100">
                   <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                    {language === 'en'
-                      ? 'Serving Estero residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                      : 'Sirviendo a los residentes de Estero con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    {local.bottomNote[language]}
                   </p>
                 </div>
               </div>

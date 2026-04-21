@@ -7,6 +7,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,27 +42,19 @@ import OptimizedImage from '@/components/OptimizedImage';
 const LocationImmokalee = () => {
   const { language } = useLanguage();
 
+  const local = cityHyperlocal.immokalee;
+
   useEffect(() => {
     const seoData = {
-      title: language === 'en' 
-        ? 'Psychiatrist Immokalee FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Immokalee FL - Dra. Melva Reve | Healing Minds',
-      description: language === 'en'
-        ? 'Dr. Melva Reve serves Immokalee, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Immokalee, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
-      keywords: language === 'en'
-        ? 'psychiatrist Immokalee FL, mental health Immokalee, Dr Melva Reve Immokalee, psychiatric care Immokalee FL'
-        : 'psiquiatra Immokalee FL, salud mental Immokalee, Dra Melva Reve Immokalee, atención psiquiátrica Immokalee FL',
+      title: local.seo.title[language],
+      description: local.seo.description[language],
+      keywords: local.seo.keywords[language],
       lang: language,
       canonical: '/locations/psychiatrist-immokalee'
     };
     updateSEO(seoData);
 
-    // Add Service Schema for Immokalee location (Hub & Spoke Model)
-    // This schema points to the main MedicalClinic as provider, avoiding conflicts
-    const serviceDescription = language === 'en'
-      ? 'Expert psychiatric care serving Immokalee residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Immokalee community.'
-      : 'Atención psiquiátrica experta para residentes de Immokalee. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Immokalee.';
+    const serviceDescription = local.seo.serviceDescription[language];
 
     addLocationServiceSchema({
       locationName: 'Immokalee',
@@ -198,9 +191,7 @@ const LocationImmokalee = () => {
 
               {/* Mobile Description */}
               <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
-                {language === 'en' 
-                  ? 'Expert psychiatric care in Immokalee.' 
-                  : 'Atención psiquiátrica experta en Immokalee.'}
+                {local.heroDescription[language]}
               </p>
 
               {/* Mobile Action Buttons */}
@@ -290,9 +281,7 @@ const LocationImmokalee = () => {
                     
                     {/* Description */}
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">
-                      {language === 'en' 
-                        ? 'Expert psychiatric care in Immokalee.' 
-                        : 'Atención psiquiátrica experta en Immokalee.'}
+                      {local.heroDescription[language]}
                     </p>
                     
                     {/* CTA Button */}
@@ -338,9 +327,7 @@ const LocationImmokalee = () => {
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Conveniently serving Immokalee residents from our Naples location on Tamiami Trail. Our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment that prioritizes your privacy and comfort.'
-                      : 'Sirviendo convenientemente a los residentes de Immokalee desde nuestra ubicación de Naples en Tamiami Trail. Nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo que prioriza su privacidad y comodidad.'}
+                    {local.healingParagraph[language]}
                   </p>
 
                   <Button 
@@ -420,9 +407,7 @@ const LocationImmokalee = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Comprehensive psychiatric services available for Immokalee residents, tailored to meet your mental health needs with compassionate care.'
-                  : 'Servicios psiquiátricos integrales disponibles para residentes de Immokalee, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
+                {local.servicesIntro[language]}
               </p>
             </div>
             
@@ -583,10 +568,8 @@ const LocationImmokalee = () => {
                   </WellnessIcon>
                 </div>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Our Naples office is conveniently located for Immokalee residents. Use these familiar landmarks to find us easily.'
-                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Immokalee. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
-                </p>
+                {local.routeIntro[language]}
+              </p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -865,9 +848,7 @@ const LocationImmokalee = () => {
 
                   <div className="mt-8 pt-6 border-t border-green-100">
                     <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                      {language === 'en'
-                        ? 'Serving Immokalee residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                        : 'Sirviendo a los residentes de Immokalee con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                      {local.bottomNote[language]}
                     </p>
                   </div>
                 </div>

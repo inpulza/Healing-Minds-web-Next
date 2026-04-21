@@ -7,6 +7,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,27 +42,19 @@ import OptimizedImage from '@/components/OptimizedImage';
 const LocationFortMyers = () => {
   const { language } = useLanguage();
 
+  const local = cityHyperlocal.fortMyers;
+
   useEffect(() => {
     const seoData = {
-      title: language === 'en' 
-        ? 'Psychiatrist Fort Myers FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Fort Myers FL - Dra. Melva Reve | Healing Minds',
-      description: language === 'en'
-        ? 'Dr. Melva Reve serves Fort Myers, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Fort Myers, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
-      keywords: language === 'en'
-        ? 'psychiatrist Fort Myers FL, mental health Fort Myers, Dr Melva Reve Fort Myers, psychiatric care Fort Myers FL'
-        : 'psiquiatra Fort Myers FL, salud mental Fort Myers, Dra Melva Reve Fort Myers, atención psiquiátrica Fort Myers FL',
+      title: local.seo.title[language],
+      description: local.seo.description[language],
+      keywords: local.seo.keywords[language],
       lang: language,
       canonical: '/locations/psychiatrist-fort-myers'
     };
     updateSEO(seoData);
 
-    // Add Service Schema for Fort Myers location (Hub & Spoke Model)
-    // This schema points to the main MedicalClinic as provider, avoiding conflicts
-    const serviceDescription = language === 'en'
-      ? 'Expert psychiatric care serving Fort Myers residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Fort Myers community.'
-      : 'Atención psiquiátrica experta para residentes de Fort Myers. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Fort Myers.';
+    const serviceDescription = local.seo.serviceDescription[language];
 
     addLocationServiceSchema({
       locationName: 'Fort Myers',
@@ -176,7 +169,7 @@ const LocationFortMyers = () => {
                 </div>
               </div>
               <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
-                {language === 'en' ? 'Comprehensive psychiatric treatment in Fort Myers.' : 'Tratamiento psiquiátrico integral en Fort Myers.'}
+                {local.heroDescription[language]}
               </p>
               <div className="flex flex-col gap-3 px-4">
                 <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 w-full" onClick={() => window.location.href = '/contact'} data-testid="button-schedule-consultation-mobile"><Calendar className="w-5 h-5" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
@@ -197,7 +190,7 @@ const LocationFortMyers = () => {
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (<>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Fort Myers, FL</span></>) : (<>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Fort Myers, FL</span></>)}
                     </h1>
-                    <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{language === 'en' ? 'Comprehensive psychiatric treatment in Fort Myers.' : 'Tratamiento psiquiátrico integral en Fort Myers.'}</p>
+                    <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{local.heroDescription[language]}</p>
                     <Button onClick={() => window.location.href = '/contact'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
                   </div>
                 </div>
@@ -233,9 +226,7 @@ const LocationFortMyers = () => {
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'As a psychiatrist near you in the Fort Myers area, I offer specialized mental health services from our Naples practice on Tamiami Trail. Our modern facilities provide a welcoming environment specifically designed for anxiety treatment in Naples FL and psychiatric medication management near you. The easy drive from Fort Myers makes accessing compassionate psychiatric care convenient and confidential.'
-                      : 'Como psiquiatra cerca de usted en el área de Fort Myers, ofrezco servicios especializados de salud mental desde nuestra práctica en Naples en Tamiami Trail. Nuestras instalaciones modernas brindan un ambiente acogedor específicamente diseñado para tratamientos de ansiedad y manejo de medicamentos psiquiátricos cerca de usted. El fácil viaje desde Fort Myers hace que el acceso a atención psiquiátrica compasiva sea conveniente y confidencial.'}
+                    {local.healingParagraph[language]}
                   </p>
 
                   <Button 
@@ -315,9 +306,7 @@ const LocationFortMyers = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Specialized psychiatric services for Fort Myers residents, including depression treatment Fort Myers FL, ADHD evaluations, and expert psychiatric medication management. Our compassionate care serves the greater Fort Myers River District and downtown communities.'
-                  : 'Servicios psiquiátricos especializados para residentes de Fort Myers, incluyendo tratamiento de depresión, evaluaciones de TDAH, y manejo experto de medicamentos psiquiátricos. Nuestra atención compasiva sirve a las comunidades del distrito fluvial de Fort Myers y el centro de la ciudad.'}
+                {local.servicesIntro[language]}
               </p>
             </div>
             
@@ -435,9 +424,7 @@ const LocationFortMyers = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Our Naples psychiatric practice is conveniently located for Fort Myers residents. Here are easy directions from popular Fort Myers landmarks to our mental health facility on Tamiami Trail.'
-                  : 'Nuestra práctica psiquiátrica en Naples está convenientemente ubicada para residentes de Fort Myers. Aquí tiene direcciones fáciles desde puntos de referencia populares de Fort Myers hasta nuestras instalaciones de salud mental en Tamiami Trail.'}
+                {local.routeIntro[language]}
               </p>
             </div>
             
@@ -717,9 +704,7 @@ const LocationFortMyers = () => {
 
                 <div className="mt-8 pt-6 border-t border-green-100">
                   <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                    {language === 'en'
-                      ? 'Serving Fort Myers residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                      : 'Sirviendo a los residentes de Fort Myers con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    {local.bottomNote[language]}
                   </p>
                 </div>
               </div>

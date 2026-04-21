@@ -7,6 +7,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,27 +42,19 @@ import OptimizedImage from '@/components/OptimizedImage';
 const LocationMarcoIsland = () => {
   const { language } = useLanguage();
 
+  const local = cityHyperlocal.marcoIsland;
+
   useEffect(() => {
     const seoData = {
-      title: language === 'en' 
-        ? 'Psychiatrist Marco Island FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Marco Island FL - Dra. Melva Reve | Healing Minds',
-      description: language === 'en'
-        ? 'Dr. Melva Reve serves Marco Island, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Marco Island, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
-      keywords: language === 'en'
-        ? 'psychiatrist Marco Island FL, mental health Marco Island, Dr Melva Reve Marco Island, psychiatric care Marco Island FL'
-        : 'psiquiatra Marco Island FL, salud mental Marco Island, Dra Melva Reve Marco Island, atención psiquiátrica Marco Island FL',
+      title: local.seo.title[language],
+      description: local.seo.description[language],
+      keywords: local.seo.keywords[language],
       lang: language,
       canonical: '/locations/psychiatrist-marco-island'
     };
     updateSEO(seoData);
 
-    // Add Service Schema for Marco Island location (Hub & Spoke Model)
-    // This schema points to the main MedicalClinic as provider, avoiding conflicts
-    const serviceDescription = language === 'en'
-      ? 'Expert psychiatric care serving Marco Island residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Marco Island community.'
-      : 'Atención psiquiátrica experta para residentes de Marco Island. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Marco Island.';
+    const serviceDescription = local.seo.serviceDescription[language];
 
     addLocationServiceSchema({
       locationName: 'Marco Island',
@@ -198,9 +191,7 @@ const LocationMarcoIsland = () => {
 
               {/* Mobile Description */}
               <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
-                {language === 'en' 
-                  ? 'Expert psychiatric care in Marco Island.' 
-                  : 'Atención psiquiátrica experta en Marco Island.'}
+                {local.heroDescription[language]}
               </p>
 
               {/* Mobile Action Buttons */}
@@ -290,9 +281,7 @@ const LocationMarcoIsland = () => {
                     
                     {/* Description */}
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">
-                      {language === 'en' 
-                        ? 'Expert psychiatric care in Marco Island.' 
-                        : 'Atención psiquiátrica experta en Marco Island.'}
+                      {local.heroDescription[language]}
                     </p>
                     
                     {/* CTA Button */}
@@ -338,9 +327,7 @@ const LocationMarcoIsland = () => {
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'As a psychiatrist near you in the Marco Island area, I offer specialized mental health services from our Naples practice on Tamiami Trail. Our modern facilities provide a welcoming environment specifically designed for anxiety treatment in Naples FL and psychiatric medication management near you. The short drive from Marco Island makes accessing compassionate psychiatric care convenient and confidential.'
-                      : 'Como psiquiatra cerca de usted en el área de Marco Island, ofrezco servicios especializados de salud mental desde nuestra práctica en Naples en Tamiami Trail. Nuestras instalaciones modernas brindan un ambiente acogedor específicamente diseñado para tratamientos de ansiedad y manejo de medicamentos psiquiátricos cerca de usted. El corto viaje desde Marco Island hace que el acceso a atención psiquiátrica compasiva sea conveniente y confidencial.'}
+                    {local.healingParagraph[language]}
                   </p>
 
                   <Button 
@@ -420,9 +407,7 @@ const LocationMarcoIsland = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Specialized psychiatric services for Marco Island residents, including depression treatment Marco Island FL, ADHD evaluations, and expert psychiatric medication management. Our compassionate care is designed specifically for the Southwest Florida island community.'
-                  : 'Servicios psiquiátricos especializados para residentes de Marco Island, incluyendo tratamiento de depresión, evaluaciones de TDAH, y manejo experto de medicamentos psiquiátricos. Nuestra atención compasiva está diseñada específicamente para la comunidad isleña del Suroeste de Florida.'}
+                {local.servicesIntro[language]}
               </p>
             </div>
             
@@ -540,9 +525,7 @@ const LocationMarcoIsland = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Our Naples psychiatric practice is conveniently located for Marco Island residents. Here are easy directions from popular Marco Island landmarks to our mental health facility on Tamiami Trail.'
-                  : 'Nuestra práctica psiquiátrica en Naples está convenientemente ubicada para residentes de Marco Island. Aquí tiene direcciones fáciles desde puntos de referencia populares de Marco Island hasta nuestras instalaciones de salud mental en Tamiami Trail.'}
+                {local.routeIntro[language]}
               </p>
             </div>
             
@@ -822,9 +805,7 @@ const LocationMarcoIsland = () => {
 
                 <div className="mt-8 pt-6 border-t border-green-100">
                   <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                    {language === 'en'
-                      ? 'Serving Marco Island residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                      : 'Sirviendo a los residentes de Marco Island con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    {local.bottomNote[language]}
                   </p>
                 </div>
               </div>

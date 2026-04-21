@@ -7,6 +7,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,26 +42,19 @@ import OptimizedImage from '@/components/OptimizedImage';
 const LocationVanderbiltBeach = () => {
   const { language } = useLanguage();
 
+  const local = cityHyperlocal.vanderbiltBeach;
+
   useEffect(() => {
     const seoData = {
-      title: language === 'en' 
-        ? 'Psychiatrist Vanderbilt Beach FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Vanderbilt Beach FL - Dra. Melva Reve | Healing Minds',
-      description: language === 'en'
-        ? 'Dr. Melva Reve serves Vanderbilt Beach, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Vanderbilt Beach, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
-      keywords: language === 'en'
-        ? 'psychiatrist Vanderbilt Beach FL, mental health Vanderbilt Beach, Dr Melva Reve Vanderbilt Beach, psychiatric care Vanderbilt Beach FL'
-        : 'psiquiatra Vanderbilt Beach FL, salud mental Vanderbilt Beach, Dra Melva Reve Vanderbilt Beach, atención psiquiátrica Vanderbilt Beach FL',
+      title: local.seo.title[language],
+      description: local.seo.description[language],
+      keywords: local.seo.keywords[language],
       lang: language,
       canonical: '/locations/psychiatrist-vanderbilt-beach'
     };
     updateSEO(seoData);
 
-    // This schema points to the main MedicalClinic as provider, avoiding conflicts
-    const serviceDescription = language === 'en'
-      ? 'Expert psychiatric care serving Vanderbilt Beach residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Vanderbilt Beach community.'
-      : 'Atención psiquiátrica experta para residentes de Vanderbilt Beach. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Vanderbilt Beach.';
+    const serviceDescription = local.seo.serviceDescription[language];
 
     addLocationServiceSchema({
       locationName: 'Vanderbilt Beach',
@@ -197,9 +191,7 @@ const LocationVanderbiltBeach = () => {
 
               {/* Mobile Description */}
               <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
-                {language === 'en' 
-                  ? 'Expert psychiatric care in Vanderbilt Beach.' 
-                  : 'Atención psiquiátrica experta en Vanderbilt Beach.'}
+                {local.heroDescription[language]}
               </p>
 
               {/* Mobile Action Buttons */}
@@ -289,9 +281,7 @@ const LocationVanderbiltBeach = () => {
                     
                     {/* Description */}
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">
-                      {language === 'en' 
-                        ? 'Expert psychiatric care in Vanderbilt Beach.' 
-                        : 'Atención psiquiátrica experta en Vanderbilt Beach.'}
+                      {local.heroDescription[language]}
                     </p>
                     
                     {/* CTA Button */}
@@ -337,9 +327,7 @@ const LocationVanderbiltBeach = () => {
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Conveniently serving Vanderbilt Beach residents from our Naples location on Tamiami Trail. Our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment that prioritizes your privacy and comfort.'
-                      : 'Sirviendo convenientemente a los residentes de Vanderbilt Beach desde nuestra ubicación de Naples en Tamiami Trail. Nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo que prioriza su privacidad y comodidad.'}
+                    {local.healingParagraph[language]}
                   </p>
 
                   <Button 
@@ -419,9 +407,7 @@ const LocationVanderbiltBeach = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Comprehensive psychiatric services available for Vanderbilt Beach residents, tailored to meet your mental health needs with compassionate care.'
-                  : 'Servicios psiquiátricos integrales disponibles para residentes de Vanderbilt Beach, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
+                {local.servicesIntro[language]}
               </p>
             </div>
             
@@ -582,10 +568,8 @@ const LocationVanderbiltBeach = () => {
                   </WellnessIcon>
                 </div>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Our Naples office is conveniently located for Vanderbilt Beach residents. Use these familiar landmarks to find us easily.'
-                    : 'Nuestra oficina de Naples está convenientemente ubicada para residentes de Vanderbilt Beach. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
-                </p>
+                {local.routeIntro[language]}
+              </p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -861,9 +845,7 @@ const LocationVanderbiltBeach = () => {
 
                 <div className="mt-8 pt-6 border-t border-green-100">
                   <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                    {language === 'en'
-                      ? 'Serving Vanderbilt Beach residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                      : 'Sirviendo a los residentes de Vanderbilt Beach con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    {local.bottomNote[language]}
                   </p>
                 </div>
               </div>

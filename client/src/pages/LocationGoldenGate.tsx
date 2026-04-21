@@ -7,6 +7,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,26 +42,19 @@ import OptimizedImage from '@/components/OptimizedImage';
 const LocationGoldenGate = () => {
   const { language } = useLanguage();
 
+  const local = cityHyperlocal.goldenGate;
+
   useEffect(() => {
     const seoData = {
-      title: language === 'en' 
-        ? 'Psychiatrist Golden Gate FL - Dr. Melva Reve | Healing Minds'
-        : 'Psiquiatra Golden Gate FL - Dra. Melva Reve | Healing Minds',
-      description: language === 'en'
-        ? 'Dr. Melva Reve serves Golden Gate, FL. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
-        : 'La Dra. Melva Reve atiende Golden Gate, FL. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272 para programar.',
-      keywords: language === 'en'
-        ? 'psychiatrist Golden Gate FL, mental health Golden Gate, Dr Melva Reve Golden Gate, psychiatric care Golden Gate FL'
-        : 'psiquiatra Golden Gate FL, salud mental Golden Gate, Dra Melva Reve Golden Gate, atención psiquiátrica Golden Gate FL',
+      title: local.seo.title[language],
+      description: local.seo.description[language],
+      keywords: local.seo.keywords[language],
       lang: language,
       canonical: '/locations/psychiatrist-golden-gate'
     };
     updateSEO(seoData);
 
-    // This schema points to the main MedicalClinic as provider, avoiding conflicts
-    const serviceDescription = language === 'en'
-      ? 'Expert psychiatric care serving Golden Gate residents. Dr. Melva Reve provides comprehensive mental health services including anxiety treatment, depression therapy, ADHD evaluation, PTSD treatment, bipolar disorder management, and psychiatric medication management for the Golden Gate community.'
-      : 'Atención psiquiátrica experta para residentes de Golden Gate. La Dra. Melva Reve proporciona servicios integrales de salud mental incluyendo tratamiento de ansiedad, terapia de depresión, evaluación de TDAH, tratamiento de TEPT, manejo de trastorno bipolar, y manejo de medicamentos psiquiátricos para la comunidad de Golden Gate.';
+    const serviceDescription = local.seo.serviceDescription[language];
 
     addLocationServiceSchema({
       locationName: 'Golden Gate',
@@ -175,7 +169,7 @@ const LocationGoldenGate = () => {
                 </div>
               </div>
               <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
-                {language === 'en' ? 'Expert psychiatric care in Golden Gate.' : 'Atención psiquiátrica experta en Golden Gate.'}
+                {local.heroDescription[language]}
               </p>
               <div className="flex flex-col gap-3 px-4">
                 <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-4 sm:py-6 px-4 sm:px-8 rounded-full inline-flex items-center justify-center gap-2 sm:gap-3 w-full text-sm sm:text-base" onClick={() => window.location.href = '/contact'} data-testid="button-schedule-consultation-mobile"><Calendar className="w-4 h-4 sm:w-5 sm:h-5" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
@@ -196,7 +190,7 @@ const LocationGoldenGate = () => {
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (<>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Golden Gate, FL</span></>) : (<>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Golden Gate, FL</span></>)}
                     </h1>
-                    <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{language === 'en' ? 'Expert psychiatric care in Golden Gate.' : 'Atención psiquiátrica experta en Golden Gate.'}</p>
+                    <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{local.heroDescription[language]}</p>
                     <Button onClick={() => window.location.href = '/contact'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
                   </div>
                 </div>
@@ -232,9 +226,7 @@ const LocationGoldenGate = () => {
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Conveniently serving Golden Gate residents from our Naples location on Tamiami Trail. Our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment that prioritizes your privacy and comfort.'
-                      : 'Sirviendo convenientemente a los residentes de Golden Gate desde nuestra ubicación de Naples en Tamiami Trail. Nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo que prioriza su privacidad y comodidad.'}
+                    {local.healingParagraph[language]}
                   </p>
 
                   <Button 
@@ -314,9 +306,7 @@ const LocationGoldenGate = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Comprehensive psychiatric services available for Golden Gate residents, tailored to meet your mental health needs with compassionate care.'
-                  : 'Servicios psiquiátricos integrales disponibles para residentes de Golden Gate, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
+                {local.servicesIntro[language]}
               </p>
             </div>
             
@@ -460,9 +450,7 @@ const LocationGoldenGate = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Our practice is conveniently located on Tamiami Trail North in Naples, making it easily accessible for Golden Gate residents seeking quality mental health care.'
-                  : 'Nuestra práctica está convenientemente ubicada en Tamiami Trail North en Naples, haciéndola fácilmente accesible para los residentes de Golden Gate que buscan atención de salud mental de calidad.'}
+                {local.routeIntro[language]}
               </p>
             </div>
             
@@ -479,45 +467,19 @@ const LocationGoldenGate = () => {
                       {language === 'en' ? 'From Golden Gate to Our Naples Office' : 'Desde Golden Gate a Nuestra Oficina de Naples'}
                     </h3>
                     <div className="mb-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-3 h-3 rounded-full bg-green-600"></div>
-                        <p className="text-gray-700 font-body text-sm">
-                          {language === 'en' 
-                            ? 'Head northwest on Golden Gate Blvd toward Collier Blvd'
-                            : 'Diríjase hacia el noroeste por Golden Gate Blvd hacia Collier Blvd'}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-3 h-3 rounded-full bg-green-600"></div>
-                        <p className="text-gray-700 font-body text-sm">
-                          {language === 'en' 
-                            ? 'Turn right onto Collier Blvd (CR-951) and continue north'
-                            : 'Gire a la derecha en Collier Blvd (CR-951) y continúe hacia el norte'}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-3 h-3 rounded-full bg-green-600"></div>
-                        <p className="text-gray-700 font-body text-sm">
-                          {language === 'en' 
-                            ? 'Continue on Collier Blvd until it merges with Tamiami Trail'
-                            : 'Continúe por Collier Blvd hasta que se fusione con Tamiami Trail'}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-3 h-3 rounded-full bg-green-600"></div>
-                        <p className="text-gray-700 font-body text-sm">
-                          {language === 'en' 
-                            ? 'Arrive at 4760 Tamiami Trl N # 25, Naples, FL 34103'
-                            : 'Llegue a 4760 Tamiami Trl N # 25, Naples, FL 34103'}
-                        </p>
-                      </div>
+                      {local.routeSteps[language].map((step, idx) => (
+                        <div key={idx} className={`flex items-center gap-3 ${idx < local.routeSteps[language].length - 1 ? 'mb-3' : ''}`}>
+                          <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                          <p className="text-gray-700 font-body text-sm">{step}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '12-15 minutes' : '12-15 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -602,9 +564,7 @@ const LocationGoldenGate = () => {
 
                 <div className="mt-8 pt-6 border-t border-green-100">
                   <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                    {language === 'en'
-                      ? 'Serving Golden Gate residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                      : 'Sirviendo a los residentes de Golden Gate con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    {local.bottomNote[language]}
                   </p>
                 </div>
               </div>
