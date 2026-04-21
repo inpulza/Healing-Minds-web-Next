@@ -33,6 +33,9 @@ export const updateSEO = (data: SEOData) => {
   // This is essential for SPA navigation where multiple route changes could accumulate tags
   
   // Step 1: Remove existing meta tags that we're about to update
+  // NOTA: NO incluimos 'link[rel="canonical"]'. El canonical lo inyecta exclusivamente
+  // el servidor (server/utils/html-injection.ts) por ruta, para evitar canonicals
+  // duplicados o inconsistentes entre el HTML inicial y el DOM tras hidratación.
   const metaTags = [
     'meta[name="description"]',
     'meta[name="keywords"]', 
@@ -42,8 +45,7 @@ export const updateSEO = (data: SEOData) => {
     'meta[property="og:image"]',
     'meta[name="twitter:title"]',
     'meta[name="twitter:description"]',
-    'meta[name="twitter:image"]',
-    'link[rel="canonical"]'
+    'meta[name="twitter:image"]'
   ];
   
   metaTags.forEach(selector => {
@@ -66,21 +68,13 @@ export const updateSEO = (data: SEOData) => {
     createMetaTag('keywords', data.keywords);
   }
   
-  // Step 5: Create canonical URL - ALWAYS absolute for consistency
-  if (data.canonical) {
-    // Ensure canonical URLs always use www subdomain for consistency
-    const preferredOrigin = window.location.origin.includes('healingmindsp.com') 
-      ? window.location.origin.replace('://healingmindsp.com', '://www.healingmindsp.com')
-      : window.location.origin;
-    
-    // Convert relative canonical to absolute URL
-    const absoluteCanonical = data.canonical.startsWith('http') 
-      ? data.canonical 
-      : `${preferredOrigin}${data.canonical}`;
-      
-    createLinkTag('canonical', absoluteCanonical);
-  }
-  
+  // Step 5: Canonical URL gestionado server-side ÚNICAMENTE.
+  // El servidor inyecta <link rel="canonical"> en el HTML inicial por ruta
+  // (ver server/utils/html-injection.ts). El cliente NO lo toca para evitar
+  // que tras la hidratación de React el canonical cambie respecto al HTML
+  // inicial (causaba "duplicate canonical" / "Google chose different canonical"
+  // en Search Console).
+
   // Step 6: Create Open Graph tags
   createMetaTag('og:title', data.title, 'property');
   createMetaTag('og:description', data.description, 'property');

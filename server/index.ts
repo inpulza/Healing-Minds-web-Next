@@ -5,6 +5,11 @@ import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 
+// Trust the Replit deployment proxy (1 hop) so req.protocol/req.secure y headers
+// como x-forwarded-proto y host se interpreten correctamente. Imprescindible para
+// generar canonicals y redirects 301 fiables en producción.
+app.set('trust proxy', 1);
+
 // Enable ETags for efficient cache validation
 app.set('etag', 'strong');
 

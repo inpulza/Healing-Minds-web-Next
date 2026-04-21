@@ -19,7 +19,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // DEBE ejecutarse ANTES del static file handler
   // NOTE: Replit sets REPLIT_DEPLOYMENT=1 when deployed, not NODE_ENV=production
   const isProduction = process.env.NODE_ENV === 'production' || process.env.REPLIT_DEPLOYMENT === '1';
-  
+
+  // CRÍTICO: Redirect 301 apex (sin www) y dominios *.replit.app a la versión canónica con www.
+  // DEBE ir ANTES del middleware de inyección de HTML (que termina la respuesta) para que el 301 ocurra.
+  // Solo se activa en producción para no romper el preview de Replit Workspace.
+  if (isProduction) {
+    app.use((req, res, next) => {
+      const host = (req.get('host') || '').toLowerCase();
+      const shouldRedirect =
+        host === 'healingmindsp.com' ||
+        host.endsWith('.replit.app');
+      if (shouldRedirect) {
+        return res.redirect(301, `https://www.healingmindsp.com${req.originalUrl}`);
+      }
+      next();
+    });
+  }
+
   if (isProduction) {
     app.use(async (req, res, next) => {
       // Solo procesar GET requests para páginas HTML (no APIs, no assets estáticos)
@@ -73,16 +89,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       next();
     });
   }
-
-  // CRÍTICO: Redirect non-www to www for domain consistency
-  app.use((req, res, next) => {
-    const host = req.get('host');
-    if (host === 'healingmindsp.com') {
-      const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-      return res.redirect(301, `${protocol}://www.healingmindsp.com${req.url}`);
-    }
-    next();
-  });
 
   // 301 redirect from old ADHD URL to new consistent URL
   app.get('/adhd-treatment-adults-naples-fl', (req, res) => {
