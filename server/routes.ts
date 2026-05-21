@@ -43,6 +43,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }
 
+  // El inglés vive en la raíz (no usamos prefijo /en/). Cualquier URL bajo
+  // /en redirige en UN solo salto a su equivalente sin prefijo, para no servir
+  // páginas vacías ni 404s a usuarios/motores con un enlace antiguo. Debe ir
+  // ANTES del normalizador de trailing slash para que /en/ no haga 2 saltos.
+  app.get(/^\/en(\/.*)?$/, (req, res) => {
+    const rest = req.path.replace(/^\/en/, '');
+    const cleaned = rest.replace(/\/+$/, '');
+    const target = cleaned || '/';
+    const qs = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
+    res.redirect(301, target + qs);
+  });
+
   // SEO: Normalize trailing slashes. Redirect every path that ends with "/"
   // (except the root "/") to its slash-less version using a permanent 301.
   // Avoids /about and /about/ being treated as two duplicate pages by Google.
