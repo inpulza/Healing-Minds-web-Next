@@ -56,6 +56,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     next();
   });
 
+  // Legacy URL 301 redirects — MUST be registered BEFORE the unknown-route 404
+  // middleware below, otherwise these paths (not in KNOWN_ROUTES) would be
+  // returned as 404 in production before the redirect handler can run.
+  app.get('/adhd-treatment-adults-naples-fl', (req, res) => {
+    res.redirect(301, '/services/adhd-treatment');
+  });
+  app.get('/locations/naples', (req, res) => {
+    res.redirect(301, '/locations/psychiatrist-naples');
+  });
+  app.get('/locations/psychiatrist-lely-resorts', (req, res) => {
+    res.redirect(301, '/locations/psychiatrist-lely-resort');
+  });
+  app.get('/es/ubicaciones/psiquiatra-lely-resorts', (req, res) => {
+    res.redirect(301, '/es/ubicaciones/psiquiatra-lely-resort');
+  });
+
   if (isProduction) {
     app.use(async (req, res, next) => {
       // Solo procesar GET requests para páginas HTML (no APIs, no assets estáticos)
@@ -135,25 +151,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       next();
     });
   }
-
-  // 301 redirect from old ADHD URL to new consistent URL
-  app.get('/adhd-treatment-adults-naples-fl', (req, res) => {
-    res.redirect(301, '/services/adhd-treatment');
-  });
-
-  // 301 redirect from legacy Naples location URL to new consistent URL
-  app.get('/locations/naples', (req, res) => {
-    res.redirect(301, '/locations/psychiatrist-naples');
-  });
-
-  // 301 redirects from old Lely Resort URLs with 's' to new consistent URLs without 's'
-  app.get('/locations/psychiatrist-lely-resorts', (req, res) => {
-    res.redirect(301, '/locations/psychiatrist-lely-resort');
-  });
-
-  app.get('/es/ubicaciones/psiquiatra-lely-resorts', (req, res) => {
-    res.redirect(301, '/es/ubicaciones/psiquiatra-lely-resort');
-  });
 
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {

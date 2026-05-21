@@ -185,9 +185,9 @@ const Contact = () => {
     <section id="contact" className="pt-12 pb-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
             Get in <span className="font-display italic text-green-700">touch</span>
-          </h2>
+          </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="contact-description">
             {t('contact.description')}
           </p>

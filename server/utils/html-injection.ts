@@ -193,7 +193,6 @@ const KNOWN_ROUTES: ReadonlySet<string> = new Set([
   '/services/bipolar-treatment',
   '/services/medication-management',
   '/telepsychiatry-florida',
-  '/locations/naples',
   '/locations/psychiatrist-naples',
   '/locations/psychiatrist-bonita-springs',
   '/locations/psychiatrist-marco-island',
@@ -265,8 +264,10 @@ export function isKnownRoute(urlOrPath: string): boolean {
  * Define meta data specific to each route
  */
 function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
-  // Normalize URL for matching
-  const normalizedUrl = url.replace(/\/$/, '') || '/';
+  // Normalize URL for matching: strip query string and hash, then a single
+  // trailing slash so "/about?utm=x" and "/about/" both resolve to "/about".
+  const pathOnly = url.split('?')[0].split('#')[0];
+  const normalizedUrl = pathOnly.replace(/\/$/, '') || '/';
   
   switch (normalizedUrl) {
     // Homepage
@@ -1708,6 +1709,131 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
             href: `${baseUrl}/es/ubicaciones/psiquiatra-vanderbilt-beach`
           }
         ]
+      };
+
+    // Telepsychiatry (EN + ES)
+    case '/telepsychiatry-florida':
+      return {
+        canonical: `${baseUrl}/telepsychiatry-florida`,
+        metaTags: [
+          { name: 'description', content: 'Telepsychiatry throughout Florida with Dr. Melva Reve. Secure HIPAA-compliant virtual psychiatric care for anxiety, depression, ADHD and more. Call (239) 423-0272.' },
+          { property: 'og:title', content: 'Telepsychiatry in Florida - Dr. Melva Reve | Healing Minds' },
+          { property: 'og:description', content: 'Bilingual virtual psychiatric care anywhere in Florida. Same quality as in-person, from the comfort of your home.' },
+          { property: 'og:url', content: `${baseUrl}/telepsychiatry-florida` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/telepsychiatry-florida` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/telepsiquiatria-florida` },
+        ],
+      };
+
+    case '/es/telepsiquiatria-florida':
+      return {
+        canonical: `${baseUrl}/es/telepsiquiatria-florida`,
+        metaTags: [
+          { name: 'description', content: 'Telepsiquiatría en toda Florida con la Dra. Melva Reve. Atención psiquiátrica virtual segura, conforme con HIPAA, para ansiedad, depresión, TDAH y más. Llame (239) 423-0272.' },
+          { property: 'og:title', content: 'Telepsiquiatría en Florida - Dra. Melva Reve | Healing Minds' },
+          { property: 'og:description', content: 'Atención psiquiátrica virtual bilingüe en cualquier lugar de Florida. La misma calidad que en persona, desde la comodidad de su hogar.' },
+          { property: 'og:url', content: `${baseUrl}/es/telepsiquiatria-florida` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/telepsychiatry-florida` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/telepsiquiatria-florida` },
+        ],
+      };
+
+    // Legal policy pages (EN)
+    case '/billing-policy':
+      return {
+        canonical: `${baseUrl}/billing-policy`,
+        metaTags: [
+          { name: 'description', content: 'Billing and payment policy for Healing Minds Psychiatry. Insurance accepted, copayments, self-pay rates, credit card fees and payment plans. Naples, FL.' },
+          { property: 'og:title', content: 'Billing and Payment Policy - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/billing-policy` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/billing-policy` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/politica-facturacion` },
+        ],
+      };
+
+    case '/cancellation-policy':
+      return {
+        canonical: `${baseUrl}/cancellation-policy`,
+        metaTags: [
+          { name: 'description', content: 'Cancellation and no-show policy for Healing Minds Psychiatry. 24-hour notice required, $50 late fee, medical emergency exceptions. Naples, FL.' },
+          { property: 'og:title', content: 'Cancellation and No-Show Policy - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/cancellation-policy` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/cancellation-policy` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/politica-cancelacion` },
+        ],
+      };
+
+    case '/emergency-policy':
+      return {
+        canonical: `${baseUrl}/emergency-policy`,
+        metaTags: [
+          { name: 'description', content: 'Emergency and crisis policy for Healing Minds Psychiatry. Not an emergency service. Florida crisis resources: 911, 988 Lifeline, David Lawrence Center.' },
+          { property: 'og:title', content: 'Emergency and Crisis Policy - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/emergency-policy` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/emergency-policy` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/politica-emergencias` },
+        ],
+      };
+
+    case '/patient-rights':
+      return {
+        canonical: `${baseUrl}/patient-rights`,
+        metaTags: [
+          { name: 'description', content: 'Patient rights and responsibilities at Healing Minds Psychiatry. Florida statutory compliance, confidentiality, informed consent and complaint procedures.' },
+          { property: 'og:title', content: 'Patient Rights and Responsibilities - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/patient-rights` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/patient-rights` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/derechos-paciente` },
+        ],
+      };
+
+    // Legal policy pages (ES)
+    case '/es/politica-facturacion':
+      return {
+        canonical: `${baseUrl}/es/politica-facturacion`,
+        metaTags: [
+          { name: 'description', content: 'Política de facturación y pago de Healing Minds Psychiatry. Seguros aceptados, copagos, tarifas particulares, cargos por tarjeta y planes de pago. Naples, FL.' },
+          { property: 'og:title', content: 'Política de Facturación y Pago - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/politica-facturacion` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/billing-policy` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/politica-facturacion` },
+        ],
+      };
+
+    case '/es/politica-cancelacion':
+      return {
+        canonical: `${baseUrl}/es/politica-cancelacion`,
+        metaTags: [
+          { name: 'description', content: 'Política de cancelación y citas perdidas de Healing Minds Psychiatry. Aviso de 24 horas requerido, cargo de $50, excepciones por emergencia médica. Naples, FL.' },
+          { property: 'og:title', content: 'Política de Cancelación y Citas Perdidas - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/politica-cancelacion` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/cancellation-policy` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/politica-cancelacion` },
+        ],
+      };
+
+    case '/es/politica-emergencias':
+      return {
+        canonical: `${baseUrl}/es/politica-emergencias`,
+        metaTags: [
+          { name: 'description', content: 'Política de emergencias y crisis de Healing Minds Psychiatry. No es un servicio de emergencia. Recursos de crisis en Florida: 911, Línea 988, David Lawrence Center.' },
+          { property: 'og:title', content: 'Política de Emergencias y Crisis - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/politica-emergencias` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/emergency-policy` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/politica-emergencias` },
+        ],
+      };
+
+    case '/es/derechos-paciente':
+      return {
+        canonical: `${baseUrl}/es/derechos-paciente`,
+        metaTags: [
+          { name: 'description', content: 'Derechos y responsabilidades del paciente en Healing Minds Psychiatry. Cumplimiento con leyes de Florida, confidencialidad, consentimiento informado y procedimientos de queja.' },
+          { property: 'og:title', content: 'Derechos y Responsabilidades del Paciente - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/derechos-paciente` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/patient-rights` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/derechos-paciente` },
+        ],
       };
 
     // Add more routes as needed
