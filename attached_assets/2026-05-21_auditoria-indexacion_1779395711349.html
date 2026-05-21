@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Auditoría de Indexación — Healing Minds Psychiatry</title>
+<style>
+  :root{
+    --green:#16a34a; --green-d:#15803d; --green-l:#f0fdf4; --green-a:#dcfce7;
+    --ink:#1f2937; --ink2:#4b5563; --muted:#6b7280;
+    --red:#b91c1c; --red-bg:#fef2f2; --red-bd:#fecaca;
+    --amber:#b45309; --amber-bg:#fffbeb; --amber-bd:#fde68a;
+    --ok:#15803d; --ok-bg:#f0fdf4; --ok-bd:#bbf7d0;
+    --line:#e5e7eb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);font-size:10.4pt;line-height:1.5;}
+  @page{size:A4;margin:17mm 16mm 18mm 16mm;}
+  @page:first{margin:0;}
+
+  h1,h2,h3,h4{font-family:Georgia,'Times New Roman',serif;color:var(--ink);font-weight:600;}
+  h2{font-size:17pt;color:var(--green-d);margin:0 0 4px;padding-top:6px;}
+  h3{font-size:12.6pt;margin:18px 0 6px;color:var(--ink);}
+  h4{font-size:11pt;margin:13px 0 4px;color:var(--green-d);}
+  p{margin:0 0 8px;}
+  ul,ol{margin:0 0 9px 19px;}
+  li{margin:0 0 4px;}
+  strong{font-weight:700;}
+  code{font-family:'Consolas','SF Mono',Menlo,monospace;font-size:8.7pt;background:#f3f4f6;
+    padding:1px 4px;border-radius:3px;color:#9333ea;word-break:break-all;}
+  .small{font-size:8.8pt;color:var(--muted);}
+
+  /* ---- COVER ---- */
+  .cover{height:297mm;background:linear-gradient(160deg,#0f3d24 0%,#15803d 55%,#16a34a 100%);
+    color:#fff;padding:30mm 22mm;display:flex;flex-direction:column;position:relative;}
+  .cover .kicker{font-size:10pt;letter-spacing:3px;text-transform:uppercase;
+    color:#bbf7d0;font-weight:700;}
+  .cover h1{color:#fff;font-size:33pt;line-height:1.16;margin:14mm 0 6mm;max-width:150mm;}
+  .cover .sub{font-size:13pt;color:#dcfce7;max-width:135mm;line-height:1.5;}
+  .cover .meta{margin-top:auto;border-top:1px solid rgba(255,255,255,.28);padding-top:7mm;
+    display:flex;gap:14mm;flex-wrap:wrap;font-size:9.5pt;}
+  .cover .meta div span{display:block;color:#a7f3d0;font-size:7.8pt;letter-spacing:1.5px;
+    text-transform:uppercase;margin-bottom:2px;}
+  .cover .verdict{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.3);
+    border-radius:10px;padding:7mm 8mm;margin-top:11mm;}
+  .cover .verdict b{color:#fff;font-size:11.5pt;}
+  .cover .verdict p{color:#dcfce7;margin:5px 0 0;font-size:9.6pt;}
+  .leaf{font-size:22pt;}
+
+  /* ---- LAYOUT ---- */
+  .page{padding:0;}
+  .section{page-break-before:always;padding-top:2mm;}
+  .lead{font-size:9.6pt;color:var(--ink2);border-left:3px solid var(--green);
+    padding:2px 0 2px 11px;margin:6px 0 14px;}
+
+  /* ---- BOXES ---- */
+  .box{border-radius:8px;padding:11px 14px;margin:11px 0;border:1px solid var(--line);}
+  .box p:last-child{margin-bottom:0;}
+  .box.red{background:var(--red-bg);border-color:var(--red-bd);}
+  .box.amber{background:var(--amber-bg);border-color:var(--amber-bd);}
+  .box.ok{background:var(--ok-bg);border-color:var(--ok-bd);}
+  .box.green{background:var(--green-l);border-color:var(--ok-bd);}
+  .box .bt{font-weight:700;font-family:Georgia,serif;font-size:10.4pt;margin-bottom:4px;display:block;}
+  .box.red .bt{color:var(--red);}
+  .box.amber .bt{color:var(--amber);}
+  .box.ok .bt,.box.green .bt{color:var(--ok);}
+
+  /* ---- TABLES ---- */
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:9pt;}
+  th{background:var(--green-d);color:#fff;text-align:left;padding:7px 9px;font-weight:600;
+    font-size:8.7pt;}
+  td{padding:6px 9px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#fafafa;}
+  .tbl-tight td,.tbl-tight th{padding:5px 8px;}
+
+  /* badges */
+  .badge{display:inline-block;padding:1px 7px;border-radius:20px;font-size:7.6pt;
+    font-weight:700;letter-spacing:.4px;white-space:nowrap;}
+  .b-p0{background:var(--red);color:#fff;}
+  .b-p1{background:var(--amber);color:#fff;}
+  .b-ok{background:var(--green);color:#fff;}
+  .b-info{background:#6b7280;color:#fff;}
+
+  /* finding card */
+  .finding{border:1px solid var(--line);border-radius:8px;margin:13px 0;overflow:hidden;
+    page-break-inside:avoid;}
+  .finding .fh{background:var(--green-l);padding:8px 13px;border-bottom:1px solid var(--ok-bd);
+    display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .finding .fh .ft{font-family:Georgia,serif;font-weight:700;font-size:11pt;color:var(--ink);}
+  .finding .fb{padding:10px 13px;}
+  .finding .fb .row{margin:6px 0;}
+  .finding .fb .lbl{font-weight:700;color:var(--green-d);font-size:8.5pt;
+    text-transform:uppercase;letter-spacing:.6px;}
+
+  .evidence{background:#0f172a;color:#e2e8f0;border-radius:6px;padding:9px 12px;
+    font-family:'Consolas',monospace;font-size:8pt;line-height:1.55;margin:7px 0;
+    white-space:pre-wrap;word-break:break-all;}
+  .evidence .c{color:#94a3b8;}
+  .evidence .g{color:#4ade80;}
+  .evidence .r{color:#f87171;}
+  .evidence .y{color:#fbbf24;}
+
+  .kpi-row{display:flex;gap:9px;margin:12px 0;}
+  .kpi{flex:1;border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center;}
+  .kpi .n{font-family:Georgia,serif;font-size:21pt;font-weight:700;line-height:1;}
+  .kpi .l{font-size:7.7pt;color:var(--muted);margin-top:5px;text-transform:uppercase;
+    letter-spacing:.5px;}
+  .kpi.red .n{color:var(--red);}
+  .kpi.amber .n{color:var(--amber);}
+  .kpi.green .n{color:var(--green);}
+
+  .toc li{margin:3px 0;font-size:9.6pt;}
+  .toc .tn{color:var(--green-d);font-weight:700;display:inline-block;width:20px;}
+
+  .footer-note{margin-top:22px;padding-top:9px;border-top:1px solid var(--line);
+    font-size:8pt;color:var(--muted);}
+  hr.soft{border:0;border-top:1px solid var(--line);margin:14px 0;}
+  .pill{display:inline-block;background:var(--green-a);color:var(--green-d);
+    font-size:8pt;font-weight:700;padding:2px 8px;border-radius:5px;}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="kicker"><span class="leaf">&#127807;</span>&nbsp;&nbsp;Inpulza &middot; Auditoría SEO Técnica</div>
+  <h1>Por qué la web de Healing&nbsp;Minds&nbsp;Psychiatry no se indexa en Google</h1>
+  <div class="sub">Diagnóstico exhaustivo de los problemas de indexación reportados en Google Search Console, su causa raíz técnica y el plan de acción para resolverlos.</div>
+
+  <div class="verdict">
+    <b>Veredicto rápido &mdash; ¿Google te está penalizando?</b>
+    <p>No. No hay ninguna penalización ni acción manual. El problema es <b>arquitectónico</b>: la web está construida como una aplicación de una sola página (SPA) y le entrega a Google el <b>mismo contenido HTML en todas sus páginas</b>. Google no las penaliza: simplemente no puede distinguirlas, así que decide no indexarlas. Es 100% corregible.</p>
+  </div>
+
+  <div class="meta">
+    <div><span>Cliente</span>Healing Minds Psychiatry<br>(Vidal Healing Minds Corp)</div>
+    <div><span>Sitio</span>www.healingmindsp.com</div>
+    <div><span>Fecha</span>21 de mayo, 2026</div>
+    <div><span>Preparado por</span>Inpulza Media</div>
+  </div>
+</div>
+
+<!-- ============ TOC / EXEC SUMMARY ============ -->
+<div class="section">
+  <h2>Resumen ejecutivo</h2>
+  <div class="lead">Lo esencial en una página. El detalle técnico viene en las secciones siguientes.</div>
+
+  <div class="kpi-row">
+    <div class="kpi red"><div class="n">1.167</div><div class="l">URLs NO indexadas</div></div>
+    <div class="kpi red"><div class="n">53</div><div class="l">Páginas reales bloqueadas por duplicado</div></div>
+    <div class="kpi amber"><div class="n">1</div><div class="l">Causa raíz única</div></div>
+    <div class="kpi green"><div class="n">0</div><div class="l">Penalizaciones de Google</div></div>
+  </div>
+
+  <h3>Qué está pasando</h3>
+  <p>Google Search Console reporta que <strong>prácticamente ninguna página del sitio se está indexando</strong>. El sitio tiene 60 páginas en su sitemap, y los datos muestran 38 páginas "rastreadas pero no indexadas", 15 tratadas como duplicados, 21 "descubiertas pero no indexadas" y más. Para una clínica que depende de aparecer en búsquedas como <em>"psiquiatra en Naples"</em>, esto significa que <strong>la web es prácticamente invisible en Google</strong>.</p>
+
+  <h3>Por qué pasa &mdash; la causa raíz</h3>
+  <p>La web es una <strong>Single Page Application (SPA) de React sin renderizado en servidor (SSR)</strong>. Cuando Google pide cualquier página &mdash; <code>/about</code>, <code>/services/medication-management</code>, o incluso una URL inventada que no existe &mdash; el servidor responde con el <strong>mismo archivo HTML idéntico</strong>: mismo título, misma descripción, mismo contenido de 3.935 caracteres. El contenido real solo aparece <em>después</em> de que se ejecuta JavaScript en el navegador, y la primera lectura de Google no espera a eso. Resultado: Google ve 60 páginas que parecen copias exactas entre sí y las descarta como contenido duplicado.</p>
+
+  <div class="box red">
+    <span class="bt">El hallazgo en una frase</span>
+    <p>Probamos en vivo el sitio: <code>/about</code>, <code>/services/medication-management</code> y una URL falsa (<code>/esta-pagina-no-existe-12345</code>) devolvieron <strong>los tres exactamente el mismo HTML &mdash; 3.935 caracteres, byte por byte</strong>. Para Google son la misma página. Ese es todo el problema.</p>
+  </div>
+
+  <h3>Qué hay que hacer</h3>
+  <ol>
+    <li><strong>Arreglo P0 (crítico):</strong> hacer que el servidor entregue título, descripción, contenido y datos estructurados <em>propios de cada ruta</em> en el HTML inicial &mdash; vía prerendering o SSR. Sin esto, nada más importa.</li>
+    <li><strong>Arreglo P0:</strong> que las URLs inexistentes devuelvan un error 404 real en lugar de "200 OK" (hoy cualquier URL inventada responde como si existiera).</li>
+    <li><strong>Arreglos P1:</strong> corregir el bug <code>:443</code> en la redirección HTTP, normalizar las barras finales, refrescar el sitemap y revisar las 1.081 URLs "bloqueadas por robots.txt".</li>
+    <li><strong>Hablar con el equipo de desarrollo</strong> antes de decidir la solución: el sitio ya inyecta el <code>canonical</code> correcto por ruta, así que es muy probable que extender ese mismo mecanismo resuelva el 80% sin reescribir la web.</li>
+  </ol>
+
+  <hr class="soft">
+  <h3>Contenido de este reporte</h3>
+  <ul class="toc">
+    <li><span class="tn">1.</span> ¿Google me está penalizando? La respuesta honesta</li>
+    <li><span class="tn">2.</span> Los números de Search Console, explicados uno por uno</li>
+    <li><span class="tn">3.</span> La causa raíz: una SPA que le miente a Google sin querer</li>
+    <li><span class="tn">4.</span> Hallazgos críticos (P0) &mdash; con evidencia en vivo</li>
+    <li><span class="tn">5.</span> Hallazgos secundarios (P1)</li>
+    <li><span class="tn">6.</span> Lo que el sitio SÍ hace bien</li>
+    <li><span class="tn">7.</span> Plan de acción priorizado</li>
+    <li><span class="tn">8.</span> Cómo plantearlo al equipo de desarrollo</li>
+    <li><span class="tn">9.</span> Validación post-arreglo</li>
+    <li><span class="tn">10.</span> Anexo &mdash; comandos y evidencia cruda</li>
+  </ul>
+</div>
+
+<!-- ============ 1. PENALIZACION ============ -->
+<div class="section">
+  <h2>1. &iquest;Google me está penalizando?</h2>
+  <div class="lead">La pregunta que más preocupa, respondida primero y sin rodeos.</div>
+
+  <p><strong>No. Google no está penalizando a Healing Minds Psychiatry.</strong> Es importante entender la diferencia, porque cambia por completo cómo se resuelve el problema.</p>
+
+  <table>
+    <tr><th style="width:50%">Penalización (acción manual)</th><th>Problema técnico de indexación (lo que tienes)</th></tr>
+    <tr>
+      <td>Un revisor humano de Google sanciona el sitio por violar sus normas (spam, contenido engañoso, enlaces comprados, contenido médico peligroso).</td>
+      <td>Google <em>quiere</em> indexar el sitio pero <em>no puede</em> distinguir sus páginas porque todas le llegan iguales. Es un fallo de comunicación técnica, no un castigo.</td>
+    </tr>
+    <tr>
+      <td>Aparece un aviso explícito en Search Console &rarr; <em>Seguridad y acciones manuales &rarr; Acciones manuales</em>.</td>
+      <td>No aparece ningún aviso ahí. Los síntomas salen en <em>Páginas &rarr; Por qué no se indexan las páginas</em> &mdash; exactamente donde los estás viendo.</td>
+    </tr>
+    <tr>
+      <td>Se resuelve pidiendo reconsideración a Google tras limpiar la infracción.</td>
+      <td>Se resuelve arreglando el código del sitio. No hay nada que "pedir perdón"; hay que hacer que el sitio se explique bien.</td>
+    </tr>
+  </table>
+
+  <div class="box ok">
+    <span class="bt">Confírmalo tú mismo en 30 segundos</span>
+    <p>Entra a Google Search Console &rarr; menú lateral <strong>Seguridad y acciones manuales</strong> &rarr; <strong>Acciones manuales</strong>. Debe decir <em>"No se han detectado problemas"</em>. Si dice eso &mdash; y casi con total seguridad lo dirá &mdash; queda confirmado: <strong>cero penalizaciones</strong>. Todo lo que ves es técnico y corregible.</p>
+  </div>
+
+  <h3>Entonces, &iquest;por qué la web "no aparece"?</h3>
+  <p>Porque una página que Google no indexa <strong>no puede mostrarse en los resultados de búsqueda</strong> &mdash; es como si no existiera para Google. No es que estés rankeando en la posición 80; es que esas páginas no están en el índice en absoluto. La buena noticia: en cuanto Google pueda leer cada página como una página distinta y con contenido propio, empezarán a indexarse y a competir por posiciones con normalidad. El problema no es de reputación, es de plomería.</p>
+</div>
+
+<!-- ============ 2. GSC NUMBERS ============ -->
+<div class="section">
+  <h2>2. Los números de Search Console, explicados</h2>
+  <div class="lead">Cada categoría que reporta Google, qué significa de verdad y a qué causa apunta.</div>
+
+  <p>Search Console agrupa <strong>1.167 URLs no indexadas</strong> en varias categorías. A primera vista parece caótico, pero casi todas apuntan a la misma raíz. Aquí están traducidas:</p>
+
+  <table class="tbl-tight">
+    <tr>
+      <th style="width:30%">Categoría en GSC</th>
+      <th style="width:9%">Cantidad</th>
+      <th style="width:9%">Gravedad</th>
+      <th>Qué significa realmente</th>
+    </tr>
+    <tr>
+      <td><strong>Bloqueada por robots.txt</strong></td>
+      <td>1.081</td>
+      <td><span class="badge b-info">Revisar</span></td>
+      <td>Google encontró 1.081 URLs que <code>robots.txt</code> le prohíbe rastrear. <strong>Probablemente NO es un problema</strong>: si son URLs técnicas (<code>/api/</code>, archivos, parámetros), está bien que estén bloqueadas. Hay que exportar la lista para confirmar que no haya páginas reales atrapadas. Ver §5.</td>
+    </tr>
+    <tr>
+      <td><strong>Excluida por etiqueta "noindex"</strong></td>
+      <td>5</td>
+      <td><span class="badge b-p1">P1</span></td>
+      <td>5 páginas le dicen explícitamente a Google "no me indexes". Puede ser intencional (páginas legales/utilitarias) o un descuido. Hay que identificar cuáles 5 son.</td>
+    </tr>
+    <tr>
+      <td><strong>Página con redirección</strong></td>
+      <td>3</td>
+      <td><span class="badge b-p1">P1</span></td>
+      <td>3 URLs redirigen a otra. Normal tras cambios de URL; Google recuerda la versión vieja. Menor.</td>
+    </tr>
+    <tr>
+      <td><strong>Error leve 404 (Soft 404)</strong></td>
+      <td>2</td>
+      <td><span class="badge b-p0">P0</span></td>
+      <td>Google pidió una URL que no existe y el sitio respondió "200 OK, todo bien" con una página vacía. <strong>Confirmado en vivo.</strong> Síntoma directo de la causa raíz. Ver §4.</td>
+    </tr>
+    <tr>
+      <td><strong>Duplicada sin canonical seleccionada</strong></td>
+      <td>2</td>
+      <td><span class="badge b-p0">P0</span></td>
+      <td>Google la ve idéntica a otra y no sabe cuál es la "oficial".</td>
+    </tr>
+    <tr>
+      <td><strong>Rastreada: actualmente sin indexar</strong></td>
+      <td>38</td>
+      <td><span class="badge b-p0">P0</span></td>
+      <td><strong>La categoría más grave.</strong> Google rastreó 38 páginas reales, vio que su contenido es idéntico/insustancial y <strong>decidió no indexarlas</strong>. Causa directa: HTML idéntico en todas. Ver §3 y §4.</td>
+    </tr>
+    <tr>
+      <td><strong>Duplicada: Google eligió otra canonical</strong></td>
+      <td>15</td>
+      <td><span class="badge b-p0">P0</span></td>
+      <td>15 páginas son tan parecidas entre sí que Google ignoró la canonical declarada y las agrupó como copias de otra. Las 15 quedan fuera del índice.</td>
+    </tr>
+    <tr>
+      <td>No encontrada (404)</td>
+      <td>0</td>
+      <td><span class="badge b-ok">OK</span></td>
+      <td>Sin errores 404 reales. Bien &mdash; aunque ver el matiz del Soft 404 arriba.</td>
+    </tr>
+    <tr>
+      <td>Página alternativa con canonical correcta</td>
+      <td>0</td>
+      <td><span class="badge b-ok">OK</span></td>
+      <td>Sin incidencias.</td>
+    </tr>
+    <tr>
+      <td><strong>Descubierta: actualmente sin indexar</strong></td>
+      <td>21</td>
+      <td><span class="badge b-p1">P1</span></td>
+      <td>Google conoce 21 URLs (por el sitemap) pero aún no las ha rastreado. Presupuesto de rastreo + sitemap desactualizado. Mejora sola cuando se arregla la raíz.</td>
+    </tr>
+  </table>
+
+  <div class="box amber">
+    <span class="bt">La lectura correcta de esta tabla</span>
+    <p>Ignora por un momento el número grande (1.081). Lo verdaderamente grave son las <strong>53 páginas reales</strong> de las categorías "rastreada sin indexar" (38) + "duplicada, Google eligió otra" (15). El sitio tiene 60 páginas en el sitemap &mdash; o sea que <strong>casi todo el sitio está fuera del índice de Google por la misma razón: contenido duplicado</strong>. Y ese duplicado no es real (las páginas SÍ son distintas para un humano), es un espejismo causado por cómo la web entrega el HTML.</p>
+  </div>
+</div>
+
+<!-- ============ 3. ROOT CAUSE ============ -->
+<div class="section">
+  <h2>3. La causa raíz: una SPA que le entrega lo mismo a Google en todas las páginas</h2>
+  <div class="lead">El 90% de todos los síntomas anteriores nacen de aquí.</div>
+
+  <h3>Cómo está construida la web</h3>
+  <p>Según el documento de requisitos del propio sitio (<code>PRD.txt</code>) y lo que confirmamos sondeando el servidor en vivo, la web es:</p>
+  <ul>
+    <li>Una <strong>Single Page Application (SPA)</strong> hecha en <strong>React</strong> + TypeScript.</li>
+    <li><strong>Renderizada del lado del cliente</strong> (client-side rendering): el HTML real se construye en el navegador del visitante ejecutando JavaScript.</li>
+    <li>Servida por un backend <strong>Express</strong> sobre infraestructura de Google (cabeceras <code>Server: Google Frontend</code> + <code>X-Powered-By: Express</code> &mdash; el patrón típico de un <strong>despliegue en Replit</strong>).</li>
+  </ul>
+  <p>Esta arquitectura es perfectamente válida para una app web. El problema aparece <strong>únicamente para el SEO</strong>, y es el mismo patrón que Inpulza ya documentó con el cliente Veritas Medical Group.</p>
+
+  <h3>El malentendido entre la SPA y Google</h3>
+  <p>Imagina que Google es un visitante que <strong>lee muy rápido y casi nunca espera</strong>. Cuando pide una página, esto es lo que ocurre:</p>
+
+  <table>
+    <tr><th style="width:50%">Lo que ve una persona en el navegador</th><th>Lo que ve Google en su primera lectura</th></tr>
+    <tr>
+      <td>El navegador descarga el HTML, ejecuta el JavaScript de React, y <strong>construye la página real</strong> con el contenido de esa ruta concreta (la página de "Manejo de Medicación", por ejemplo).</td>
+      <td>Recibe el HTML <strong>antes</strong> de ejecutar el JavaScript. Y ese HTML inicial es una <strong>plantilla vacía idéntica</strong> para todas las rutas. No ve el contenido específico de la página.</td>
+    </tr>
+    <tr>
+      <td>Ve 60 páginas distintas, cada una con su tema, su texto y su propósito.</td>
+      <td>Ve 60 páginas que <strong>parecen archivos calcados</strong>: mismo título, misma descripción, mismo cuerpo de 3.935 caracteres.</td>
+    </tr>
+  </table>
+
+  <p>Google <em>sí</em> puede ejecutar JavaScript, pero lo hace en una segunda pasada, más lenta y que <strong>no garantiza para todas las páginas</strong>. Si en la primera pasada todas las páginas le parecen idénticas, Google concluye <em>"esto es contenido duplicado, no vale la pena gastar recursos"</em> y deja de insistir. Por eso aparecen los 38 "rastreada sin indexar" y los 15 "duplicada".</p>
+
+  <div class="box red">
+    <span class="bt">Por qué esto es tan grave para una clínica</span>
+    <p>El SEO local de salud mental se gana con <strong>páginas específicas</strong>: una para ansiedad, una para depresión, una para "psiquiatra en Naples", una para "psiquiatra en Marco Island". El sitio las tiene todas creadas &mdash; el sitemap lista 60 &mdash; pero Google las ve como copias y las descarta. Es como tener un catálogo completo de servicios y que el cliente solo pueda ver la portada. <strong>El trabajo de contenido ya está hecho; Google simplemente no lo está recibiendo.</strong></p>
+  </div>
+
+  <h3>La cadena completa de causa y efecto</h3>
+  <table class="tbl-tight">
+    <tr><th>Causa técnica</th><th>&rarr;</th><th>Síntoma en Search Console</th></tr>
+    <tr><td>Mismo HTML/título/descripción en todas las rutas</td><td>&rarr;</td><td>38 rastreada sin indexar &middot; 15 duplicada (Google eligió otra) &middot; 2 duplicada sin canonical</td></tr>
+    <tr><td>El servidor responde 200 OK a URLs que no existen</td><td>&rarr;</td><td>2 Soft 404</td></tr>
+    <tr><td>Sitemap con fechas viejas + sin contenido distintivo</td><td>&rarr;</td><td>21 descubierta sin indexar</td></tr>
+    <tr><td>Variantes de URL antiguas (apex / http) ya conocidas por Google</td><td>&rarr;</td><td>3 página con redirección</td></tr>
+    <tr><td>Reglas de robots.txt + URLs técnicas o fantasma</td><td>&rarr;</td><td>1.081 bloqueada por robots.txt</td></tr>
+  </table>
+  <p class="small">Cinco categorías distintas de error, pero solo dos arreglos de fondo (renderizado por ruta + 404 reales) resuelven la inmensa mayoría.</p>
+</div>
+
+<!-- ============ 4. P0 FINDINGS ============ -->
+<div class="section">
+  <h2>4. Hallazgos críticos (P0)</h2>
+  <div class="lead">Cada hallazgo viene con la evidencia exacta obtenida sondeando www.healingmindsp.com el 21/05/2026.</div>
+
+  <!-- F1 -->
+  <div class="finding">
+    <div class="fh">
+      <span class="ft">P0&middot;1 &nbsp; Todas las páginas internas entregan HTML idéntico</span>
+      <span class="badge b-p0">CRÍTICO</span>
+    </div>
+    <div class="fb">
+      <div class="row"><span class="lbl">Síntoma</span><br>El HTML inicial servido para <code>/about</code>, <code>/services/medication-management</code> y una URL inexistente es <strong>el mismo, carácter por carácter</strong>: 3.935 caracteres de texto, mismo título, misma meta descripción.</div>
+      <div class="row"><span class="lbl">Evidencia en vivo</span></div>
+      <div class="evidence"><span class="c"># Texto de contenido en el HTML inicial (sin ejecutar JS):</span>
+/                                  <span class="g">13.076 chars</span>  <span class="c">(home: tiene contenido)</span>
+/about                             <span class="r">3.935 chars</span>   <span class="r">&larr; plantilla vacía</span>
+/services/medication-management    <span class="r">3.935 chars</span>   <span class="r">&larr; idéntica</span>
+/esta-pagina-no-existe-12345       <span class="r">3.935 chars</span>   <span class="r">&larr; idéntica (¡y no existe!)</span>
+
+<span class="c"># Title servido en TODAS las rutas, incluida la URL falsa:</span>
+"Expert Psychiatric Care in Naples, FL - Anxiety, Depression,
+ ADHD, Therapy | Dr. Melva Reve"</div>
+      <div class="row"><span class="lbl">Impacto</span><br>Google ve ~59 páginas como copias exactas. Origen directo de los 38 "rastreada sin indexar" + 15 "duplicada". <strong>Es el hallazgo número uno.</strong></div>
+      <div class="row"><span class="lbl">Arreglo requerido</span><br>El servidor debe entregar, en el HTML inicial, el <strong>título, la meta descripción, el H1, el contenido principal y el JSON-LD propios de cada ruta</strong> &mdash; mediante prerendering (generar HTML estático por ruta) o SSR. Ver §7 y §8.</div>
+    </div>
+  </div>
+
+  <!-- F2 -->
+  <div class="finding">
+    <div class="fh">
+      <span class="ft">P0&middot;2 &nbsp; El sitio responde "200 OK" a URLs que no existen (Soft 404)</span>
+      <span class="badge b-p0">CRÍTICO</span>
+    </div>
+    <div class="fb">
+      <div class="row"><span class="lbl">Síntoma</span><br>Cualquier URL inventada &mdash; <code>/esta-pagina-no-existe-12345</code>, <code>/zzz-fake-99</code>, <code>/404</code> &mdash; devuelve código <strong>HTTP 200 OK</strong> en lugar de un 404. El sitio le dice a Google que esas páginas inexistentes son válidas.</div>
+      <div class="row"><span class="lbl">Evidencia en vivo</span></div>
+      <div class="evidence"><span class="c"># curl -sI a URLs que NO existen:</span>
+GET /esta-pagina-no-existe-12345  &rarr;  <span class="r">HTTP/1.1 200 OK</span>
+GET /zzz-fake-99                  &rarr;  <span class="r">HTTP/1.1 200 OK</span>
+GET /404                          &rarr;  <span class="r">HTTP/1.1 200 OK</span>
+<span class="c"># Lo correcto sería: HTTP/1.1 404 Not Found</span></div>
+      <div class="row"><span class="lbl">Impacto</span><br>Google rastrea URLs basura como si fueran reales, malgasta presupuesto de rastreo y las marca como "Soft 404". También infla artificialmente cuántas URLs cree Google que existen &mdash; lo que puede contribuir al número anómalo de URLs descubiertas.</div>
+      <div class="row"><span class="lbl">Arreglo requerido</span><br>Añadir una ruta "catch-all" que, para cualquier ruta no reconocida, devuelva un <strong>código 404 real</strong> y una etiqueta <code>noindex</code>.</div>
+    </div>
+  </div>
+
+  <!-- F3 -->
+  <div class="finding">
+    <div class="fh">
+      <span class="ft">P0&middot;3 &nbsp; Título y meta descripción idénticos en todo el sitio</span>
+      <span class="badge b-p0">CRÍTICO</span>
+    </div>
+    <div class="fb">
+      <div class="row"><span class="lbl">Síntoma</span><br>Las 5 páginas sondeadas (incluida la home y una URL falsa) sirven el mismo <code>&lt;title&gt;</code> y la misma <code>&lt;meta name="description"&gt;</code> en el HTML inicial. El título y la descripción son la primera señal que usa Google para entender de qué trata una página.</div>
+      <div class="row"><span class="lbl">Impacto</span><br>Aunque se arregle el contenido, si título y descripción siguen iguales Google sigue sin poder diferenciarlas. Además, el título genérico no contiene palabras clave específicas por servicio ni por ciudad &mdash; se pierde todo el SEO local de las páginas de ubicaciones (Naples, Marco Island, Fort Myers, etc.).</div>
+      <div class="row"><span class="lbl">Arreglo requerido</span><br>Mismo arreglo que P0&middot;1: el título y la descripción deben generarse por ruta en el servidor. El sitio ya hace esto correctamente con la etiqueta <code>canonical</code> (ver §6), así que el mecanismo para extenderlo ya existe.</div>
+    </div>
+  </div>
+
+  <!-- F4 -->
+  <div class="finding">
+    <div class="fh">
+      <span class="ft">P0&middot;4 &nbsp; La etiqueta og:url contradice a la canonical</span>
+      <span class="badge b-p0">CRÍTICO</span>
+    </div>
+    <div class="fb">
+      <div class="row"><span class="lbl">Síntoma</span><br>En todas las páginas, la etiqueta <code>og:url</code> apunta a <code>https://healingmindsp.com</code> (dominio sin www, sin ruta), mientras la <code>canonical</code> apunta correctamente a la URL real con www y con su ruta. Dos señales en conflicto.</div>
+      <div class="row"><span class="lbl">Evidencia en vivo</span></div>
+      <div class="evidence"><span class="c"># En la página /about:</span>
+<span class="g">canonical</span>  &rarr; https://www.healingmindsp.com/about     <span class="g">&#10003; correcta</span>
+<span class="r">og:url</span>     &rarr; https://healingmindsp.com               <span class="r">&#10007; sin www, sin ruta, igual en todo el sitio</span></div>
+      <div class="row"><span class="lbl">Impacto</span><br>Refuerza la señal de "todas estas páginas son la misma" (todas dicen og:url = la raíz del dominio) y mezcla el dominio con/sin www. Contribuye a los duplicados.</div>
+      <div class="row"><span class="lbl">Arreglo requerido</span><br>Generar <code>og:url</code> por ruta, con www, igual que la canonical. Es un arreglo de una línea en el mismo punto donde ya se inyecta la canonical.</div>
+    </div>
+  </div>
+
+  <!-- F5 -->
+  <div class="finding">
+    <div class="fh">
+      <span class="ft">P0&middot;5 &nbsp; Sin etiqueta H1 en el HTML inicial</span>
+      <span class="badge b-p1">ALTO</span>
+    </div>
+    <div class="fb">
+      <div class="row"><span class="lbl">Síntoma</span><br>Ninguna de las páginas sondeadas &mdash; ni siquiera la home &mdash; tiene una etiqueta <code>&lt;h1&gt;</code> en el HTML inicial. El H1 es el encabezado principal: le dice a Google el tema central de la página. Solo aparece tras ejecutar JavaScript.</div>
+      <div class="row"><span class="lbl">Impacto</span><br>Google pierde la señal de jerarquía más importante de cada página en su primera lectura. Se resuelve automáticamente con el arreglo P0&middot;1 (renderizar contenido por ruta en servidor).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 5. P1 FINDINGS ============ -->
+<div class="section">
+  <h2>5. Hallazgos secundarios (P1)</h2>
+  <div class="lead">Problemas reales pero de menor impacto, o que se resuelven solos al arreglar la raíz.</div>
+
+  <h3>5.1 Bug <code>:443</code> en la redirección de HTTP a HTTPS</h3>
+  <p>Al pedir el sitio por <code>http://</code>, la redirección a la versión segura añade un puerto explícito que no debería estar:</p>
+  <div class="evidence"><span class="c"># curl -sI http://www.healingmindsp.com/</span>
+HTTP/1.1 301 Moved Permanently
+Location: https://www.healingmindsp.com<span class="r">:443</span>/   <span class="r">&larr; el ":443" sobra</span>
+<span class="c"># Debería ser: Location: https://www.healingmindsp.com/</span></div>
+  <p>Técnicamente <code>:443</code> es el puerto HTTPS por defecto, pero incluirlo hace que Google pueda ver <code>https://...:443/</code> como una URL <em>distinta</em> de <code>https://.../</code>. Es un origen probable de las 3 "página con redirección". <strong>Arreglo:</strong> en el middleware de redirección, eliminar el <code>:puerto</code> del host antes de construir la URL de destino (patrón ya documentado en la skill de Inpulza <code>seo-indexing-audit</code>, snippet A).</p>
+
+  <h3>5.2 Sin normalización de la barra final (trailing slash)</h3>
+  <p><code>/about</code> y <code>/about/</code> devuelven ambos 200 OK &mdash; son dos URLs que sirven lo mismo. Crea pares de duplicados innecesarios. <strong>Arreglo:</strong> redirigir 301 toda URL terminada en <code>/</code> a su versión sin barra (snippet D de la skill).</p>
+
+  <h3>5.3 Sitemap con fechas obsoletas</h3>
+  <p>El sitemap (<code>/sitemap.xml</code>) lista correctamente <strong>60 URLs</strong> bien estructuradas, pero sus fechas <code>&lt;lastmod&gt;</code> van de junio a septiembre de <strong>2025</strong> &mdash; entre 8 y 11 meses atrás. Google usa esa fecha para decidir cada cuánto revisita. Fechas viejas = recrawl lento, y contribuye a las 21 "descubierta sin indexar". Además, el sitemap se sirve con <code>Cache-Control: private</code>, lo que no es ideal. <strong>Arreglo:</strong> regenerar el sitemap con <code>&lt;lastmod&gt;</code> actual en cada publicación (script <code>generate-sitemap.mjs</code> de la skill).</p>
+
+  <h3>5.4 hreflang inconsistente entre páginas</h3>
+  <p>El sitio es bilingüe (inglés + español con prefijo <code>/es/</code>), lo cual es correcto. Pero las etiquetas <code>hreflang</code> (que conectan cada página con su versión en el otro idioma) aparecen de forma inconsistente: 3 en la home, 2 en <code>/about</code>, 0 en rutas no reconocidas. Deben ser consistentes y completas en cada par de páginas EN/ES. Se resuelve junto con el renderizado por ruta.</p>
+
+  <h3>5.5 Las 5 páginas con "noindex"</h3>
+  <p>Search Console reporta 5 páginas con etiqueta <code>noindex</code>. No es necesariamente un error &mdash; las páginas legales (política de cookies, términos) a veces se marcan así a propósito. <strong>Acción:</strong> en GSC, abrir la categoría "Excluida por noindex", exportar las 5 URLs y verificar que ninguna sea una página de servicio o ubicación que SÍ debería indexarse.</p>
+
+  <h3>5.6 Las 1.081 URLs "bloqueadas por robots.txt" &mdash; cómo interpretarlas</h3>
+  <p>Es el número más llamativo, pero <strong>casi seguro NO es el problema principal</strong>. El archivo <code>robots.txt</code> del sitio es razonable: permite todo el contenido (<code>Allow: /</code>) y solo bloquea zonas técnicas (<code>/api/</code>, <code>/server/</code>, <code>/admin/</code>, <code>/_next/</code>, <code>/404</code>, <code>/500</code>, y URLs con el parámetro <code>?_g=</code>). Bloquear esas zonas es <strong>correcto</strong>.</p>
+  <p>"Bloqueada por robots.txt" en GSC solo significa "Google quiso rastrear esto y le dijimos que no". Si esas 1.081 URLs son endpoints técnicos, archivos o URLs basura, <strong>está perfecto que estén bloqueadas y no hay que hacer nada</strong>. Las causas más probables del volumen alto:</p>
+  <ul>
+    <li><strong>URLs fantasma:</strong> como el sitio responde 200 a cualquier ruta (P0&middot;2), Google puede haber descubierto cientos de URLs inexistentes; las que coinciden con un patrón de <code>Disallow</code> caen en este grupo.</li>
+    <li><strong>Restos de una versión anterior del sitio</strong> (en la carpeta del cliente hay una plantilla Webflow de e-commerce &mdash; este tipo de plantilla genera miles de URLs de catálogo).</li>
+    <li><strong>URLs con parámetros de seguimiento</strong> de las campañas de Google Ads.</li>
+  </ul>
+  <div class="box amber">
+    <span class="bt">Acción concreta para este punto</span>
+    <p>En GSC, abre <em>Páginas &rarr; Bloqueada por robots.txt &rarr; Ejemplos</em> y exporta la lista. Revisa si aparece <strong>alguna página real</strong> (servicio, ubicación, "about", "contact"). <br>&bull; Si <strong>NO</strong> aparece ninguna página real &rarr; se ignora, es ruido benigno.<br>&bull; Si <strong>SÍ</strong> aparece alguna &rarr; hay que ajustar la regla concreta de <code>robots.txt</code> que la atrapa. Manda esa lista a Inpulza y la diagnosticamos al detalle.</p>
+  </div>
+</div>
+
+<!-- ============ 6. WHAT'S GOOD ============ -->
+<div class="section">
+  <h2>6. Lo que el sitio SÍ hace bien</h2>
+  <div class="lead">Importante: no todo está roto. Esto NO hay que tocarlo &mdash; y además facilita el arreglo.</div>
+
+  <table>
+    <tr><th style="width:34%">Acierto</th><th>Por qué importa</th></tr>
+    <tr>
+      <td><strong>Canonical correcta por ruta</strong> en el HTML inicial</td>
+      <td>Cada página declara su propia URL canónica, con www y ruta correcta. Esto demuestra que <strong>ya existe un mecanismo en el servidor que inyecta etiquetas por ruta</strong>. Es la clave del arreglo: extender ese mismo mecanismo a título, descripción y contenido.</td>
+    </tr>
+    <tr>
+      <td><strong>Redirección apex &rarr; www</strong></td>
+      <td><code>healingmindsp.com</code> redirige con 301 a <code>www.healingmindsp.com</code>. El dominio canónico está bien definido y es consistente.</td>
+    </tr>
+    <tr>
+      <td><strong>HTTPS funcionando</strong></td>
+      <td>El sitio fuerza HTTPS (salvo el detalle cosmético del <code>:443</code>). Sin penalización por seguridad.</td>
+    </tr>
+    <tr>
+      <td><strong>robots.txt sensato</strong></td>
+      <td>Permite el contenido, bloquea solo zonas técnicas, declara la ubicación del sitemap y frena bots agresivos (AhrefsBot, MJ12bot). Bien planteado.</td>
+    </tr>
+    <tr>
+      <td><strong>Sitemap completo y bien estructurado</strong></td>
+      <td>60 URLs, con jerarquía limpia: servicios, ubicaciones y páginas legales, cada una con su versión EN y ES. La <em>arquitectura de información</em> es buena; solo falta que Google pueda leer el contenido.</td>
+    </tr>
+    <tr>
+      <td><strong>Estructura de URLs limpia y bilingüe</strong></td>
+      <td><code>/services/anxiety-treatment</code>, <code>/es/servicios/tratamiento-ansiedad</code>, <code>/locations/psychiatrist-naples</code>&hellip; URLs descriptivas, con palabras clave, y separación EN/ES por prefijo <code>/es/</code>. Es exactamente como debe ser.</td>
+    </tr>
+    <tr>
+      <td><strong>Etiqueta meta robots permisiva</strong></td>
+      <td>Las páginas dicen <code>index, follow</code> &mdash; es decir, el sitio <em>quiere</em> ser indexado. No hay un <code>noindex</code> global que esté saboteando todo.</td>
+    </tr>
+    <tr>
+      <td><strong>Algo de JSON-LD presente</strong></td>
+      <td>La home incluye 3 bloques de datos estructurados. Hay base para construir el schema médico (MedicalClinic, Physician) en el resto de páginas.</td>
+    </tr>
+  </table>
+
+  <div class="box green">
+    <span class="bt">La conclusión optimista</span>
+    <p>El sitio está <strong>bien planteado a nivel de estrategia</strong>: buena estructura de URLs, sitemap completo, bilingüe, contenido por servicio y por ciudad ya creado. El único fallo &mdash; pero crítico &mdash; es <em>cómo se le entrega ese contenido a Google</em>. No hay que rehacer la web; hay que arreglar la capa de entrega. Y como el servidor ya inyecta la canonical por ruta, el camino técnico ya está medio abierto.</p>
+  </div>
+</div>
+
+<!-- ============ 7. ACTION PLAN ============ -->
+<div class="section">
+  <h2>7. Plan de acción priorizado</h2>
+  <div class="lead">Qué hacer, en qué orden, y qué resuelve cada paso. Pensado para ejecutarse en 3 sprints.</div>
+
+  <h3>Sprint 1 &mdash; El arreglo de fondo (resuelve ~85% del problema)</h3>
+  <table class="tbl-tight">
+    <tr><th style="width:6%">#</th><th style="width:54%">Acción</th><th>Resuelve</th></tr>
+    <tr><td>1</td><td><strong>Renderizar metadata y contenido por ruta en el servidor.</strong> Que el HTML inicial de cada URL incluya su título, meta descripción, H1, contenido principal y JSON-LD propios. Dos caminos posibles (a validar con el dev team, ver §8): <em>(a)</em> prerendering &mdash; generar un HTML estático por cada una de las 60 rutas; <em>(b)</em> SSR. La opción (a) suele ser la más rápida sin reescribir la web.</td><td>P0&middot;1, P0&middot;3, P0&middot;5 &rarr; los 38 "rastreada sin indexar", 15 "duplicada", 2 "duplicada sin canonical"</td></tr>
+    <tr><td>2</td><td><strong>Generar <code>og:url</code> por ruta</strong>, con www, idéntica a la canonical.</td><td>P0&middot;4</td></tr>
+    <tr><td>3</td><td><strong>hreflang completo y consistente</strong> en cada par EN/ES.</td><td>5.4</td></tr>
+  </table>
+
+  <h3>Sprint 2 &mdash; Limpieza de señales</h3>
+  <table class="tbl-tight">
+    <tr><th style="width:6%">#</th><th style="width:54%">Acción</th><th>Resuelve</th></tr>
+    <tr><td>4</td><td><strong>404 reales:</strong> ruta catch-all que devuelva código HTTP 404 + <code>noindex</code> para cualquier ruta no reconocida.</td><td>P0&middot;2 &rarr; los 2 Soft 404 y URLs fantasma</td></tr>
+    <tr><td>5</td><td><strong>Corregir el bug <code>:443</code></strong> en la redirección http&rarr;https (quitar el puerto del host).</td><td>5.1 &rarr; parte de "página con redirección"</td></tr>
+    <tr><td>6</td><td><strong>Normalizar trailing slash:</strong> 301 de <code>/ruta/</code> a <code>/ruta</code>.</td><td>5.2</td></tr>
+  </table>
+
+  <h3>Sprint 3 &mdash; Sitemap, robots y validación</h3>
+  <table class="tbl-tight">
+    <tr><th style="width:6%">#</th><th style="width:54%">Acción</th><th>Resuelve</th></tr>
+    <tr><td>7</td><td><strong>Regenerar el sitemap</strong> con <code>&lt;lastmod&gt;</code> actual y servirlo con cache pública. Reenviarlo en GSC.</td><td>5.3 &rarr; las 21 "descubierta sin indexar"</td></tr>
+    <tr><td>8</td><td><strong>Exportar y revisar</strong> las 5 URLs "noindex" y la muestra de las 1.081 "bloqueada por robots.txt". Ajustar reglas solo si hay páginas reales atrapadas.</td><td>5.5, 5.6</td></tr>
+    <tr><td>9</td><td><strong>Validar en GSC:</strong> "Validar corrección" en cada categoría de error + "Solicitar indexación" en las 5-10 páginas prioritarias.</td><td>Cierre del ciclo</td></tr>
+  </table>
+
+  <div class="box red">
+    <span class="bt">Regla de oro de la priorización</span>
+    <p>El <strong>paso 1 es el 85% del valor</strong>. No tiene sentido invertir en más contenido, en keyword research, ni en nuevas páginas hasta que el paso 1 esté hecho: cualquier página nueva caería en el mismo agujero. Sprint 1 primero, siempre.</p>
+  </div>
+
+  <h3>Expectativas de tiempo</h3>
+  <ul>
+    <li><strong>Implementación:</strong> Sprint 1, aprox. 3&ndash;7 días de desarrollo si se extiende el middleware ya existente (estimación a confirmar con el dev team). Sprints 2 y 3, 1&ndash;3 días más.</li>
+    <li><strong>Reacción de Google:</strong> tras publicar, la validación en GSC tarda 1&ndash;3 días en empezar; la reindexación masiva del sitio se ve a lo largo de <strong>2&ndash;4 semanas</strong>. La categoría "descubierta sin indexar" es la más lenta.</li>
+    <li><strong>Resultado esperado:</strong> de ~7 páginas indexadas hoy a las 60 del sitemap indexadas y compitiendo por posiciones en 4&ndash;6 semanas.</li>
+  </ul>
+</div>
+
+<!-- ============ 8. DEV TEAM ============ -->
+<div class="section">
+  <h2>8. Cómo plantearlo al equipo de desarrollo</h2>
+  <div class="lead">La auditoría diagnostica el síntoma desde fuera. Quien tiene el código sabe cuál es la solución más simple.</div>
+
+  <p>Una lección que Inpulza documentó con el caso Veritas: <strong>desde fuera se ve el síntoma, pero el equipo de desarrollo suele conocer una solución mucho más simple de lo que parece</strong>. En Veritas, la auditoría inicialmente sugirió migrar a otro framework (3&ndash;6 semanas); el equipo del cliente propuso extender un middleware que ya existía (3&ndash;5 días) &mdash; y tenían razón.</p>
+
+  <p>El sitio de Healing Minds está en la misma situación: <strong>ya inyecta la <code>canonical</code> correcta por ruta</strong>. Eso significa que el servidor Express ya tiene un punto donde modifica el HTML según la URL. La pregunta clave para el dev team no es "&iquest;reescribimos la web?" sino:</p>
+
+  <div class="box green">
+    <span class="bt">Preguntas exactas para el equipo de desarrollo</span>
+    <ol style="margin-bottom:0;">
+      <li>"El servidor ya inyecta la etiqueta <code>canonical</code> distinta por ruta. &iquest;Pueden extender ese <strong>mismo mecanismo</strong> para inyectar también <code>title</code>, <code>meta description</code>, <code>og:url</code>, <code>H1</code> y el contenido principal por ruta?"</li>
+      <li>"&iquest;Es viable un paso de <strong>prerendering</strong> que genere un HTML estático por cada una de las 60 rutas en cada publicación?"</li>
+      <li>"Para rutas no reconocidas, &iquest;pueden devolver un <strong>404 real</strong> en lugar de 200?"</li>
+      <li>"En la redirección http&rarr;https, &iquest;pueden quitar el <code>:443</code> del host de destino?"</li>
+    </ol>
+  </div>
+
+  <p><strong>El proceso recomendado:</strong> (1) compartir este reporte con el dev team; (2) dejar que ellos validen el camino técnico más corto con su conocimiento del código; (3) iterar sobre su propuesta; (4) ejecutar. <strong>No comprometerse con una migración de framework completa antes de esa conversación.</strong> Inpulza dispone de la skill interna <code>seo-indexing-audit</code> con los fragmentos de código exactos (middleware de canonical/meta, manejador 404, script de sitemap) listos para este stack Vite/React/Express &mdash; se los podemos pasar al dev team para acelerar.</p>
+
+  <h3>Nota sobre Replit</h3>
+  <p>El sitio está desplegado en Replit (las cabeceras <code>Server: Google Frontend</code> + <code>Express</code> lo confirman). Replit soporta perfectamente todo lo anterior &mdash; middlewares de Express, prerendering, manejadores 404. No hay que cambiar de hosting. Lo único a tener en cuenta: Replit a veces inyecta el puerto en las cabeceras de host (de ahí el bug <code>:443</code>), así que el middleware de redirección debe limpiar el puerto explícitamente.</p>
+</div>
+
+<!-- ============ 9. VALIDATION ============ -->
+<div class="section">
+  <h2>9. Validación post-arreglo</h2>
+  <div class="lead">Cómo comprobar, de forma objetiva, que cada arreglo funcionó &mdash; antes de pulsar "Validar" en Google.</div>
+
+  <h3>9.1 Comprobaciones técnicas (re-ejecutar tras publicar)</h3>
+  <table class="tbl-tight">
+    <tr><th style="width:46%">Comprobación</th><th>Resultado esperado tras el arreglo</th></tr>
+    <tr><td>Title de 3 páginas distintas</td><td>3 títulos <strong>distintos</strong>, específicos de cada página</td></tr>
+    <tr><td>Tamaño del cuerpo HTML de 3 páginas internas</td><td>Tamaños <strong>distintos</strong> entre sí, &gt; 3.935 chars, con contenido real</td></tr>
+    <tr><td><code>curl -I</code> a una URL inexistente</td><td><code>HTTP/1.1 404 Not Found</code></td></tr>
+    <tr><td><code>curl -I http://</code> al sitio</td><td><code>Location: https://www.healingmindsp.com/</code> (sin <code>:443</code>)</td></tr>
+    <tr><td><code>og:url</code> en 3 páginas</td><td>3 valores distintos, con www y ruta, iguales a la canonical</td></tr>
+    <tr><td><code>&lt;lastmod&gt;</code> del sitemap</td><td>Fecha de hoy</td></tr>
+    <tr><td>H1 en el HTML inicial</td><td>Un <code>&lt;h1&gt;</code> presente y propio de cada página</td></tr>
+  </table>
+  <p class="small">Los comandos exactos están en el Anexo A. También conviene usar la <em>Prueba de resultados enriquecidos</em> de Google y la <em>Inspección de URL &rarr; Probar URL publicada</em> en GSC, que muestran el HTML tal como lo ve Googlebot.</p>
+
+  <h3>9.2 Checklist en Google Search Console</h3>
+  <ul>
+    <li>&#9744; Publicar todos los arreglos del Sprint 1.</li>
+    <li>&#9744; <em>Sitemaps</em> &rarr; reenviar <code>/sitemap.xml</code> y esperar estado "Correcto".</li>
+    <li>&#9744; <em>Páginas</em> &rarr; en cada categoría de error, pulsar <strong>"Validar corrección"</strong> (la validación corre ~14 días).</li>
+    <li>&#9744; <em>Inspección de URL</em> &rarr; probar 5&ndash;10 páginas prioritarias (home, servicios principales, ubicaciones top) &rarr; <strong>"Solicitar indexación"</strong> (límite ~10/día).</li>
+    <li>&#9744; <em>Seguridad y acciones manuales</em> &rarr; confirmar de nuevo "No se han detectado problemas".</li>
+    <li>&#9744; A los 7 días: revisar que el número de "rastreada sin indexar" empiece a bajar.</li>
+    <li>&#9744; A las 4 semanas: revisar el total de páginas indexadas &mdash; objetivo: acercarse a 60.</li>
+  </ul>
+
+  <h3>9.3 Señales de éxito</h3>
+  <p>Sabrás que funcionó cuando, en GSC, las categorías "rastreada sin indexar" y "duplicada" bajen hacia cero y la cifra de <strong>páginas indexadas</strong> suba de forma sostenida. En paralelo, el informe de <em>Rendimiento</em> empezará a mostrar impresiones para las páginas de servicios y de ubicaciones, no solo para la home.</p>
+</div>
+
+<!-- ============ 10. ANNEX ============ -->
+<div class="section">
+  <h2>10. Anexo A &mdash; Comandos y evidencia cruda</h2>
+  <div class="lead">Para que el equipo de desarrollo pueda reproducir la auditoría y verificar los arreglos.</div>
+
+  <h3>Comandos de diagnóstico usados (21/05/2026)</h3>
+  <div class="evidence"><span class="c"># Canonicalización de host</span>
+curl -sI https://healingmindsp.com/        <span class="c"># &rarr; 301 a www  &#10003;</span>
+curl -sI http://www.healingmindsp.com/     <span class="c"># &rarr; 301 con :443  &#10007;</span>
+
+<span class="c"># Renderizado SPA &mdash; tamaño de contenido por ruta</span>
+UA="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+for u in / /about /services/medication-management /esta-pagina-no-existe-12345; do
+  curl -s -A "$UA" "https://www.healingmindsp.com$u"
+done
+
+<span class="c"># Soft 404 &mdash; URLs inexistentes</span>
+curl -sI https://www.healingmindsp.com/zzz-fake-99    <span class="c"># &rarr; 200 OK  &#10007;</span>
+
+<span class="c"># Sitemap y robots</span>
+curl -s https://www.healingmindsp.com/sitemap.xml | grep -c '&lt;loc&gt;'
+curl -s https://www.healingmindsp.com/robots.txt</div>
+
+  <h3>Resultados clave</h3>
+  <table class="tbl-tight">
+    <tr><th>Prueba</th><th>Resultado</th><th>Estado</th></tr>
+    <tr><td>apex &rarr; www</td><td>301 correcto</td><td><span class="badge b-ok">OK</span></td></tr>
+    <tr><td>http &rarr; https</td><td>301 con <code>:443</code> de más</td><td><span class="badge b-p1">P1</span></td></tr>
+    <tr><td>HTML idéntico en rutas internas</td><td>3.935 chars iguales en <code>/about</code>, servicio y URL falsa</td><td><span class="badge b-p0">P0</span></td></tr>
+    <tr><td>Title por ruta</td><td>Idéntico en las 5 rutas probadas</td><td><span class="badge b-p0">P0</span></td></tr>
+    <tr><td>Soft 404</td><td>200 OK en URLs inexistentes</td><td><span class="badge b-p0">P0</span></td></tr>
+    <tr><td>og:url</td><td><code>https://healingmindsp.com</code> fijo en todo el sitio</td><td><span class="badge b-p0">P0</span></td></tr>
+    <tr><td>canonical por ruta</td><td>Correcta, con www y ruta</td><td><span class="badge b-ok">OK</span></td></tr>
+    <tr><td>H1 en HTML inicial</td><td>Ausente en todas</td><td><span class="badge b-p1">P1</span></td></tr>
+    <tr><td>Sitemap</td><td>60 URLs, <code>lastmod</code> de 2025</td><td><span class="badge b-p1">P1</span></td></tr>
+    <tr><td>robots.txt</td><td>Permisivo, solo bloquea zonas técnicas</td><td><span class="badge b-ok">OK</span></td></tr>
+  </table>
+
+  <h3>robots.txt actual del sitio</h3>
+  <div class="evidence">User-agent: *
+Allow: /
+Sitemap: https://www.healingmindsp.com/sitemap.xml
+Disallow: /api/
+Disallow: /server/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /404
+Disallow: /500
+Disallow: /*?_g=
+User-agent: AhrefsBot   &rarr; Disallow: /
+User-agent: MJ12bot     &rarr; Disallow: /</div>
+
+  <div class="box ok">
+    <span class="bt">Resumen final</span>
+    <p><strong>No hay penalización.</strong> El sitio tiene una buena estrategia y estructura, pero su arquitectura SPA le entrega a Google el mismo HTML en todas las páginas, y por eso Google no las indexa. Con un arreglo de renderizado por ruta &mdash; extendiendo el mecanismo de canonical que el sitio ya tiene &mdash; el problema se resuelve y el sitio puede empezar a indexarse en 2&ndash;4 semanas. El siguiente paso es compartir este reporte con el equipo de desarrollo.</p>
+  </div>
+
+  <div class="footer-note">
+    Auditoría SEO técnica de indexación &mdash; Healing Minds Psychiatry (www.healingmindsp.com) &middot;
+    Preparado por Inpulza Media para Jordan / Dr. Melva Reve &middot; 21 de mayo de 2026 &middot;
+    Metodología: <code>inpulza-site-architecture-seo-audit-methodology</code> + <code>seo-indexing-audit</code>.
+    Evidencia obtenida mediante sondeo en vivo del servidor de producción con user-agent de Googlebot.
+    Diagnóstico de las 1.081 URLs bloqueadas pendiente de exportación de ejemplos desde Search Console.
+  </div>
+</div>
+
+</body>
+</html>
