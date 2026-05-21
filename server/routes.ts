@@ -7,7 +7,7 @@ import { MetricoolService } from "./services/metricool";
 import { reviewsCache } from "./cache/reviews-cache";
 import { staticReviews, staticStats } from "./data/static-reviews";
 import { emailService } from "./services/email";
-import { injectMetaTags } from "./utils/html-injection";
+import { injectMetaTags, isKnownRoute } from "./utils/html-injection";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -25,16 +25,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Solo se activa en producción para no romper el preview de Replit Workspace.
   if (isProduction) {
     app.use((req, res, next) => {
-      const host = (req.get('host') || '').toLowerCase();
+      const rawHost = (req.get('host') || '').toLowerCase();
+      // ":443" is the HTTPS default port. Google Frontend's implicit HTTP→HTTPS
+      // redirect leaves it in the host; if we don't redirect it away, Google
+      // treats "host:443" as a distinct origin and the Search Console fills up
+      // with "Page with redirect" duplicates.
+      const had443 = rawHost.endsWith(':443');
+      const hostBare = had443 ? rawHost.slice(0, -4) : rawHost;
       const shouldRedirect =
-        host === 'healingmindsp.com' ||
-        host.endsWith('.replit.app');
+        had443 ||
+        hostBare === 'healingmindsp.com' ||
+        hostBare.endsWith('.replit.app');
       if (shouldRedirect) {
         return res.redirect(301, `https://www.healingmindsp.com${req.originalUrl}`);
       }
       next();
     });
   }
+
+  // SEO: Normalize trailing slashes. Redirect every path that ends with "/"
+  // (except the root "/") to its slash-less version using a permanent 301.
+  // Avoids /about and /about/ being treated as two duplicate pages by Google.
+  app.use((req, res, next) => {
+    if (req.method !== 'GET') return next();
+    const path = req.path;
+    if (path.length > 1 && path.endsWith('/') && !path.includes('.')) {
+      const search = req.originalUrl.slice(req.path.length);
+      return res.redirect(301, path.slice(0, -1) + search);
+    }
+    next();
+  });
 
   if (isProduction) {
     app.use(async (req, res, next) => {
@@ -53,10 +73,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
           
           let html = await fs.promises.readFile(indexPath, "utf-8");
-          
+
+          // SEO: real 404 for routes the SPA does not recognize. We still serve
+          // the React app (so the NotFound page renders), but with HTTP 404 and
+          // a noindex meta so Google removes/skips the URL. Fixes Soft 404s.
+          // Use req.path so query strings (e.g. ?utm=...) don't trigger false 404s.
+          const known = isKnownRoute(req.path);
+          if (!known) {
+            html = html.replace(
+              /<meta\s+name=["']robots["'][^>]*>/i,
+              '<meta name="robots" content="noindex, follow">'
+            );
+            console.log(`🚫 SEO [PRODUCTION]: 404 + noindex for unknown route ${req.originalUrl}`);
+            html = injectMetaTags(html, req);
+            return res.status(404).set({ "Content-Type": "text/html" }).end(html);
+          }
+
           console.log(`🔧 SEO [PRODUCTION]: Injecting meta tags for ${req.originalUrl}`);
           html = injectMetaTags(html, req);
-          
+
           return res.status(200).set({ "Content-Type": "text/html" }).end(html);
         } catch (error) {
           console.error("❌ Error serving HTML with injections, falling back to static handler:", error);
@@ -76,11 +111,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Solo procesar requests que podrían ser páginas HTML (no APIs, no assets)
       if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
         const originalEnd = res.end;
-        
+        const known = isKnownRoute(req.path);
+
         res.end = function(chunk: any, encoding?: any) {
           if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html')) {
-            console.log(`🔧 SEO [DEV]: Injecting meta tags for ${req.originalUrl}`);
-            const modifiedHtml = injectMetaTags(chunk, req);
+            let modifiedHtml = chunk;
+            if (!known) {
+              modifiedHtml = modifiedHtml.replace(
+                /<meta\s+name=["']robots["'][^>]*>/i,
+                '<meta name="robots" content="noindex, follow">'
+              );
+              console.log(`🚫 SEO [DEV]: 404 + noindex for unknown route ${req.originalUrl}`);
+              res.status(404);
+            } else {
+              console.log(`🔧 SEO [DEV]: Injecting meta tags for ${req.originalUrl}`);
+            }
+            modifiedHtml = injectMetaTags(modifiedHtml, req);
             return originalEnd.call(this, modifiedHtml, encoding);
           }
           return originalEnd.call(this, chunk, encoding);

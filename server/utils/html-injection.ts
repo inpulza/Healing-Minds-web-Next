@@ -18,6 +18,63 @@ interface PageMeta {
   metaTags?: MetaTag[];
 }
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function buildMetaTagString(tag: MetaTag): string {
+  if (tag.rel && tag.href) {
+    if (tag.hreflang) {
+      return `<link rel="${tag.rel}" hreflang="${tag.hreflang}" href="${tag.href}" />`;
+    }
+    return `<link rel="${tag.rel}" href="${tag.href}" />`;
+  }
+  if (tag.name && tag.content !== undefined) {
+    return `<meta name="${tag.name}" content="${escapeHtml(tag.content)}" />`;
+  }
+  if (tag.property && tag.content !== undefined) {
+    return `<meta property="${tag.property}" content="${escapeHtml(tag.content)}" />`;
+  }
+  return '';
+}
+
+/**
+ * Replace an existing <meta name|property="..."> tag if present, otherwise insert before </head>.
+ * For <link rel="alternate" hreflang="..."> we never deduplicate by rel only (multiple allowed);
+ * we replace only when the same hreflang+rel combo already exists.
+ */
+function upsertMetaTag(html: string, tag: MetaTag): string {
+  const tagStr = `    ${buildMetaTagString(tag)}`;
+  if (!tagStr.trim()) return html;
+
+  if (tag.name) {
+    const regex = new RegExp(`<meta\\s+name=["']${escapeRegex(tag.name)}["'][^>]*>`, 'i');
+    if (regex.test(html)) return html.replace(regex, tagStr.trim());
+  } else if (tag.property) {
+    const regex = new RegExp(`<meta\\s+property=["']${escapeRegex(tag.property)}["'][^>]*>`, 'i');
+    if (regex.test(html)) return html.replace(regex, tagStr.trim());
+  } else if (tag.rel === 'alternate' && tag.hreflang) {
+    const regex = new RegExp(
+      `<link\\s+rel=["']alternate["']\\s+hreflang=["']${escapeRegex(tag.hreflang)}["'][^>]*>`,
+      'i'
+    );
+    if (regex.test(html)) return html.replace(regex, tagStr.trim());
+  } else if (tag.rel) {
+    const regex = new RegExp(`<link\\s+rel=["']${escapeRegex(tag.rel)}["'][^>]*>`, 'i');
+    if (regex.test(html)) return html.replace(regex, tagStr.trim());
+  }
+
+  return html.replace('</head>', `${tagStr}\n  </head>`);
+}
+
 /**
  * CRÍTICO: HTML Injection para meta tags server-side
  * Esta función inyecta meta tags específicos por ruta ANTES de enviar HTML al cliente
@@ -48,60 +105,160 @@ export function injectMetaTags(html: string, req: Request): string {
   }
   
   let modifiedHtml = html;
-  
-  // Inject canonical tag in <head>
-  if (pageMetaData.canonical) {
-    const canonicalTag = `    <link rel="canonical" href="${pageMetaData.canonical}" />`;
+
+  // 1) Replace <title> per-route. If no explicit title is defined,
+  //    derive it from og:title in the metaTags array (every route already declares one).
+  let titleToUse = pageMetaData.title;
+  if (!titleToUse && pageMetaData.metaTags) {
+    const ogTitle = pageMetaData.metaTags.find(t => t.property === 'og:title');
+    if (ogTitle?.content) titleToUse = ogTitle.content;
+  }
+  if (titleToUse) {
     modifiedHtml = modifiedHtml.replace(
-      '</head>',
-      `${canonicalTag}\n  </head>`
+      /<title>[\s\S]*?<\/title>/,
+      `<title>${escapeHtml(titleToUse)}</title>`
     );
   }
-  
-  // Inject JSON-LD schema in <head>
-  // Support both single schema and multiple schemas
+
+  // 2) Replace <meta name="description"> per-route (also covers description
+  //    when only declared as a top-level field, not inside metaTags).
+  if (pageMetaData.description) {
+    modifiedHtml = upsertMetaTag(modifiedHtml, {
+      name: 'description',
+      content: pageMetaData.description,
+    });
+  }
+
+  // 3) Inject canonical tag (append; index.html does not include one).
+  if (pageMetaData.canonical) {
+    const canonicalTag = `    <link rel="canonical" href="${pageMetaData.canonical}" />`;
+    modifiedHtml = modifiedHtml.replace('</head>', `${canonicalTag}\n  </head>`);
+  }
+
+  // 4) Inject JSON-LD schemas. Append all; index.html has none baked in.
   const schemasToInject = pageMetaData.schemas || (pageMetaData.schema ? [pageMetaData.schema] : []);
-  
   if (schemasToInject.length > 0) {
     const schemaTags = schemasToInject
       .map(schema => `    <script type="application/ld+json">${JSON.stringify(schema, null, 2)}</script>`)
       .join('\n');
-    
-    modifiedHtml = modifiedHtml.replace(
-      '</head>',
-      `${schemaTags}\n  </head>`
-    );
+    modifiedHtml = modifiedHtml.replace('</head>', `${schemaTags}\n  </head>`);
   }
-  
-  // Inject additional meta tags
+
+  // 5) Upsert all per-route meta tags (replace if already present, else insert).
+  //    This is what fixes the og:url/og:title/description duplication bug.
   if (pageMetaData.metaTags && pageMetaData.metaTags.length > 0) {
-    const additionalTags = pageMetaData.metaTags
-      .map(tag => {
-        if (tag.rel && tag.href) {
-          // Handle hreflang links
-          if (tag.hreflang) {
-            return `    <link rel="${tag.rel}" hreflang="${tag.hreflang}" href="${tag.href}" />`;
-          }
-          return `    <link rel="${tag.rel}" href="${tag.href}" />`;
-        } else if (tag.name && tag.content) {
-          return `    <meta name="${tag.name}" content="${tag.content}" />`;
-        } else if (tag.property && tag.content) {
-          return `    <meta property="${tag.property}" content="${tag.content}" />`;
-        }
-        return '';
-      })
-      .filter(tag => tag !== '')
-      .join('\n');
-      
-    if (additionalTags) {
-      modifiedHtml = modifiedHtml.replace(
-        '</head>',
-        `${additionalTags}\n  </head>`
-      );
+    // Also mirror og:title to twitter:title and og:description to twitter:description
+    // so social cards stay aligned per route.
+    const ogTitle = pageMetaData.metaTags.find(t => t.property === 'og:title');
+    const ogDescription = pageMetaData.metaTags.find(t => t.property === 'og:description');
+
+    for (const tag of pageMetaData.metaTags) {
+      modifiedHtml = upsertMetaTag(modifiedHtml, tag);
+    }
+
+    if (ogTitle?.content) {
+      modifiedHtml = upsertMetaTag(modifiedHtml, {
+        name: 'twitter:title',
+        content: ogTitle.content,
+      });
+    }
+    if (ogDescription?.content) {
+      modifiedHtml = upsertMetaTag(modifiedHtml, {
+        name: 'twitter:description',
+        content: ogDescription.content,
+      });
     }
   }
-  
+
   return modifiedHtml;
+}
+
+/**
+ * Authoritative allowlist of routes the SPA actually renders.
+ * Must stay in sync with the <Route> entries in client/src/App.tsx.
+ * This is the source of truth for 404 vs. 200 decisions and is intentionally
+ * decoupled from the metadata switch (which can lag behind the routes table).
+ */
+const KNOWN_ROUTES: ReadonlySet<string> = new Set([
+  // English
+  '/',
+  '/about',
+  '/contact',
+  '/for-patients',
+  '/services',
+  '/services/anxiety-treatment',
+  '/services/depression-treatment',
+  '/services/adhd-treatment',
+  '/services/ptsd-treatment',
+  '/services/bipolar-treatment',
+  '/services/medication-management',
+  '/telepsychiatry-florida',
+  '/locations/naples',
+  '/locations/psychiatrist-naples',
+  '/locations/psychiatrist-bonita-springs',
+  '/locations/psychiatrist-marco-island',
+  '/locations/psychiatrist-estero',
+  '/locations/psychiatrist-fort-myers',
+  '/locations/psychiatrist-ave-maria',
+  '/locations/psychiatrist-golden-gate',
+  '/locations/psychiatrist-immokalee',
+  '/locations/psychiatrist-lely-resort',
+  '/locations/psychiatrist-vanderbilt-beach',
+  '/privacy-policy',
+  '/terms-of-service',
+  '/hipaa-notice',
+  '/cookie-policy',
+  '/cancellation-policy',
+  '/billing-policy',
+  '/emergency-policy',
+  '/patient-rights',
+  // Spanish
+  '/es',
+  '/es/acerca-de',
+  '/es/contacto',
+  '/es/para-pacientes',
+  '/es/servicios',
+  '/es/servicios/tratamiento-ansiedad',
+  '/es/servicios/tratamiento-depresion',
+  '/es/servicios/tratamiento-adhd',
+  '/es/servicios/tratamiento-tept',
+  '/es/servicios/tratamiento-bipolar',
+  '/es/servicios/manejo-medicamentos',
+  '/es/telepsiquiatria-florida',
+  '/es/ubicaciones/psiquiatra-naples',
+  '/es/ubicaciones/psiquiatra-bonita-springs',
+  '/es/ubicaciones/psiquiatra-marco-island',
+  '/es/ubicaciones/psiquiatra-estero',
+  '/es/ubicaciones/psiquiatra-fort-myers',
+  '/es/ubicaciones/psiquiatra-ave-maria',
+  '/es/ubicaciones/psiquiatra-golden-gate',
+  '/es/ubicaciones/psiquiatra-immokalee',
+  '/es/ubicaciones/psiquiatra-lely-resort',
+  '/es/ubicaciones/psiquiatra-marco-island',
+  '/es/ubicaciones/psiquiatra-vanderbilt-beach',
+  '/es/politica-privacidad',
+  '/es/terminos-servicio',
+  '/es/aviso-hipaa',
+  '/es/politica-cookies',
+  '/es/politica-cancelacion',
+  '/es/politica-facturacion',
+  '/es/politica-emergencias',
+  '/es/derechos-paciente',
+]);
+
+/**
+ * Returns true when the given URL path corresponds to a real route we serve.
+ * Accepts either a bare path ("/about") or a full URL with query/hash; everything
+ * after "?" or "#" is ignored, and a single trailing slash is tolerated so that
+ * "/about/" still resolves to true (it will be 301-normalized separately).
+ */
+export function isKnownRoute(urlOrPath: string): boolean {
+  if (!urlOrPath) return false;
+  // Strip query string and hash before lookup.
+  let path = urlOrPath.split('?')[0].split('#')[0];
+  // Tolerate one trailing slash (real normalization happens via 301 redirect).
+  if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
+  return KNOWN_ROUTES.has(path);
 }
 
 /**

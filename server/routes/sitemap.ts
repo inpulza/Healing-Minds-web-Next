@@ -13,12 +13,19 @@ export const generateSitemap = (req: Request, res: Response) => {
   
   const baseUrl = `${protocol}://${host}`;
   
-  // Define realistic last modification dates for different types of content
-  const recentDate = '2025-08-20'; // Recent major updates (Microsoft Clarity, schema optimization)
-  const contentDate = '2025-08-15'; // Service page content updates
-  const oldContentDate = '2025-07-15'; // Older established content
-  const locationDate = '2025-09-15'; // New satellite location pages
-  const legalDate = '2025-06-01'; // Legal pages (less frequent updates)
+  // Last modification dates. Kept fresh automatically so Google re-crawls more often.
+  // We anchor on "today" and offset by category to preserve a sensible recency hierarchy.
+  const today = new Date();
+  const isoDate = (offsetDays: number) => {
+    const d = new Date(today);
+    d.setUTCDate(d.getUTCDate() - offsetDays);
+    return d.toISOString().split('T')[0];
+  };
+  const recentDate = isoDate(0);       // Homepage / heavily updated
+  const contentDate = isoDate(7);      // Service pages
+  const oldContentDate = isoDate(14);  // Established content
+  const locationDate = isoDate(3);     // Location pages (local SEO priority)
+  const legalDate = isoDate(30);       // Legal / policy pages
   
   // Define bilingual page relationships for hreflang
   const bilingualPages = [
