@@ -55,6 +55,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.redirect(301, target + qs);
   });
 
+  // CRÍTICO: Bloqueo de URLs basura / hack / spam de parámetros.
+  // DEBE ir ANTES del middleware de inyección de HTML (que termina la respuesta);
+  // de lo contrario estas URLs devolvían 200 con el home y desperdiciaban crawl budget
+  // (causa de los "Crawled - not indexed" / Soft 404 reportados en Search Console).
+  app.use((req, res, next) => {
+    if (req.method !== 'GET') return next();
+    const url = req.originalUrl;
+    const pathname = req.path;
+    const qs = url.includes('?') ? url.slice(url.indexOf('?') + 1) : '';
+
+    // 1) Hack de keywords japonés + spam de campañas/archivos → 410 Gone (contenido eliminado).
+    if (
+      url.includes('zhHant') ||
+      url.includes('surugaya') ||
+      qs.includes('campaign_uid') ||
+      qs.includes('.html') ||
+      qs.startsWith('cd_html') ||
+      qs.startsWith('hobby') ||
+      qs.startsWith('events') ||
+      pathname.startsWith('/product/') ||
+      pathname.includes('/zh') ||
+      pathname.includes('/ja/')
+    ) {
+      console.log(`🚫 410 Gone: junk/hack URL blocked - ${url}`);
+      return res.status(410).type('text/plain').send('Gone');
+    }
+
+    // 2) Spam de parámetro ?_g= → 403 Forbidden.
+    if (url.includes('?_g=') || url.includes('&_g=')) {
+      console.log(`🚫 403 Forbidden: parameter spam blocked - ${url}`);
+      return res.status(403).type('text/plain').send('Forbidden');
+    }
+
+    // 3) URLs fantasma de WordPress (tema anterior) → 410 Gone.
+    if (
+      pathname.startsWith('/home-') ||
+      pathname.startsWith('/member/') ||
+      pathname.startsWith('/legend/') ||
+      pathname.includes('/wp-') ||
+      pathname.includes('/wordpress/') ||
+      pathname.includes('/comments') ||
+      pathname.endsWith('/feed') ||
+      pathname.includes('/feed/') ||
+      (pathname.includes('/blog/') && !pathname.startsWith('/blog'))
+    ) {
+      console.log(`🚫 410 Gone: WordPress legacy URL blocked - ${url}`);
+      return res.status(410).type('text/plain').send('Gone');
+    }
+
+    next();
+  });
+
   // SEO: Normalize trailing slashes. Redirect every path that ends with "/"
   // (except the root "/") to its slash-less version using a permanent 301.
   // Avoids /about and /about/ being treated as two duplicate pages by Google.
@@ -377,56 +429,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/sitemap.xml", generateSitemap);
   app.get("/robots.txt", generateRobotsTxt);
 
-  // CRÍTICO: URL Cleanup Middleware - DEBE ir ANTES del catch-all routing
-  // Esta es la solución definitiva para Soft 404 y spam de parámetros
-  app.use((req, res, next) => {
-    const url = req.originalUrl;
-    const pathname = req.path;
-
-    // 1. HACKEO: Japanese Keyword Hack URLs → 410 Gone (contenido eliminado permanentemente)
-    if (url.includes('zhHant') || 
-        url.includes('surugaya') || 
-        url.includes('product/surugaya') ||
-        pathname.startsWith('/product/') ||
-        pathname.includes('/zh') ||
-        pathname.includes('/ja/')) {
-      console.log(`🚫 410 Gone: Japanese hack URL blocked - ${url}`);
-      return res.status(410).json({
-        error: 'Gone',
-        message: 'This content has been permanently removed',
-        code: 410
-      });
-    }
-
-    // 2. SPAM: URLs con parámetro ?_g= → 403 Forbidden (acceso denegado)
-    if (url.includes('?_g=') || url.includes('&_g=')) {
-      console.log(`🚫 403 Forbidden: Parameter spam blocked - ${url}`);
-      return res.status(403).json({
-        error: 'Forbidden', 
-        message: 'Access denied - parameter spam detected',
-        code: 403
-      });
-    }
-
-    // 3. WORDPRESS LEGACY: URLs fantasma del tema anterior → 404 Not Found
-    if (pathname.startsWith('/home-') ||
-        pathname.startsWith('/member/') ||
-        pathname.startsWith('/legend/') ||
-        pathname.includes('/wp-') ||
-        pathname.includes('/wordpress/') ||
-        pathname.includes('/blog/') && !pathname.startsWith('/blog') // Bloquea /blog/algo pero permite /blog
-        ) {
-      console.log(`🚫 404 Not Found: WordPress legacy URL blocked - ${url}`);
-      return res.status(404).json({
-        error: 'Not Found',
-        message: 'The requested page does not exist',
-        code: 404
-      });
-    }
-
-    // 4. URLs legítimas → continuar al SPA routing normal
-    next();
-  });
+  // NOTA: El bloqueo de URLs basura/hack/spam ahora se registra mucho antes
+  // (justo después del redirect /en) para que se ejecute ANTES del middleware
+  // de inyección de HTML, que de lo contrario terminaba la respuesta con 200.
 
   const httpServer = createServer(app);
   return httpServer;

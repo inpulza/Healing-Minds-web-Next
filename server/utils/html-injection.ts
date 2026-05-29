@@ -991,6 +991,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/privacy-policy`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/privacy-policy`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/politica-privacidad`
           }
         ]
       };
@@ -1010,6 +1020,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/terms-of-service`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/terms-of-service`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/terminos-servicio`
           }
         ]
       };
@@ -1029,6 +1049,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/hipaa-notice`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/hipaa-notice`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/aviso-hipaa`
           }
         ]
       };
@@ -1048,6 +1078,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/cookie-policy`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/cookie-policy`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/politica-cookies`
           }
         ]
       };
@@ -1068,6 +1108,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/servicios`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios`
           }
         ]
       };
@@ -1088,6 +1138,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/servicios/tratamiento-ansiedad`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/anxiety-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-ansiedad`
           }
         ]
       };
@@ -1107,6 +1167,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/servicios/tratamiento-depresion`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/depression-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-depresion`
           }
         ]
       };
@@ -1126,6 +1196,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/servicios/tratamiento-tept`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/ptsd-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-tept`
           }
         ]
       };
@@ -1145,6 +1225,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/servicios/tratamiento-bipolar`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/bipolar-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-bipolar`
           }
         ]
       };
@@ -1164,6 +1254,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/servicios/manejo-medicamentos`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/medication-management`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/manejo-medicamentos`
           }
         ]
       };
@@ -1184,6 +1284,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/politica-privacidad`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/privacy-policy`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/politica-privacidad`
           }
         ]
       };
@@ -1203,6 +1313,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/terminos-servicio`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/terms-of-service`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/terminos-servicio`
           }
         ]
       };
@@ -1222,6 +1342,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/aviso-hipaa`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/hipaa-notice`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/aviso-hipaa`
           }
         ]
       };
@@ -1241,6 +1371,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/politica-cookies`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/cookie-policy`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/politica-cookies`
           }
         ]
       };
@@ -1396,6 +1536,16 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             property: 'og:url',
             content: `${baseUrl}/es/servicios/tratamiento-adhd`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'en',
+            href: `${baseUrl}/services/adhd-treatment`
+          },
+          {
+            rel: 'alternate',
+            hreflang: 'es',
+            href: `${baseUrl}/es/servicios/tratamiento-adhd`
           }
         ]
       };
