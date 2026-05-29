@@ -19,6 +19,10 @@ export interface CityHyperlocal {
   routeSteps: Record<Lang, string[]>;
   duration: Record<Lang, string>;
   bottomNote: Record<Lang, string>;
+  featureBadges: { en: string; es: string }[];
+  serviceNotes: Record<Lang, string[]>;
+  neighborhoods: Record<Lang, string[]>;
+  localContext: Record<Lang, string>;
 }
 
 export const cityHyperlocal: Record<string, CityHyperlocal> = {
@@ -76,6 +80,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       en: "Serving Lely Resort residents — including Players Club & Spa, Stonebridge, the Classics and Lakoya — with in-person visits at our Park Shore office and secure telehealth follow-up. Call (239) 423-0272 for directions or scheduling.",
       es: "Atendiendo a residentes de Lely Resort — incluyendo Players Club & Spa, Stonebridge, the Classics y Lakoya — con visitas en persona en Park Shore y telesalud segura para seguimiento. Llame al (239) 423-0272.",
     },
+    featureBadges: [
+      { en: '55+ Community Focus', es: 'Enfoque en Comunidad 55+' },
+      { en: '15-20 Min via US-41', es: '15-20 Min por US-41' },
+      { en: 'Telehealth Between Visits', es: 'Telesalud Entre Visitas' },
+      { en: 'Medication Review', es: 'Revisión de Medicamentos' },
+      { en: 'Bilingual Care', es: 'Atención Bilingüe' },
+      { en: 'Easy Park Shore Parking', es: 'Estacionamiento Fácil en Park Shore' },
+    ],
+    serviceNotes: {
+      en: [
+        "Common among Lely retirees after a move, a new diagnosis, or the loss of a spouse.",
+        "We watch for low mood that can follow retirement or reduced mobility in active 55+ residents.",
+        "Adult ADHD evaluations for Lely residents who were never assessed earlier in life.",
+        "Trauma-informed care, including for veterans living across Lely's master-association communities.",
+        "Long-term mood stabilization coordinated with the other doctors many Lely retirees already see.",
+        "Careful review of multiple prescriptions — a frequent request from our older Lely patients.",
+      ],
+      es: [
+        "Frecuente en jubilados de Lely tras una mudanza, un nuevo diagnóstico o la pérdida de un cónyuge.",
+        "Vigilamos el ánimo bajo que puede seguir a la jubilación o a la movilidad reducida en residentes activos de 55+.",
+        "Evaluaciones de TDAH para adultos de Lely que nunca fueron valorados antes.",
+        "Atención informada en trauma, incluida para veteranos en las comunidades de Lely.",
+        "Estabilización del ánimo a largo plazo coordinada con los demás médicos que muchos jubilados de Lely ya consultan.",
+        "Revisión cuidadosa de múltiples recetas — una solicitud frecuente de nuestros pacientes mayores de Lely.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Players Club & Spa', 'Stonebridge', 'The Classics', 'Lakoya', 'Mustang Island', 'Lely Country Club', 'Ole at Lely Resort', 'Tiger Island Estates'],
+      es: ['Players Club & Spa', 'Stonebridge', 'The Classics', 'Lakoya', 'Mustang Island', 'Lely Country Club', 'Ole at Lely Resort', 'Tiger Island Estates'],
+    },
+    localContext: {
+      en: "We see patients from across Lely Resort's master-association communities in ZIP 34113 — from Players Club & Spa and Stonebridge to the Classics and Lakoya. Most come in once for an evaluation via Collier Boulevard and US-41, then continue with secure telehealth designed around an active 55+ lifestyle.",
+      es: "Atendemos a pacientes de toda la red de comunidades de Lely Resort en el ZIP 34113 — desde Players Club & Spa y Stonebridge hasta the Classics y Lakoya. La mayoría viene una vez para la evaluación por Collier Boulevard y US-41, y luego continúa con telesalud segura pensada para un estilo de vida activo 55+.",
+    },
   },
 
   vanderbiltBeach: {
@@ -131,6 +169,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     bottomNote: {
       en: "Serving Vanderbilt Beach with a snowbird-friendly model: in-person visits during the season, secure telehealth and written records sent to your northern provider when you travel. Call (239) 423-0272.",
       es: "Atendiendo a Vanderbilt Beach con un modelo amigable para snowbirds: visitas presenciales en temporada, telesalud segura y resúmenes enviados a su proveedor del norte cuando viaja. (239) 423-0272.",
+    },
+    featureBadges: [
+      { en: 'Snowbird Continuity', es: 'Continuidad para Snowbirds' },
+      { en: '10-15 Min on US-41', es: '10-15 Min por US-41' },
+      { en: 'Records Sent North', es: 'Resúmenes Enviados al Norte' },
+      { en: 'Seasonal Scheduling', es: 'Agenda Estacional' },
+      { en: 'Telehealth Anywhere', es: 'Telesalud en Cualquier Lugar' },
+      { en: 'Bilingual Care', es: 'Atención Bilingüe' },
+    ],
+    serviceNotes: {
+      en: [
+        "Often tied to the back-and-forth of seasonal living between Naples and a home up north.",
+        "We coordinate with your northern provider so care doesn't lapse when you travel.",
+        "Adult ADHD evaluations scheduled within your Florida season.",
+        "Trauma-informed care with secure video that follows you between residences.",
+        "Mood stabilization with written summaries sent to your home-state psychiatrist.",
+        "Refill and monitoring plans built around the months you spend away from Florida.",
+      ],
+      es: [
+        "A menudo ligada al ir y venir de la vida estacional entre Naples y otra casa en el norte.",
+        "Coordinamos con su proveedor del norte para que la atención no se interrumpa al viajar.",
+        "Evaluaciones de TDAH para adultos programadas dentro de su temporada en Florida.",
+        "Atención informada en trauma con video seguro que le acompaña entre residencias.",
+        "Estabilización del ánimo con resúmenes enviados a su psiquiatra en su estado de origen.",
+        "Planes de resurtido y monitoreo pensados para los meses fuera de Florida.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Vanderbilt Beach', 'Pelican Bay', 'Connors at Vanderbilt Beach', 'Baker-Carroll Point', 'Regatta', 'The Dunes', 'Naples Park (north)'],
+      es: ['Vanderbilt Beach', 'Pelican Bay', 'Connors at Vanderbilt Beach', 'Baker-Carroll Point', 'Regatta', 'The Dunes', 'Naples Park (norte)'],
+    },
+    localContext: {
+      en: "About 44.6% of housing in Vanderbilt Beach (ZIP 34108) is seasonal, so many of our patients here split the year between Naples and a home up north. Our Park Shore office is a 10–15 minute drive down US-41, and we build each plan around snowbird continuity — an in-person evaluation in season, then secure telehealth and written summaries sent to your home-state provider.",
+      es: "Cerca del 44.6% de la vivienda en Vanderbilt Beach (ZIP 34108) es estacional, por lo que muchos de nuestros pacientes dividen el año entre Naples y otra casa en el norte. Nuestra oficina de Park Shore queda a 10–15 minutos por US-41, y diseñamos cada plan para la continuidad del snowbird — una evaluación en persona en temporada y luego telesalud segura con resúmenes enviados a su proveedor de origen.",
     },
   },
 
@@ -188,6 +260,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       en: "Serving Bonita Springs (ZIP 34134/34135) with bilingual psychiatric care, US-41 access and telehealth follow-up. Call (239) 423-0272 to schedule.",
       es: "Atendiendo a Bonita Springs (ZIP 34134/34135) con atención psiquiátrica bilingüe, acceso por US-41 y telesalud para seguimiento. (239) 423-0272.",
     },
+    featureBadges: [
+      { en: 'Bilingual (EN/ES)', es: 'Bilingüe (EN/ES)' },
+      { en: 'Straight Shot on US-41', es: 'Directo por US-41' },
+      { en: '15-20 Min to Park Shore', es: '15-20 Min a Park Shore' },
+      { en: 'Medication Management', es: 'Manejo de Medicamentos' },
+      { en: 'Telehealth Follow-up', es: 'Seguimiento por Telesalud' },
+      { en: 'Most Major Insurance', es: 'Mayoría de Seguros' },
+    ],
+    serviceNotes: {
+      en: [
+        "Care in English or Spanish for Bonita's many bilingual households.",
+        "Comprehensive plans for residents across Bonita Bay, Pelican Landing and the Imperial corridor.",
+        "Adult ADHD evaluations — a common first visit for working Bonita Springs families.",
+        "Trauma-informed, culturally sensitive care for Bonita's diverse community.",
+        "Long-term mood stabilization, with the option of Spanish-language sessions.",
+        "Just 15–20 minutes south on US-41 for in-person medication reviews when needed.",
+      ],
+      es: [
+        "Atención en inglés o español para los muchos hogares bilingües de Bonita.",
+        "Planes integrales para residentes de Bonita Bay, Pelican Landing y el corredor de Imperial.",
+        "Evaluaciones de TDAH para adultos — una primera visita común para familias trabajadoras de Bonita Springs.",
+        "Atención informada en trauma y culturalmente sensible para la diversa comunidad de Bonita.",
+        "Estabilización del ánimo a largo plazo, con la opción de sesiones en español.",
+        "Solo 15–20 minutos al sur por US-41 para revisiones de medicamentos en persona cuando se necesite.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Bonita Bay', 'Pelican Landing', 'Spanish Wells', 'Worthington', 'Bonita National', 'Imperial', 'Palmira', 'Hunters Ridge'],
+      es: ['Bonita Bay', 'Pelican Landing', 'Spanish Wells', 'Worthington', 'Bonita National', 'Imperial', 'Palmira', 'Hunters Ridge'],
+    },
+    localContext: {
+      en: "Bonita Springs (ZIP 34134/34135) is home to roughly 57,000 residents, with about 21% of households speaking Spanish at home. From Bonita Bay and Pelican Landing to the Imperial corridor, our Park Shore office is a straight 15–20 minute drive south on US-41 — and bilingual sessions and telehealth follow-up are standard for our Bonita patients.",
+      es: "Bonita Springs (ZIP 34134/34135) tiene aproximadamente 57,000 residentes, y cerca del 21% de los hogares habla español en casa. Desde Bonita Bay y Pelican Landing hasta el corredor de Imperial, nuestra oficina de Park Shore queda a 15–20 minutos directos al sur por US-41 — y las sesiones bilingües y el seguimiento por telesalud son estándar para nuestros pacientes de Bonita.",
+    },
   },
 
   estero: {
@@ -243,6 +349,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     bottomNote: {
       en: "Serving Estero residents — including Pelican Sound, Grandezza, the Brooks, West Bay Club and Miromar Lakes — with in-person care and telehealth between visits. Call (239) 423-0272.",
       es: "Atendiendo a residentes de Estero — incluyendo Pelican Sound, Grandezza, the Brooks, West Bay Club y Miromar Lakes — con atención presencial y telesalud entre visitas. (239) 423-0272.",
+    },
+    featureBadges: [
+      { en: '65+ Friendly Care', es: 'Atención para 65+' },
+      { en: 'Near Coconut Point', es: 'Cerca de Coconut Point' },
+      { en: '25-30 Min via I-75', es: '25-30 Min por I-75' },
+      { en: 'Telehealth Available', es: 'Telesalud Disponible' },
+      { en: 'Bilingual Care', es: 'Atención Bilingüe' },
+      { en: 'Medication Review', es: 'Revisión de Medicamentos' },
+    ],
+    serviceNotes: {
+      en: [
+        "Support for both Estero's active retirees and the younger families near FGCU.",
+        "Personalized plans for residents of Pelican Sound, Grandezza, the Brooks and Miromar Lakes.",
+        "Adult ADHD evaluations, including for students and young professionals near FGCU.",
+        "Trauma-informed care with telehealth so the I-75 drive isn't needed every time.",
+        "Long-term mood stabilization built around Estero's busy seasonal calendar.",
+        "Careful medication review for the many 65+ residents managing several prescriptions.",
+      ],
+      es: [
+        "Apoyo tanto para los jubilados activos de Estero como para las familias jóvenes cerca de FGCU.",
+        "Planes personalizados para residentes de Pelican Sound, Grandezza, the Brooks y Miromar Lakes.",
+        "Evaluaciones de TDAH para adultos, incluidos estudiantes y jóvenes profesionales cerca de FGCU.",
+        "Atención informada en trauma con telesalud para evitar el viaje por la I-75 en cada cita.",
+        "Estabilización del ánimo a largo plazo pensada para el ajetreado calendario estacional de Estero.",
+        "Revisión cuidadosa de medicamentos para los muchos residentes 65+ que manejan varias recetas.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Pelican Sound', 'Grandezza', 'The Brooks', 'Wildcat Run', 'West Bay Club', 'Miromar Lakes', 'Coconut Point', 'Corkscrew Shores'],
+      es: ['Pelican Sound', 'Grandezza', 'The Brooks', 'Wildcat Run', 'West Bay Club', 'Miromar Lakes', 'Coconut Point', 'Corkscrew Shores'],
+    },
+    localContext: {
+      en: "Estero (ZIP 33928) is a Lee County village of roughly 39,000 where about 51.9% of residents are 65 or older and dozens of planned communities — Pelican Sound, Grandezza, the Brooks, West Bay Club and Miromar Lakes among them — anchor daily life. Our Park Shore office is 25–30 minutes south on I-75, and telehealth keeps the drive optional between visits.",
+      es: "Estero (ZIP 33928) es un poblado del condado de Lee con cerca de 39,000 residentes, donde aproximadamente el 51.9% tiene 65 años o más y decenas de comunidades planificadas — Pelican Sound, Grandezza, the Brooks, West Bay Club y Miromar Lakes entre ellas — estructuran la vida diaria. Nuestra oficina de Park Shore queda a 25–30 minutos al sur por I-75, y la telesalud hace opcional el viaje entre visitas.",
     },
   },
 
@@ -300,6 +440,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       en: "Serving Fort Myers and the Lee County metro with bilingual psychiatric care, an in-person Park Shore office and secure telehealth follow-up. Call (239) 423-0272 to schedule.",
       es: "Atendiendo a Fort Myers y al área metropolitana del condado de Lee con atención psiquiátrica bilingüe, oficina en Park Shore y telesalud segura para seguimiento. (239) 423-0272.",
     },
+    featureBadges: [
+      { en: 'Bilingual (EN/ES)', es: 'Bilingüe (EN/ES)' },
+      { en: 'Telehealth-First Follow-up', es: 'Seguimiento por Telesalud' },
+      { en: '40-45 Min via I-75', es: '40-45 Min por I-75' },
+      { en: 'One In-Person Visit', es: 'Una Visita en Persona' },
+      { en: 'Written Records Shared', es: 'Registros Compartidos' },
+      { en: 'Medication Management', es: 'Manejo de Medicamentos' },
+    ],
+    serviceNotes: {
+      en: [
+        "Care for a younger, more diverse Lee County population, in English or Spanish.",
+        "Comprehensive plans combining one in-person visit with ongoing telehealth.",
+        "Adult ADHD evaluations for busy Fort Myers professionals and parents.",
+        "Trauma-informed care by secure video, so the I-75 drive is rarely required.",
+        "Mood stabilization with clear written records you can share with local providers.",
+        "Medication management mostly by telehealth, with one Naples visit when needed.",
+      ],
+      es: [
+        "Atención para una población del condado de Lee más joven y diversa, en inglés o español.",
+        "Planes integrales que combinan una visita en persona con seguimiento por telesalud.",
+        "Evaluaciones de TDAH para adultos ocupados de Fort Myers, profesionales y padres.",
+        "Atención informada en trauma por video seguro, para que el viaje por la I-75 rara vez sea necesario.",
+        "Estabilización del ánimo con registros claros que puede compartir con proveedores locales.",
+        "Manejo de medicamentos principalmente por telesalud, con una visita a Naples cuando se necesite.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Downtown River District', 'McGregor', 'Gateway', 'Fort Myers Beach', 'Cape Coral (nearby)', 'Lehigh Acres', 'San Carlos Park', 'Whiskey Creek'],
+      es: ['Downtown River District', 'McGregor', 'Gateway', 'Fort Myers Beach', 'Cape Coral (cercano)', 'Lehigh Acres', 'San Carlos Park', 'Whiskey Creek'],
+    },
+    localContext: {
+      en: "The Fort Myers / Lee County metro has roughly 975,000 residents — younger and more diverse than Naples, with about 17.9% foreign-born. Many patients make one 40–45 minute drive south on I-75 for an in-person evaluation, then switch to secure telehealth for ongoing visits, with bilingual care and written records throughout.",
+      es: "El área metropolitana de Fort Myers / condado de Lee tiene aproximadamente 975,000 habitantes — más joven y diversa que Naples, con cerca del 17.9% nacidos en el extranjero. Muchos pacientes hacen un viaje de 40–45 minutos al sur por I-75 para la evaluación inicial y luego pasan a telesalud segura para visitas continuas, con atención bilingüe y registros escritos en todo momento.",
+    },
   },
 
   marcoIsland: {
@@ -355,6 +529,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     bottomNote: {
       en: "Serving Marco Island with a bridge-aware care plan: in-person when it matters, secure telehealth the rest of the time. Call (239) 423-0272.",
       es: "Atendiendo a Marco Island con un plan que tiene en cuenta el puente: presencial cuando importa, y telesalud segura el resto del tiempo. (239) 423-0272.",
+    },
+    featureBadges: [
+      { en: 'Skip the Jolley Bridge', es: 'Evite el Puente Jolley' },
+      { en: 'Telehealth-First Care', es: 'Atención por Telesalud' },
+      { en: '25-30 Min to Naples', es: '25-30 Min a Naples' },
+      { en: 'Snowbird Continuity', es: 'Continuidad para Snowbirds' },
+      { en: 'Bilingual Care', es: 'Atención Bilingüe' },
+      { en: 'Medication Management', es: 'Manejo de Medicamentos' },
+    ],
+    serviceNotes: {
+      en: [
+        "Secure video means most anxiety visits never require crossing the Jolley Bridge.",
+        "Comprehensive care for Marco's largely retired, year-round and seasonal residents.",
+        "Adult ADHD evaluations on the mainland, then follow-up by telehealth.",
+        "Trauma-informed care from home — no bridge required for follow-ups.",
+        "Long-term mood stabilization coordinated for seasonal residents.",
+        "Prescriptions sent electronically to your preferred Marco Island pharmacy.",
+      ],
+      es: [
+        "El video seguro hace que la mayoría de las citas de ansiedad no requieran cruzar el puente Jolley.",
+        "Atención integral para los residentes de Marco, en su mayoría jubilados, permanentes y estacionales.",
+        "Evaluaciones de TDAH para adultos en tierra firme, con seguimiento por telesalud.",
+        "Atención informada en trauma desde casa — sin necesidad de cruzar el puente para seguimientos.",
+        "Estabilización del ánimo a largo plazo coordinada para residentes estacionales.",
+        "Recetas enviadas electrónicamente a su farmacia preferida en Marco Island.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Old Marco', 'Tigertail Beach area', 'Hideaway Beach', 'Marco Shores', 'Smokehouse Bay', 'Key Marco', 'Caxambas'],
+      es: ['Old Marco', 'área de Tigertail Beach', 'Hideaway Beach', 'Marco Shores', 'Smokehouse Bay', 'Key Marco', 'Caxambas'],
+    },
+    localContext: {
+      en: "Marco Island (ZIP 34145) has a permanent population near 16,600 that nearly doubles in winter, with a median age close to 67.7. Because reaching our Park Shore office means Collier Blvd and the Jolley Bridge (25–30 minutes), we design care around the bridge — a thorough first evaluation in person, then secure telehealth that keeps most visits on the island.",
+      es: "Marco Island (ZIP 34145) tiene una población permanente cerca de 16,600 que casi se duplica en invierno, con edad mediana cercana a 67.7. Como llegar a nuestra oficina de Park Shore implica Collier Blvd y el puente Jolley (25–30 minutos), diseñamos la atención teniendo en cuenta el puente — una primera evaluación cuidadosa en persona y luego telesalud segura que mantiene la mayoría de las visitas en la isla.",
     },
   },
 
@@ -412,6 +620,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       en: "Serving Golden Gate (ZIP 34116) with fully bilingual psychiatric care — sessions in Spanish, school-coordinated teen care, and telehealth between visits. Call (239) 423-0272.",
       es: "Atendiendo a Golden Gate (ZIP 34116) con atención psiquiátrica completamente bilingüe — sesiones en español, atención coordinada con escuelas para adolescentes, y telesalud entre visitas. (239) 423-0272.",
     },
+    featureBadges: [
+      { en: 'Sessions in Spanish', es: 'Sesiones en Español' },
+      { en: 'School-Coordinated Teen Care', es: 'Atención Coordinada con Escuelas' },
+      { en: '12-15 Min via US-41', es: '12-15 Min por US-41' },
+      { en: 'Family-Focused Care', es: 'Atención Centrada en la Familia' },
+      { en: 'Telehealth Available', es: 'Telesalud Disponible' },
+      { en: 'Most Major Insurance', es: 'Mayoría de Seguros' },
+    ],
+    serviceNotes: {
+      en: [
+        "Delivered entirely in Spanish when preferred, including postpartum anxiety.",
+        "Care for working Golden Gate families, in Spanish or English.",
+        "Evaluations for adults and adolescents, coordinated with Collier County schools.",
+        "Trauma-informed, culturally sensitive care for Golden Gate's Hispanic community.",
+        "Long-term mood stabilization, with sessions available in Spanish.",
+        "Medication management in person or by telehealth, just 12–15 minutes away.",
+      ],
+      es: [
+        "Ofrecida completamente en español cuando se prefiere, incluida la ansiedad postparto.",
+        "Atención para familias trabajadoras de Golden Gate, en español o inglés.",
+        "Evaluaciones para adultos y adolescentes, coordinadas con las escuelas del condado de Collier.",
+        "Atención informada en trauma y culturalmente sensible para la comunidad hispana de Golden Gate.",
+        "Estabilización del ánimo a largo plazo, con sesiones disponibles en español.",
+        "Manejo de medicamentos en persona o por telesalud, a solo 12–15 minutos.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Golden Gate City', 'Golden Gate Estates', 'Sunshine Blvd area', 'Coronado', 'Tropicana', 'Santa Barbara corridor'],
+      es: ['Golden Gate City', 'Golden Gate Estates', 'área de Sunshine Blvd', 'Coronado', 'Tropicana', 'corredor de Santa Barbara'],
+    },
+    localContext: {
+      en: "Golden Gate (ZIP 34116) is a young, working-family community where about 58.9% of residents identify as Hispanic and roughly 79.6% of households speak Spanish at home. Sessions with Dr. Reve can be conducted entirely in Spanish — from ADHD evaluations to postpartum and family care — and our Park Shore office is just a 12–15 minute drive via Golden Gate Pkwy and US-41.",
+      es: "Golden Gate (ZIP 34116) es una comunidad joven de familias trabajadoras donde cerca del 58.9% se identifica como hispano y aproximadamente el 79.6% de los hogares habla español en casa. Las sesiones con la Dra. Reve pueden realizarse completamente en español — desde evaluaciones de TDAH hasta atención postparto y familiar — y nuestra oficina de Park Shore queda a solo 12–15 minutos por Golden Gate Pkwy y US-41.",
+    },
   },
 
   immokalee: {
@@ -468,6 +710,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       en: "Serving Immokalee (ZIP 34142) with bilingual psychiatric care designed around the realities of agricultural work — Spanish-language sessions, evening telehealth and a single longer in-person visit when needed. Call (239) 423-0272.",
       es: "Atendiendo a Immokalee (ZIP 34142) con atención psiquiátrica bilingüe diseñada para la realidad del trabajo agrícola — sesiones en español, telesalud por la tarde y una sola visita presencial más larga cuando se necesite. (239) 423-0272.",
     },
+    featureBadges: [
+      { en: 'Sessions in Spanish', es: 'Sesiones en Español' },
+      { en: 'Evening & Weekend Telehealth', es: 'Telesalud Tarde y Fines de Semana' },
+      { en: 'Scheduled Around Field Hours', es: 'Adaptada a Horarios del Campo' },
+      { en: 'One In-Person Visit', es: 'Una Visita en Persona' },
+      { en: 'Culturally Sensitive Care', es: 'Atención Culturalmente Sensible' },
+      { en: 'Most Major Insurance', es: 'Mayoría de Seguros' },
+    ],
+    serviceNotes: {
+      en: [
+        "Offered in Spanish, with evening telehealth so you don't lose a day in the fields.",
+        "Care for Immokalee's young, hardworking agricultural community.",
+        "Adult and adolescent evaluations scheduled around the harvest calendar.",
+        "Trauma-informed, confidential care in Spanish, by secure video when needed.",
+        "Long-term mood stabilization with telehealth between the longer in-person visits.",
+        "Refills sent to your Immokalee pharmacy, with evening follow-ups by video.",
+      ],
+      es: [
+        "Ofrecida en español, con telesalud por la tarde para no perder un día en el campo.",
+        "Atención para la joven y trabajadora comunidad agrícola de Immokalee.",
+        "Evaluaciones para adultos y adolescentes programadas según el calendario de cosecha.",
+        "Atención confidencial e informada en trauma en español, por video seguro cuando se necesite.",
+        "Estabilización del ánimo a largo plazo con telesalud entre las visitas presenciales más largas.",
+        "Resurtidos enviados a su farmacia de Immokalee, con seguimientos por video por la tarde.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Downtown Immokalee', 'Main St (SR-29) corridor', 'Lake Trafford', 'Farm Worker Village', 'Eden Park', 'Carson Rd area'],
+      es: ['Centro de Immokalee', 'corredor de Main St (SR-29)', 'Lake Trafford', 'Farm Worker Village', 'Eden Park', 'área de Carson Rd'],
+    },
+    localContext: {
+      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic and the median age is near 30. With a large agricultural workforce setting the rhythm of family life, we schedule Spanish-language sessions and evening or weekend telehealth so workers don't lose a day in the fields — reserving the 50–60 minute drive via CR-846 for the initial evaluation when possible.",
+      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano y la edad mediana es cercana a 30. Con una gran fuerza laboral agrícola marcando el ritmo familiar, programamos sesiones en español y telesalud por la tarde o los fines de semana para que los trabajadores no pierdan un día en el campo — reservando el viaje de 50–60 minutos por CR-846 para la evaluación inicial cuando es posible.",
+    },
   },
 
   aveMaria: {
@@ -523,6 +799,40 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     bottomNote: {
       en: "Serving Ave Maria with care that fits university and family life — bilingual sessions, telehealth that respects the academic calendar, and an in-person Park Shore office when an extended visit is needed. Call (239) 423-0272.",
       es: "Atendiendo a Ave Maria con atención adaptada a la vida universitaria y familiar — sesiones bilingües, telesalud que respeta el calendario académico, y oficina presencial en Park Shore cuando se necesita una visita extendida. (239) 423-0272.",
+    },
+    featureBadges: [
+      { en: 'University-Family Focus', es: 'Enfoque Universitario y Familiar' },
+      { en: 'Fits the Academic Calendar', es: 'Adaptada al Calendario Académico' },
+      { en: 'Telehealth-First Care', es: 'Atención por Telesalud' },
+      { en: 'Bilingual (EN/ES)', es: 'Bilingüe (EN/ES)' },
+      { en: 'College-Age Care', es: 'Atención para Edad Universitaria' },
+      { en: 'ADHD Evaluations', es: 'Evaluaciones de TDAH' },
+    ],
+    serviceNotes: {
+      en: [
+        "College-age anxiety care with telehealth that respects exam weeks.",
+        "Support for university students, faculty families and young parents.",
+        "Careful adult ADHD evaluations — a frequent request from Ave Maria students.",
+        "Trauma-informed care by secure video that fits academic schedules.",
+        "Long-term mood stabilization that continues through academic breaks.",
+        "Medication management mostly by telehealth, with a Naples visit when needed.",
+      ],
+      es: [
+        "Atención de ansiedad universitaria con telesalud que respeta las semanas de exámenes.",
+        "Apoyo para estudiantes universitarios, familias del profesorado y padres jóvenes.",
+        "Evaluaciones cuidadosas de TDAH para adultos — una solicitud frecuente de estudiantes de Ave Maria.",
+        "Atención informada en trauma por video seguro que se adapta a horarios académicos.",
+        "Estabilización del ánimo a largo plazo que continúa durante los recesos académicos.",
+        "Manejo de medicamentos principalmente por telesalud, con una visita a Naples cuando se necesite.",
+      ],
+    },
+    neighborhoods: {
+      en: ['Ave Maria University', 'Maple Ridge', 'Del Webb Naples', 'La Piazza / Town Center', 'Avalon Park', 'Coquina at Maple Ridge', 'Emerson Park'],
+      es: ['Ave Maria University', 'Maple Ridge', 'Del Webb Naples', 'La Piazza / Town Center', 'Avalon Park', 'Coquina at Maple Ridge', 'Emerson Park'],
+    },
+    localContext: {
+      en: "Ave Maria is a planned community of roughly 7,500 in eastern Collier County, founded in 2005 around Ave Maria University. With a young profile of students, faculty families and growing families, we offer bilingual sessions, careful ADHD evaluations, and college-age anxiety and depression care — with telehealth that respects the academic calendar, since the drive to Park Shore runs about 50–60 minutes via Oil Well Rd and I-75.",
+      es: "Ave Maria es una comunidad planificada de aproximadamente 7,500 habitantes en el este del condado de Collier, fundada en 2005 alrededor de Ave Maria University. Con un perfil joven de estudiantes, familias del profesorado y familias en crecimiento, ofrecemos sesiones bilingües, evaluaciones cuidadosas de TDAH y atención de ansiedad y depresión en edad universitaria — con telesalud que respeta el calendario académico, ya que el viaje a Park Shore es de unos 50–60 minutos por Oil Well Rd y la I-75.",
     },
   },
 };

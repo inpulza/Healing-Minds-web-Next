@@ -262,14 +262,7 @@ const LocationFortMyers = () => {
           {/* Features Badges */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             <div className="flex flex-wrap justify-center gap-3">
-              {[
-                { en: 'Easy Parking Available', es: 'Estacionamiento Fácil Disponible' },
-                { en: 'Accessible Location', es: 'Ubicación Accesible' },
-                { en: 'Private & Confidential', es: 'Privado y Confidencial' },
-                { en: 'Modern Facilities', es: 'Instalaciones Modernas' },
-                { en: 'Welcoming Environment', es: 'Ambiente Acogedor' },
-                { en: 'Professional Care', es: 'Atención Profesional' }
-              ].map((feature, index) => (
+              {local.featureBadges.map((feature, index) => (
                 <div key={index} className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
                   <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <CheckCircle className="w-3 h-3 text-blue-600" />
@@ -285,6 +278,32 @@ const LocationFortMyers = () => {
 
         {/* Insurance Logos Section - Moved below fold */}
         <LocationInsuranceLogos />
+
+        {/* Neighborhoods & Communities We Serve */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl sm:text-4xl font-body font-bold text-green-800 mb-4">
+                {language === 'en' ? (
+                  <>Neighborhoods &amp; <span className="font-display italic text-green-700">Communities</span> We Serve</>
+                ) : (
+                  <>Vecindarios y <span className="font-display italic text-green-700">Comunidades</span> que Atendemos</>
+                )}
+              </h2>
+              <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
+                {local.localContext[language]}
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-3">
+              {local.neighborhoods[language].map((neighborhood, index) => (
+                <div key={index} className="flex items-center gap-2 bg-green-50 rounded-full px-4 py-2 border border-green-100">
+                  <MapPin className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <span className="text-gray-700 font-body font-medium text-sm">{neighborhood}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Services Section */}
         <section className="py-20 bg-white">
@@ -383,6 +402,10 @@ const LocationFortMyers = () => {
                     
                     <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                       {service.description}
+                    </p>
+
+                    <p className="text-sm text-green-700 mb-4 sm:mb-6 font-body italic leading-relaxed">
+                      {local.serviceNotes[language][index]}
                     </p>
 
                     <Link href={service.link} className="mt-auto">
