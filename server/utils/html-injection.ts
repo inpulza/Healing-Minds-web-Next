@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { cityHyperlocal, type Lang } from '@/data/locationHyperlocal';
 
 interface MetaTag {
   name?: string;
@@ -28,6 +29,131 @@ function escapeHtml(s: string): string {
 
 function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// ── Satellite location registry ──────────────────────────────────────────────
+// Single source of truth tying each non-Naples location route to its hyperlocal
+// content (client/src/data/locationHyperlocal.ts) so server-side metadata and the
+// pre-rendered crawler body stay in sync with the React pages. Naples is the main
+// office and keeps its own bespoke entries in the switch statements below.
+interface SatelliteCity {
+  key: string;        // cityHyperlocal key
+  enSlug: string;     // path segment after /locations/
+  esSlug: string;     // path segment after /es/ubicaciones/
+  cityName: string;   // display + areaServed name
+}
+
+const SATELLITE_CITIES: SatelliteCity[] = [
+  { key: 'bonitaSprings',   enSlug: 'psychiatrist-bonita-springs',   esSlug: 'psiquiatra-bonita-springs',   cityName: 'Bonita Springs' },
+  { key: 'marcoIsland',     enSlug: 'psychiatrist-marco-island',     esSlug: 'psiquiatra-marco-island',     cityName: 'Marco Island' },
+  { key: 'fortMyers',       enSlug: 'psychiatrist-fort-myers',       esSlug: 'psiquiatra-fort-myers',       cityName: 'Fort Myers' },
+  { key: 'aveMaria',        enSlug: 'psychiatrist-ave-maria',        esSlug: 'psiquiatra-ave-maria',        cityName: 'Ave Maria' },
+  { key: 'estero',          enSlug: 'psychiatrist-estero',           esSlug: 'psiquiatra-estero',           cityName: 'Estero' },
+  { key: 'goldenGate',      enSlug: 'psychiatrist-golden-gate',      esSlug: 'psiquiatra-golden-gate',      cityName: 'Golden Gate' },
+  { key: 'immokalee',       enSlug: 'psychiatrist-immokalee',        esSlug: 'psiquiatra-immokalee',        cityName: 'Immokalee' },
+  { key: 'lelyResorts',     enSlug: 'psychiatrist-lely-resort',      esSlug: 'psiquiatra-lely-resort',      cityName: 'Lely Resort' },
+  { key: 'vanderbiltBeach', enSlug: 'psychiatrist-vanderbilt-beach', esSlug: 'psiquiatra-vanderbilt-beach', cityName: 'Vanderbilt Beach' },
+];
+
+const SATELLITE_BY_PATH: Record<string, { city: SatelliteCity; lang: Lang }> = (() => {
+  const index: Record<string, { city: SatelliteCity; lang: Lang }> = {};
+  for (const city of SATELLITE_CITIES) {
+    index[`/locations/${city.enSlug}`] = { city, lang: 'en' };
+    index[`/es/ubicaciones/${city.esSlug}`] = { city, lang: 'es' };
+  }
+  return index;
+})();
+
+// Per-route PageMeta for a satellite city, sourced from its hyperlocal SEO copy
+// so titles/descriptions are city-specific instead of boilerplate.
+function getLocationPageMeta(baseUrl: string, city: SatelliteCity, lang: Lang): PageMeta {
+  const data = cityHyperlocal[city.key];
+  const enUrl = `${baseUrl}/locations/${city.enSlug}`;
+  const esUrl = `${baseUrl}/es/ubicaciones/${city.esSlug}`;
+  const canonical = lang === 'es' ? esUrl : enUrl;
+  const locationPath = lang === 'es'
+    ? `/es/ubicaciones/${city.esSlug}`
+    : `/locations/${city.enSlug}`;
+  return {
+    canonical,
+    schema: getServiceSchema(baseUrl, city.cityName, lang, locationPath),
+    metaTags: [
+      { name: 'description', content: data.seo.description[lang] },
+      { property: 'og:title', content: data.seo.title[lang] },
+      { property: 'og:description', content: data.seo.description[lang] },
+      { property: 'og:url', content: canonical },
+      { rel: 'alternate', hreflang: 'en', href: enUrl },
+      { rel: 'alternate', hreflang: 'es', href: esUrl },
+    ],
+  };
+}
+
+// Pre-rendered crawler body for a satellite city, built from hyperlocal copy so
+// JS-disabled crawlers and AI bots see real, city-specific content.
+function buildLocationBody(
+  city: SatelliteCity,
+  lang: Lang,
+  links: { contactInfo: string; serviceLinks: string; locationLinks: string },
+): string {
+  const data = cityHyperlocal[city.key];
+  const isEs = lang === 'es';
+  const home = isEs ? '/es' : '/';
+  const altPath = isEs ? `/locations/${city.enSlug}` : `/es/ubicaciones/${city.esSlug}`;
+  const contactPath = isEs ? '/es/contacto' : '/contact';
+  const aboutPath = isEs ? '/es/acerca-de' : '/about';
+  const neighborhoods = data.neighborhoods[lang]
+    .map(n => `<li>${escapeHtml(n)}</li>`)
+    .join('\n      ');
+
+  const t = isEs
+    ? {
+        h1: `Psiquiatra para ${city.cityName}, FL — Dra. Melva Reve`,
+        localHeading: `Atención Local en ${city.cityName}`,
+        neighborhoodsHeading: 'Vecindarios que Atendemos',
+        servicesNav: 'Servicios',
+        areasNav: 'Otras Áreas',
+        quickNav: 'Enlaces Rápidos',
+        schedule: 'Programar Cita',
+        about: 'Sobre la Dra. Melva Reve',
+        altLabel: 'English',
+      }
+    : {
+        h1: `Psychiatrist for ${city.cityName}, FL — Dr. Melva Reve`,
+        localHeading: `Local Care in ${city.cityName}`,
+        neighborhoodsHeading: 'Neighborhoods We Serve',
+        servicesNav: 'Services',
+        areasNav: 'Nearby Areas',
+        quickNav: 'Quick Links',
+        schedule: 'Schedule Appointment',
+        about: 'About Dr. Melva Reve',
+        altLabel: 'Español',
+      };
+
+  return `<main>
+  <header><a href="${home}">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>${escapeHtml(t.h1)}</h1>
+    <p>${escapeHtml(data.heroDescription[lang])}</p>
+    <p>${escapeHtml(data.healingParagraph[lang])}</p>
+    ${links.contactInfo}
+  </section>
+  <section>
+    <h2>${escapeHtml(t.localHeading)}</h2>
+    <p>${escapeHtml(data.localContext[lang])}</p>
+    <h3>${escapeHtml(t.neighborhoodsHeading)}</h3>
+    <ul>
+      ${neighborhoods}
+    </ul>
+    <p>${escapeHtml(data.routeIntro[lang])}</p>
+  </section>
+  <nav aria-label="${escapeHtml(t.servicesNav)}">${links.serviceLinks}</nav>
+  <nav aria-label="${escapeHtml(t.areasNav)}">${links.locationLinks}</nav>
+  <nav aria-label="${escapeHtml(t.quickNav)}"><ul>
+    <li><a href="${contactPath}">${escapeHtml(t.schedule)}</a></li>
+    <li><a href="${aboutPath}">${escapeHtml(t.about)}</a></li>
+    <li><a href="${altPath}">${escapeHtml(t.altLabel)}</a></li>
+  </ul></nav>
+</main>`;
 }
 
 function buildMetaTagString(tag: MetaTag): string {
@@ -339,7 +465,14 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
   // trailing slash so "/about?utm=x" and "/about/" both resolve to "/about".
   const pathOnly = url.split('?')[0].split('#')[0];
   const normalizedUrl = pathOnly.replace(/\/$/, '') || '/';
-  
+
+  // Satellite location routes are generated from hyperlocal data so their titles,
+  // descriptions and Service schema stay city-specific and language-aware.
+  const satellite = SATELLITE_BY_PATH[normalizedUrl];
+  if (satellite) {
+    return getLocationPageMeta(baseUrl, satellite.city, satellite.lang);
+  }
+
   switch (normalizedUrl) {
     // Homepage
     case '/':
@@ -732,322 +865,6 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
             rel: 'alternate',
             hreflang: 'es',
             href: `${baseUrl}/es/ubicaciones/psiquiatra-naples`
-          }
-        ]
-      };
-
-    // Satellite Location Pages - Hub & Spoke Pattern
-    case '/locations/psychiatrist-bonita-springs':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-bonita-springs`,
-        schema: getServiceSchema(baseUrl, 'Bonita Springs'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Bonita Springs? Dr. Melva Reve serves Bonita Springs FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Bonita Springs FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Bonita Springs? Dr. Melva Reve serves Bonita Springs FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-bonita-springs`
-          },
-          // HREFLANG: Bonita Springs bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-bonita-springs`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-bonita-springs`
-          }
-        ]
-      };
-
-    case '/locations/psychiatrist-marco-island':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-marco-island`,
-        schema: getServiceSchema(baseUrl, 'Marco Island'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Marco Island? Dr. Melva Reve serves Marco Island FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Marco Island FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Marco Island? Dr. Melva Reve serves Marco Island FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-marco-island`
-          },
-          // HREFLANG: Marco Island bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-marco-island`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-marco-island`
-          }
-        ]
-      };
-
-    case '/locations/psychiatrist-fort-myers':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-fort-myers`,
-        schema: getServiceSchema(baseUrl, 'Fort Myers'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Fort Myers? Dr. Melva Reve serves Fort Myers FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Fort Myers FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Fort Myers? Dr. Melva Reve serves Fort Myers FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-fort-myers`
-          },
-          // HREFLANG: Fort Myers bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-fort-myers`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-fort-myers`
-          }
-        ]
-      };
-
-    case '/locations/psychiatrist-ave-maria':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-ave-maria`,
-        schema: getServiceSchema(baseUrl, 'Ave Maria'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Ave Maria? Dr. Melva Reve serves Ave Maria FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Ave Maria FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Ave Maria? Dr. Melva Reve serves Ave Maria FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-ave-maria`
-          },
-          // HREFLANG: Ave Maria bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-ave-maria`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-ave-maria`
-          }
-        ]
-      };
-
-    case '/locations/psychiatrist-estero':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-estero`,
-        schema: getServiceSchema(baseUrl, 'Estero'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Estero? Dr. Melva Reve serves Estero FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Estero FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Estero? Dr. Melva Reve serves Estero FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-estero`
-          },
-          // HREFLANG: Estero bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-estero`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-estero`
-          }
-        ]
-      };
-
-    case '/locations/psychiatrist-golden-gate':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-golden-gate`,
-        schema: getServiceSchema(baseUrl, 'Golden Gate'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Golden Gate? Dr. Melva Reve serves Golden Gate FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Golden Gate FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Golden Gate? Dr. Melva Reve serves Golden Gate FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-golden-gate`
-          },
-          // HREFLANG: Golden Gate bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-golden-gate`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-golden-gate`
-          }
-        ]
-      };
-
-    case '/locations/psychiatrist-immokalee':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-immokalee`,
-        schema: getServiceSchema(baseUrl, 'Immokalee'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Immokalee? Dr. Melva Reve serves Immokalee FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Immokalee FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Immokalee? Dr. Melva Reve serves Immokalee FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-immokalee`
-          },
-          // HREFLANG: Immokalee bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-immokalee`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-immokalee`
-          }
-        ]
-      };
-
-    case '/locations/psychiatrist-lely-resort':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-lely-resort`,
-        schema: getServiceSchema(baseUrl, 'Lely Resort'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Lely Resort? Dr. Melva Reve serves Lely Resort FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Lely Resort FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Lely Resort? Dr. Melva Reve serves Lely Resort FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-lely-resort`
-          },
-          // HREFLANG: Lely Resort bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-lely-resort`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resort`
-          }
-        ]
-      };
-
-    case '/locations/psychiatrist-vanderbilt-beach':
-      return {
-        canonical: `${baseUrl}/locations/psychiatrist-vanderbilt-beach`,
-        schema: getServiceSchema(baseUrl, 'Vanderbilt Beach'),
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Looking for expert psychiatric care in Vanderbilt Beach? Dr. Melva Reve serves Vanderbilt Beach FL area with anxiety, depression, ADHD, PTSD treatment. Call (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psychiatrist Near Vanderbilt Beach FL - Dr. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:description',
-            content: 'Looking for expert psychiatric care in Vanderbilt Beach? Dr. Melva Reve serves Vanderbilt Beach FL area with anxiety, depression, ADHD, PTSD treatment.'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/locations/psychiatrist-vanderbilt-beach`
-          },
-          // HREFLANG: Vanderbilt Beach bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-vanderbilt-beach`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-vanderbilt-beach`
           }
         ]
       };
@@ -1665,285 +1482,6 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
         ]
       };
 
-    case '/es/ubicaciones/psiquiatra-bonita-springs':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-bonita-springs`,
-        schema: getServiceSchema(baseUrl, 'Bonita Springs'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Bonita Springs? La Dra. Melva Reve sirve el área de Bonita Springs FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Bonita Springs FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-bonita-springs`
-          },
-          // HREFLANG: Bonita Springs bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-bonita-springs`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-bonita-springs`
-          }
-        ]
-      };
-
-    case '/es/ubicaciones/psiquiatra-marco-island':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-marco-island`,
-        schema: getServiceSchema(baseUrl, 'Marco Island'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Marco Island? La Dra. Melva Reve sirve el área de Marco Island FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Marco Island FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-marco-island`
-          },
-          // HREFLANG: Marco Island bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-marco-island`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-marco-island`
-          }
-        ]
-      };
-
-    case '/es/ubicaciones/psiquiatra-fort-myers':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-fort-myers`,
-        schema: getServiceSchema(baseUrl, 'Fort Myers'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Fort Myers? La Dra. Melva Reve sirve el área de Fort Myers FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Fort Myers FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-fort-myers`
-          },
-          // HREFLANG: Fort Myers bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-fort-myers`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-fort-myers`
-          }
-        ]
-      };
-
-    case '/es/ubicaciones/psiquiatra-ave-maria':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-ave-maria`,
-        schema: getServiceSchema(baseUrl, 'Ave Maria'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Ave Maria? La Dra. Melva Reve sirve el área de Ave Maria FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Ave Maria FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-ave-maria`
-          },
-          // HREFLANG: Ave Maria bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-ave-maria`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-ave-maria`
-          }
-        ]
-      };
-
-    case '/es/ubicaciones/psiquiatra-estero':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-estero`,
-        schema: getServiceSchema(baseUrl, 'Estero'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Estero? La Dra. Melva Reve sirve el área de Estero FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Estero FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-estero`
-          },
-          // HREFLANG: Estero bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-estero`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-estero`
-          }
-        ]
-      };
-
-    case '/es/ubicaciones/psiquiatra-golden-gate':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-golden-gate`,
-        schema: getServiceSchema(baseUrl, 'Golden Gate'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Golden Gate? La Dra. Melva Reve sirve el área de Golden Gate FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Golden Gate FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-golden-gate`
-          },
-          // HREFLANG: Golden Gate bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-golden-gate`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-golden-gate`
-          }
-        ]
-      };
-
-    case '/es/ubicaciones/psiquiatra-immokalee':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-immokalee`,
-        schema: getServiceSchema(baseUrl, 'Immokalee'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Immokalee? La Dra. Melva Reve sirve el área de Immokalee FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Immokalee FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-immokalee`
-          },
-          // HREFLANG: Immokalee bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-immokalee`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-immokalee`
-          }
-        ]
-      };
-
-    case '/es/ubicaciones/psiquiatra-lely-resort':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resort`,
-        schema: getServiceSchema(baseUrl, 'Lely Resort'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Lely Resort? La Dra. Melva Reve sirve el área de Lely Resort FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Lely Resort FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resort`
-          },
-          // HREFLANG: Lely Resort bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-lely-resort`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-lely-resort`
-          }
-        ]
-      };
-
-    case '/es/ubicaciones/psiquiatra-vanderbilt-beach':
-      return {
-        canonical: `${baseUrl}/es/ubicaciones/psiquiatra-vanderbilt-beach`,
-        schema: getServiceSchema(baseUrl, 'Vanderbilt Beach'),
-        metaTags: [
-          {
-            name: 'description',
-            content: '¿Busca atención psiquiátrica experta en Vanderbilt Beach? La Dra. Melva Reve sirve el área de Vanderbilt Beach FL con tratamiento para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
-          },
-          {
-            property: 'og:title',
-            content: 'Psiquiatra Cerca de Vanderbilt Beach FL - Dra. Melva Reve | Healing Minds'
-          },
-          {
-            property: 'og:url',
-            content: `${baseUrl}/es/ubicaciones/psiquiatra-vanderbilt-beach`
-          },
-          // HREFLANG: Vanderbilt Beach bilingual versions
-          {
-            rel: 'alternate',
-            hreflang: 'en',
-            href: `${baseUrl}/locations/psychiatrist-vanderbilt-beach`
-          },
-          {
-            rel: 'alternate',
-            hreflang: 'es',
-            href: `${baseUrl}/es/ubicaciones/psiquiatra-vanderbilt-beach`
-          }
-        ]
-      };
-
     // Telepsychiatry (EN + ES)
     case '/telepsychiatry-florida':
       return {
@@ -2157,14 +1695,20 @@ function getServiceDetailSchema(baseUrl: string, lang: 'en' | 'es', key: string)
   };
 }
 
-function getServiceSchema(baseUrl: string, cityName: string) {
+function getServiceSchema(baseUrl: string, cityName: string, lang: Lang = 'en', locationPath?: string) {
+  const isEs = lang === 'es';
+  const url = locationPath
+    ? `${baseUrl}${locationPath}`
+    : `${baseUrl}/locations/psychiatrist-${cityName.toLowerCase().replace(/ /g, '-')}`;
   return {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": `${baseUrl}/locations/psychiatrist-${cityName.toLowerCase().replace(/ /g, '-')}#Service`,
-    "name": "Psychiatric Services",
-    "description": `Expert psychiatric care and mental health services for ${cityName}, FL residents. Dr. Melva Reve provides comprehensive treatment for anxiety, depression, ADHD, PTSD, and other mental health conditions.`,
-    "serviceType": "Psychiatric Care",
+    "@id": `${url}#Service`,
+    "name": isEs ? "Servicios Psiquiátricos" : "Psychiatric Services",
+    "description": isEs
+      ? `Atención psiquiátrica experta y servicios de salud mental para residentes de ${cityName}, FL. La Dra. Melva Reve ofrece tratamiento integral para ansiedad, depresión, TDAH, TEPT y otras condiciones de salud mental.`
+      : `Expert psychiatric care and mental health services for ${cityName}, FL residents. Dr. Melva Reve provides comprehensive treatment for anxiety, depression, ADHD, PTSD, and other mental health conditions.`,
+    "serviceType": isEs ? "Atención Psiquiátrica" : "Psychiatric Care",
     "areaServed": {
       "@type": "City",
       "name": cityName,
@@ -2217,7 +1761,7 @@ function getServiceSchema(baseUrl: string, cityName: string) {
       ]
     },
     "availableLanguage": ["English", "Spanish"],
-    "url": `${baseUrl}/locations/psychiatrist-${cityName.toLowerCase().replace(/ /g, '-')}`
+    "url": url
   };
 }
 
@@ -2650,6 +2194,10 @@ function getStaticPageBody(path: string, baseUrl: string): string | null {
       <li><a href="/locations/psychiatrist-fort-myers">Fort Myers</a></li>
       <li><a href="/locations/psychiatrist-estero">Estero</a></li>
       <li><a href="/locations/psychiatrist-golden-gate">Golden Gate</a></li>
+      <li><a href="/locations/psychiatrist-ave-maria">Ave Maria</a></li>
+      <li><a href="/locations/psychiatrist-immokalee">Immokalee</a></li>
+      <li><a href="/locations/psychiatrist-lely-resort">Lely Resort</a></li>
+      <li><a href="/locations/psychiatrist-vanderbilt-beach">Vanderbilt Beach</a></li>
     </ul>`;
 
   const esLocationLinks = `<ul>
@@ -2659,6 +2207,10 @@ function getStaticPageBody(path: string, baseUrl: string): string | null {
       <li><a href="/es/ubicaciones/psiquiatra-fort-myers">Fort Myers</a></li>
       <li><a href="/es/ubicaciones/psiquiatra-estero">Estero</a></li>
       <li><a href="/es/ubicaciones/psiquiatra-golden-gate">Golden Gate</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-ave-maria">Ave Maria</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-immokalee">Immokalee</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-lely-resort">Lely Resort</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-vanderbilt-beach">Vanderbilt Beach</a></li>
     </ul>`;
 
   const enLegalLinks = `<ul>
@@ -2682,6 +2234,16 @@ function getStaticPageBody(path: string, baseUrl: string): string | null {
       <li><a href="/es/politica-emergencias">Pol&iacute;tica de Emergencias</a></li>
       <li><a href="/es/derechos-paciente">Derechos del Paciente</a></li>
     </ul>`;
+
+  // Satellite location pages render their crawler body from hyperlocal copy.
+  const satellite = SATELLITE_BY_PATH[path];
+  if (satellite) {
+    return buildLocationBody(satellite.city, satellite.lang, {
+      contactInfo,
+      serviceLinks: satellite.lang === 'es' ? esServiceLinks : enServiceLinks,
+      locationLinks: satellite.lang === 'es' ? esLocationLinks : enLocationLinks,
+    });
+  }
 
   switch (path) {
     // ── English Homepage ────────────────────────────────────────────────────
@@ -2941,150 +2503,6 @@ function getStaticPageBody(path: string, baseUrl: string): string | null {
   </ul></nav>
 </main>`;
 
-    case '/locations/psychiatrist-bonita-springs':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Bonita Springs, FL</h1>
-    <p>Looking for expert psychiatric care near Bonita Springs, FL? Dr. Melva Reve serves the Bonita Springs area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-bonita-springs">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/locations/psychiatrist-marco-island':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Marco Island, FL</h1>
-    <p>Looking for expert psychiatric care near Marco Island, FL? Dr. Melva Reve serves the Marco Island area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-marco-island">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/locations/psychiatrist-fort-myers':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Fort Myers, FL</h1>
-    <p>Looking for expert psychiatric care near Fort Myers, FL? Dr. Melva Reve serves the Fort Myers area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-fort-myers">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/locations/psychiatrist-ave-maria':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Ave Maria, FL</h1>
-    <p>Looking for expert psychiatric care near Ave Maria, FL? Dr. Melva Reve serves the Ave Maria area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-ave-maria">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/locations/psychiatrist-estero':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Estero, FL</h1>
-    <p>Looking for expert psychiatric care near Estero, FL? Dr. Melva Reve serves the Estero area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-estero">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/locations/psychiatrist-golden-gate':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Golden Gate, FL</h1>
-    <p>Looking for expert psychiatric care near Golden Gate, FL? Dr. Melva Reve serves the Golden Gate area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-golden-gate">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/locations/psychiatrist-immokalee':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Immokalee, FL</h1>
-    <p>Looking for expert psychiatric care near Immokalee, FL? Dr. Melva Reve serves the Immokalee area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-immokalee">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/locations/psychiatrist-lely-resort':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Lely Resort, FL</h1>
-    <p>Looking for expert psychiatric care near Lely Resort, FL? Dr. Melva Reve serves the Lely Resort area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-lely-resort">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/locations/psychiatrist-vanderbilt-beach':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist Near Vanderbilt Beach, FL</h1>
-    <p>Looking for expert psychiatric care near Vanderbilt Beach, FL? Dr. Melva Reve serves the Vanderbilt Beach area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-vanderbilt-beach">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
     // ── Spanish Location Pages ───────────────────────────────────────────────
     case '/es/ubicaciones/psiquiatra-naples':
       return `<main>
@@ -3100,150 +2518,6 @@ function getStaticPageBody(path: string, baseUrl: string): string | null {
     <li><a href="/es/ubicaciones/psiquiatra-marco-island">Marco Island</a></li>
     <li><a href="/es/ubicaciones/psiquiatra-fort-myers">Fort Myers</a></li>
     <li><a href="/es/contacto">Programar Cita</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-bonita-springs':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Bonita Springs, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Bonita Springs, FL? La Dra. Melva Reve atiende el &aacute;rea de Bonita Springs con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-bonita-springs">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-marco-island':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Marco Island, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Marco Island, FL? La Dra. Melva Reve atiende el &aacute;rea de Marco Island con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-marco-island">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-fort-myers':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Fort Myers, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Fort Myers, FL? La Dra. Melva Reve atiende el &aacute;rea de Fort Myers con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-fort-myers">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-ave-maria':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Ave Maria, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Ave Maria, FL? La Dra. Melva Reve atiende el &aacute;rea de Ave Maria con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-ave-maria">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-estero':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Estero, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Estero, FL? La Dra. Melva Reve atiende el &aacute;rea de Estero con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-estero">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-golden-gate':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Golden Gate, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Golden Gate, FL? La Dra. Melva Reve atiende el &aacute;rea de Golden Gate con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-golden-gate">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-immokalee':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Immokalee, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Immokalee, FL? La Dra. Melva Reve atiende el &aacute;rea de Immokalee con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-immokalee">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-lely-resort':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Lely Resort, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Lely Resort, FL? La Dra. Melva Reve atiende el &aacute;rea de Lely Resort con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-lely-resort">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/ubicaciones/psiquiatra-vanderbilt-beach':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra Cerca de Vanderbilt Beach, FL</h1>
-    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Vanderbilt Beach, FL? La Dra. Melva Reve atiende el &aacute;rea de Vanderbilt Beach con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-    <li><a href="/locations/psychiatrist-vanderbilt-beach">English</a></li>
   </ul></nav>
 </main>`;
 

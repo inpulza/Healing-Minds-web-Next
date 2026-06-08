@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'wouter';
 import { useLanguage } from '../contexts/LanguageContext';
 import { MapPin, Navigation, Clock, Users } from 'lucide-react';
 import southwestFloridaMap from '../assets/southwest-florida-map.webp';
@@ -6,34 +7,41 @@ import southwestFloridaMap from '../assets/southwest-florida-map.webp';
 const ServiceAreas: React.FC = () => {
   const { language } = useLanguage();
 
+  const locationPath = (enSlug: string, esSlug: string) =>
+    language === 'en' ? `/locations/${enSlug}` : `/es/ubicaciones/${esSlug}`;
+
   const serviceAreas = [
     {
       name: 'Naples, FL',
       population: '22,088',
       distance: language === 'en' ? 'Main Office' : 'Oficina Principal',
       coordinates: [26.1420, -81.7948] as [number, number],
-      isMainOffice: true
+      isMainOffice: true,
+      path: locationPath('psychiatrist-naples', 'psiquiatra-naples')
     },
     {
       name: 'Marco Island, FL', 
       population: '17,963',
       distance: language === 'en' ? '20 min drive' : '20 min en auto',
       coordinates: [25.9412, -81.7273] as [number, number],
-      isMainOffice: false
+      isMainOffice: false,
+      path: locationPath('psychiatrist-marco-island', 'psiquiatra-marco-island')
     },
     {
       name: 'Bonita Springs, FL',
       population: '57,755', 
       distance: language === 'en' ? '25 min drive' : '25 min en auto',
       coordinates: [26.3398, -81.7787] as [number, number],
-      isMainOffice: false
+      isMainOffice: false,
+      path: locationPath('psychiatrist-bonita-springs', 'psiquiatra-bonita-springs')
     },
     {
       name: 'Estero, FL',
       population: '36,939',
       distance: language === 'en' ? '30 min drive' : '30 min en auto',
       coordinates: [26.4376, -81.8067] as [number, number],
-      isMainOffice: false
+      isMainOffice: false,
+      path: locationPath('psychiatrist-estero', 'psiquiatra-estero')
     }
   ];
 
@@ -211,7 +219,12 @@ const ServiceAreas: React.FC = () => {
             {/* Service Areas List */}
             <div className="space-y-4" data-testid="service-areas-list">
               {serviceAreas.map((area, index) => (
-                <div key={index} className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-green-50 hover:shadow-md transition-shadow duration-300">
+                <Link
+                  key={index}
+                  href={area.path}
+                  className="block bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-green-50 hover:shadow-md hover:border-green-200 transition-all duration-300"
+                  data-testid={`service-area-link-${index}`}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 sm:gap-4">
                       <div className="w-3 h-3 bg-green-500 rounded-full flex-shrink-0"></div>
@@ -229,7 +242,7 @@ const ServiceAreas: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
 
