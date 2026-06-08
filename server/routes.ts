@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactMessageSchema } from "@shared/schema";
-import { generateSitemap, generateRobotsTxt } from "./routes/sitemap";
+import { generateSitemap, generateRobotsTxt, generateLlmsTxt } from "./routes/sitemap";
 import { MetricoolService } from "./services/metricool";
 import { reviewsCache } from "./cache/reviews-cache";
 import { staticReviews, staticStats } from "./data/static-reviews";
@@ -428,6 +428,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // SEO routes - Sitemap XML and Robots.txt
   app.get("/sitemap.xml", generateSitemap);
   app.get("/robots.txt", generateRobotsTxt);
+  app.get("/llms.txt", generateLlmsTxt);
 
   // NOTA: El bloqueo de URLs basura/hack/spam ahora se registra mucho antes
   // (justo después del redirect /en) para que se ejecute ANTES del middleware

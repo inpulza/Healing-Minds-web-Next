@@ -5,6 +5,13 @@ description: Why /es vs /es/ keeps causing recurring SEO audit flags (canonical/
 
 # /es trailing-slash mismatch is the recurring SEO regression
 
+**STATUS (June 2026): RESOLVED.** All surfaces below now use `/es` (slashless). A real
+plain-text `/llms.txt` route exists, and the two safe JSON-LD fixes (boolean
+`isAcceptingNewPatients`, Service `provider.@id` → `#organization`) are applied. Still
+OPEN: review `datePublished` (needs real dates, do not fabricate), thin city pages, and
+the missing-H1 page. If this trailing-slash flag ever reappears, re-check the rule below.
+
+
 The server 301-redirects every path ending in "/" (except root "/") to its slashless
 version, so `GET /es/` → 301 → `/es`. But the Spanish homepage's canonical, og:url,
 hreflang `es`, and the sitemap `<loc>`+hreflang all reference `/es/` (WITH trailing slash) —

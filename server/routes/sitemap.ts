@@ -32,7 +32,7 @@ export const generateSitemap = (req: Request, res: Response) => {
     // Homepage with bilingual version
     {
       en: '/',
-      es: '/es/',
+      es: '/es',
       lastmod: recentDate,
       changefreq: 'weekly',
       priority: '1.0'
@@ -403,4 +403,68 @@ Disallow: /`;
   });
   
   res.send(robotsTxt);
+};
+
+// llms.txt generator — gives AI search engines a clean, plain-text map of the site.
+// Format follows the spec at https://llmstxt.org (H1 title, blockquote summary, link sections).
+export const generateLlmsTxt = (req: Request, res: Response) => {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  let host = req.get('host') || 'www.healingmindsp.com';
+  if (host === 'healingmindsp.com') {
+    host = 'www.healingmindsp.com';
+  }
+  const baseUrl = `${protocol}://${host}`;
+
+  const llmsTxt = `# Healing Minds Psychiatry
+
+> Bilingual (English/Spanish) psychiatry practice led by Dr. Melva Reve in Naples, FL. Expert, compassionate treatment for anxiety, depression, ADHD, PTSD, bipolar disorder, and psychiatric medication management. Telepsychiatry available throughout Florida. Address: 4760 Tamiami Trl N # 25, Naples, FL 34103. Phone: (239) 423-0272.
+
+## Main Pages
+- [Home](${baseUrl}/): Overview of the practice, Dr. Melva Reve, and services
+- [About Dr. Melva Reve](${baseUrl}/about): Training, credentials, and approach to care
+- [Services](${baseUrl}/services): Full list of psychiatric services offered
+- [For Patients](${baseUrl}/for-patients): Forms, insurance, and what to expect
+- [Contact](${baseUrl}/contact): Address, phone, and appointment scheduling
+- [Telepsychiatry Florida](${baseUrl}/telepsychiatry-florida): Virtual psychiatric care across Florida
+
+## Services
+- [Anxiety Treatment](${baseUrl}/services/anxiety-treatment)
+- [Depression Treatment](${baseUrl}/services/depression-treatment)
+- [ADHD Treatment](${baseUrl}/services/adhd-treatment)
+- [PTSD Treatment](${baseUrl}/services/ptsd-treatment)
+- [Bipolar Treatment](${baseUrl}/services/bipolar-treatment)
+- [Medication Management](${baseUrl}/services/medication-management)
+
+## Locations
+- [Psychiatrist in Naples](${baseUrl}/locations/psychiatrist-naples)
+- [Psychiatrist in Bonita Springs](${baseUrl}/locations/psychiatrist-bonita-springs)
+- [Psychiatrist in Marco Island](${baseUrl}/locations/psychiatrist-marco-island)
+- [Psychiatrist in Fort Myers](${baseUrl}/locations/psychiatrist-fort-myers)
+- [Psychiatrist in Estero](${baseUrl}/locations/psychiatrist-estero)
+- [Psychiatrist in Ave Maria](${baseUrl}/locations/psychiatrist-ave-maria)
+- [Psychiatrist in Golden Gate](${baseUrl}/locations/psychiatrist-golden-gate)
+- [Psychiatrist in Immokalee](${baseUrl}/locations/psychiatrist-immokalee)
+- [Psychiatrist in Lely Resort](${baseUrl}/locations/psychiatrist-lely-resort)
+- [Psychiatrist in Vanderbilt Beach](${baseUrl}/locations/psychiatrist-vanderbilt-beach)
+
+## Spanish / Español
+- [Inicio](${baseUrl}/es): Versión en español del sitio
+- [Acerca de](${baseUrl}/es/acerca-de): Sobre la Dra. Melva Reve
+- [Servicios](${baseUrl}/es/servicios): Servicios psiquiátricos
+- [Para Pacientes](${baseUrl}/es/para-pacientes): Información para pacientes
+- [Contacto](${baseUrl}/es/contacto): Dirección, teléfono y citas
+
+## Legal
+- [Privacy Policy](${baseUrl}/privacy-policy)
+- [Terms of Service](${baseUrl}/terms-of-service)
+- [HIPAA Notice](${baseUrl}/hipaa-notice)
+- [Patient Rights](${baseUrl}/patient-rights)
+`;
+
+  res.set({
+    'Content-Type': 'text/plain; charset=utf-8',
+    'Cache-Control': 'public, max-age=86400'
+  });
+
+  res.send(llmsTxt);
 };

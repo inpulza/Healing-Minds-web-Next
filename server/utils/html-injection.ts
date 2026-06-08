@@ -305,7 +305,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             rel: 'alternate',
             hreflang: 'es',
-            href: `${baseUrl}/es/`
+            href: `${baseUrl}/es`
           },
           {
             rel: 'alternate',
@@ -1389,7 +1389,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/es':
     case '/es/':
       return {
-        canonical: `${baseUrl}/es/`,
+        canonical: `${baseUrl}/es`,
         schema: getMedicalBusinessSchema(baseUrl),
         metaTags: [
           {
@@ -1406,7 +1406,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           },
           {
             property: 'og:url',
-            content: `${baseUrl}/es/`
+            content: `${baseUrl}/es`
           },
           // HREFLANG: Homepage bilingual versions
           {
@@ -1417,7 +1417,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
           {
             rel: 'alternate',
             hreflang: 'es',
-            href: `${baseUrl}/es/`
+            href: `${baseUrl}/es`
           },
           {
             rel: 'alternate',
@@ -2012,7 +2012,7 @@ function getServiceSchema(baseUrl: string, cityName: string) {
     },
     "provider": {
       "@type": "MedicalClinic",
-      "@id": "https://www.healingmindsp.com/#MedicalClinic"
+      "@id": "https://www.healingmindsp.com/#organization"
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
@@ -2318,7 +2318,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
     "paymentAccepted": ["Insurance", "Credit Card", "Cash"],
     "currenciesAccepted": "USD",
     "priceRange": "$$",
-    "isAcceptingNewPatients": "True",
+    "isAcceptingNewPatients": true,
     "sameAs": [
       "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
       "https://www.instagram.com/hmpsychiatry/",
