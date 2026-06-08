@@ -230,6 +230,17 @@ export function injectMetaTags(html: string, req: Request): string {
     content: 'summary_large_image',
   });
 
+  // 7) Inject static pre-render body content into #root for non-rendering crawlers.
+  //    React will replace this content on load; JS-disabled crawlers and AI bots
+  //    (GPTBot, ClaudeBot, etc.) see real H1 + description + internal links.
+  const staticBody = getStaticPageBody(pathOnly, baseUrl);
+  if (staticBody) {
+    modifiedHtml = modifiedHtml.replace(
+      '<div id="root"></div>',
+      `<div id="root">${staticBody}</div>`
+    );
+  }
+
   return modifiedHtml;
 }
 
@@ -2588,4 +2599,692 @@ function getMedicalBusinessSchema(baseUrl: string) {
       }
     }
   };
+}
+
+/**
+ * Returns static semantic HTML for key public routes so non-rendering crawlers
+ * (GPTBot, ClaudeBot, Perplexity, etc.) can read the page's H1, description,
+ * and internal-link graph from the initial HTML response.
+ *
+ * React replaces this content immediately on boot — JS-enabled visitors never
+ * see it. The injection targets <div id="root"> in the shared SPA shell.
+ *
+ * Coverage: homepage, 6 service pages, 10 location pages, about, contact
+ * (EN + ES equivalents for each).
+ */
+function getStaticPageBody(path: string, baseUrl: string): string | null {
+  const phone = '(239) 423-0272';
+  const address = '4760 Tamiami Trl N #25, Naples, FL 34103';
+
+  const contactInfo = `<address>Dr. Melva Reve, MD &mdash; <a href="tel:+12394230272">${phone}</a> &mdash; ${address}</address>`;
+
+  const enServiceLinks = `<ul>
+      <li><a href="/services/anxiety-treatment">Anxiety Treatment</a></li>
+      <li><a href="/services/depression-treatment">Depression Treatment</a></li>
+      <li><a href="/services/adhd-treatment">ADHD Treatment</a></li>
+      <li><a href="/services/ptsd-treatment">PTSD Treatment</a></li>
+      <li><a href="/services/bipolar-treatment">Bipolar Disorder Treatment</a></li>
+      <li><a href="/services/medication-management">Medication Management</a></li>
+    </ul>`;
+
+  const esServiceLinks = `<ul>
+      <li><a href="/es/servicios/tratamiento-ansiedad">Tratamiento de Ansiedad</a></li>
+      <li><a href="/es/servicios/tratamiento-depresion">Tratamiento de Depresi&oacute;n</a></li>
+      <li><a href="/es/servicios/tratamiento-adhd">Tratamiento de TDAH</a></li>
+      <li><a href="/es/servicios/tratamiento-tept">Tratamiento de TEPT</a></li>
+      <li><a href="/es/servicios/tratamiento-bipolar">Tratamiento Bipolar</a></li>
+      <li><a href="/es/servicios/manejo-medicamentos">Manejo de Medicamentos</a></li>
+    </ul>`;
+
+  const enLocationLinks = `<ul>
+      <li><a href="/locations/psychiatrist-naples">Naples</a></li>
+      <li><a href="/locations/psychiatrist-bonita-springs">Bonita Springs</a></li>
+      <li><a href="/locations/psychiatrist-marco-island">Marco Island</a></li>
+      <li><a href="/locations/psychiatrist-fort-myers">Fort Myers</a></li>
+      <li><a href="/locations/psychiatrist-estero">Estero</a></li>
+      <li><a href="/locations/psychiatrist-golden-gate">Golden Gate</a></li>
+    </ul>`;
+
+  const esLocationLinks = `<ul>
+      <li><a href="/es/ubicaciones/psiquiatra-naples">Naples</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-bonita-springs">Bonita Springs</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-marco-island">Marco Island</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-fort-myers">Fort Myers</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-estero">Estero</a></li>
+      <li><a href="/es/ubicaciones/psiquiatra-golden-gate">Golden Gate</a></li>
+    </ul>`;
+
+  switch (path) {
+    // ── English Homepage ────────────────────────────────────────────────────
+    case '/':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Expert Psychiatric Care in Naples, FL</h1>
+    <p>Dr. Melva Reve provides expert psychiatric care in Naples, FL, specializing in anxiety, depression, ADHD, PTSD, and bipolar disorder. Bilingual services in English and Spanish. Most insurance plans accepted. Telehealth and in-office appointments available throughout Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Locations">${enLocationLinks}</nav>
+  <nav aria-label="More"><ul>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/contact">Contact &amp; Schedule Appointment</a></li>
+    <li><a href="/for-patients">For Patients</a></li>
+    <li><a href="/es">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── Spanish Homepage ─────────────────────────────────────────────────────
+    case '/es':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Atenci&oacute;n Psiqu&iacute;atrica Experta en Naples, FL</h1>
+    <p>La Dra. Melva Reve ofrece atenci&oacute;n psiqu&iacute;atrica experta en Naples, FL, especializ&aacute;ndose en ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Servicios biling&uuml;es en ingl&eacute;s y espa&ntilde;ol. Se aceptan la mayor&iacute;a de planes de seguro. Consultas de telesalud y en consultorio disponibles en todo el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Ubicaciones">${esLocationLinks}</nav>
+  <nav aria-label="M&aacute;s"><ul>
+    <li><a href="/es/acerca-de">Acerca de la Dra. Melva Reve</a></li>
+    <li><a href="/es/contacto">Contacto y Cita</a></li>
+    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
+    <li><a href="/">English</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── English Service Pages ────────────────────────────────────────────────
+    case '/services/anxiety-treatment':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Anxiety Treatment in Naples, FL</h1>
+    <p>Expert anxiety treatment in Naples, FL. Dr. Melva Reve provides comprehensive care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments and personalized medication management. Bilingual psychiatrist serving Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Related Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
+    <li><a href="/es/servicios/tratamiento-ansiedad">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/services/depression-treatment':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Depression Treatment in Naples, FL</h1>
+    <p>Professional depression treatment in Naples, FL. Dr. Melva Reve offers expert care for major depression, postpartum depression, and seasonal depression with personalized treatment plans and medication management. Bilingual psychiatrist serving Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Related Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
+    <li><a href="/es/servicios/tratamiento-depresion">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/services/adhd-treatment':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>ADHD Treatment in Naples, FL</h1>
+    <p>Expert ADHD treatment for adults in Naples, FL. Dr. Melva Reve provides comprehensive ADHD evaluation, medication management, and behavioral strategies to improve focus and daily functioning. Bilingual psychiatrist serving Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Related Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
+    <li><a href="/es/servicios/tratamiento-adhd">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/services/ptsd-treatment':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>PTSD Treatment in Naples, FL</h1>
+    <p>Trauma-informed psychiatric care for post-traumatic stress disorder in Naples, FL. Dr. Melva Reve uses evidence-based treatments to help patients heal from traumatic experiences, including therapy and medication management. Bilingual psychiatrist serving Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Related Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
+    <li><a href="/es/servicios/tratamiento-tept">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/services/bipolar-treatment':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Bipolar Disorder Treatment in Naples, FL</h1>
+    <p>Expert psychiatric care for bipolar disorder in Naples, FL. Dr. Melva Reve provides mood stabilization, medication management, and comprehensive support for bipolar I, bipolar II, and cyclothymia. Bilingual psychiatrist serving Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Related Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
+    <li><a href="/es/servicios/tratamiento-bipolar">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/services/medication-management':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Medication Management in Naples, FL</h1>
+    <p>Expert psychiatric medication evaluation, monitoring, and adjustment in Naples, FL. Dr. Melva Reve provides comprehensive safety assessments and personalized treatment plans for all psychiatric conditions. Bilingual psychiatrist serving Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Related Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
+    <li><a href="/es/servicios/manejo-medicamentos">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── Spanish Service Pages ────────────────────────────────────────────────
+    case '/es/servicios/tratamiento-ansiedad':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Tratamiento de Ansiedad en Naples, FL</h1>
+    <p>Tratamiento experto de ansiedad en Naples, FL. La Dra. Melva Reve proporciona atenci&oacute;n integral para ataques de p&aacute;nico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/services/anxiety-treatment">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/servicios/tratamiento-depresion':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Tratamiento de Depresi&oacute;n en Naples, FL</h1>
+    <p>Tratamiento profesional de depresi&oacute;n en Naples, FL. La Dra. Melva Reve ofrece atenci&oacute;n experta para depresi&oacute;n mayor, depresi&oacute;n posparto y depresi&oacute;n estacional con planes de tratamiento personalizados. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/services/depression-treatment">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/servicios/tratamiento-adhd':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Tratamiento de TDAH en Naples, FL</h1>
+    <p>Tratamiento experto de TDAH para adultos en Naples, FL. La Dra. Melva Reve ofrece evaluaci&oacute;n integral de TDAH, manejo de medicamentos y estrategias conductuales para mejorar el enfoque y funcionamiento diario. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/services/adhd-treatment">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/servicios/tratamiento-tept':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Tratamiento de TEPT en Naples, FL</h1>
+    <p>Atenci&oacute;n psiqu&iacute;atrica informada en trauma para trastorno de estr&eacute;s postraum&aacute;tico en Naples, FL. La Dra. Melva Reve usa tratamientos basados en evidencia para ayudar a los pacientes a sanar de experiencias traum&aacute;ticas. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/services/ptsd-treatment">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/servicios/tratamiento-bipolar':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Tratamiento de Trastorno Bipolar en Naples, FL</h1>
+    <p>Atenci&oacute;n psiqu&iacute;atrica experta para trastorno bipolar en Naples, FL. La Dra. Melva Reve ofrece estabilizaci&oacute;n del &aacute;nimo, manejo de medicamentos y apoyo integral para bipolar I, II y ciclotimia. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/services/bipolar-treatment">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/servicios/manejo-medicamentos':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Manejo de Medicamentos en Naples, FL</h1>
+    <p>Evaluaci&oacute;n, monitoreo y ajuste experto de medicamentos psiqu&iacute;atricos en Naples, FL. La Dra. Melva Reve proporciona evaluaciones de seguridad integrales y planes de tratamiento personalizados para todas las condiciones psiqu&iacute;atricas. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/services/medication-management">English</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── English Location Pages ───────────────────────────────────────────────
+    case '/locations/psychiatrist-naples':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist in Naples, FL &mdash; Dr. Melva Reve</h1>
+    <p>Visit Dr. Melva Reve at our Naples, FL office for expert psychiatric care. Specializing in anxiety, depression, ADHD, PTSD, and bipolar disorder. In-person and telehealth appointments available. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Nearby Areas"><ul>
+    <li><a href="/locations/psychiatrist-bonita-springs">Bonita Springs</a></li>
+    <li><a href="/locations/psychiatrist-marco-island">Marco Island</a></li>
+    <li><a href="/locations/psychiatrist-fort-myers">Fort Myers</a></li>
+    <li><a href="/locations/psychiatrist-estero">Estero</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-bonita-springs':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Bonita Springs, FL</h1>
+    <p>Looking for expert psychiatric care near Bonita Springs, FL? Dr. Melva Reve serves the Bonita Springs area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-bonita-springs">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-marco-island':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Marco Island, FL</h1>
+    <p>Looking for expert psychiatric care near Marco Island, FL? Dr. Melva Reve serves the Marco Island area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-marco-island">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-fort-myers':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Fort Myers, FL</h1>
+    <p>Looking for expert psychiatric care near Fort Myers, FL? Dr. Melva Reve serves the Fort Myers area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-fort-myers">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-ave-maria':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Ave Maria, FL</h1>
+    <p>Looking for expert psychiatric care near Ave Maria, FL? Dr. Melva Reve serves the Ave Maria area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-ave-maria">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-estero':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Estero, FL</h1>
+    <p>Looking for expert psychiatric care near Estero, FL? Dr. Melva Reve serves the Estero area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-estero">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-golden-gate':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Golden Gate, FL</h1>
+    <p>Looking for expert psychiatric care near Golden Gate, FL? Dr. Melva Reve serves the Golden Gate area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-golden-gate">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-immokalee':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Immokalee, FL</h1>
+    <p>Looking for expert psychiatric care near Immokalee, FL? Dr. Melva Reve serves the Immokalee area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-immokalee">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-lely-resort':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Lely Resort, FL</h1>
+    <p>Looking for expert psychiatric care near Lely Resort, FL? Dr. Melva Reve serves the Lely Resort area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-lely-resort">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/locations/psychiatrist-vanderbilt-beach':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatrist Near Vanderbilt Beach, FL</h1>
+    <p>Looking for expert psychiatric care near Vanderbilt Beach, FL? Dr. Melva Reve serves the Vanderbilt Beach area with anxiety, depression, ADHD, PTSD, and bipolar disorder treatment. Conveniently located in Naples with telehealth options. Insurance accepted.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/locations/psychiatrist-naples">Naples Office</a></li>
+    <li><a href="/contact">Schedule Appointment</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-vanderbilt-beach">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── Spanish Location Pages ───────────────────────────────────────────────
+    case '/es/ubicaciones/psiquiatra-naples':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra en Naples, FL &mdash; Dra. Melva Reve</h1>
+    <p>Visite a la Dra. Melva Reve en nuestra oficina en Naples, FL para atenci&oacute;n psiqu&iacute;atrica experta. Especializ&aacute;ndose en ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Citas presenciales y de telesalud disponibles. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Otras &Aacute;reas"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-bonita-springs">Bonita Springs</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-marco-island">Marco Island</a></li>
+    <li><a href="/es/ubicaciones/psiquiatra-fort-myers">Fort Myers</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-bonita-springs':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Bonita Springs, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Bonita Springs, FL? La Dra. Melva Reve atiende el &aacute;rea de Bonita Springs con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-bonita-springs">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-marco-island':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Marco Island, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Marco Island, FL? La Dra. Melva Reve atiende el &aacute;rea de Marco Island con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-marco-island">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-fort-myers':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Fort Myers, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Fort Myers, FL? La Dra. Melva Reve atiende el &aacute;rea de Fort Myers con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-fort-myers">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-ave-maria':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Ave Maria, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Ave Maria, FL? La Dra. Melva Reve atiende el &aacute;rea de Ave Maria con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-ave-maria">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-estero':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Estero, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Estero, FL? La Dra. Melva Reve atiende el &aacute;rea de Estero con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-estero">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-golden-gate':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Golden Gate, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Golden Gate, FL? La Dra. Melva Reve atiende el &aacute;rea de Golden Gate con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-golden-gate">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-immokalee':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Immokalee, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Immokalee, FL? La Dra. Melva Reve atiende el &aacute;rea de Immokalee con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-immokalee">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-lely-resort':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Lely Resort, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Lely Resort, FL? La Dra. Melva Reve atiende el &aacute;rea de Lely Resort con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-lely-resort">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/ubicaciones/psiquiatra-vanderbilt-beach':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psiquiatra Cerca de Vanderbilt Beach, FL</h1>
+    <p>&iquest;Busca atenci&oacute;n psiqu&iacute;atrica experta cerca de Vanderbilt Beach, FL? La Dra. Melva Reve atiende el &aacute;rea de Vanderbilt Beach con tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Ubicada en Naples con opciones de telesalud. Se acepta seguro.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/ubicaciones/psiquiatra-naples">Oficina Naples</a></li>
+    <li><a href="/es/contacto">Programar Cita</a></li>
+    <li><a href="/locations/psychiatrist-vanderbilt-beach">English</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── About ────────────────────────────────────────────────────────────────
+    case '/about':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>About Dr. Melva Reve &mdash; Naples, FL Psychiatrist</h1>
+    <p>Dr. Melva Reve is a board-certified psychiatrist in Naples, FL specializing in anxiety, depression, ADHD, PTSD, and bipolar disorder. She provides compassionate, evidence-based psychiatric care in both English and Spanish, serving patients throughout Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/for-patients">For Patients</a></li>
+    <li><a href="/es/acerca-de">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/acerca-de':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Sobre la Dra. Melva Reve &mdash; Psiquiatra en Naples, FL</h1>
+    <p>La Dra. Melva Reve es una psiquiatra certificada en Naples, FL que se especializa en ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Brinda atenci&oacute;n psiqu&iacute;atrica compasiva basada en evidencia en ingl&eacute;s y espa&ntilde;ol, atendiendo a pacientes en todo el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
+    <li><a href="/about">English</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── Contact ──────────────────────────────────────────────────────────────
+    case '/contact':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Contact Healing Minds Psychiatry &mdash; Naples, FL</h1>
+    <p>Schedule an appointment with Dr. Melva Reve for expert psychiatric care in Naples, FL. We accept most insurance plans and offer both in-person and telehealth appointments for anxiety, depression, ADHD, PTSD, and bipolar disorder treatment.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/for-patients">For Patients</a></li>
+    <li><a href="/es/contacto">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/contacto':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Contacto &mdash; Healing Minds Psychiatry, Naples, FL</h1>
+    <p>Programe una cita con la Dra. Melva Reve para atenci&oacute;n psiqu&iacute;atrica experta en Naples, FL. Aceptamos la mayor&iacute;a de los planes de seguro y ofrecemos citas presenciales y de telesalud para el tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
+    <li><a href="/contact">English</a></li>
+  </ul></nav>
+</main>`;
+
+    default:
+      return null;
+  }
 }
