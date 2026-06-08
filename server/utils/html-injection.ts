@@ -2609,8 +2609,15 @@ function getMedicalBusinessSchema(baseUrl: string) {
  * React replaces this content immediately on boot — JS-enabled visitors never
  * see it. The injection targets <div id="root"> in the shared SPA shell.
  *
- * Coverage: homepage, 6 service pages, 10 location pages, about, contact
- * (EN + ES equivalents for each).
+ * Coverage (EN + ES equivalents for each):
+ *   - Homepages
+ *   - 6 service detail pages
+ *   - 10 location pages
+ *   - About and Contact pages
+ *   - 3 hub pages: /services, /for-patients, /telepsychiatry-florida
+ *   - 8 legal/trust pages: privacy-policy, terms-of-service, hipaa-notice,
+ *     cookie-policy, cancellation-policy, billing-policy, emergency-policy,
+ *     patient-rights
  */
 function getStaticPageBody(path: string, baseUrl: string): string | null {
   const phone = '(239) 423-0272';
