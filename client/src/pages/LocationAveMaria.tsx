@@ -457,7 +457,7 @@ const LocationAveMaria = () => {
                     ? 'Specialized evaluation and treatment for adults and teens to improve focus and daily functioning.'
                     : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
                   icon: Smile,
-                  link: '/services/adhd-treatment'
+                  link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
                 },
                 {
                   id: 'ptsd',

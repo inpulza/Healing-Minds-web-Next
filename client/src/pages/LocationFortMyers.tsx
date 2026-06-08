@@ -356,7 +356,7 @@ const LocationFortMyers = () => {
                     ? 'ADHD evaluation and treatment Fort Myers FL. Specialized assessment and treatment for adults and teens to improve focus and daily functioning with medication management near me.'
                     : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
                   icon: Smile,
-                  link: '/services/adhd-treatment'
+                  link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
                 },
                 {
                   id: 'ptsd',

@@ -36,7 +36,7 @@ const Services = () => {
         : 'Evaluación especializada y tratamiento para adultos y adolescentes con TDAH. Mejore el enfoque, organización y funcionamiento diario con atención psiquiátrica experta.',
       icon: Smile,
       featured: false,
-      link: '/services/adhd-treatment'
+      link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
     },
     {
       id: 'ptsd',
@@ -78,9 +78,9 @@ const Services = () => {
             <WellnessIcon size="md" color="green" className="opacity-70">
               <Brain />
             </WellnessIcon>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center" data-testid="services-title">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center" data-testid="services-title">
               Mental Health for <span className="font-display italic text-green-700">every</span> mind
-            </h1>
+            </h2>
             <WellnessIcon size="md" color="blue" className="opacity-70">
               <Heart />
             </WellnessIcon>
