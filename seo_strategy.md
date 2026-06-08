@@ -30,4 +30,4 @@
 ## Notes
 - This project uses a Vite + React frontend with Wouter routing and an Express server.
 - Public pages are served through a shared SPA HTML shell with server-side head injection for route-specific metadata.
-- Public body content is still client-rendered and should be evaluated accordingly for Google rendering delays, social crawlers, and AI crawlers.
+- The site now uses partial server-injected static body HTML: home, about, contact, service-detail, and location routes send meaningful body content in the initial HTML, while hub, telepsychiatry, and legal/trust routes still rely on client rendering for body content.
