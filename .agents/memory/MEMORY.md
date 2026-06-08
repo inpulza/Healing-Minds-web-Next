@@ -1,0 +1,1 @@
+- [Spanish homepage trailing-slash SEO trap](es-homepage-trailing-slash.md) — /es/ vs /es mismatch (canonical/hreflang/sitemap point at the 301-redirecting /es/) is the ONE root cause behind recurring multi-flag SEO audits; also fake llms.txt + thin city pages.
