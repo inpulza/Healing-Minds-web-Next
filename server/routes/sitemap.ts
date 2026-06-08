@@ -13,27 +13,12 @@ export const generateSitemap = (req: Request, res: Response) => {
   
   const baseUrl = `${protocol}://${host}`;
   
-  // Last modification dates. Kept fresh automatically so Google re-crawls more often.
-  // We anchor on "today" and offset by category to preserve a sensible recency hierarchy.
-  const today = new Date();
-  const isoDate = (offsetDays: number) => {
-    const d = new Date(today);
-    d.setUTCDate(d.getUTCDate() - offsetDays);
-    return d.toISOString().split('T')[0];
-  };
-  const recentDate = isoDate(0);       // Homepage / heavily updated
-  const contentDate = isoDate(7);      // Service pages
-  const oldContentDate = isoDate(14);  // Established content
-  const locationDate = isoDate(3);     // Location pages (local SEO priority)
-  const legalDate = isoDate(30);       // Legal / policy pages
-  
   // Define bilingual page relationships for hreflang
   const bilingualPages = [
     // Homepage with bilingual version
     {
       en: '/',
       es: '/es',
-      lastmod: recentDate,
       changefreq: 'weekly',
       priority: '1.0'
     },
@@ -41,28 +26,24 @@ export const generateSitemap = (req: Request, res: Response) => {
     {
       en: '/about',
       es: '/es/acerca-de',
-      lastmod: oldContentDate,
       changefreq: 'monthly',
       priority: '0.8'
     },
     {
       en: '/contact',
       es: '/es/contacto',
-      lastmod: oldContentDate,
       changefreq: 'monthly',
       priority: '0.8'
     },
     {
       en: '/for-patients',
       es: '/es/para-pacientes',
-      lastmod: oldContentDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/telepsychiatry-florida',
       es: '/es/telepsiquiatria-florida',
-      lastmod: recentDate,
       changefreq: 'monthly',
       priority: '0.8'
     },
@@ -70,7 +51,6 @@ export const generateSitemap = (req: Request, res: Response) => {
     {
       en: '/services',
       es: '/es/servicios',
-      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.8'
     },
@@ -78,42 +58,36 @@ export const generateSitemap = (req: Request, res: Response) => {
     {
       en: '/services/anxiety-treatment',
       es: '/es/servicios/tratamiento-ansiedad',
-      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/depression-treatment',
       es: '/es/servicios/tratamiento-depresion',
-      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/adhd-treatment',
       es: '/es/servicios/tratamiento-adhd',
-      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/ptsd-treatment',
       es: '/es/servicios/tratamiento-tept',
-      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/bipolar-treatment',
       es: '/es/servicios/tratamiento-bipolar',
-      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       en: '/services/medication-management',
       es: '/es/servicios/manejo-medicamentos',
-      lastmod: contentDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
@@ -121,145 +95,126 @@ export const generateSitemap = (req: Request, res: Response) => {
     {
       en: '/locations/psychiatrist-naples',
       es: '/es/ubicaciones/psiquiatra-naples',
-      lastmod: oldContentDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-bonita-springs',
       es: '/es/ubicaciones/psiquiatra-bonita-springs',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-marco-island',
       es: '/es/ubicaciones/psiquiatra-marco-island',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-fort-myers',
       es: '/es/ubicaciones/psiquiatra-fort-myers',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-ave-maria',
       es: '/es/ubicaciones/psiquiatra-ave-maria',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-estero',
       es: '/es/ubicaciones/psiquiatra-estero',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-golden-gate',
       es: '/es/ubicaciones/psiquiatra-golden-gate',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-immokalee',
       es: '/es/ubicaciones/psiquiatra-immokalee',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-lely-resort',
       es: '/es/ubicaciones/psiquiatra-lely-resort',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     },
     {
       en: '/locations/psychiatrist-vanderbilt-beach',
       es: '/es/ubicaciones/psiquiatra-vanderbilt-beach',
-      lastmod: locationDate,
       changefreq: 'monthly',
       priority: '0.6'
     }
   ];
 
   // Pages that exist only in English (no Spanish version) - currently empty
-  const englishOnlyPages: Array<{url: string, lastmod: string, changefreq: string, priority: string}> = [];
+  const englishOnlyPages: Array<{url: string, changefreq: string, priority: string}> = [];
   
   // Define legal pages with bilingual support (lower priority as per SEO best practices)
   const legalPages = [
     {
       en: '/privacy-policy',
       es: '/es/politica-privacidad',
-      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/terms-of-service',
       es: '/es/terminos-servicio',
-      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/hipaa-notice',
       es: '/es/aviso-hipaa',
-      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/cookie-policy',
       es: '/es/politica-cookies',
-      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/cancellation-policy',
       es: '/es/politica-cancelacion',
-      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/billing-policy',
       es: '/es/politica-facturacion',
-      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/emergency-policy',
       es: '/es/politica-emergencias',
-      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     },
     {
       en: '/patient-rights',
       es: '/es/derechos-paciente',
-      lastmod: legalDate,
       changefreq: 'yearly',
       priority: '0.3'
     }
   ];
   
   // Define site structure with priorities and update frequencies  
-  const pages: Array<{url: string, lastmod: string, changefreq: string, priority: string}> = [];
+  const pages: Array<{url: string, changefreq: string, priority: string}> = [];
 
   // Generate XML sitemap with hreflang support (currently unused as pages array is empty)
   const regularPagesXml = pages.map(page => `  <url>
     <loc>${baseUrl}${page.url}</loc>
-    <lastmod>${page.lastmod}</lastmod>
   </url>`).join('\n');
 
   // Generate English-only pages (if any) with hreflang auto-reference
@@ -270,7 +225,6 @@ export const generateSitemap = (req: Request, res: Response) => {
                 hreflang="en"
                 href="${baseUrl}${page.url}"
                 />
-    <lastmod>${page.lastmod}</lastmod>
   </url>`).join('\n');
 
   // Generate bilingual pages with optimized hreflang (cleaner, non-redundant approach)
@@ -288,7 +242,6 @@ export const generateSitemap = (req: Request, res: Response) => {
                 hreflang="es"
                 href="${baseUrl}${page.es}"
                 />
-    <lastmod>${page.lastmod}</lastmod>
   </url>`,
     // Spanish version with hreflang to both languages
     `  <url>
@@ -303,7 +256,6 @@ export const generateSitemap = (req: Request, res: Response) => {
                 hreflang="es"
                 href="${baseUrl}${page.es}"
                 />
-    <lastmod>${page.lastmod}</lastmod>
   </url>`
   ]).flat().join('\n');
 
@@ -322,7 +274,6 @@ export const generateSitemap = (req: Request, res: Response) => {
                 hreflang="es"
                 href="${baseUrl}${page.es}"
                 />
-    <lastmod>${page.lastmod}</lastmod>
   </url>`,
     // Spanish version with hreflang
     `  <url>
@@ -337,7 +288,6 @@ export const generateSitemap = (req: Request, res: Response) => {
                 hreflang="es"
                 href="${baseUrl}${page.es}"
                 />
-    <lastmod>${page.lastmod}</lastmod>
   </url>`
   ]).flat().join('\n');
 
@@ -449,16 +399,51 @@ export const generateLlmsTxt = (req: Request, res: Response) => {
 
 ## Spanish / Español
 - [Inicio](${baseUrl}/es): Versión en español del sitio
-- [Acerca de](${baseUrl}/es/acerca-de): Sobre la Dra. Melva Reve
+- [Acerca de la Dra. Melva Reve](${baseUrl}/es/acerca-de): Sobre la Dra. Melva Reve
 - [Servicios](${baseUrl}/es/servicios): Servicios psiquiátricos
+- [Telepsiquiatría Florida](${baseUrl}/es/telepsiquiatria-florida): Atención psiquiátrica virtual en toda Florida
 - [Para Pacientes](${baseUrl}/es/para-pacientes): Información para pacientes
 - [Contacto](${baseUrl}/es/contacto): Dirección, teléfono y citas
+
+## Servicios en Español
+- [Tratamiento de Ansiedad](${baseUrl}/es/servicios/tratamiento-ansiedad)
+- [Tratamiento de Depresión](${baseUrl}/es/servicios/tratamiento-depresion)
+- [Tratamiento de ADHD](${baseUrl}/es/servicios/tratamiento-adhd)
+- [Tratamiento de TEPT](${baseUrl}/es/servicios/tratamiento-tept)
+- [Tratamiento Bipolar](${baseUrl}/es/servicios/tratamiento-bipolar)
+- [Manejo de Medicamentos](${baseUrl}/es/servicios/manejo-medicamentos)
+
+## Ubicaciones en Español
+- [Psiquiatra en Naples](${baseUrl}/es/ubicaciones/psiquiatra-naples)
+- [Psiquiatra en Bonita Springs](${baseUrl}/es/ubicaciones/psiquiatra-bonita-springs)
+- [Psiquiatra en Marco Island](${baseUrl}/es/ubicaciones/psiquiatra-marco-island)
+- [Psiquiatra en Fort Myers](${baseUrl}/es/ubicaciones/psiquiatra-fort-myers)
+- [Psiquiatra en Estero](${baseUrl}/es/ubicaciones/psiquiatra-estero)
+- [Psiquiatra en Ave Maria](${baseUrl}/es/ubicaciones/psiquiatra-ave-maria)
+- [Psiquiatra en Golden Gate](${baseUrl}/es/ubicaciones/psiquiatra-golden-gate)
+- [Psiquiatra en Immokalee](${baseUrl}/es/ubicaciones/psiquiatra-immokalee)
+- [Psiquiatra en Lely Resort](${baseUrl}/es/ubicaciones/psiquiatra-lely-resort)
+- [Psiquiatra en Vanderbilt Beach](${baseUrl}/es/ubicaciones/psiquiatra-vanderbilt-beach)
 
 ## Legal
 - [Privacy Policy](${baseUrl}/privacy-policy)
 - [Terms of Service](${baseUrl}/terms-of-service)
 - [HIPAA Notice](${baseUrl}/hipaa-notice)
+- [Cookie Policy](${baseUrl}/cookie-policy)
+- [Cancellation Policy](${baseUrl}/cancellation-policy)
+- [Billing Policy](${baseUrl}/billing-policy)
+- [Emergency Policy](${baseUrl}/emergency-policy)
 - [Patient Rights](${baseUrl}/patient-rights)
+
+## Legal en Español
+- [Política de Privacidad](${baseUrl}/es/politica-privacidad)
+- [Términos de Servicio](${baseUrl}/es/terminos-servicio)
+- [Aviso HIPAA](${baseUrl}/es/aviso-hipaa)
+- [Política de Cookies](${baseUrl}/es/politica-cookies)
+- [Política de Cancelación](${baseUrl}/es/politica-cancelacion)
+- [Política de Facturación](${baseUrl}/es/politica-facturacion)
+- [Política de Emergencias](${baseUrl}/es/politica-emergencias)
+- [Derechos del Paciente](${baseUrl}/es/derechos-paciente)
 `;
 
   res.set({
