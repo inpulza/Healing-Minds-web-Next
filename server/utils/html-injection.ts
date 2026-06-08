@@ -2654,6 +2654,28 @@ function getStaticPageBody(path: string, baseUrl: string): string | null {
       <li><a href="/es/ubicaciones/psiquiatra-golden-gate">Golden Gate</a></li>
     </ul>`;
 
+  const enLegalLinks = `<ul>
+      <li><a href="/privacy-policy">Privacy Policy</a></li>
+      <li><a href="/terms-of-service">Terms of Service</a></li>
+      <li><a href="/hipaa-notice">HIPAA Notice</a></li>
+      <li><a href="/cookie-policy">Cookie Policy</a></li>
+      <li><a href="/cancellation-policy">Cancellation Policy</a></li>
+      <li><a href="/billing-policy">Billing Policy</a></li>
+      <li><a href="/emergency-policy">Emergency Policy</a></li>
+      <li><a href="/patient-rights">Patient Rights</a></li>
+    </ul>`;
+
+  const esLegalLinks = `<ul>
+      <li><a href="/es/politica-privacidad">Pol&iacute;tica de Privacidad</a></li>
+      <li><a href="/es/terminos-servicio">T&eacute;rminos de Servicio</a></li>
+      <li><a href="/es/aviso-hipaa">Aviso HIPAA</a></li>
+      <li><a href="/es/politica-cookies">Pol&iacute;tica de Cookies</a></li>
+      <li><a href="/es/politica-cancelacion">Pol&iacute;tica de Cancelaci&oacute;n</a></li>
+      <li><a href="/es/politica-facturacion">Pol&iacute;tica de Facturaci&oacute;n</a></li>
+      <li><a href="/es/politica-emergencias">Pol&iacute;tica de Emergencias</a></li>
+      <li><a href="/es/derechos-paciente">Derechos del Paciente</a></li>
+    </ul>`;
+
   switch (path) {
     // ── English Homepage ────────────────────────────────────────────────────
     case '/':
@@ -3281,6 +3303,368 @@ function getStaticPageBody(path: string, baseUrl: string): string | null {
     <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
     <li><a href="/es/para-pacientes">Para Pacientes</a></li>
     <li><a href="/contact">English</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── English Hub Pages ────────────────────────────────────────────────────
+    case '/services':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Psychiatric Services in Naples, FL</h1>
+    <p>Comprehensive psychiatric services in Naples, FL. Dr. Melva Reve treats anxiety, depression, ADHD, PTSD, and bipolar disorder with expert medication management. Bilingual care in English and Spanish for patients throughout Southwest Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/for-patients">For Patients</a></li>
+    <li><a href="/es/servicios">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/for-patients':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>For Patients &mdash; Healing Minds Psychiatry</h1>
+    <p>Patient resources and information for Healing Minds Psychiatry. Forms, insurance, appointment scheduling, and what to expect during your visit with Dr. Melva Reve in Naples, FL.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/telepsychiatry-florida">Telepsychiatry in Florida</a></li>
+    <li><a href="/es/para-pacientes">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/telepsychiatry-florida':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Telepsychiatry in Florida</h1>
+    <p>Telepsychiatry throughout Florida with Dr. Melva Reve. Secure, HIPAA-compliant virtual psychiatric care for anxiety, depression, ADHD, and more. Bilingual virtual care with the same quality as in-person, from the comfort of your home.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Services">${enServiceLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/contact">Schedule an Appointment</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/for-patients">For Patients</a></li>
+    <li><a href="/es/telepsiquiatria-florida">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── Spanish Hub Pages ────────────────────────────────────────────────────
+    case '/es/servicios':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Servicios Psiqui&aacute;tricos en Naples, FL</h1>
+    <p>Servicios psiqui&aacute;tricos completos en Naples, FL. La Dra. Melva Reve trata ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar con manejo experto de medicamentos. Atenci&oacute;n biling&uuml;e en ingl&eacute;s y espa&ntilde;ol para pacientes en todo el suroeste de Florida.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
+    <li><a href="/services">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/para-pacientes':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Para Pacientes &mdash; Healing Minds Psychiatry</h1>
+    <p>Informaci&oacute;n importante para pacientes sobre seguro, citas y atenci&oacute;n psiqui&aacute;trica en Healing Minds Naples. Preguntas frecuentes y qu&eacute; esperar durante su visita con la Dra. Melva Reve.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/es/telepsiquiatria-florida">Telepsiquiatr&iacute;a en Florida</a></li>
+    <li><a href="/for-patients">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/telepsiquiatria-florida':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Telepsiquiatr&iacute;a en Florida</h1>
+    <p>Telepsiquiatr&iacute;a en toda Florida con la Dra. Melva Reve. Atenci&oacute;n psiqui&aacute;trica virtual segura, conforme con HIPAA, para ansiedad, depresi&oacute;n, TDAH y m&aacute;s. Atenci&oacute;n virtual biling&uuml;e con la misma calidad que en persona, desde la comodidad de su hogar.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Servicios">${esServiceLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es/contacto">Programar una Cita</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
+    <li><a href="/telepsychiatry-florida">English</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── English Legal &amp; Trust Pages ──────────────────────────────────────
+    case '/privacy-policy':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Privacy Policy</h1>
+    <p>Privacy Policy for Healing Minds Psychiatry. Learn how we protect your personal health information and comply with HIPAA regulations.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${enLegalLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/es/politica-privacidad">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/terms-of-service':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Terms of Service</h1>
+    <p>Terms of Service for Healing Minds Psychiatry. Understanding the terms and conditions for psychiatric care with Dr. Melva Reve.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${enLegalLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/es/terminos-servicio">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/hipaa-notice':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>HIPAA Notice of Privacy Practices</h1>
+    <p>HIPAA Notice of Privacy Practices for Healing Minds Psychiatry. Your rights regarding protected health information and privacy.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${enLegalLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/es/aviso-hipaa">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/cookie-policy':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Cookie Policy</h1>
+    <p>Cookie Policy for Healing Minds Psychiatry website. Learn about cookies usage, analytics, and your privacy choices.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${enLegalLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/es/politica-cookies">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/cancellation-policy':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Cancellation and No-Show Policy</h1>
+    <p>Cancellation and no-show policy for Healing Minds Psychiatry. 24-hour notice required, $50 late fee, with medical emergency exceptions. Naples, FL.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${enLegalLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/es/politica-cancelacion">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/billing-policy':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Billing and Payment Policy</h1>
+    <p>Billing and payment policy for Healing Minds Psychiatry. Insurance accepted, copayments, self-pay rates, credit card fees, and payment plans. Naples, FL.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${enLegalLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/es/politica-facturacion">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/emergency-policy':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Emergency and Crisis Policy</h1>
+    <p>Emergency and crisis policy for Healing Minds Psychiatry. We are not an emergency service. Florida crisis resources: 911, 988 Suicide &amp; Crisis Lifeline, and the David Lawrence Center.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${enLegalLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/es/politica-emergencias">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/patient-rights':
+      return `<main>
+  <header><a href="/">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Patient Rights and Responsibilities</h1>
+    <p>Patient rights and responsibilities at Healing Minds Psychiatry. Florida statutory compliance, confidentiality, informed consent, and complaint procedures.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${enLegalLinks}</nav>
+  <nav aria-label="Quick Links"><ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/es/derechos-paciente">Espa&ntilde;ol</a></li>
+  </ul></nav>
+</main>`;
+
+    // ── Spanish Legal &amp; Trust Pages ──────────────────────────────────────
+    case '/es/politica-privacidad':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Pol&iacute;tica de Privacidad</h1>
+    <p>Pol&iacute;tica de Privacidad para Healing Minds Psychiatry. Aprenda c&oacute;mo protegemos su informaci&oacute;n de salud personal y cumplimos con las regulaciones HIPAA.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${esLegalLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es">Inicio</a></li>
+    <li><a href="/es/contacto">Contacto</a></li>
+    <li><a href="/privacy-policy">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/terminos-servicio':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>T&eacute;rminos de Servicio</h1>
+    <p>T&eacute;rminos de Servicio para Healing Minds Psychiatry. Entendiendo los t&eacute;rminos y condiciones para la atenci&oacute;n psiqui&aacute;trica con la Dra. Melva Reve.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${esLegalLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es">Inicio</a></li>
+    <li><a href="/es/contacto">Contacto</a></li>
+    <li><a href="/terms-of-service">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/aviso-hipaa':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Aviso de Pr&aacute;cticas de Privacidad HIPAA</h1>
+    <p>Aviso de Pr&aacute;cticas de Privacidad HIPAA para Healing Minds Psychiatry. Sus derechos con respecto a la informaci&oacute;n de salud protegida y privacidad.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${esLegalLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es">Inicio</a></li>
+    <li><a href="/es/contacto">Contacto</a></li>
+    <li><a href="/hipaa-notice">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/politica-cookies':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Pol&iacute;tica de Cookies</h1>
+    <p>Pol&iacute;tica de Cookies para el sitio web de Healing Minds Psychiatry. Aprenda sobre el uso de cookies, an&aacute;lisis y sus opciones de privacidad.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${esLegalLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es">Inicio</a></li>
+    <li><a href="/es/contacto">Contacto</a></li>
+    <li><a href="/cookie-policy">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/politica-cancelacion':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Pol&iacute;tica de Cancelaci&oacute;n y Citas Perdidas</h1>
+    <p>Pol&iacute;tica de cancelaci&oacute;n y citas perdidas de Healing Minds Psychiatry. Aviso de 24 horas requerido, cargo de $50, con excepciones por emergencia m&eacute;dica. Naples, FL.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${esLegalLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es">Inicio</a></li>
+    <li><a href="/es/contacto">Contacto</a></li>
+    <li><a href="/cancellation-policy">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/politica-facturacion':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Pol&iacute;tica de Facturaci&oacute;n y Pago</h1>
+    <p>Pol&iacute;tica de facturaci&oacute;n y pago de Healing Minds Psychiatry. Seguros aceptados, copagos, tarifas particulares, cargos por tarjeta y planes de pago. Naples, FL.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${esLegalLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es">Inicio</a></li>
+    <li><a href="/es/contacto">Contacto</a></li>
+    <li><a href="/billing-policy">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/politica-emergencias':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Pol&iacute;tica de Emergencias y Crisis</h1>
+    <p>Pol&iacute;tica de emergencias y crisis de Healing Minds Psychiatry. No es un servicio de emergencia. Recursos de crisis en Florida: 911, L&iacute;nea 988 de Prevenci&oacute;n del Suicidio y Crisis, y el David Lawrence Center.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${esLegalLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es">Inicio</a></li>
+    <li><a href="/es/contacto">Contacto</a></li>
+    <li><a href="/emergency-policy">English</a></li>
+  </ul></nav>
+</main>`;
+
+    case '/es/derechos-paciente':
+      return `<main>
+  <header><a href="/es">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>Derechos y Responsabilidades del Paciente</h1>
+    <p>Derechos y responsabilidades del paciente en Healing Minds Psychiatry. Cumplimiento con leyes de Florida, confidencialidad, consentimiento informado y procedimientos de queja.</p>
+    ${contactInfo}
+  </section>
+  <nav aria-label="Legal">${esLegalLinks}</nav>
+  <nav aria-label="Enlaces R&aacute;pidos"><ul>
+    <li><a href="/es">Inicio</a></li>
+    <li><a href="/es/contacto">Contacto</a></li>
+    <li><a href="/patient-rights">English</a></li>
   </ul></nav>
 </main>`;
 
