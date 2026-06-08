@@ -30,4 +30,6 @@
 ## Notes
 - This project uses a Vite + React frontend with Wouter routing and an Express server.
 - Public pages are served through a shared SPA HTML shell with server-side head injection for route-specific metadata.
-- The site now uses partial server-injected static body HTML: home, about, contact, service-detail, and location routes send meaningful body content in the initial HTML, while hub, telepsychiatry, and legal/trust routes still rely on client rendering for body content.
+- `getStaticPageBody()` now covers the home, about, contact, service-detail, location, hub, telepsychiatry, and legal/trust routes, so the public site is no longer an empty-body shell for non-rendering crawlers on those pages.
+- The remaining high-impact SEO risk is fidelity, not absence: several satellite location pages still send generic initial HTML/head content compared with the richer hyperlocal copy users see after hydration.
+- AI crawlers and social preview bots should be evaluated from the server response, not the hydrated React view, because they do not execute the full client app.
