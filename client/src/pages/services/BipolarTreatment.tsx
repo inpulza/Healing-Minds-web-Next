@@ -353,7 +353,7 @@ const BipolarTreatment = () => {
                     ))}
                   </div>
 
-                  <Link href="/contact">
+                  <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
                       <span>{language === 'en' ? 'Get Specialized Care' : 'Obtener Atención Especializada'}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
@@ -666,7 +666,7 @@ const BipolarTreatment = () => {
                     'Manejo de medicamentos basado en evidencia',
                     'Enfoque colaborativo con terapeutas y equipos de apoyo',
                     'Monitoreo regular y ajuste de planes de tratamiento',
-                    <>Se acepta seguro y horarios flexibles en <Link href="/locations/psychiatrist-naples" className="text-green-700 hover:text-green-800 underline">nuestra ubicación en Naples, FL</Link></>
+                    <>Se acepta seguro y horarios flexibles en <Link href="/es/ubicaciones/psiquiatra-naples" className="text-green-700 hover:text-green-800 underline">nuestra ubicación en Naples, FL</Link></>
                   ]).map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
@@ -693,7 +693,7 @@ const BipolarTreatment = () => {
                     }
                   </p>
                   <div className="space-y-4">
-                    <Link href="/contact">
+                    <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                       <Button 
                         size="lg" 
                         className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 transition-all duration-300"

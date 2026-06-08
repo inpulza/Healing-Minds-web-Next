@@ -16,16 +16,16 @@ const Footer = () => {
   const services = [
     { href: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad', label: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad' },
     { href: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion', label: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión' },
-    { href: '/services/adhd-treatment', label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH' },
+    { href: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd', label: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH' },
     { href: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept', label: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT' },
     { href: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar', label: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar' },
     { href: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos', label: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos' }
   ];
 
   const quickLinks = [
-    { href: '/about', label: language === 'en' ? 'About Dr. Reve' : 'Sobre la Dra. Reve' },
-    { href: '/for-patients', label: language === 'en' ? 'For Patients' : 'Para Pacientes' },
-    { href: '/contact', label: language === 'en' ? 'Contact Us' : 'Contáctanos' }
+    { href: language === 'en' ? '/about' : '/es/acerca-de', label: language === 'en' ? 'About Dr. Reve' : 'Sobre la Dra. Reve' },
+    { href: language === 'en' ? '/for-patients' : '/es/para-pacientes', label: language === 'en' ? 'For Patients' : 'Para Pacientes' },
+    { href: language === 'en' ? '/contact' : '/es/contacto', label: language === 'en' ? 'Contact Us' : 'Contáctanos' }
   ];
 
   const patientResources = [

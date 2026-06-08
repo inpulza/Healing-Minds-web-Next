@@ -179,7 +179,7 @@ const AnxietyTreatment = () => {
                     }
                   </p>
 
-                  <Link href="/contact">
+                  <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
                       <span>{language === 'en' ? 'Schedule Assessment' : 'Programar Evaluación'}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
@@ -350,7 +350,7 @@ const AnxietyTreatment = () => {
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <MapPin className="w-5 h-5 text-green-300" />
-                      <Link href="/locations/psychiatrist-naples" className="font-body hover:text-green-100 transition-colors underline">
+                      <Link href={language === 'en' ? '/locations/psychiatrist-naples' : '/es/ubicaciones/psiquiatra-naples'} className="font-body hover:text-green-100 transition-colors underline">
                         {language === 'en' ? 'Visit Our Naples, FL Location' : 'Visite Nuestra Ubicación en Naples, FL'}
                       </Link>
                     </div>
@@ -375,7 +375,7 @@ const AnxietyTreatment = () => {
                   </div>
                   
                   <div className="mt-8">
-                    <Link href="/contact">
+                    <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                       <Button size="lg" variant="secondary" className="bg-white text-green-800 hover:bg-green-50 font-semibold py-6 px-8 rounded-full w-full inline-flex items-center justify-center gap-3">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
                           <Calendar className="w-4 h-4 text-green-800" />

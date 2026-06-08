@@ -114,12 +114,12 @@ const Header = () => {
   };
 
   const navigationItems = [
-    { href: '/', label: t('nav.home') },
-    { href: '/about', label: t('nav.about') },
-    { href: '/services', label: t('nav.services'), hasDropdown: true, dropdownType: 'services' },
+    { href: language === 'en' ? '/' : '/es', label: t('nav.home') },
+    { href: language === 'en' ? '/about' : '/es/acerca-de', label: t('nav.about') },
+    { href: language === 'en' ? '/services' : '/es/servicios', label: t('nav.services'), hasDropdown: true, dropdownType: 'services' },
     { href: language === 'en' ? '/telepsychiatry-florida' : '/es/telepsiquiatria-florida', label: language === 'en' ? 'Telepsychiatry' : 'Telepsiquiatría' },
-    { href: '/locations', label: language === 'en' ? 'Locations We Serve' : 'Áreas de Servicio', hasDropdown: true, dropdownType: 'locations' },
-    { href: '/contact', label: t('nav.contact') },
+    { href: language === 'en' ? '/locations' : '/es/ubicaciones', label: language === 'en' ? 'Locations We Serve' : 'Áreas de Servicio', hasDropdown: true, dropdownType: 'locations' },
+    { href: language === 'en' ? '/contact' : '/es/contacto', label: t('nav.contact') },
   ];
 
   const serviceItems = [
@@ -157,53 +157,53 @@ const Header = () => {
 
   const locationItems = [
     {
-      href: '/locations/psychiatrist-naples',
-      label: language === 'en' ? 'Naples, FL' : 'Naples, FL',
+      href: language === 'en' ? '/locations/psychiatrist-naples' : '/es/ubicaciones/psiquiatra-naples',
+      label: 'Naples, FL',
       description: language === 'en' ? 'Comprehensive psychiatric care in Southwest Florida' : 'Atención psiquiátrica integral en el suroeste de Florida'
     },
     {
-      href: '/locations/psychiatrist-ave-maria',
-      label: language === 'en' ? 'Ave Maria, FL' : 'Ave Maria, FL',
+      href: language === 'en' ? '/locations/psychiatrist-ave-maria' : '/es/ubicaciones/psiquiatra-ave-maria',
+      label: 'Ave Maria, FL',
       description: language === 'en' ? 'Expert psychiatric care in Ave Maria' : 'Atención psiquiátrica experta en Ave Maria'
     },
     {
-      href: '/locations/psychiatrist-bonita-springs',
-      label: language === 'en' ? 'Bonita Springs, FL' : 'Bonita Springs, FL',
+      href: language === 'en' ? '/locations/psychiatrist-bonita-springs' : '/es/ubicaciones/psiquiatra-bonita-springs',
+      label: 'Bonita Springs, FL',
       description: language === 'en' ? 'Professional psychiatric services in Bonita Springs' : 'Servicios psiquiátricos profesionales en Bonita Springs'
     },
     {
-      href: '/locations/psychiatrist-estero',
-      label: language === 'en' ? 'Estero, FL' : 'Estero, FL',
+      href: language === 'en' ? '/locations/psychiatrist-estero' : '/es/ubicaciones/psiquiatra-estero',
+      label: 'Estero, FL',
       description: language === 'en' ? 'Quality mental health care in Estero' : 'Atención de salud mental de calidad en Estero'
     },
     {
-      href: '/locations/psychiatrist-fort-myers',
-      label: language === 'en' ? 'Fort Myers, FL' : 'Fort Myers, FL',
+      href: language === 'en' ? '/locations/psychiatrist-fort-myers' : '/es/ubicaciones/psiquiatra-fort-myers',
+      label: 'Fort Myers, FL',
       description: language === 'en' ? 'Comprehensive psychiatric treatment in Fort Myers' : 'Tratamiento psiquiátrico integral en Fort Myers'
     },
     {
-      href: '/locations/psychiatrist-golden-gate',
-      label: language === 'en' ? 'Golden Gate, FL' : 'Golden Gate, FL',
+      href: language === 'en' ? '/locations/psychiatrist-golden-gate' : '/es/ubicaciones/psiquiatra-golden-gate',
+      label: 'Golden Gate, FL',
       description: language === 'en' ? 'Expert psychiatric care in Golden Gate' : 'Atención psiquiátrica experta en Golden Gate'
     },
     {
-      href: '/locations/psychiatrist-immokalee',
-      label: language === 'en' ? 'Immokalee, FL' : 'Immokalee, FL',
+      href: language === 'en' ? '/locations/psychiatrist-immokalee' : '/es/ubicaciones/psiquiatra-immokalee',
+      label: 'Immokalee, FL',
       description: language === 'en' ? 'Professional mental health services in Immokalee' : 'Servicios profesionales de salud mental en Immokalee'
     },
     {
-      href: '/locations/psychiatrist-lely-resort',
-      label: language === 'en' ? 'Lely Resort, FL' : 'Lely Resort, FL',
+      href: language === 'en' ? '/locations/psychiatrist-lely-resort' : '/es/ubicaciones/psiquiatra-lely-resort',
+      label: 'Lely Resort, FL',
       description: language === 'en' ? 'Quality psychiatric care in Lely Resort' : 'Atención psiquiátrica de calidad en Lely Resort'
     },
     {
-      href: '/locations/psychiatrist-marco-island',
-      label: language === 'en' ? 'Marco Island, FL' : 'Marco Island, FL',
+      href: language === 'en' ? '/locations/psychiatrist-marco-island' : '/es/ubicaciones/psiquiatra-marco-island',
+      label: 'Marco Island, FL',
       description: language === 'en' ? 'Expert psychiatric treatment on Marco Island' : 'Tratamiento psiquiátrico experto en Marco Island'
     },
     {
-      href: '/locations/psychiatrist-vanderbilt-beach',
-      label: language === 'en' ? 'Vanderbilt Beach, FL' : 'Vanderbilt Beach, FL',
+      href: language === 'en' ? '/locations/psychiatrist-vanderbilt-beach' : '/es/ubicaciones/psiquiatra-vanderbilt-beach',
+      label: 'Vanderbilt Beach, FL',
       description: language === 'en' ? 'Professional psychiatric services in Vanderbilt Beach' : 'Servicios psiquiátricos profesionales en Vanderbilt Beach'
     }
   ];
@@ -327,7 +327,7 @@ const Header = () => {
                 }}
               />
             </Button>
-            <Link href="/contact">
+            <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
               <Button
                 className="group inline-flex items-center justify-center gap-2 rounded-full text-sm lg:text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 lg:px-8 py-5 lg:py-6 whitespace-nowrap"
                 data-testid="book-now-button"
@@ -335,7 +335,7 @@ const Header = () => {
                 <div className="w-5 h-5 lg:w-6 lg:h-6 min-w-[1.25rem] lg:min-w-[1.5rem] min-h-[1.25rem] lg:min-h-[1.5rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
                   <ArrowRight className="w-3 h-3 text-white" />
                 </div>
-                <span>Book Now</span>
+                <span>{language === 'en' ? 'Book Now' : 'Reservar Ahora'}</span>
               </Button>
             </Link>
           </div>
@@ -562,7 +562,7 @@ const Header = () => {
                   }}
                 />
               </Button>
-              <Link href="/contact" className="w-full sm:w-auto">
+              <Link href={language === 'en' ? '/contact' : '/es/contacto'} className="w-full sm:w-auto">
                 <Button
                   className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 py-4 w-full sm:w-auto"
                   onClick={() => setIsMobileMenuOpen(false)}

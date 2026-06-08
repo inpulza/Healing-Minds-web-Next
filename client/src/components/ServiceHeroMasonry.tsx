@@ -122,7 +122,7 @@ export const ServiceHeroMasonry = ({
           )}
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
+            <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
               <Button 
                 size="lg" 
                 className="bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center gap-3 transition-all duration-300"

@@ -292,7 +292,7 @@ const ServiciosEspanol = () => {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              <Link href="/locations/psychiatrist-naples">
+              <Link href="/es/ubicaciones/psiquiatra-naples">
                 <Button variant="outline" className="border-white text-white hover:bg-green-700 rounded-full px-8 py-3 font-semibold">
                   <MapPin className="w-4 h-4 mr-2" />
                   Nuestra Ubicación en Naples

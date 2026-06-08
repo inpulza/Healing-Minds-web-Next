@@ -423,7 +423,7 @@ const AdhdTreatment = () => {
                     </p>
                   </div>
 
-                  <Link href="/contact">
+                  <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-7 w-full sm:w-auto">
                       <span className="text-center">{language === 'en' ? 'Schedule ADHD Evaluation' : 'Programar Evaluación TDAH'}</span>
                       <div className="w-6 h-6 sm:w-8 sm:h-8 lg:w-9 lg:h-9 min-w-[1.5rem] min-h-[1.5rem] sm:min-w-[2rem] sm:min-h-[2rem] lg:min-w-[2.25rem] lg:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
@@ -711,7 +711,7 @@ const AdhdTreatment = () => {
                   </span>
                 </a>
                 
-                <Link href="/contact">
+                <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                   <Button 
                     variant="outline" 
                     className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 border-2 border-green-700 text-green-700 hover:bg-green-50 px-4 sm:px-8 py-3 sm:py-4"
@@ -862,7 +862,7 @@ const AdhdTreatment = () => {
                     : '¿Ofrecen telepsiquiatría para el tratamiento del TDAH en Florida?',
                   answer: language === 'en'
                     ? <>Yes, at Healing Minds Psychiatry we offer telepsychiatry services from <Link href="/locations/psychiatrist-naples" className="text-green-700 hover:text-green-800 underline">our Naples, FL practice</Link>. This allows you to receive expert care and follow-up from the comfort of your home, as long as you are located within the state of Florida.</>
-                    : <>Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría desde <Link href="/locations/psychiatrist-naples" className="text-green-700 hover:text-green-800 underline">nuestra práctica en Naples, FL</Link>. Esto te permite recibir atención experta y seguimiento desde la comodidad de tu hogar, siempre que te encuentres en el estado de Florida.</>
+                    : <>Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría desde <Link href="/es/ubicaciones/psiquiatra-naples" className="text-green-700 hover:text-green-800 underline">nuestra práctica en Naples, FL</Link>. Esto te permite recibir atención experta y seguimiento desde la comodidad de tu hogar, siempre que te encuentres en el estado de Florida.</>
                 }
               ].map((faq, index) => (
                 <div

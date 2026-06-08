@@ -23,7 +23,7 @@ const CTASection = () => {
             }
           </p>
           
-          <Link href="/contact">
+          <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
             <Button
               className="group inline-flex items-center justify-center gap-2 sm:gap-4 rounded-full text-base sm:text-xl font-semibold transition-all duration-300 bg-white text-green-700 hover:bg-green-50 px-4 sm:px-10 py-6 sm:py-8 hover:shadow-xl hover:-translate-y-2 mb-6"
               data-testid="cta-button"

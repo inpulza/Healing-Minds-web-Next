@@ -193,7 +193,7 @@ const LocationNaples = () => {
                 <Button 
                   size="lg" 
                   className="bg-green-800 hover:bg-green-700 text-white font-semibold py-4 sm:py-6 px-4 sm:px-8 rounded-full inline-flex items-center justify-center gap-2 sm:gap-3 w-full text-sm sm:text-base"
-                  onClick={() => window.location.href = '/contact'}
+                  onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'}
                   data-testid="button-schedule-consultation-mobile"
                 >
                   <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -282,7 +282,7 @@ const LocationNaples = () => {
                     
                     {/* CTA Button */}
                     <Button
-                      onClick={() => window.location.href = '/contact'}
+                      onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'}
                       className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
                       data-testid="button-schedule-consultation-desktop"
                     >
@@ -1040,7 +1040,7 @@ const LocationNaples = () => {
                 }
               </p>
               
-              <Link href="/contact">
+              <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                 <Button
                   className="group inline-flex items-center justify-center gap-2 sm:gap-4 rounded-full text-base sm:text-xl font-semibold transition-all duration-300 bg-white text-green-700 hover:bg-green-50 px-4 sm:px-10 py-6 sm:py-8 hover:shadow-xl hover:-translate-y-2 mb-6"
                   data-testid="cta-button"
@@ -1087,7 +1087,7 @@ const LocationNaples = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button 
                 className="bg-green-800 text-white hover:bg-green-700 px-8 py-6 rounded-full font-body font-semibold text-lg min-w-[240px]"
-                onClick={() => window.location.href = '/contact'}
+                onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'}
                 data-testid="button-schedule-consultation"
               >
                 <Heart className="w-5 h-5 mr-2" />

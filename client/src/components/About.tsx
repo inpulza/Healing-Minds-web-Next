@@ -66,7 +66,7 @@ const About = () => {
               </div>
 
               {/* CTA Principal */}
-              <Link href="/contact">
+              <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                 <Button
                   className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-7 hover:shadow-lg hover:-translate-y-1"
                   data-testid="about-hero-cta"

@@ -279,7 +279,7 @@ const MedicationManagement = () => {
                     }
                   </p>
 
-                  <Link href="/contact">
+                  <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
                       <span>{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
@@ -409,7 +409,7 @@ const MedicationManagement = () => {
                     </div>
                   </div>
 
-                  <Link href="/contact">
+                  <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
                       <span>{language === 'en' ? 'Start Medication Management' : 'Iniciar Manejo de Medicamentos'}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
@@ -510,7 +510,7 @@ const MedicationManagement = () => {
                     'Servicios bilingües en inglés y español',
                     'Asistencia con cobertura de seguro',
                     'Seguimiento regular y monitoreo de seguridad',
-                    <>Horarios convenientes y <Link href="/locations/psychiatrist-naples" className="text-green-700 hover:text-green-800 underline">ubicación accesible en Naples, FL</Link></>
+                    <>Horarios convenientes y <Link href="/es/ubicaciones/psiquiatra-naples" className="text-green-700 hover:text-green-800 underline">ubicación accesible en Naples, FL</Link></>
                   ]).map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
@@ -537,7 +537,7 @@ const MedicationManagement = () => {
                     }
                   </p>
                   <div className="space-y-4">
-                    <Link href="/contact">
+                    <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                       <Button 
                         size="lg" 
                         className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-6 px-8 rounded-full inline-flex items-center justify-center gap-3 transition-all duration-300"

@@ -37,11 +37,23 @@ const BilingualCare = () => {
           <div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-body font-bold text-green-800 leading-tight" data-testid="bilingual-title">
-                <span className="font-display italic text-green-700">Guided</span> by passion.
-                <WellnessIcon size="md" color="orange" className="inline-flex mx-2 sm:mx-3 mb-1 sm:mb-2">
-                  <Heart />
-                </WellnessIcon>
-                <span className="font-display italic text-green-700">Driven</span> by purpose.
+              {language === 'en' ? (
+                <>
+                  <span className="font-display italic text-green-700">Guided</span> by passion.
+                  <WellnessIcon size="md" color="orange" className="inline-flex mx-2 sm:mx-3 mb-1 sm:mb-2">
+                    <Heart />
+                  </WellnessIcon>
+                  <span className="font-display italic text-green-700">Driven</span> by purpose.
+                </>
+              ) : (
+                <>
+                  <span className="font-display italic text-green-700">Guiados</span> por la pasión.
+                  <WellnessIcon size="md" color="orange" className="inline-flex mx-2 sm:mx-3 mb-1 sm:mb-2">
+                    <Heart />
+                  </WellnessIcon>
+                  <span className="font-display italic text-green-700">Impulsados</span> por el propósito.
+                </>
+              )}
               </h2>
             </div>
             
@@ -69,7 +81,7 @@ const BilingualCare = () => {
               ))}
             </div>
             
-            <Link href="/contact">
+            <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
               <Button
                 className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7"
                 data-testid="bilingual-schedule-consultation"

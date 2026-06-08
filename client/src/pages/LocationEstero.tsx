@@ -155,7 +155,7 @@ const LocationEstero = () => {
                 {local.heroDescription[language]}
               </p>
               <div className="flex flex-col gap-3 px-4">
-                <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-4 sm:py-6 px-4 sm:px-8 rounded-full inline-flex items-center justify-center gap-2 sm:gap-3 w-full text-sm sm:text-base" onClick={() => window.location.href = '/contact'} data-testid="button-schedule-consultation-mobile"><Calendar className="w-4 h-4 sm:w-5 sm:h-5" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
+                <Button size="lg" className="bg-green-800 hover:bg-green-700 text-white font-semibold py-4 sm:py-6 px-4 sm:px-8 rounded-full inline-flex items-center justify-center gap-2 sm:gap-3 w-full text-sm sm:text-base" onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'} data-testid="button-schedule-consultation-mobile"><Calendar className="w-4 h-4 sm:w-5 sm:h-5" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
                 <Button variant="outline" size="lg" className="border-green-800 text-green-800 hover:bg-green-50 font-semibold py-4 sm:py-6 px-4 sm:px-8 rounded-full inline-flex items-center justify-center gap-2 sm:gap-3 w-full text-sm sm:text-base" onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')} data-testid="button-get-directions-mobile"><Navigation className="w-4 h-4 sm:w-5 sm:h-5" />{content.getDirections}</Button>
               </div>
             </div>
@@ -174,7 +174,7 @@ const LocationEstero = () => {
                       {language === 'en' ? (<>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Estero, FL</span></>) : (<>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Estero, FL</span></>)}
                     </h1>
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{local.heroDescription[language]}</p>
-                    <Button onClick={() => window.location.href = '/contact'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
+                    <Button onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
                   </div>
                 </div>
               </div>
@@ -863,7 +863,7 @@ const LocationEstero = () => {
               </p>
               <Button 
                 className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
-                onClick={() => window.location.href = '/contact'}
+                onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'}
                 data-testid="button-schedule-community"
               >
                 <Calendar className="w-5 h-5" />
@@ -899,7 +899,7 @@ const LocationEstero = () => {
               <div className="text-center mt-12">
                 <Button 
                   className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
-                  onClick={() => window.location.href = '/contact'}
+                  onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'}
                   data-testid="button-schedule-after-video"
                 >
                   <Calendar className="w-5 h-5" />
