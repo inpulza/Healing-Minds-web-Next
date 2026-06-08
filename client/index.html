@@ -65,16 +65,6 @@
     <link rel="preconnect" href="https://scripts.clarity.ms" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     
-    <!-- Critical resource hints for mobile - non-blocking -->
-    <link rel="modulepreload" href="/src/main.tsx" />
-    <link rel="modulepreload" href="/src/App.tsx" />
-    <link rel="modulepreload" href="/src/components/Hero.tsx" fetchpriority="high" />
-    <link rel="modulepreload" href="/src/components/Header.tsx" fetchpriority="high" />
-    <link rel="modulepreload" href="/src/hooks/useLanguage.ts" fetchpriority="high" />
-    <link rel="modulepreload" href="/src/contexts/LanguageContext.tsx" fetchpriority="high" />
-    <link rel="modulepreload" href="/src/components/InsuranceLogos.tsx" />
-    <link rel="modulepreload" href="/src/components/OptimizedImage.tsx" />
-    <link rel="modulepreload" href="/src/pages/Home.tsx" fetchpriority="high" />
     <!-- Non-blocking font loading for mobile optimization -->
     <link
       rel="preload"
@@ -87,24 +77,6 @@
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap&subset=latin"
     /></noscript>
-
-    <!-- LCP Critical Resource Preload - Mobile First with Responsive Sizing -->
-    <link
-      rel="preload"
-      href="/src/assets/hero-doctor-mobile-optimized.webp"
-      as="image"
-      type="image/webp"
-      media="(max-width: 767px)"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      href="/src/assets/hero-doctor-hq.webp"
-      as="image"
-      type="image/webp"
-      media="(min-width: 768px)"
-      fetchpriority="high"
-    />
 
     <!-- Critical CSS inline optimization -->
     <style>
