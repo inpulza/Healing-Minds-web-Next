@@ -56,9 +56,28 @@ export const updateSEO = (data: SEOData) => {
   // Step 2: Update title (direct assignment, no duplication possible)
   document.title = data.title;
   
-  // Step 3: Update language attribute
+  // Step 3: Update language attribute and og:locale signals.
+  // The server injects the correct lang/og:locale per route in the initial HTML;
+  // here we keep them in sync during client-side navigation. We update the tags
+  // IN PLACE (not via createMetaTag) to avoid duplicate og:locale meta tags.
   if (data.lang) {
     document.documentElement.lang = data.lang;
+
+    const locale = data.lang === 'es' ? 'es_US' : 'en_US';
+    const altLocale = data.lang === 'es' ? 'en_US' : 'es_US';
+
+    const upsertProperty = (property: string, content: string) => {
+      let tag = document.querySelector(`meta[property="${property}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('property', property);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    };
+
+    upsertProperty('og:locale', locale);
+    upsertProperty('og:locale:alternate', altLocale);
   }
   
   // Step 4: Create new meta tags and canonical link (guaranteed unique now)

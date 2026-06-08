@@ -106,6 +106,24 @@ export function injectMetaTags(html: string, req: Request): string {
   
   let modifiedHtml = html;
 
+  // 0) Rewrite language signals per route so non-JS crawlers and social bots
+  //    read the correct locale from the INITIAL HTML. The shared shell defaults
+  //    to English (lang="en", og:locale="en_US"); Spanish routes override to es.
+  const pathOnly = url.split('?')[0].split('#')[0];
+  const isSpanish = pathOnly === '/es' || pathOnly.startsWith('/es/');
+  modifiedHtml = modifiedHtml.replace(
+    /<html\s+lang="[^"]*">/i,
+    `<html lang="${isSpanish ? 'es' : 'en'}">`
+  );
+  modifiedHtml = upsertMetaTag(modifiedHtml, {
+    property: 'og:locale',
+    content: isSpanish ? 'es_US' : 'en_US',
+  });
+  modifiedHtml = upsertMetaTag(modifiedHtml, {
+    property: 'og:locale:alternate',
+    content: isSpanish ? 'en_US' : 'es_US',
+  });
+
   // 1) Replace <title> per-route. If no explicit title is defined,
   //    derive it from og:title in the metaTags array (every route already declares one).
   let titleToUse = pageMetaData.title;
@@ -146,29 +164,71 @@ export function injectMetaTags(html: string, req: Request): string {
 
   // 5) Upsert all per-route meta tags (replace if already present, else insert).
   //    This is what fixes the og:url/og:title/description duplication bug.
+  let ogTitle: MetaTag | undefined;
+  let ogDescription: MetaTag | undefined;
   if (pageMetaData.metaTags && pageMetaData.metaTags.length > 0) {
-    // Also mirror og:title to twitter:title and og:description to twitter:description
-    // so social cards stay aligned per route.
-    const ogTitle = pageMetaData.metaTags.find(t => t.property === 'og:title');
-    const ogDescription = pageMetaData.metaTags.find(t => t.property === 'og:description');
+    ogTitle = pageMetaData.metaTags.find(t => t.property === 'og:title');
+    ogDescription = pageMetaData.metaTags.find(t => t.property === 'og:description');
 
     for (const tag of pageMetaData.metaTags) {
       modifiedHtml = upsertMetaTag(modifiedHtml, tag);
     }
-
-    if (ogTitle?.content) {
-      modifiedHtml = upsertMetaTag(modifiedHtml, {
-        name: 'twitter:title',
-        content: ogTitle.content,
-      });
-    }
-    if (ogDescription?.content) {
-      modifiedHtml = upsertMetaTag(modifiedHtml, {
-        name: 'twitter:description',
-        content: ogDescription.content,
-      });
-    }
   }
+
+  // 6) Guarantee a COMPLETE social card on every route, even when a route
+  //    definition omits og:description / og:image. Social crawlers do not run
+  //    client JS, so the initial HTML must carry route-specific previews instead
+  //    of falling back to the homepage copy + favicon from the shared shell.
+
+  // 6a) og:description + twitter:description fall back to the route description
+  //     (then og:title) when the route declares no explicit og:description.
+  //     The route description may live either as the top-level field or as a
+  //     metaTags entry (name="description"); check both before the title.
+  const routeDescription =
+    pageMetaData.description ||
+    pageMetaData.metaTags?.find(t => t.name === 'description')?.content;
+  const effectiveDescription =
+    ogDescription?.content || routeDescription || ogTitle?.content;
+  if (effectiveDescription) {
+    modifiedHtml = upsertMetaTag(modifiedHtml, {
+      property: 'og:description',
+      content: effectiveDescription,
+    });
+    modifiedHtml = upsertMetaTag(modifiedHtml, {
+      name: 'twitter:description',
+      content: effectiveDescription,
+    });
+  }
+
+  // 6b) twitter:title mirrors og:title (or the page <title>) per route.
+  const effectiveTitle = ogTitle?.content || titleToUse;
+  if (effectiveTitle) {
+    modifiedHtml = upsertMetaTag(modifiedHtml, {
+      name: 'twitter:title',
+      content: effectiveTitle,
+    });
+  }
+
+  // 6c) Branded 1200x630 share image + large summary card, replacing the
+  //     favicon-based preview from the shell. A route may still ship its own
+  //     og:image (handled in the loop above); we only inject the default when
+  //     none was provided.
+  const hasRouteImage = pageMetaData.metaTags?.some(t => t.property === 'og:image');
+  if (!hasRouteImage) {
+    const shareImage = `${baseUrl}/og-image.png`;
+    const shareImageAlt =
+      'Healing Minds Psychiatry - Dr. Melva Reve, expert psychiatric care in Naples, FL';
+    modifiedHtml = upsertMetaTag(modifiedHtml, { property: 'og:image', content: shareImage });
+    modifiedHtml = upsertMetaTag(modifiedHtml, { property: 'og:image:alt', content: shareImageAlt });
+    modifiedHtml = upsertMetaTag(modifiedHtml, { property: 'og:image:width', content: '1200' });
+    modifiedHtml = upsertMetaTag(modifiedHtml, { property: 'og:image:height', content: '630' });
+    modifiedHtml = upsertMetaTag(modifiedHtml, { name: 'twitter:image', content: shareImage });
+    modifiedHtml = upsertMetaTag(modifiedHtml, { name: 'twitter:image:alt', content: shareImageAlt });
+  }
+  modifiedHtml = upsertMetaTag(modifiedHtml, {
+    name: 'twitter:card',
+    content: 'summary_large_image',
+  });
 
   return modifiedHtml;
 }
