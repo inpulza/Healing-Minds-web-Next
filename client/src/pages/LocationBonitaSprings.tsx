@@ -6,7 +6,7 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
@@ -54,23 +54,6 @@ const LocationBonitaSprings = () => {
     };
     updateSEO(seoData);
 
-    const serviceDescription = local.seo.serviceDescription[language];
-
-    addLocationServiceSchema({
-      locationName: 'Bonita Springs',
-      description: serviceDescription,
-      pageId: 'bonita-springs-location',
-      language: language
-    });
-
-    return () => {
-      // Clean up Service schema when component unmounts
-      const serviceSchema = document.querySelector('script[type="application/ld+json"]#bonita-springs-location-service-schema');
-      if (serviceSchema) {
-        serviceSchema.remove();
-        console.log('🧹 Cleaned up Bonita Springs Service schema');
-      }
-    };
   }, [language]);
 
   const contentData = {

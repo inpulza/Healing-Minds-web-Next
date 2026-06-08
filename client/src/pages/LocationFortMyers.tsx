@@ -6,7 +6,7 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
@@ -54,23 +54,6 @@ const LocationFortMyers = () => {
     };
     updateSEO(seoData);
 
-    const serviceDescription = local.seo.serviceDescription[language];
-
-    addLocationServiceSchema({
-      locationName: 'Fort Myers',
-      description: serviceDescription,
-      pageId: 'fort-myers-location',
-      language: language
-    });
-
-    return () => {
-      // Clean up Service schema when component unmounts
-      const serviceSchema = document.querySelector('script[type="application/ld+json"]#fort-myers-location-service-schema');
-      if (serviceSchema) {
-        serviceSchema.remove();
-        console.log('🧹 Cleaned up Fort Myers Service schema');
-      }
-    };
   }, [language]);
 
   const contentData = {

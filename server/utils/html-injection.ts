@@ -412,6 +412,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/services/anxiety-treatment':
       return {
         canonical: `${baseUrl}/services/anxiety-treatment`,
+        schema: getServiceDetailSchema(baseUrl, 'en', 'anxiety'),
         metaTags: [
           {
             name: 'description',
@@ -442,6 +443,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/services/depression-treatment':
       return {
         canonical: `${baseUrl}/services/depression-treatment`,
+        schema: getServiceDetailSchema(baseUrl, 'en', 'depression'),
         metaTags: [
           {
             name: 'description',
@@ -472,6 +474,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/services/adhd-treatment':
       return {
         canonical: `${baseUrl}/services/adhd-treatment`,
+        schema: getServiceDetailSchema(baseUrl, 'en', 'adhd'),
         metaTags: [
           {
             name: 'description',
@@ -502,6 +505,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/services/ptsd-treatment':
       return {
         canonical: `${baseUrl}/services/ptsd-treatment`,
+        schema: getServiceDetailSchema(baseUrl, 'en', 'ptsd'),
         metaTags: [
           {
             name: 'description',
@@ -532,6 +536,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/services/bipolar-treatment':
       return {
         canonical: `${baseUrl}/services/bipolar-treatment`,
+        schema: getServiceDetailSchema(baseUrl, 'en', 'bipolar'),
         metaTags: [
           {
             name: 'description',
@@ -562,6 +567,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/services/medication-management':
       return {
         canonical: `${baseUrl}/services/medication-management`,
+        schema: getServiceDetailSchema(baseUrl, 'en', 'medication'),
         metaTags: [
           {
             name: 'description',
@@ -1126,6 +1132,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/es/servicios/tratamiento-ansiedad':
       return {
         canonical: `${baseUrl}/es/servicios/tratamiento-ansiedad`,
+        schema: getServiceDetailSchema(baseUrl, 'es', 'anxiety'),
         metaTags: [
           {
             name: 'description',
@@ -1155,6 +1162,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/es/servicios/tratamiento-depresion':
       return {
         canonical: `${baseUrl}/es/servicios/tratamiento-depresion`,
+        schema: getServiceDetailSchema(baseUrl, 'es', 'depression'),
         metaTags: [
           {
             name: 'description',
@@ -1184,6 +1192,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/es/servicios/tratamiento-tept':
       return {
         canonical: `${baseUrl}/es/servicios/tratamiento-tept`,
+        schema: getServiceDetailSchema(baseUrl, 'es', 'ptsd'),
         metaTags: [
           {
             name: 'description',
@@ -1213,6 +1222,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/es/servicios/tratamiento-bipolar':
       return {
         canonical: `${baseUrl}/es/servicios/tratamiento-bipolar`,
+        schema: getServiceDetailSchema(baseUrl, 'es', 'bipolar'),
         metaTags: [
           {
             name: 'description',
@@ -1242,6 +1252,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/es/servicios/manejo-medicamentos':
       return {
         canonical: `${baseUrl}/es/servicios/manejo-medicamentos`,
+        schema: getServiceDetailSchema(baseUrl, 'es', 'medication'),
         metaTags: [
           {
             name: 'description',
@@ -1524,6 +1535,7 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
     case '/es/servicios/tratamiento-adhd':
       return {
         canonical: `${baseUrl}/es/servicios/tratamiento-adhd`,
+        schema: getServiceDetailSchema(baseUrl, 'es', 'adhd'),
         metaTags: [
           {
             name: 'description',
@@ -1996,6 +2008,84 @@ function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
  * Generate Service schema for Hub & Spoke pattern (satellite location pages)
  * Links to main MedicalClinic as provider while targeting specific areas
  */
+// Authoritative per-service content for the six treatment-detail routes.
+// Used to emit a stable, server-rendered Service schema in the initial HTML
+// (so non-rendering AI crawlers see it) with correctly localized labels.
+const SERVICE_DETAILS: Record<string, {
+  serviceTypeEn: string; serviceTypeEs: string;
+  nameEn: string; nameEs: string;
+  descEn: string; descEs: string;
+  pathEn: string; pathEs: string;
+}> = {
+  anxiety: {
+    serviceTypeEn: 'Anxiety Treatment', serviceTypeEs: 'Tratamiento de Ansiedad',
+    nameEn: 'Anxiety Treatment in Naples, FL', nameEs: 'Tratamiento de Ansiedad en Naples, FL',
+    descEn: 'Expert psychiatric care for anxiety disorders including panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments.',
+    descEs: 'Atención psiquiátrica experta para trastornos de ansiedad incluyendo ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.',
+    pathEn: '/services/anxiety-treatment', pathEs: '/es/servicios/tratamiento-ansiedad',
+  },
+  depression: {
+    serviceTypeEn: 'Depression Treatment', serviceTypeEs: 'Tratamiento de Depresión',
+    nameEn: 'Depression Treatment in Naples, FL', nameEs: 'Tratamiento de Depresión en Naples, FL',
+    descEn: 'Comprehensive psychiatric care for major depression, postpartum depression, and seasonal depression with personalized treatment plans and medication management.',
+    descEs: 'Atención psiquiátrica integral para depresión mayor, depresión posparto y depresión estacional con planes de tratamiento personalizados y manejo de medicamentos.',
+    pathEn: '/services/depression-treatment', pathEs: '/es/servicios/tratamiento-depresion',
+  },
+  adhd: {
+    serviceTypeEn: 'ADHD Treatment', serviceTypeEs: 'Tratamiento de TDAH',
+    nameEn: 'ADHD Treatment in Naples, FL', nameEs: 'Tratamiento de TDAH en Naples, FL',
+    descEn: 'Expert ADHD treatment for adults with comprehensive evaluation, medication management, and behavioral strategies to improve focus and daily functioning.',
+    descEs: 'Tratamiento experto de TDAH para adultos con evaluación integral, manejo de medicamentos y estrategias conductuales para mejorar el enfoque y funcionamiento diario.',
+    pathEn: '/services/adhd-treatment', pathEs: '/es/servicios/tratamiento-adhd',
+  },
+  ptsd: {
+    serviceTypeEn: 'PTSD Treatment', serviceTypeEs: 'Tratamiento de TEPT',
+    nameEn: 'PTSD Treatment in Naples, FL', nameEs: 'Tratamiento de TEPT en Naples, FL',
+    descEn: 'Trauma-informed psychiatric care for post-traumatic stress disorder using evidence-based treatments to help heal from traumatic experiences.',
+    descEs: 'Atención psiquiátrica informada en trauma para trastorno de estrés postraumático usando tratamientos basados en evidencia para ayudar a sanar de experiencias traumáticas.',
+    pathEn: '/services/ptsd-treatment', pathEs: '/es/servicios/tratamiento-tept',
+  },
+  bipolar: {
+    serviceTypeEn: 'Bipolar Treatment', serviceTypeEs: 'Tratamiento Bipolar',
+    nameEn: 'Bipolar Disorder Treatment in Naples, FL', nameEs: 'Tratamiento de Trastorno Bipolar en Naples, FL',
+    descEn: 'Expert psychiatric care for bipolar disorder with mood stabilization, medication management, and comprehensive support for bipolar I, II, and cyclothymia.',
+    descEs: 'Atención psiquiátrica experta para trastorno bipolar con estabilización del ánimo, manejo de medicamentos y apoyo integral para bipolar I, II y ciclotimia.',
+    pathEn: '/services/bipolar-treatment', pathEs: '/es/servicios/tratamiento-bipolar',
+  },
+  medication: {
+    serviceTypeEn: 'Medication Management', serviceTypeEs: 'Manejo de Medicamentos',
+    nameEn: 'Medication Management in Naples, FL', nameEs: 'Manejo de Medicamentos en Naples, FL',
+    descEn: 'Expert psychiatric medication evaluation, monitoring, and adjustment with comprehensive safety assessments and personalized treatment plans.',
+    descEs: 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales y planes de tratamiento personalizados.',
+    pathEn: '/services/medication-management', pathEs: '/es/servicios/manejo-medicamentos',
+  },
+};
+
+function getServiceDetailSchema(baseUrl: string, lang: 'en' | 'es', key: string) {
+  const d = SERVICE_DETAILS[key];
+  const path = lang === 'en' ? d.pathEn : d.pathEs;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${baseUrl}${path}#service`,
+    "name": lang === 'en' ? d.nameEn : d.nameEs,
+    "serviceType": lang === 'en' ? d.serviceTypeEn : d.serviceTypeEs,
+    "description": lang === 'en' ? d.descEn : d.descEs,
+    "url": `${baseUrl}${path}`,
+    "areaServed": {
+      "@type": "City",
+      "name": "Naples",
+      "addressRegion": "FL",
+      "addressCountry": "US"
+    },
+    "provider": {
+      "@type": "MedicalClinic",
+      "@id": "https://www.healingmindsp.com/#organization"
+    },
+    "availableLanguage": ["English", "Spanish"]
+  };
+}
+
 function getServiceSchema(baseUrl: string, cityName: string) {
   return {
     "@context": "https://schema.org",

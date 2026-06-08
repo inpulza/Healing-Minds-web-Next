@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { updateSEO, addServiceSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain, Heart, ChevronUp, ChevronDown } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
@@ -36,18 +36,6 @@ const BipolarTreatment = () => {
       canonical: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
     };
     updateSEO(seoData);
-    
-    // Add Service Schema (SPOKE) - connects to MedicalClinic HUB
-    addServiceSchema({
-      serviceType: "Bipolar Treatment",
-      name: language === 'en' 
-        ? "Tratamiento de Trastorno Bipolar en Naples, FL"
-        : "Bipolar Disorder Treatment in Naples, FL",
-      description: language === 'en'
-        ? "Expert psychiatric care for bipolar disorder with mood stabilization, medication management, and comprehensive support for bipolar I, II, and cyclothymia."
-        : "Atención psiquiátrica experta para trastorno bipolar con estabilización del ánimo, manejo de medicamentos y apoyo integral para bipolar I, II y ciclotimia.",
-      pageId: "bipolar"
-    });
 
     // Track TikTok ViewContent event
     trackServiceView('Bipolar Treatment', 'bipolar');

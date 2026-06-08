@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { updateSEO, addServiceSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Heart, Brain, Smile, Sun } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
@@ -36,18 +36,6 @@ const DepressionTreatment = () => {
       canonical: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
     };
     updateSEO(seoData);
-    
-    // Add Service Schema (SPOKE) - connects to MedicalClinic HUB
-    addServiceSchema({
-      serviceType: "Depression Treatment",
-      name: language === 'en' 
-        ? "Tratamiento de Depresión en Naples, FL"
-        : "Depression Treatment in Naples, FL",
-      description: language === 'en'
-        ? "Comprehensive psychiatric care for major depression, postpartum depression, and seasonal depression with personalized treatment plans and medication management."
-        : "Atención psiquiátrica integral para depresión mayor, depresión posparto y depresión estacional con planes de tratamiento personalizados y manejo de medicamentos.",
-      pageId: "depression"
-    });
 
     // Track TikTok ViewContent event
     trackServiceView('Depression Treatment', 'depression');

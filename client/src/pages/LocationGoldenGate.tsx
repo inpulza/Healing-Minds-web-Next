@@ -6,7 +6,7 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
@@ -54,23 +54,6 @@ const LocationGoldenGate = () => {
     };
     updateSEO(seoData);
 
-    const serviceDescription = local.seo.serviceDescription[language];
-
-    addLocationServiceSchema({
-      locationName: 'Golden Gate',
-      description: serviceDescription,
-      pageId: 'golden-gate-location',
-      language: language
-    });
-
-    return () => {
-      // Clean up Service schema when component unmounts
-      const serviceSchema = document.querySelector('script[type="application/ld+json"]#golden-gate-location-service-schema');
-      if (serviceSchema) {
-        serviceSchema.remove();
-        console.log('🧹 Cleaned up Golden Gate Service schema');
-      }
-    };
   }, [language]);
 
   const contentData = {

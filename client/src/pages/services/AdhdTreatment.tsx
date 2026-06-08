@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { updateSEO, addServiceSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, Brain, Activity, Sparkles, ChevronDown } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
@@ -37,18 +37,6 @@ const AdhdTreatment = () => {
       canonical: '/services/adhd-treatment'
     };
     updateSEO(seoData);
-    
-    // Add Service Schema (SPOKE) - connects to MedicalClinic HUB
-    addServiceSchema({
-      serviceType: "ADHD Treatment",
-      name: language === 'en' 
-        ? "Tratamiento de TDAH en Naples, FL"
-        : "ADHD Treatment in Naples, FL",
-      description: language === 'en'
-        ? "Expert ADHD treatment for adults with comprehensive evaluation, medication management, and behavioral strategies to improve focus and daily functioning."
-        : "Tratamiento experto de TDAH para adultos con evaluación integral, manejo de medicamentos y estrategias conductuales para mejorar el enfoque y funcionamiento diario.",
-      pageId: "adhd"
-    });
 
     // Track TikTok ViewContent event
     trackServiceView('ADHD Treatment', 'adhd');

@@ -6,7 +6,7 @@ import LocationInsuranceLogos from '@/components/LocationInsuranceLogos';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
-import { updateSEO, addLocationServiceSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
@@ -54,23 +54,6 @@ const LocationVanderbiltBeach = () => {
     };
     updateSEO(seoData);
 
-    const serviceDescription = local.seo.serviceDescription[language];
-
-    addLocationServiceSchema({
-      locationName: 'Vanderbilt Beach',
-      description: serviceDescription,
-      pageId: 'vanderbilt-beach-location',
-      language: language
-    });
-
-    return () => {
-      // Clean up Service schema when component unmounts
-      const serviceSchema = document.querySelector('script[type="application/ld+json"]#vanderbilt-beach-location-service-schema');
-      if (serviceSchema) {
-        serviceSchema.remove();
-        console.log('🧹 Cleaned up Vanderbilt Beach Service schema');
-      }
-    };
   }, [language]);
 
   const contentData = {

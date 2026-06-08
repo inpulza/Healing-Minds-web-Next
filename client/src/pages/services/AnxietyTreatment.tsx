@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import { ServiceHeroMasonry } from '@/components/ServiceHeroMasonry';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { updateSEO, addServiceSchema } from '@/utils/seo';
+import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Brain, Heart, Smile } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 
@@ -36,18 +36,6 @@ const AnxietyTreatment = () => {
       canonical: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
     };
     updateSEO(seoData);
-    
-    // Add Service Schema (SPOKE) - connects to MedicalClinic HUB
-    addServiceSchema({
-      serviceType: "Anxiety Treatment",
-      name: language === 'en' 
-        ? "Tratamiento de Ansiedad en Naples, FL"
-        : "Anxiety Treatment in Naples, FL",
-      description: language === 'en'
-        ? "Expert psychiatric care for anxiety disorders including panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments."
-        : "Atención psiquiátrica experta para trastornos de ansiedad incluyendo ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.",
-      pageId: "anxiety"
-    });
 
     // Track TikTok ViewContent event
     trackServiceView('Anxiety Treatment', 'anxiety');
