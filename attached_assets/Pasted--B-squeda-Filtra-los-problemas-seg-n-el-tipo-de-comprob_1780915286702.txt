@@ -1,0 +1,149 @@
+
+Búsqueda
+Filtra los problemas según el tipo de comprobación que se activa
+Errores
+(4)
+
+8 entidades de datos estructurados no son válidas
+
+Cómo solucionarlo
+6 nuevos problemas
+2 problemas con enlaces hreflang incorrectos
+
+Cómo solucionarlo
+2 nuevos problemas
+1 página incorrecta encontrada en el archivo sitemap.xml
+
+Cómo solucionarlo
+1 nuevo problema
+1 conflicto de hreflang en el código fuente de la página
+
+Cómo solucionarlo
+1 nuevo problema
+Advertencias
+(3)
+
+2 páginas tienen una baja relación texto-HTML
+
+Cómo solucionarlo
+1 nuevo problema
+2 páginas tienen un problema de bajo número de palabras
+
+Cómo solucionarlo
+2 nuevos problemas
+1 página no tiene un encabezado h1
+
+Cómo solucionarlo
+1 nuevo problema
+Avisos
+(3)
+
+2 URL con redireccionamiento permanente
+
+Cómo solucionarlo
+2 nuevos problemas
+1 página tiene un solo enlace interno entrante.
+
+Cómo solucionarlo
+1 nuevo problema
+nuevo
+El archivo llms.txt tiene problemas de formato
+
+Cómo solucionarlo
+Sobre el problema
+Este problema se desencadena cuando las entidades de datos estructurados contienen campos que no cumplen con las directrices de Google.
+Es importante que implementes y mantengas tus datos estructurados correctamente si quieres ganar ventaja frente a tus competidores en los resultados de búsqueda.
+Si el marcado de tu página web contiene errores, los rastreadores no podrán entenderlo correctamente y correrás el riesgo de perder la oportunidad de aparecer en los fragmentos destacados y conseguir un posicionamiento más favorable.
+Para más información sobre los requisitos de datos estructurados, visita schema.org, la documentación de Google, o nuestro artículo.
+Categoría: Rastreabilidad
+Cómo solucionarlo
+Revisa los datos estructurados de tus páginas web con una herramienta de validación. Ten en cuenta que cada herramienta de prueba de marcado de datos estructurados puede arrojar resultados diferentes.
+Te recomendamos que utilices la herramienta Prueba de resultados enriquecidos para revisar y validar los datos estructurados de tus páginas web y adaptarlos a los requisitos de los fragmentos enriquecidos.
+Trabaja en el proyecto con tus compañeros y mantén el orden
+
+---
+
+Sobre el problema
+Un atributo hreflang (rel="alternate" hreflang="x") ayuda a los motores de búsqueda a comprender qué página debe mostrarse a los visitantes en función de su ubicación. Es necesario usar este atributo si tu sitio web es multilingüe y deseas ayudar a los usuarios de otros países a encontrar su contenido en el idioma más apropiado para ellos.
+Es muy importante asegurarte de que tus enlaces hreflang refieran siempre a URL absolutas con códigos de estado HTTP 200; de lo contrario, los motores de búsqueda no podrán interpretarlos correctamente y no mostrarán la versión de idioma correcta de las páginas al público relevante.
+
+Si deseas más información, consulta estos artículos: Informar a Google de versiones localizadas de páginas: , ¡Guía Completa de Posicionamiento SEO Internacional con Semrush y Atributo hreflang 101
+Categoría: Indexabilidad
+Cómo solucionarlo
+Para evitar problemas con los enlaces hreflang, sugerimos que revises los atributos hreflang y hagas lo siguiente:
+- Corrijas las URL de hreflang rotas
+- Corrijas los redireccionamientos hreflang
+- Sustituyas las URL relativas por absolutas
+Trabaja en el proyecto con tus compañeros y mantén el orden
+
+
+Sobre el problema
+Un archivo sitemap.xml permite a los rastreadores encontrar fácilmente las páginas de tu sitio web. Solo deberías incluir en tu archivo sitemap.xml aquellas páginas correctas destinadas a tus visitantes.
+Este error se detecta si tu sitemap.xml incluye URL que:
+- dirigen a páginas web con el mismo contenido.
+- redirigen a una página web diferente.
+- devuelven un código de estado distinto de 200.
+Incluir en tu archivo dichas URL confundirá a los motores de búsqueda, ocasionará rastreos innecesarios o, incluso, es posible que ocasione que se rechace tu sitemap.
+Categoría: Rastreabilidad
+Cómo solucionarlo
+Comprueba si tu sitemap.xml incluye alguna URL de redireccionamiento, no canónica o con código de estado distinto de 200. Suministra URL de destino final canónicas y que devuelvan códigos de estado 200.
+Trabaja en el proyecto con tus compañeros y mantén el orden
+
+----
+
+Sobre el problema
+Si tu sitio web es multilingüe, es necesario ayudar a los usuarios de otros países a encontrar su contenido en el idioma que es más apropiado para ellos. Aquí es donde resulta práctico el atributo hreflang (rel="alternate" hreflang="x"). El uso de este atributo en las páginas de tu sitio web le dice a los motores de búsqueda qué páginas deben mostrarse a los visitantes en función de su ubicación. Es muy importante sincronizar correctamente tus atributos hreflang en el código fuente de tu página para evitar un comportamiento inesperado de los motores de búsqueda. Si deseas más información, consulta este artículo.
+Categoría: Indexabilidad
+Cómo solucionarlo
+Asegúrate de que utilizas tus atributos hreflang correctamente. Aquí se indican algunas maneras para evitar problemas de implementación de hreflang:
+- Especifica el código de idioma ISO 639-1 correcto. En el caso de variaciones de la secuencia de comandos de idiomas, utiliza el formato estándar ISO 15924.
+- Especifica el código de país ISO_3166-1_alpha-2 correcto.
+Trabaja en el proyecto con tus compañeros y mantén el orden
+
+---
+
+Sobre el problema
+Tu relación texto a HTML indica la cantidad de texto real que tienes en tu página web en comparación con la cantidad de código. Este problema surge cuando la relación de texto a HTML es 10 % o inferior.
+Los motores de búsqueda han empezado a centrarse en páginas que incluyen más contenido. Ese es el motivo por el que una mayor relación de texto a HTML significa que tu página tiene una mayor probabilidad de obtener una buena posición en los resultados de búsqueda.
+Una menor cantidad de código aumenta la velocidad de carga de tu página y también ayuda a mejorar tus rankings. También ayuda a los robots de los motores de búsqueda a rastrear tu sitio web más rápido.
+Categoría: Indexabilidad, Contenido
+Cómo solucionarlo
+Divide el contenido de texto y de código de tu página web en archivos diferentes y compara sus tamaños. Si el tamaño del archivo de código supera el tamaño del archivo de texto, revista el código HTML de tu página y plantéate optimizar su estructura y eliminar los scripts y estilos incrustados.
+Trabaja en el proyecto con tus
+
+----
+
+Sobre el problema
+Aunque menos importantes que las etiquetas <title>, los encabezados h1 te ayudarán a definir el tema de tu página para los motores de búsqueda y usuarios. Si falta una etiqueta <h1> o está vacía, los motores de búsqueda pueden colocar tu página en un ranking inferior del que tendría. Además, si falta una etiqueta <h1> se rompe la jerarquía de encabezados de tu página, lo cual influye negativamente en la SEO.
+Categoría: Metaetiquetas, Indexabilidad, Contenido
+Cómo solucionarlo
+Ofrece un encabezado h1 relevante y conciso para cada una de tus páginas.
+Trabaja en el proyecto con tus compañeros y mantén el orden
+
+---
+
+Sobre el problema
+A pesar de que utilizar redireccionamientos permanentes (redireccionamientos 301 o 308) es apropiado en muchas situaciones (por ejemplo, cuando mueves un sitio web a un nuevo dominio, para redirigir a los usuarios desde una página eliminada a una nueva o manejar problemas de contenido duplicado), se recomienda mantenerlos en el mínimo. Cada vez que rediriges una de las páginas de tu sitio web, disminuye el presupuesto de rastreo y este puede agotarse antes de que los motores de búsqueda puedan rastrear la página que deseas indexar. Además, demasiados redireccionamientos permanentes pueden confundir a los usuarios.
+Categoría: Estado HTTP, Rastreabilidad
+Cómo solucionarlo
+Revisa todas las URL con redireccionamiento permanente. Cambia los redireccionamientos permanentes por URL de página de destino cuando sea posible.
+Trabaja en el proyecto con tus compañeros y mantén el orden
+
+---
+
+Sobre el problema
+Tener pocos enlaces internos entrantes significa que hay pocas o ninguna visita o posibilidades de aparecer en los resultados de búsqueda.
+Búsqueda de IA
+Los motores de búsqueda de IA utilizan patrones de enlazado interno para comprender la importancia del contenido y las relaciones dentro de la red de conocimiento de tu web. Las páginas con pocos enlaces internos pueden parecer menos relevantes para los algoritmos de IA y reducir la visibilidad de tu contenido y las posibilidades de que se mencione.
+
+Categoría: Enlaces, Rastreabilidad, Búsqueda de IA
+Cómo solucionarlo
+Añade más enlaces internos entrantes a las páginas con contenido importante.
+Trabaja en el proyecto con tus compañeros y mantén el orden
+
+Sobre el problema
+Si tu archivo llms.txt tiene un formato erróneo, los motores de búsqueda de IA que lo utilicen pueden interpretar el contenido de tu web con menor precisión.
+Categoría: Búsqueda de IA
+Cómo solucionarlo
+Revisa tu archivo llms.txt y soluciona todos los problemas. Visita llmstxt.org para saber cómo formatear tu archivo correctamente.
+Trabaja en el proyecto con tus compañeros y mantén el orden
