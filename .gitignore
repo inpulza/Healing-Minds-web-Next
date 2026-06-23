@@ -4,3 +4,14 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Secrets / credentials — NEVER commit (keep on disk for local reference only)
+attached_assets/*credenciales*
+attached_assets/*credentials*
+attached_assets/*GSC*
+attached_assets/*OAuth*
+attached_assets/*oauth*
+attached_assets/*secret*
+attached_assets/*refresh*token*
+*credenciales*
+*refresh-token*
