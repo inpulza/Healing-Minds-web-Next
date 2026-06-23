@@ -5,7 +5,7 @@ import { ArrowRight, Heart, Users, CheckCircle, Play, Linkedin, Facebook, Instag
 import WellnessIcon from '@/components/WellnessIcon';
 import Reviews from '@/components/Reviews';
 import { useTikTokVideos } from '@/hooks/useTikTokVideos';
-import doctorProfileImage from '@assets/doctor-profile-v2.webp';
+import doctorProfileImage from '@assets/doctor-profile-hq.webp';
 
 const About = () => {
   const { language } = useLanguage();

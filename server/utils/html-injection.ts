@@ -19,6 +19,31 @@ interface PageMeta {
   metaTags?: MetaTag[];
 }
 
+// Detect non-rendering crawlers / bots (search engines, AI crawlers, social
+// scrapers). Only these receive the static text-only body inside #root, so
+// human visitors never see the unstyled pre-render flash before React mounts.
+// Googlebot/Bingbot render JS and still get the full React app; the static
+// fallback mainly serves engines that don't execute JavaScript.
+const CRAWLER_UA_REGEX = new RegExp(
+  [
+    'bot', 'crawl', 'spider', 'slurp',
+    'googlebot', 'bingbot', 'duckduckbot', 'yandex', 'baiduspider',
+    'gptbot', 'oai-searchbot', 'chatgpt-user', 'claudebot', 'claude-web',
+    'anthropic-ai', 'perplexitybot', 'google-extended', 'ccbot', 'applebot',
+    'bytespider', 'amazonbot', 'facebookexternalhit', 'facebot',
+    'twitterbot', 'linkedinbot', 'pinterest', 'redditbot', 'whatsapp',
+    'telegrambot', 'discordbot', 'embedly', 'quora link preview',
+    'mediapartners-google', 'adsbot-google', 'apis-google',
+  ].join('|'),
+  'i'
+);
+
+function isCrawlerRequest(req: Request): boolean {
+  const ua = req.get('user-agent') || '';
+  if (!ua) return false;
+  return CRAWLER_UA_REGEX.test(ua);
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')
@@ -356,15 +381,18 @@ export function injectMetaTags(html: string, req: Request): string {
     content: 'summary_large_image',
   });
 
-  // 7) Inject static pre-render body content into #root for non-rendering crawlers.
-  //    React will replace this content on load; JS-disabled crawlers and AI bots
-  //    (GPTBot, ClaudeBot, etc.) see real H1 + description + internal links.
-  const staticBody = getStaticPageBody(pathOnly, baseUrl);
-  if (staticBody) {
-    modifiedHtml = modifiedHtml.replace(
-      '<div id="root"></div>',
-      `<div id="root">${staticBody}</div>`
-    );
+  // 7) Inject static pre-render body content into #root for non-rendering crawlers
+  //    ONLY. Human visitors get an empty #root so React mounts cleanly with no
+  //    flash of the unstyled text-only fallback. JS-disabled crawlers and AI bots
+  //    (GPTBot, ClaudeBot, etc.) still see real H1 + description + internal links.
+  if (isCrawlerRequest(req)) {
+    const staticBody = getStaticPageBody(pathOnly, baseUrl);
+    if (staticBody) {
+      modifiedHtml = modifiedHtml.replace(
+        '<div id="root"></div>',
+        `<div id="root">${staticBody}</div>`
+      );
+    }
   }
 
   return modifiedHtml;
