@@ -109,6 +109,13 @@ crear un segundo sistema que compita.
   - **`author` como `Person`** (Dr. Melva Reve) con `@id`; `publisher` = la práctica
     (Organization/MedicalClinic, reutilizar el `@id` de los schemas existentes de
     Healing). E-E-A-T de salud.
+  - **El nodo Person NO debe ser un nombre pelado** (hallazgo de la investigación
+    YMYL): incluir `jobTitle`, `hasCredential` (MD / board certs) y `sameAs` (NPI +
+    perfiles en directorios médicos). **Reutilizar los datos verificados que Healing
+    YA tiene en su schema `Physician`** de la Dra. Reve (NPI + directorios) — no
+    inventar; enlazar al mismo `@id`/`sameAs`.
+  - **DECISIÓN Sprint 2: SOLO autor.** No se modela campo `reviewedBy`/revisor médico
+    en esta base (clínica pequeña). Queda como mejora futura cuando crezca el equipo.
   - `datePublished` (publishedAt), `dateModified` (updatedAt), `mainEntityOfPage`,
     `isPartOf` (#website), `wordCount`, `image`.
 - **Prohibido**: `aggregateRating`/`Review` en Organization/MedicalClinic (riesgo de
@@ -166,3 +173,26 @@ para poder ejecutar `seo:check`. Sin esto no hay URL que auditar.
 1. Esquema y tipos → 2. Storage → 3. API routes → 4. Páginas cliente →
 5. SSR anti–Soft 404 → 6. Sitemap → 7. Fix 410 → 8. Seed. No saltar el orden: el SSR
 depende del storage y del shape del payload de la API.
+
+---
+
+## Anexo — Hallazgos de la investigación E-E-A-T / YMYL (data-driven)
+
+Investigación web (jun 2026) sobre contenido médico bajo YMYL. Confirma el enfoque y
+fija prioridades respaldadas por datos:
+
+**Ya cubierto en este sprint (críticos):**
+- Autor nombrado con byline visible + `Person` schema con credenciales y `sameAs`.
+- `dateModified` reciente (Google penaliza contenido médico desactualizado >12 meses).
+- HTTPS, política de privacidad, contacto transparente (Healing ya lo tiene).
+- Prohibido `Review`/`aggregateRating` en nodos de negocio.
+
+**Mejoras futuras (post-Sprint 2), ordenadas por impacto según la investigación:**
+1. **"Medically Reviewed By" + revisor** (`reviewedBy` → `Person`): marcado como
+   factor CRÍTICO para salud. Es la mejora #1 cuando crezca el equipo clínico.
+2. **Citas a fuentes autoritativas** en el contenido (NIH, CDC, Mayo Clinic, WHO,
+   FDA) y evitar lenguaje de "cura"/exagerado.
+3. `MedicalWebPage` / `MedicalCondition` schema para artículos clínicos específicos.
+4. `lastReviewed` + `MedicalAudience` en el schema.
+5. Si se usa generación con IA (futuro): Google la acepta solo si hay revisión por
+   experto, datos/insights originales y autor nombrado que asume responsabilidad.
