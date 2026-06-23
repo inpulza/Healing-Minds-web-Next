@@ -1,17 +1,13 @@
 import { Request, Response } from 'express';
+import { getSeoSiteConfig } from '../seo/config';
+
+function getBaseUrl(): string {
+  return getSeoSiteConfig().siteBaseUrl;
+}
 
 // Sitemap XML generator for Dr. Melva Reve's psychiatric practice
 export const generateSitemap = (req: Request, res: Response) => {
-  // Determine preferred protocol and domain consistently
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-  let host = req.get('host') || 'www.healingmindsp.com';
-  
-  // Ensure consistent www subdomain for canonical URLs
-  if (host === 'healingmindsp.com') {
-    host = 'www.healingmindsp.com';
-  }
-  
-  const baseUrl = `${protocol}://${host}`;
+  const baseUrl = getBaseUrl();
   
   // Define bilingual page relationships for hreflang
   const bilingualPages = [
@@ -311,16 +307,7 @@ ${legalPagesXml}
 
 // Robots.txt generator to reference sitemap
 export const generateRobotsTxt = (req: Request, res: Response) => {
-  // Determine preferred protocol and domain consistently
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-  let host = req.get('host') || 'www.healingmindsp.com';
-  
-  // Ensure consistent www subdomain for canonical URLs
-  if (host === 'healingmindsp.com') {
-    host = 'www.healingmindsp.com';
-  }
-  
-  const baseUrl = `${protocol}://${host}`;
+  const baseUrl = getBaseUrl();
   
   // OPTIMIZADO: Robots.txt conforme a directrices Google 2025
   const robotsTxt = `User-agent: *
@@ -358,12 +345,7 @@ Disallow: /`;
 // llms.txt generator — gives AI search engines a clean, plain-text map of the site.
 // Format follows the spec at https://llmstxt.org (H1 title, blockquote summary, link sections).
 export const generateLlmsTxt = (req: Request, res: Response) => {
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-  let host = req.get('host') || 'www.healingmindsp.com';
-  if (host === 'healingmindsp.com') {
-    host = 'www.healingmindsp.com';
-  }
-  const baseUrl = `${protocol}://${host}`;
+  const baseUrl = getBaseUrl();
 
   const llmsTxt = `# Healing Minds Psychiatry
 

@@ -11,6 +11,7 @@ import { reviewsCache } from "./cache/reviews-cache";
 import { staticReviews, staticStats } from "./data/static-reviews";
 import { emailService } from "./services/email";
 import { injectMetaTags, isKnownRoute } from "./utils/html-injection";
+import { getCanonicalRedirectUrl, shouldRedirectToCanonicalHost } from "./seo/config";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -28,20 +29,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Solo se activa en producción para no romper el preview de Replit Workspace.
   if (isProduction) {
     app.use((req, res, next) => {
-      const rawHost = (req.get('host') || '').toLowerCase();
-      // ":443" is the HTTPS default port. Google Frontend's implicit HTTP→HTTPS
-      // redirect leaves it in the host; if we don't redirect it away, Google
-      // treats "host:443" as a distinct origin and the Search Console fills up
-      // with "Page with redirect" duplicates.
-      const had443 = rawHost.endsWith(':443');
-      const hostBare = had443 ? rawHost.slice(0, -4) : rawHost;
-      const shouldRedirect =
-        had443 ||
-        hostBare === 'healingmindsp.com' ||
-        hostBare.endsWith('.replit.app');
-      if (shouldRedirect) {
-        return res.redirect(301, `https://www.healingmindsp.com${req.originalUrl}`);
+      if (shouldRedirectToCanonicalHost(req.get('host'))) {
+        return res.redirect(301, getCanonicalRedirectUrl(req.originalUrl));
       }
+
       next();
     });
   }

@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { cityHyperlocal, type Lang } from '@/data/locationHyperlocal';
+import { getSeoSiteConfig } from '../seo/config';
 
 interface MetaTag {
   name?: string;
@@ -238,15 +239,7 @@ function upsertMetaTag(html: string, tag: MetaTag): string {
  */
 export function injectMetaTags(html: string, req: Request): string {
   const url = req.originalUrl;
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-  let host = req.get('host') || 'www.healingmindsp.com';
-  
-  // Ensure consistent www subdomain (critical for production SEO)
-  if (host === 'healingmindsp.com' || host?.includes('replit.app')) {
-    host = 'www.healingmindsp.com';
-  }
-  
-  const baseUrl = `${protocol}://${host}`;
+  const baseUrl = getSeoSiteConfig().siteBaseUrl;
   
   // Define page-specific meta data
   const pageMetaData = getPageMetaData(url, baseUrl);
