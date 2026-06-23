@@ -38,7 +38,11 @@ export const HONEYPOT_FIELDS = ["website", "url", "homepage", "companyWebsite"] 
 // the real contact fields plus anti-spam-only fields (honeypot + timing) that
 // are stripped before persistence. Phone is required and validated here.
 export const contactFormRequestSchema = insertContactMessageSchema.extend({
+  firstName: z.string().trim().min(1),
+  lastName: z.string().trim().min(1),
+  email: z.string().trim().email(),
   phone: z.string().trim().min(1),
+  message: z.string().trim().min(1),
   formStartedAt: z.coerce.number().optional(),
   website: z.string().optional(),
   url: z.string().optional(),

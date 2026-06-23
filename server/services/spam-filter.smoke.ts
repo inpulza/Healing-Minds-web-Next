@@ -4,6 +4,7 @@
 // rate limiter is not touched. The DNS check runs for real against the network.
 
 import { evaluateContactSubmission } from "./spam-filter";
+import { contactFormRequestSchema } from "@shared/schema";
 
 const now = Date.now();
 const HUMAN_START = now - 5000; // 5s ago: passes the timing check
@@ -109,9 +110,68 @@ const cases: Case[] = [
   },
 ];
 
+// Schema-level validation cases (these are rejected by contactFormRequestSchema
+// in the route with a 400 before any spam heuristics run).
+interface SchemaCase {
+  name: string;
+  payload: Record<string, unknown>;
+  expectValid: boolean;
+}
+
+const schemaCases: SchemaCase[] = [
+  {
+    name: "reject: malformed email (no @)",
+    payload: basePayload({ email: "not-an-email" }),
+    expectValid: false,
+  },
+  {
+    name: "reject: empty firstName",
+    payload: basePayload({ firstName: "   " }),
+    expectValid: false,
+  },
+  {
+    name: "reject: empty lastName",
+    payload: basePayload({ lastName: "" }),
+    expectValid: false,
+  },
+  {
+    name: "reject: empty message",
+    payload: basePayload({ message: "  " }),
+    expectValid: false,
+  },
+  {
+    name: "reject: empty phone",
+    payload: basePayload({ phone: "" }),
+    expectValid: false,
+  },
+  {
+    name: "accept: well-formed required fields",
+    payload: basePayload({}),
+    expectValid: true,
+  },
+];
+
 async function run() {
   let passed = 0;
   let failed = 0;
+
+  for (const c of schemaCases) {
+    const parsed = contactFormRequestSchema.safeParse(c.payload);
+    const ok = parsed.success === c.expectValid;
+    if (ok) {
+      passed++;
+      console.log(
+        `✅ ${c.name} → ${parsed.success ? "valid" : "rejected"}`,
+      );
+    } else {
+      failed++;
+      console.log(
+        `❌ ${c.name} → expected ${
+          c.expectValid ? "valid" : "rejected"
+        } but got ${parsed.success ? "valid" : "rejected"}`,
+      );
+    }
+  }
 
   for (const c of cases) {
     const verdict = await evaluateContactSubmission(c.payload, {
