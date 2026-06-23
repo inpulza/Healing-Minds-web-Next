@@ -1,1 +1,2 @@
 - [Spanish homepage trailing-slash SEO trap](es-homepage-trailing-slash.md) — /es/ vs /es mismatch (canonical/hreflang/sitemap point at the 301-redirecting /es/) is the ONE root cause behind recurring multi-flag SEO audits; also fake llms.txt + thin city pages.
+- [Contact form anti-spam filter](contact-form-antispam.md) — silent spam filtering on the single /api/contact endpoint; DNS check must fail OPEN (both resolvers must agree NXDOMAIN to block); gibberish heuristic combines signals, never naive vowel count.

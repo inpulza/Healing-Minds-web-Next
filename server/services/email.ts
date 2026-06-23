@@ -4,7 +4,10 @@ import type { InsertContactMessage } from '@shared/schema';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export interface EmailService {
-  sendContactNotification(contactData: InsertContactMessage): Promise<void>;
+  sendContactNotification(
+    contactData: InsertContactMessage,
+    options?: { test?: boolean },
+  ): Promise<void>;
   sendConfirmationEmail(contactData: InsertContactMessage): Promise<void>;
 }
 
@@ -12,9 +15,13 @@ export class ResendEmailService implements EmailService {
   private readonly fromEmail = 'noreply@healingmindsp.com';
   private readonly practiceEmail = 'info@healingmindsp.com';
 
-  async sendContactNotification(contactData: InsertContactMessage): Promise<void> {
+  async sendContactNotification(
+    contactData: InsertContactMessage,
+    options?: { test?: boolean },
+  ): Promise<void> {
     console.log('🚀 ENTERED sendContactNotification method');
-    const subject = `Nueva consulta desde el sitio web - ${contactData.firstName} ${contactData.lastName}`;
+    const prefix = options?.test ? '[TEST] ' : '';
+    const subject = `${prefix}Nueva consulta desde el sitio web - ${contactData.firstName} ${contactData.lastName}`;
     
     const htmlContent = `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 30px; background: #ffffff;">

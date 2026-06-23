@@ -1,7 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactMessageSchema } from "@shared/schema";
+import { insertContactMessageSchema, contactFormRequestSchema } from "@shared/schema";
+import { evaluateContactSubmission } from "./services/spam-filter";
+import { checkRateLimit } from "./services/rate-limiter";
+import { getClientIp } from "./utils/client-ip";
 import { generateSitemap, generateRobotsTxt, generateLlmsTxt } from "./routes/sitemap";
 import { MetricoolService } from "./services/metricool";
 import { reviewsCache } from "./cache/reviews-cache";
@@ -219,9 +222,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {
-      // Validate request body using Zod schema
-      const validatedData = insertContactMessageSchema.parse(req.body);
-      
+      const ip = getClientIp(req);
+      const emailForLimit =
+        typeof req.body?.email === "string" ? req.body.email : undefined;
+
+      // Rate limit by IP and by email. Over the limit → 429.
+      const rateLimit = checkRateLimit(ip, emailForLimit);
+      if (!rateLimit.allowed) {
+        console.log(`🚫 Rate limit exceeded for contact form (ip=${ip})`);
+        if (rateLimit.retryAfterSec) {
+          res.set("Retry-After", String(rateLimit.retryAfterSec));
+        }
+        return res.status(429).json({
+          success: false,
+          message: "Too many requests. Please try again later.",
+        });
+      }
+
+      // Validate request body (real fields + honeypot/timing fields).
+      const submission = contactFormRequestSchema.parse(req.body);
+
+      // Run anti-spam checks. On a spam verdict, respond as if it succeeded but
+      // do NOT save, email, or trigger conversions (silent filtering).
+      const verdict = await evaluateContactSubmission(submission);
+      if (verdict.spam) {
+        console.log(
+          `🛡️ Contact submission silently filtered as spam (reason=${verdict.reason})`,
+        );
+        return res.status(202).json({ success: true, filtered: true });
+      }
+
+      // Strip anti-spam-only fields before persistence/email.
+      const validatedData = insertContactMessageSchema.parse({
+        firstName: submission.firstName,
+        lastName: submission.lastName,
+        email: submission.email,
+        phone: submission.phone,
+        preferredLanguage: submission.preferredLanguage,
+        message: submission.message,
+      });
+
       // Store the contact message
       const contactMessage = await storage.createContactMessage(validatedData);
       
@@ -229,7 +269,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         console.log("🔄 Starting email sending process...");
         await Promise.all([
-          emailService.sendContactNotification(validatedData),
+          emailService.sendContactNotification(validatedData, { test: !isProduction }),
           emailService.sendConfirmationEmail(validatedData)
         ]);
         console.log("✅ Emails sent successfully for contact form submission");

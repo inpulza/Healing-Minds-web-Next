@@ -30,10 +30,27 @@ export const insertContactMessageSchema = createInsertSchema(contactMessages).om
   createdAt: true,
 });
 
+// Hidden honeypot fields that must stay empty for a real user. Bots that
+// auto-fill every input will populate them, letting us silently filter.
+export const HONEYPOT_FIELDS = ["website", "url", "homepage", "companyWebsite"] as const;
+
+// Schema for the raw contact form request coming from the browser. It carries
+// the real contact fields plus anti-spam-only fields (honeypot + timing) that
+// are stripped before persistence. Phone is required and validated here.
+export const contactFormRequestSchema = insertContactMessageSchema.extend({
+  phone: z.string().trim().min(1),
+  formStartedAt: z.coerce.number().optional(),
+  website: z.string().optional(),
+  url: z.string().optional(),
+  homepage: z.string().optional(),
+  companyWebsite: z.string().optional(),
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 export type ContactMessage = typeof contactMessages.$inferSelect;
+export type ContactFormRequest = z.infer<typeof contactFormRequestSchema>;
 
 // Review schemas for Metricool integration
 export const reviewSchema = z.object({

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
@@ -52,6 +52,15 @@ const Contact = () => {
     preferredLanguage: 'english',
     message: ''
   });
+  // Honeypot fields: hidden from real users, only bots fill them.
+  const [honeypot, setHoneypot] = useState({
+    website: '',
+    url: '',
+    homepage: '',
+    companyWebsite: ''
+  });
+  // Timestamp when the form first mounted, used to reject instant bot submissions.
+  const formStartedAtRef = useRef<number>(Date.now());
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -63,7 +72,7 @@ const Contact = () => {
 
     try {
       // Validate required fields
-      if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
+      if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.message) {
         toast({
           title: language === 'en' ? 'Error' : 'Error',
           description: language === 'en' 
@@ -93,20 +102,37 @@ const Contact = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          ...honeypot,
+          formStartedAt: formStartedAtRef.current,
+        }),
       });
+
+      if (response.status === 429) {
+        toast({
+          title: language === 'en' ? 'Please wait' : 'Por favor espere',
+          description: language === 'en'
+            ? 'You have submitted too many times. Please try again later.'
+            : 'Ha enviado demasiadas veces. Por favor intente más tarde.',
+          variant: 'destructive'
+        });
+        return;
+      }
 
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
 
-      // Track successful form submission with Clarity
-      trackEvent('contact_form_submitted');
-      setTag('contact_language', formData.preferredLanguage);
-      setTag('contact_form_type', 'main_contact');
+      const result = await response.json().catch(() => ({}));
 
-      // Track TikTok Lead event
-      trackContactFormSubmission('contact');
+      // Only fire analytics/conversions for genuine, non-filtered submissions.
+      if (!result?.filtered) {
+        trackEvent('contact_form_submitted');
+        setTag('contact_language', formData.preferredLanguage);
+        setTag('contact_form_type', 'main_contact');
+        trackContactFormSubmission('contact');
+      }
 
       toast({
         title: language === 'en' ? 'Success!' : '¡Éxito!',
@@ -124,6 +150,8 @@ const Contact = () => {
         preferredLanguage: 'english',
         message: ''
       });
+      setHoneypot({ website: '', url: '', homepage: '', companyWebsite: '' });
+      formStartedAtRef.current = Date.now();
 
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -319,6 +347,42 @@ const Contact = () => {
             </h3>
             
             <form onSubmit={handleSubmit} className="space-y-6" data-testid="contact-form">
+              {/* Honeypot fields - hidden from real users, only bots fill these */}
+              <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }}>
+                <label htmlFor="contact-website">Website</label>
+                <input
+                  id="contact-website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot.website}
+                  onChange={(e) => setHoneypot(prev => ({ ...prev, website: e.target.value }))}
+                />
+                <input
+                  id="contact-url"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot.url}
+                  onChange={(e) => setHoneypot(prev => ({ ...prev, url: e.target.value }))}
+                />
+                <input
+                  id="contact-homepage"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot.homepage}
+                  onChange={(e) => setHoneypot(prev => ({ ...prev, homepage: e.target.value }))}
+                />
+                <input
+                  id="contact-companyWebsite"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot.companyWebsite}
+                  onChange={(e) => setHoneypot(prev => ({ ...prev, companyWebsite: e.target.value }))}
+                />
+              </div>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -367,11 +431,12 @@ const Contact = () => {
 
               <div>
                 <Label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('contact.form.phone')}
+                  {t('contact.form.phone')} *
                 </Label>
                 <Input
                   id="phone"
                   type="tel"
+                  required
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
                   className="w-full"
