@@ -1,0 +1,74 @@
+Contexto para Replit — Healing Minds SEO Publishing Engine
+
+Vamos a empezar un nuevo bloque de trabajo en el repo:
+
+inpulza/Healing-Minds-Psychiatry-New-Web
+
+El objetivo NO es copiar y pegar el blog de XL Homes tal cual. El objetivo es adaptar la metodología que ya funciona en XL Homes a Healing Minds Psychiatry, convirtiéndola poco a poco en un sistema reusable para cualquier cliente/nicho de Inpulza.
+
+Qué existe en XL Homes:
+- Un panel de administración para crear/generar blogs.
+- Flujo editorial con muchos pasos: idea, research, anti-canibalización, artículo, metadatos SEO, imágenes, verificación, publicación.
+- Blog público renderizado para Google.
+- Sitemap dinámico.
+- Hook SEO post-publicación que audita la URL, revisa canonical/robots/contenido/sitemap, envía sitemap a Search Console e inspecciona URL.
+- Todo esto ya fue probado en producción con xl-homes.com.
+
+Qué queremos hacer en Healing Minds:
+- Empezar paso a paso, no con un big bang.
+- Primero auditar la estructura actual del repo.
+- Luego portar la capa reusable de SEO publishing.
+- Después crear/adaptar una base de blog.
+- Finalmente construir el motor editorial healthcare, con reglas propias de psiquiatría/YMYL.
+
+Importante:
+Healing Minds es healthcare. No se puede usar la misma lógica creativa de XL Homes sin adaptación. Aquí necesitamos:
+- tono médico responsable,
+- fuentes confiables,
+- cuidado con claims clínicos,
+- disclaimers cuando aplique,
+- revisión humana antes de publicar,
+- rutas bilingües cuando tenga sentido,
+- foco local: Naples, Southwest Florida, telepsychiatry Florida.
+
+Dominio/SEO:
+- Dominio canónico: https://www.healingmindsp.com
+- Search Console property: sc-domain:healingmindsp.com
+- Sitemap: https://www.healingmindsp.com/sitemap.xml
+- No generar tokens nuevos de Google. Reutilizar la infraestructura segura de Inpulza cuando haga falta. Nunca commitear ni mostrar secretos.
+
+Dinámica de trabajo:
+- CodeX revisa desde fuera, planifica, implementa en ramas/PRs cuando toque y valida con datos.
+- Replit revisa el repo desde dentro, ejecuta pruebas, verifica deploys y ayuda con smoke tests.
+- No mezclar refactors grandes con cambios SEO críticos.
+- Todo cambio importante debe ir por PR o flujo controlado, como hicimos en XL Homes.
+- Antes de implementar, confirmar el sprint y el alcance.
+
+Plan inicial:
+Sprint 0 — Auditoría:
+- revisar rutas, sitemap, SSR/meta injection, schema, build, Search Console, estructura DB y si existe algo de blog/admin.
+- documentar diferencias con XL Homes.
+- decidir exactamente qué piezas son portables.
+
+Sprint 1 — SEO Publishing Engine:
+- portar solo la capa reusable: audit URL, sitemap submit, URL Inspection, config por dominio.
+- probarlo con rutas existentes, no con blog nuevo todavía.
+- validar que no rompe producción.
+
+Sprint 2 — Base de blog:
+- crear /blog y /blog/:slug si no existen.
+- decidir schema de posts.
+- integrar posts al sitemap.
+- asegurar SSR real y JSON-LD.
+
+Sprint 3 — Perfil healthcare:
+- crear reglas de contenido para Healing Minds.
+- definir fuentes médicas confiables.
+- definir categorías, servicios, locations y tono.
+- mantener draft -> human review -> publish.
+
+Sprint 4 — Motor editorial:
+- adaptar generación de ideas, research, artículo, imágenes si aplica, verificación y publicación.
+
+Objetivo final:
+Que Healing Minds sea el segundo piloto para convertir el sistema de XL Homes en un módulo SEO editorial empaquetable para cualquier cliente de Inpulza.
