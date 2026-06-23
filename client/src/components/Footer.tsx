@@ -25,6 +25,7 @@ const Footer = () => {
   const quickLinks = [
     { href: language === 'en' ? '/about' : '/es/acerca-de', label: language === 'en' ? 'About Dr. Reve' : 'Sobre la Dra. Reve' },
     { href: language === 'en' ? '/for-patients' : '/es/para-pacientes', label: language === 'en' ? 'For Patients' : 'Para Pacientes' },
+    { href: language === 'en' ? '/blog' : '/es/blog', label: 'Blog' },
     { href: language === 'en' ? '/contact' : '/es/contacto', label: language === 'en' ? 'Contact Us' : 'Contáctanos' }
   ];
 

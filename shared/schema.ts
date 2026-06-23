@@ -1,5 +1,17 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -20,6 +32,94 @@ export const contactMessages = pgTable("contact_messages", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const blogPostStatusEnum = pgEnum("blog_post_status", [
+  "draft",
+  "pending_review",
+  "published",
+  "rejected",
+]);
+
+export const blogAuthors = pgTable("blog_authors", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  name: varchar("name", { length: 255 }).notNull(),
+  title: varchar("title", { length: 255 }),
+  bio: text("bio"),
+  imageUrl: varchar("image_url", { length: 500 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const blogCategories = pgTable(
+  "blog_categories",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    name: varchar("name", { length: 100 }).notNull(),
+    slug: varchar("slug", { length: 100 }).notNull(),
+    language: varchar("language", { length: 5 }).notNull().default("en"),
+    description: text("description"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_categories_language_slug").on(table.language, table.slug),
+  ],
+);
+
+export const blogTags = pgTable(
+  "blog_tags",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    name: varchar("name", { length: 100 }).notNull(),
+    slug: varchar("slug", { length: 100 }).notNull(),
+    language: varchar("language", { length: 5 }).notNull().default("en"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_tags_language_slug").on(table.language, table.slug),
+  ],
+);
+
+export const blogPosts = pgTable(
+  "blog_posts",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    title: varchar("title", { length: 255 }).notNull(),
+    slug: varchar("slug", { length: 255 }).notNull(),
+    language: varchar("language", { length: 5 }).notNull().default("en"),
+    translationGroupId: uuid("translation_group_id").notNull().defaultRandom(),
+    excerpt: text("excerpt"),
+    content: text("content"),
+    featuredImage: varchar("featured_image", { length: 500 }),
+    featuredImageAlt: varchar("featured_image_alt", { length: 255 }),
+    authorId: integer("author_id").references(() => blogAuthors.id, { onDelete: "set null" }),
+    categoryId: integer("category_id").references(() => blogCategories.id, { onDelete: "set null" }),
+    status: blogPostStatusEnum("status").notNull().default("draft"),
+    isFeatured: boolean("is_featured").notNull().default(false),
+    metaTitle: varchar("meta_title", { length: 70 }),
+    metaDescription: varchar("meta_description", { length: 160 }),
+    readingTime: integer("reading_time"),
+    publishedAt: timestamp("published_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_posts_language_slug").on(table.language, table.slug),
+    index("idx_blog_posts_status").on(table.status),
+    index("idx_blog_posts_published_at").on(table.publishedAt),
+    index("idx_blog_posts_category_id").on(table.categoryId),
+    index("idx_blog_posts_translation_group").on(table.translationGroupId),
+  ],
+);
+
+export const blogPostTags = pgTable(
+  "blog_post_tags",
+  {
+    postId: integer("post_id").references(() => blogPosts.id, { onDelete: "cascade" }).notNull(),
+    tagId: integer("tag_id").references(() => blogTags.id, { onDelete: "cascade" }).notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.postId, table.tagId] }),
+  ],
+);
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -29,6 +129,25 @@ export const insertContactMessageSchema = createInsertSchema(contactMessages).om
   id: true,
   createdAt: true,
 });
+
+export const insertBlogAuthorSchema = createInsertSchema(blogAuthors).omit({
+  createdAt: true,
+});
+
+export const insertBlogCategorySchema = createInsertSchema(blogCategories).omit({
+  createdAt: true,
+});
+
+export const insertBlogTagSchema = createInsertSchema(blogTags).omit({
+  createdAt: true,
+});
+
+export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertBlogPostTagSchema = createInsertSchema(blogPostTags);
 
 // Hidden honeypot fields that must stay empty for a real user. Bots that
 // auto-fill every input will populate them, letting us silently filter.
@@ -55,6 +174,17 @@ export type User = typeof users.$inferSelect;
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 export type ContactMessage = typeof contactMessages.$inferSelect;
 export type ContactFormRequest = z.infer<typeof contactFormRequestSchema>;
+export type BlogPostStatus = (typeof blogPostStatusEnum.enumValues)[number];
+export type InsertBlogAuthor = z.infer<typeof insertBlogAuthorSchema>;
+export type BlogAuthor = typeof blogAuthors.$inferSelect;
+export type InsertBlogCategory = z.infer<typeof insertBlogCategorySchema>;
+export type BlogCategory = typeof blogCategories.$inferSelect;
+export type InsertBlogTag = z.infer<typeof insertBlogTagSchema>;
+export type BlogTag = typeof blogTags.$inferSelect;
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type InsertBlogPostTag = z.infer<typeof insertBlogPostTagSchema>;
+export type BlogPostTag = typeof blogPostTags.$inferSelect;
 
 // Review schemas for Metricool integration
 export const reviewSchema = z.object({

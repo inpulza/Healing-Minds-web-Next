@@ -20,6 +20,8 @@ const bilingualURLMapping: Record<string, string> = {
   '/es/para-pacientes': '/for-patients',
   '/locations': '/es/ubicaciones',
   '/es/ubicaciones': '/locations',
+  '/blog': '/es/blog',
+  '/es/blog': '/blog',
   
   // Individual service pages mapping
   '/services/anxiety-treatment': '/es/servicios/tratamiento-ansiedad',

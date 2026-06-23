@@ -12,6 +12,7 @@ import { staticReviews, staticStats } from "./data/static-reviews";
 import { emailService } from "./services/email";
 import { injectMetaTags, isKnownRoute } from "./utils/html-injection";
 import { getCanonicalRedirectUrl, shouldRedirectToCanonicalHost } from "./seo/config";
+import { getBlogPostBySlug, getBlogPosts, type BlogLanguage } from "./blog/storage";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -92,7 +93,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       pathname.includes('/comments') ||
       pathname.endsWith('/feed') ||
       pathname.includes('/feed/') ||
-      (pathname.includes('/blog/') && !pathname.startsWith('/blog'))
+      (
+        pathname.includes('/blog/') &&
+        !pathname.startsWith('/blog/') &&
+        !pathname.startsWith('/es/blog/') &&
+        !pathname.startsWith('/api/')
+      )
     ) {
       console.log(`🚫 410 Gone: WordPress legacy URL blocked - ${url}`);
       return res.status(410).type('text/plain').send('Gone');
@@ -152,19 +158,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // the React app (so the NotFound page renders), but with HTTP 404 and
           // a noindex meta so Google removes/skips the URL. Fixes Soft 404s.
           // Use req.path so query strings (e.g. ?utm=...) don't trigger false 404s.
-          const known = isKnownRoute(req.path);
+          const known = await isKnownRoute(req.path);
           if (!known) {
             html = html.replace(
               /<meta\s+name=["']robots["'][^>]*>/i,
               '<meta name="robots" content="noindex, follow">'
             );
             console.log(`🚫 SEO [PRODUCTION]: 404 + noindex for unknown route ${req.originalUrl}`);
-            html = injectMetaTags(html, req);
+            html = await injectMetaTags(html, req);
             return res.status(404).set({ "Content-Type": "text/html" }).end(html);
           }
 
           console.log(`🔧 SEO [PRODUCTION]: Injecting meta tags for ${req.originalUrl}`);
-          html = injectMetaTags(html, req);
+          html = await injectMetaTags(html, req);
 
           return res.status(200).set({ "Content-Type": "text/html" }).end(html);
         } catch (error) {
@@ -185,23 +191,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Solo procesar requests que podrían ser páginas HTML (no APIs, no assets)
       if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.includes('.')) {
         const originalEnd = res.end;
-        const known = isKnownRoute(req.path);
+        const knownPromise = isKnownRoute(req.path);
 
         res.end = function(chunk: any, encoding?: any) {
           if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html')) {
-            let modifiedHtml = chunk;
-            if (!known) {
-              modifiedHtml = modifiedHtml.replace(
-                /<meta\s+name=["']robots["'][^>]*>/i,
-                '<meta name="robots" content="noindex, follow">'
-              );
-              console.log(`🚫 SEO [DEV]: 404 + noindex for unknown route ${req.originalUrl}`);
-              res.status(404);
-            } else {
-              console.log(`🔧 SEO [DEV]: Injecting meta tags for ${req.originalUrl}`);
-            }
-            modifiedHtml = injectMetaTags(modifiedHtml, req);
-            return originalEnd.call(this, modifiedHtml, encoding);
+            void (async () => {
+              let modifiedHtml = chunk;
+              const known = await knownPromise;
+              if (!known) {
+                modifiedHtml = modifiedHtml.replace(
+                  /<meta\s+name=["']robots["'][^>]*>/i,
+                  '<meta name="robots" content="noindex, follow">'
+                );
+                console.log(`SEO [DEV]: 404 + noindex for unknown route ${req.originalUrl}`);
+                res.status(404);
+              } else {
+                console.log(`SEO [DEV]: Injecting meta tags for ${req.originalUrl}`);
+              }
+              modifiedHtml = await injectMetaTags(modifiedHtml, req);
+              originalEnd.call(this, modifiedHtml, encoding);
+            })().catch(next);
+            return this;
           }
           return originalEnd.call(this, chunk, encoding);
         };
@@ -307,6 +317,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ 
         success: false, 
         message: "Error fetching contact messages" 
+      });
+    }
+  });
+
+  // Public blog endpoints. Sprint 2 exposes only published content; admin,
+  // drafts, and article generation remain out of scope.
+  app.get("/api/blog/posts", async (req, res) => {
+    try {
+      const language = req.query.language === "es" ? "es" : req.query.language === "en" ? "en" : undefined;
+      const posts = await getBlogPosts({
+        status: "published",
+        language,
+        categorySlug: typeof req.query.category === "string" ? req.query.category : undefined,
+        tagSlug: typeof req.query.tag === "string" ? req.query.tag : undefined,
+        limit: typeof req.query.limit === "string" ? Number(req.query.limit) || 50 : 50,
+        offset: typeof req.query.offset === "string" ? Number(req.query.offset) || 0 : 0,
+      });
+      res.status(200).json({ success: true, data: posts });
+    } catch (error) {
+      console.error("Error fetching blog posts:", error);
+      res.status(500).json({
+        success: false,
+        message: "Error fetching blog posts",
+      });
+    }
+  });
+
+  app.get("/api/blog/posts/:slug", async (req, res) => {
+    try {
+      const language: BlogLanguage = req.query.language === "es" ? "es" : "en";
+      const post = await getBlogPostBySlug(req.params.slug, language);
+      if (!post) {
+        return res.status(404).json({
+          success: false,
+          message: "Blog post not found",
+        });
+      }
+
+      res.status(200).json({ success: true, data: post });
+    } catch (error) {
+      console.error("Error fetching blog post:", error);
+      res.status(500).json({
+        success: false,
+        message: "Error fetching blog post",
       });
     }
   });

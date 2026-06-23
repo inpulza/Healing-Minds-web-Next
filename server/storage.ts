@@ -62,6 +62,7 @@ export class MemStorage implements IStorage {
   async getContactMessageById(id: string): Promise<ContactMessage | undefined> {
     return this.contactMessages.get(id);
   }
+
 }
 
 export const storage = new MemStorage();

@@ -30,6 +30,8 @@ const About = lazy(() => import('@/pages/About'));
 const Services = lazy(() => import('@/pages/Services'));
 const ForPatients = lazy(() => import('@/pages/ForPatients'));
 const Contact = lazy(() => import('@/pages/Contact'));
+const BlogIndex = lazy(() => import('@/pages/BlogIndex'));
+const BlogPost = lazy(() => import('@/pages/BlogPost'));
 const ServiciosEspanol = lazy(() => import('@/pages/ServiciosEspanol'));
 const LocationNaples = lazy(() => import('@/pages/LocationNaples'));
 const LocationBonitaSprings = lazy(() => import('@/pages/LocationBonitaSprings'));
@@ -149,6 +151,10 @@ function Router() {
       <Route path="/es/ubicaciones/psiquiatra-lely-resort" component={() => <SpanishRouteWrapper Component={LocationLelyResorts} />} />
       
       <Route path="/contact" component={Contact} />
+      <Route path="/blog" component={() => <BlogIndex />} />
+      <Route path="/blog/:slug" component={BlogPost} />
+      <Route path="/es/blog" component={() => <BlogIndex language="es" />} />
+      <Route path="/es/blog/:slug" component={BlogPost} />
       
       {/* Spanish Main Pages */}
       <Route path="/es" component={HomeEspanol} />

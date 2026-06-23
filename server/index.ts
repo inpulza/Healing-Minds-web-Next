@@ -40,6 +40,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   // This ensures Google sees updated schema markup and NAP consistency fixes
   else if (req.url.match(/\.html$/) || 
            req.url === '/' || 
+           req.url.includes('/blog') ||
            req.url.includes('/locations/') ||
            req.url.includes('/services/') ||
            req.url.includes('/es/') ||
@@ -114,11 +115,13 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
+  const listenOptions: { port: number; host: string; reusePort?: boolean } = {
     port,
     host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
+    ...(process.platform === "win32" ? {} : { reusePort: true }),
+  };
+
+  server.listen(listenOptions, () => {
     log(`serving on port ${port}`);
   });
 })();

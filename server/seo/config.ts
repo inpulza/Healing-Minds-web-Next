@@ -51,13 +51,12 @@ export function shouldRedirectToCanonicalHost(rawHost: string | undefined): bool
   const lowerHost = rawHost.toLowerCase();
   const hadDefaultHttpsPort = lowerHost.endsWith(":443");
   const hostBare = hadDefaultHttpsPort ? lowerHost.slice(0, -4) : lowerHost;
-  const apexHost = canonicalHost.startsWith("www.")
-    ? canonicalHost.slice(4)
-    : canonicalHost;
+  const shouldRedirectApexToWww = canonicalHost.startsWith("www.");
+  const apexHost = shouldRedirectApexToWww ? canonicalHost.slice(4) : null;
 
   return (
     hadDefaultHttpsPort ||
-    hostBare === apexHost ||
+    (apexHost !== null && hostBare === apexHost) ||
     hostBare.endsWith(".replit.app")
   );
 }

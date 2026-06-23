@@ -5,6 +5,10 @@ const DEFAULT_PATHS = [
   "/services/anxiety-treatment",
   "/locations/psychiatrist-naples",
   "/es/servicios/tratamiento-ansiedad",
+  "/blog",
+  "/es/blog",
+  "/blog/understanding-anxiety-treatment-naples",
+  "/es/blog/tratamiento-ansiedad-naples",
 ];
 
 function printUsage(): void {

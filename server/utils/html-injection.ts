@@ -1,5 +1,16 @@
 import { Request } from 'express';
 import { cityHyperlocal, type Lang } from '@/data/locationHyperlocal';
+import {
+  getBlogIndexPath,
+  getBlogPostBySlug,
+  getBlogPostPath,
+  getBlogPostPlainText,
+  getBlogPosts,
+  getBlogSlugFromPath,
+  getPostTranslations,
+  type BlogLanguage,
+  type BlogPostWithRelations,
+} from '../blog/storage';
 import { getSeoSiteConfig } from '../seo/config';
 
 interface MetaTag {
@@ -55,6 +66,130 @@ function escapeHtml(s: string): string {
 
 function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+async function getBlogPostFromPath(path: string): Promise<BlogPostWithRelations | undefined> {
+  const match = getBlogSlugFromPath(path);
+  return match ? getBlogPostBySlug(match.slug, match.language) : undefined;
+}
+
+function formatBlogDate(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+
+function getBlogDate(post: BlogPostWithRelations, field: 'published' | 'modified'): Date {
+  if (field === 'published') {
+    return post.publishedAt || post.createdAt;
+  }
+  return post.updatedAt || post.publishedAt || post.createdAt;
+}
+
+function getBlogSchemaLanguage(language: BlogLanguage): string {
+  return language === 'es' ? 'es' : 'en-US';
+}
+
+function getBlogDescription(post: BlogPostWithRelations): string {
+  return post.metaDescription || post.excerpt || getBlogPostPlainText(post).slice(0, 160);
+}
+
+function getBlogImage(baseUrl: string, post: BlogPostWithRelations): string {
+  return post.featuredImage || `${baseUrl}/og-image.png`;
+}
+
+function getPhysicianAuthorSchema(baseUrl: string, author?: BlogPostWithRelations['author']) {
+  return {
+    "@type": "Person",
+    "@id": `${baseUrl}/#physician`,
+    "name": author?.name || "Dr. Melva Reve Urgelles",
+    "honorificPrefix": "Dr.",
+    "jobTitle": author?.title || "Psychiatrist",
+    "description": author?.bio || "Psychiatrist specializing in anxiety, depression, ADHD, and PTSD treatment. Bilingual in English and Spanish.",
+    "image": author?.imageUrl || `${baseUrl}/doctor-profile-v2.webp`,
+    "medicalSpecialty": "Psychiatry",
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "NPI",
+      "value": "1982233631"
+    },
+    "hasCredential": [
+      {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "Medical Doctor"
+      },
+      {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "Board Certified Psychiatrist"
+      }
+    ],
+    "sameAs": [
+      "https://www.healthgrades.com/physician/dr-melva-reve-urgelles-1dgbqeci76",
+      "https://weprevent.org/listing/dr-melva-reve-urgelles-md-vc998mp/",
+      "https://providers.sharecare.com/doctor/dr-melva-reve-urgelles-1dgbqeci76",
+      "https://npidb.org/doctors/allopathic_osteopathic_physicians/psychiatry_2084p0800x/1982233631.aspx"
+    ],
+    "knowsLanguage": ["English", "Spanish"],
+    "worksFor": {
+      "@id": `${baseUrl}/#organization`
+    }
+  };
+}
+
+function buildBlogAlternateLinks(baseUrl: string, translations: BlogPostWithRelations[]): MetaTag[] {
+  const links: MetaTag[] = [];
+  const byLanguage = new Map<BlogLanguage, BlogPostWithRelations>();
+  for (const post of translations) {
+    if (post.language === 'en' || post.language === 'es') {
+      byLanguage.set(post.language, post);
+    }
+  }
+
+  for (const language of ['en', 'es'] as const) {
+    const post = byLanguage.get(language);
+    if (post) {
+      links.push({
+        rel: 'alternate',
+        hreflang: language,
+        href: `${baseUrl}${getBlogPostPath(post)}`,
+      });
+    }
+  }
+
+  const defaultPost = byLanguage.get('en') || translations[0];
+  if (defaultPost) {
+    links.push({
+      rel: 'alternate',
+      hreflang: 'x-default',
+      href: `${baseUrl}${getBlogPostPath(defaultPost)}`,
+    });
+  }
+
+  return links;
+}
+
+function sanitizeBlogHtml(html: string): string {
+  const allowedTags = new Set(['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a']);
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/\son\w+="[^"]*"/gi, '')
+    .replace(/\son\w+='[^']*'/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/<\/?([a-z0-9-]+)(\s[^>]*)?>/gi, (match, tagName, rawAttrs = '') => {
+      const tag = String(tagName).toLowerCase();
+      if (!allowedTags.has(tag)) return '';
+      if (match.startsWith('</')) return `</${tag}>`;
+      if (tag === 'br') return '<br>';
+      if (tag !== 'a') return `<${tag}>`;
+
+      const hrefMatch = String(rawAttrs).match(/\shref=(["'])(.*?)\1/i);
+      const href = hrefMatch?.[2] || '';
+      const isSafeHref = href.startsWith('/') || href.startsWith('https://') || href.startsWith('http://');
+      return isSafeHref ? `<a href="${escapeHtml(href)}">` : '<a>';
+    });
+}
+
+function safeJsonForInlineScript(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, '\\u003c');
 }
 
 // ── Satellite location registry ──────────────────────────────────────────────
@@ -237,12 +372,12 @@ function upsertMetaTag(html: string, tag: MetaTag): string {
  * - Producción: Intercepta HTML estático servido por Express
  * - Ambos casos: Inyecta canonical tags y schema JSON-LD antes de envío al cliente
  */
-export function injectMetaTags(html: string, req: Request): string {
+export async function injectMetaTags(html: string, req: Request): Promise<string> {
   const url = req.originalUrl;
   const baseUrl = getSeoSiteConfig().siteBaseUrl;
   
   // Define page-specific meta data
-  const pageMetaData = getPageMetaData(url, baseUrl);
+  const pageMetaData = await getPageMetaData(url, baseUrl);
   
   if (!pageMetaData) {
     return html; // No changes for unknown routes
@@ -304,6 +439,21 @@ export function injectMetaTags(html: string, req: Request): string {
       .map(schema => `    <script type="application/ld+json">${JSON.stringify(schema, null, 2)}</script>`)
       .join('\n');
     modifiedHtml = modifiedHtml.replace('</head>', `${schemaTags}\n  </head>`);
+  }
+
+  // 4b) Blog posts get the same payload shape as the API in the initial HTML.
+  // This lets the React page render synchronously and avoids a blank article
+  // shell while the client refetches in the background.
+  const blogPostForClient = await getBlogPostFromPath(pathOnly);
+  if (blogPostForClient) {
+    const inlineData = safeJsonForInlineScript({
+      success: true,
+      data: blogPostForClient,
+    });
+    modifiedHtml = modifiedHtml.replace(
+      '</head>',
+      `    <script>window.__SSR_BLOG_POST__ = ${inlineData};</script>\n  </head>`
+    );
   }
 
   // 5) Upsert all per-route meta tags (replace if already present, else insert).
@@ -379,7 +529,7 @@ export function injectMetaTags(html: string, req: Request): string {
   //    flash of the unstyled text-only fallback. JS-disabled crawlers and AI bots
   //    (GPTBot, ClaudeBot, etc.) still see real H1 + description + internal links.
   if (isCrawlerRequest(req)) {
-    const staticBody = getStaticPageBody(pathOnly, baseUrl);
+    const staticBody = await getStaticPageBody(pathOnly, baseUrl);
     if (staticBody) {
       modifiedHtml = modifiedHtml.replace(
         '<div id="root"></div>',
@@ -403,6 +553,7 @@ const KNOWN_ROUTES: ReadonlySet<string> = new Set([
   '/about',
   '/contact',
   '/for-patients',
+  '/blog',
   '/services',
   '/services/anxiety-treatment',
   '/services/depression-treatment',
@@ -431,6 +582,7 @@ const KNOWN_ROUTES: ReadonlySet<string> = new Set([
   '/patient-rights',
   // Spanish
   '/es',
+  '/es/blog',
   '/es/acerca-de',
   '/es/contacto',
   '/es/para-pacientes',
@@ -469,23 +621,126 @@ const KNOWN_ROUTES: ReadonlySet<string> = new Set([
  * after "?" or "#" is ignored, and a single trailing slash is tolerated so that
  * "/about/" still resolves to true (it will be 301-normalized separately).
  */
-export function isKnownRoute(urlOrPath: string): boolean {
+export async function isKnownRoute(urlOrPath: string): Promise<boolean> {
   if (!urlOrPath) return false;
   // Strip query string and hash before lookup.
   let path = urlOrPath.split('?')[0].split('#')[0];
   // Tolerate one trailing slash (real normalization happens via 301 redirect).
   if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
-  return KNOWN_ROUTES.has(path);
+  if (KNOWN_ROUTES.has(path)) return true;
+  return Boolean(await getBlogPostFromPath(path));
 }
 
 /**
  * Define meta data specific to each route
  */
-function getPageMetaData(url: string, baseUrl: string): PageMeta | null {
+async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta | null> {
   // Normalize URL for matching: strip query string and hash, then a single
   // trailing slash so "/about?utm=x" and "/about/" both resolve to "/about".
   const pathOnly = url.split('?')[0].split('#')[0];
   const normalizedUrl = pathOnly.replace(/\/$/, '') || '/';
+
+  if (normalizedUrl === '/blog' || normalizedUrl === '/es/blog') {
+    const language: BlogLanguage = normalizedUrl === '/es/blog' ? 'es' : 'en';
+    const title = language === 'es'
+      ? 'Blog de Salud Mental | Healing Minds Psychiatry'
+      : 'Mental Health Blog | Healing Minds Psychiatry';
+    const description = language === 'es'
+      ? 'Articulos educativos de Healing Minds Psychiatry sobre ansiedad, telepsiquiatria, manejo de medicamentos y atencion psiquiatrica en Naples y Florida.'
+      : 'Educational articles from Healing Minds Psychiatry about anxiety, telepsychiatry, medication management, and psychiatric care in Naples and Florida.';
+    const canonical = `${baseUrl}${getBlogIndexPath(language)}`;
+    return {
+      title,
+      description,
+      canonical,
+      schema: await getBlogSchema(baseUrl, language),
+      metaTags: [
+        {
+          name: 'description',
+          content: description,
+        },
+        {
+          property: 'og:title',
+          content: title,
+        },
+        {
+          property: 'og:description',
+          content: description,
+        },
+        {
+          property: 'og:url',
+          content: canonical,
+        },
+        {
+          rel: 'alternate',
+          hreflang: 'en',
+          href: `${baseUrl}/blog`,
+        },
+        {
+          rel: 'alternate',
+          hreflang: 'es',
+          href: `${baseUrl}/es/blog`,
+        },
+        {
+          rel: 'alternate',
+          hreflang: 'x-default',
+          href: `${baseUrl}/blog`,
+        },
+      ],
+    };
+  }
+
+  const blogPost = await getBlogPostFromPath(normalizedUrl);
+  if (blogPost) {
+    const translations = await getPostTranslations(blogPost.translationGroupId);
+    const alternateLinks = buildBlogAlternateLinks(baseUrl, translations);
+    return {
+      title: blogPost.metaTitle || blogPost.title,
+      description: blogPost.metaDescription || blogPost.excerpt || undefined,
+      canonical: `${baseUrl}${getBlogPostPath(blogPost)}`,
+      schemas: [
+        getBlogPostSchema(baseUrl, blogPost),
+        getBreadcrumbListSchema(baseUrl, normalizedUrl),
+      ],
+      metaTags: [
+        {
+          name: 'description',
+          content: blogPost.metaDescription || blogPost.excerpt || '',
+        },
+        {
+          property: 'og:title',
+          content: blogPost.metaTitle || blogPost.title,
+        },
+        {
+          property: 'og:description',
+          content: blogPost.metaDescription || blogPost.excerpt || '',
+        },
+        {
+          property: 'og:url',
+          content: `${baseUrl}${getBlogPostPath(blogPost)}`,
+        },
+        ...(blogPost.featuredImage ? [
+          {
+            property: 'og:image',
+            content: blogPost.featuredImage,
+          },
+          {
+            property: 'og:image:alt',
+            content: blogPost.featuredImageAlt || blogPost.title,
+          },
+        ] : []),
+        {
+          property: 'article:published_time',
+          content: (blogPost.publishedAt || blogPost.createdAt).toISOString(),
+        },
+        {
+          property: 'article:modified_time',
+          content: blogPost.updatedAt.toISOString(),
+        },
+        ...alternateLinks,
+      ],
+    };
+  }
 
   // Satellite location routes are generated from hyperlocal data so their titles,
   // descriptions and Service schema stay city-specific and language-aware.
@@ -1716,6 +1971,68 @@ function getServiceDetailSchema(baseUrl: string, lang: 'en' | 'es', key: string)
   };
 }
 
+async function getBlogSchema(baseUrl: string, language: BlogLanguage) {
+  const posts = await getBlogPosts({ status: 'published', language, limit: 20 });
+  const blogPath = getBlogIndexPath(language);
+  const isSpanish = language === 'es';
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${baseUrl}${blogPath}#blog`,
+    "name": isSpanish ? "Blog de Salud Mental de Healing Minds Psychiatry" : "Healing Minds Psychiatry Blog",
+    "description": isSpanish
+      ? "Articulos educativos de salud mental de Healing Minds Psychiatry."
+      : "Educational mental health articles from Healing Minds Psychiatry.",
+    "url": `${baseUrl}${blogPath}`,
+    "inLanguage": getBlogSchemaLanguage(language),
+    "publisher": {
+      "@id": `${baseUrl}/#organization`
+    },
+    "blogPost": posts.map(post => ({
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "url": `${baseUrl}${getBlogPostPath(post)}`,
+      "datePublished": getBlogDate(post, 'published').toISOString(),
+      "dateModified": getBlogDate(post, 'modified').toISOString(),
+      "author": {
+        "@id": `${baseUrl}/#physician`
+      }
+    }))
+  };
+}
+
+function getBlogPostSchema(baseUrl: string, post: BlogPostWithRelations) {
+  const plainText = getBlogPostPlainText(post);
+  const postUrl = `${baseUrl}${getBlogPostPath(post)}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${postUrl}#blogposting`,
+    "headline": post.title,
+    "description": getBlogDescription(post),
+    "articleBody": plainText,
+    "url": postUrl,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": postUrl
+    },
+    "datePublished": getBlogDate(post, 'published').toISOString(),
+    "dateModified": getBlogDate(post, 'modified').toISOString(),
+    "author": getPhysicianAuthorSchema(baseUrl, post.author),
+    "publisher": {
+      "@id": `${baseUrl}/#organization`
+    },
+    "isPartOf": {
+      "@id": `${baseUrl}/#website`
+    },
+    "image": getBlogImage(baseUrl, post),
+    "about": post.tags.map(tag => tag.name),
+    "articleSection": post.category?.name,
+    "inLanguage": getBlogSchemaLanguage(post.language as BlogLanguage),
+    "wordCount": plainText.split(/\s+/).filter(Boolean).length
+  };
+}
+
 function getServiceSchema(baseUrl: string, cityName: string, lang: Lang = 'en', locationPath?: string) {
   const isEs = lang === 'es';
   const url = locationPath
@@ -1811,6 +2128,7 @@ function getBreadcrumbListSchema(baseUrl: string, path: string) {
     const nameMapping: { [key: string]: string } = {
       'about': 'About Dr. Reve',
       'contact': 'Contact Us',
+      'blog': 'Blog',
       'services': 'Services',
       'anxiety-treatment': 'Anxiety Treatment',
       'depression-treatment': 'Depression Treatment',
@@ -2054,58 +2372,6 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "https://www.tiktok.com/@dra.melvavidal"
     ],
     "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5.0",
-      "bestRating": "5",
-      "worstRating": "1",
-      "ratingCount": "17"
-    },
-    "review": [
-      {
-        "@type": "Review",
-        "name": "A Positive and Reassuring Experience",
-        "author": {
-          "@type": "Person",
-          "name": "Julio Gonzalez"
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-        },
-        "datePublished": "2025-10-07",
-        "reviewBody": "My visit was genuinely a positive and reassuring experience. The provider was compassionate, patient, and really took the time to listen and understand what I was going through."
-      },
-      {
-        "@type": "Review",
-        "name": "Truly Life-Changing Care",
-        "author": {
-          "@type": "Person",
-          "name": "Ismael Gonzalez"
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-        },
-        "reviewBody": "My experience with Dr Reve has been truly life-changing. Her compassionate approach and expertise have made a significant difference in my mental health journey."
-      },
-      {
-        "@type": "Review",
-        "name": "Best Bilingual Psychiatrist",
-        "author": {
-          "@type": "Person",
-          "name": "Maylin Garcia Gonzalez"
-        },
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-        },
-        "reviewBody": "The best bilingual psychiatrist I've ever met! Finding professional mental health care in both English and Spanish has been invaluable for my family."
-      }
-    ],
     "founder": {
       "@type": "Physician",
       "@id": `${baseUrl}/#physician`,
@@ -2166,6 +2432,66 @@ function getMedicalBusinessSchema(baseUrl: string) {
   };
 }
 
+async function buildBlogIndexBody(baseUrl: string, contactInfo: string, language: BlogLanguage): Promise<string> {
+  const posts = await getBlogPosts({ status: 'published', language, limit: 50 });
+  const isSpanish = language === 'es';
+  const postLinks = posts.map(post => `<article>
+    <p>${escapeHtml(post.category?.name || (isSpanish ? 'Salud Mental' : 'Mental Health'))} - ${formatBlogDate(getBlogDate(post, 'published'))} - ${post.readingTime || 5} min ${isSpanish ? 'lectura' : 'read'}</p>
+    <h2><a href="${getBlogPostPath(post)}">${escapeHtml(post.title)}</a></h2>
+    <p>${escapeHtml(post.excerpt || '')}</p>
+  </article>`).join('\n');
+
+  return `<main>
+  <header><a href="${isSpanish ? '/es' : '/'}">Healing Minds Psychiatry</a></header>
+  <section>
+    <h1>${isSpanish ? 'Blog de Salud Mental' : 'Mental Health Blog'}</h1>
+    <p>${isSpanish
+      ? 'Articulos educativos de Healing Minds Psychiatry sobre ansiedad, telepsiquiatria, manejo de medicamentos y atencion psiquiatrica para pacientes en Naples y Florida.'
+      : 'Educational articles from Healing Minds Psychiatry about anxiety, telepsychiatry, medication management, and psychiatric care for patients in Naples and across Florida.'}</p>
+    ${contactInfo}
+  </section>
+  <section aria-label="Published articles">
+    ${postLinks || `<p>${isSpanish ? 'Todavia no hay articulos publicados.' : 'No articles are published yet.'}</p>`}
+  </section>
+  <nav aria-label="Blog navigation"><ul>
+    <li><a href="${isSpanish ? '/es/servicios' : '/services'}">${isSpanish ? 'Servicios Psiquiatricos' : 'Psychiatric Services'}</a></li>
+    <li><a href="${isSpanish ? '/es/telepsiquiatria-florida' : '/telepsychiatry-florida'}">${isSpanish ? 'Telepsiquiatria en Florida' : 'Telepsychiatry in Florida'}</a></li>
+    <li><a href="${isSpanish ? '/es/contacto' : '/contact'}">${isSpanish ? 'Programar una cita' : 'Schedule an Appointment'}</a></li>
+  </ul></nav>
+</main>`;
+}
+
+function buildBlogPostBody(post: BlogPostWithRelations, contactInfo: string): string {
+  const isSpanish = post.language === 'es';
+  const safeContent = sanitizeBlogHtml(post.content || '');
+  const tags = post.tags.map(tag => `<li>${escapeHtml(tag.name)}</li>`).join('\n      ');
+
+  return `<main>
+  <header><a href="${isSpanish ? '/es' : '/'}">Healing Minds Psychiatry</a> / <a href="${getBlogIndexPath(post.language as BlogLanguage)}">Blog</a></header>
+  <article>
+    <p>${escapeHtml(post.category?.name || (isSpanish ? 'Salud Mental' : 'Mental Health'))} - ${formatBlogDate(getBlogDate(post, 'published'))} - ${post.readingTime || 5} min ${isSpanish ? 'lectura' : 'read'}</p>
+    <p>${escapeHtml(post.author?.name || 'Dr. Melva Reve Urgelles')}</p>
+    <h1>${escapeHtml(post.title)}</h1>
+    <p>${escapeHtml(post.excerpt || '')}</p>
+    ${safeContent}
+    <footer>
+      <p>${isSpanish
+        ? 'Contenido educativo de Healing Minds Psychiatry. Este articulo no sustituye la atencion de emergencia ni el consejo medico individual.'
+        : 'Educational content from Healing Minds Psychiatry. This article is not a substitute for emergency care or individualized medical advice.'}</p>
+      <ul>
+        ${tags}
+      </ul>
+      ${contactInfo}
+    </footer>
+  </article>
+  <nav aria-label="Related links"><ul>
+    <li><a href="${getBlogIndexPath(post.language as BlogLanguage)}">${isSpanish ? 'Volver al blog' : 'Back to the blog'}</a></li>
+    <li><a href="${isSpanish ? '/es/servicios' : '/services'}">${isSpanish ? 'Servicios Psiquiatricos' : 'Psychiatric Services'}</a></li>
+    <li><a href="${isSpanish ? '/es/contacto' : '/contact'}">${isSpanish ? 'Contactar a Healing Minds Psychiatry' : 'Contact Healing Minds Psychiatry'}</a></li>
+  </ul></nav>
+</main>`;
+}
+
 /**
  * Returns static semantic HTML for key public routes so non-rendering crawlers
  * (GPTBot, ClaudeBot, Perplexity, etc.) can read the page's H1, description,
@@ -2180,11 +2506,12 @@ function getMedicalBusinessSchema(baseUrl: string) {
  *   - 10 location pages
  *   - About and Contact pages
  *   - 3 hub pages: /services, /for-patients, /telepsychiatry-florida
+ *   - Blog index and published blog posts
  *   - 8 legal/trust pages: privacy-policy, terms-of-service, hipaa-notice,
  *     cookie-policy, cancellation-policy, billing-policy, emergency-policy,
  *     patient-rights
  */
-function getStaticPageBody(path: string, baseUrl: string): string | null {
+async function getStaticPageBody(path: string, baseUrl: string): Promise<string | null> {
   const phone = '(239) 423-0272';
   const address = '4760 Tamiami Trl N #25, Naples, FL 34103';
 
@@ -2255,6 +2582,15 @@ function getStaticPageBody(path: string, baseUrl: string): string | null {
       <li><a href="/es/politica-emergencias">Pol&iacute;tica de Emergencias</a></li>
       <li><a href="/es/derechos-paciente">Derechos del Paciente</a></li>
     </ul>`;
+
+  if (path === '/blog' || path === '/es/blog') {
+    return buildBlogIndexBody(baseUrl, contactInfo, path === '/es/blog' ? 'es' : 'en');
+  }
+
+  const blogPost = await getBlogPostFromPath(path);
+  if (blogPost) {
+    return buildBlogPostBody(blogPost, contactInfo);
+  }
 
   // Satellite location pages render their crawler body from hyperlocal copy.
   const satellite = SATELLITE_BY_PATH[path];

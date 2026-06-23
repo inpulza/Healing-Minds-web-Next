@@ -1,12 +1,54 @@
 import { Request, Response } from 'express';
+import {
+  getBlogIndexPath,
+  getBlogPostPath,
+  getBlogPosts,
+  getPostTranslations,
+  type BlogLanguage,
+  type BlogPostWithRelations,
+} from '../blog/storage';
 import { getSeoSiteConfig } from '../seo/config';
 
 function getBaseUrl(): string {
   return getSeoSiteConfig().siteBaseUrl;
 }
 
+function getBlogLastMod(post: BlogPostWithRelations): string {
+  const date = post.publishedAt || post.updatedAt || post.createdAt;
+  return date.toISOString().split('T')[0];
+}
+
+function getBlogHreflangLinks(baseUrl: string, posts: BlogPostWithRelations[]): string {
+  const byLanguage = new Map<BlogLanguage, BlogPostWithRelations>();
+  for (const post of posts) {
+    if (post.language === 'en' || post.language === 'es') {
+      byLanguage.set(post.language, post);
+    }
+  }
+
+  const links = (['en', 'es'] as const)
+    .map(language => byLanguage.get(language))
+    .filter((post): post is BlogPostWithRelations => Boolean(post))
+    .map(post => `    <xhtml:link
+                rel="alternate"
+                hreflang="${post.language}"
+                href="${baseUrl}${getBlogPostPath(post)}"
+                />`);
+
+  const defaultPost = byLanguage.get('en') || posts[0];
+  if (defaultPost) {
+    links.push(`    <xhtml:link
+                rel="alternate"
+                hreflang="x-default"
+                href="${baseUrl}${getBlogPostPath(defaultPost)}"
+                />`);
+  }
+
+  return links.join('\n');
+}
+
 // Sitemap XML generator for Dr. Melva Reve's psychiatric practice
-export const generateSitemap = (req: Request, res: Response) => {
+export const generateSitemap = async (req: Request, res: Response) => {
   const baseUrl = getBaseUrl();
   
   // Define bilingual page relationships for hreflang
@@ -216,7 +258,7 @@ export const generateSitemap = (req: Request, res: Response) => {
   // Generate English-only pages (if any) with hreflang auto-reference
   const englishOnlyPagesXml = englishOnlyPages.map(page => `  <url>
     <loc>${baseUrl}${page.url}</loc>
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="en"
                 href="${baseUrl}${page.url}"
@@ -228,12 +270,12 @@ export const generateSitemap = (req: Request, res: Response) => {
     // English version (canonical) with hreflang to both languages
     `  <url>
     <loc>${baseUrl}${page.en}</loc>
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="en"
                 href="${baseUrl}${page.en}"
                 />
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="es"
                 href="${baseUrl}${page.es}"
@@ -242,12 +284,12 @@ export const generateSitemap = (req: Request, res: Response) => {
     // Spanish version with hreflang to both languages
     `  <url>
     <loc>${baseUrl}${page.es}</loc>
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="en"
                 href="${baseUrl}${page.en}"
                 />
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="es"
                 href="${baseUrl}${page.es}"
@@ -260,12 +302,12 @@ export const generateSitemap = (req: Request, res: Response) => {
     // English version with hreflang
     `  <url>
     <loc>${baseUrl}${page.en}</loc>
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="en"
                 href="${baseUrl}${page.en}"
                 />
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="es"
                 href="${baseUrl}${page.es}"
@@ -274,18 +316,74 @@ export const generateSitemap = (req: Request, res: Response) => {
     // Spanish version with hreflang
     `  <url>
     <loc>${baseUrl}${page.es}</loc>
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="en"
                 href="${baseUrl}${page.en}"
                 />
-    <xhtml:link 
+    <xhtml:link
                 rel="alternate"
                 hreflang="es"
                 href="${baseUrl}${page.es}"
                 />
   </url>`
   ]).flat().join('\n');
+
+  const blogPosts = await getBlogPosts({ status: 'published', limit: 500 });
+  const blogPostPagesXml = await Promise.all(blogPosts.map(async post => {
+    const translations = await getPostTranslations(post.translationGroupId);
+    return `  <url>
+    <loc>${baseUrl}${getBlogPostPath(post)}</loc>
+    <lastmod>${getBlogLastMod(post)}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+${getBlogHreflangLinks(baseUrl, translations)}
+  </url>`;
+  }));
+
+  const blogPagesXml = [
+    `  <url>
+    <loc>${baseUrl}/blog</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="${baseUrl}${getBlogIndexPath('en')}"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="es"
+                href="${baseUrl}${getBlogIndexPath('es')}"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="x-default"
+                href="${baseUrl}${getBlogIndexPath('en')}"
+                />
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`,
+    `  <url>
+    <loc>${baseUrl}/es/blog</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="${baseUrl}${getBlogIndexPath('en')}"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="es"
+                href="${baseUrl}${getBlogIndexPath('es')}"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="x-default"
+                href="${baseUrl}${getBlogIndexPath('en')}"
+                />
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`,
+    ...blogPostPagesXml,
+  ].join('\n');
 
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -294,6 +392,7 @@ ${regularPagesXml}
 ${bilingualPagesXml}
 ${englishOnlyPagesXml}
 ${legalPagesXml}
+${blogPagesXml}
 </urlset>`;
 
   // Set proper headers for XML
@@ -344,8 +443,9 @@ Disallow: /`;
 
 // llms.txt generator — gives AI search engines a clean, plain-text map of the site.
 // Format follows the spec at https://llmstxt.org (H1 title, blockquote summary, link sections).
-export const generateLlmsTxt = (req: Request, res: Response) => {
+export const generateLlmsTxt = async (req: Request, res: Response) => {
   const baseUrl = getBaseUrl();
+  const blogPosts = await getBlogPosts({ status: 'published', limit: 100 });
 
   const llmsTxt = `# Healing Minds Psychiatry
 
@@ -358,6 +458,7 @@ export const generateLlmsTxt = (req: Request, res: Response) => {
 - [For Patients](${baseUrl}/for-patients): Forms, insurance, and what to expect
 - [Contact](${baseUrl}/contact): Address, phone, and appointment scheduling
 - [Telepsychiatry Florida](${baseUrl}/telepsychiatry-florida): Virtual psychiatric care across Florida
+- [Blog](${baseUrl}/blog): Educational articles from Healing Minds Psychiatry
 
 ## Services
 - [Anxiety Treatment](${baseUrl}/services/anxiety-treatment)
@@ -366,6 +467,9 @@ export const generateLlmsTxt = (req: Request, res: Response) => {
 - [PTSD Treatment](${baseUrl}/services/ptsd-treatment)
 - [Bipolar Treatment](${baseUrl}/services/bipolar-treatment)
 - [Medication Management](${baseUrl}/services/medication-management)
+
+## Blog
+${blogPosts.map(post => `- [${post.title}](${baseUrl}${getBlogPostPath(post)}): ${post.excerpt || ''}`).join('\n')}
 
 ## Locations
 - [Psychiatrist in Naples](${baseUrl}/locations/psychiatrist-naples)
