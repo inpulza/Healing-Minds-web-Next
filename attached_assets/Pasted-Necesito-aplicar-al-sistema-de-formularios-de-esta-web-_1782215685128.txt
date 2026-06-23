@@ -1,0 +1,112 @@
+Necesito aplicar al sistema de formularios de esta web el mismo endurecimiento anti-spam que hicimos en Inpulza.
+
+Objetivo:
+Evitar que bots o pruebas falsas generen leads, emails internos o conversiones cuando envían formularios con datos inventados, dominios falsos, teléfonos ficticios o texto basura. Pero sin bloquear leads reales.
+
+Implementación requerida:
+
+1. Validación server-side obligatoria
+No confiar solo en validación del frontend. Todos los formularios públicos deben validar en el backend:
+- name requerido
+- email válido
+- phone requerido y válido
+- message requerido
+- website/company/service según aplique
+
+2. Honeypot oculto
+Añadir campos invisibles tipo:
+- website
+- url
+- homepage
+- companyWebsite
+
+Si cualquiera viene lleno, filtrar silenciosamente.
+
+3. Timing mínimo
+Enviar `formStartedAt` desde el frontend.
+En backend bloquear silenciosamente si:
+- falta `formStartedAt`
+- el formulario se envía demasiado rápido, por ejemplo menos de 1.5s-2.5s.
+
+4. Rate limit
+Rate limit por IP y por email:
+- contacto: aprox. 5 por IP / 10 min, 3 por email / 1h
+- audit/free consultation: aprox. 4 por IP / 10 min, 2 por email / 1h
+
+Si excede, devolver 429.
+
+5. Dominios fake/reservados
+Bloquear emails con dominios:
+- example.com / example.net / example.org
+- localhost
+- .test
+- .invalid
+- .example
+- .localhost
+
+6. DNS del dominio del email
+Antes de aceptar el lead, comprobar si el dominio del email tiene MX o al menos A/AAAA.
+Ejemplo:
+- `carlos@ruizlawmiami.com` si el dominio no existe DNS => filtrar.
+La verificación debe fallar abierto ante timeout o error de infraestructura para no perder leads reales.
+Ideal:
+- DNS nativo primero
+- fallback DNS-over-HTTPS consultando solo el dominio, no el email completo
+- timeout corto aprox. 1.2s
+
+7. Teléfonos ficticios
+Bloquear números norteamericanos con patrón:
+- `555-0100` a `555-0199`
+Ejemplo:
+- `(305) 555-0142` => filtrar
+No bloquear todos los 555, solo ese rango.
+
+8. Gibberish / texto basura
+Añadir heurística conservadora para mensajes basura tipo:
+- `dafsfg fhfg fdgdgdghf`
+- tokens random con muchas mayúsculas/minúsculas mezcladas
+- emails segmentados tipo `k.es.t.re.lh.erb.far.m@gmail.com`
+
+IMPORTANTE:
+No usar una regla agresiva de “pocas vocales”, porque bloquea palabras reales como:
+- growth
+- brands
+- strong
+- months
+
+La regla correcta debe ser conservadora:
+- palabras sin vocales
+- corridas consonantes muy largas
+- tokens random sin espacios
+- combinación de varias señales antes de bloquear
+
+9. Bloqueo silencioso
+Cuando un envío se filtre como spam:
+- responder `202 { success: true, filtered: true }`
+- NO guardar lead real
+- NO mandar email interno
+- NO mandar email de confirmación
+- NO disparar conversiones GA4/Ads
+
+10. Tests obligatorios
+Añadir smoke tests para estos casos:
+
+Debe bloquear:
+- dominio `example.com`
+- dominio inexistente
+- teléfono `(305) 555-0142`
+- honeypot lleno
+- envío sin `formStartedAt`
+- envío demasiado rápido
+- mensaje `dafsfg fhfg fdgdgdghf`
+- email segmentado raro
+
+Debe permitir:
+- mensaje real: `We want more growth and stronger brands this year.`
+- mensaje real: `We need help improving local SEO and lead quality for our clinic.`
+- Gmail válido con teléfono válido y mensaje normal
+
+11. Dev/test emails
+Si se hacen pruebas en dev/staging, marcar emails o subjects con `[TEST]` o silenciar emails internos para no confundir pruebas con leads reales.
+
+No instalar reCAPTCHA todavía. Si después de esto sigue el spam, evaluar Cloudflare Turnstile como siguiente capa.
