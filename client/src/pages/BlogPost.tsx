@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useRoute } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
+import DOMPurify from 'dompurify';
 import { ArrowLeft, Calendar, Clock, Phone, Tag } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -66,26 +67,12 @@ function formatDate(date: string | null, language: BlogLanguage): string {
   }).format(new Date(date));
 }
 
-function sanitizeBlogHtml(html: string): string {
-  const allowedTags = new Set(['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a']);
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?<\/style>/gi, '')
-    .replace(/\son\w+="[^"]*"/gi, '')
-    .replace(/\son\w+='[^']*'/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/<\/?([a-z0-9-]+)(\s[^>]*)?>/gi, (match, tagName, rawAttrs = '') => {
-      const tag = String(tagName).toLowerCase();
-      if (!allowedTags.has(tag)) return '';
-      if (match.startsWith('</')) return `</${tag}>`;
-      if (tag === 'br') return '<br>';
-      if (tag !== 'a') return `<${tag}>`;
-
-      const hrefMatch = String(rawAttrs).match(/\shref=(["'])(.*?)\1/i);
-      const href = hrefMatch?.[2] || '';
-      const isSafeHref = href.startsWith('/') || href.startsWith('https://') || href.startsWith('http://');
-      return isSafeHref ? `<a href="${href.replace(/"/g, '&quot;')}">` : '<a>';
-    });
+function sanitizeClientBlogHtml(html: string): string {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a', 'blockquote'],
+    ALLOWED_ATTR: ['href', 'target', 'rel'],
+    ALLOW_DATA_ATTR: false,
+  });
 }
 
 const copy = {
@@ -230,7 +217,7 @@ const BlogPost = () => {
 
               <div
                 className="prose prose-lg prose-green max-w-none prose-headings:font-body prose-headings:text-green-950 prose-p:text-gray-700 prose-p:leading-8 prose-a:text-green-800"
-                dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(post.content || '') }}
+                dangerouslySetInnerHTML={{ __html: sanitizeClientBlogHtml(post.content || '') }}
               />
 
               <div className="mt-12 pt-8 border-t border-green-100">

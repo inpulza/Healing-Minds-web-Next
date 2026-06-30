@@ -1,4 +1,6 @@
-const ALLOWED_TAGS = new Set([
+import sanitizeHtml from "sanitize-html";
+
+const BLOG_ALLOWED_TAGS = [
   "p",
   "h2",
   "h3",
@@ -12,39 +14,66 @@ const ALLOWED_TAGS = new Set([
   "br",
   "a",
   "blockquote",
-]);
+];
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+function isSafeBlogHref(href: string): boolean {
+  if (!href) return false;
+  if (href.startsWith("/") && !href.startsWith("//")) return true;
+
+  try {
+    const url = new URL(href);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function isExternalBlogHref(href: string): boolean {
+  try {
+    const url = new URL(href);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 export function sanitizeBlogContentHtml(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/\son\w+="[^"]*"/gi, "")
-    .replace(/\son\w+='[^']*'/gi, "")
-    .replace(/\sstyle=(["']).*?\1/gi, "")
-    .replace(/javascript:/gi, "")
-    .replace(/<\/?([a-z0-9-]+)(\s[^>]*)?>/gi, (match, tagName, rawAttrs = "") => {
-      const tag = String(tagName).toLowerCase();
-      if (!ALLOWED_TAGS.has(tag)) return "";
-      if (match.startsWith("</")) return `</${tag}>`;
-      if (tag === "br") return "<br>";
-      if (tag !== "a") return `<${tag}>`;
+  return sanitizeHtml(html, {
+    allowedTags: BLOG_ALLOWED_TAGS,
+    allowedAttributes: {
+      a: ["href", "target", "rel"],
+    },
+    allowedSchemes: ["http", "https"],
+    allowedSchemesByTag: {
+      a: ["http", "https"],
+    },
+    allowProtocolRelative: false,
+    transformTags: {
+      a: (_tagName, attribs): { tagName: string; attribs: Record<string, string> } => {
+        const href = attribs.href || "";
+        if (!isSafeBlogHref(href)) {
+          return { tagName: "a", attribs: {} };
+        }
 
-      const hrefMatch = String(rawAttrs).match(/\shref=(["'])(.*?)\1/i);
-      const href = hrefMatch?.[2] || "";
-      const isSafeHref = href.startsWith("/") || href.startsWith("https://") || href.startsWith("http://");
-      return isSafeHref
-        ? `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">`
-        : "<a>";
-    });
+        if (isExternalBlogHref(href)) {
+          return {
+            tagName: "a",
+            attribs: {
+              href,
+              target: "_blank",
+              rel: "noopener noreferrer",
+            },
+          };
+        }
+
+        return {
+          tagName: "a",
+          attribs: { href },
+        };
+      },
+    },
+    disallowedTagsMode: "discard",
+  }).trim();
 }
 
 export function getPlainTextFromHtml(html: string): string {

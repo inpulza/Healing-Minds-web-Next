@@ -1,8 +1,16 @@
 import type { Express, NextFunction, Request, Response } from "express";
 import crypto from "crypto";
+import { getClientIp } from "./utils/client-ip";
 
 const ADMIN_COOKIE_NAME = "hm_admin_session";
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
+const SCRYPT_KEY_LENGTH = 32;
+const LOGIN_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const LOGIN_RATE_LIMIT_MAX_ATTEMPTS = 10;
+
+type AdminPasswordVerifier =
+  | { scheme: "scrypt"; salt: string; key: string }
+  | { scheme: "sha256"; hash: string };
 
 type AdminSessionPayload = {
   username: string;
@@ -10,7 +18,9 @@ type AdminSessionPayload = {
   exp: number;
 };
 
-function getAdminConfig(): { username: string; passwordHash: string; secret: string } | null {
+const loginAttempts = new Map<string, { count: number; resetAt: number }>();
+
+function getAdminConfig(): { username: string; passwordVerifier: AdminPasswordVerifier; secret: string } | null {
   const username = process.env.BLOG_ADMIN_USERNAME;
   const rawPassword = process.env.BLOG_ADMIN_PASSWORD;
   const providedHash = process.env.BLOG_ADMIN_PASSWORD_HASH;
@@ -18,11 +28,16 @@ function getAdminConfig(): { username: string; passwordHash: string; secret: str
 
   if (!username || !secret || (!rawPassword && !providedHash)) return null;
 
-  const passwordHash = providedHash
-    ? providedHash.replace(/^sha256:/i, "").trim().toLowerCase()
-    : sha256(rawPassword || "");
+  try {
+    const passwordVerifier = providedHash
+      ? parsePasswordVerifier(providedHash)
+      : createScryptVerifier(rawPassword || "", username, secret);
 
-  return { username, passwordHash, secret };
+    return { username, passwordVerifier, secret };
+  } catch (error) {
+    console.error("Invalid admin password configuration:", error);
+    return null;
+  }
 }
 
 function isProductionRuntime(): boolean {
@@ -47,10 +62,77 @@ function sha256(value: string): string {
   return crypto.createHash("sha256").update(value).digest("hex");
 }
 
+function createScryptVerifier(password: string, username: string, secret: string): AdminPasswordVerifier {
+  const salt = sha256(`${username}:${secret}:blog-admin`).slice(0, 32);
+  return {
+    scheme: "scrypt",
+    salt,
+    key: crypto.scryptSync(password, salt, SCRYPT_KEY_LENGTH).toString("base64url"),
+  };
+}
+
+function parsePasswordVerifier(value: string): AdminPasswordVerifier {
+  const normalized = value.trim();
+  if (normalized.toLowerCase().startsWith("scrypt:")) {
+    const [, salt, key] = normalized.split(":");
+    if (!salt || !key) {
+      throw new Error("BLOG_ADMIN_PASSWORD_HASH scrypt format must be scrypt:<salt>:<key>");
+    }
+    return { scheme: "scrypt", salt, key };
+  }
+
+  return {
+    scheme: "sha256",
+    hash: normalized.replace(/^sha256:/i, "").toLowerCase(),
+  };
+}
+
+function verifyAdminPassword(password: string, verifier: AdminPasswordVerifier): boolean {
+  if (verifier.scheme === "scrypt") {
+    const candidate = crypto.scryptSync(password, verifier.salt, SCRYPT_KEY_LENGTH).toString("base64url");
+    return safeEqual(candidate, verifier.key);
+  }
+
+  return safeEqual(sha256(password), verifier.hash);
+}
+
 function safeEqual(a: string, b: string): boolean {
   const left = Buffer.from(a);
   const right = Buffer.from(b);
   return left.length === right.length && crypto.timingSafeEqual(left, right);
+}
+
+function getLoginRateLimitKey(req: Request): string {
+  return `${getClientIp(req)}:admin-login`;
+}
+
+function isLoginRateLimited(key: string): boolean {
+  const attempt = loginAttempts.get(key);
+  if (!attempt) return false;
+  if (attempt.resetAt <= Date.now()) {
+    loginAttempts.delete(key);
+    return false;
+  }
+  return attempt.count >= LOGIN_RATE_LIMIT_MAX_ATTEMPTS;
+}
+
+function recordFailedLogin(key: string): void {
+  const now = Date.now();
+  const current = loginAttempts.get(key);
+  if (!current || current.resetAt <= now) {
+    loginAttempts.set(key, {
+      count: 1,
+      resetAt: now + LOGIN_RATE_LIMIT_WINDOW_MS,
+    });
+    return;
+  }
+
+  current.count += 1;
+  loginAttempts.set(key, current);
+}
+
+function clearLoginRateLimit(key: string): void {
+  loginAttempts.delete(key);
 }
 
 function base64UrlEncode(value: string): string {
@@ -267,9 +349,19 @@ export function registerAdminAuthRoutes(app: Express): void {
       });
     }
 
+    const rateLimitKey = getLoginRateLimitKey(req);
+    if (isLoginRateLimited(rateLimitKey)) {
+      res.set("Retry-After", String(Math.ceil(LOGIN_RATE_LIMIT_WINDOW_MS / 1000)));
+      return res.status(429).json({
+        success: false,
+        message: "Too many failed login attempts. Please try again later.",
+      });
+    }
+
     const usernameOk = safeEqual(username, config.username);
-    const passwordOk = safeEqual(sha256(password), config.passwordHash);
+    const passwordOk = verifyAdminPassword(password, config.passwordVerifier);
     if (!usernameOk || !passwordOk) {
+      recordFailedLogin(rateLimitKey);
       clearAdminCookie(res);
       return res.status(401).json({
         success: false,
@@ -277,6 +369,7 @@ export function registerAdminAuthRoutes(app: Express): void {
       });
     }
 
+    clearLoginRateLimit(rateLimitKey);
     const token = createSessionToken(config.username, config.secret);
     res.cookie(ADMIN_COOKIE_NAME, token, {
       httpOnly: true,

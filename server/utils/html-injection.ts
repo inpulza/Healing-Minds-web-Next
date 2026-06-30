@@ -11,6 +11,7 @@ import {
   type BlogLanguage,
   type BlogPostWithRelations,
 } from '../blog/storage';
+import { sanitizeBlogContentHtml } from '../blog/sanitize';
 import { getSeoSiteConfig } from '../seo/config';
 
 interface MetaTag {
@@ -164,28 +165,6 @@ function buildBlogAlternateLinks(baseUrl: string, translations: BlogPostWithRela
   }
 
   return links;
-}
-
-function sanitizeBlogHtml(html: string): string {
-  const allowedTags = new Set(['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a']);
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?<\/style>/gi, '')
-    .replace(/\son\w+="[^"]*"/gi, '')
-    .replace(/\son\w+='[^']*'/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/<\/?([a-z0-9-]+)(\s[^>]*)?>/gi, (match, tagName, rawAttrs = '') => {
-      const tag = String(tagName).toLowerCase();
-      if (!allowedTags.has(tag)) return '';
-      if (match.startsWith('</')) return `</${tag}>`;
-      if (tag === 'br') return '<br>';
-      if (tag !== 'a') return `<${tag}>`;
-
-      const hrefMatch = String(rawAttrs).match(/\shref=(["'])(.*?)\1/i);
-      const href = hrefMatch?.[2] || '';
-      const isSafeHref = href.startsWith('/') || href.startsWith('https://') || href.startsWith('http://');
-      return isSafeHref ? `<a href="${escapeHtml(href)}">` : '<a>';
-    });
 }
 
 function safeJsonForInlineScript(value: unknown): string {
@@ -641,6 +620,37 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
   // trailing slash so "/about?utm=x" and "/about/" both resolve to "/about".
   const pathOnly = url.split('?')[0].split('#')[0];
   const normalizedUrl = pathOnly.replace(/\/$/, '') || '/';
+
+  if (normalizedUrl === '/admin' || normalizedUrl.startsWith('/admin/')) {
+    const canonical = `${baseUrl}${normalizedUrl}`;
+    return {
+      title: 'Admin | Healing Minds Psychiatry',
+      description: 'Private admin area for Healing Minds Psychiatry.',
+      canonical,
+      metaTags: [
+        {
+          name: 'robots',
+          content: 'noindex, nofollow',
+        },
+        {
+          name: 'description',
+          content: 'Private admin area for Healing Minds Psychiatry.',
+        },
+        {
+          property: 'og:title',
+          content: 'Admin | Healing Minds Psychiatry',
+        },
+        {
+          property: 'og:description',
+          content: 'Private admin area for Healing Minds Psychiatry.',
+        },
+        {
+          property: 'og:url',
+          content: canonical,
+        },
+      ],
+    };
+  }
 
   if (normalizedUrl === '/blog' || normalizedUrl === '/es/blog') {
     const language: BlogLanguage = normalizedUrl === '/es/blog' ? 'es' : 'en';
@@ -2465,7 +2475,7 @@ async function buildBlogIndexBody(baseUrl: string, contactInfo: string, language
 
 function buildBlogPostBody(post: BlogPostWithRelations, contactInfo: string): string {
   const isSpanish = post.language === 'es';
-  const safeContent = sanitizeBlogHtml(post.content || '');
+  const safeContent = sanitizeBlogContentHtml(post.content || '');
   const tags = post.tags.map(tag => `<li>${escapeHtml(tag.name)}</li>`).join('\n      ');
 
   return `<main>

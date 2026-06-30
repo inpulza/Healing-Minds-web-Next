@@ -13,12 +13,20 @@ import { emailService } from "./services/email";
 import { injectMetaTags, isKnownRoute } from "./utils/html-injection";
 import { getCanonicalRedirectUrl, shouldRedirectToCanonicalHost } from "./seo/config";
 import { getBlogPostBySlug, getBlogPosts, type BlogLanguage } from "./blog/storage";
+import { sanitizeBlogContentHtml } from "./blog/sanitize";
 import { registerAdminAuthRoutes, requireAdmin } from "./admin-auth";
 import { registerAdminBlogRoutes } from "./blog/admin-routes";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+
+function sanitizePublicBlogPost<T extends { content: string | null }>(post: T): T {
+  return {
+    ...post,
+    content: sanitizeBlogContentHtml(post.content || ""),
+  };
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // CRÍTICO: Production HTML Injection Middleware
@@ -341,7 +349,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         limit: typeof req.query.limit === "string" ? Number(req.query.limit) || 50 : 50,
         offset: typeof req.query.offset === "string" ? Number(req.query.offset) || 0 : 0,
       });
-      res.status(200).json({ success: true, data: posts });
+      res.status(200).json({ success: true, data: posts.map(sanitizePublicBlogPost) });
     } catch (error) {
       console.error("Error fetching blog posts:", error);
       res.status(500).json({
@@ -362,7 +370,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      res.status(200).json({ success: true, data: post });
+      res.status(200).json({ success: true, data: sanitizePublicBlogPost(post) });
     } catch (error) {
       console.error("Error fetching blog post:", error);
       res.status(500).json({
