@@ -4,11 +4,13 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
 import {
   CheckCircle2,
+  AlertTriangle,
   ExternalLink,
   Eye,
   FilePenLine,
   LogOut,
   Plus,
+  Wrench,
   Search,
   ShieldAlert,
   Trash2,
@@ -98,10 +100,59 @@ type PublishCheck = {
   detail?: string;
 };
 
+type BlogVerificationSeverity = 'blocking' | 'warning' | 'info';
+type BlogVerificationFixType =
+  | 'slug'
+  | 'metaTitle'
+  | 'metaDescription'
+  | 'readingTime'
+  | 'featuredImageAlt'
+  | 'medicalDisclaimer';
+
+type BlogVerificationCheck = {
+  id: string;
+  label: string;
+  ok: boolean;
+  severity: BlogVerificationSeverity;
+  message: string;
+  detail?: string;
+  count?: number;
+  required?: number;
+  fixType?: BlogVerificationFixType;
+};
+
+type BlogVerificationReport = {
+  isReady: boolean;
+  score: number;
+  summary: string;
+  checks: BlogVerificationCheck[];
+  blocking: BlogVerificationCheck[];
+  warnings: BlogVerificationCheck[];
+  passed: BlogVerificationCheck[];
+};
+
+type BlogFixResult = {
+  success: boolean;
+  fixType: BlogVerificationFixType;
+  message: string;
+  changedFields: string[];
+};
+
 type ApiResponse<T> = {
   success: boolean;
   data: T;
   checks?: PublishCheck[];
+  verification?: BlogVerificationReport;
+};
+
+type FixApiResponse = {
+  success: boolean;
+  data: {
+    result: BlogFixResult;
+    post: BlogPost;
+    verification: BlogVerificationReport;
+    checks: PublishCheck[];
+  };
 };
 
 type SessionResponse = {
@@ -247,6 +298,8 @@ export default function BlogAdminPage() {
   const [form, setForm] = useState<FormState | null>(null);
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [checks, setChecks] = useState<PublishCheck[]>([]);
+  const [verification, setVerification] = useState<BlogVerificationReport | null>(null);
+  const [fixingCheck, setFixingCheck] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 
   const sessionQuery = useQuery<SessionResponse>({
@@ -306,6 +359,7 @@ export default function BlogAdminPage() {
     onSuccess: data => {
       setForm(formFromPost(data.data));
       setChecks(data.checks || []);
+      setVerification(data.verification || null);
       queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
       setActionError(null);
@@ -321,7 +375,9 @@ export default function BlogAdminPage() {
       return response.json() as Promise<ApiResponse<BlogPost>>;
     },
     onSuccess: data => {
+      setForm(formFromPost(data.data));
       setChecks(data.checks || []);
+      setVerification(data.verification || null);
       queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
       setActionError(null);
@@ -356,9 +412,44 @@ export default function BlogAdminPage() {
     },
   });
 
+  const verifyMutation = useMutation({
+    mutationFn: async (postId: number) => {
+      const response = await apiRequest('GET', `/api/admin/blog/posts/${postId}/verify`);
+      return response.json() as Promise<ApiResponse<BlogVerificationReport>>;
+    },
+    onSuccess: data => {
+      setVerification(data.data);
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Verification failed');
+    },
+  });
+
+  const fixMutation = useMutation({
+    mutationFn: async ({ postId, fixType }: { postId: number; fixType: BlogVerificationFixType }) => {
+      setFixingCheck(fixType);
+      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/fix`, { fixType });
+      return response.json() as Promise<FixApiResponse>;
+    },
+    onSuccess: data => {
+      setForm(formFromPost(data.data.post));
+      setChecks(data.data.checks || []);
+      setVerification(data.data.verification);
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
+      queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Fix failed');
+    },
+    onSettled: () => setFixingCheck(null),
+  });
+
   const openNewPost = () => {
     setForm(createEmptyForm(authors, categories));
     setChecks([]);
+    setVerification(null);
     setActionError(null);
     setEditorOpen(true);
   };
@@ -366,6 +457,7 @@ export default function BlogAdminPage() {
   const openEditPost = (post: BlogPost) => {
     setForm(formFromPost(post));
     setChecks([]);
+    setVerification(null);
     setActionError(null);
     setEditorOpen(true);
   };
@@ -723,7 +815,50 @@ export default function BlogAdminPage() {
                 <div className="rounded-md border border-slate-200 p-4">
                   <h3 className="text-sm font-semibold">Publish checklist</h3>
                   <div className="mt-3 space-y-2">
-                    {checks.length === 0 ? (
+                    {verification ? (
+                      <div className="space-y-3">
+                        <div className="rounded-md bg-slate-50 p-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="text-sm font-medium text-slate-900">Verification score</p>
+                            <Badge className={verification.isReady ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}>
+                              {verification.score}%
+                            </Badge>
+                          </div>
+                          <p className="mt-2 text-xs text-slate-600">{verification.summary}</p>
+                        </div>
+                        {verification.checks.map(check => (
+                          <div key={check.id} className="flex items-start gap-2 text-sm">
+                            {check.ok ? (
+                              <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-600" />
+                            ) : (
+                              <AlertTriangle className={`mt-0.5 h-4 w-4 ${check.severity === 'blocking' ? 'text-red-600' : 'text-amber-600'}`} />
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-start justify-between gap-2">
+                                <p className={check.ok ? 'text-slate-700' : check.severity === 'blocking' ? 'text-red-700' : 'text-amber-800'}>
+                                  {check.label}
+                                </p>
+                                {!check.ok && check.fixType && form.id && (
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    className="h-7 px-2 text-xs"
+                                    disabled={fixMutation.isPending}
+                                    onClick={() => fixMutation.mutate({ postId: form.id!, fixType: check.fixType! })}
+                                  >
+                                    <Wrench className="mr-1 h-3 w-3" aria-hidden="true" />
+                                    {fixingCheck === check.fixType ? 'Fixing' : 'Fix'}
+                                  </Button>
+                                )}
+                              </div>
+                              <p className="text-xs text-slate-500">{check.message}</p>
+                              {check.detail && <p className="break-words text-xs text-slate-500">{check.detail}</p>}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : checks.length === 0 ? (
                       <p className="text-sm text-slate-600">Save the post to run checks.</p>
                     ) : checks.map(check => (
                       <div key={check.id} className="flex items-start gap-2 text-sm">
@@ -754,6 +889,9 @@ export default function BlogAdminPage() {
                 </Button>
                 <Button variant="outline" onClick={() => statusMutation.mutate({ postId: form.id!, status: 'draft' })} disabled={statusMutation.isPending}>
                   Move to draft
+                </Button>
+                <Button variant="outline" onClick={() => verifyMutation.mutate(form.id!)} disabled={verifyMutation.isPending}>
+                  Verify
                 </Button>
                 <Button variant="outline" onClick={() => seoMutation.mutate(form.id!)} disabled={seoMutation.isPending}>
                   SEO check

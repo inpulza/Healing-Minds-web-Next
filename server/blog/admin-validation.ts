@@ -2,9 +2,18 @@ import { z } from "zod";
 import type { BlogPostStatus } from "@shared/schema";
 import type { BlogPostWithRelations } from "./storage";
 import { getPlainTextFromHtml } from "./sanitize";
+import { hasMedicalDisclaimer } from "./editorial-rules";
 
 const statusSchema = z.enum(["draft", "pending_review", "published", "rejected"]);
 const languageSchema = z.enum(["en", "es"]);
+const blogFixTypeSchema = z.enum([
+  "slug",
+  "metaTitle",
+  "metaDescription",
+  "readingTime",
+  "featuredImageAlt",
+  "medicalDisclaimer",
+]);
 
 export const adminBlogPostSchema = z.object({
   title: z.string().trim().min(5).max(255),
@@ -34,6 +43,10 @@ export const adminBlogStatusSchema = z.object({
   status: statusSchema,
 });
 
+export const adminBlogFixSchema = z.object({
+  fixType: blogFixTypeSchema,
+});
+
 export const adminBlogCategorySchema = z.object({
   name: z.string().trim().min(2).max(100),
   slug: z.string().trim().min(2).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -54,18 +67,10 @@ export type PublishCheck = {
   detail?: string;
 };
 
-const disclaimerPatterns = [
-  /not a substitute/i,
-  /emergency/i,
-  /911/,
-  /no sustituye/i,
-  /emergencia/i,
-];
-
 export function validatePostForPublish(post: BlogPostWithRelations): PublishCheck[] {
   const text = getPlainTextFromHtml(post.content || "");
   const wordCount = text.split(/\s+/).filter(Boolean).length;
-  const hasDisclaimer = disclaimerPatterns.some(pattern => pattern.test(text));
+  const hasDisclaimer = hasMedicalDisclaimer(text);
 
   return [
     {

@@ -1,6 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { ZodError } from "zod";
 import {
+  adminBlogFixSchema,
   adminBlogCategorySchema,
   adminBlogPostSchema,
   adminBlogPostUpdateSchema,
@@ -25,6 +26,8 @@ import {
   type BlogLanguage,
 } from "./storage";
 import { estimateReadingTime, sanitizeBlogContentHtml } from "./sanitize";
+import { applyDeterministicBlogFix } from "./content-fixes";
+import { buildBlogVerificationReport } from "./verification";
 import { runSeoPublishingCheck } from "../seo/publishing";
 
 function sendValidationError(res: Response, error: unknown): void {
@@ -169,9 +172,59 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const post = await getBlogPostById(id);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
-      res.status(200).json({ success: true, data: post, checks: validatePostForPublish(post) });
+      res.status(200).json({
+        success: true,
+        data: post,
+        checks: validatePostForPublish(post),
+        verification: buildBlogVerificationReport(post),
+      });
     } catch (error) {
       sendDbError(res, error);
+    }
+  });
+
+  app.get("/api/admin/blog/posts/:id/verify", async (req, res) => {
+    const id = parseId(req);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid post id" });
+
+    try {
+      const post = await getBlogPostById(id);
+      if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      res.status(200).json({ success: true, data: buildBlogVerificationReport(post) });
+    } catch (error) {
+      sendDbError(res, error);
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:id/fix", async (req, res) => {
+    const id = parseId(req);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid post id" });
+
+    try {
+      const { fixType } = adminBlogFixSchema.parse(req.body);
+      const post = await getBlogPostById(id);
+      if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+
+      const result = await applyDeterministicBlogFix(post, fixType);
+      if (!result.success) {
+        return res.status(400).json({ success: false, message: result.message, data: result });
+      }
+
+      res.status(200).json({
+        success: true,
+        data: {
+          result,
+          post: result.post,
+          verification: result.verification,
+          checks: result.post ? validatePostForPublish(result.post) : validatePostForPublish(post),
+        },
+      });
+    } catch (error) {
+      try {
+        sendValidationError(res, error);
+      } catch {
+        sendDbError(res, error);
+      }
     }
   });
 
@@ -179,7 +232,12 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const payload = normalizePostPayload(req.body);
       const post = await createBlogPost(payload);
-      res.status(201).json({ success: true, data: post, checks: validatePostForPublish(post) });
+      res.status(201).json({
+        success: true,
+        data: post,
+        checks: validatePostForPublish(post),
+        verification: buildBlogVerificationReport(post),
+      });
     } catch (error) {
       try {
         sendValidationError(res, error);
@@ -197,7 +255,12 @@ export function registerAdminBlogRoutes(app: Express): void {
       const payload = normalizePostUpdatePayload(req.body);
       const post = await updateBlogPost(id, payload);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
-      res.status(200).json({ success: true, data: post, checks: validatePostForPublish(post) });
+      res.status(200).json({
+        success: true,
+        data: post,
+        checks: validatePostForPublish(post),
+        verification: buildBlogVerificationReport(post),
+      });
     } catch (error) {
       try {
         sendValidationError(res, error);
@@ -230,7 +293,12 @@ export function registerAdminBlogRoutes(app: Express): void {
         runPostPublishCheckInBackground(getBlogPostPath(post));
       }
 
-      res.status(200).json({ success: true, data: post, checks: validatePostForPublish(post) });
+      res.status(200).json({
+        success: true,
+        data: post,
+        checks: validatePostForPublish(post),
+        verification: buildBlogVerificationReport(post),
+      });
     } catch (error) {
       try {
         sendValidationError(res, error);
