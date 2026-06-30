@@ -32,6 +32,8 @@ const ForPatients = lazy(() => import('@/pages/ForPatients'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const BlogIndex = lazy(() => import('@/pages/BlogIndex'));
 const BlogPost = lazy(() => import('@/pages/BlogPost'));
+const AdminLogin = lazy(() => import('@/pages/admin/AdminLogin'));
+const BlogAdminPage = lazy(() => import('@/pages/admin/BlogAdminPage'));
 const ServiciosEspanol = lazy(() => import('@/pages/ServiciosEspanol'));
 const LocationNaples = lazy(() => import('@/pages/LocationNaples'));
 const LocationBonitaSprings = lazy(() => import('@/pages/LocationBonitaSprings'));
@@ -155,6 +157,8 @@ function Router() {
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/es/blog" component={() => <BlogIndex language="es" />} />
       <Route path="/es/blog/:slug" component={BlogPost} />
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/blog" component={BlogAdminPage} />
       
       {/* Spanish Main Pages */}
       <Route path="/es" component={HomeEspanol} />

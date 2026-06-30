@@ -13,6 +13,8 @@ import { emailService } from "./services/email";
 import { injectMetaTags, isKnownRoute } from "./utils/html-injection";
 import { getCanonicalRedirectUrl, shouldRedirectToCanonicalHost } from "./seo/config";
 import { getBlogPostBySlug, getBlogPosts, type BlogLanguage } from "./blog/storage";
+import { registerAdminAuthRoutes, requireAdmin } from "./admin-auth";
+import { registerAdminBlogRoutes } from "./blog/admin-routes";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -220,6 +222,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }
 
+  registerAdminAuthRoutes(app);
+  app.use("/api/admin/*", requireAdmin);
+
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {
@@ -308,7 +313,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all contact messages (for admin purposes)
-  app.get("/api/contact-messages", async (req, res) => {
+  app.get("/api/contact-messages", requireAdmin, async (req, res) => {
     try {
       const messages = await storage.getAllContactMessages();
       res.status(200).json({ success: true, data: messages });
@@ -320,6 +325,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+
+  registerAdminBlogRoutes(app);
 
   // Public blog endpoints. Sprint 2 exposes only published content; admin,
   // drafts, and article generation remain out of scope.

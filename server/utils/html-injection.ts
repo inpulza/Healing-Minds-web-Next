@@ -554,6 +554,8 @@ const KNOWN_ROUTES: ReadonlySet<string> = new Set([
   '/contact',
   '/for-patients',
   '/blog',
+  '/admin/login',
+  '/admin/blog',
   '/services',
   '/services/anxiety-treatment',
   '/services/depression-treatment',

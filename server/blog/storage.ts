@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, type SQL } from "drizzle-orm";
+import { and, count, desc, eq, ilike, inArray, or, type SQL } from "drizzle-orm";
 import {
   blogAuthors,
   blogCategories,
@@ -10,6 +10,9 @@ import {
   type BlogPost,
   type BlogPostStatus,
   type BlogTag,
+  type InsertBlogCategory,
+  type InsertBlogPost,
+  type InsertBlogTag,
 } from "@shared/schema";
 import { db } from "../db";
 
@@ -28,6 +31,18 @@ export type GetBlogPostsOptions = {
   tagSlug?: string;
   limit?: number;
   offset?: number;
+};
+
+export type GetAdminBlogPostsOptions = {
+  status?: BlogPostStatus | "all";
+  language?: BlogLanguage | "all";
+  search?: string;
+  limit?: number;
+  offset?: number;
+};
+
+export type BlogPostInput = InsertBlogPost & {
+  tagIds?: number[];
 };
 
 function isBlogLanguage(value: string): value is BlogLanguage {
@@ -149,6 +164,171 @@ export async function getBlogPosts(options: GetBlogPostsOptions = {}): Promise<B
     .offset(offset);
 
   return hydratePosts(rows);
+}
+
+export async function getAdminBlogPosts(options: GetAdminBlogPostsOptions = {}): Promise<BlogPostWithRelations[]> {
+  const {
+    status = "all",
+    language = "all",
+    search,
+    limit = 100,
+    offset = 0,
+  } = options;
+
+  const conditions: SQL[] = [];
+  if (status !== "all") {
+    conditions.push(eq(blogPosts.status, status));
+  }
+  if (language !== "all" && isBlogLanguage(language)) {
+    conditions.push(eq(blogPosts.language, language));
+  }
+  if (search?.trim()) {
+    const pattern = `%${search.trim()}%`;
+    conditions.push(
+      or(
+        ilike(blogPosts.title, pattern),
+        ilike(blogPosts.slug, pattern),
+        ilike(blogPosts.excerpt, pattern),
+      )!,
+    );
+  }
+
+  const rows = await db
+    .select({
+      post: blogPosts,
+      author: blogAuthors,
+      category: blogCategories,
+    })
+    .from(blogPosts)
+    .leftJoin(blogAuthors, eq(blogPosts.authorId, blogAuthors.id))
+    .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+    .where(conditions.length > 0 ? and(...conditions) : undefined)
+    .orderBy(desc(blogPosts.updatedAt), desc(blogPosts.createdAt))
+    .limit(limit)
+    .offset(offset);
+
+  return hydratePosts(rows);
+}
+
+export async function getBlogPostById(id: number): Promise<BlogPostWithRelations | undefined> {
+  const rows = await db
+    .select({
+      post: blogPosts,
+      author: blogAuthors,
+      category: blogCategories,
+    })
+    .from(blogPosts)
+    .leftJoin(blogAuthors, eq(blogPosts.authorId, blogAuthors.id))
+    .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+    .where(eq(blogPosts.id, id))
+    .limit(1);
+
+  const [post] = await hydratePosts(rows);
+  return post;
+}
+
+export async function setBlogPostTags(postId: number, tagIds: number[]): Promise<void> {
+  const uniqueTagIds = Array.from(new Set(tagIds.filter(Number.isFinite)));
+  await db.delete(blogPostTags).where(eq(blogPostTags.postId, postId));
+  if (uniqueTagIds.length === 0) return;
+
+  await db
+    .insert(blogPostTags)
+    .values(uniqueTagIds.map(tagId => ({ postId, tagId })))
+    .onConflictDoNothing();
+}
+
+export async function createBlogPost(values: BlogPostInput): Promise<BlogPostWithRelations> {
+  const { tagIds = [], ...postValues } = values;
+  const [post] = await db
+    .insert(blogPosts)
+    .values({
+      ...postValues,
+      updatedAt: new Date(),
+    })
+    .returning();
+
+  await setBlogPostTags(post.id, tagIds);
+  const created = await getBlogPostById(post.id);
+  if (!created) throw new Error("Blog post was created but could not be loaded");
+  return created;
+}
+
+export async function updateBlogPost(id: number, values: Partial<BlogPostInput>): Promise<BlogPostWithRelations | undefined> {
+  const { tagIds, ...postValues } = values;
+  const [updated] = await db
+    .update(blogPosts)
+    .set({
+      ...postValues,
+      updatedAt: new Date(),
+    })
+    .where(eq(blogPosts.id, id))
+    .returning();
+
+  if (!updated) return undefined;
+  if (tagIds) {
+    await setBlogPostTags(id, tagIds);
+  }
+
+  return getBlogPostById(id);
+}
+
+export async function deleteBlogPost(id: number): Promise<boolean> {
+  const deleted = await db.delete(blogPosts).where(eq(blogPosts.id, id)).returning({ id: blogPosts.id });
+  return deleted.length > 0;
+}
+
+export async function getBlogAuthors(): Promise<BlogAuthor[]> {
+  return db.select().from(blogAuthors).orderBy(blogAuthors.name);
+}
+
+export async function getBlogCategories(language?: BlogLanguage): Promise<BlogCategory[]> {
+  const query = db.select().from(blogCategories);
+  if (language) {
+    return query.where(eq(blogCategories.language, language)).orderBy(blogCategories.name);
+  }
+  return query.orderBy(blogCategories.language, blogCategories.name);
+}
+
+export async function getBlogTags(language?: BlogLanguage): Promise<BlogTag[]> {
+  const query = db.select().from(blogTags);
+  if (language) {
+    return query.where(eq(blogTags.language, language)).orderBy(blogTags.name);
+  }
+  return query.orderBy(blogTags.language, blogTags.name);
+}
+
+export async function createBlogCategory(values: InsertBlogCategory): Promise<BlogCategory> {
+  const [created] = await db.insert(blogCategories).values(values).returning();
+  return created;
+}
+
+export async function createBlogTag(values: InsertBlogTag): Promise<BlogTag> {
+  const [created] = await db.insert(blogTags).values(values).returning();
+  return created;
+}
+
+export async function getBlogStats(): Promise<Record<BlogPostStatus, number>> {
+  const rows = await db
+    .select({
+      status: blogPosts.status,
+      total: count(),
+    })
+    .from(blogPosts)
+    .groupBy(blogPosts.status);
+
+  const stats: Record<BlogPostStatus, number> = {
+    draft: 0,
+    pending_review: 0,
+    published: 0,
+    rejected: 0,
+  };
+
+  for (const row of rows) {
+    stats[row.status] = Number(row.total);
+  }
+
+  return stats;
 }
 
 export async function getBlogPostBySlug(
