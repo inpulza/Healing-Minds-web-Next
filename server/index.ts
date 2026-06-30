@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { seedInitialBlogPosts } from "./blog/seed";
 
 const app = express();
 
@@ -91,6 +92,20 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  if (process.env.BLOG_SEED_ON_BOOT !== "false") {
+    try {
+      await seedInitialBlogPosts({
+        logger: {
+          log,
+          warn: console.warn,
+          error: console.error,
+        },
+      });
+    } catch (error) {
+      console.error("Blog seed-on-boot failed (continuing startup):", error);
+    }
+  }
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
