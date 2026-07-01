@@ -33,6 +33,8 @@ import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { buildBlogSemanticMemory } from "./ai/memory";
 import { selectBlogResearchSources } from "./ai/research";
 import { applyDeterministicBlogFix } from "./content-fixes";
+import { ensureBlogInternalLinks, selectBlogInternalLinks } from "./internal-links";
+import { selectBlogTagIds } from "./taxonomy";
 import { buildBlogVerificationReport } from "./verification";
 import { runSeoPublishingCheck } from "../seo/publishing";
 import { getClientIp } from "../utils/client-ip";
@@ -234,7 +236,7 @@ export function registerAdminBlogRoutes(app: Express): void {
       ]);
       const author = authors.find(item => item.id === payload.authorId);
       const category = categories.find(item => item.id === payload.categoryId);
-      const selectedTags = tags.filter(tag => payload.tagIds.includes(tag.id));
+      const requestedTags = tags.filter(tag => payload.tagIds.includes(tag.id));
 
       if (!author) {
         return res.status(400).json({ success: false, message: "Selected author was not found" });
@@ -242,9 +244,27 @@ export function registerAdminBlogRoutes(app: Express): void {
       if (!category) {
         return res.status(400).json({ success: false, message: "Selected category must match the draft language" });
       }
-      if (selectedTags.length !== payload.tagIds.length) {
+      if (requestedTags.length !== payload.tagIds.length) {
         return res.status(400).json({ success: false, message: "Selected tags must match the draft language" });
       }
+
+      const promptTagIds = selectBlogTagIds({
+        language: payload.language,
+        availableTags: tags,
+        existingTagIds: payload.tagIds,
+        topic: payload.topic,
+        targetKeyword: payload.targetKeyword,
+        excerpt: payload.additionalContext,
+        categoryName: category.name,
+      });
+      const selectedTags = tags.filter(tag => promptTagIds.includes(tag.id));
+      const selectedInternalLinks = selectBlogInternalLinks({
+        language: payload.language,
+        requestedLinks: payload.internalLinks,
+        topic: payload.topic,
+        targetKeyword: payload.targetKeyword,
+        categoryName: category.name,
+      });
 
       const research = selectBlogResearchSources({
         topic: payload.topic,
@@ -253,7 +273,7 @@ export function registerAdminBlogRoutes(app: Express): void {
         language: payload.language,
         categoryName: category.name,
         tagNames: selectedTags.map(tag => tag.name),
-        internalLinks: payload.internalLinks,
+        internalLinks: selectedInternalLinks,
       });
       const semanticMemory = await buildBlogSemanticMemory({
         topic: payload.topic,
@@ -270,19 +290,49 @@ export function registerAdminBlogRoutes(app: Express): void {
         language: payload.language,
         categoryName: category.name,
         tagNames: selectedTags.map(tag => tag.name),
-        internalLinks: payload.internalLinks,
+        internalLinks: selectedInternalLinks,
         researchSources: research.sources,
         semanticMemory,
       });
 
       const slug = await getAvailableBlogSlug(generated.slug, payload.language);
+      const finalTagIds = selectBlogTagIds({
+        language: payload.language,
+        availableTags: tags,
+        existingTagIds: promptTagIds,
+        topic: payload.topic,
+        targetKeyword: payload.targetKeyword,
+        title: generated.title,
+        excerpt: generated.excerpt,
+        contentHtml: generated.contentHtml,
+        categoryName: category.name,
+      });
+      const contentWithInternalLinks = ensureBlogInternalLinks(generated.contentHtml, {
+        language: payload.language,
+        requestedLinks: selectedInternalLinks,
+        topic: payload.topic,
+        targetKeyword: payload.targetKeyword,
+        title: generated.title,
+        excerpt: generated.excerpt,
+        categoryName: category.name,
+      });
+      const aiRiskNotes = [...generated.riskNotes];
+      const autoAddedTagNames = tags
+        .filter(tag => finalTagIds.includes(tag.id) && !payload.tagIds.includes(tag.id))
+        .map(tag => tag.name);
+      if (autoAddedTagNames.length > 0) {
+        aiRiskNotes.push(`Auto-selected topic tags for editor review: ${autoAddedTagNames.join(", ")}.`);
+      }
+      if (contentWithInternalLinks.addedLinks.length > 0) {
+        aiRiskNotes.push(`Auto-added internal links for editor review: ${contentWithInternalLinks.addedLinks.join(", ")}.`);
+      }
       const postPayload = normalizePostPayload({
         title: generated.title,
         slug,
         language: payload.language,
         translationGroupId: payload.translationGroupId,
         excerpt: generated.excerpt,
-        content: generated.contentHtml,
+        content: contentWithInternalLinks.contentHtml,
         featuredImage: null,
         featuredImageAlt: generated.featuredImageAlt || null,
         authorId: payload.authorId,
@@ -291,7 +341,7 @@ export function registerAdminBlogRoutes(app: Express): void {
         isFeatured: false,
         metaTitle: generated.metaTitle,
         metaDescription: generated.metaDescription,
-        tagIds: payload.tagIds,
+        tagIds: finalTagIds,
       });
 
       const post = await createBlogPost(postPayload);
@@ -301,7 +351,7 @@ export function registerAdminBlogRoutes(app: Express): void {
         checks: validatePostForPublish(post),
         verification: buildBlogVerificationReport(post),
         ai: {
-          riskNotes: generated.riskNotes,
+          riskNotes: aiRiskNotes,
           research,
           semanticMemory,
         },

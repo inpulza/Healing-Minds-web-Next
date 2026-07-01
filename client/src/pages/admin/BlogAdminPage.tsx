@@ -108,7 +108,9 @@ type BlogVerificationFixType =
   | 'metaDescription'
   | 'readingTime'
   | 'featuredImageAlt'
-  | 'medicalDisclaimer';
+  | 'medicalDisclaimer'
+  | 'tags'
+  | 'internalLinks';
 
 type BlogVerificationCheck = {
   id: string;
@@ -221,6 +223,7 @@ type FormState = {
   featuredImageAlt: string;
   authorId: string;
   categoryId: string;
+  status: BlogStatus;
   isFeatured: boolean;
   metaTitle: string;
   metaDescription: string;
@@ -287,6 +290,7 @@ function createEmptyForm(authors: BlogAuthor[], categories: BlogCategory[]): For
     featuredImageAlt: '',
     authorId: authors[0]?.id ? String(authors[0].id) : '',
     categoryId: defaultCategory?.id ? String(defaultCategory.id) : '',
+    status: 'draft',
     isFeatured: false,
     metaTitle: '',
     metaDescription: '',
@@ -321,6 +325,7 @@ function formFromPost(post: BlogPost): FormState {
     featuredImageAlt: post.featuredImageAlt || '',
     authorId: post.authorId ? String(post.authorId) : '',
     categoryId: post.categoryId ? String(post.categoryId) : '',
+    status: post.status,
     isFeatured: post.isFeatured,
     metaTitle: post.metaTitle || '',
     metaDescription: post.metaDescription || '',
@@ -614,6 +619,7 @@ export default function BlogAdminPage() {
     if (!form?.id) return;
     statusMutation.mutate({ postId: form.id, status: 'published' });
   };
+  const canPublishCurrent = form?.status === 'pending_review' || form?.status === 'published';
 
   const logout = async () => {
     await apiRequest('POST', '/api/admin/logout');
@@ -1233,7 +1239,11 @@ export default function BlogAdminPage() {
               {saveMutation.isPending ? 'Saving...' : 'Save draft'}
             </Button>
             {form?.id && (
-              <Button onClick={publishCurrent} disabled={statusMutation.isPending}>
+              <Button
+                onClick={publishCurrent}
+                disabled={statusMutation.isPending || !canPublishCurrent}
+                title={canPublishCurrent ? undefined : 'Submit review before publishing'}
+              >
                 Publish
               </Button>
             )}

@@ -1,6 +1,8 @@
 import type { BlogPostWithRelations } from "./storage";
-import { updateBlogPost, type BlogPostInput } from "./storage";
+import { getBlogTags, updateBlogPost, type BlogPostInput } from "./storage";
 import { estimateReadingTime, getPlainTextFromHtml, sanitizeBlogContentHtml } from "./sanitize";
+import { ensureBlogInternalLinks } from "./internal-links";
+import { selectBlogTagIdsForPost } from "./taxonomy";
 import {
   getMedicalDisclaimerHtml,
   hasMedicalDisclaimer,
@@ -166,6 +168,56 @@ export async function applyDeterministicBlogFix(
         { content, readingTime: estimateReadingTime(content) },
         ["content", "readingTime"],
         "Medical disclaimer added to the article body.",
+      );
+    }
+
+    case "tags": {
+      const availableTags = await getBlogTags(normalizeLanguage(post.language));
+      const tagIds = selectBlogTagIdsForPost(post, availableTags);
+      const existingTagIds = post.tags.map(tag => tag.id);
+      const changed = tagIds.some(tagId => !existingTagIds.includes(tagId)) || tagIds.length !== existingTagIds.length;
+
+      if (tagIds.length === 0 || !changed) {
+        return {
+          success: false,
+          fixType,
+          message: "No matching topic tags were found automatically. Choose tags manually before publishing.",
+          changedFields: [],
+        };
+      }
+
+      return updateAndReport(
+        post,
+        fixType,
+        { tagIds },
+        ["tagIds"],
+        "Topic tags selected from the article title, category, excerpt, and body copy.",
+      );
+    }
+
+    case "internalLinks": {
+      const result = ensureBlogInternalLinks(post.content || "", {
+        language: normalizeLanguage(post.language),
+        title: post.title,
+        excerpt: post.excerpt,
+        categoryName: post.category?.name,
+      });
+
+      if (result.addedLinks.length === 0) {
+        return {
+          success: false,
+          fixType,
+          message: "The article already includes internal links or no safe internal link could be added.",
+          changedFields: [],
+        };
+      }
+
+      return updateAndReport(
+        post,
+        fixType,
+        { content: result.contentHtml, readingTime: estimateReadingTime(result.contentHtml) },
+        ["content", "readingTime"],
+        `Internal links added: ${result.addedLinks.join(", ")}.`,
       );
     }
 

@@ -3,6 +3,7 @@ import type { BlogPostStatus } from "@shared/schema";
 import type { BlogPostWithRelations } from "./storage";
 import { getPlainTextFromHtml } from "./sanitize";
 import { hasMedicalDisclaimer } from "./editorial-rules";
+import { buildBlogVerificationReport } from "./verification";
 
 const statusSchema = z.enum(["draft", "pending_review", "published", "rejected"]);
 const languageSchema = z.enum(["en", "es"]);
@@ -13,6 +14,8 @@ const blogFixTypeSchema = z.enum([
   "readingTime",
   "featuredImageAlt",
   "medicalDisclaimer",
+  "tags",
+  "internalLinks",
 ]);
 
 export const adminBlogPostSchema = z.object({
@@ -142,10 +145,31 @@ export function validatePostForPublish(post: BlogPostWithRelations): PublishChec
 
 export function assertPublishReady(post: BlogPostWithRelations): void {
   const checks = validatePostForPublish(post);
+  const verification = buildBlogVerificationReport(post);
+  const requiresReview = post.status !== "pending_review" && post.status !== "published";
   const failed = checks.filter(check => !check.ok);
-  if (failed.length > 0) {
+  const verificationBlockers: PublishCheck[] = verification.blocking.map(check => ({
+    id: check.id,
+    label: check.label,
+    ok: false,
+    detail: check.detail || check.message,
+  }));
+  if (requiresReview) {
+    failed.push({
+      id: "humanReview",
+      label: "Human review",
+      ok: false,
+      detail: "Move the draft to pending review before publishing.",
+    });
+  }
+  if (failed.length > 0 || verification.blocking.length > 0) {
     const error = new Error("Post is not ready to publish") as Error & { checks?: PublishCheck[] };
-    error.checks = checks;
+    error.checks = checks.concat(verificationBlockers, requiresReview ? [{
+      id: "humanReview",
+      label: "Human review",
+      ok: false,
+      detail: "Move the draft to pending review before publishing.",
+    }] : []);
     throw error;
   }
 }

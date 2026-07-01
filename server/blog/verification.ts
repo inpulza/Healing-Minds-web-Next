@@ -10,7 +10,9 @@ export type BlogVerificationFixType =
   | "metaDescription"
   | "readingTime"
   | "featuredImageAlt"
-  | "medicalDisclaimer";
+  | "medicalDisclaimer"
+  | "tags"
+  | "internalLinks";
 
 export type BlogVerificationCheck = {
   id: string;
@@ -164,6 +166,7 @@ export function buildBlogVerificationReport(post: BlogPostWithRelations): BlogVe
       message: "At least one tag is required before publish.",
       count: post.tags.length,
       required: 1,
+      fixType: "tags",
     },
     {
       id: "tagsDepth",
@@ -173,6 +176,7 @@ export function buildBlogVerificationReport(post: BlogPostWithRelations): BlogVe
       message: "Two or more tags give the admin better topic grouping for future automation.",
       count: post.tags.length,
       required: 2,
+      fixType: "tags",
     },
     {
       id: "featuredImageAlt",
@@ -206,6 +210,7 @@ export function buildBlogVerificationReport(post: BlogPostWithRelations): BlogVe
       count: internalLinks.length,
       required: 1,
       detail: internalLinks.join(", ") || "None",
+      fixType: "internalLinks",
     },
     {
       id: "externalSources",

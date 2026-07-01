@@ -1,8 +1,6 @@
 import type { BlogAiGenerateInput } from "./types";
 import { formatResearchSourcesForPrompt } from "./research";
-
-const EN_INTERNAL_LINKS = ["/services", "/for-patients", "/contact", "/telepsychiatry-florida"];
-const ES_INTERNAL_LINKS = ["/es/servicios", "/es/para-pacientes", "/es/contacto"];
+import { getDefaultBlogInternalLinkHrefs } from "../internal-links";
 
 function formatList(items: string[]): string {
   return items.length > 0 ? items.map(item => `- ${item}`).join("\n") : "- None provided";
@@ -21,7 +19,7 @@ function formatSemanticMemoryForPrompt(input: BlogAiGenerateInput): string {
 
 export function buildHealingMindsBlogPrompt(input: BlogAiGenerateInput): string {
   const languageName = input.language === "es" ? "Spanish" : "English";
-  const fallbackLinks = input.language === "es" ? ES_INTERNAL_LINKS : EN_INTERNAL_LINKS;
+  const fallbackLinks = getDefaultBlogInternalLinkHrefs(input.language);
   const internalLinks = input.internalLinks && input.internalLinks.length > 0 ? input.internalLinks : fallbackLinks;
   const researchSources = input.researchSources || [];
   const semanticMemory = input.semanticMemory;

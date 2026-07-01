@@ -47,7 +47,6 @@ function tokenize(value: string): string[] {
       .filter(token => token.length >= 3 && !STOPWORDS.has(token)),
   ));
 }
-
 function scoreOverlap(inputTokens: string[], corpusTokens: string[]): { score: number; overlapTerms: string[] } {
   const corpus = new Set(corpusTokens);
   const overlapTerms = inputTokens.filter(token => corpus.has(token));
@@ -58,7 +57,6 @@ function scoreOverlap(inputTokens: string[], corpusTokens: string[]): { score: n
     overlapTerms: overlapTerms.slice(0, 12),
   };
 }
-
 function recommendationFromScore(score: number): BlogSemanticMemoryMatch["recommendation"] {
   if (score >= 0.68) return "update_existing";
   if (score >= 0.38) return "change_angle";
@@ -130,14 +128,4 @@ export async function buildBlogSemanticMemory(input: MemoryInput): Promise<BlogS
     recommendation,
     riskNotes,
   };
-}
-
-export function formatSemanticMemoryForPrompt(memory: BlogSemanticMemory): string {
-  if (memory.matches.length === 0) {
-    return "- No similar existing blog posts found in the current language.";
-  }
-
-  return memory.matches.map(match => (
-    `- ${match.title} (/blog/${match.slug}, ${match.status}, score ${match.score}): overlap terms ${match.overlapTerms.join(", ")}. Recommendation: ${match.recommendation}.`
-  )).join("\n");
 }

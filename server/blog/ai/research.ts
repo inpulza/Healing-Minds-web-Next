@@ -116,7 +116,6 @@ function buildQueries(input: BlogAiGenerateInput): string[] {
   return [
     `site:nimh.nih.gov ${topic}`,
     `site:988lifeline.org ${topic}`,
-    `site:samhsa.gov ${topic}`,
   ];
 }
 
