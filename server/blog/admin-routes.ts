@@ -30,6 +30,8 @@ import {
 import { estimateReadingTime, sanitizeBlogContentHtml } from "./sanitize";
 import { assertBlogAiGenerationConfigured, generateBlogDraftWithAi } from "./ai/generator";
 import { checkBlogAiRateLimit } from "./ai/rate-limit";
+import { buildBlogSemanticMemory } from "./ai/memory";
+import { selectBlogResearchSources } from "./ai/research";
 import { applyDeterministicBlogFix } from "./content-fixes";
 import { buildBlogVerificationReport } from "./verification";
 import { runSeoPublishingCheck } from "../seo/publishing";
@@ -204,10 +206,13 @@ export function registerAdminBlogRoutes(app: Express): void {
   app.post("/api/admin/blog/generate-draft", async (req, res) => {
     try {
       const payload = adminBlogGenerateDraftSchema.parse(req.body);
-      if (containsLikelyPatientIdentifier(payload.additionalContext || "")) {
+      const possibleSensitiveText = [payload.topic, payload.targetKeyword, payload.additionalContext]
+        .filter(Boolean)
+        .join(" ");
+      if (containsLikelyPatientIdentifier(possibleSensitiveText)) {
         return res.status(400).json({
           success: false,
-          message: "Additional context must not include patient-identifying information",
+          message: "AI generation inputs must not include patient-identifying information",
         });
       }
 
@@ -241,6 +246,23 @@ export function registerAdminBlogRoutes(app: Express): void {
         return res.status(400).json({ success: false, message: "Selected tags must match the draft language" });
       }
 
+      const research = selectBlogResearchSources({
+        topic: payload.topic,
+        additionalContext: payload.additionalContext,
+        targetKeyword: payload.targetKeyword,
+        language: payload.language,
+        categoryName: category.name,
+        tagNames: selectedTags.map(tag => tag.name),
+        internalLinks: payload.internalLinks,
+      });
+      const semanticMemory = await buildBlogSemanticMemory({
+        topic: payload.topic,
+        targetKeyword: payload.targetKeyword,
+        language: payload.language,
+        categoryName: category.name,
+        tagNames: selectedTags.map(tag => tag.name),
+      });
+
       const generated = await generateBlogDraftWithAi({
         topic: payload.topic,
         additionalContext: payload.additionalContext,
@@ -249,6 +271,8 @@ export function registerAdminBlogRoutes(app: Express): void {
         categoryName: category.name,
         tagNames: selectedTags.map(tag => tag.name),
         internalLinks: payload.internalLinks,
+        researchSources: research.sources,
+        semanticMemory,
       });
 
       const slug = await getAvailableBlogSlug(generated.slug, payload.language);
@@ -278,6 +302,8 @@ export function registerAdminBlogRoutes(app: Express): void {
         verification: buildBlogVerificationReport(post),
         ai: {
           riskNotes: generated.riskNotes,
+          research,
+          semanticMemory,
         },
       });
     } catch (error) {

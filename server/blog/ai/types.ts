@@ -8,6 +8,8 @@ export type BlogAiGenerateInput = {
   categoryName?: string;
   tagNames?: string[];
   internalLinks?: string[];
+  researchSources?: BlogResearchSource[];
+  semanticMemory?: BlogSemanticMemory;
 };
 
 export type BlogAiGeneratedDraft = {
@@ -26,4 +28,49 @@ export type BlogAiConfig = {
   model: string;
   timeoutMs: number;
   maxTokens: number;
+};
+
+export type BlogResearchConfidence = "low" | "medium" | "high";
+
+export type BlogResearchSource = {
+  id: string;
+  title: string;
+  publisher: string;
+  domain: string;
+  url: string;
+  sourceCategory: "institutional" | "clinical" | "crisis";
+  summary: string;
+  topics: string[];
+  confidence: BlogResearchConfidence;
+  accessedAt: string;
+};
+
+export type BlogResearchBrief = {
+  topic: string;
+  language: BlogLanguage;
+  accessedAt: string;
+  queries: string[];
+  sources: BlogResearchSource[];
+  confidence: BlogResearchConfidence;
+  riskNotes: string[];
+};
+
+export type BlogSemanticMemoryMatch = {
+  postId: number;
+  title: string;
+  slug: string;
+  language: BlogLanguage;
+  status: string;
+  score: number;
+  overlapTerms: string[];
+  recommendation: "create_new" | "change_angle" | "update_existing";
+};
+
+export type BlogSemanticMemory = {
+  topic: string;
+  targetKeyword?: string;
+  language: BlogLanguage;
+  matches: BlogSemanticMemoryMatch[];
+  recommendation: "create_new" | "change_angle" | "update_existing";
+  riskNotes: string[];
 };

@@ -4,6 +4,10 @@ import { getMedicalDisclaimerHtml, hasMedicalDisclaimer, slugifyBlogValue, trunc
 import type { BlogAiGeneratedDraft } from "./types";
 import type { BlogLanguage } from "../storage";
 
+type NormalizeOptions = {
+  allowedExternalSourceUrls?: string[];
+};
+
 export const aiGeneratedDraftSchema = z.object({
   title: z.string().trim().min(5).max(255),
   slug: z.string().trim().min(3).max(255).optional(),
@@ -48,10 +52,57 @@ function ensureDisclaimer(contentHtml: string, language: BlogLanguage): string {
   return `${contentHtml}\n${getMedicalDisclaimerHtml(language)}`;
 }
 
+function normalizeUrlForComparison(value: string): string | null {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    url.hash = "";
+    url.search = "";
+    return `${url.origin}${url.pathname.replace(/\/$/, "")}`;
+  } catch {
+    return null;
+  }
+}
+
+function extractExternalUrls(value: string): string[] {
+  const urls = new Set<string>();
+
+  Array.from(value.matchAll(/<a\b[^>]*\bhref=(["'])(.*?)\1/gi))
+    .map(match => match[2])
+    .filter(href => /^https?:\/\//i.test(href))
+    .forEach(href => urls.add(href));
+
+  Array.from(value.matchAll(/\bhttps?:\/\/[^\s"'<>]+/gi))
+    .map(match => match[0].replace(/[).,;:!?]+$/g, ""))
+    .forEach(url => urls.add(url));
+
+  return Array.from(urls);
+}
+
+function assertAllowedExternalUrls(values: string[], allowedUrls: string[] | undefined): void {
+  const foundUrls = values.flatMap(extractExternalUrls);
+  if (foundUrls.length === 0) return;
+
+  const allowed = new Set((allowedUrls || []).map(normalizeUrlForComparison).filter(Boolean));
+  const disallowed = foundUrls
+    .filter(href => {
+      const normalized = normalizeUrlForComparison(href);
+      return !normalized || !allowed.has(normalized);
+    });
+
+  if (disallowed.length > 0) {
+    throw Object.assign(new Error("AI draft included external URLs outside the verified allowlist"), {
+      statusCode: 502,
+      links: disallowed,
+    });
+  }
+}
+
 export function normalizeAiGeneratedDraft(
   rawDraft: unknown,
   language: BlogLanguage,
   fallbackTopic: string,
+  options: NormalizeOptions = {},
 ): BlogAiGeneratedDraft {
   const parsed = aiGeneratedDraftSchema.parse(rawDraft);
   const title = truncateSeoText(parsed.title || fallbackTopic, 255);
@@ -62,6 +113,11 @@ export function normalizeAiGeneratedDraft(
   const metaDescription = buildMetaDescription(parsed.metaDescription || "", excerpt, contentHtml);
   const slug = slugifyBlogValue(parsed.slug || title || fallbackTopic);
   const featuredImageAlt = truncateSeoText(parsed.featuredImageAlt || `${title} | Healing Minds Psychiatry`, 255);
+  const riskNotes = parsed.riskNotes || [];
+  assertAllowedExternalUrls(
+    [contentHtml, excerpt, metaTitle, metaDescription, featuredImageAlt, ...riskNotes],
+    options.allowedExternalSourceUrls,
+  );
 
   if (contentHtml.length < 100 || getPlainTextFromHtml(contentHtml).split(/\s+/).filter(Boolean).length < 120) {
     throw Object.assign(new Error("AI draft was too short to save safely"), { statusCode: 502 });
@@ -75,11 +131,16 @@ export function normalizeAiGeneratedDraft(
     metaTitle,
     metaDescription,
     featuredImageAlt,
-    riskNotes: parsed.riskNotes || [],
+    riskNotes,
   };
 }
 
-export function parseGeneratedDraftJson(content: string, language: BlogLanguage, fallbackTopic: string): BlogAiGeneratedDraft {
+export function parseGeneratedDraftJson(
+  content: string,
+  language: BlogLanguage,
+  fallbackTopic: string,
+  options: NormalizeOptions = {},
+): BlogAiGeneratedDraft {
   let parsed: unknown;
   try {
     parsed = JSON.parse(stripJsonCodeFence(content));
@@ -88,5 +149,5 @@ export function parseGeneratedDraftJson(content: string, language: BlogLanguage,
     throw statusError;
   }
 
-  return normalizeAiGeneratedDraft(parsed, language, fallbackTopic);
+  return normalizeAiGeneratedDraft(parsed, language, fallbackTopic, options);
 }

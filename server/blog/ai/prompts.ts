@@ -1,4 +1,5 @@
 import type { BlogAiGenerateInput } from "./types";
+import { formatResearchSourcesForPrompt } from "./research";
 
 const EN_INTERNAL_LINKS = ["/services", "/for-patients", "/contact", "/telepsychiatry-florida"];
 const ES_INTERNAL_LINKS = ["/es/servicios", "/es/para-pacientes", "/es/contacto"];
@@ -7,10 +8,23 @@ function formatList(items: string[]): string {
   return items.length > 0 ? items.map(item => `- ${item}`).join("\n") : "- None provided";
 }
 
+function formatSemanticMemoryForPrompt(input: BlogAiGenerateInput): string {
+  const matches = input.semanticMemory?.matches || [];
+  if (matches.length === 0) {
+    return "- No similar existing blog posts found in the current language.";
+  }
+
+  return matches.map(match => (
+    `- ${match.title} (${match.status}, score ${match.score}): overlap terms ${match.overlapTerms.join(", ")}. Recommendation: ${match.recommendation}.`
+  )).join("\n");
+}
+
 export function buildHealingMindsBlogPrompt(input: BlogAiGenerateInput): string {
   const languageName = input.language === "es" ? "Spanish" : "English";
   const fallbackLinks = input.language === "es" ? ES_INTERNAL_LINKS : EN_INTERNAL_LINKS;
   const internalLinks = input.internalLinks && input.internalLinks.length > 0 ? input.internalLinks : fallbackLinks;
+  const researchSources = input.researchSources || [];
+  const semanticMemory = input.semanticMemory;
 
   return `You are drafting a blog article for Healing Minds Psychiatry in Naples, Florida.
 
@@ -34,12 +48,21 @@ ${formatList(input.tagNames || [])}
 Allowed internal links:
 ${formatList(internalLinks)}
 
+Trusted external sources:
+${formatResearchSourcesForPrompt(researchSources)}
+
+Existing content to avoid duplicating:
+${semanticMemory ? formatSemanticMemoryForPrompt(input) : "- No semantic memory provided."}
+
 Clinical/YMYL rules:
 - This is an educational draft for human clinical review, not medical advice.
 - Do not diagnose the reader.
 - Do not promise cures, guaranteed outcomes, or personalized treatment results.
 - Do not invent sources, studies, statistics, credentials, patient stories, reviews, or testimonials.
-- Do not include external citations or source links in this sprint.
+- Use only the trusted external source URLs listed above. Do not use any other external URLs.
+- If the trusted sources are not specific enough for a claim, keep the claim broad or omit it.
+- Include a short <h2>Sources</h2> section near the end with 1 to 3 trusted source links when relevant.
+- Use the existing content notes to avoid repeating the same angle as another article.
 - Do not mention patient-identifying information.
 - Use Dr. Melva Reve Urgelles as the clinician/author context without inventing credentials beyond psychiatrist/bilingual psychiatric care.
 - Include emergency/911 and not-a-substitute-for-medical-advice language near the end.

@@ -156,10 +156,49 @@ type FixApiResponse = {
   };
 };
 
+type BlogResearchSource = {
+  id: string;
+  title: string;
+  publisher: string;
+  domain: string;
+  url: string;
+  sourceCategory: 'institutional' | 'clinical' | 'crisis';
+  summary: string;
+  confidence: 'low' | 'medium' | 'high';
+  accessedAt: string;
+};
+
+type BlogResearchBrief = {
+  confidence: 'low' | 'medium' | 'high';
+  sources: BlogResearchSource[];
+  riskNotes: string[];
+};
+
+type BlogSemanticMemoryMatch = {
+  postId: number;
+  title: string;
+  slug: string;
+  language: BlogLanguage;
+  status: BlogStatus;
+  score: number;
+  overlapTerms: string[];
+  recommendation: 'create_new' | 'change_angle' | 'update_existing';
+};
+
+type BlogSemanticMemory = {
+  recommendation: 'create_new' | 'change_angle' | 'update_existing';
+  matches: BlogSemanticMemoryMatch[];
+  riskNotes: string[];
+};
+
+type AiGenerationNotes = {
+  riskNotes: string[];
+  research?: BlogResearchBrief;
+  semanticMemory?: BlogSemanticMemory;
+};
+
 type GenerateDraftApiResponse = ApiResponse<BlogPost> & {
-  ai?: {
-    riskNotes: string[];
-  };
+  ai?: AiGenerationNotes;
 };
 
 type SessionResponse = {
@@ -347,6 +386,7 @@ export default function BlogAdminPage() {
   const [fixingCheck, setFixingCheck] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [generateError, setGenerateError] = useState<string | null>(null);
+  const [aiNotes, setAiNotes] = useState<AiGenerationNotes | null>(null);
 
   const sessionQuery = useQuery<SessionResponse>({
     queryKey: ['/api/admin/session'],
@@ -509,6 +549,7 @@ export default function BlogAdminPage() {
       setForm(formFromPost(data.data));
       setChecks(data.checks || []);
       setVerification(data.verification || null);
+      setAiNotes(data.ai || null);
       setGenerateOpen(false);
       setEditorOpen(true);
       queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
@@ -524,6 +565,7 @@ export default function BlogAdminPage() {
   const openGenerateDraft = () => {
     setGenerateForm(createGenerateDraftForm(authors, categories));
     setGenerateError(null);
+    setAiNotes(null);
     setGenerateOpen(true);
   };
 
@@ -531,6 +573,7 @@ export default function BlogAdminPage() {
     setForm(createEmptyForm(authors, categories));
     setChecks([]);
     setVerification(null);
+    setAiNotes(null);
     setActionError(null);
     setEditorOpen(true);
   };
@@ -539,6 +582,7 @@ export default function BlogAdminPage() {
     setForm(formFromPost(post));
     setChecks([]);
     setVerification(null);
+    setAiNotes(null);
     setActionError(null);
     setEditorOpen(true);
   };
@@ -890,6 +934,63 @@ export default function BlogAdminPage() {
           {form && (
             <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
               <div className="space-y-4">
+                {aiNotes && (
+                  <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4">
+                    <div className="flex items-start gap-3">
+                      <Sparkles className="mt-0.5 h-4 w-4 text-emerald-700" aria-hidden="true" />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-sm font-semibold text-emerald-950">AI research notes</h3>
+                          {aiNotes.research && (
+                            <Badge className="bg-white text-emerald-800">Source confidence: {aiNotes.research.confidence}</Badge>
+                          )}
+                          {aiNotes.semanticMemory && (
+                            <Badge className="bg-white text-emerald-800">Memory: {aiNotes.semanticMemory.recommendation.replace(/_/g, ' ')}</Badge>
+                          )}
+                        </div>
+
+                        {aiNotes.research?.sources.length ? (
+                          <div className="mt-3 space-y-2">
+                            <p className="text-xs font-medium text-emerald-950">Trusted sources used for the draft</p>
+                            <ul className="space-y-1 text-xs text-emerald-900">
+                              {aiNotes.research.sources.map(source => (
+                                <li key={source.id}>
+                                  <a className="inline-flex items-center gap-1 underline" href={source.url} target="_blank" rel="noreferrer">
+                                    {source.title}
+                                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                                  </a>
+                                  <span className="text-emerald-800"> - {source.publisher}, accessed {source.accessedAt}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : null}
+
+                        {aiNotes.semanticMemory?.matches.length ? (
+                          <div className="mt-3 space-y-2">
+                            <p className="text-xs font-medium text-emerald-950">Possible topic overlap</p>
+                            <ul className="space-y-1 text-xs text-emerald-900">
+                              {aiNotes.semanticMemory.matches.slice(0, 3).map(match => (
+                                <li key={match.postId}>
+                                  {match.title} ({match.status}, score {match.score}) - {match.recommendation.replace(/_/g, ' ')}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : null}
+
+                        {[...(aiNotes.riskNotes || []), ...(aiNotes.research?.riskNotes || []), ...(aiNotes.semanticMemory?.riskNotes || [])].length > 0 && (
+                          <ul className="mt-3 list-disc space-y-1 pl-4 text-xs text-emerald-900">
+                            {[...(aiNotes.riskNotes || []), ...(aiNotes.research?.riskNotes || []), ...(aiNotes.semanticMemory?.riskNotes || [])]
+                              .slice(0, 6)
+                              .map((note, index) => <li key={`${note}-${index}`}>{note}</li>)}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="post-title">Title</Label>

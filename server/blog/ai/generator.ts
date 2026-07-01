@@ -1,4 +1,5 @@
 import { buildHealingMindsBlogPrompt } from "./prompts";
+import { extractAllowedSourceUrls } from "./research";
 import { parseGeneratedDraftJson } from "./validation";
 import type { BlogAiConfig, BlogAiGenerateInput, BlogAiGeneratedDraft } from "./types";
 
@@ -86,7 +87,9 @@ export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promi
       throw Object.assign(new Error("Blog AI provider returned an empty draft"), { statusCode: 502 });
     }
 
-    return parseGeneratedDraftJson(content, input.language, input.topic);
+    return parseGeneratedDraftJson(content, input.language, input.topic, {
+      allowedExternalSourceUrls: extractAllowedSourceUrls(input.researchSources || []),
+    });
   } catch (error) {
     if ((error as { name?: string }).name === "AbortError") {
       throw Object.assign(new Error("Blog AI provider timed out"), { statusCode: 504 });
