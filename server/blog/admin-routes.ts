@@ -8,6 +8,7 @@ import {
   adminBlogPostUpdateSchema,
   adminBlogStatusSchema,
   adminBlogTagSchema,
+  adminBlogTopicPlannerSchema,
   assertPublishReady,
   validatePostForPublish,
 } from "./admin-validation";
@@ -33,6 +34,7 @@ import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { buildBlogEditorialBrief } from "./ai/editorial-brief";
 import { buildBlogSemanticMemory } from "./ai/memory";
 import { selectBlogResearchSources } from "./ai/research";
+import { buildBlogTopicPlan } from "./ai/topic-planner";
 import { applyDeterministicBlogFix } from "./content-fixes";
 import { ensureBlogInternalLinks, selectBlogInternalLinks } from "./internal-links";
 import { selectBlogTagIds } from "./taxonomy";
@@ -203,6 +205,43 @@ export function registerAdminBlogRoutes(app: Express): void {
       res.status(200).json({ success: true, data: posts });
     } catch (error) {
       sendDbError(res, error);
+    }
+  });
+
+  app.post("/api/admin/blog/topic-plan", async (req, res) => {
+    try {
+      const payload = adminBlogTopicPlannerSchema.parse(req.body);
+      if (containsLikelyPatientIdentifier(payload.focus || "")) {
+        return res.status(400).json({
+          success: false,
+          message: "Topic planning inputs must not include patient-identifying information",
+        });
+      }
+
+      const [categories, tags] = await Promise.all([
+        getBlogCategories(payload.language),
+        getBlogTags(payload.language),
+      ]);
+      if (payload.categoryId && !categories.some(category => category.id === payload.categoryId)) {
+        return res.status(400).json({ success: false, message: "Selected category must match the planner language" });
+      }
+
+      const plan = await buildBlogTopicPlan({
+        language: payload.language,
+        categories,
+        tags,
+        categoryId: payload.categoryId,
+        focus: payload.focus,
+        limit: payload.limit,
+      });
+
+      res.status(200).json({ success: true, data: plan });
+    } catch (error) {
+      try {
+        sendValidationError(res, error);
+      } catch {
+        sendDbError(res, error);
+      }
     }
   });
 

@@ -205,6 +205,41 @@ type BlogEditorialBrief = {
   riskNotes: string[];
 };
 
+type BlogTopicPlanCandidate = {
+  id: string;
+  topic: string;
+  targetKeyword: string;
+  language: BlogLanguage;
+  categoryId: number;
+  categoryName: string;
+  tagIds: number[];
+  tagNames: string[];
+  internalLinks: string[];
+  score: number;
+  noveltyScore: number;
+  overlapScore: number;
+  recommendation: 'recommended' | 'change_angle' | 'update_existing';
+  angle: string;
+  rationale: string;
+  riskNotes: string[];
+  research: BlogResearchBrief;
+  semanticMemory: BlogSemanticMemory;
+  editorialBrief: BlogEditorialBrief;
+};
+
+type BlogTopicPlan = {
+  language: BlogLanguage;
+  generatedAt: string;
+  candidates: BlogTopicPlanCandidate[];
+  summary: {
+    considered: number;
+    returned: number;
+    recommended: number;
+    changeAngle: number;
+    updateExisting: number;
+  };
+};
+
 type AiGenerationNotes = {
   riskNotes: string[];
   research?: BlogResearchBrief;
@@ -215,6 +250,8 @@ type AiGenerationNotes = {
 type GenerateDraftApiResponse = ApiResponse<BlogPost> & {
   ai?: AiGenerationNotes;
 };
+
+type TopicPlanApiResponse = ApiResponse<BlogTopicPlan>;
 
 type SessionResponse = {
   success: boolean;
@@ -251,6 +288,13 @@ type GenerateDraftFormState = {
   authorId: string;
   categoryId: string;
   tagIds: number[];
+};
+
+type TopicPlannerFormState = {
+  language: BlogLanguage;
+  categoryId: string;
+  focus: string;
+  limit: string;
 };
 
 const statusLabels: Record<BlogStatus, string> = {
@@ -325,6 +369,17 @@ function createGenerateDraftForm(authors: BlogAuthor[], categories: BlogCategory
   };
 }
 
+function createTopicPlannerForm(categories: BlogCategory[]): TopicPlannerFormState {
+  const defaultLanguage: BlogLanguage = 'en';
+  const defaultCategory = categories.find(category => category.language === defaultLanguage) || categories[0];
+  return {
+    language: defaultLanguage,
+    categoryId: defaultCategory?.id ? String(defaultCategory.id) : '',
+    focus: '',
+    limit: '5',
+  };
+}
+
 function formFromPost(post: BlogPost): FormState {
   return {
     id: post.id,
@@ -355,6 +410,15 @@ function toGenerateDraftPayload(form: GenerateDraftFormState) {
     authorId: Number(form.authorId),
     categoryId: Number(form.categoryId),
     tagIds: form.tagIds,
+  };
+}
+
+function toTopicPlannerPayload(form: TopicPlannerFormState) {
+  return {
+    language: form.language,
+    categoryId: form.categoryId ? Number(form.categoryId) : undefined,
+    focus: form.focus || undefined,
+    limit: Number(form.limit) || 5,
   };
 }
 
@@ -395,15 +459,19 @@ export default function BlogAdminPage() {
   const [search, setSearch] = useState('');
   const [editorOpen, setEditorOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
+  const [plannerOpen, setPlannerOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [form, setForm] = useState<FormState | null>(null);
   const [generateForm, setGenerateForm] = useState<GenerateDraftFormState | null>(null);
+  const [plannerForm, setPlannerForm] = useState<TopicPlannerFormState | null>(null);
+  const [topicPlan, setTopicPlan] = useState<BlogTopicPlan | null>(null);
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [checks, setChecks] = useState<PublishCheck[]>([]);
   const [verification, setVerification] = useState<BlogVerificationReport | null>(null);
   const [fixingCheck, setFixingCheck] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [generateError, setGenerateError] = useState<string | null>(null);
+  const [plannerError, setPlannerError] = useState<string | null>(null);
   const [aiNotes, setAiNotes] = useState<AiGenerationNotes | null>(null);
 
   const sessionQuery = useQuery<SessionResponse>({
@@ -459,6 +527,10 @@ export default function BlogAdminPage() {
   const availableGenerateTags = useMemo(
     () => tags.filter(tag => tag.language === (generateForm?.language || 'en')),
     [tags, generateForm?.language],
+  );
+  const availablePlannerCategories = useMemo(
+    () => categories.filter(category => category.language === (plannerForm?.language || 'en')),
+    [categories, plannerForm?.language],
   );
 
   const saveMutation = useMutation({
@@ -558,6 +630,20 @@ export default function BlogAdminPage() {
     onSettled: () => setFixingCheck(null),
   });
 
+  const topicPlanMutation = useMutation({
+    mutationFn: async (currentForm: TopicPlannerFormState) => {
+      const response = await apiRequest('POST', '/api/admin/blog/topic-plan', toTopicPlannerPayload(currentForm));
+      return response.json() as Promise<TopicPlanApiResponse>;
+    },
+    onSuccess: data => {
+      setTopicPlan(data.data);
+      setPlannerError(null);
+    },
+    onError: error => {
+      setPlannerError(error instanceof Error ? error.message : 'Topic planning failed');
+    },
+  });
+
   const generateDraftMutation = useMutation({
     mutationFn: async (currentForm: GenerateDraftFormState) => {
       const response = await apiRequest('POST', '/api/admin/blog/generate-draft', toGenerateDraftPayload(currentForm));
@@ -587,6 +673,13 @@ export default function BlogAdminPage() {
     setGenerateOpen(true);
   };
 
+  const openTopicPlanner = () => {
+    setPlannerForm(createTopicPlannerForm(categories));
+    setTopicPlan(null);
+    setPlannerError(null);
+    setPlannerOpen(true);
+  };
+
   const openNewPost = () => {
     setForm(createEmptyForm(authors, categories));
     setChecks([]);
@@ -613,9 +706,33 @@ export default function BlogAdminPage() {
     setGenerateForm(current => current ? { ...current, [key]: value } : current);
   };
 
+  const updatePlannerForm = <K extends keyof TopicPlannerFormState>(key: K, value: TopicPlannerFormState[K]) => {
+    setPlannerForm(current => current ? { ...current, [key]: value } : current);
+  };
+
   const generateDraft = () => {
     if (!generateForm) return;
     generateDraftMutation.mutate(generateForm);
+  };
+
+  const planTopics = () => {
+    if (!plannerForm) return;
+    topicPlanMutation.mutate(plannerForm);
+  };
+
+  const useTopicCandidate = (candidate: BlogTopicPlanCandidate) => {
+    setGenerateForm({
+      topic: candidate.topic,
+      targetKeyword: candidate.targetKeyword,
+      additionalContext: candidate.angle,
+      language: candidate.language,
+      authorId: authors[0]?.id ? String(authors[0].id) : '',
+      categoryId: String(candidate.categoryId),
+      tagIds: candidate.tagIds,
+    });
+    setGenerateError(null);
+    setPlannerOpen(false);
+    setGenerateOpen(true);
   };
 
   const saveCurrentForm = () => {
@@ -674,6 +791,10 @@ export default function BlogAdminPage() {
             <Button variant="outline" onClick={logout}>
               <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
               Logout
+            </Button>
+            <Button variant="outline" onClick={openTopicPlanner} disabled={categories.length === 0}>
+              <Search className="mr-2 h-4 w-4" aria-hidden="true" />
+              Plan Topics
             </Button>
             <Button variant="outline" onClick={openGenerateDraft} disabled={authors.length === 0 || categories.length === 0}>
               <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -807,6 +928,162 @@ export default function BlogAdminPage() {
           </Table>
         </section>
       </div>
+
+      <Dialog open={plannerOpen} onOpenChange={setPlannerOpen}>
+        <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Auto Topic Planner</DialogTitle>
+            <DialogDescription>Find draft topics with overlap checks before using AI Generate.</DialogDescription>
+          </DialogHeader>
+
+          {plannerForm && (
+            <div className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <Label>Language</Label>
+                  <Select
+                    value={plannerForm.language}
+                    onValueChange={value => {
+                      const language = value as BlogLanguage;
+                      const category = categories.find(item => item.language === language);
+                      setPlannerForm(current => current ? {
+                        ...current,
+                        language,
+                        categoryId: category ? String(category.id) : '',
+                      } : current);
+                      setTopicPlan(null);
+                    }}
+                  >
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="es">Spanish</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <Select value={plannerForm.categoryId} onValueChange={value => updatePlannerForm('categoryId', value)}>
+                    <SelectTrigger><SelectValue placeholder="Any category" /></SelectTrigger>
+                    <SelectContent>
+                      {availablePlannerCategories.map(category => (
+                        <SelectItem key={category.id} value={String(category.id)}>{category.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="planner-limit">Ideas</Label>
+                  <Select value={plannerForm.limit} onValueChange={value => updatePlannerForm('limit', value)}>
+                    <SelectTrigger id="planner-limit"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {[3, 5, 8].map(limit => (
+                        <SelectItem key={limit} value={String(limit)}>{limit}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="planner-focus">Focus</Label>
+                <Input
+                  id="planner-focus"
+                  value={plannerForm.focus}
+                  placeholder="Optional: anxiety, medication, telepsychiatry..."
+                  onChange={event => {
+                    updatePlannerForm('focus', event.target.value);
+                    setTopicPlan(null);
+                  }}
+                />
+              </div>
+
+              {plannerError && (
+                <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {plannerError}
+                </div>
+              )}
+
+              {topicPlan && (
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                    <Badge className="bg-slate-100 text-slate-700">{topicPlan.summary.returned} shown</Badge>
+                    <Badge className="bg-emerald-100 text-emerald-800">{topicPlan.summary.recommended} recommended</Badge>
+                    <Badge className="bg-amber-100 text-amber-800">{topicPlan.summary.changeAngle} change angle</Badge>
+                    <Badge className="bg-red-100 text-red-800">{topicPlan.summary.updateExisting} update existing</Badge>
+                  </div>
+
+                  {topicPlan.candidates.map(candidate => (
+                    <div key={candidate.id} className="rounded-md border border-slate-200 p-4">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-sm font-semibold text-slate-950">{candidate.topic}</h3>
+                            <Badge className={candidate.recommendation === 'recommended' ? 'bg-emerald-100 text-emerald-800' : candidate.recommendation === 'change_angle' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'}>
+                              {candidate.recommendation.replace(/_/g, ' ')}
+                            </Badge>
+                          </div>
+                          <p className="mt-1 text-xs text-slate-600">{candidate.angle}</p>
+                          <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
+                            <span>Score {candidate.score}</span>
+                            <span>Overlap {Math.round(candidate.overlapScore * 100)}%</span>
+                            <span>Novelty {candidate.noveltyScore}%</span>
+                            <span>{candidate.categoryName}</span>
+                          </div>
+                        </div>
+                        <Button
+                          type="button"
+                          size="sm"
+                          disabled={authors.length === 0}
+                          onClick={() => useTopicCandidate(candidate)}
+                        >
+                          Use for Draft
+                        </Button>
+                      </div>
+
+                      <div className="mt-3 grid gap-3 text-xs text-slate-600 sm:grid-cols-2">
+                        <div>
+                          <p className="font-medium text-slate-800">Tags</p>
+                          <p>{candidate.tagNames.length ? candidate.tagNames.join(', ') : 'Manual selection needed'}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-slate-800">Internal links</p>
+                          <p>{candidate.internalLinks.join(', ')}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-slate-800">Sources</p>
+                          <p>{candidate.research.sources.map(source => source.domain).join(', ')}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-slate-800">Memory</p>
+                          <p>{candidate.semanticMemory.matches[0] ? `${candidate.semanticMemory.matches[0].title} (${candidate.semanticMemory.matches[0].score})` : 'No strong overlap'}</p>
+                        </div>
+                      </div>
+
+                      {candidate.riskNotes.length > 0 && (
+                        <ul className="mt-3 list-disc space-y-1 pl-4 text-xs text-amber-800">
+                          {candidate.riskNotes.slice(0, 3).map((note, index) => (
+                            <li key={`${candidate.id}-risk-${index}`}>{note}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button variant="outline" onClick={() => setPlannerOpen(false)}>Close</Button>
+            <Button onClick={planTopics} disabled={!plannerForm?.categoryId || topicPlanMutation.isPending}>
+              {topicPlanMutation.isPending ? 'Planning...' : 'Plan Topics'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={generateOpen} onOpenChange={setGenerateOpen}>
         <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
