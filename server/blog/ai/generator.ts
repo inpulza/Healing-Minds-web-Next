@@ -5,6 +5,7 @@ import type { BlogAiConfig, BlogAiGenerateInput, BlogAiGeneratedDraft } from "./
 
 type OpenAiChatResponse = {
   choices?: Array<{
+    finish_reason?: string;
     message?: {
       content?: string;
     };
@@ -30,7 +31,7 @@ function getBlogAiConfig(): BlogAiConfig {
     apiKey,
     model: process.env.BLOG_AI_MODEL || "gpt-4o-mini",
     timeoutMs: readPositiveInt(process.env.BLOG_AI_TIMEOUT_MS, 60_000),
-    maxTokens: readPositiveInt(process.env.BLOG_AI_MAX_TOKENS, 4_500),
+    maxTokens: readPositiveInt(process.env.BLOG_AI_MAX_TOKENS, 6_500),
   };
 }
 
@@ -82,13 +83,22 @@ export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promi
     }
 
     const payload = await response.json() as OpenAiChatResponse;
-    const content = payload.choices?.[0]?.message?.content;
+    const choice = payload.choices?.[0];
+    if (choice?.finish_reason === "length") {
+      throw Object.assign(new Error("Blog AI provider response was truncated"), { statusCode: 502 });
+    }
+
+    const content = choice?.message?.content;
     if (!content) {
       throw Object.assign(new Error("Blog AI provider returned an empty draft"), { statusCode: 502 });
     }
 
     return parseGeneratedDraftJson(content, input.language, input.topic, {
       allowedExternalSourceUrls: extractAllowedSourceUrls(input.researchSources || []),
+      minimumWordCount: input.editorialBrief?.minimumWordCount,
+      targetWordCount: input.editorialBrief?.targetWordCount,
+      minimumH2Count: Math.min(5, input.editorialBrief?.requiredSections.length || 5),
+      requiredSections: input.editorialBrief?.requiredSections,
     });
   } catch (error) {
     if ((error as { name?: string }).name === "AbortError") {

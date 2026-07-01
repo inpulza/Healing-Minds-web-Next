@@ -193,10 +193,23 @@ type BlogSemanticMemory = {
   riskNotes: string[];
 };
 
+type BlogEditorialBrief = {
+  targetWordCount: number;
+  minimumWordCount: number;
+  maximumWordCount: number;
+  searchIntent: string;
+  audience: string;
+  requiredSections: string[];
+  requiredInternalLinks: string[];
+  sourceRequirement: string;
+  riskNotes: string[];
+};
+
 type AiGenerationNotes = {
   riskNotes: string[];
   research?: BlogResearchBrief;
   semanticMemory?: BlogSemanticMemory;
+  editorialBrief?: BlogEditorialBrief;
 };
 
 type GenerateDraftApiResponse = ApiResponse<BlogPost> & {
@@ -953,7 +966,23 @@ export default function BlogAdminPage() {
                           {aiNotes.semanticMemory && (
                             <Badge className="bg-white text-emerald-800">Memory: {aiNotes.semanticMemory.recommendation.replace(/_/g, ' ')}</Badge>
                           )}
+                          {aiNotes.editorialBrief && (
+                            <Badge className="bg-white text-emerald-800">Target: {aiNotes.editorialBrief.targetWordCount} words</Badge>
+                          )}
                         </div>
+
+                        {aiNotes.editorialBrief && (
+                          <div className="mt-3 space-y-2">
+                            <p className="text-xs font-medium text-emerald-950">Editorial structure used</p>
+                            <p className="text-xs text-emerald-900">{aiNotes.editorialBrief.searchIntent}</p>
+                            <p className="text-xs text-emerald-800">Visible for this generated draft only; it is not persisted after reload.</p>
+                            <ul className="grid gap-1 text-xs text-emerald-900 sm:grid-cols-2">
+                              {aiNotes.editorialBrief.requiredSections.map(section => (
+                                <li key={section}>- {section}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
                         {aiNotes.research?.sources.length ? (
                           <div className="mt-3 space-y-2">
@@ -985,9 +1014,9 @@ export default function BlogAdminPage() {
                           </div>
                         ) : null}
 
-                        {[...(aiNotes.riskNotes || []), ...(aiNotes.research?.riskNotes || []), ...(aiNotes.semanticMemory?.riskNotes || [])].length > 0 && (
+                        {[...(aiNotes.riskNotes || []), ...(aiNotes.research?.riskNotes || []), ...(aiNotes.semanticMemory?.riskNotes || []), ...(aiNotes.editorialBrief?.riskNotes || [])].length > 0 && (
                           <ul className="mt-3 list-disc space-y-1 pl-4 text-xs text-emerald-900">
-                            {[...(aiNotes.riskNotes || []), ...(aiNotes.research?.riskNotes || []), ...(aiNotes.semanticMemory?.riskNotes || [])]
+                            {[...(aiNotes.riskNotes || []), ...(aiNotes.research?.riskNotes || []), ...(aiNotes.semanticMemory?.riskNotes || []), ...(aiNotes.editorialBrief?.riskNotes || [])]
                               .slice(0, 6)
                               .map((note, index) => <li key={`${note}-${index}`}>{note}</li>)}
                           </ul>

@@ -10,6 +10,7 @@ export type BlogAiGenerateInput = {
   internalLinks?: string[];
   researchSources?: BlogResearchSource[];
   semanticMemory?: BlogSemanticMemory;
+  editorialBrief?: BlogEditorialBrief;
 };
 
 export type BlogAiGeneratedDraft = {
@@ -72,5 +73,17 @@ export type BlogSemanticMemory = {
   language: BlogLanguage;
   matches: BlogSemanticMemoryMatch[];
   recommendation: "create_new" | "change_angle" | "update_existing";
+  riskNotes: string[];
+};
+
+export type BlogEditorialBrief = {
+  targetWordCount: number;
+  minimumWordCount: number;
+  maximumWordCount: number;
+  searchIntent: string;
+  audience: string;
+  requiredSections: string[];
+  requiredInternalLinks: string[];
+  sourceRequirement: string;
   riskNotes: string[];
 };

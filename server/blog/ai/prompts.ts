@@ -1,5 +1,6 @@
 import type { BlogAiGenerateInput } from "./types";
 import { formatResearchSourcesForPrompt } from "./research";
+import { formatEditorialBriefForPrompt } from "./editorial-brief";
 import { getDefaultBlogInternalLinkHrefs } from "../internal-links";
 
 function formatList(items: string[]): string {
@@ -52,6 +53,9 @@ ${formatResearchSourcesForPrompt(researchSources)}
 Existing content to avoid duplicating:
 ${semanticMemory ? formatSemanticMemoryForPrompt(input) : "- No semantic memory provided."}
 
+Editorial brief:
+${formatEditorialBriefForPrompt(input.editorialBrief)}
+
 Clinical/YMYL rules:
 - This is an educational draft for human clinical review, not medical advice.
 - Do not diagnose the reader.
@@ -70,9 +74,11 @@ HTML rules:
 - Return body HTML only, no full document, no markdown.
 - Allowed tags only: <p>, <h2>, <h3>, <ul>, <ol>, <li>, <strong>, <em>, <a>, <blockquote>.
 - Do not use <h1>, <img>, <script>, <style>, iframes, inline styles, classes, or event handlers.
-- Include 3 to 6 useful <h2> sections.
-- Include at least one natural internal link from the allowed list if it fits.
-- Aim for 900 to 1,200 words.
+- Follow the editorial brief sections as <h2> sections where they fit naturally.
+- Include 5 to 7 useful <h2> sections.
+- Include at least one natural internal link from the allowed list.
+- Aim for the editorial brief target word count without padding or repeating yourself.
+- Use concise, clinically conservative explanations instead of filler.
 
 Return only valid JSON with this exact shape:
 {

@@ -6,6 +6,10 @@ import type { BlogLanguage } from "../storage";
 
 type NormalizeOptions = {
   allowedExternalSourceUrls?: string[];
+  minimumWordCount?: number;
+  targetWordCount?: number;
+  minimumH2Count?: number;
+  requiredSections?: string[];
 };
 
 export const aiGeneratedDraftSchema = z.object({
@@ -98,6 +102,16 @@ function assertAllowedExternalUrls(values: string[], allowedUrls: string[] | und
   }
 }
 
+function normalizeTextForStructure(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function normalizeAiGeneratedDraft(
   rawDraft: unknown,
   language: BlogLanguage,
@@ -113,13 +127,30 @@ export function normalizeAiGeneratedDraft(
   const metaDescription = buildMetaDescription(parsed.metaDescription || "", excerpt, contentHtml);
   const slug = slugifyBlogValue(parsed.slug || title || fallbackTopic);
   const featuredImageAlt = truncateSeoText(parsed.featuredImageAlt || `${title} | Healing Minds Psychiatry`, 255);
-  const riskNotes = parsed.riskNotes || [];
+  const riskNotes = [...(parsed.riskNotes || [])];
+  const wordCount = getPlainTextFromHtml(contentHtml).split(/\s+/).filter(Boolean).length;
+  if (options.minimumWordCount && wordCount < options.minimumWordCount) {
+    riskNotes.push(`Generated draft is ${wordCount} words, below the editorial brief minimum of ${options.minimumWordCount}. Expand during human review.`);
+  } else if (options.targetWordCount && wordCount < Math.round(options.targetWordCount * 0.85)) {
+    riskNotes.push(`Generated draft is ${wordCount} words, below the target depth of ${options.targetWordCount}.`);
+  }
+  const h2Count = Array.from(contentHtml.matchAll(/<h2\b/gi)).length;
+  if (options.minimumH2Count && h2Count < options.minimumH2Count) {
+    riskNotes.push(`Generated draft has ${h2Count} H2 sections, below the editorial brief target of ${options.minimumH2Count}.`);
+  }
+  const normalizedContent = normalizeTextForStructure(getPlainTextFromHtml(contentHtml));
+  const missingSections = (options.requiredSections || [])
+    .filter(section => !normalizedContent.includes(normalizeTextForStructure(section)))
+    .slice(0, 4);
+  if (missingSections.length > 0) {
+    riskNotes.push(`Generated draft may be missing or renaming expected sections: ${missingSections.join("; ")}.`);
+  }
   assertAllowedExternalUrls(
     [contentHtml, excerpt, metaTitle, metaDescription, featuredImageAlt, ...riskNotes],
     options.allowedExternalSourceUrls,
   );
 
-  if (contentHtml.length < 100 || getPlainTextFromHtml(contentHtml).split(/\s+/).filter(Boolean).length < 120) {
+  if (contentHtml.length < 100 || wordCount < 120) {
     throw Object.assign(new Error("AI draft was too short to save safely"), { statusCode: 502 });
   }
 

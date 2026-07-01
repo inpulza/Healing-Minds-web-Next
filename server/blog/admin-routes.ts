@@ -30,6 +30,7 @@ import {
 import { estimateReadingTime, sanitizeBlogContentHtml } from "./sanitize";
 import { assertBlogAiGenerationConfigured, generateBlogDraftWithAi } from "./ai/generator";
 import { checkBlogAiRateLimit } from "./ai/rate-limit";
+import { buildBlogEditorialBrief } from "./ai/editorial-brief";
 import { buildBlogSemanticMemory } from "./ai/memory";
 import { selectBlogResearchSources } from "./ai/research";
 import { applyDeterministicBlogFix } from "./content-fixes";
@@ -282,6 +283,17 @@ export function registerAdminBlogRoutes(app: Express): void {
         categoryName: category.name,
         tagNames: selectedTags.map(tag => tag.name),
       });
+      const editorialBrief = buildBlogEditorialBrief({
+        topic: payload.topic,
+        additionalContext: payload.additionalContext,
+        targetKeyword: payload.targetKeyword,
+        language: payload.language,
+        categoryName: category.name,
+        tagNames: selectedTags.map(tag => tag.name),
+        internalLinks: selectedInternalLinks,
+        researchSources: research.sources,
+        semanticMemory,
+      });
 
       const generated = await generateBlogDraftWithAi({
         topic: payload.topic,
@@ -293,6 +305,7 @@ export function registerAdminBlogRoutes(app: Express): void {
         internalLinks: selectedInternalLinks,
         researchSources: research.sources,
         semanticMemory,
+        editorialBrief,
       });
 
       const slug = await getAvailableBlogSlug(generated.slug, payload.language);
@@ -354,6 +367,7 @@ export function registerAdminBlogRoutes(app: Express): void {
           riskNotes: aiRiskNotes,
           research,
           semanticMemory,
+          editorialBrief,
         },
       });
     } catch (error) {
