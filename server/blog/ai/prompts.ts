@@ -1,0 +1,67 @@
+import type { BlogAiGenerateInput } from "./types";
+
+const EN_INTERNAL_LINKS = ["/services", "/for-patients", "/contact", "/telepsychiatry-florida"];
+const ES_INTERNAL_LINKS = ["/es/servicios", "/es/para-pacientes", "/es/contacto"];
+
+function formatList(items: string[]): string {
+  return items.length > 0 ? items.map(item => `- ${item}`).join("\n") : "- None provided";
+}
+
+export function buildHealingMindsBlogPrompt(input: BlogAiGenerateInput): string {
+  const languageName = input.language === "es" ? "Spanish" : "English";
+  const fallbackLinks = input.language === "es" ? ES_INTERNAL_LINKS : EN_INTERNAL_LINKS;
+  const internalLinks = input.internalLinks && input.internalLinks.length > 0 ? input.internalLinks : fallbackLinks;
+
+  return `You are drafting a blog article for Healing Minds Psychiatry in Naples, Florida.
+
+Write in ${languageName}.
+
+Topic:
+${input.topic}
+
+Target keyword:
+${input.targetKeyword || input.topic}
+
+Editorial context:
+${input.additionalContext || "No additional editorial context provided."}
+
+Category:
+${input.categoryName || "No category provided"}
+
+Selected tags:
+${formatList(input.tagNames || [])}
+
+Allowed internal links:
+${formatList(internalLinks)}
+
+Clinical/YMYL rules:
+- This is an educational draft for human clinical review, not medical advice.
+- Do not diagnose the reader.
+- Do not promise cures, guaranteed outcomes, or personalized treatment results.
+- Do not invent sources, studies, statistics, credentials, patient stories, reviews, or testimonials.
+- Do not include external citations or source links in this sprint.
+- Do not mention patient-identifying information.
+- Use Dr. Melva Reve Urgelles as the clinician/author context without inventing credentials beyond psychiatrist/bilingual psychiatric care.
+- Include emergency/911 and not-a-substitute-for-medical-advice language near the end.
+- Keep the tone calm, clear, professional, and patient-friendly.
+
+HTML rules:
+- Return body HTML only, no full document, no markdown.
+- Allowed tags only: <p>, <h2>, <h3>, <ul>, <ol>, <li>, <strong>, <em>, <a>, <blockquote>.
+- Do not use <h1>, <img>, <script>, <style>, iframes, inline styles, classes, or event handlers.
+- Include 3 to 6 useful <h2> sections.
+- Include at least one natural internal link from the allowed list if it fits.
+- Aim for 900 to 1,200 words.
+
+Return only valid JSON with this exact shape:
+{
+  "title": "SEO-friendly article title",
+  "slug": "lowercase-hyphenated-slug",
+  "excerpt": "20 to 500 character summary",
+  "contentHtml": "<p>...</p>",
+  "metaTitle": "70 characters max",
+  "metaDescription": "50 to 160 characters",
+  "featuredImageAlt": "descriptive alt text",
+  "riskNotes": ["short note for human reviewer"]
+}`;
+}

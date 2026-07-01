@@ -357,6 +357,31 @@ export async function getBlogPostBySlug(
   return post;
 }
 
+export async function getAnyBlogPostBySlug(
+  slug: string,
+  language: BlogLanguage,
+): Promise<BlogPostWithRelations | undefined> {
+  const rows = await db
+    .select({
+      post: blogPosts,
+      author: blogAuthors,
+      category: blogCategories,
+    })
+    .from(blogPosts)
+    .leftJoin(blogAuthors, eq(blogPosts.authorId, blogAuthors.id))
+    .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+    .where(
+      and(
+        eq(blogPosts.slug, slug),
+        eq(blogPosts.language, language),
+      ),
+    )
+    .limit(1);
+
+  const [post] = await hydratePosts(rows);
+  return post;
+}
+
 export async function getPostTranslations(
   translationGroupId: string,
 ): Promise<BlogPostWithRelations[]> {

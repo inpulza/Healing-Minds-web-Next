@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import {
   adminBlogFixSchema,
   adminBlogCategorySchema,
+  adminBlogGenerateDraftSchema,
   adminBlogPostSchema,
   adminBlogPostUpdateSchema,
   adminBlogStatusSchema,
@@ -16,6 +17,7 @@ import {
   createBlogTag,
   deleteBlogPost,
   getAdminBlogPosts,
+  getAnyBlogPostBySlug,
   getBlogAuthors,
   getBlogCategories,
   getBlogPostById,
@@ -26,13 +28,16 @@ import {
   type BlogLanguage,
 } from "./storage";
 import { estimateReadingTime, sanitizeBlogContentHtml } from "./sanitize";
+import { assertBlogAiGenerationConfigured, generateBlogDraftWithAi } from "./ai/generator";
+import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { applyDeterministicBlogFix } from "./content-fixes";
 import { buildBlogVerificationReport } from "./verification";
 import { runSeoPublishingCheck } from "../seo/publishing";
+import { getClientIp } from "../utils/client-ip";
 
 function sendValidationError(res: Response, error: unknown): void {
   const requestError = error as { statusCode?: number; message?: string };
-  if (requestError.statusCode && requestError.statusCode >= 400 && requestError.statusCode < 500) {
+  if (requestError.statusCode && requestError.statusCode >= 400 && requestError.statusCode < 600) {
     res.status(requestError.statusCode).json({
       success: false,
       message: requestError.message || "Invalid blog request",
@@ -90,6 +95,37 @@ function parseId(req: Request): number | null {
 
 function normalizeLanguage(value: unknown): BlogLanguage | "all" {
   return value === "en" || value === "es" ? value : "all";
+}
+
+function containsLikelyPatientIdentifier(value: string): boolean {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (!normalized) return false;
+
+  const datePattern = String.raw`(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}[/-]\d{1,2}[/-]\d{1,2}|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+\d{1,2},?\s+\d{2,4})`;
+  const hasEmail = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(normalized);
+  const hasPhone = /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/.test(normalized);
+  const hasSsn = /\b\d{3}[-.\s]?\d{2}[-.\s]?\d{4}\b/.test(normalized);
+  const hasBirthDate = new RegExp(String.raw`\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|fecha de nacimiento|nacimiento)\b.{0,50}\b${datePattern}\b`, "i").test(normalized);
+  const hasMedicalId = /\b(?:mrn|medical record|member id|patient id|record number|chart number|insurance id|policy number|historia clinica|numero de paciente|id de paciente)\b\s*[:#-]?\s*[A-Z0-9-]{4,}\b/i.test(normalized);
+  const namePattern = String.raw`[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}`;
+  const hasExplicitPatientName = new RegExp(String.raw`\b(?:patient|paciente)\s+(?:name\s*)[:#-]?\s*${namePattern}\b`, "i").test(normalized)
+    || new RegExp(String.raw`\b(?:patient|paciente)\s*[:#-]\s*${namePattern}\b`, "i").test(normalized);
+  const hasNamedPatientContext = new RegExp(String.raw`\b(?:patient|paciente)\s+${namePattern}\b.{0,80}\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|diagnosed|diagnosis|medication|prescribed|symptoms|mrn|medical record|member id|patient id)\b`, "i").test(normalized);
+
+  return hasEmail || hasPhone || hasSsn || hasBirthDate || hasMedicalId || hasExplicitPatientName || hasNamedPatientContext;
+}
+
+async function getAvailableBlogSlug(baseSlug: string, language: BlogLanguage): Promise<string> {
+  const normalizedBase = baseSlug || "blog-draft";
+  let candidate = normalizedBase;
+
+  for (let suffix = 2; suffix <= 50; suffix += 1) {
+    const existing = await getAnyBlogPostBySlug(candidate, language);
+    if (!existing) return candidate;
+    candidate = `${normalizedBase}-${suffix}`;
+  }
+
+  return `${normalizedBase}-${Date.now()}`;
 }
 
 function normalizePostPayload(input: unknown) {
@@ -162,6 +198,94 @@ export function registerAdminBlogRoutes(app: Express): void {
       res.status(200).json({ success: true, data: posts });
     } catch (error) {
       sendDbError(res, error);
+    }
+  });
+
+  app.post("/api/admin/blog/generate-draft", async (req, res) => {
+    try {
+      const payload = adminBlogGenerateDraftSchema.parse(req.body);
+      if (containsLikelyPatientIdentifier(payload.additionalContext || "")) {
+        return res.status(400).json({
+          success: false,
+          message: "Additional context must not include patient-identifying information",
+        });
+      }
+
+      assertBlogAiGenerationConfigured();
+
+      const rateLimit = checkBlogAiRateLimit(getClientIp(req));
+      if (!rateLimit.allowed) {
+        if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
+        return res.status(429).json({
+          success: false,
+          message: "Blog AI generation rate limit reached",
+        });
+      }
+
+      const [authors, categories, tags] = await Promise.all([
+        getBlogAuthors(),
+        getBlogCategories(payload.language),
+        getBlogTags(payload.language),
+      ]);
+      const author = authors.find(item => item.id === payload.authorId);
+      const category = categories.find(item => item.id === payload.categoryId);
+      const selectedTags = tags.filter(tag => payload.tagIds.includes(tag.id));
+
+      if (!author) {
+        return res.status(400).json({ success: false, message: "Selected author was not found" });
+      }
+      if (!category) {
+        return res.status(400).json({ success: false, message: "Selected category must match the draft language" });
+      }
+      if (selectedTags.length !== payload.tagIds.length) {
+        return res.status(400).json({ success: false, message: "Selected tags must match the draft language" });
+      }
+
+      const generated = await generateBlogDraftWithAi({
+        topic: payload.topic,
+        additionalContext: payload.additionalContext,
+        targetKeyword: payload.targetKeyword,
+        language: payload.language,
+        categoryName: category.name,
+        tagNames: selectedTags.map(tag => tag.name),
+        internalLinks: payload.internalLinks,
+      });
+
+      const slug = await getAvailableBlogSlug(generated.slug, payload.language);
+      const postPayload = normalizePostPayload({
+        title: generated.title,
+        slug,
+        language: payload.language,
+        translationGroupId: payload.translationGroupId,
+        excerpt: generated.excerpt,
+        content: generated.contentHtml,
+        featuredImage: null,
+        featuredImageAlt: generated.featuredImageAlt || null,
+        authorId: payload.authorId,
+        categoryId: payload.categoryId,
+        status: "draft",
+        isFeatured: false,
+        metaTitle: generated.metaTitle,
+        metaDescription: generated.metaDescription,
+        tagIds: payload.tagIds,
+      });
+
+      const post = await createBlogPost(postPayload);
+      res.status(201).json({
+        success: true,
+        data: post,
+        checks: validatePostForPublish(post),
+        verification: buildBlogVerificationReport(post),
+        ai: {
+          riskNotes: generated.riskNotes,
+        },
+      });
+    } catch (error) {
+      try {
+        sendValidationError(res, error);
+      } catch {
+        sendDbError(res, error);
+      }
     }
   });
 

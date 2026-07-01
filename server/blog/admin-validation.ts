@@ -47,6 +47,18 @@ export const adminBlogFixSchema = z.object({
   fixType: blogFixTypeSchema,
 });
 
+export const adminBlogGenerateDraftSchema = z.object({
+  topic: z.string().trim().min(5).max(180),
+  additionalContext: z.string().trim().max(2000).optional().default(""),
+  targetKeyword: z.string().trim().max(120).optional(),
+  language: languageSchema.default("en"),
+  authorId: z.coerce.number().int().positive(),
+  categoryId: z.coerce.number().int().positive(),
+  tagIds: z.array(z.coerce.number().int().positive()).max(8).default([]),
+  internalLinks: z.array(z.string().trim().regex(/^\/(?!\/)/).max(200)).max(5).default([]),
+  translationGroupId: z.string().uuid().optional(),
+});
+
 export const adminBlogCategorySchema = z.object({
   name: z.string().trim().min(2).max(100),
   slug: z.string().trim().min(2).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),

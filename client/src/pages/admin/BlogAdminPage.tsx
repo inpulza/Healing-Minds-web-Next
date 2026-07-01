@@ -10,6 +10,7 @@ import {
   FilePenLine,
   LogOut,
   Plus,
+  Sparkles,
   Wrench,
   Search,
   ShieldAlert,
@@ -155,6 +156,12 @@ type FixApiResponse = {
   };
 };
 
+type GenerateDraftApiResponse = ApiResponse<BlogPost> & {
+  ai?: {
+    riskNotes: string[];
+  };
+};
+
 type SessionResponse = {
   success: boolean;
   authenticated: boolean;
@@ -178,6 +185,16 @@ type FormState = {
   isFeatured: boolean;
   metaTitle: string;
   metaDescription: string;
+  tagIds: number[];
+};
+
+type GenerateDraftFormState = {
+  topic: string;
+  additionalContext: string;
+  targetKeyword: string;
+  language: BlogLanguage;
+  authorId: string;
+  categoryId: string;
   tagIds: number[];
 };
 
@@ -238,6 +255,20 @@ function createEmptyForm(authors: BlogAuthor[], categories: BlogCategory[]): For
   };
 }
 
+function createGenerateDraftForm(authors: BlogAuthor[], categories: BlogCategory[]): GenerateDraftFormState {
+  const defaultLanguage: BlogLanguage = 'en';
+  const defaultCategory = categories.find(category => category.language === defaultLanguage) || categories[0];
+  return {
+    topic: '',
+    additionalContext: '',
+    targetKeyword: '',
+    language: defaultLanguage,
+    authorId: authors[0]?.id ? String(authors[0].id) : '',
+    categoryId: defaultCategory?.id ? String(defaultCategory.id) : '',
+    tagIds: [],
+  };
+}
+
 function formFromPost(post: BlogPost): FormState {
   return {
     id: post.id,
@@ -255,6 +286,18 @@ function formFromPost(post: BlogPost): FormState {
     metaTitle: post.metaTitle || '',
     metaDescription: post.metaDescription || '',
     tagIds: post.tags.map(tag => tag.id),
+  };
+}
+
+function toGenerateDraftPayload(form: GenerateDraftFormState) {
+  return {
+    topic: form.topic,
+    additionalContext: form.additionalContext || undefined,
+    targetKeyword: form.targetKeyword || undefined,
+    language: form.language,
+    authorId: Number(form.authorId),
+    categoryId: Number(form.categoryId),
+    tagIds: form.tagIds,
   };
 }
 
@@ -294,13 +337,16 @@ export default function BlogAdminPage() {
   const [languageFilter, setLanguageFilter] = useState<BlogLanguage | 'all'>('all');
   const [search, setSearch] = useState('');
   const [editorOpen, setEditorOpen] = useState(false);
+  const [generateOpen, setGenerateOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [form, setForm] = useState<FormState | null>(null);
+  const [generateForm, setGenerateForm] = useState<GenerateDraftFormState | null>(null);
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [checks, setChecks] = useState<PublishCheck[]>([]);
   const [verification, setVerification] = useState<BlogVerificationReport | null>(null);
   const [fixingCheck, setFixingCheck] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [generateError, setGenerateError] = useState<string | null>(null);
 
   const sessionQuery = useQuery<SessionResponse>({
     queryKey: ['/api/admin/session'],
@@ -347,6 +393,14 @@ export default function BlogAdminPage() {
   const availableTags = useMemo(
     () => tags.filter(tag => tag.language === (form?.language || 'en')),
     [tags, form?.language],
+  );
+  const availableGenerateCategories = useMemo(
+    () => categories.filter(category => category.language === (generateForm?.language || 'en')),
+    [categories, generateForm?.language],
+  );
+  const availableGenerateTags = useMemo(
+    () => tags.filter(tag => tag.language === (generateForm?.language || 'en')),
+    [tags, generateForm?.language],
   );
 
   const saveMutation = useMutation({
@@ -446,6 +500,33 @@ export default function BlogAdminPage() {
     onSettled: () => setFixingCheck(null),
   });
 
+  const generateDraftMutation = useMutation({
+    mutationFn: async (currentForm: GenerateDraftFormState) => {
+      const response = await apiRequest('POST', '/api/admin/blog/generate-draft', toGenerateDraftPayload(currentForm));
+      return response.json() as Promise<GenerateDraftApiResponse>;
+    },
+    onSuccess: data => {
+      setForm(formFromPost(data.data));
+      setChecks(data.checks || []);
+      setVerification(data.verification || null);
+      setGenerateOpen(false);
+      setEditorOpen(true);
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
+      queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
+      setGenerateError(null);
+      setActionError(null);
+    },
+    onError: error => {
+      setGenerateError(error instanceof Error ? error.message : 'AI draft generation failed');
+    },
+  });
+
+  const openGenerateDraft = () => {
+    setGenerateForm(createGenerateDraftForm(authors, categories));
+    setGenerateError(null);
+    setGenerateOpen(true);
+  };
+
   const openNewPost = () => {
     setForm(createEmptyForm(authors, categories));
     setChecks([]);
@@ -464,6 +545,15 @@ export default function BlogAdminPage() {
 
   const updateForm = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm(current => current ? { ...current, [key]: value } : current);
+  };
+
+  const updateGenerateForm = <K extends keyof GenerateDraftFormState>(key: K, value: GenerateDraftFormState[K]) => {
+    setGenerateForm(current => current ? { ...current, [key]: value } : current);
+  };
+
+  const generateDraft = () => {
+    if (!generateForm) return;
+    generateDraftMutation.mutate(generateForm);
   };
 
   const saveCurrentForm = () => {
@@ -521,6 +611,10 @@ export default function BlogAdminPage() {
             <Button variant="outline" onClick={logout}>
               <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
               Logout
+            </Button>
+            <Button variant="outline" onClick={openGenerateDraft} disabled={authors.length === 0 || categories.length === 0}>
+              <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
+              AI Generate
             </Button>
             <Button onClick={openNewPost}>
               <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -651,11 +745,146 @@ export default function BlogAdminPage() {
         </section>
       </div>
 
+      <Dialog open={generateOpen} onOpenChange={setGenerateOpen}>
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>AI Article Generator</DialogTitle>
+            <DialogDescription>Create an unpublished draft for editorial review.</DialogDescription>
+          </DialogHeader>
+
+          {generateForm && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="ai-topic">Topic</Label>
+                <Input
+                  id="ai-topic"
+                  value={generateForm.topic}
+                  placeholder="e.g., Anxiety treatment options in Naples"
+                  onChange={event => updateGenerateForm('topic', event.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="ai-keyword">Target keyword</Label>
+                <Input
+                  id="ai-keyword"
+                  value={generateForm.targetKeyword}
+                  placeholder="Optional"
+                  onChange={event => updateGenerateForm('targetKeyword', event.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="ai-context">Additional context</Label>
+                <Textarea
+                  id="ai-context"
+                  value={generateForm.additionalContext}
+                  rows={4}
+                  placeholder="Angle, local focus, or points to include. Do not include patient-identifying information."
+                  onChange={event => updateGenerateForm('additionalContext', event.target.value)}
+                />
+                <p className="text-xs text-slate-500">Do not paste patient names, emails, phone numbers, dates of birth, or private clinical details.</p>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label>Language</Label>
+                  <Select
+                    value={generateForm.language}
+                    onValueChange={value => {
+                      const language = value as BlogLanguage;
+                      const category = categories.find(item => item.language === language);
+                      setGenerateForm(current => current ? {
+                        ...current,
+                        language,
+                        categoryId: category ? String(category.id) : '',
+                        tagIds: [],
+                      } : current);
+                    }}
+                  >
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="es">Spanish</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Author</Label>
+                  <Select value={generateForm.authorId} onValueChange={value => updateGenerateForm('authorId', value)}>
+                    <SelectTrigger><SelectValue placeholder="Select author" /></SelectTrigger>
+                    <SelectContent>
+                      {authors.map(author => (
+                        <SelectItem key={author.id} value={String(author.id)}>{author.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <Select value={generateForm.categoryId} onValueChange={value => updateGenerateForm('categoryId', value)}>
+                  <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                  <SelectContent>
+                    {availableGenerateCategories.map(category => (
+                      <SelectItem key={category.id} value={String(category.id)}>{category.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="rounded-md border border-slate-200 p-4">
+                <h3 className="text-sm font-semibold">Tags</h3>
+                <div className="mt-3 grid max-h-44 gap-2 overflow-auto sm:grid-cols-2">
+                  {availableGenerateTags.map(tag => (
+                    <label key={tag.id} className="flex items-center gap-2 text-sm">
+                      <Checkbox
+                        checked={generateForm.tagIds.includes(tag.id)}
+                        onCheckedChange={checked => {
+                          setGenerateForm(current => {
+                            if (!current) return current;
+                            return {
+                              ...current,
+                              tagIds: checked
+                                ? Array.from(new Set([...current.tagIds, tag.id]))
+                                : current.tagIds.filter(id => id !== tag.id),
+                            };
+                          });
+                        }}
+                      />
+                      {tag.name}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {generateError && (
+            <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {generateError}
+            </div>
+          )}
+
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button variant="outline" onClick={() => setGenerateOpen(false)}>Cancel</Button>
+            <Button
+              onClick={generateDraft}
+              disabled={!generateForm?.topic.trim() || !generateForm.authorId || !generateForm.categoryId || generateDraftMutation.isPending}
+            >
+              {generateDraftMutation.isPending ? 'Generating...' : 'Generate Draft'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
         <DialogContent className="max-h-[92vh] max-w-5xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{form?.id ? 'Edit blog post' : 'New blog post'}</DialogTitle>
-            <DialogDescription>Manual editorial workflow. AI generation is intentionally out of scope for this sprint.</DialogDescription>
+            <DialogDescription>Drafts stay unpublished until human review and publish approval.</DialogDescription>
           </DialogHeader>
 
           {form && (
