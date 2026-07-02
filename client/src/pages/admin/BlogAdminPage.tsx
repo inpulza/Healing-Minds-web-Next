@@ -547,6 +547,8 @@ export default function BlogAdminPage() {
   const sessionQuery = useQuery<SessionResponse>({
     queryKey: ['/api/admin/session'],
     queryFn: () => fetchJson('/api/admin/session'),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 
   const authenticated = Boolean(sessionQuery.data?.authenticated);
@@ -919,6 +921,7 @@ export default function BlogAdminPage() {
 
   const logout = async () => {
     await apiRequest('POST', '/api/admin/logout');
+    await queryClient.invalidateQueries({ queryKey: ['/api/admin/session'] });
     navigate('/admin/login');
   };
 

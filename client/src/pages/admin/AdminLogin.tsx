@@ -4,7 +4,7 @@ import { LogIn, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { apiRequest } from '@/lib/queryClient';
+import { apiRequest, queryClient } from '@/lib/queryClient';
 
 type AdminSession = {
   success: boolean;
@@ -23,7 +23,7 @@ export default function AdminLogin() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    fetch('/api/admin/session', { credentials: 'include' })
+    fetch('/api/admin/session', { credentials: 'include', cache: 'no-store' })
       .then(res => res.json())
       .then((data: AdminSession) => {
         setSession(data);
@@ -39,6 +39,7 @@ export default function AdminLogin() {
 
     try {
       await apiRequest('POST', '/api/admin/login', { username, password });
+      await queryClient.invalidateQueries({ queryKey: ['/api/admin/session'] });
       navigate('/admin/blog');
     } catch (loginError) {
       setError(loginError instanceof Error ? loginError.message : 'Login failed.');

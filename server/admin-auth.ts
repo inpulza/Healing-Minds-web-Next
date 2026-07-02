@@ -1,6 +1,7 @@
 import type { Express, NextFunction, Request, Response } from "express";
 import crypto from "crypto";
 import { getClientIp } from "./utils/client-ip";
+import { isReplitAuthConfigured, logoutReplitSession } from "./replit-auth";
 
 const ADMIN_COOKIE_NAME = "hm_admin_session";
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
@@ -21,8 +22,8 @@ type AdminSessionPayload = {
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 
 function getAdminConfig(): { username: string; passwordVerifier: AdminPasswordVerifier; secret: string } | null {
-  const username = process.env.BLOG_ADMIN_USERNAME;
-  const rawPassword = process.env.BLOG_ADMIN_PASSWORD;
+  const username = process.env.BLOG_ADMIN_USERNAME?.trim();
+  const rawPassword = process.env.BLOG_ADMIN_PASSWORD?.trim();
   const providedHash = process.env.BLOG_ADMIN_PASSWORD_HASH;
   const secret = process.env.BLOG_ADMIN_SESSION_SECRET || process.env.SESSION_SECRET;
 
@@ -54,6 +55,8 @@ function getAllowedReplitAdminEmails(): string[] {
 function getAdminAuthMode(): "off" | "replit" | "custom" {
   const mode = (process.env.BLOG_ADMIN_AUTH_MODE || process.env.ADMIN_AUTH_MODE || "").toLowerCase();
   if ((mode === "off" || mode === "disabled") && !isProductionRuntime()) return "off";
+  if (mode === "custom") return "custom";
+  if (mode === "replit") return "replit";
   if (getAdminConfig()) return "custom";
   return "replit";
 }
@@ -210,7 +213,7 @@ function getReplitUser(req: Request): any | null {
 }
 
 function isAllowedReplitAdmin(user: any): boolean {
-  const email = String(user?.claims?.email || user?.email || "").toLowerCase();
+  const email = String(user?.claims?.email || user?.email || "").trim().toLowerCase();
   if (!email) return false;
 
   const allowedEmails = getAllowedReplitAdminEmails();
@@ -231,7 +234,7 @@ export function isAdminAuthConfigured(): boolean {
   const mode = getAdminAuthMode();
   if (mode === "off") return true;
   if (mode === "custom") return getAdminConfig() !== null;
-  return getAllowedReplitAdminEmails().length > 0;
+  return isReplitAuthConfigured() && getAllowedReplitAdminEmails().length > 0;
 }
 
 export function requireAdmin(req: Request, res: Response, next: NextFunction): void {
@@ -242,6 +245,14 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction): v
   }
 
   if (mode === "replit") {
+    if (!isReplitAuthConfigured()) {
+      res.status(503).json({
+        success: false,
+        message: "Replit Auth is not configured",
+      });
+      return;
+    }
+
     if (getAllowedReplitAdminEmails().length === 0) {
       res.status(503).json({
         success: false,
@@ -295,6 +306,10 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction): v
 
 export function registerAdminAuthRoutes(app: Express): void {
   app.get("/api/admin/session", (req, res) => {
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate");
+    res.set("Pragma", "no-cache");
+    res.set("Expires", "0");
+
     const configured = isAdminAuthConfigured();
     const mode = getAdminAuthMode();
     const replitUser = mode === "replit" ? getReplitUser(req) : null;
@@ -317,6 +332,8 @@ export function registerAdminAuthRoutes(app: Express): void {
   });
 
   app.post("/api/admin/login", (req, res) => {
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate");
+
     const mode = getAdminAuthMode();
     if (mode === "off") {
       return res.status(200).json({
@@ -358,7 +375,7 @@ export function registerAdminAuthRoutes(app: Express): void {
       });
     }
 
-    const usernameOk = safeEqual(username, config.username);
+    const usernameOk = safeEqual(username.trim(), config.username);
     const passwordOk = verifyAdminPassword(password, config.passwordVerifier);
     if (!usernameOk || !passwordOk) {
       recordFailedLogin(rateLimitKey);
@@ -385,8 +402,12 @@ export function registerAdminAuthRoutes(app: Express): void {
     });
   });
 
-  app.post("/api/admin/logout", (_req, res) => {
+  app.post("/api/admin/logout", (req, res) => {
     clearAdminCookie(res);
+    if (getAdminAuthMode() === "replit") {
+      logoutReplitSession(req, res);
+      return;
+    }
     res.status(200).json({ success: true });
   });
 }

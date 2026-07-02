@@ -3,6 +3,7 @@ import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { seedInitialBlogPosts } from "./blog/seed";
+import { setupReplitAuth } from "./replit-auth";
 
 const app = express();
 
@@ -92,6 +93,8 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  await setupReplitAuth(app);
+
   if (process.env.BLOG_SEED_ON_BOOT !== "false") {
     try {
       await seedInitialBlogPosts({
