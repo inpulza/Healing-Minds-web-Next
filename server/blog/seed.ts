@@ -185,8 +185,8 @@ export async function seedInitialBlogPosts(options: SeedBlogOptions = {}): Promi
 <h2>Care can continue by telepsychiatry</h2>
 <p>For patients across Florida, telepsychiatry can make follow-up more consistent after the initial treatment plan is established. Consistency is important because anxiety treatment often improves through measured adjustments, patient feedback, and coordination with therapy or primary care when appropriate.</p>
 <p>This article is educational and is not a substitute for emergency care or individualized medical advice. If you are in immediate danger or thinking about harming yourself, call 911 or go to the nearest emergency room.</p>`,
-    featuredImage: "/doctor-consultation.webp",
-    featuredImageAlt: "Psychiatric consultation at Healing Minds Psychiatry in Naples",
+    featuredImage: "/images/blog/approved/anxiety-treatment.webp",
+    featuredImageAlt: "Calm therapeutic setting representing anxiety treatment support",
     authorId: author.id,
     categoryId: enCategory.id,
     status: "published",
@@ -211,8 +211,8 @@ export async function seedInitialBlogPosts(options: SeedBlogOptions = {}): Promi
 <h2>El cuidado puede continuar por telepsiquiatria</h2>
 <p>Para pacientes en Florida, la telepsiquiatria puede hacer que el seguimiento sea mas constante despues de establecer el plan inicial. La consistencia es importante porque el tratamiento de ansiedad suele mejorar con ajustes medidos, retroalimentacion del paciente y coordinacion con terapia o cuidado primario cuando corresponde.</p>
 <p>Este articulo es educativo y no sustituye la atencion de emergencia ni el consejo medico individual. Si esta en peligro inmediato o piensa hacerse dano, llame al 911 o vaya a la sala de emergencia mas cercana.</p>`,
-    featuredImage: "/doctor-consultation.webp",
-    featuredImageAlt: "Consulta psiquiatrica en Healing Minds Psychiatry en Naples",
+    featuredImage: "/images/blog/approved/anxiety-treatment.webp",
+    featuredImageAlt: "Entorno terapeutico tranquilo que representa apoyo para el tratamiento de ansiedad",
     authorId: author.id,
     categoryId: esCategory.id,
     status: "published",

@@ -1,6 +1,10 @@
 import type { BlogPostWithRelations } from "./storage";
 import { getBlogTags, updateBlogPost, type BlogPostInput } from "./storage";
 import { estimateReadingTime, getPlainTextFromHtml, sanitizeBlogContentHtml } from "./sanitize";
+import {
+  getCuratedFeaturedImageAlt,
+  selectCuratedFeaturedImageForPost,
+} from "./featured-images";
 import { ensureBlogInternalLinks } from "./internal-links";
 import { selectBlogTagIdsForPost } from "./taxonomy";
 import {
@@ -145,6 +149,27 @@ export async function applyDeterministicBlogFix(
         { featuredImageAlt },
         ["featuredImageAlt"],
         "Featured image alt text generated from the article title.",
+      );
+    }
+
+    case "featuredImage": {
+      const featuredImage = selectCuratedFeaturedImageForPost(post);
+      const featuredImageAlt = getCuratedFeaturedImageAlt(featuredImage, post.language);
+      if (post.featuredImage === featuredImage.url && post.featuredImageAlt === featuredImageAlt) {
+        return {
+          success: false,
+          fixType,
+          message: "The article already uses the best matching curated featured image.",
+          changedFields: [],
+        };
+      }
+
+      return updateAndReport(
+        post,
+        fixType,
+        { featuredImage: featuredImage.url, featuredImageAlt },
+        ["featuredImage", "featuredImageAlt"],
+        `Curated featured image selected: ${featuredImage.label}.`,
       );
     }
 

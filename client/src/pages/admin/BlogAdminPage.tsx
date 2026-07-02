@@ -107,6 +107,7 @@ type BlogVerificationFixType =
   | 'metaTitle'
   | 'metaDescription'
   | 'readingTime'
+  | 'featuredImage'
   | 'featuredImageAlt'
   | 'medicalDisclaimer'
   | 'tags'
@@ -1792,6 +1793,15 @@ export default function BlogAdminPage() {
                   <div className="space-y-2">
                     <Label htmlFor="featured-image">Featured image URL</Label>
                     <Input id="featured-image" value={form.featuredImage} onChange={event => updateForm('featuredImage', event.target.value)} />
+                    {form.featuredImage && (
+                      <div className="overflow-hidden rounded-md border border-slate-200 bg-slate-50">
+                        <img
+                          src={form.featuredImage}
+                          alt={form.featuredImageAlt || 'Featured image preview'}
+                          className="aspect-[16/9] w-full object-cover"
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="featured-alt">Featured image alt text</Label>

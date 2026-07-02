@@ -107,6 +107,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         pathname.includes('/blog/') &&
         !pathname.startsWith('/blog/') &&
         !pathname.startsWith('/es/blog/') &&
+        !pathname.startsWith('/images/') &&
         !pathname.startsWith('/api/')
       )
     ) {

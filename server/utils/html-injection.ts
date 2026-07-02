@@ -93,8 +93,14 @@ function getBlogDescription(post: BlogPostWithRelations): string {
   return post.metaDescription || post.excerpt || getBlogPostPlainText(post).slice(0, 160);
 }
 
+function toAbsoluteBlogAssetUrl(baseUrl: string, value?: string | null): string | null {
+  if (!value) return null;
+  if (/^https?:\/\//i.test(value)) return value;
+  return `${baseUrl}${value.startsWith('/') ? value : `/${value}`}`;
+}
+
 function getBlogImage(baseUrl: string, post: BlogPostWithRelations): string {
-  return post.featuredImage || `${baseUrl}/og-image.png`;
+  return toAbsoluteBlogAssetUrl(baseUrl, post.featuredImage) || `${baseUrl}/og-image.png`;
 }
 
 function getPhysicianAuthorSchema(baseUrl: string, author?: BlogPostWithRelations['author']) {
@@ -734,10 +740,18 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         ...(blogPost.featuredImage ? [
           {
             property: 'og:image',
-            content: blogPost.featuredImage,
+            content: getBlogImage(baseUrl, blogPost),
           },
           {
             property: 'og:image:alt',
+            content: blogPost.featuredImageAlt || blogPost.title,
+          },
+          {
+            name: 'twitter:image',
+            content: getBlogImage(baseUrl, blogPost),
+          },
+          {
+            name: 'twitter:image:alt',
             content: blogPost.featuredImageAlt || blogPost.title,
           },
         ] : []),

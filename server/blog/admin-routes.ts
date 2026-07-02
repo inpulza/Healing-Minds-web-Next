@@ -37,6 +37,7 @@ import { buildBlogSemanticMemory } from "./ai/memory";
 import { selectBlogResearchSources } from "./ai/research";
 import { buildBlogTopicPlan, type BlogTopicPlanCandidate } from "./ai/topic-planner";
 import { applyDeterministicBlogFix } from "./content-fixes";
+import { getCuratedFeaturedImageAlt, selectCuratedFeaturedImage } from "./featured-images";
 import { ensureBlogInternalLinks, selectBlogInternalLinks } from "./internal-links";
 import { selectBlogTagIds } from "./taxonomy";
 import { buildBlogVerificationReport } from "./verification";
@@ -338,6 +339,16 @@ async function createGeneratedBlogDraft(
     excerpt: generated.excerpt,
     categoryName: category.name,
   });
+  const featuredImage = selectCuratedFeaturedImage({
+    language: payload.language,
+    title: generated.title,
+    topic: payload.topic,
+    targetKeyword: payload.targetKeyword,
+    excerpt: generated.excerpt,
+    contentHtml: contentWithInternalLinks.contentHtml,
+    categoryName: category.name,
+    tagNames: selectedTags.map(tag => tag.name),
+  });
   const aiRiskNotes = [...generated.riskNotes];
   const autoAddedTagNames = tags
     .filter(tag => finalTagIds.includes(tag.id) && !payload.tagIds.includes(tag.id))
@@ -348,6 +359,13 @@ async function createGeneratedBlogDraft(
   if (contentWithInternalLinks.addedLinks.length > 0) {
     aiRiskNotes.push(`Auto-added internal links for editor review: ${contentWithInternalLinks.addedLinks.join(", ")}.`);
   }
+  aiRiskNotes.push(`Auto-selected curated featured image for editor review: ${featuredImage.label}.`);
+  addWorkflowStep(workflowSteps, {
+    id: "featured-image",
+    label: "Featured image",
+    status: "completed",
+    detail: `${featuredImage.label} selected from the curated Healing Minds image library.`,
+  });
   const postPayload = normalizePostPayload({
     title: generated.title,
     slug,
@@ -355,8 +373,8 @@ async function createGeneratedBlogDraft(
     translationGroupId: payload.translationGroupId,
     excerpt: generated.excerpt,
     content: contentWithInternalLinks.contentHtml,
-    featuredImage: null,
-    featuredImageAlt: generated.featuredImageAlt || null,
+    featuredImage: featuredImage.url,
+    featuredImageAlt: getCuratedFeaturedImageAlt(featuredImage, payload.language),
     authorId: payload.authorId,
     categoryId: payload.categoryId,
     status: "draft",

@@ -9,6 +9,7 @@ export type BlogVerificationFixType =
   | "metaTitle"
   | "metaDescription"
   | "readingTime"
+  | "featuredImage"
   | "featuredImageAlt"
   | "medicalDisclaimer"
   | "tags"
@@ -191,7 +192,8 @@ export function buildBlogVerificationReport(post: BlogPostWithRelations): BlogVe
       label: "Featured image",
       ok: Boolean(post.featuredImage),
       severity: "warning",
-      message: "The article can publish without an image, but future AI image generation should fill this.",
+      message: "The article can publish without an image, but a curated featured image improves the blog index and social preview.",
+      fixType: "featuredImage",
     },
     {
       id: "medicalDisclaimer",

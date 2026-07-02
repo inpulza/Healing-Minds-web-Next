@@ -12,6 +12,7 @@ const blogFixTypeSchema = z.enum([
   "metaTitle",
   "metaDescription",
   "readingTime",
+  "featuredImage",
   "featuredImageAlt",
   "medicalDisclaimer",
   "tags",
