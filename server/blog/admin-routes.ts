@@ -777,14 +777,26 @@ export function registerAdminBlogRoutes(app: Express): void {
       const post = await getBlogPostById(id);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
       if (post.status === "published") {
-        return res.status(400).json({
-          success: false,
-          message: "Published posts must be moved to draft before deletion",
-        });
+        const confirmPublishedDelete = req.body?.confirmPublishedDelete === true;
+        const confirmSlug = typeof req.body?.confirmSlug === "string" ? req.body.confirmSlug.trim() : "";
+        if (!confirmPublishedDelete || confirmSlug !== post.slug) {
+          return res.status(400).json({
+            success: false,
+            message: "Published post deletion requires confirmation with the exact post slug",
+          });
+        }
       }
 
       await deleteBlogPost(id);
-      res.status(200).json({ success: true });
+      res.status(200).json({
+        success: true,
+        data: {
+          deletedPostId: id,
+          deletedSlug: post.slug,
+          deletedStatus: post.status,
+          publicPath: getBlogPostPath(post),
+        },
+      });
     } catch (error) {
       sendDbError(res, error);
     }
