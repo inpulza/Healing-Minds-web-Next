@@ -1,6 +1,7 @@
 import type { Express, Request, Response } from "express";
-import { ZodError } from "zod";
+import { ZodError, type z } from "zod";
 import {
+  adminBlogAutoGenerateSchema,
   adminBlogFixSchema,
   adminBlogCategorySchema,
   adminBlogGenerateDraftSchema,
@@ -34,7 +35,7 @@ import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { buildBlogEditorialBrief } from "./ai/editorial-brief";
 import { buildBlogSemanticMemory } from "./ai/memory";
 import { selectBlogResearchSources } from "./ai/research";
-import { buildBlogTopicPlan } from "./ai/topic-planner";
+import { buildBlogTopicPlan, type BlogTopicPlanCandidate } from "./ai/topic-planner";
 import { applyDeterministicBlogFix } from "./content-fixes";
 import { ensureBlogInternalLinks, selectBlogInternalLinks } from "./internal-links";
 import { selectBlogTagIds } from "./taxonomy";
@@ -170,6 +171,229 @@ function normalizePostUpdatePayload(input: unknown) {
   };
 }
 
+type AdminBlogGenerateDraftPayload = z.infer<typeof adminBlogGenerateDraftSchema>;
+
+type BlogGenerationWorkflowStep = {
+  id: string;
+  label: string;
+  status: "completed";
+  detail?: string;
+};
+
+type BlogGenerationWorkflow = {
+  mode: "manual" | "auto-generate";
+  generatedAt: string;
+  selectedCandidate?: BlogTopicPlanCandidate;
+  topicPlan?: Awaited<ReturnType<typeof buildBlogTopicPlan>>;
+  steps: BlogGenerationWorkflowStep[];
+};
+
+function addWorkflowStep(
+  steps: BlogGenerationWorkflowStep[] | undefined,
+  step: BlogGenerationWorkflowStep,
+): void {
+  steps?.push(step);
+}
+
+async function createGeneratedBlogDraft(
+  payload: AdminBlogGenerateDraftPayload,
+  workflowSteps?: BlogGenerationWorkflowStep[],
+) {
+  const [authors, categories, tags] = await Promise.all([
+    getBlogAuthors(),
+    getBlogCategories(payload.language),
+    getBlogTags(payload.language),
+  ]);
+  const author = authors.find(item => item.id === payload.authorId);
+  const category = categories.find(item => item.id === payload.categoryId);
+  const requestedTags = tags.filter(tag => payload.tagIds.includes(tag.id));
+
+  if (!author) {
+    throw Object.assign(new Error("Selected author was not found"), { statusCode: 400 });
+  }
+  if (!category) {
+    throw Object.assign(new Error("Selected category must match the draft language"), { statusCode: 400 });
+  }
+  if (requestedTags.length !== payload.tagIds.length) {
+    throw Object.assign(new Error("Selected tags must match the draft language"), { statusCode: 400 });
+  }
+
+  addWorkflowStep(workflowSteps, {
+    id: "editorial-context",
+    label: "Editorial context",
+    status: "completed",
+    detail: `${author.name}; ${category.name}; ${requestedTags.length} requested tag${requestedTags.length === 1 ? "" : "s"}.`,
+  });
+
+  const promptTagIds = selectBlogTagIds({
+    language: payload.language,
+    availableTags: tags,
+    existingTagIds: payload.tagIds,
+    topic: payload.topic,
+    targetKeyword: payload.targetKeyword,
+    excerpt: payload.additionalContext,
+    categoryName: category.name,
+  });
+  const selectedTags = tags.filter(tag => promptTagIds.includes(tag.id));
+  const selectedInternalLinks = selectBlogInternalLinks({
+    language: payload.language,
+    requestedLinks: payload.internalLinks,
+    topic: payload.topic,
+    targetKeyword: payload.targetKeyword,
+    categoryName: category.name,
+  });
+
+  addWorkflowStep(workflowSteps, {
+    id: "taxonomy-links",
+    label: "Taxonomy and internal links",
+    status: "completed",
+    detail: `${selectedTags.length} tag${selectedTags.length === 1 ? "" : "s"} selected; ${selectedInternalLinks.length} internal link${selectedInternalLinks.length === 1 ? "" : "s"} selected.`,
+  });
+
+  const research = selectBlogResearchSources({
+    topic: payload.topic,
+    additionalContext: payload.additionalContext,
+    targetKeyword: payload.targetKeyword,
+    language: payload.language,
+    categoryName: category.name,
+    tagNames: selectedTags.map(tag => tag.name),
+    internalLinks: selectedInternalLinks,
+  });
+  addWorkflowStep(workflowSteps, {
+    id: "trusted-research",
+    label: "Trusted research",
+    status: "completed",
+    detail: `${research.sources.length} allowlisted source${research.sources.length === 1 ? "" : "s"}; confidence ${research.confidence}.`,
+  });
+
+  const semanticMemory = await buildBlogSemanticMemory({
+    topic: payload.topic,
+    targetKeyword: payload.targetKeyword,
+    language: payload.language,
+    categoryName: category.name,
+    tagNames: selectedTags.map(tag => tag.name),
+  });
+  addWorkflowStep(workflowSteps, {
+    id: "semantic-memory",
+    label: "Semantic memory",
+    status: "completed",
+    detail: `${semanticMemory.recommendation.replace(/_/g, " ")}; ${semanticMemory.matches.length} possible overlap match${semanticMemory.matches.length === 1 ? "" : "es"}.`,
+  });
+
+  const editorialBrief = buildBlogEditorialBrief({
+    topic: payload.topic,
+    additionalContext: payload.additionalContext,
+    targetKeyword: payload.targetKeyword,
+    language: payload.language,
+    categoryName: category.name,
+    tagNames: selectedTags.map(tag => tag.name),
+    internalLinks: selectedInternalLinks,
+    researchSources: research.sources,
+    semanticMemory,
+  });
+  addWorkflowStep(workflowSteps, {
+    id: "editorial-brief",
+    label: "Editorial brief",
+    status: "completed",
+    detail: `${editorialBrief.requiredSections.length} required section${editorialBrief.requiredSections.length === 1 ? "" : "s"}; target ${editorialBrief.targetWordCount} words.`,
+  });
+
+  const generated = await generateBlogDraftWithAi({
+    topic: payload.topic,
+    additionalContext: payload.additionalContext,
+    targetKeyword: payload.targetKeyword,
+    language: payload.language,
+    categoryName: category.name,
+    tagNames: selectedTags.map(tag => tag.name),
+    internalLinks: selectedInternalLinks,
+    researchSources: research.sources,
+    semanticMemory,
+    editorialBrief,
+  });
+  addWorkflowStep(workflowSteps, {
+    id: "ai-draft",
+    label: "AI draft",
+    status: "completed",
+    detail: generated.title,
+  });
+
+  const slug = await getAvailableBlogSlug(generated.slug, payload.language);
+  const finalTagIds = selectBlogTagIds({
+    language: payload.language,
+    availableTags: tags,
+    existingTagIds: promptTagIds,
+    topic: payload.topic,
+    targetKeyword: payload.targetKeyword,
+    title: generated.title,
+    excerpt: generated.excerpt,
+    contentHtml: generated.contentHtml,
+    categoryName: category.name,
+  });
+  const contentWithInternalLinks = ensureBlogInternalLinks(generated.contentHtml, {
+    language: payload.language,
+    requestedLinks: selectedInternalLinks,
+    topic: payload.topic,
+    targetKeyword: payload.targetKeyword,
+    title: generated.title,
+    excerpt: generated.excerpt,
+    categoryName: category.name,
+  });
+  const aiRiskNotes = [...generated.riskNotes];
+  const autoAddedTagNames = tags
+    .filter(tag => finalTagIds.includes(tag.id) && !payload.tagIds.includes(tag.id))
+    .map(tag => tag.name);
+  if (autoAddedTagNames.length > 0) {
+    aiRiskNotes.push(`Auto-selected topic tags for editor review: ${autoAddedTagNames.join(", ")}.`);
+  }
+  if (contentWithInternalLinks.addedLinks.length > 0) {
+    aiRiskNotes.push(`Auto-added internal links for editor review: ${contentWithInternalLinks.addedLinks.join(", ")}.`);
+  }
+  const postPayload = normalizePostPayload({
+    title: generated.title,
+    slug,
+    language: payload.language,
+    translationGroupId: payload.translationGroupId,
+    excerpt: generated.excerpt,
+    content: contentWithInternalLinks.contentHtml,
+    featuredImage: null,
+    featuredImageAlt: generated.featuredImageAlt || null,
+    authorId: payload.authorId,
+    categoryId: payload.categoryId,
+    status: "draft",
+    isFeatured: false,
+    metaTitle: generated.metaTitle,
+    metaDescription: generated.metaDescription,
+    tagIds: finalTagIds,
+  });
+
+  const post = await createBlogPost(postPayload);
+  const verification = buildBlogVerificationReport(post);
+  addWorkflowStep(workflowSteps, {
+    id: "sanitize-save",
+    label: "Sanitize and save",
+    status: "completed",
+    detail: `Draft ${post.id} saved with status ${post.status}; publishedAt remains empty.`,
+  });
+  addWorkflowStep(workflowSteps, {
+    id: "verify",
+    label: "Verification",
+    status: "completed",
+    detail: `${verification.score}% score; ${verification.blocking.length} blocker${verification.blocking.length === 1 ? "" : "s"}.`,
+  });
+
+  return {
+    data: post,
+    checks: validatePostForPublish(post),
+    verification,
+    ai: {
+      riskNotes: aiRiskNotes,
+      research,
+      semanticMemory,
+      editorialBrief,
+    },
+  };
+}
+
 function runPostPublishCheckInBackground(path: string): void {
   if (process.env.SEO_PUBLISHING_HOOK_ENABLED === "false") return;
 
@@ -245,6 +469,105 @@ export function registerAdminBlogRoutes(app: Express): void {
     }
   });
 
+  app.post("/api/admin/blog/auto-generate", async (req, res) => {
+    try {
+      const payload = adminBlogAutoGenerateSchema.parse(req.body);
+      if (containsLikelyPatientIdentifier(payload.focus || "")) {
+        return res.status(400).json({
+          success: false,
+          message: "Auto generation inputs must not include patient-identifying information",
+        });
+      }
+
+      assertBlogAiGenerationConfigured();
+
+      const rateLimit = checkBlogAiRateLimit(getClientIp(req));
+      if (!rateLimit.allowed) {
+        if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
+        return res.status(429).json({
+          success: false,
+          message: "Blog AI generation rate limit reached",
+        });
+      }
+
+      const workflowSteps: BlogGenerationWorkflowStep[] = [];
+      const [authors, categories, tags] = await Promise.all([
+        getBlogAuthors(),
+        getBlogCategories(payload.language),
+        getBlogTags(payload.language),
+      ]);
+      const author = authors.find(item => item.id === payload.authorId);
+      if (!author) {
+        return res.status(400).json({ success: false, message: "Selected author was not found" });
+      }
+      if (payload.categoryId && !categories.some(category => category.id === payload.categoryId)) {
+        return res.status(400).json({ success: false, message: "Selected category must match the auto generation language" });
+      }
+
+      const topicPlan = await buildBlogTopicPlan({
+        language: payload.language,
+        categories,
+        tags,
+        categoryId: payload.categoryId,
+        focus: payload.focus,
+        limit: payload.limit,
+      });
+      addWorkflowStep(workflowSteps, {
+        id: "topic-plan",
+        label: "Topic plan",
+        status: "completed",
+        detail: `${topicPlan.summary.returned} candidate${topicPlan.summary.returned === 1 ? "" : "s"}; ${topicPlan.summary.recommended} recommended.`,
+      });
+
+      const selectedCandidate = topicPlan.candidates.find(candidate => candidate.recommendation === "recommended");
+      const baseWorkflow: BlogGenerationWorkflow = {
+        mode: "auto-generate",
+        generatedAt: new Date().toISOString(),
+        selectedCandidate,
+        topicPlan,
+        steps: workflowSteps,
+      };
+
+      if (!selectedCandidate) {
+        return res.status(409).json({
+          success: false,
+          message: "No low-overlap topic was safe for Auto Generate. Use Plan Topics and select a manual angle.",
+          workflow: baseWorkflow,
+        });
+      }
+
+      addWorkflowStep(workflowSteps, {
+        id: "topic-selection",
+        label: "Topic selection",
+        status: "completed",
+        detail: `${selectedCandidate.topic}; overlap ${Math.round(selectedCandidate.overlapScore * 100)}%; score ${selectedCandidate.score}.`,
+      });
+
+      const result = await createGeneratedBlogDraft({
+        topic: selectedCandidate.topic,
+        additionalContext: selectedCandidate.angle,
+        targetKeyword: selectedCandidate.targetKeyword,
+        language: selectedCandidate.language,
+        authorId: payload.authorId,
+        categoryId: selectedCandidate.categoryId,
+        tagIds: selectedCandidate.tagIds,
+        internalLinks: selectedCandidate.internalLinks,
+      }, workflowSteps);
+
+      res.status(201).json({
+        success: true,
+        ...result,
+        workflow: baseWorkflow,
+      });
+    } catch (error) {
+      try {
+        sendValidationError(res, error);
+      } catch {
+        sendDbError(res, error);
+      }
+    }
+  });
+
   app.post("/api/admin/blog/generate-draft", async (req, res) => {
     try {
       const payload = adminBlogGenerateDraftSchema.parse(req.body);
@@ -269,145 +592,10 @@ export function registerAdminBlogRoutes(app: Express): void {
         });
       }
 
-      const [authors, categories, tags] = await Promise.all([
-        getBlogAuthors(),
-        getBlogCategories(payload.language),
-        getBlogTags(payload.language),
-      ]);
-      const author = authors.find(item => item.id === payload.authorId);
-      const category = categories.find(item => item.id === payload.categoryId);
-      const requestedTags = tags.filter(tag => payload.tagIds.includes(tag.id));
-
-      if (!author) {
-        return res.status(400).json({ success: false, message: "Selected author was not found" });
-      }
-      if (!category) {
-        return res.status(400).json({ success: false, message: "Selected category must match the draft language" });
-      }
-      if (requestedTags.length !== payload.tagIds.length) {
-        return res.status(400).json({ success: false, message: "Selected tags must match the draft language" });
-      }
-
-      const promptTagIds = selectBlogTagIds({
-        language: payload.language,
-        availableTags: tags,
-        existingTagIds: payload.tagIds,
-        topic: payload.topic,
-        targetKeyword: payload.targetKeyword,
-        excerpt: payload.additionalContext,
-        categoryName: category.name,
-      });
-      const selectedTags = tags.filter(tag => promptTagIds.includes(tag.id));
-      const selectedInternalLinks = selectBlogInternalLinks({
-        language: payload.language,
-        requestedLinks: payload.internalLinks,
-        topic: payload.topic,
-        targetKeyword: payload.targetKeyword,
-        categoryName: category.name,
-      });
-
-      const research = selectBlogResearchSources({
-        topic: payload.topic,
-        additionalContext: payload.additionalContext,
-        targetKeyword: payload.targetKeyword,
-        language: payload.language,
-        categoryName: category.name,
-        tagNames: selectedTags.map(tag => tag.name),
-        internalLinks: selectedInternalLinks,
-      });
-      const semanticMemory = await buildBlogSemanticMemory({
-        topic: payload.topic,
-        targetKeyword: payload.targetKeyword,
-        language: payload.language,
-        categoryName: category.name,
-        tagNames: selectedTags.map(tag => tag.name),
-      });
-      const editorialBrief = buildBlogEditorialBrief({
-        topic: payload.topic,
-        additionalContext: payload.additionalContext,
-        targetKeyword: payload.targetKeyword,
-        language: payload.language,
-        categoryName: category.name,
-        tagNames: selectedTags.map(tag => tag.name),
-        internalLinks: selectedInternalLinks,
-        researchSources: research.sources,
-        semanticMemory,
-      });
-
-      const generated = await generateBlogDraftWithAi({
-        topic: payload.topic,
-        additionalContext: payload.additionalContext,
-        targetKeyword: payload.targetKeyword,
-        language: payload.language,
-        categoryName: category.name,
-        tagNames: selectedTags.map(tag => tag.name),
-        internalLinks: selectedInternalLinks,
-        researchSources: research.sources,
-        semanticMemory,
-        editorialBrief,
-      });
-
-      const slug = await getAvailableBlogSlug(generated.slug, payload.language);
-      const finalTagIds = selectBlogTagIds({
-        language: payload.language,
-        availableTags: tags,
-        existingTagIds: promptTagIds,
-        topic: payload.topic,
-        targetKeyword: payload.targetKeyword,
-        title: generated.title,
-        excerpt: generated.excerpt,
-        contentHtml: generated.contentHtml,
-        categoryName: category.name,
-      });
-      const contentWithInternalLinks = ensureBlogInternalLinks(generated.contentHtml, {
-        language: payload.language,
-        requestedLinks: selectedInternalLinks,
-        topic: payload.topic,
-        targetKeyword: payload.targetKeyword,
-        title: generated.title,
-        excerpt: generated.excerpt,
-        categoryName: category.name,
-      });
-      const aiRiskNotes = [...generated.riskNotes];
-      const autoAddedTagNames = tags
-        .filter(tag => finalTagIds.includes(tag.id) && !payload.tagIds.includes(tag.id))
-        .map(tag => tag.name);
-      if (autoAddedTagNames.length > 0) {
-        aiRiskNotes.push(`Auto-selected topic tags for editor review: ${autoAddedTagNames.join(", ")}.`);
-      }
-      if (contentWithInternalLinks.addedLinks.length > 0) {
-        aiRiskNotes.push(`Auto-added internal links for editor review: ${contentWithInternalLinks.addedLinks.join(", ")}.`);
-      }
-      const postPayload = normalizePostPayload({
-        title: generated.title,
-        slug,
-        language: payload.language,
-        translationGroupId: payload.translationGroupId,
-        excerpt: generated.excerpt,
-        content: contentWithInternalLinks.contentHtml,
-        featuredImage: null,
-        featuredImageAlt: generated.featuredImageAlt || null,
-        authorId: payload.authorId,
-        categoryId: payload.categoryId,
-        status: "draft",
-        isFeatured: false,
-        metaTitle: generated.metaTitle,
-        metaDescription: generated.metaDescription,
-        tagIds: finalTagIds,
-      });
-
-      const post = await createBlogPost(postPayload);
+      const result = await createGeneratedBlogDraft(payload);
       res.status(201).json({
         success: true,
-        data: post,
-        checks: validatePostForPublish(post),
-        verification: buildBlogVerificationReport(post),
-        ai: {
-          riskNotes: aiRiskNotes,
-          research,
-          semanticMemory,
-          editorialBrief,
-        },
+        ...result,
       });
     } catch (error) {
       try {

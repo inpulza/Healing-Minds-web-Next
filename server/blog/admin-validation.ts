@@ -69,6 +69,14 @@ export const adminBlogTopicPlannerSchema = z.object({
   limit: z.coerce.number().int().min(1).max(8).optional().default(5),
 });
 
+export const adminBlogAutoGenerateSchema = z.object({
+  language: languageSchema.default("en"),
+  authorId: z.coerce.number().int().positive(),
+  categoryId: z.coerce.number().int().positive().optional(),
+  focus: z.string().trim().max(500).optional().default(""),
+  limit: z.coerce.number().int().min(1).max(8).optional().default(5),
+});
+
 export const adminBlogCategorySchema = z.object({
   name: z.string().trim().min(2).max(100),
   slug: z.string().trim().min(2).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
