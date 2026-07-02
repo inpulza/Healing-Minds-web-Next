@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link, useRoute } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
-import { ArrowLeft, Calendar, Clock, Phone, Tag } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, List, Phone, Tag } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -35,6 +35,19 @@ type BlogPostResponse = {
   success: boolean;
   data: BlogPostDetail;
 };
+
+type BlogListResponse = {
+  success: boolean;
+  data: BlogPostDetail[];
+};
+
+type TocHeading = {
+  id: string;
+  text: string;
+  level: 2 | 3;
+};
+
+const DOMPURIFY_NAMED_PROP_PREFIX = 'user-content-';
 
 declare global {
   interface Window {
@@ -70,9 +83,55 @@ function formatDate(date: string | null, language: BlogLanguage): string {
 function sanitizeClientBlogHtml(html: string): string {
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a', 'blockquote'],
-    ALLOWED_ATTR: ['href', 'target', 'rel'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'id'],
     ALLOW_DATA_ATTR: false,
+    SANITIZE_NAMED_PROPS: true,
   });
+}
+
+function slugifyHeading(text: string, fallback: string): string {
+  const slug = text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, 64);
+
+  return slug || fallback;
+}
+
+function prepareBlogArticleHtml(html: string): { content: string; headings: TocHeading[] } {
+  if (typeof DOMParser === 'undefined') {
+    return { content: sanitizeClientBlogHtml(html), headings: [] };
+  }
+
+  const parser = new DOMParser();
+  const safeHtml = sanitizeClientBlogHtml(html);
+  const doc = parser.parseFromString(safeHtml, 'text/html');
+  const usedIds = new Map<string, number>();
+  const headings: TocHeading[] = [];
+
+  doc.querySelectorAll('h2, h3').forEach((heading, index) => {
+    const text = heading.textContent?.trim() || '';
+    if (!text) return;
+
+    const baseId = heading.id || slugifyHeading(text, `section-${index + 1}`);
+    const count = usedIds.get(baseId) || 0;
+    const rawId = count > 0 ? `${baseId}-${count}` : baseId;
+    const id = rawId.startsWith(DOMPURIFY_NAMED_PROP_PREFIX)
+      ? rawId
+      : `${DOMPURIFY_NAMED_PROP_PREFIX}${rawId}`;
+    usedIds.set(baseId, count + 1);
+    heading.id = id;
+    headings.push({ id, text, level: heading.tagName.toLowerCase() === 'h3' ? 3 : 2 });
+  });
+
+  return {
+    content: sanitizeClientBlogHtml(doc.body.innerHTML),
+    headings,
+  };
 }
 
 const copy = {
@@ -80,6 +139,8 @@ const copy = {
     back: 'Back to Blog',
     notFound: 'Article not found.',
     loadError: 'This article could not load right now.',
+    contents: 'Contents',
+    related: 'Related Articles',
     fallbackCategory: 'Mental Health',
     minuteLabel: 'min read',
     ctaTitle: 'Need psychiatric care in Naples or by telehealth in Florida?',
@@ -91,6 +152,8 @@ const copy = {
     back: 'Volver al Blog',
     notFound: 'Articulo no encontrado.',
     loadError: 'Este articulo no pudo cargar ahora.',
+    contents: 'Contenido',
+    related: 'Articulos Relacionados',
     fallbackCategory: 'Salud Mental',
     minuteLabel: 'min lectura',
     ctaTitle: 'Necesita atencion psiquiatrica en Naples o por telehealth en Florida?',
@@ -116,6 +179,34 @@ const BlogPost = () => {
   });
 
   const post = data?.data;
+  const { content: processedContent, headings } = useMemo(
+    () => prepareBlogArticleHtml(post?.content || ''),
+    [post?.content],
+  );
+  const showToc = headings.length >= 3;
+
+  const relatedQuery = useQuery<BlogListResponse>({
+    queryKey: [`/api/blog/posts/related/${slug}?language=${language}&category=${post?.category?.slug || ''}`],
+    enabled: Boolean(post),
+    queryFn: async () => {
+      const categoryParam = post?.category?.slug ? `&category=${encodeURIComponent(post.category.slug)}` : '';
+      const categoryResponse = await fetch(`/api/blog/posts?language=${language}${categoryParam}&limit=4`);
+      const categoryData = categoryResponse.ok ? await categoryResponse.json() as BlogListResponse : { success: false, data: [] };
+      let related = categoryData.data.filter(item => item.slug !== slug);
+
+      if (related.length < 3) {
+        const recentResponse = await fetch(`/api/blog/posts?language=${language}&limit=6`);
+        const recentData = recentResponse.ok ? await recentResponse.json() as BlogListResponse : { success: false, data: [] };
+        const fallback = recentData.data.filter(item =>
+          item.slug !== slug && !related.some(existing => existing.id === item.id),
+        );
+        related = [...related, ...fallback];
+      }
+
+      return { success: true, data: related.slice(0, 3) };
+    },
+  });
+  const relatedPosts = relatedQuery.data?.data ?? [];
 
   useEffect(() => {
     setLanguage(language);
@@ -208,51 +299,119 @@ const BlogPost = () => {
               </div>
             </section>
 
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
               <img
                 src={post.featuredImage || doctorConsultation}
                 alt={post.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
-                className="w-full aspect-[16/9] object-cover rounded-lg mb-10"
+                className="mx-auto w-full max-w-4xl aspect-[16/9] object-cover rounded-lg mb-10"
               />
 
-              <div
-                className="prose prose-lg prose-green max-w-none prose-headings:font-body prose-headings:text-green-950 prose-p:text-gray-700 prose-p:leading-8 prose-a:text-green-800"
-                dangerouslySetInnerHTML={{ __html: sanitizeClientBlogHtml(post.content || '') }}
-              />
-
-              <div className="mt-12 pt-8 border-t border-green-100">
-                {post.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {post.tags.map(tag => (
-                      <span key={tag.slug} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-50 text-green-800 text-sm font-medium">
-                        <Tag className="w-3 h-3" />
-                        {tag.name}
-                      </span>
+              {showToc && (
+                <nav className="mb-8 rounded-lg bg-green-50 p-4 lg:hidden" aria-label={text.contents}>
+                  <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-green-950">
+                    <List className="h-4 w-4" />
+                    {text.contents}
+                  </div>
+                  <ul className="space-y-2">
+                    {headings.map(heading => (
+                      <li key={heading.id} className={heading.level === 3 ? 'pl-4' : ''}>
+                        <a href={`#${heading.id}`} className="text-sm text-gray-700 hover:text-green-800">
+                          {heading.text}
+                        </a>
+                      </li>
                     ))}
-                  </div>
-                )}
+                  </ul>
+                </nav>
+              )}
 
-                <Card className="p-6 sm:p-8 rounded-lg border-green-100 bg-green-50">
-                  <h2 className="text-2xl font-body font-bold text-green-950 mb-3">
-                    {text.ctaTitle}
-                  </h2>
-                  <p className="text-gray-700 leading-relaxed mb-5">
-                    {text.ctaBody}
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Link href={text.contactPath}>
-                      <Button className="bg-green-800 hover:bg-green-700 text-white rounded-full px-6">
-                        {text.ctaButton}
-                      </Button>
-                    </Link>
-                    <a href="tel:+12394230272">
-                      <Button variant="outline" className="border-green-800 text-green-800 hover:bg-white rounded-full px-6">
-                        <Phone className="w-4 h-4 mr-2" />
-                        (239) 423-0272
-                      </Button>
-                    </a>
+              <div className="grid gap-12 lg:grid-cols-[minmax(0,760px)_240px] lg:justify-center">
+                <div>
+                  <div
+                    className="blog-article"
+                    dangerouslySetInnerHTML={{ __html: processedContent }}
+                  />
+
+                  <div className="mt-12 pt-8 border-t border-green-100">
+                    {post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {post.tags.map(tag => (
+                          <span key={tag.slug} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-50 text-green-800 text-sm font-medium">
+                            <Tag className="w-3 h-3" />
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <Card className="p-6 sm:p-8 rounded-lg border-green-100 bg-green-50">
+                      <h2 className="text-2xl font-body font-bold text-green-950 mb-3">
+                        {text.ctaTitle}
+                      </h2>
+                      <p className="text-gray-700 leading-relaxed mb-5">
+                        {text.ctaBody}
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Link href={text.contactPath}>
+                          <Button className="bg-green-800 hover:bg-green-700 text-white rounded-full px-6">
+                            {text.ctaButton}
+                          </Button>
+                        </Link>
+                        <a href="tel:+12394230272">
+                          <Button variant="outline" className="border-green-800 text-green-800 hover:bg-white rounded-full px-6">
+                            <Phone className="w-4 h-4 mr-2" />
+                            (239) 423-0272
+                          </Button>
+                        </a>
+                      </div>
+                    </Card>
                   </div>
-                </Card>
+
+                  {relatedPosts.length > 0 && (
+                    <section className="mt-14" aria-labelledby="related-articles-heading">
+                      <h2 id="related-articles-heading" className="mb-6 text-2xl font-body font-bold text-green-950">
+                        {text.related}
+                      </h2>
+                      <div className="grid gap-5 sm:grid-cols-3">
+                        {relatedPosts.map(related => (
+                          <Link key={related.id} href={getBlogPostPath(related)} className="group block">
+                            <img
+                              src={related.featuredImage || doctorConsultation}
+                              alt={related.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
+                              className="mb-3 aspect-[4/3] w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                              loading="lazy"
+                            />
+                            <p className="mb-1 text-xs font-semibold text-green-800">
+                              {related.category?.name || text.fallbackCategory}
+                            </p>
+                            <h3 className="text-base font-body font-bold leading-snug text-green-950 transition-colors group-hover:text-green-700">
+                              {related.title}
+                            </h3>
+                          </Link>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+                </div>
+
+                {showToc && (
+                  <aside className="hidden lg:block">
+                    <nav className="sticky top-28 rounded-lg bg-green-50 p-4" aria-label={text.contents}>
+                      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-green-950">
+                        <List className="h-4 w-4" />
+                        {text.contents}
+                      </div>
+                      <ul className="space-y-2">
+                        {headings.map(heading => (
+                          <li key={heading.id} className={heading.level === 3 ? 'pl-4' : ''}>
+                            <a href={`#${heading.id}`} className="text-sm leading-snug text-gray-700 hover:text-green-800">
+                              {heading.text}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </nav>
+                  </aside>
+                )}
               </div>
             </div>
           </article>

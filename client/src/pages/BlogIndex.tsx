@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, BookOpen, Calendar, Clock } from 'lucide-react';
@@ -23,6 +23,7 @@ type BlogPostListItem = {
   publishedAt: string | null;
   featuredImage: string | null;
   featuredImageAlt: string | null;
+  isFeatured: boolean;
 };
 
 type BlogListResponse = {
@@ -57,6 +58,8 @@ const copy = {
     empty: 'No articles are published yet.',
     error: 'The blog could not load right now. Please refresh the page or contact the office if the issue continues.',
     read: 'Read Article',
+    allPosts: 'All Articles',
+    featured: 'Featured',
     minuteLabel: 'min',
     fallbackCategory: 'Mental Health',
   },
@@ -69,6 +72,8 @@ const copy = {
     empty: 'Todavia no hay articulos publicados.',
     error: 'El blog no pudo cargar ahora. Actualice la pagina o contacte la oficina si el problema continua.',
     read: 'Leer Articulo',
+    allPosts: 'Todos los Articulos',
+    featured: 'Destacado',
     minuteLabel: 'min',
     fallbackCategory: 'Salud Mental',
   },
@@ -78,6 +83,7 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
   const { setLanguage } = useLanguage();
   const text = copy[language];
   const blogPath = language === 'es' ? '/es/blog' : '/blog';
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const { data, isLoading, isError } = useQuery<BlogListResponse>({
     queryKey: [`/api/blog/posts?language=${language}`],
@@ -94,6 +100,20 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
   }, [blogPath, language, setLanguage, text.seoDescription, text.seoTitle]);
 
   const posts = data?.data ?? [];
+  const categories = useMemo(() => {
+    const map = new Map<string, { name: string; slug: string }>();
+    posts.forEach(post => {
+      if (post.category?.slug) {
+        map.set(post.category.slug, post.category);
+      }
+    });
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [posts]);
+  const visiblePosts = selectedCategory
+    ? posts.filter(post => post.category?.slug === selectedCategory)
+    : posts;
+  const featuredPost = visiblePosts.find(post => post.isFeatured) || visiblePosts[0];
+  const regularPosts = featuredPost ? visiblePosts.filter(post => post.id !== featuredPost.id) : visiblePosts;
 
   return (
     <div className="min-h-screen bg-white">
@@ -120,7 +140,7 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {isLoading && (
               <div className="grid md:grid-cols-2 gap-6">
-                {[0, 1].map(index => (
+                {[0, 1, 2, 3].map(index => (
                   <div key={index} className="h-80 bg-green-50 animate-pulse rounded-lg" />
                 ))}
               </div>
@@ -139,11 +159,92 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
             )}
 
             {posts.length > 0 && (
-              <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-                {posts.map(post => {
+              <div className="space-y-10">
+                {categories.length > 1 && (
+                  <div className="flex flex-wrap gap-2" aria-label={language === 'es' ? 'Filtrar articulos por categoria' : 'Filter articles by category'}>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategory(null)}
+                      className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                        selectedCategory === null
+                          ? 'bg-green-900 text-white'
+                          : 'bg-green-50 text-green-900 hover:bg-green-100'
+                      }`}
+                    >
+                      {text.allPosts}
+                    </button>
+                    {categories.map(category => (
+                      <button
+                        key={category.slug}
+                        type="button"
+                        onClick={() => setSelectedCategory(category.slug)}
+                        className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                          selectedCategory === category.slug
+                            ? 'bg-green-900 text-white'
+                            : 'bg-green-50 text-green-900 hover:bg-green-100'
+                        }`}
+                      >
+                        {category.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {featuredPost && (
+                  <Card className="overflow-hidden rounded-lg border-green-100 bg-green-50 shadow-sm">
+                    <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
+                      <Link href={getBlogPostPath(featuredPost)} aria-label={`${text.read}: ${featuredPost.title}`}>
+                        <img
+                          src={featuredPost.featuredImage || doctorConsultation}
+                          alt={featuredPost.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
+                          className="h-72 w-full object-cover lg:h-full"
+                          loading="eager"
+                        />
+                      </Link>
+                      <div className="p-6 sm:p-8 lg:p-10">
+                        <div className="mb-5 flex flex-wrap items-center gap-3 text-sm text-gray-700">
+                          <span className="rounded-full bg-green-900 px-3 py-1 text-xs font-semibold text-white">
+                            {featuredPost.category?.name || text.fallbackCategory}
+                          </span>
+                          {featuredPost.isFeatured && (
+                            <span className="text-green-900 font-semibold">{text.featured}</span>
+                          )}
+                          {featuredPost.publishedAt && (
+                            <span className="inline-flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              {formatDate(featuredPost.publishedAt, language)}
+                            </span>
+                          )}
+                          <span className="inline-flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            {featuredPost.readingTime || 5} {text.minuteLabel}
+                          </span>
+                        </div>
+                        <h2 className="text-3xl sm:text-4xl font-body font-bold text-green-950 leading-tight mb-4">
+                          <Link href={getBlogPostPath(featuredPost)} className="hover:text-green-700 transition-colors">
+                            {featuredPost.title}
+                          </Link>
+                        </h2>
+                        {featuredPost.excerpt && (
+                          <p className="text-gray-700 leading-relaxed text-lg mb-6">{featuredPost.excerpt}</p>
+                        )}
+                        <Link href={getBlogPostPath(featuredPost)}>
+                          <Button className="bg-green-800 hover:bg-green-700 text-white rounded-full px-5">
+                            {text.read}
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </Card>
+                )}
+
+                {regularPosts.length > 0 && (
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    {regularPosts.map(post => {
                   const postPath = getBlogPostPath(post);
                   return (
-                    <Card key={post.id} className="overflow-hidden border-green-100 rounded-lg shadow-sm">
+                    <Card key={post.id} className="overflow-hidden border-green-100 rounded-lg shadow-sm transition-shadow hover:shadow-md">
                       <Link href={postPath} aria-label={`${text.read}: ${post.title}`}>
                         <img
                           src={post.featuredImage || doctorConsultation}
@@ -181,7 +282,9 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
                       </div>
                     </Card>
                   );
-                })}
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </div>
