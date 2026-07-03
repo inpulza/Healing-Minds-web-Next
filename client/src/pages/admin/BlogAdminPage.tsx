@@ -281,6 +281,31 @@ type SessionResponse = {
   admin: { username: string; role: string } | null;
 };
 
+type RuntimeInfo = {
+  runtime: 'live' | 'dev' | 'unknown';
+  isReplitDeployment: boolean;
+};
+
+type BlogInternalLinkImpact = {
+  id: number;
+  title: string;
+  slug: string;
+  language: BlogLanguage;
+  status: BlogStatus;
+  path: string;
+};
+
+type UnpublishImpact = {
+  postId: number;
+  slug: string;
+  status: BlogStatus;
+  publicPath: string;
+  linkingPosts: BlogInternalLinkImpact[];
+  linkingPostCount: number;
+};
+
+type BlogPostUnpublishTarget = Pick<BlogPost, 'id' | 'title' | 'slug' | 'language' | 'status'>;
+
 type FormState = {
   id?: number;
   title: string;
@@ -535,6 +560,8 @@ export default function BlogAdminPage() {
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState('');
+  const [unpublishTarget, setUnpublishTarget] = useState<BlogPostUnpublishTarget | null>(null);
+  const [unpublishConfirmSlug, setUnpublishConfirmSlug] = useState('');
   const [checks, setChecks] = useState<PublishCheck[]>([]);
   const [verification, setVerification] = useState<BlogVerificationReport | null>(null);
   const [fixingCheck, setFixingCheck] = useState<string | null>(null);
@@ -552,6 +579,11 @@ export default function BlogAdminPage() {
   });
 
   const authenticated = Boolean(sessionQuery.data?.authenticated);
+
+  const runtimeQuery = useQuery<ApiResponse<RuntimeInfo>>({
+    queryKey: ['/api/admin/runtime'],
+    enabled: authenticated,
+  });
 
   const postsQuery = useQuery<ApiResponse<BlogPost[]>>({
     queryKey: [`/api/admin/blog/posts?status=${statusFilter}&language=${languageFilter}&search=${encodeURIComponent(search)}`],
@@ -578,11 +610,17 @@ export default function BlogAdminPage() {
     enabled: authenticated,
   });
 
+  const unpublishImpactQuery = useQuery<ApiResponse<UnpublishImpact>>({
+    queryKey: [`/api/admin/blog/posts/${unpublishTarget?.id || 'none'}/unpublish-impact`],
+    enabled: authenticated && Boolean(unpublishTarget),
+  });
+
   const authors = authorsQuery.data?.data || [];
   const categories = categoriesQuery.data?.data || [];
   const tags = tagsQuery.data?.data || [];
   const posts = postsQuery.data?.data || [];
   const stats = statsQuery.data?.data;
+  const runtime = runtimeQuery.data?.data?.runtime || 'unknown';
 
   const availableCategories = useMemo(
     () => categories.filter(category => category.language === (form?.language || 'en')),
@@ -630,8 +668,22 @@ export default function BlogAdminPage() {
   });
 
   const statusMutation = useMutation({
-    mutationFn: async ({ postId, status }: { postId: number; status: BlogStatus }) => {
-      const response = await apiRequest('PATCH', `/api/admin/blog/posts/${postId}/status`, { status });
+    mutationFn: async ({
+      postId,
+      status,
+      confirmUnpublish,
+      confirmSlug,
+    }: {
+      postId: number;
+      status: BlogStatus;
+      confirmUnpublish?: boolean;
+      confirmSlug?: string;
+    }) => {
+      const response = await apiRequest('PATCH', `/api/admin/blog/posts/${postId}/status`, {
+        status,
+        ...(confirmUnpublish ? { confirmUnpublish } : {}),
+        ...(confirmSlug ? { confirmSlug: confirmSlug.trim() } : {}),
+      });
       return response.json() as Promise<ApiResponse<BlogPost>>;
     },
     onSuccess: data => {
@@ -640,6 +692,8 @@ export default function BlogAdminPage() {
       setVerification(data.verification || null);
       queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
+      setUnpublishTarget(null);
+      setUnpublishConfirmSlug('');
       setActionError(null);
     },
     onError: error => {
@@ -847,6 +901,43 @@ export default function BlogAdminPage() {
     });
   };
 
+  const openUnpublishDialog = (post: BlogPostUnpublishTarget) => {
+    setUnpublishTarget(post);
+    setUnpublishConfirmSlug('');
+    setActionError(null);
+  };
+
+  const closeUnpublishDialog = (open: boolean) => {
+    if (open || statusMutation.isPending) return;
+    setUnpublishTarget(null);
+    setUnpublishConfirmSlug('');
+  };
+
+  const moveCurrentToDraft = () => {
+    if (!form?.id) return;
+    if (form.status === 'published') {
+      openUnpublishDialog({
+        id: form.id,
+        title: form.title,
+        slug: form.slug,
+        language: form.language,
+        status: form.status,
+      });
+      return;
+    }
+    statusMutation.mutate({ postId: form.id, status: 'draft' });
+  };
+
+  const confirmMoveToDraft = () => {
+    if (!unpublishTarget) return;
+    statusMutation.mutate({
+      postId: unpublishTarget.id,
+      status: 'draft',
+      confirmUnpublish: true,
+      confirmSlug: unpublishConfirmSlug,
+    });
+  };
+
   const updateForm = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm(current => current ? { ...current, [key]: value } : current);
   };
@@ -910,6 +1001,7 @@ export default function BlogAdminPage() {
 
   const submitForReview = () => {
     if (!form?.id) return;
+    if (form.status === 'published') return;
     statusMutation.mutate({ postId: form.id, status: 'pending_review' });
   };
 
@@ -950,6 +1042,8 @@ export default function BlogAdminPage() {
 
   const displayedAutoGenerateSteps = autoGenerateWorkflow?.steps
     || (autoGenerateMutation.isPending ? autoGeneratePendingSteps : []);
+  const unpublishImpact = unpublishImpactQuery.data?.data;
+  const unpublishPath = unpublishImpact?.publicPath || (unpublishTarget ? getPostPath(unpublishTarget) : '');
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -958,6 +1052,22 @@ export default function BlogAdminPage() {
           <div>
             <p className="text-sm font-medium text-emerald-700">Healing Minds Psychiatry</p>
             <h1 className="mt-1 text-2xl font-semibold tracking-normal">Blog Editorial Admin</h1>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <Badge
+                className={
+                  runtime === 'live'
+                    ? 'bg-red-100 text-red-800'
+                    : runtime === 'dev'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-slate-100 text-slate-700'
+                }
+              >
+                {runtime === 'live' ? 'LIVE DATABASE' : runtime === 'dev' ? 'DEV DATABASE' : 'DATABASE UNKNOWN'}
+              </Badge>
+              {runtime === 'live' && (
+                <span className="text-xs text-red-700">Changes affect the public site.</span>
+              )}
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={logout}>
@@ -1161,6 +1271,80 @@ export default function BlogAdminPage() {
               }
             >
               {deleteMutation.isPending ? 'Deleting...' : 'Delete post'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={Boolean(unpublishTarget)} onOpenChange={closeUnpublishDialog}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Move published post to draft</DialogTitle>
+            <DialogDescription>
+              This removes the post from the public blog and sitemap without deleting it.
+            </DialogDescription>
+          </DialogHeader>
+
+          {unpublishTarget && (
+            <div className="space-y-4">
+              <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                <div className="font-medium">{unpublishTarget.title}</div>
+                <div className="mt-1 break-all text-xs text-slate-500">{unpublishPath}</div>
+                <div className="mt-2">
+                  <Badge className={statusClasses[unpublishTarget.status]}>
+                    {statusLabels[unpublishTarget.status]}
+                  </Badge>
+                </div>
+              </div>
+
+              <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                The public URL will return 404 while this post is a draft. Review any internal links before leaving it unpublished.
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-800">Published posts linking here</p>
+                {unpublishImpactQuery.isLoading ? (
+                  <p className="text-sm text-slate-600">Checking internal links...</p>
+                ) : unpublishImpact?.linkingPosts.length ? (
+                  <ul className="space-y-2 text-sm text-slate-700">
+                    {unpublishImpact.linkingPosts.map(post => (
+                      <li key={post.id} className="rounded-md border border-slate-200 bg-white p-2">
+                        <div className="font-medium">{post.title}</div>
+                        <div className="break-all text-xs text-slate-500">{post.path}</div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-slate-600">No published posts currently link to this URL.</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="unpublish-confirm-slug">Type the exact slug to confirm</Label>
+                <Input
+                  id="unpublish-confirm-slug"
+                  value={unpublishConfirmSlug}
+                  onChange={event => setUnpublishConfirmSlug(event.target.value)}
+                  placeholder={unpublishTarget.slug}
+                />
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button variant="outline" onClick={() => closeUnpublishDialog(false)} disabled={statusMutation.isPending}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmMoveToDraft}
+              disabled={
+                !unpublishTarget
+                || statusMutation.isPending
+                || unpublishConfirmSlug.trim() !== unpublishTarget.slug
+              }
+            >
+              {statusMutation.isPending ? 'Moving...' : 'Move to draft'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1943,10 +2127,12 @@ export default function BlogAdminPage() {
           <DialogFooter className="gap-2 sm:gap-2">
             {form?.id && (
               <>
-                <Button variant="outline" onClick={submitForReview} disabled={statusMutation.isPending}>
-                  Submit review
-                </Button>
-                <Button variant="outline" onClick={() => statusMutation.mutate({ postId: form.id!, status: 'draft' })} disabled={statusMutation.isPending}>
+                {form.status !== 'published' && (
+                  <Button variant="outline" onClick={submitForReview} disabled={statusMutation.isPending}>
+                    Submit review
+                  </Button>
+                )}
+                <Button variant="outline" onClick={moveCurrentToDraft} disabled={statusMutation.isPending}>
                   Move to draft
                 </Button>
                 <Button variant="outline" onClick={() => verifyMutation.mutate(form.id!)} disabled={verifyMutation.isPending}>

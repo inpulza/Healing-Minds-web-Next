@@ -45,6 +45,8 @@ export const adminBlogPostUpdateSchema = adminBlogPostSchema.partial().extend({
 
 export const adminBlogStatusSchema = z.object({
   status: statusSchema,
+  confirmUnpublish: z.boolean().optional(),
+  confirmSlug: z.string().trim().optional(),
 });
 
 export const adminBlogFixSchema = z.object({

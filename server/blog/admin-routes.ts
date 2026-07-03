@@ -18,6 +18,7 @@ import {
   createBlogPost,
   createBlogTag,
   deleteBlogPost,
+  findPublishedPostsLinkingToPost,
   getAdminBlogPosts,
   getAnyBlogPostBySlug,
   getBlogAuthors,
@@ -153,6 +154,10 @@ function normalizePostPayload(input: unknown) {
 }
 
 function normalizePostUpdatePayload(input: unknown) {
+  if (input && typeof input === "object" && !Array.isArray(input) && "status" in input) {
+    throw Object.assign(new Error("Use the status action to change a post status"), { statusCode: 400 });
+  }
+
   const parsed = adminBlogPostUpdateSchema.parse(input);
   if (parsed.status === "published") {
     throw Object.assign(new Error("Use the publish action to publish a post"), { statusCode: 400 });
@@ -655,6 +660,34 @@ export function registerAdminBlogRoutes(app: Express): void {
     }
   });
 
+  app.get("/api/admin/blog/posts/:id/unpublish-impact", async (req, res) => {
+    const id = parseId(req);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid post id" });
+
+    try {
+      const post = await getBlogPostById(id);
+      if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+
+      const linkingPosts = post.status === "published"
+        ? await findPublishedPostsLinkingToPost(post)
+        : [];
+
+      res.status(200).json({
+        success: true,
+        data: {
+          postId: post.id,
+          slug: post.slug,
+          status: post.status,
+          publicPath: getBlogPostPath(post),
+          linkingPosts,
+          linkingPostCount: linkingPosts.length,
+        },
+      });
+    } catch (error) {
+      sendDbError(res, error);
+    }
+  });
+
   app.post("/api/admin/blog/posts/:id/fix", async (req, res) => {
     const id = parseId(req);
     if (!id) return res.status(400).json({ success: false, message: "Invalid post id" });
@@ -734,12 +767,21 @@ export function registerAdminBlogRoutes(app: Express): void {
     if (!id) return res.status(400).json({ success: false, message: "Invalid post id" });
 
     try {
-      const { status } = adminBlogStatusSchema.parse(req.body);
+      const { status, confirmUnpublish, confirmSlug } = adminBlogStatusSchema.parse(req.body);
       const existing = await getBlogPostById(id);
       if (!existing) return res.status(404).json({ success: false, message: "Blog post not found" });
 
       if (status === "published") {
         assertPublishReady(existing);
+      }
+
+      if (existing.status === "published" && status !== "published") {
+        if (confirmUnpublish !== true || confirmSlug !== existing.slug) {
+          return res.status(400).json({
+            success: false,
+            message: "Moving a published post out of published status requires confirmation with the exact post slug",
+          });
+        }
       }
 
       const post = await updateBlogPost(id, {

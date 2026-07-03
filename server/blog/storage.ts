@@ -1,4 +1,4 @@
-import { and, count, desc, eq, ilike, inArray, or, type SQL } from "drizzle-orm";
+import { and, count, desc, eq, ilike, inArray, ne, or, type SQL } from "drizzle-orm";
 import {
   blogAuthors,
   blogCategories,
@@ -43,6 +43,15 @@ export type GetAdminBlogPostsOptions = {
 
 export type BlogPostInput = InsertBlogPost & {
   tagIds?: number[];
+};
+
+export type BlogInternalLinkImpact = {
+  id: number;
+  title: string;
+  slug: string;
+  language: BlogLanguage;
+  status: BlogPostStatus;
+  path: string;
 };
 
 function isBlogLanguage(value: string): value is BlogLanguage {
@@ -276,6 +285,32 @@ export async function updateBlogPost(id: number, values: Partial<BlogPostInput>)
 export async function deleteBlogPost(id: number): Promise<boolean> {
   const deleted = await db.delete(blogPosts).where(eq(blogPosts.id, id)).returning({ id: blogPosts.id });
   return deleted.length > 0;
+}
+
+export async function findPublishedPostsLinkingToPost(
+  targetPost: Pick<BlogPostWithRelations, "id" | "slug" | "language">,
+): Promise<BlogInternalLinkImpact[]> {
+  const targetPath = getBlogPostPath(targetPost);
+  const rows = await db
+    .select({ post: blogPosts })
+    .from(blogPosts)
+    .where(
+      and(
+        eq(blogPosts.status, "published"),
+        ne(blogPosts.id, targetPost.id),
+        ilike(blogPosts.content, `%${targetPath}%`),
+      ),
+    )
+    .orderBy(desc(blogPosts.publishedAt), desc(blogPosts.updatedAt));
+
+  return rows.map(row => ({
+    id: row.post.id,
+    title: row.post.title,
+    slug: row.post.slug,
+    language: row.post.language as BlogLanguage,
+    status: row.post.status,
+    path: getBlogPostPath(row.post),
+  }));
 }
 
 export async function getBlogAuthors(): Promise<BlogAuthor[]> {

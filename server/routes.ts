@@ -233,6 +233,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   registerAdminAuthRoutes(app);
   app.use("/api/admin/*", requireAdmin);
+  app.get("/api/admin/runtime", (_req, res) => {
+    const isReplitDeployment = process.env.REPLIT_DEPLOYMENT === "1";
+    res.status(200).json({
+      success: true,
+      data: {
+        runtime: isReplitDeployment ? "live" : "dev",
+        isReplitDeployment,
+      },
+    });
+  });
 
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
