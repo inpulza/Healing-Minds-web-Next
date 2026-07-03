@@ -131,6 +131,26 @@ export const blogPostTags = pgTable(
   ],
 );
 
+export const blogRedirects = pgTable(
+  "blog_redirects",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    sourcePath: varchar("source_path", { length: 500 }).notNull(),
+    targetPath: varchar("target_path", { length: 500 }).notNull(),
+    statusCode: integer("status_code").notNull().default(301),
+    reason: varchar("reason", { length: 100 }),
+    isActive: boolean("is_active").notNull().default(true),
+    sourcePostId: integer("source_post_id").references(() => blogPosts.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_redirects_source_path").on(table.sourcePath),
+    index("idx_blog_redirects_active").on(table.isActive),
+    index("idx_blog_redirects_source_post_id").on(table.sourcePostId),
+  ],
+);
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -159,6 +179,14 @@ export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
 });
 
 export const insertBlogPostTagSchema = createInsertSchema(blogPostTags);
+export const insertBlogRedirectSchema = z.object({
+  sourcePath: z.string().min(1).max(500),
+  targetPath: z.string().min(1).max(500),
+  statusCode: z.number().int().refine(value => value === 301 || value === 302).default(301),
+  reason: z.string().max(100).nullable().optional(),
+  isActive: z.boolean().default(true),
+  sourcePostId: z.number().int().positive().nullable().optional(),
+});
 
 // Hidden honeypot fields that must stay empty for a real user. Bots that
 // auto-fill every input will populate them, letting us silently filter.
@@ -196,6 +224,8 @@ export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type InsertBlogPostTag = z.infer<typeof insertBlogPostTagSchema>;
 export type BlogPostTag = typeof blogPostTags.$inferSelect;
+export type InsertBlogRedirect = z.infer<typeof insertBlogRedirectSchema>;
+export type BlogRedirect = typeof blogRedirects.$inferSelect;
 
 // Review schemas for Metricool integration
 export const reviewSchema = z.object({

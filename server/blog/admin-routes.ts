@@ -2,11 +2,14 @@ import type { Express, Request, Response } from "express";
 import { ZodError, type z } from "zod";
 import {
   adminBlogAutoGenerateSchema,
+  adminBlogInternalLinkAuditSchema,
   adminBlogFixSchema,
   adminBlogCategorySchema,
   adminBlogGenerateDraftSchema,
   adminBlogPostSchema,
   adminBlogPostUpdateSchema,
+  adminBlogRedirectCleanupSchema,
+  adminBlogRedirectSchema,
   adminBlogStatusSchema,
   adminBlogTagSchema,
   adminBlogTopicPlannerSchema,
@@ -17,16 +20,24 @@ import {
   createBlogCategory,
   createBlogPost,
   createBlogTag,
+  deactivateBlogRedirect,
   deleteBlogPost,
+  findBlogPostsLinkingToPath,
   findPublishedPostsLinkingToPost,
+  getActiveBlogRedirect,
   getAdminBlogPosts,
   getAnyBlogPostBySlug,
   getBlogAuthors,
   getBlogCategories,
   getBlogPostById,
+  getBlogPostBySlug,
   getBlogPostPath,
+  getBlogRedirectById,
+  getBlogRedirects,
   getBlogStats,
   getBlogTags,
+  normalizeInternalPath,
+  upsertBlogRedirect,
   updateBlogPost,
   type BlogLanguage,
 } from "./storage";
@@ -123,6 +134,95 @@ function containsLikelyPatientIdentifier(value: string): boolean {
   const hasNamedPatientContext = new RegExp(String.raw`\b(?:patient|paciente)\s+${namePattern}\b.{0,80}\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|diagnosed|diagnosis|medication|prescribed|symptoms|mrn|medical record|member id|patient id)\b`, "i").test(normalized);
 
   return hasEmail || hasPhone || hasSsn || hasBirthDate || hasMedicalId || hasExplicitPatientName || hasNamedPatientContext;
+}
+
+function assertSafeBlogRedirectPath(sourcePath: string, targetPath: string): void {
+  if (!sourcePath.startsWith("/blog/") && !sourcePath.startsWith("/es/blog/")) {
+    throw Object.assign(new Error("Redirect source must be a blog post path"), { statusCode: 400 });
+  }
+  if (targetPath.startsWith("/api/") || targetPath === "/api" || targetPath.startsWith("/admin/") || targetPath === "/admin") {
+    throw Object.assign(new Error("Redirect target must be a public internal path"), { statusCode: 400 });
+  }
+  if (sourcePath === targetPath) {
+    throw Object.assign(new Error("Redirect source and target must be different"), { statusCode: 400 });
+  }
+}
+
+function assertLocalPathInput(value: string, label: string): void {
+  const trimmed = value.trim();
+  if (!trimmed.startsWith("/") || trimmed.startsWith("//") || /^https?:\/\//i.test(trimmed)) {
+    throw Object.assign(new Error(`${label} must be an internal path that starts with /`), { statusCode: 400 });
+  }
+}
+
+function parseBlogPostPath(path: string): { slug: string; language: BlogLanguage } | null {
+  const normalizedPath = normalizeInternalPath(path);
+  if (normalizedPath.startsWith("/es/blog/")) {
+    const slug = normalizedPath.slice("/es/blog/".length);
+    return slug ? { slug, language: "es" } : null;
+  }
+  if (normalizedPath.startsWith("/blog/")) {
+    const slug = normalizedPath.slice("/blog/".length);
+    return slug ? { slug, language: "en" } : null;
+  }
+  return null;
+}
+
+async function assertRedirectSourceIsNotPublishedPost(sourcePath: string): Promise<void> {
+  const parsedPath = parseBlogPostPath(sourcePath);
+  if (!parsedPath) return;
+  const publishedPost = await getBlogPostBySlug(parsedPath.slug, parsedPath.language);
+  if (publishedPost) {
+    throw Object.assign(new Error("Redirect source is currently a published post URL; unpublish or delete the post before redirecting it"), { statusCode: 400 });
+  }
+}
+
+function normalizeRedirectPayload(input: unknown) {
+  const parsed = adminBlogRedirectSchema.parse(input);
+  assertLocalPathInput(parsed.sourcePath, "Redirect source");
+  assertLocalPathInput(parsed.targetPath, "Redirect target");
+  const sourcePath = normalizeInternalPath(parsed.sourcePath);
+  const targetPath = normalizeInternalPath(parsed.targetPath);
+  assertSafeBlogRedirectPath(sourcePath, targetPath);
+  return {
+    ...parsed,
+    sourcePath,
+    targetPath,
+    reason: parsed.reason || null,
+    sourcePostId: parsed.sourcePostId || null,
+  };
+}
+
+function getRedirectTargetOrNull(sourcePath: string, redirectTargetPath?: string | null): string | null {
+  const rawTarget = redirectTargetPath?.trim();
+  if (!rawTarget) return null;
+  assertLocalPathInput(rawTarget, "Redirect target");
+  const targetPath = normalizeInternalPath(rawTarget);
+  assertSafeBlogRedirectPath(sourcePath, targetPath);
+  return targetPath;
+}
+
+async function assertRedirectHasNoActiveChain(targetPath: string): Promise<void> {
+  const chainedRedirect = await getActiveBlogRedirect(targetPath);
+  if (chainedRedirect) {
+    throw Object.assign(new Error("Redirect target already has an active redirect; choose the final destination instead"), { statusCode: 400 });
+  }
+}
+
+async function assertRedirectDecision(sourcePath: string, redirectTargetPath?: string | null, confirmNoRedirect?: boolean): Promise<string | null> {
+  const targetPath = getRedirectTargetOrNull(sourcePath, redirectTargetPath);
+  if (targetPath) {
+    await assertRedirectHasNoActiveChain(targetPath);
+    return targetPath;
+  }
+  if (confirmNoRedirect === true) return null;
+  throw Object.assign(new Error("Removing a published URL requires a redirect target or explicit no-redirect confirmation"), { statusCode: 400 });
+}
+
+function replaceHrefPath(content: string, sourcePath: string, targetPath: string): string {
+  const escapedSource = sourcePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const hrefPattern = new RegExp(`(href=["'])${escapedSource}(?=(?:["'?#]))`, "g");
+  return content.replace(hrefPattern, `$1${targetPath}`);
 }
 
 async function getAvailableBlogSlug(baseSlug: string, language: BlogLanguage): Promise<string> {
@@ -437,6 +537,130 @@ export function registerAdminBlogRoutes(app: Express): void {
       sendDbError(res, error);
     }
   });
+
+  app.get("/api/admin/blog/redirects", async (_req, res) => {
+    try {
+      res.status(200).json({ success: true, data: await getBlogRedirects() });
+    } catch (error) {
+      sendDbError(res, error);
+    }
+  });
+
+  app.post("/api/admin/blog/redirects", async (req, res) => {
+    try {
+      const payload = normalizeRedirectPayload(req.body);
+      await assertRedirectSourceIsNotPublishedPost(payload.sourcePath);
+      await assertRedirectHasNoActiveChain(payload.targetPath);
+      const redirect = await upsertBlogRedirect(payload);
+      const linkingPosts = await findBlogPostsLinkingToPath(redirect.sourcePath);
+      res.status(201).json({
+        success: true,
+        data: {
+          redirect,
+          linkImpact: {
+            sourcePath: redirect.sourcePath,
+            targetPath: redirect.targetPath,
+            linkingPosts,
+            linkingPostCount: linkingPosts.length,
+          },
+        },
+      });
+    } catch (error) {
+      try {
+        sendValidationError(res, error);
+      } catch {
+        sendDbError(res, error);
+      }
+    }
+  });
+
+  app.get("/api/admin/blog/internal-link-audit", async (req, res) => {
+    try {
+      const payload = adminBlogInternalLinkAuditSchema.parse({
+        path: req.query.path,
+        status: req.query.status,
+      });
+      const path = normalizeInternalPath(payload.path);
+      const linkingPosts = await findBlogPostsLinkingToPath(path, { status: payload.status });
+      res.status(200).json({
+        success: true,
+        data: {
+          path,
+          status: payload.status,
+          linkingPosts,
+          linkingPostCount: linkingPosts.length,
+        },
+      });
+    } catch (error) {
+      try {
+        sendValidationError(res, error);
+      } catch {
+        sendDbError(res, error);
+      }
+    }
+  });
+
+  const applyRedirectLinkCleanup = async (req: Request, res: Response) => {
+    const id = parseId(req);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid redirect id" });
+
+    try {
+      const { confirmSourcePath } = adminBlogRedirectCleanupSchema.parse(req.body);
+      const redirect = await getBlogRedirectById(id);
+      if (!redirect) return res.status(404).json({ success: false, message: "Blog redirect not found" });
+      if (!redirect.isActive) return res.status(400).json({ success: false, message: "Cannot apply cleanup for an inactive redirect" });
+
+      const sourcePath = normalizeInternalPath(redirect.sourcePath);
+      const targetPath = normalizeInternalPath(redirect.targetPath);
+      if (normalizeInternalPath(confirmSourcePath) !== sourcePath) {
+        return res.status(400).json({
+          success: false,
+          message: "Link cleanup requires confirmation with the exact redirect source path",
+        });
+      }
+
+      const impactedPosts = await findBlogPostsLinkingToPath(sourcePath);
+      const updatedPosts = [];
+      for (const impact of impactedPosts) {
+        const post = await getBlogPostById(impact.id);
+        if (!post?.content) continue;
+        const nextContent = replaceHrefPath(post.content, sourcePath, targetPath);
+        if (nextContent === post.content) continue;
+        const updated = await updateBlogPost(post.id, {
+          content: sanitizeBlogContentHtml(nextContent),
+        });
+        if (updated) {
+          updatedPosts.push({
+            id: updated.id,
+            title: updated.title,
+            slug: updated.slug,
+            language: updated.language,
+            status: updated.status,
+            path: getBlogPostPath(updated),
+          });
+        }
+      }
+
+      res.status(200).json({
+        success: true,
+        data: {
+          redirect,
+          scannedPostCount: impactedPosts.length,
+          updatedPostCount: updatedPosts.length,
+          updatedPosts,
+        },
+      });
+    } catch (error) {
+      try {
+        sendValidationError(res, error);
+      } catch {
+        sendDbError(res, error);
+      }
+    }
+  };
+
+  app.post("/api/admin/blog/redirects/:id/apply-link-cleanup", applyRedirectLinkCleanup);
+  app.post("/api/admin/blog/redirects/:id/cleanup-links", applyRedirectLinkCleanup);
 
   app.get("/api/admin/blog/posts", async (req, res) => {
     try {
@@ -767,7 +991,13 @@ export function registerAdminBlogRoutes(app: Express): void {
     if (!id) return res.status(400).json({ success: false, message: "Invalid post id" });
 
     try {
-      const { status, confirmUnpublish, confirmSlug } = adminBlogStatusSchema.parse(req.body);
+      const {
+        status,
+        confirmUnpublish,
+        confirmSlug,
+        redirectTargetPath,
+        confirmNoRedirect,
+      } = adminBlogStatusSchema.parse(req.body);
       const existing = await getBlogPostById(id);
       if (!existing) return res.status(404).json({ success: false, message: "Blog post not found" });
 
@@ -775,11 +1005,25 @@ export function registerAdminBlogRoutes(app: Express): void {
         assertPublishReady(existing);
       }
 
+      let redirect = null;
+      let deactivatedRedirect = null;
       if (existing.status === "published" && status !== "published") {
         if (confirmUnpublish !== true || confirmSlug !== existing.slug) {
           return res.status(400).json({
             success: false,
             message: "Moving a published post out of published status requires confirmation with the exact post slug",
+          });
+        }
+        const sourcePath = getBlogPostPath(existing);
+        const targetPath = await assertRedirectDecision(sourcePath, redirectTargetPath, confirmNoRedirect);
+        if (targetPath) {
+          redirect = await upsertBlogRedirect({
+            sourcePath,
+            targetPath,
+            statusCode: 301,
+            reason: "unpublish",
+            isActive: true,
+            sourcePostId: existing.id,
           });
         }
       }
@@ -791,12 +1035,15 @@ export function registerAdminBlogRoutes(app: Express): void {
 
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
       if (status === "published") {
+        deactivatedRedirect = await deactivateBlogRedirect(getBlogPostPath(post));
         runPostPublishCheckInBackground(getBlogPostPath(post));
       }
 
       res.status(200).json({
         success: true,
         data: post,
+        redirect,
+        deactivatedRedirect,
         checks: validatePostForPublish(post),
         verification: buildBlogVerificationReport(post),
       });
@@ -836,13 +1083,28 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const post = await getBlogPostById(id);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      let redirect = null;
       if (post.status === "published") {
         const confirmPublishedDelete = req.body?.confirmPublishedDelete === true;
         const confirmSlug = typeof req.body?.confirmSlug === "string" ? req.body.confirmSlug.trim() : "";
+        const redirectTargetPath = typeof req.body?.redirectTargetPath === "string" ? req.body.redirectTargetPath : undefined;
+        const confirmNoRedirect = req.body?.confirmNoRedirect === true;
         if (!confirmPublishedDelete || confirmSlug !== post.slug) {
           return res.status(400).json({
             success: false,
             message: "Published post deletion requires confirmation with the exact post slug",
+          });
+        }
+        const sourcePath = getBlogPostPath(post);
+        const targetPath = await assertRedirectDecision(sourcePath, redirectTargetPath, confirmNoRedirect);
+        if (targetPath) {
+          redirect = await upsertBlogRedirect({
+            sourcePath,
+            targetPath,
+            statusCode: 301,
+            reason: "delete",
+            isActive: true,
+            sourcePostId: post.id,
           });
         }
       }
@@ -855,10 +1117,15 @@ export function registerAdminBlogRoutes(app: Express): void {
           deletedSlug: post.slug,
           deletedStatus: post.status,
           publicPath: getBlogPostPath(post),
+          redirect,
         },
       });
     } catch (error) {
-      sendDbError(res, error);
+      try {
+        sendValidationError(res, error);
+      } catch {
+        sendDbError(res, error);
+      }
     }
   });
 

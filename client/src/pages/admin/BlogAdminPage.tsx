@@ -381,6 +381,10 @@ function getPostPath(post: Pick<BlogPost, 'language' | 'slug'>): string {
   return post.language === 'es' ? `/es/blog/${post.slug}` : `/blog/${post.slug}`;
 }
 
+function getBlogIndexPath(language: BlogLanguage): string {
+  return language === 'es' ? '/es/blog' : '/blog';
+}
+
 function sanitizePreviewHtml(html: string): string {
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a', 'blockquote'],
@@ -560,8 +564,12 @@ export default function BlogAdminPage() {
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState('');
+  const [deleteRedirectTargetPath, setDeleteRedirectTargetPath] = useState('');
+  const [deleteConfirmNoRedirect, setDeleteConfirmNoRedirect] = useState(false);
   const [unpublishTarget, setUnpublishTarget] = useState<BlogPostUnpublishTarget | null>(null);
   const [unpublishConfirmSlug, setUnpublishConfirmSlug] = useState('');
+  const [unpublishRedirectTargetPath, setUnpublishRedirectTargetPath] = useState('');
+  const [unpublishConfirmNoRedirect, setUnpublishConfirmNoRedirect] = useState(false);
   const [checks, setChecks] = useState<PublishCheck[]>([]);
   const [verification, setVerification] = useState<BlogVerificationReport | null>(null);
   const [fixingCheck, setFixingCheck] = useState<string | null>(null);
@@ -673,16 +681,22 @@ export default function BlogAdminPage() {
       status,
       confirmUnpublish,
       confirmSlug,
+      redirectTargetPath,
+      confirmNoRedirect,
     }: {
       postId: number;
       status: BlogStatus;
       confirmUnpublish?: boolean;
       confirmSlug?: string;
+      redirectTargetPath?: string;
+      confirmNoRedirect?: boolean;
     }) => {
       const response = await apiRequest('PATCH', `/api/admin/blog/posts/${postId}/status`, {
         status,
         ...(confirmUnpublish ? { confirmUnpublish } : {}),
         ...(confirmSlug ? { confirmSlug: confirmSlug.trim() } : {}),
+        ...(redirectTargetPath ? { redirectTargetPath: redirectTargetPath.trim() } : {}),
+        ...(confirmNoRedirect ? { confirmNoRedirect } : {}),
       });
       return response.json() as Promise<ApiResponse<BlogPost>>;
     },
@@ -694,6 +708,8 @@ export default function BlogAdminPage() {
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
       setUnpublishTarget(null);
       setUnpublishConfirmSlug('');
+      setUnpublishRedirectTargetPath('');
+      setUnpublishConfirmNoRedirect(false);
       setActionError(null);
     },
     onError: error => {
@@ -702,12 +718,27 @@ export default function BlogAdminPage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async ({ post, confirmSlug }: { post: BlogPost; confirmSlug?: string }) => {
+    mutationFn: async ({
+      post,
+      confirmSlug,
+      redirectTargetPath,
+      confirmNoRedirect,
+    }: {
+      post: BlogPost;
+      confirmSlug?: string;
+      redirectTargetPath?: string;
+      confirmNoRedirect?: boolean;
+    }) => {
       await apiRequest(
         'DELETE',
         `/api/admin/blog/posts/${post.id}`,
         post.status === 'published'
-          ? { confirmPublishedDelete: true, confirmSlug: confirmSlug?.trim() || '' }
+          ? {
+              confirmPublishedDelete: true,
+              confirmSlug: confirmSlug?.trim() || '',
+              ...(redirectTargetPath ? { redirectTargetPath: redirectTargetPath.trim() } : {}),
+              ...(confirmNoRedirect ? { confirmNoRedirect } : {}),
+            }
           : undefined,
       );
     },
@@ -716,6 +747,8 @@ export default function BlogAdminPage() {
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
       setDeleteTarget(null);
       setDeleteConfirmSlug('');
+      setDeleteRedirectTargetPath('');
+      setDeleteConfirmNoRedirect(false);
       setActionError(null);
     },
     onError: error => {
@@ -884,6 +917,8 @@ export default function BlogAdminPage() {
   const openDeletePost = (post: BlogPost) => {
     setDeleteTarget(post);
     setDeleteConfirmSlug('');
+    setDeleteRedirectTargetPath(post.status === 'published' ? getBlogIndexPath(post.language) : '');
+    setDeleteConfirmNoRedirect(false);
     setActionError(null);
   };
 
@@ -891,6 +926,8 @@ export default function BlogAdminPage() {
     if (open || deleteMutation.isPending) return;
     setDeleteTarget(null);
     setDeleteConfirmSlug('');
+    setDeleteRedirectTargetPath('');
+    setDeleteConfirmNoRedirect(false);
   };
 
   const confirmDeletePost = () => {
@@ -898,12 +935,16 @@ export default function BlogAdminPage() {
     deleteMutation.mutate({
       post: deleteTarget,
       confirmSlug: deleteConfirmSlug,
+      redirectTargetPath: deleteConfirmNoRedirect ? '' : deleteRedirectTargetPath,
+      confirmNoRedirect: deleteConfirmNoRedirect,
     });
   };
 
   const openUnpublishDialog = (post: BlogPostUnpublishTarget) => {
     setUnpublishTarget(post);
     setUnpublishConfirmSlug('');
+    setUnpublishRedirectTargetPath(getBlogIndexPath(post.language));
+    setUnpublishConfirmNoRedirect(false);
     setActionError(null);
   };
 
@@ -911,6 +952,8 @@ export default function BlogAdminPage() {
     if (open || statusMutation.isPending) return;
     setUnpublishTarget(null);
     setUnpublishConfirmSlug('');
+    setUnpublishRedirectTargetPath('');
+    setUnpublishConfirmNoRedirect(false);
   };
 
   const moveCurrentToDraft = () => {
@@ -935,6 +978,8 @@ export default function BlogAdminPage() {
       status: 'draft',
       confirmUnpublish: true,
       confirmSlug: unpublishConfirmSlug,
+      redirectTargetPath: unpublishConfirmNoRedirect ? '' : unpublishRedirectTargetPath,
+      confirmNoRedirect: unpublishConfirmNoRedirect,
     });
   };
 
@@ -1044,6 +1089,15 @@ export default function BlogAdminPage() {
     || (autoGenerateMutation.isPending ? autoGeneratePendingSteps : []);
   const unpublishImpact = unpublishImpactQuery.data?.data;
   const unpublishPath = unpublishImpact?.publicPath || (unpublishTarget ? getPostPath(unpublishTarget) : '');
+  const deleteRedirectDecisionReady =
+    !deleteTarget
+    || deleteTarget.status !== 'published'
+    || deleteConfirmNoRedirect
+    || deleteRedirectTargetPath.trim().length > 0;
+  const unpublishRedirectDecisionReady =
+    !unpublishTarget
+    || unpublishConfirmNoRedirect
+    || unpublishRedirectTargetPath.trim().length > 0;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -1237,8 +1291,26 @@ export default function BlogAdminPage() {
               {deleteTarget.status === 'published' ? (
                 <div className="space-y-3">
                   <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-                    This post is currently live. Deleting it removes it from the blog and sitemap; its public URL will return 404.
+                    This post is currently live. Deleting it removes it from the blog and sitemap; create a redirect unless you intentionally want the public URL to return 404.
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="delete-redirect-target">Redirect old URL to</Label>
+                    <Input
+                      id="delete-redirect-target"
+                      value={deleteRedirectTargetPath}
+                      onChange={event => setDeleteRedirectTargetPath(event.target.value)}
+                      placeholder={getBlogIndexPath(deleteTarget.language)}
+                      disabled={deleteConfirmNoRedirect}
+                    />
+                    <p className="text-xs text-slate-500">Use an internal public path such as {getBlogIndexPath(deleteTarget.language)}.</p>
+                  </div>
+                  <label className="flex items-start gap-2 text-sm text-slate-700">
+                    <Checkbox
+                      checked={deleteConfirmNoRedirect}
+                      onCheckedChange={value => setDeleteConfirmNoRedirect(value === true)}
+                    />
+                    <span>I understand this URL will return 404 without a redirect.</span>
+                  </label>
                   <div className="space-y-2">
                     <Label htmlFor="delete-confirm-slug">Type the exact slug to confirm</Label>
                     <Input
@@ -1268,6 +1340,7 @@ export default function BlogAdminPage() {
                 !deleteTarget
                 || deleteMutation.isPending
                 || (deleteTarget.status === 'published' && deleteConfirmSlug.trim() !== deleteTarget.slug)
+                || !deleteRedirectDecisionReady
               }
             >
               {deleteMutation.isPending ? 'Deleting...' : 'Delete post'}
@@ -1298,7 +1371,7 @@ export default function BlogAdminPage() {
               </div>
 
               <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-                The public URL will return 404 while this post is a draft. Review any internal links before leaving it unpublished.
+                The post will leave the public blog and sitemap. Create a redirect unless you intentionally want the old public URL to return 404 while it is a draft.
               </div>
 
               <div className="space-y-2">
@@ -1318,6 +1391,26 @@ export default function BlogAdminPage() {
                   <p className="text-sm text-slate-600">No published posts currently link to this URL.</p>
                 )}
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="unpublish-redirect-target">Redirect old URL to</Label>
+                <Input
+                  id="unpublish-redirect-target"
+                  value={unpublishRedirectTargetPath}
+                  onChange={event => setUnpublishRedirectTargetPath(event.target.value)}
+                  placeholder={getBlogIndexPath(unpublishTarget.language)}
+                  disabled={unpublishConfirmNoRedirect}
+                />
+                <p className="text-xs text-slate-500">Use an internal public path such as {getBlogIndexPath(unpublishTarget.language)}.</p>
+              </div>
+
+              <label className="flex items-start gap-2 text-sm text-slate-700">
+                <Checkbox
+                  checked={unpublishConfirmNoRedirect}
+                  onCheckedChange={value => setUnpublishConfirmNoRedirect(value === true)}
+                />
+                <span>I understand this URL will return 404 without a redirect.</span>
+              </label>
 
               <div className="space-y-2">
                 <Label htmlFor="unpublish-confirm-slug">Type the exact slug to confirm</Label>
@@ -1342,6 +1435,7 @@ export default function BlogAdminPage() {
                 !unpublishTarget
                 || statusMutation.isPending
                 || unpublishConfirmSlug.trim() !== unpublishTarget.slug
+                || !unpublishRedirectDecisionReady
               }
             >
               {statusMutation.isPending ? 'Moving...' : 'Move to draft'}

@@ -12,7 +12,7 @@ import { staticReviews, staticStats } from "./data/static-reviews";
 import { emailService } from "./services/email";
 import { injectMetaTags, isKnownRoute } from "./utils/html-injection";
 import { getCanonicalRedirectUrl, shouldRedirectToCanonicalHost } from "./seo/config";
-import { getBlogPostBySlug, getBlogPosts, type BlogLanguage } from "./blog/storage";
+import { getActiveBlogRedirect, getBlogPostBySlug, getBlogPosts, type BlogLanguage } from "./blog/storage";
 import { sanitizeBlogContentHtml } from "./blog/sanitize";
 import { registerAdminAuthRoutes, requireAdmin } from "./admin-auth";
 import { registerAdminBlogRoutes } from "./blog/admin-routes";
@@ -26,6 +26,11 @@ function sanitizePublicBlogPost<T extends { content: string | null }>(post: T): 
     ...post,
     content: sanitizeBlogContentHtml(post.content || ""),
   };
+}
+
+function appendOriginalQuery(targetPath: string, originalUrl: string, requestPath: string): string {
+  const suffix = originalUrl.slice(requestPath.length);
+  return suffix.startsWith("?") ? `${targetPath}${suffix}` : targetPath;
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -145,6 +150,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   app.get('/es/ubicaciones/psiquiatra-lely-resorts', (req, res) => {
     res.redirect(301, '/es/ubicaciones/psiquiatra-lely-resort');
+  });
+
+  // Blog redirects are resolved before HTML injection decides whether a missing
+  // blog URL is a 404. They are intentionally limited to blog article paths.
+  app.use(async (req, res, next) => {
+    if (req.method !== 'GET') return next();
+    if (!req.path.startsWith('/blog/') && !req.path.startsWith('/es/blog/')) return next();
+
+    try {
+      const redirect = await getActiveBlogRedirect(req.path);
+      if (!redirect) return next();
+      return res.redirect(redirect.statusCode, appendOriginalQuery(redirect.targetPath, req.originalUrl, req.path));
+    } catch (error) {
+      console.error("Blog redirect lookup failed; continuing without redirect:", error);
+      return next();
+    }
   });
 
   if (isProduction) {

@@ -4,7 +4,9 @@ import {
   blogCategories,
   blogPosts,
   blogPostTags,
+  blogRedirects,
   blogTags,
+  type BlogRedirect,
   type BlogAuthor,
   type BlogCategory,
   type BlogPost,
@@ -12,6 +14,7 @@ import {
   type BlogTag,
   type InsertBlogCategory,
   type InsertBlogPost,
+  type InsertBlogRedirect,
   type InsertBlogTag,
 } from "@shared/schema";
 import { db } from "../db";
@@ -45,6 +48,8 @@ export type BlogPostInput = InsertBlogPost & {
   tagIds?: number[];
 };
 
+export type BlogRedirectInput = InsertBlogRedirect;
+
 export type BlogInternalLinkImpact = {
   id: number;
   title: string;
@@ -52,6 +57,11 @@ export type BlogInternalLinkImpact = {
   language: BlogLanguage;
   status: BlogPostStatus;
   path: string;
+};
+
+export type FindInternalLinkOptions = {
+  status?: BlogPostStatus | "all";
+  excludePostId?: number;
 };
 
 function isBlogLanguage(value: string): value is BlogLanguage {
@@ -86,6 +96,15 @@ export function getBlogPostPlainText(post: Pick<BlogPostWithRelations, "title" |
     .replace(/<[^>]*>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+export function normalizeInternalPath(value: string): string {
+  const trimmed = value.trim();
+  const withoutOrigin = trimmed.replace(/^https?:\/\/[^/]+/i, "");
+  const [withoutHash] = withoutOrigin.split("#");
+  const [pathOnly] = withoutHash.split("?");
+  const normalized = pathOnly.startsWith("/") ? pathOnly : `/${pathOnly}`;
+  return normalized.length > 1 && normalized.endsWith("/") ? normalized.slice(0, -1) : normalized;
 }
 
 async function getTagsForPostIds(postIds: number[]): Promise<Map<number, BlogTag[]>> {
@@ -287,20 +306,32 @@ export async function deleteBlogPost(id: number): Promise<boolean> {
   return deleted.length > 0;
 }
 
-export async function findPublishedPostsLinkingToPost(
-  targetPost: Pick<BlogPostWithRelations, "id" | "slug" | "language">,
+export async function findBlogPostsLinkingToPath(
+  targetPath: string,
+  options: FindInternalLinkOptions = {},
 ): Promise<BlogInternalLinkImpact[]> {
-  const targetPath = getBlogPostPath(targetPost);
+  const normalizedPath = normalizeInternalPath(targetPath);
+  const conditions: SQL[] = [
+    or(
+      ilike(blogPosts.content, `%href="${normalizedPath}"%`),
+      ilike(blogPosts.content, `%href='${normalizedPath}'%`),
+      ilike(blogPosts.content, `%href="${normalizedPath}?%`),
+      ilike(blogPosts.content, `%href='${normalizedPath}?%`),
+      ilike(blogPosts.content, `%href="${normalizedPath}#%`),
+      ilike(blogPosts.content, `%href='${normalizedPath}#%`),
+    )!,
+  ];
+  if (options.status && options.status !== "all") {
+    conditions.push(eq(blogPosts.status, options.status));
+  }
+  if (options.excludePostId) {
+    conditions.push(ne(blogPosts.id, options.excludePostId));
+  }
+
   const rows = await db
     .select({ post: blogPosts })
     .from(blogPosts)
-    .where(
-      and(
-        eq(blogPosts.status, "published"),
-        ne(blogPosts.id, targetPost.id),
-        ilike(blogPosts.content, `%${targetPath}%`),
-      ),
-    )
+    .where(and(...conditions))
     .orderBy(desc(blogPosts.publishedAt), desc(blogPosts.updatedAt));
 
   return rows.map(row => ({
@@ -311,6 +342,81 @@ export async function findPublishedPostsLinkingToPost(
     status: row.post.status,
     path: getBlogPostPath(row.post),
   }));
+}
+
+export async function findPublishedPostsLinkingToPost(
+  targetPost: Pick<BlogPostWithRelations, "id" | "slug" | "language">,
+): Promise<BlogInternalLinkImpact[]> {
+  return findBlogPostsLinkingToPath(getBlogPostPath(targetPost), {
+    status: "published",
+    excludePostId: targetPost.id,
+  });
+}
+
+export async function getBlogRedirects(): Promise<BlogRedirect[]> {
+  return db.select().from(blogRedirects).orderBy(desc(blogRedirects.updatedAt), desc(blogRedirects.createdAt));
+}
+
+export async function getBlogRedirectById(id: number): Promise<BlogRedirect | undefined> {
+  const [redirect] = await db.select().from(blogRedirects).where(eq(blogRedirects.id, id)).limit(1);
+  return redirect;
+}
+
+export async function getActiveBlogRedirect(sourcePath: string): Promise<BlogRedirect | undefined> {
+  const normalizedPath = normalizeInternalPath(sourcePath);
+  const [redirect] = await db
+    .select()
+    .from(blogRedirects)
+    .where(
+      and(
+        eq(blogRedirects.sourcePath, normalizedPath),
+        eq(blogRedirects.isActive, true),
+      ),
+    )
+    .limit(1);
+  return redirect;
+}
+
+export async function deactivateBlogRedirect(sourcePath: string): Promise<BlogRedirect | undefined> {
+  const normalizedPath = normalizeInternalPath(sourcePath);
+  const [redirect] = await db
+    .update(blogRedirects)
+    .set({
+      isActive: false,
+      updatedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(blogRedirects.sourcePath, normalizedPath),
+        eq(blogRedirects.isActive, true),
+      ),
+    )
+    .returning();
+  return redirect;
+}
+
+export async function upsertBlogRedirect(values: BlogRedirectInput): Promise<BlogRedirect> {
+  const [redirect] = await db
+    .insert(blogRedirects)
+    .values({
+      ...values,
+      sourcePath: normalizeInternalPath(values.sourcePath),
+      targetPath: normalizeInternalPath(values.targetPath),
+      updatedAt: new Date(),
+    })
+    .onConflictDoUpdate({
+      target: blogRedirects.sourcePath,
+      set: {
+        targetPath: normalizeInternalPath(values.targetPath),
+        statusCode: values.statusCode || 301,
+        reason: values.reason || null,
+        isActive: values.isActive ?? true,
+        sourcePostId: values.sourcePostId || null,
+        updatedAt: new Date(),
+      },
+    })
+    .returning();
+  return redirect;
 }
 
 export async function getBlogAuthors(): Promise<BlogAuthor[]> {

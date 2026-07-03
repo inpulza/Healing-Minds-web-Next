@@ -47,6 +47,26 @@ export const adminBlogStatusSchema = z.object({
   status: statusSchema,
   confirmUnpublish: z.boolean().optional(),
   confirmSlug: z.string().trim().optional(),
+  redirectTargetPath: z.string().trim().max(500).optional(),
+  confirmNoRedirect: z.boolean().optional(),
+});
+
+export const adminBlogRedirectSchema = z.object({
+  sourcePath: z.string().trim().min(3).max(500),
+  targetPath: z.string().trim().min(1).max(500),
+  statusCode: z.union([z.literal(301), z.literal(302)]).default(301),
+  reason: z.string().trim().max(100).optional().nullable(),
+  isActive: z.coerce.boolean().default(true),
+  sourcePostId: z.coerce.number().int().positive().optional().nullable(),
+});
+
+export const adminBlogInternalLinkAuditSchema = z.object({
+  path: z.string().trim().min(1).max(500),
+  status: z.enum(["all", "draft", "pending_review", "published", "rejected"]).default("all"),
+});
+
+export const adminBlogRedirectCleanupSchema = z.object({
+  confirmSourcePath: z.string().trim().min(1).max(500),
 });
 
 export const adminBlogFixSchema = z.object({
