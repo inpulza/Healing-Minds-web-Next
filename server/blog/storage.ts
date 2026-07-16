@@ -301,9 +301,50 @@ export async function updateBlogPost(id: number, values: Partial<BlogPostInput>)
   return getBlogPostById(id);
 }
 
-export async function deleteBlogPost(id: number): Promise<boolean> {
-  const deleted = await db.delete(blogPosts).where(eq(blogPosts.id, id)).returning({ id: blogPosts.id });
-  return deleted.length > 0;
+export async function deleteBlogPostWithRedirect(
+  id: number,
+  redirectValues?: BlogRedirectInput,
+): Promise<{ deleted: boolean; redirect: BlogRedirect | null }> {
+  return db.transaction(async tx => {
+    const deleted = await tx
+      .delete(blogPosts)
+      .where(eq(blogPosts.id, id))
+      .returning({ id: blogPosts.id });
+
+    if (deleted.length === 0) {
+      return { deleted: false, redirect: null };
+    }
+
+    if (!redirectValues) {
+      return { deleted: true, redirect: null };
+    }
+
+    const sourcePath = normalizeInternalPath(redirectValues.sourcePath);
+    const targetPath = normalizeInternalPath(redirectValues.targetPath);
+    const [redirect] = await tx
+      .insert(blogRedirects)
+      .values({
+        ...redirectValues,
+        sourcePath,
+        targetPath,
+        sourcePostId: null,
+        updatedAt: new Date(),
+      })
+      .onConflictDoUpdate({
+        target: blogRedirects.sourcePath,
+        set: {
+          targetPath,
+          statusCode: redirectValues.statusCode || 301,
+          reason: redirectValues.reason || null,
+          isActive: redirectValues.isActive ?? true,
+          sourcePostId: null,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+
+    return { deleted: true, redirect };
+  });
 }
 
 export async function findBlogPostsLinkingToPath(

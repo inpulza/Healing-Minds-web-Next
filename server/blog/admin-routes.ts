@@ -21,7 +21,7 @@ import {
   createBlogPost,
   createBlogTag,
   deactivateBlogRedirect,
-  deleteBlogPost,
+  deleteBlogPostWithRedirect,
   findBlogPostsLinkingToPath,
   findPublishedPostsLinkingToPost,
   getActiveBlogRedirect,
@@ -1101,7 +1101,7 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const post = await getBlogPostById(id);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
-      let redirect = null;
+      let redirectRequest: Parameters<typeof deleteBlogPostWithRedirect>[1];
       if (post.status === "published") {
         const confirmPublishedDelete = req.body?.confirmPublishedDelete === true;
         const confirmSlug = typeof req.body?.confirmSlug === "string" ? req.body.confirmSlug.trim() : "";
@@ -1116,18 +1116,21 @@ export function registerAdminBlogRoutes(app: Express): void {
         const sourcePath = getBlogPostPath(post);
         const targetPath = await assertRedirectDecision(sourcePath, redirectTargetPath, confirmNoRedirect);
         if (targetPath) {
-          redirect = await upsertBlogRedirect({
+          redirectRequest = {
             sourcePath,
             targetPath,
             statusCode: 301,
             reason: "delete",
             isActive: true,
-            sourcePostId: post.id,
-          });
+            sourcePostId: null,
+          };
         }
       }
 
-      await deleteBlogPost(id);
+      const deletion = await deleteBlogPostWithRedirect(id, redirectRequest);
+      if (!deletion.deleted) {
+        return res.status(404).json({ success: false, message: "Blog post not found" });
+      }
       res.status(200).json({
         success: true,
         data: {
@@ -1135,7 +1138,7 @@ export function registerAdminBlogRoutes(app: Express): void {
           deletedSlug: post.slug,
           deletedStatus: post.status,
           publicPath: getBlogPostPath(post),
-          redirect,
+          redirect: deletion.redirect,
         },
       });
     } catch (error) {
