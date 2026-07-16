@@ -18,6 +18,11 @@ app.set('etag', 'strong');
 // Enable aggressive gzip compression for better performance
 app.use(compression({
   filter: (req: Request, res: Response) => {
+    // Streaming progress must flush immediately through the Replit proxy.
+    if (req.headers.accept?.includes('text/event-stream')) {
+      return false;
+    }
+
     // Don't compress responses with this request header
     if (req.headers['x-no-compression']) {
       return false;

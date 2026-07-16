@@ -1,7 +1,8 @@
-import { and, count, desc, eq, ilike, inArray, ne, or, type SQL } from "drizzle-orm";
+import { and, count, desc, eq, ilike, inArray, isNull, ne, or, type SQL } from "drizzle-orm";
 import {
   blogAuthors,
   blogCategories,
+  blogGenerationRuns,
   blogPosts,
   blogPostTags,
   blogRedirects,
@@ -279,6 +280,53 @@ export async function createBlogPost(values: BlogPostInput): Promise<BlogPostWit
   await setBlogPostTags(post.id, tagIds);
   const created = await getBlogPostById(post.id);
   if (!created) throw new Error("Blog post was created but could not be loaded");
+  return created;
+}
+
+export async function createBlogPostForGenerationRun(
+  values: BlogPostInput,
+  runId: number,
+): Promise<BlogPostWithRelations> {
+  const postId = await db.transaction(async tx => {
+    const { tagIds = [], ...postValues } = values;
+    const [post] = await tx
+      .insert(blogPosts)
+      .values({
+        ...postValues,
+        updatedAt: new Date(),
+      })
+      .returning({ id: blogPosts.id });
+
+    const uniqueTagIds = Array.from(new Set(tagIds.filter(Number.isFinite)));
+    if (uniqueTagIds.length > 0) {
+      await tx
+        .insert(blogPostTags)
+        .values(uniqueTagIds.map(tagId => ({ postId: post.id, tagId })))
+        .onConflictDoNothing();
+    }
+
+    const [linkedRun] = await tx
+      .update(blogGenerationRuns)
+      .set({
+        postId: post.id,
+        heartbeatAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(and(
+        eq(blogGenerationRuns.id, runId),
+        eq(blogGenerationRuns.status, "running"),
+        isNull(blogGenerationRuns.postId),
+      ))
+      .returning({ id: blogGenerationRuns.id });
+    if (!linkedRun) {
+      throw new Error("Generation run could not claim its draft");
+    }
+
+    return post.id;
+  });
+
+  const created = await getBlogPostById(postId);
+  if (!created) throw new Error("Generated blog post was committed but could not be loaded");
   return created;
 }
 

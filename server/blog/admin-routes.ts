@@ -19,6 +19,7 @@ import {
 import {
   createBlogCategory,
   createBlogPost,
+  createBlogPostForGenerationRun,
   createBlogTag,
   deactivateBlogRedirect,
   deleteBlogPostWithRedirect,
@@ -55,6 +56,21 @@ import { selectBlogTagIds } from "./taxonomy";
 import { buildBlogVerificationReport } from "./verification";
 import { runSeoPublishingCheck } from "../seo/publishing";
 import { getClientIp } from "../utils/client-ip";
+import {
+  appendBlogGenerationEvent,
+  claimBlogGenerationRun,
+  completeBlogGenerationRun,
+  createBlogGenerationRun,
+  failBlogGenerationRun,
+  getBlogGenerationRun,
+  getBlogGenerationRunByIdempotencyKey,
+  getOpenBlogGenerationRun,
+  listBlogGenerationEvents,
+  markStaleBlogGenerationRunsInterrupted,
+  queuePreparedBlogGenerationRun,
+  updateBlogGenerationRun,
+} from "./generation/storage";
+import type { JsonObject } from "./generation/types";
 
 function sendValidationError(res: Response, error: unknown): void {
   const requestError = error as { statusCode?: number; message?: string };
@@ -278,11 +294,12 @@ function normalizePostUpdatePayload(input: unknown) {
 }
 
 type AdminBlogGenerateDraftPayload = z.infer<typeof adminBlogGenerateDraftSchema>;
+type AdminBlogAutoGeneratePayload = z.infer<typeof adminBlogAutoGenerateSchema>;
 
 type BlogGenerationWorkflowStep = {
   id: string;
   label: string;
-  status: "completed";
+  status: "pending" | "in_progress" | "completed" | "failed";
   detail?: string;
 };
 
@@ -294,17 +311,35 @@ type BlogGenerationWorkflow = {
   steps: BlogGenerationWorkflowStep[];
 };
 
-function addWorkflowStep(
-  steps: BlogGenerationWorkflowStep[] | undefined,
+type BlogGenerationProgressReporter = (
+  workflow: BlogGenerationWorkflow,
   step: BlogGenerationWorkflowStep,
-): void {
-  steps?.push(step);
+) => Promise<void>;
+
+async function updateWorkflowStep(
+  workflow: BlogGenerationWorkflow | undefined,
+  step: BlogGenerationWorkflowStep,
+  reportProgress?: BlogGenerationProgressReporter,
+): Promise<void> {
+  if (!workflow) return;
+  const index = workflow.steps.findIndex(item => item.id === step.id);
+  if (index >= 0) workflow.steps[index] = step;
+  else workflow.steps.push(step);
+  await reportProgress?.(workflow, step);
 }
 
 async function createGeneratedBlogDraft(
   payload: AdminBlogGenerateDraftPayload,
-  workflowSteps?: BlogGenerationWorkflowStep[],
+  workflow?: BlogGenerationWorkflow,
+  reportProgress?: BlogGenerationProgressReporter,
+  generationRunId?: number,
 ) {
+  await updateWorkflowStep(workflow, {
+    id: "editorial-context",
+    label: "Editorial context",
+    status: "in_progress",
+    detail: "Loading the selected clinical author and bilingual taxonomy.",
+  }, reportProgress);
   const [authors, categories, tags] = await Promise.all([
     getBlogAuthors(),
     getBlogCategories(payload.language),
@@ -324,12 +359,19 @@ async function createGeneratedBlogDraft(
     throw Object.assign(new Error("Selected tags must match the draft language"), { statusCode: 400 });
   }
 
-  addWorkflowStep(workflowSteps, {
+  await updateWorkflowStep(workflow, {
     id: "editorial-context",
     label: "Editorial context",
     status: "completed",
     detail: `${author.name}; ${category.name}; ${requestedTags.length} requested tag${requestedTags.length === 1 ? "" : "s"}.`,
-  });
+  }, reportProgress);
+
+  await updateWorkflowStep(workflow, {
+    id: "taxonomy-links",
+    label: "Taxonomy and internal links",
+    status: "in_progress",
+    detail: "Selecting existing tags and verified internal routes.",
+  }, reportProgress);
 
   const promptTagIds = selectBlogTagIds({
     language: payload.language,
@@ -349,12 +391,19 @@ async function createGeneratedBlogDraft(
     categoryName: category.name,
   });
 
-  addWorkflowStep(workflowSteps, {
+  await updateWorkflowStep(workflow, {
     id: "taxonomy-links",
     label: "Taxonomy and internal links",
     status: "completed",
     detail: `${selectedTags.length} tag${selectedTags.length === 1 ? "" : "s"} selected; ${selectedInternalLinks.length} internal link${selectedInternalLinks.length === 1 ? "" : "s"} selected.`,
-  });
+  }, reportProgress);
+
+  await updateWorkflowStep(workflow, {
+    id: "trusted-research",
+    label: "Trusted research",
+    status: "in_progress",
+    detail: "Selecting sources from the curated medical allowlist.",
+  }, reportProgress);
 
   const research = selectBlogResearchSources({
     topic: payload.topic,
@@ -365,12 +414,19 @@ async function createGeneratedBlogDraft(
     tagNames: selectedTags.map(tag => tag.name),
     internalLinks: selectedInternalLinks,
   });
-  addWorkflowStep(workflowSteps, {
+  await updateWorkflowStep(workflow, {
     id: "trusted-research",
     label: "Trusted research",
     status: "completed",
     detail: `${research.sources.length} allowlisted source${research.sources.length === 1 ? "" : "s"}; confidence ${research.confidence}.`,
-  });
+  }, reportProgress);
+
+  await updateWorkflowStep(workflow, {
+    id: "semantic-memory",
+    label: "Semantic memory",
+    status: "in_progress",
+    detail: "Comparing the topic with existing drafts and published articles.",
+  }, reportProgress);
 
   const semanticMemory = await buildBlogSemanticMemory({
     topic: payload.topic,
@@ -379,12 +435,19 @@ async function createGeneratedBlogDraft(
     categoryName: category.name,
     tagNames: selectedTags.map(tag => tag.name),
   });
-  addWorkflowStep(workflowSteps, {
+  await updateWorkflowStep(workflow, {
     id: "semantic-memory",
     label: "Semantic memory",
     status: "completed",
     detail: `${semanticMemory.recommendation.replace(/_/g, " ")}; ${semanticMemory.matches.length} possible overlap match${semanticMemory.matches.length === 1 ? "" : "es"}.`,
-  });
+  }, reportProgress);
+
+  await updateWorkflowStep(workflow, {
+    id: "editorial-brief",
+    label: "Editorial brief",
+    status: "in_progress",
+    detail: "Building the YMYL-safe article structure and depth target.",
+  }, reportProgress);
 
   const editorialBrief = buildBlogEditorialBrief({
     topic: payload.topic,
@@ -397,12 +460,19 @@ async function createGeneratedBlogDraft(
     researchSources: research.sources,
     semanticMemory,
   });
-  addWorkflowStep(workflowSteps, {
+  await updateWorkflowStep(workflow, {
     id: "editorial-brief",
     label: "Editorial brief",
     status: "completed",
     detail: `${editorialBrief.requiredSections.length} required section${editorialBrief.requiredSections.length === 1 ? "" : "s"}; target ${editorialBrief.targetWordCount} words.`,
-  });
+  }, reportProgress);
+
+  await updateWorkflowStep(workflow, {
+    id: "ai-draft",
+    label: "AI draft",
+    status: "in_progress",
+    detail: "Generating the unpublished clinical education draft.",
+  }, reportProgress);
 
   const generated = await generateBlogDraftWithAi({
     topic: payload.topic,
@@ -416,12 +486,12 @@ async function createGeneratedBlogDraft(
     semanticMemory,
     editorialBrief,
   });
-  addWorkflowStep(workflowSteps, {
+  await updateWorkflowStep(workflow, {
     id: "ai-draft",
     label: "AI draft",
     status: "completed",
     detail: generated.title,
-  });
+  }, reportProgress);
 
   const slug = await getAvailableBlogSlug(generated.slug, payload.language);
   const finalTagIds = selectBlogTagIds({
@@ -465,12 +535,25 @@ async function createGeneratedBlogDraft(
     aiRiskNotes.push(`Auto-added internal links for editor review: ${contentWithInternalLinks.addedLinks.join(", ")}.`);
   }
   aiRiskNotes.push(`Auto-selected curated featured image for editor review: ${featuredImage.label}.`);
-  addWorkflowStep(workflowSteps, {
+  await updateWorkflowStep(workflow, {
+    id: "featured-image",
+    label: "Featured image",
+    status: "in_progress",
+    detail: "Matching an approved Healing Minds image to the article.",
+  }, reportProgress);
+  await updateWorkflowStep(workflow, {
     id: "featured-image",
     label: "Featured image",
     status: "completed",
     detail: `${featuredImage.label} selected from the curated Healing Minds image library.`,
-  });
+  }, reportProgress);
+
+  await updateWorkflowStep(workflow, {
+    id: "sanitize-save",
+    label: "Sanitize and save",
+    status: "in_progress",
+    detail: "Sanitizing HTML and saving one private draft.",
+  }, reportProgress);
   const postPayload = normalizePostPayload({
     title: generated.title,
     slug,
@@ -489,20 +572,28 @@ async function createGeneratedBlogDraft(
     tagIds: finalTagIds,
   });
 
-  const post = await createBlogPost(postPayload);
+  const post = generationRunId
+    ? await createBlogPostForGenerationRun(postPayload, generationRunId)
+    : await createBlogPost(postPayload);
   const verification = buildBlogVerificationReport(post);
-  addWorkflowStep(workflowSteps, {
+  await updateWorkflowStep(workflow, {
     id: "sanitize-save",
     label: "Sanitize and save",
     status: "completed",
     detail: `Draft ${post.id} saved with status ${post.status}; publishedAt remains empty.`,
-  });
-  addWorkflowStep(workflowSteps, {
+  }, reportProgress);
+  await updateWorkflowStep(workflow, {
+    id: "verify",
+    label: "Verification",
+    status: "in_progress",
+    detail: "Running the editorial and YMYL readiness checks.",
+  }, reportProgress);
+  await updateWorkflowStep(workflow, {
     id: "verify",
     label: "Verification",
     status: "completed",
     detail: `${verification.score}% score; ${verification.blocking.length} blocker${verification.blocking.length === 1 ? "" : "s"}.`,
-  });
+  }, reportProgress);
 
   return {
     data: post,
@@ -515,6 +606,208 @@ async function createGeneratedBlogDraft(
       editorialBrief,
     },
   };
+}
+
+const AUTO_GENERATE_WORKFLOW_STEPS: Array<Pick<BlogGenerationWorkflowStep, "id" | "label">> = [
+  { id: "topic-plan", label: "Topic plan" },
+  { id: "topic-selection", label: "Topic selection" },
+  { id: "editorial-context", label: "Editorial context" },
+  { id: "taxonomy-links", label: "Taxonomy and internal links" },
+  { id: "trusted-research", label: "Trusted research" },
+  { id: "semantic-memory", label: "Semantic memory" },
+  { id: "editorial-brief", label: "Editorial brief" },
+  { id: "ai-draft", label: "AI draft" },
+  { id: "featured-image", label: "Featured image" },
+  { id: "sanitize-save", label: "Sanitize and save" },
+  { id: "verify", label: "Verification" },
+];
+
+function createAutoGenerateWorkflow(): BlogGenerationWorkflow {
+  return {
+    mode: "auto-generate",
+    generatedAt: new Date().toISOString(),
+    steps: AUTO_GENERATE_WORKFLOW_STEPS.map(step => ({ ...step, status: "pending" })),
+  };
+}
+
+async function prepareAutoGenerateWorkflow(
+  payload: AdminBlogAutoGeneratePayload,
+  reportProgress?: BlogGenerationProgressReporter,
+) : Promise<BlogGenerationWorkflow> {
+  const workflow = createAutoGenerateWorkflow();
+  await updateWorkflowStep(workflow, {
+    id: "topic-plan",
+    label: "Topic plan",
+    status: "in_progress",
+    detail: "Scoring safe topic candidates against existing content.",
+  }, reportProgress);
+
+  const [authors, categories, tags] = await Promise.all([
+    getBlogAuthors(),
+    getBlogCategories(payload.language),
+    getBlogTags(payload.language),
+  ]);
+  const author = authors.find(item => item.id === payload.authorId);
+  if (!author) {
+    throw Object.assign(new Error("Selected author was not found"), { statusCode: 400, workflow });
+  }
+  if (payload.categoryId && !categories.some(category => category.id === payload.categoryId)) {
+    throw Object.assign(new Error("Selected category must match the auto generation language"), { statusCode: 400, workflow });
+  }
+
+  const topicPlan = await buildBlogTopicPlan({
+    language: payload.language,
+    categories,
+    tags,
+    categoryId: payload.categoryId,
+    focus: payload.focus,
+    limit: payload.limit,
+  });
+  workflow.topicPlan = topicPlan;
+  await updateWorkflowStep(workflow, {
+    id: "topic-plan",
+    label: "Topic plan",
+    status: "completed",
+    detail: `${topicPlan.summary.returned} candidate${topicPlan.summary.returned === 1 ? "" : "s"}; ${topicPlan.summary.recommended} recommended.`,
+  }, reportProgress);
+
+  const selectedCandidate = topicPlan.candidates.find(candidate => candidate.recommendation === "recommended");
+  workflow.selectedCandidate = selectedCandidate;
+  if (!selectedCandidate) {
+    const message = "No low-overlap topic was safe for Auto Generate. Use Plan Topics and select a manual angle.";
+    await updateWorkflowStep(workflow, {
+      id: "topic-selection",
+      label: "Topic selection",
+      status: "failed",
+      detail: message,
+    }, reportProgress);
+    throw Object.assign(new Error(message), { statusCode: 409, workflow });
+  }
+
+  await updateWorkflowStep(workflow, {
+    id: "topic-selection",
+    label: "Topic selection",
+    status: "completed",
+    detail: `${selectedCandidate.topic}; overlap ${Math.round(selectedCandidate.overlapScore * 100)}%; score ${selectedCandidate.score}.`,
+  }, reportProgress);
+
+  return workflow;
+}
+
+async function executeAutoGenerateWorkflow(
+  payload: AdminBlogAutoGeneratePayload,
+  reportProgress?: BlogGenerationProgressReporter,
+  generationRunId?: number,
+  preparedWorkflow?: BlogGenerationWorkflow,
+) {
+  const workflow = preparedWorkflow || await prepareAutoGenerateWorkflow(payload, reportProgress);
+  const selectedCandidate = workflow.selectedCandidate;
+  if (!selectedCandidate) {
+    throw Object.assign(new Error("Prepared generation run has no selected topic"), { statusCode: 409, workflow });
+  }
+
+  let result: Awaited<ReturnType<typeof createGeneratedBlogDraft>>;
+  try {
+    result = await createGeneratedBlogDraft({
+      topic: selectedCandidate.topic,
+      additionalContext: selectedCandidate.angle,
+      targetKeyword: selectedCandidate.targetKeyword,
+      language: selectedCandidate.language,
+      authorId: payload.authorId,
+      categoryId: selectedCandidate.categoryId,
+      tagIds: selectedCandidate.tagIds,
+      internalLinks: selectedCandidate.internalLinks,
+    }, workflow, reportProgress, generationRunId);
+  } catch (error) {
+    const workflowError = error as Error & { workflow?: BlogGenerationWorkflow };
+    workflowError.workflow = workflow;
+    throw workflowError;
+  }
+
+  return { result, workflow };
+}
+
+function toJsonObject(value: unknown): JsonObject {
+  return JSON.parse(JSON.stringify(value)) as JsonObject;
+}
+
+async function executePersistedAutoGenerateRun(runId: number): Promise<void> {
+  const claimed = await claimBlogGenerationRun(runId);
+  if (!claimed) return;
+  const heartbeatTimer = setInterval(() => {
+    void updateBlogGenerationRun(runId, { heartbeatAt: new Date() })
+      .catch(error => console.error(`Could not heartbeat generation run ${runId}:`, error));
+  }, 30_000);
+  heartbeatTimer.unref();
+
+  const reportProgress: BlogGenerationProgressReporter = async (workflow, step) => {
+    const workflowJson = toJsonObject(workflow);
+    const updated = await updateBlogGenerationRun(runId, { workflow: workflowJson });
+    if (!updated) throw new Error("Generation run is no longer active");
+    await appendBlogGenerationEvent({
+      runId,
+      eventType: "progress",
+      payload: toJsonObject({ runId, workflow, step }),
+    }).catch(eventError => console.error("Could not persist generation progress event:", eventError));
+  };
+
+  try {
+    const payload = adminBlogAutoGenerateSchema.parse(claimed.input);
+    const { result, workflow } = await executeAutoGenerateWorkflow(
+      payload,
+      reportProgress,
+      runId,
+      claimed.workflow as unknown as BlogGenerationWorkflow,
+    );
+    const response = {
+      success: true,
+      ...result,
+      workflow,
+    };
+    const completed = await completeBlogGenerationRun(runId, {
+      postId: result.data.id,
+      workflow: toJsonObject(workflow),
+      result: toJsonObject(response),
+    });
+    if (!completed) throw new Error("Could not complete the generation run");
+    await appendBlogGenerationEvent({
+      runId,
+      eventType: "complete",
+      payload: toJsonObject(response),
+    }).catch(eventError => console.error("Could not persist generation completion event:", eventError));
+  } catch (error) {
+    const runError = error as Error & { statusCode?: number; workflow?: BlogGenerationWorkflow };
+    const currentRun = await getBlogGenerationRun(runId).catch(() => undefined);
+    const workflow = runError.workflow
+      || (currentRun?.workflow as unknown as BlogGenerationWorkflow | null)
+      || (claimed.workflow as unknown as BlogGenerationWorkflow | null)
+      || createAutoGenerateWorkflow();
+    const runningStep = workflow.steps.find(step => step.status === "in_progress");
+    if (runningStep) {
+      runningStep.status = "failed";
+      runningStep.detail = runError.message || "Generation failed";
+    }
+    const failure = {
+      success: false,
+      message: runError.message || "Auto generation failed",
+      statusCode: runError.statusCode || 500,
+      postId: currentRun?.postId || null,
+      partialSuccess: Boolean(currentRun?.postId),
+      workflow,
+    };
+    await failBlogGenerationRun(runId, {
+      error: failure.message,
+      workflow: toJsonObject(workflow),
+      result: toJsonObject(failure),
+    }).catch(dbError => console.error("Could not persist failed generation run:", dbError));
+    await appendBlogGenerationEvent({
+      runId,
+      eventType: "failed",
+      payload: toJsonObject(failure),
+    }).catch(dbError => console.error("Could not persist failed generation event:", dbError));
+  } finally {
+    clearInterval(heartbeatTimer);
+  }
 }
 
 function runPostPublishCheckInBackground(path: string): void {
@@ -530,6 +823,14 @@ function runPostPublishCheckInBackground(path: string): void {
 }
 
 export function registerAdminBlogRoutes(app: Express): void {
+  const recoverStaleGenerationRuns = () => {
+    void markStaleBlogGenerationRunsInterrupted(new Date(Date.now() - 5 * 60 * 1000))
+      .catch(error => console.error("Could not recover stale blog generation runs:", error));
+  };
+  recoverStaleGenerationRuns();
+  const generationRecoveryTimer = setInterval(recoverStaleGenerationRuns, 60_000);
+  generationRecoveryTimer.unref();
+
   app.get("/api/admin/blog/stats", async (_req, res) => {
     try {
       res.status(200).json({ success: true, data: await getBlogStats() });
@@ -716,13 +1017,50 @@ export function registerAdminBlogRoutes(app: Express): void {
     }
   });
 
-  app.post("/api/admin/blog/auto-generate", async (req, res) => {
+  app.post("/api/admin/blog/generation-runs", async (req, res) => {
     try {
       const payload = adminBlogAutoGenerateSchema.parse(req.body);
       if (containsLikelyPatientIdentifier(payload.focus || "")) {
         return res.status(400).json({
           success: false,
           message: "Auto generation inputs must not include patient-identifying information",
+        });
+      }
+
+      const idempotencyKey = req.get("Idempotency-Key")?.trim() || "";
+      if (!/^[A-Za-z0-9._:-]{8,255}$/.test(idempotencyKey)) {
+        return res.status(400).json({
+          success: false,
+          message: "A valid Idempotency-Key header is required",
+        });
+      }
+
+      const existing = await getBlogGenerationRunByIdempotencyKey(idempotencyKey);
+      if (existing) {
+        if (existing.status === "queued") {
+          setImmediate(() => {
+            void executePersistedAutoGenerateRun(existing.id).catch(error => {
+              console.error(`Unhandled queued generation run failure (${existing.id}):`, error);
+            });
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          data: {
+            runId: existing.id,
+            status: existing.status,
+            workflow: existing.workflow || createAutoGenerateWorkflow(),
+          },
+        });
+      }
+
+      const openRun = await getOpenBlogGenerationRun();
+      if (openRun) {
+        return res.status(409).json({
+          success: false,
+          message: `Generation run ${openRun.id} is already ${openRun.status}. Reopen it instead of creating another draft.`,
+          workflow: openRun.workflow || undefined,
+          runId: openRun.id,
         });
       }
 
@@ -737,74 +1075,82 @@ export function registerAdminBlogRoutes(app: Express): void {
         });
       }
 
-      const workflowSteps: BlogGenerationWorkflowStep[] = [];
-      const [authors, categories, tags] = await Promise.all([
-        getBlogAuthors(),
-        getBlogCategories(payload.language),
-        getBlogTags(payload.language),
-      ]);
-      const author = authors.find(item => item.id === payload.authorId);
-      if (!author) {
-        return res.status(400).json({ success: false, message: "Selected author was not found" });
-      }
-      if (payload.categoryId && !categories.some(category => category.id === payload.categoryId)) {
-        return res.status(400).json({ success: false, message: "Selected category must match the auto generation language" });
-      }
-
-      const topicPlan = await buildBlogTopicPlan({
-        language: payload.language,
-        categories,
-        tags,
-        categoryId: payload.categoryId,
-        focus: payload.focus,
-        limit: payload.limit,
-      });
-      addWorkflowStep(workflowSteps, {
-        id: "topic-plan",
-        label: "Topic plan",
-        status: "completed",
-        detail: `${topicPlan.summary.returned} candidate${topicPlan.summary.returned === 1 ? "" : "s"}; ${topicPlan.summary.recommended} recommended.`,
-      });
-
-      const selectedCandidate = topicPlan.candidates.find(candidate => candidate.recommendation === "recommended");
-      const baseWorkflow: BlogGenerationWorkflow = {
-        mode: "auto-generate",
-        generatedAt: new Date().toISOString(),
-        selectedCandidate,
-        topicPlan,
-        steps: workflowSteps,
-      };
-
-      if (!selectedCandidate) {
-        return res.status(409).json({
-          success: false,
-          message: "No low-overlap topic was safe for Auto Generate. Use Plan Topics and select a manual angle.",
-          workflow: baseWorkflow,
+      // Persist a safe preflight record before planning so a lost response can
+      // recover by idempotency key. Raw free-form focus is never persisted.
+      let workflow = createAutoGenerateWorkflow();
+      const persistedPayload = { ...payload, focus: "" };
+      let run: Awaited<ReturnType<typeof createBlogGenerationRun>>;
+      try {
+        run = await createBlogGenerationRun({
+          idempotencyKey,
+          input: toJsonObject(persistedPayload),
+          workflow: toJsonObject(workflow),
         });
+      } catch (error) {
+        if ((error as { code?: string }).code === "23505") {
+          const concurrentRun = await getOpenBlogGenerationRun();
+          return res.status(409).json({
+            success: false,
+            message: concurrentRun
+              ? `Generation run ${concurrentRun.id} is already ${concurrentRun.status}. Reopen it instead of creating another draft.`
+              : "Another generation run started at the same time. Reopen it instead of creating another draft.",
+            workflow: concurrentRun?.workflow || undefined,
+            runId: concurrentRun?.id,
+          });
+        }
+        throw error;
       }
-
-      addWorkflowStep(workflowSteps, {
-        id: "topic-selection",
-        label: "Topic selection",
-        status: "completed",
-        detail: `${selectedCandidate.topic}; overlap ${Math.round(selectedCandidate.overlapScore * 100)}%; score ${selectedCandidate.score}.`,
+      await appendBlogGenerationEvent({
+        runId: run.id,
+        eventType: "progress",
+        payload: toJsonObject({ runId: run.id, workflow }),
       });
 
-      const result = await createGeneratedBlogDraft({
-        topic: selectedCandidate.topic,
-        additionalContext: selectedCandidate.angle,
-        targetKeyword: selectedCandidate.targetKeyword,
-        language: selectedCandidate.language,
-        authorId: payload.authorId,
-        categoryId: selectedCandidate.categoryId,
-        tagIds: selectedCandidate.tagIds,
-        internalLinks: selectedCandidate.internalLinks,
-      }, workflowSteps);
+      try {
+        workflow = await prepareAutoGenerateWorkflow(payload);
+        const queued = await queuePreparedBlogGenerationRun(run.id, toJsonObject(workflow));
+        if (!queued) throw new Error("Generation run could not finish topic planning");
+        await appendBlogGenerationEvent({
+          runId: run.id,
+          eventType: "progress",
+          payload: toJsonObject({ runId: run.id, workflow }),
+        });
+      } catch (error) {
+        const planningError = error as Error & { statusCode?: number; workflow?: BlogGenerationWorkflow };
+        workflow = planningError.workflow || workflow;
+        const failure = {
+          success: false,
+          message: planningError.message || "Topic planning failed",
+          statusCode: planningError.statusCode || 500,
+          workflow,
+          runId: run.id,
+        };
+        await failBlogGenerationRun(run.id, {
+          error: failure.message,
+          workflow: toJsonObject(workflow),
+          result: toJsonObject(failure),
+        });
+        await appendBlogGenerationEvent({
+          runId: run.id,
+          eventType: "failed",
+          payload: toJsonObject(failure),
+        });
+        return res.status(failure.statusCode).json(failure);
+      }
 
-      res.status(201).json({
+      res.status(202).json({
         success: true,
-        ...result,
-        workflow: baseWorkflow,
+        data: {
+          runId: run.id,
+          status: "queued",
+          workflow,
+        },
+      });
+
+      setImmediate(() => {
+        void executePersistedAutoGenerateRun(run.id).catch(error => {
+          console.error(`Unhandled blog generation run failure (${run.id}):`, error);
+        });
       });
     } catch (error) {
       try {
@@ -813,6 +1159,125 @@ export function registerAdminBlogRoutes(app: Express): void {
         sendDbError(res, error);
       }
     }
+  });
+
+  app.get("/api/admin/blog/generation-runs/by-key", async (req, res) => {
+    const idempotencyKey = typeof req.query.key === "string" ? req.query.key.trim() : "";
+    if (!/^[A-Za-z0-9._:-]{8,255}$/.test(idempotencyKey)) {
+      return res.status(400).json({ success: false, message: "Invalid idempotency key" });
+    }
+    try {
+      const run = await getBlogGenerationRunByIdempotencyKey(idempotencyKey);
+      if (!run) return res.status(404).json({ success: false, message: "Generation run not found" });
+      res.status(200).json({ success: true, data: run });
+    } catch (error) {
+      sendDbError(res, error);
+    }
+  });
+
+  app.get("/api/admin/blog/generation-runs/:id", async (req, res) => {
+    const runId = Number(req.params.id);
+    if (!Number.isInteger(runId) || runId <= 0) {
+      return res.status(400).json({ success: false, message: "Invalid generation run id" });
+    }
+    try {
+      const run = await getBlogGenerationRun(runId);
+      if (!run) return res.status(404).json({ success: false, message: "Generation run not found" });
+      res.status(200).json({ success: true, data: run });
+    } catch (error) {
+      sendDbError(res, error);
+    }
+  });
+
+  app.get("/api/admin/blog/generation-runs/:id/events", async (req, res) => {
+    const runId = Number(req.params.id);
+    if (!Number.isInteger(runId) || runId <= 0) {
+      return res.status(400).json({ success: false, message: "Invalid generation run id" });
+    }
+
+    const initialRun = await getBlogGenerationRun(runId).catch(error => {
+      console.error("Could not load generation run for SSE:", error);
+      return undefined;
+    });
+    if (!initialRun) return res.status(404).json({ success: false, message: "Generation run not found" });
+    if (initialRun.status === "queued") {
+      setImmediate(() => {
+        void executePersistedAutoGenerateRun(initialRun.id).catch(error => {
+          console.error(`Unhandled resumed generation run failure (${initialRun.id}):`, error);
+        });
+      });
+    }
+
+    res.status(200);
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Connection", "keep-alive");
+    res.setHeader("X-Accel-Buffering", "no");
+    res.flushHeaders();
+
+    let closed = false;
+    req.on("close", () => { closed = true; });
+    res.on("close", () => { closed = true; });
+
+    const headerEventId = Number(req.get("Last-Event-ID") || 0);
+    let afterId = Number.isInteger(headerEventId) && headerEventId > 0 ? headerEventId : 0;
+    let lastHeartbeat = Date.now();
+    let terminalSent = false;
+
+    while (!closed && !res.writableEnded) {
+      try {
+        const events = await listBlogGenerationEvents(runId, { afterId });
+        for (const event of events) {
+          afterId = event.id;
+          res.write(`id: ${event.id}\nevent: ${event.eventType}\ndata: ${JSON.stringify(event.payload)}\n\n`);
+          if (event.eventType === "complete" || event.eventType === "failed" || event.eventType === "interrupted") {
+            terminalSent = true;
+          }
+        }
+
+        const run = await getBlogGenerationRun(runId);
+        if (!run) {
+          res.write(`event: failed\ndata: ${JSON.stringify({ message: "Generation run no longer exists" })}\n\n`);
+          terminalSent = true;
+        } else if (!terminalSent && (run.status === "completed" || run.status === "failed" || run.status === "interrupted")) {
+          const eventType = run.status === "completed" ? "complete" : run.status;
+          const payload = run.result || {
+            success: false,
+            message: run.status === "interrupted"
+              ? (run.postId ? "Generation was interrupted after saving a private draft" : "Generation was interrupted before a draft was saved")
+              : "Generation failed",
+            workflow: run.workflow,
+            postId: run.postId,
+            partialSuccess: Boolean(run.postId),
+          };
+          res.write(`event: ${eventType}\ndata: ${JSON.stringify(payload)}\n\n`);
+          terminalSent = true;
+        }
+
+        if (terminalSent) break;
+        if (Date.now() - lastHeartbeat >= 15_000) {
+          res.write(`: heartbeat ${Date.now()}\n\n`);
+          lastHeartbeat = Date.now();
+        }
+      } catch (error) {
+        console.error(`Generation SSE polling failed (${runId}):`, error);
+        res.write(`event: failed\ndata: ${JSON.stringify({ message: "Could not read generation progress" })}\n\n`);
+        terminalSent = true;
+        break;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+    if (!res.writableEnded) res.end();
+  });
+
+  app.post("/api/admin/blog/auto-generate", (_req, res) => {
+    res.status(410).json({
+      success: false,
+      message: "The synchronous Auto Generate endpoint was retired to prevent duplicate drafts. Start a durable generation run instead.",
+      replacement: "/api/admin/blog/generation-runs",
+    });
   });
 
   app.post("/api/admin/blog/generate-draft", async (req, res) => {

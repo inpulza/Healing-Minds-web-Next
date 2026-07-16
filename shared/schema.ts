@@ -50,6 +50,15 @@ export const blogPostStatusEnum = pgEnum("blog_post_status", [
   "rejected",
 ]);
 
+export const blogGenerationRunStatusEnum = pgEnum("blog_generation_run_status", [
+  "planning",
+  "queued",
+  "running",
+  "completed",
+  "failed",
+  "interrupted",
+]);
+
 export const blogAuthors = pgTable("blog_authors", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   name: varchar("name", { length: 255 }).notNull(),
@@ -128,6 +137,45 @@ export const blogPostTags = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.postId, table.tagId] }),
+  ],
+);
+
+export const blogGenerationRuns = pgTable(
+  "blog_generation_runs",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    idempotencyKey: varchar("idempotency_key", { length: 255 }).notNull(),
+    status: blogGenerationRunStatusEnum("status").notNull().default("planning"),
+    input: jsonb("input").$type<Record<string, unknown>>().notNull(),
+    workflow: jsonb("workflow").$type<Record<string, unknown>>(),
+    result: jsonb("result").$type<Record<string, unknown>>(),
+    postId: integer("post_id").references(() => blogPosts.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    heartbeatAt: timestamp("heartbeat_at"),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_generation_runs_idempotency_key").on(table.idempotencyKey),
+    uniqueIndex("idx_blog_generation_runs_single_open")
+      .on(sql`(1)`)
+      .where(sql`${table.status} in ('planning', 'queued', 'running')`),
+    index("idx_blog_generation_runs_status_heartbeat").on(table.status, table.heartbeatAt),
+  ],
+);
+
+export const blogGenerationEvents = pgTable(
+  "blog_generation_events",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    runId: integer("run_id").references(() => blogGenerationRuns.id, { onDelete: "cascade" }).notNull(),
+    eventType: varchar("event_type", { length: 100 }).notNull(),
+    payload: jsonb("payload").$type<Record<string, unknown>>().notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_blog_generation_events_run_id_id").on(table.runId, table.id),
   ],
 );
 
@@ -214,6 +262,7 @@ export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 export type ContactMessage = typeof contactMessages.$inferSelect;
 export type ContactFormRequest = z.infer<typeof contactFormRequestSchema>;
 export type BlogPostStatus = (typeof blogPostStatusEnum.enumValues)[number];
+export type BlogGenerationRunStatus = (typeof blogGenerationRunStatusEnum.enumValues)[number];
 export type InsertBlogAuthor = z.infer<typeof insertBlogAuthorSchema>;
 export type BlogAuthor = typeof blogAuthors.$inferSelect;
 export type InsertBlogCategory = z.infer<typeof insertBlogCategorySchema>;
@@ -224,6 +273,8 @@ export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type InsertBlogPostTag = z.infer<typeof insertBlogPostTagSchema>;
 export type BlogPostTag = typeof blogPostTags.$inferSelect;
+export type BlogGenerationRun = typeof blogGenerationRuns.$inferSelect;
+export type BlogGenerationEvent = typeof blogGenerationEvents.$inferSelect;
 export type InsertBlogRedirect = z.infer<typeof insertBlogRedirectSchema>;
 export type BlogRedirect = typeof blogRedirects.$inferSelect;
 
