@@ -969,6 +969,22 @@ export function registerAdminBlogRoutes(app: Express): void {
 
     try {
       const payload = normalizePostUpdatePayload(req.body);
+      const existing = await getBlogPostById(id);
+      if (!existing) return res.status(404).json({ success: false, message: "Blog post not found" });
+
+      if (existing.status === "published") {
+        const nextSlug = typeof payload.slug === "string" ? payload.slug : existing.slug;
+        const nextLanguage = payload.language === "en" || payload.language === "es" ? payload.language : existing.language;
+        const nextPath = getBlogPostPath({ slug: nextSlug, language: nextLanguage });
+        const activeRedirect = await getActiveBlogRedirect(nextPath);
+        if (activeRedirect) {
+          return res.status(400).json({
+            success: false,
+            message: "Cannot save a published post to a URL with an active redirect; deactivate the redirect first",
+          });
+        }
+      }
+
       const post = await updateBlogPost(id, payload);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
       res.status(200).json({
@@ -1007,6 +1023,8 @@ export function registerAdminBlogRoutes(app: Express): void {
 
       let redirect = null;
       let deactivatedRedirect = null;
+      let redirectSourcePath: string | null = null;
+      let redirectTargetPathToCreate: string | null = null;
       if (existing.status === "published" && status !== "published") {
         if (confirmUnpublish !== true || confirmSlug !== existing.slug) {
           return res.status(400).json({
@@ -1014,18 +1032,8 @@ export function registerAdminBlogRoutes(app: Express): void {
             message: "Moving a published post out of published status requires confirmation with the exact post slug",
           });
         }
-        const sourcePath = getBlogPostPath(existing);
-        const targetPath = await assertRedirectDecision(sourcePath, redirectTargetPath, confirmNoRedirect);
-        if (targetPath) {
-          redirect = await upsertBlogRedirect({
-            sourcePath,
-            targetPath,
-            statusCode: 301,
-            reason: "unpublish",
-            isActive: true,
-            sourcePostId: existing.id,
-          });
-        }
+        redirectSourcePath = getBlogPostPath(existing);
+        redirectTargetPathToCreate = await assertRedirectDecision(redirectSourcePath, redirectTargetPath, confirmNoRedirect);
       }
 
       const post = await updateBlogPost(id, {
@@ -1034,6 +1042,16 @@ export function registerAdminBlogRoutes(app: Express): void {
       });
 
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      if (redirectSourcePath && redirectTargetPathToCreate) {
+        redirect = await upsertBlogRedirect({
+          sourcePath: redirectSourcePath,
+          targetPath: redirectTargetPathToCreate,
+          statusCode: 301,
+          reason: "unpublish",
+          isActive: true,
+          sourcePostId: existing.id,
+        });
+      }
       if (status === "published") {
         deactivatedRedirect = await deactivateBlogRedirect(getBlogPostPath(post));
         runPostPublishCheckInBackground(getBlogPostPath(post));
