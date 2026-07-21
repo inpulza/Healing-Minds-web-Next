@@ -559,7 +559,7 @@ const MedicationManagement = () => {
                       <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
                         <Phone className="w-4 h-4 text-green-800" />
                       </div>
-                      <a href="tel:+1-239-555-0123" className="flex items-center gap-3">
+                      <a href="tel:+12394230272" className="flex items-center gap-3">
                         {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
                       </a>
                     </Button>
