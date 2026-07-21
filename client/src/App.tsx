@@ -20,7 +20,7 @@ import Home from '@/pages/Home';
 const MobileToolbar = lazy(() => import('@/components/MobileToolbar'));
 
 // Floating Video Bubble - Lazy loaded for performance optimization
-const FloatingVideoBubble = lazy(() => import('@/components/FloatingVideoBubble'));
+const TelehealthVideoWidget = lazy(() => import('@/components/TelehealthVideoWidget'));
 
 // WhatsApp Floating Button - Desktop only, lazy loaded
 const WhatsAppFloatingButton = lazy(() => import('@/components/WhatsAppFloatingButton'));
@@ -256,7 +256,7 @@ function App() {
               <CookieBanner />
             </Suspense>
             <Suspense fallback={null}>
-              <FloatingVideoBubble />
+              <TelehealthVideoWidget />
             </Suspense>
             <Suspense fallback={null}>
               <WhatsAppFloatingButton />
