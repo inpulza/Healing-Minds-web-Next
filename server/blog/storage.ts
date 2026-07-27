@@ -3,6 +3,7 @@ import {
   blogAuthors,
   blogCategories,
   blogGenerationRuns,
+  blogPostImages,
   blogPosts,
   blogPostTags,
   blogRedirects,
@@ -346,6 +347,50 @@ export async function updateBlogPost(id: number, values: Partial<BlogPostInput>)
     await setBlogPostTags(id, tagIds);
   }
 
+  return getBlogPostById(id);
+}
+
+export async function updateBlogPostStatusWithImageGuard(
+  id: number,
+  status: BlogPostStatus,
+  publishedAt?: Date,
+): Promise<BlogPostWithRelations | undefined> {
+  await db.transaction(async tx => {
+    const [post] = await tx
+      .select({ id: blogPosts.id })
+      .from(blogPosts)
+      .where(eq(blogPosts.id, id))
+      .limit(1)
+      .for("update");
+    if (!post) return;
+
+    const [blockingImage] = await tx
+      .select({ id: blogPostImages.id })
+      .from(blogPostImages)
+      .where(and(
+        eq(blogPostImages.postId, id),
+        or(
+          eq(blogPostImages.generationStatus, "generating"),
+          eq(blogPostImages.errorCode, "deletion_pending"),
+        ),
+      ))
+      .limit(1);
+    if (blockingImage) {
+      throw Object.assign(
+        new Error("Wait for image generation or deletion to finish before publishing"),
+        { statusCode: 409 },
+      );
+    }
+
+    await tx
+      .update(blogPosts)
+      .set({
+        status,
+        ...(status === "published" && publishedAt ? { publishedAt } : {}),
+        updatedAt: new Date(),
+      })
+      .where(eq(blogPosts.id, id));
+  });
   return getBlogPostById(id);
 }
 

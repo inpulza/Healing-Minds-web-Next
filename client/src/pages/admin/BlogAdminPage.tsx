@@ -8,9 +8,11 @@ import {
   ExternalLink,
   Eye,
   FilePenLine,
+  ImageIcon,
   LogOut,
   Loader2,
   Plus,
+  RefreshCw,
   Sparkles,
   Wrench,
   Search,
@@ -93,6 +95,36 @@ type BlogPost = {
   author: BlogAuthor | null;
   category: BlogCategory | null;
   tags: BlogTag[];
+};
+
+type BlogPostImage = {
+  id: number;
+  postId: number;
+  role: 'hero' | 'inline';
+  slot: string;
+  anchorHeading: string | null;
+  source: 'curated' | 'ai';
+  generationStatus: 'pending' | 'generating' | 'completed' | 'failed';
+  reviewStatus: 'candidate' | 'selected' | 'rejected';
+  objectKey: string | null;
+  publicUrl: string | null;
+  mimeType: string | null;
+  width: number | null;
+  height: number | null;
+  bytes: number | null;
+  checksum: string | null;
+  alt: string | null;
+  caption: string | null;
+  model: string | null;
+  errorMessage: string | null;
+  sortOrder: number;
+  createdAt: string;
+};
+
+type BlogImageConfig = {
+  enabled: boolean;
+  model: string;
+  storage: string;
 };
 
 type PublishCheck = {
@@ -385,6 +417,7 @@ const autoGeneratePendingSteps: BlogGenerationWorkflowStep[] = [
   { id: 'ai-draft', label: 'AI draft', status: 'pending' },
   { id: 'featured-image', label: 'Featured image', status: 'pending' },
   { id: 'sanitize-save', label: 'Sanitize and save', status: 'pending' },
+  { id: 'ai-images', label: 'AI image variants', status: 'pending' },
   { id: 'verify', label: 'Verification', status: 'pending' },
 ];
 
@@ -633,6 +666,16 @@ export default function BlogAdminPage() {
     enabled: authenticated,
   });
 
+  const imageConfigQuery = useQuery<ApiResponse<BlogImageConfig>>({
+    queryKey: ['/api/admin/blog/images/config'],
+    enabled: authenticated,
+  });
+
+  const imagesQuery = useQuery<ApiResponse<BlogPostImage[]>>({
+    queryKey: [`/api/admin/blog/posts/${form?.id || 'none'}/images`],
+    enabled: authenticated && editorOpen && Boolean(form?.id),
+  });
+
   const unpublishImpactQuery = useQuery<ApiResponse<UnpublishImpact>>({
     queryKey: [`/api/admin/blog/posts/${unpublishTarget?.id || 'none'}/unpublish-impact`],
     enabled: authenticated && Boolean(unpublishTarget),
@@ -642,6 +685,8 @@ export default function BlogAdminPage() {
   const categories = categoriesQuery.data?.data || [];
   const tags = tagsQuery.data?.data || [];
   const posts = postsQuery.data?.data || [];
+  const images = imagesQuery.data?.data || [];
+  const imageConfig = imageConfigQuery.data?.data;
   const stats = statsQuery.data?.data;
   const runtime = runtimeQuery.data?.data?.runtime || 'unknown';
 
@@ -687,6 +732,87 @@ export default function BlogAdminPage() {
     },
     onError: error => {
       setActionError(error instanceof Error ? error.message : 'Save failed');
+    },
+  });
+
+  const refreshImages = (postId: number) => {
+    queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/posts/${postId}/images`] });
+    queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
+  };
+
+  const generateImagesMutation = useMutation({
+    mutationFn: async ({ postId, role }: { postId: number; role: 'hero' | 'inline' | 'all' }) => {
+      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/generate`, { role });
+      return response.json();
+    },
+    onSuccess: (_data, variables) => {
+      refreshImages(variables.postId);
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Image generation failed');
+    },
+  });
+
+  const regenerateImageMutation = useMutation({
+    mutationFn: async ({ postId, imageId }: { postId: number; imageId: number }) => {
+      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/${imageId}/regenerate`);
+      return response.json();
+    },
+    onSuccess: (_data, variables) => {
+      refreshImages(variables.postId);
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Image regeneration failed');
+    },
+  });
+
+  const selectImageMutation = useMutation({
+    mutationFn: async ({ postId, imageId }: { postId: number; imageId: number }) => {
+      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/${imageId}/select`);
+      return response.json() as Promise<ApiResponse<BlogPostImage>>;
+    },
+    onSuccess: (data, variables) => {
+      if (data.data.role === 'hero' && data.data.publicUrl) {
+        setForm(current => current ? {
+          ...current,
+          featuredImage: data.data.publicUrl || current.featuredImage,
+          featuredImageAlt: data.data.alt || current.featuredImageAlt,
+        } : current);
+      }
+      refreshImages(variables.postId);
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Image selection failed');
+    },
+  });
+
+  const deselectImageMutation = useMutation({
+    mutationFn: async ({ postId, imageId }: { postId: number; imageId: number }) => {
+      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/${imageId}/deselect`);
+      return response.json();
+    },
+    onSuccess: (_data, variables) => {
+      refreshImages(variables.postId);
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Could not remove the inline image');
+    },
+  });
+
+  const deleteImageMutation = useMutation({
+    mutationFn: async ({ postId, imageId }: { postId: number; imageId: number }) => {
+      await apiRequest('DELETE', `/api/admin/blog/posts/${postId}/images/${imageId}`);
+    },
+    onSuccess: (_data, variables) => {
+      refreshImages(variables.postId);
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Image deletion failed');
     },
   });
 
@@ -2243,6 +2369,171 @@ export default function BlogAdminPage() {
                     <Input id="featured-alt" value={form.featuredImageAlt} onChange={event => updateForm('featuredImageAlt', event.target.value)} />
                   </div>
                 </div>
+
+                <section className="space-y-4 rounded-xl bg-slate-50/80 p-4 sm:p-5" aria-labelledby="blog-images-heading">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <h3 id="blog-images-heading" className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                        <ImageIcon className="h-4 w-4 text-emerald-700" aria-hidden="true" />
+                        Reviewed image variants
+                      </h3>
+                      <p className="mt-1 max-w-2xl text-xs leading-relaxed text-slate-600">
+                        The current curated hero stays selected until you explicitly choose a completed AI candidate.
+                        Inline images are placed after their saved heading without changing article HTML.
+                      </p>
+                    </div>
+                    {form.id && form.status === 'draft' && (
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'hero' })}
+                        >
+                          Hero
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'inline' })}
+                        >
+                          Inline
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'all' })}
+                        >
+                          {generateImagesMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                          Generate set
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  {!form.id ? (
+                    <p className="text-xs text-slate-600">Save the draft first to create image variants.</p>
+                  ) : form.status !== 'draft' ? (
+                    <p className="text-xs text-amber-800">Image variants are read-only after the draft leaves draft status.</p>
+                  ) : !imageConfig?.enabled ? (
+                    <p className="text-xs text-amber-800">
+                      AI images are disabled. Replit must set BLOG_IMAGE_ENABLED=true and configure App Storage for a real smoke test.
+                    </p>
+                  ) : null}
+
+                  {form.id && imagesQuery.isLoading && (
+                    <p className="flex items-center gap-2 text-xs text-slate-600">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading image variants...
+                    </p>
+                  )}
+
+                  {form.id && !imagesQuery.isLoading && images.length === 0 && (
+                    <p className="text-xs text-slate-600">No variants are registered yet. The existing featured image remains the fallback.</p>
+                  )}
+
+                  {images.length > 0 && (
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {images.map(image => {
+                        const mutationBusy = generateImagesMutation.isPending
+                          || regenerateImageMutation.isPending
+                          || selectImageMutation.isPending
+                          || deselectImageMutation.isPending
+                          || deleteImageMutation.isPending;
+                        return (
+                          <article key={image.id} className="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200/70">
+                            {image.publicUrl ? (
+                              <img
+                                src={image.publicUrl}
+                                alt={image.alt || `${image.role} image candidate`}
+                                className="aspect-[3/2] w-full object-cover"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="flex aspect-[3/2] items-center justify-center bg-slate-100 text-slate-500">
+                                {image.generationStatus === 'generating'
+                                  ? <Loader2 className="h-5 w-5 animate-spin" />
+                                  : <ImageIcon className="h-5 w-5" />}
+                              </div>
+                            )}
+                            <div className="space-y-3 p-3">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <Badge variant="outline">{image.slot}</Badge>
+                                <Badge className={image.reviewStatus === 'selected' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'}>
+                                  {image.reviewStatus}
+                                </Badge>
+                                <span className="text-[11px] text-slate-500">{image.source} - {image.generationStatus}</span>
+                              </div>
+                              {image.anchorHeading && (
+                                <p className="text-xs leading-relaxed text-slate-600">After: {image.anchorHeading}</p>
+                              )}
+                              {image.errorMessage && (
+                                <p className="text-xs leading-relaxed text-red-700">{image.errorMessage}</p>
+                              )}
+                              <div className="flex flex-wrap gap-2">
+                                {image.generationStatus === 'completed' && image.reviewStatus !== 'selected' && (
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={form.status !== 'draft' || mutationBusy}
+                                    onClick={() => selectImageMutation.mutate({ postId: form.id!, imageId: image.id })}
+                                  >
+                                    <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" /> Select
+                                  </Button>
+                                )}
+                                {image.source === 'ai' && (
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={form.status !== 'draft' || !imageConfig?.enabled || mutationBusy}
+                                    onClick={() => regenerateImageMutation.mutate({ postId: form.id!, imageId: image.id })}
+                                  >
+                                    <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Regenerate
+                                  </Button>
+                                )}
+                                {image.role === 'inline' && image.reviewStatus === 'selected' && (
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={form.status !== 'draft' || mutationBusy}
+                                    onClick={() => deselectImageMutation.mutate({ postId: form.id!, imageId: image.id })}
+                                  >
+                                    Remove from article
+                                  </Button>
+                                )}
+                                {image.source === 'ai'
+                                  && image.generationStatus !== 'generating'
+                                  && image.reviewStatus !== 'selected'
+                                  && (
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    className="text-red-700 hover:bg-red-50 hover:text-red-800"
+                                    disabled={form.status !== 'draft' || mutationBusy}
+                                    onClick={() => {
+                                      if (window.confirm('Delete this image variant and its physical App Storage object?')) {
+                                        deleteImageMutation.mutate({ postId: form.id!, imageId: image.id });
+                                      }
+                                    }}
+                                  >
+                                    <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Delete
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  )}
+                </section>
               </div>
 
               <aside className="space-y-4">

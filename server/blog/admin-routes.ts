@@ -38,6 +38,7 @@ import {
   getBlogStats,
   getBlogTags,
   normalizeInternalPath,
+  updateBlogPostStatusWithImageGuard,
   upsertBlogRedirect,
   updateBlogPost,
   type BlogLanguage,
@@ -71,6 +72,13 @@ import {
   updateBlogGenerationRun,
 } from "./generation/storage";
 import type { JsonObject } from "./generation/types";
+import { containsLikelyPatientIdentifier } from "./privacy";
+import {
+  deleteAllBlogImageObjectsForPost,
+  generateBlogImageSet,
+  type BlogImageGenerationSummary,
+} from "./images/service";
+import { ensureCuratedHeroImage } from "./images/storage";
 
 function sendValidationError(res: Response, error: unknown): void {
   const requestError = error as { statusCode?: number; message?: string };
@@ -132,24 +140,6 @@ function parseId(req: Request): number | null {
 
 function normalizeLanguage(value: unknown): BlogLanguage | "all" {
   return value === "en" || value === "es" ? value : "all";
-}
-
-function containsLikelyPatientIdentifier(value: string): boolean {
-  const normalized = value.replace(/\s+/g, " ").trim();
-  if (!normalized) return false;
-
-  const datePattern = String.raw`(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}[/-]\d{1,2}[/-]\d{1,2}|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+\d{1,2},?\s+\d{2,4})`;
-  const hasEmail = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(normalized);
-  const hasPhone = /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/.test(normalized);
-  const hasSsn = /\b\d{3}[-.\s]?\d{2}[-.\s]?\d{4}\b/.test(normalized);
-  const hasBirthDate = new RegExp(String.raw`\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|fecha de nacimiento|nacimiento)\b.{0,50}\b${datePattern}\b`, "i").test(normalized);
-  const hasMedicalId = /\b(?:mrn|medical record|member id|patient id|record number|chart number|insurance id|policy number|historia clinica|numero de paciente|id de paciente)\b\s*[:#-]?\s*[A-Z0-9-]{4,}\b/i.test(normalized);
-  const namePattern = String.raw`[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}`;
-  const hasExplicitPatientName = new RegExp(String.raw`\b(?:patient|paciente)\s+(?:name\s*)[:#-]?\s*${namePattern}\b`, "i").test(normalized)
-    || new RegExp(String.raw`\b(?:patient|paciente)\s*[:#-]\s*${namePattern}\b`, "i").test(normalized);
-  const hasNamedPatientContext = new RegExp(String.raw`\b(?:patient|paciente)\s+${namePattern}\b.{0,80}\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|diagnosed|diagnosis|medication|prescribed|symptoms|mrn|medical record|member id|patient id)\b`, "i").test(normalized);
-
-  return hasEmail || hasPhone || hasSsn || hasBirthDate || hasMedicalId || hasExplicitPatientName || hasNamedPatientContext;
 }
 
 function assertSafeBlogRedirectPath(sourcePath: string, targetPath: string): void {
@@ -575,13 +565,54 @@ async function createGeneratedBlogDraft(
   const post = generationRunId
     ? await createBlogPostForGenerationRun(postPayload, generationRunId)
     : await createBlogPost(postPayload);
-  const verification = buildBlogVerificationReport(post);
   await updateWorkflowStep(workflow, {
     id: "sanitize-save",
     label: "Sanitize and save",
     status: "completed",
     detail: `Draft ${post.id} saved with status ${post.status}; publishedAt remains empty.`,
   }, reportProgress);
+
+  let imageSummary: BlogImageGenerationSummary | undefined;
+  if (generationRunId) {
+    await updateWorkflowStep(workflow, {
+      id: "ai-images",
+      label: "AI image variants",
+      status: "in_progress",
+      detail: "Keeping the curated hero selected while generating reviewed hero and inline candidates.",
+    }, reportProgress);
+    try {
+      imageSummary = await generateBlogImageSet(post, {
+        role: "all",
+        generationRunId,
+        maxInline: 2,
+      });
+      aiRiskNotes.push(...imageSummary.warnings.map(warning => `Image warning: ${warning}`));
+      await updateWorkflowStep(workflow, {
+        id: "ai-images",
+        label: "AI image variants",
+        status: "completed",
+        detail: imageSummary.enabled
+          ? `${imageSummary.generated.length} candidate${imageSummary.generated.length === 1 ? "" : "s"} ready; ${imageSummary.failed.length} failed. Curated hero remains selected pending review.`
+          : "Image generation is disabled. Curated hero remains selected.",
+      }, reportProgress);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Image generation failed";
+      aiRiskNotes.push(`Image warning: ${message}. Curated hero remains selected.`);
+      await updateWorkflowStep(workflow, {
+        id: "ai-images",
+        label: "AI image variants",
+        status: "completed",
+        detail: `Image attempt failed open: ${message}. Curated hero remains selected.`,
+      }, reportProgress);
+    }
+  } else {
+    await ensureCuratedHeroImage(post).catch(error => {
+      console.error(`Could not persist curated image fallback for draft ${post.id}:`, error);
+      aiRiskNotes.push("Curated image metadata could not be persisted; the existing featured image remains on the draft.");
+    });
+  }
+
+  const verification = buildBlogVerificationReport(post);
   await updateWorkflowStep(workflow, {
     id: "verify",
     label: "Verification",
@@ -604,6 +635,7 @@ async function createGeneratedBlogDraft(
       research,
       semanticMemory,
       editorialBrief,
+      images: imageSummary,
     },
   };
 }
@@ -619,6 +651,7 @@ const AUTO_GENERATE_WORKFLOW_STEPS: Array<Pick<BlogGenerationWorkflowStep, "id" 
   { id: "ai-draft", label: "AI draft" },
   { id: "featured-image", label: "Featured image" },
   { id: "sanitize-save", label: "Sanitize and save" },
+  { id: "ai-images", label: "AI image variants" },
   { id: "verify", label: "Verification" },
 ];
 
@@ -1452,6 +1485,15 @@ export function registerAdminBlogRoutes(app: Express): void {
 
       const post = await updateBlogPost(id, payload);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      if (
+        post.status === "draft"
+        && (
+          Object.prototype.hasOwnProperty.call(payload, "featuredImage")
+          || Object.prototype.hasOwnProperty.call(payload, "featuredImageAlt")
+        )
+      ) {
+        await ensureCuratedHeroImage(post);
+      }
       res.status(200).json({
         success: true,
         data: post,
@@ -1501,10 +1543,11 @@ export function registerAdminBlogRoutes(app: Express): void {
         redirectTargetPathToCreate = await assertRedirectDecision(redirectSourcePath, redirectTargetPath, confirmNoRedirect);
       }
 
-      const post = await updateBlogPost(id, {
+      const post = await updateBlogPostStatusWithImageGuard(
+        id,
         status,
-        ...(status === "published" && !existing.publishedAt ? { publishedAt: new Date() } : {}),
-      });
+        status === "published" ? existing.publishedAt || new Date() : undefined,
+      );
 
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
       if (redirectSourcePath && redirectTargetPathToCreate) {
@@ -1592,6 +1635,7 @@ export function registerAdminBlogRoutes(app: Express): void {
         }
       }
 
+      await deleteAllBlogImageObjectsForPost(id);
       const deletion = await deleteBlogPostWithRedirect(id, redirectRequest);
       if (!deletion.deleted) {
         return res.status(404).json({ success: false, message: "Blog post not found" });

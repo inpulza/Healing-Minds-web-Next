@@ -16,15 +16,19 @@ import { getActiveBlogRedirect, getBlogPostBySlug, getBlogPosts, type BlogLangua
 import { sanitizeBlogContentHtml } from "./blog/sanitize";
 import { registerAdminAuthRoutes, requireAdmin } from "./admin-auth";
 import { registerAdminBlogRoutes } from "./blog/admin-routes";
+import { registerBlogImageRoutes } from "./blog/images/routes";
+import { getSelectedBlogPostImages } from "./blog/images/storage";
+import { materializeSelectedInlineImages } from "./blog/images/render";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-function sanitizePublicBlogPost<T extends { content: string | null }>(post: T): T {
+async function sanitizePublicBlogPost<T extends { id: number; content: string | null }>(post: T): Promise<T> {
+  const images = await getSelectedBlogPostImages(post.id);
   return {
     ...post,
-    content: sanitizeBlogContentHtml(post.content || ""),
+    content: materializeSelectedInlineImages(sanitizeBlogContentHtml(post.content || ""), images),
   };
 }
 
@@ -254,6 +258,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   registerAdminAuthRoutes(app);
   app.use("/api/admin/*", requireAdmin);
+  registerBlogImageRoutes(app);
   app.get("/api/admin/runtime", (_req, res) => {
     const isReplitDeployment = process.env.REPLIT_DEPLOYMENT === "1";
     res.status(200).json({
@@ -381,7 +386,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         limit: typeof req.query.limit === "string" ? Number(req.query.limit) || 50 : 50,
         offset: typeof req.query.offset === "string" ? Number(req.query.offset) || 0 : 0,
       });
-      res.status(200).json({ success: true, data: posts.map(sanitizePublicBlogPost) });
+      const safePosts = posts.map(post => ({
+        ...post,
+        content: sanitizeBlogContentHtml(post.content || ""),
+      }));
+      res.status(200).json({ success: true, data: safePosts });
     } catch (error) {
       console.error("Error fetching blog posts:", error);
       res.status(500).json({
@@ -402,7 +411,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      res.status(200).json({ success: true, data: sanitizePublicBlogPost(post) });
+      res.status(200).json({ success: true, data: await sanitizePublicBlogPost(post) });
     } catch (error) {
       console.error("Error fetching blog post:", error);
       res.status(500).json({

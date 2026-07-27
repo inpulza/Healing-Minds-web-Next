@@ -59,6 +59,29 @@ export const blogGenerationRunStatusEnum = pgEnum("blog_generation_run_status", 
   "interrupted",
 ]);
 
+export const blogPostImageRoleEnum = pgEnum("blog_post_image_role", [
+  "hero",
+  "inline",
+]);
+
+export const blogPostImageSourceEnum = pgEnum("blog_post_image_source", [
+  "curated",
+  "ai",
+]);
+
+export const blogPostImageGenerationStatusEnum = pgEnum("blog_post_image_generation_status", [
+  "pending",
+  "generating",
+  "completed",
+  "failed",
+]);
+
+export const blogPostImageReviewStatusEnum = pgEnum("blog_post_image_review_status", [
+  "candidate",
+  "selected",
+  "rejected",
+]);
+
 export const blogAuthors = pgTable("blog_authors", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   name: varchar("name", { length: 255 }).notNull(),
@@ -179,6 +202,53 @@ export const blogGenerationEvents = pgTable(
   ],
 );
 
+export const blogPostImages = pgTable(
+  "blog_post_images",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    postId: integer("post_id").references(() => blogPosts.id, { onDelete: "cascade" }).notNull(),
+    role: blogPostImageRoleEnum("role").notNull(),
+    slot: varchar("slot", { length: 100 }).notNull(),
+    anchorHeading: varchar("anchor_heading", { length: 255 }),
+    source: blogPostImageSourceEnum("source").notNull(),
+    generationStatus: blogPostImageGenerationStatusEnum("generation_status").notNull().default("pending"),
+    reviewStatus: blogPostImageReviewStatusEnum("review_status").notNull().default("candidate"),
+    objectKey: varchar("object_key", { length: 500 }),
+    publicUrl: varchar("public_url", { length: 500 }),
+    mimeType: varchar("mime_type", { length: 100 }),
+    width: integer("width"),
+    height: integer("height"),
+    bytes: integer("bytes"),
+    checksum: varchar("checksum", { length: 64 }),
+    alt: varchar("alt", { length: 255 }),
+    caption: varchar("caption", { length: 500 }),
+    safeVisualBrief: text("safe_visual_brief"),
+    prompt: text("prompt"),
+    promptVersion: varchar("prompt_version", { length: 50 }),
+    provider: varchar("provider", { length: 100 }),
+    model: varchar("model", { length: 100 }),
+    generationRunId: integer("generation_run_id").references(() => blogGenerationRuns.id, { onDelete: "set null" }),
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    durationMs: integer("duration_ms"),
+    errorCode: varchar("error_code", { length: 100 }),
+    errorMessage: text("error_message"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_blog_post_images_post_slot").on(table.postId, table.slot),
+    index("idx_blog_post_images_generation_run").on(table.generationRunId),
+    uniqueIndex("idx_blog_post_images_object_key")
+      .on(table.objectKey)
+      .where(sql`${table.objectKey} is not null`),
+    uniqueIndex("idx_blog_post_images_single_selected_slot")
+      .on(table.postId, table.slot)
+      .where(sql`${table.reviewStatus} = 'selected'`),
+  ],
+);
+
 export const blogRedirects = pgTable(
   "blog_redirects",
   {
@@ -227,6 +297,10 @@ export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
 });
 
 export const insertBlogPostTagSchema = createInsertSchema(blogPostTags);
+export const insertBlogPostImageSchema = createInsertSchema(blogPostImages).omit({
+  createdAt: true,
+  updatedAt: true,
+});
 export const insertBlogRedirectSchema = z.object({
   sourcePath: z.string().min(1).max(500),
   targetPath: z.string().min(1).max(500),
@@ -275,6 +349,12 @@ export type InsertBlogPostTag = z.infer<typeof insertBlogPostTagSchema>;
 export type BlogPostTag = typeof blogPostTags.$inferSelect;
 export type BlogGenerationRun = typeof blogGenerationRuns.$inferSelect;
 export type BlogGenerationEvent = typeof blogGenerationEvents.$inferSelect;
+export type BlogPostImageRole = (typeof blogPostImageRoleEnum.enumValues)[number];
+export type BlogPostImageSource = (typeof blogPostImageSourceEnum.enumValues)[number];
+export type BlogPostImageGenerationStatus = (typeof blogPostImageGenerationStatusEnum.enumValues)[number];
+export type BlogPostImageReviewStatus = (typeof blogPostImageReviewStatusEnum.enumValues)[number];
+export type InsertBlogPostImage = typeof blogPostImages.$inferInsert;
+export type BlogPostImage = typeof blogPostImages.$inferSelect;
 export type InsertBlogRedirect = z.infer<typeof insertBlogRedirectSchema>;
 export type BlogRedirect = typeof blogRedirects.$inferSelect;
 

@@ -11,7 +11,9 @@ import {
   type BlogLanguage,
   type BlogPostWithRelations,
 } from '../blog/storage';
-import { sanitizeBlogContentHtml } from '../blog/sanitize';
+import { sanitizeRenderedBlogContentHtml } from '../blog/sanitize';
+import { getSelectedBlogPostImages } from '../blog/images/storage';
+import { materializeSelectedInlineImages } from '../blog/images/render';
 import { getSeoSiteConfig } from '../seo/config';
 
 interface MetaTag {
@@ -71,7 +73,14 @@ function escapeRegex(s: string): string {
 
 async function getBlogPostFromPath(path: string): Promise<BlogPostWithRelations | undefined> {
   const match = getBlogSlugFromPath(path);
-  return match ? getBlogPostBySlug(match.slug, match.language) : undefined;
+  if (!match) return undefined;
+  const post = await getBlogPostBySlug(match.slug, match.language);
+  if (!post) return undefined;
+  const images = await getSelectedBlogPostImages(post.id);
+  return {
+    ...post,
+    content: materializeSelectedInlineImages(post.content || '', images),
+  };
 }
 
 function formatBlogDate(date: Date): string {
@@ -2489,7 +2498,7 @@ async function buildBlogIndexBody(baseUrl: string, contactInfo: string, language
 
 function buildBlogPostBody(post: BlogPostWithRelations, contactInfo: string): string {
   const isSpanish = post.language === 'es';
-  const safeContent = sanitizeBlogContentHtml(post.content || '');
+  const safeContent = sanitizeRenderedBlogContentHtml(post.content || '');
   const tags = post.tags.map(tag => `<li>${escapeHtml(tag.name)}</li>`).join('\n      ');
 
   return `<main>

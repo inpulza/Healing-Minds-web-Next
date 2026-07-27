@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { Link, useRoute } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
+import { isManagedBlogImagePublicUrl } from '@shared/blog-images';
 import { ArrowLeft, Calendar, Clock, List, Phone, Tag } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -82,8 +83,8 @@ function formatDate(date: string | null, language: BlogLanguage): string {
 
 function sanitizeClientBlogHtml(html: string): string {
   return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a', 'blockquote'],
-    ALLOWED_ATTR: ['href', 'target', 'rel', 'id'],
+    ALLOWED_TAGS: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a', 'blockquote', 'figure', 'img', 'figcaption'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'id', 'class', 'src', 'alt', 'loading', 'decoding', 'width', 'height'],
     ALLOW_DATA_ATTR: false,
     SANITIZE_NAMED_PROPS: true,
   });
@@ -110,6 +111,19 @@ function prepareBlogArticleHtml(html: string): { content: string; headings: TocH
   const parser = new DOMParser();
   const safeHtml = sanitizeClientBlogHtml(html);
   const doc = parser.parseFromString(safeHtml, 'text/html');
+  doc.querySelectorAll('img').forEach(image => {
+    const src = image.getAttribute('src') || '';
+    if (!isManagedBlogImagePublicUrl(src)) {
+      (image.closest('figure') || image).remove();
+      return;
+    }
+    image.setAttribute('loading', 'lazy');
+    image.setAttribute('decoding', 'async');
+  });
+  doc.querySelectorAll('figure').forEach(figure => {
+    figure.className = 'blog-inline-image';
+    if (!figure.querySelector('img')) figure.remove();
+  });
   const usedIds = new Map<string, number>();
   const headings: TocHeading[] = [];
 
