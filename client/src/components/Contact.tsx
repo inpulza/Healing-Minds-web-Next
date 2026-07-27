@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
+import { trackLeadConversion, trackContactFormEvent } from '@/lib/analytics';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -128,6 +129,14 @@ const Contact = () => {
 
       // Only fire analytics/conversions for genuine, non-filtered submissions.
       if (!result?.filtered) {
+        // GA4 — this is the one Google Ads imports as a conversion. Note that the `trackEvent`
+        // below is Clarity's, not GA4's; they share a name, which is why this was missing.
+        trackLeadConversion('contact_form', {
+          form_type: 'main_contact',
+          language_preference: formData.preferredLanguage,
+        });
+        trackContactFormEvent('submit', 'main_contact');
+
         trackEvent('contact_form_submitted');
         setTag('contact_language', formData.preferredLanguage);
         setTag('contact_form_type', 'main_contact');
@@ -155,6 +164,7 @@ const Contact = () => {
 
     } catch (error) {
       console.error('Error submitting form:', error);
+      trackContactFormEvent('error', 'main_contact');
       toast({
         title: language === 'en' ? 'Error' : 'Error',
         description: language === 'en' 
@@ -279,10 +289,12 @@ const Contact = () => {
                           }
                           onClick={() => {
                             if (info.link?.startsWith('tel:')) {
+                              trackLeadConversion('phone_call', { click_location: 'contact_page' });
                               trackEvent('phone_call_initiated');
                               setTag('phone_click_location', 'contact_page');
                               trackPhoneClick(info.value, 'contact_page');
                             } else if (info.link?.startsWith('mailto:')) {
+                              trackLeadConversion('email', { click_location: 'contact_page' });
                               trackEvent('email_initiated');
                               setTag('email_click_location', 'contact_page');
                             }

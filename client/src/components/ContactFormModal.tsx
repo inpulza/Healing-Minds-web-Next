@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
+import { trackLeadConversion, trackContactFormEvent } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -122,6 +123,14 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
 
       // Only fire analytics/conversions for genuine, non-filtered submissions.
       if (!result?.filtered) {
+        // GA4 — the event Google Ads imports as a conversion. The `trackEvent` below is
+        // Clarity's, not GA4's; they share a name, which is why this was missing.
+        trackLeadConversion('contact_form', {
+          form_type: 'mobile_modal',
+          language_preference: formData.preferredLanguage,
+        });
+        trackContactFormEvent('submit', 'mobile_modal');
+
         trackEvent('contact_form_submitted');
         setTag('contact_language', formData.preferredLanguage);
         setTag('contact_form_type', 'mobile_modal');
@@ -151,6 +160,7 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
 
     } catch (error) {
       console.error('Error submitting form:', error);
+      trackContactFormEvent('error', 'mobile_modal');
       toast({
         title: language === 'en' ? 'Error' : 'Error',
         description: language === 'en' 

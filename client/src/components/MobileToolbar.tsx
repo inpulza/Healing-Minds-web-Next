@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
+import { trackLeadConversion } from '@/lib/analytics';
 import ContactFormModal from '@/components/ContactFormModal';
 import { Calendar, Phone, FileText } from 'lucide-react';
 import { SiWhatsapp } from 'react-icons/si';
@@ -27,6 +28,7 @@ const MobileToolbar = () => {
   };
 
   const handleCallClick = () => {
+    trackLeadConversion('phone_call', { click_location: 'mobile_toolbar' });
     trackEvent('mobile_toolbar_call_clicked');
     setTag('toolbar_action', 'call');
     trackPhoneClick('(239) 423-0272', 'mobile-toolbar');
@@ -34,6 +36,7 @@ const MobileToolbar = () => {
   };
 
   const handleWhatsAppClick = () => {
+    trackLeadConversion('whatsapp', { click_location: 'mobile_toolbar' });
     trackEvent('mobile_toolbar_whatsapp_clicked');
     setTag('toolbar_action', 'whatsapp');
     window.open(whatsappNumber, '_blank', 'noopener,noreferrer');

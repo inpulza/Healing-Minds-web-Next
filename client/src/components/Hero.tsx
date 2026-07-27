@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
+import { trackLeadConversion } from '@/lib/analytics';
 import { ArrowRight, Phone, Brain, Heart } from 'lucide-react';
 import heroImage from '../assets/hero-doctor-latest.webp';
 import mobileHeroImage from '../assets/hero-doctor-latest.webp';
@@ -116,7 +117,10 @@ const Hero = React.memo(() => {
                 <ArrowRight className="w-4 h-4 text-green-800" />
               </Button>
             </Link>
-            <a href="tel:+12394230272">
+            <a
+              href="tel:+12394230272"
+              onClick={() => trackLeadConversion('phone_call', { click_location: 'hero_mobile' })}
+            >
               <Button
                 className="whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-green-800 text-white hover:bg-green-900 border-2 border-green-800 hover:border-green-900 px-6 py-4 shadow-lg pt-[24px] pb-[24px]"
                 data-testid="hero-call-now-mobile"
@@ -199,7 +203,10 @@ const Hero = React.memo(() => {
                       </div>
                     </Button>
                   </Link>
-                  <a href="tel:+12394230272">
+                  <a
+                    href="tel:+12394230272"
+                    onClick={() => trackLeadConversion('phone_call', { click_location: 'hero_desktop' })}
+                  >
                     <Button
                       className="group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-transparent text-green-800 hover:bg-green-50 border-2 border-green-800 px-6 md:px-8 py-5 md:py-6 shadow-lg"
                       data-testid="hero-call-now"

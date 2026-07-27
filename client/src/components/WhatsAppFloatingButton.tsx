@@ -1,5 +1,6 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
+import { trackLeadConversion } from '@/lib/analytics';
 
 const WhatsAppFloatingButton = () => {
   const { language } = useLanguage();
@@ -12,6 +13,7 @@ const WhatsAppFloatingButton = () => {
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${language === 'es' ? messageEs : messageEn}`;
 
   const handleClick = () => {
+    trackLeadConversion('whatsapp', { click_location: 'floating_button' });
     trackEvent('desktop_whatsapp_button_clicked');
     setTag('whatsapp_source', 'floating_button');
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');

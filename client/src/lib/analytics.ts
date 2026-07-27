@@ -277,6 +277,39 @@ export function trackContactFormEvent(action: 'start' | 'submit' | 'error', form
   trackEvent(`contact_form_${action}`, 'lead_generation', formType);
 }
 
+export type LeadSource = 'contact_form' | 'phone_call' | 'whatsapp' | 'email';
+
+/**
+ * Fires the GA4 recommended `generate_lead` event — the one Google Ads imports as a conversion.
+ *
+ * Deliberately NOT deferred via requestIdleCallback (unlike trackEvent above): phone and WhatsApp
+ * clicks navigate away from the page, and a deferred callback would never run. `transport_type:
+ * 'beacon'` lets the request survive the page unload.
+ *
+ * Callers are responsible for only firing this on genuine leads (e.g. after the server confirms a
+ * submission was not filtered as spam), otherwise Google optimises towards junk.
+ */
+export function trackLeadConversion(source: LeadSource, detail: Record<string, any> = {}): void {
+  if (!hasAnalyticsConsent()) {
+    return;
+  }
+
+  if (typeof window.gtag === 'undefined') {
+    return;
+  }
+
+  window.gtag('event', 'generate_lead', {
+    lead_source: source,
+    event_category: 'lead_generation',
+    transport_type: 'beacon',
+    ...detail,
+  });
+
+  if (import.meta.env.DEV) {
+    console.log('GA lead conversion tracked:', { source, ...detail });
+  }
+}
+
 // Track insurance logo clicks
 export function trackInsuranceClick(insuranceName: string): void {
   trackEvent('insurance_logo_click', 'user_engagement', insuranceName);

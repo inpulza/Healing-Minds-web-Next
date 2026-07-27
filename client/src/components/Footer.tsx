@@ -1,6 +1,7 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
+import { trackLeadConversion } from '@/lib/analytics';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Mail, Phone, MapPin, ArrowRight, Calendar, Linkedin, Facebook, Instagram } from 'lucide-react';
@@ -280,6 +281,7 @@ const Footer = () => {
                   data-testid="footer-phone"
                   aria-label={language === 'en' ? 'Call Healing Minds Psychiatry at (239) 423-0272' : 'Llamar a Healing Minds Psychiatry al (239) 423-0272'}
                   onClick={() => {
+                    trackLeadConversion('phone_call', { click_location: 'footer' });
                     trackEvent('phone_call_initiated');
                     setTag('phone_click_location', 'footer');
                     trackPhoneClick('(239) 423-0272', 'footer');
