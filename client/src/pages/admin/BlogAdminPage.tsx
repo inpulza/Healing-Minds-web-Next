@@ -241,11 +241,19 @@ type BlogEditorialBrief = {
 
 type BlogTopicPlanCandidate = {
   id: string;
+  candidateKey: string;
+  batch: number;
   topic: string;
   targetKeyword: string;
+  topicKey: string;
   language: BlogLanguage;
   categoryId: number;
+  categoryKey: string;
   categoryName: string;
+  pillar: string;
+  patientStage: string;
+  contentFormat: string;
+  searchIntent: string;
   tagIds: number[];
   tagNames: string[];
   internalLinks: string[];
@@ -253,8 +261,11 @@ type BlogTopicPlanCandidate = {
   noveltyScore: number;
   overlapScore: number;
   recommendation: 'recommended' | 'change_angle' | 'update_existing';
+  semanticDecision: 'duplicate' | 'same_cluster_distinct_intent' | 'distinct' | 'judge_unavailable';
   angle: string;
   rationale: string;
+  whyTimely: string;
+  strategyVersion: string;
   riskNotes: string[];
   research: BlogResearchBrief;
   semanticMemory: BlogSemanticMemory;
@@ -264,6 +275,9 @@ type BlogTopicPlanCandidate = {
 type BlogTopicPlan = {
   language: BlogLanguage;
   generatedAt: string;
+  strategyVersion: string;
+  promptVersion: string;
+  selectedCandidateId?: string;
   candidates: BlogTopicPlanCandidate[];
   summary: {
     considered: number;
@@ -271,6 +285,7 @@ type BlogTopicPlan = {
     recommended: number;
     changeAngle: number;
     updateExisting: number;
+    batches: number;
   };
 };
 
@@ -291,8 +306,8 @@ type BlogGenerationWorkflowStep = {
 type BlogGenerationWorkflow = {
   mode: 'manual' | 'auto-generate';
   generatedAt: string;
+  authorId?: number;
   selectedCandidate?: BlogTopicPlanCandidate;
-  topicPlan?: BlogTopicPlan;
   steps: BlogGenerationWorkflowStep[];
 };
 
@@ -375,21 +390,22 @@ type GenerateDraftFormState = {
   authorId: string;
   categoryId: string;
   tagIds: number[];
+  plannedStrategy?: {
+    contentPillar: string;
+    patientStage: string;
+    contentFormat: string;
+    searchIntent: string;
+    topicStrategyVersion: string;
+  };
 };
 
 type TopicPlannerFormState = {
   language: BlogLanguage;
-  categoryId: string;
-  focus: string;
-  limit: string;
 };
 
 type AutoGenerateFormState = {
   language: BlogLanguage;
   authorId: string;
-  categoryId: string;
-  focus: string;
-  limit: string;
 };
 
 const statusLabels: Record<BlogStatus, string> = {
@@ -407,12 +423,14 @@ const statusClasses: Record<BlogStatus, string> = {
 };
 
 const autoGeneratePendingSteps: BlogGenerationWorkflowStep[] = [
-  { id: 'topic-plan', label: 'Topic plan', status: 'pending' },
+  { id: 'strategy-context', label: 'Strategy context', status: 'pending' },
+  { id: 'topic-ideation', label: 'Topic ideation', status: 'pending' },
+  { id: 'deterministic-review', label: 'Deterministic review', status: 'pending' },
+  { id: 'semantic-review', label: 'Semantic review', status: 'pending' },
   { id: 'topic-selection', label: 'Topic selection', status: 'pending' },
   { id: 'editorial-context', label: 'Editorial context', status: 'pending' },
   { id: 'taxonomy-links', label: 'Taxonomy and internal links', status: 'pending' },
   { id: 'trusted-research', label: 'Trusted research', status: 'pending' },
-  { id: 'semantic-memory', label: 'Semantic memory', status: 'pending' },
   { id: 'editorial-brief', label: 'Editorial brief', status: 'pending' },
   { id: 'ai-draft', label: 'AI draft', status: 'pending' },
   { id: 'featured-image', label: 'Featured image', status: 'pending' },
@@ -483,26 +501,18 @@ function createGenerateDraftForm(authors: BlogAuthor[], categories: BlogCategory
   };
 }
 
-function createTopicPlannerForm(categories: BlogCategory[]): TopicPlannerFormState {
+function createTopicPlannerForm(): TopicPlannerFormState {
   const defaultLanguage: BlogLanguage = 'en';
-  const defaultCategory = categories.find(category => category.language === defaultLanguage) || categories[0];
   return {
     language: defaultLanguage,
-    categoryId: defaultCategory?.id ? String(defaultCategory.id) : '',
-    focus: '',
-    limit: '5',
   };
 }
 
-function createAutoGenerateForm(authors: BlogAuthor[], categories: BlogCategory[]): AutoGenerateFormState {
+function createAutoGenerateForm(authors: BlogAuthor[]): AutoGenerateFormState {
   const defaultLanguage: BlogLanguage = 'en';
-  const defaultCategory = categories.find(category => category.language === defaultLanguage) || categories[0];
   return {
     language: defaultLanguage,
     authorId: authors[0]?.id ? String(authors[0].id) : '',
-    categoryId: defaultCategory?.id ? String(defaultCategory.id) : '',
-    focus: '',
-    limit: '5',
   };
 }
 
@@ -536,25 +546,20 @@ function toGenerateDraftPayload(form: GenerateDraftFormState) {
     authorId: Number(form.authorId),
     categoryId: Number(form.categoryId),
     tagIds: form.tagIds,
+    ...(form.plannedStrategy || {}),
   };
 }
 
 function toTopicPlannerPayload(form: TopicPlannerFormState) {
   return {
     language: form.language,
-    categoryId: form.categoryId ? Number(form.categoryId) : undefined,
-    focus: form.focus || undefined,
-    limit: Number(form.limit) || 5,
   };
 }
 
 function toAutoGeneratePayload(form: AutoGenerateFormState) {
   return {
     language: form.language,
-    authorId: Number(form.authorId),
-    categoryId: form.categoryId ? Number(form.categoryId) : undefined,
-    focus: form.focus || undefined,
-    limit: Number(form.limit) || 5,
+    authorId: form.authorId ? Number(form.authorId) : undefined,
   };
 }
 
@@ -705,14 +710,6 @@ export default function BlogAdminPage() {
   const availableGenerateTags = useMemo(
     () => tags.filter(tag => tag.language === (generateForm?.language || 'en')),
     [tags, generateForm?.language],
-  );
-  const availablePlannerCategories = useMemo(
-    () => categories.filter(category => category.language === (plannerForm?.language || 'en')),
-    [categories, plannerForm?.language],
-  );
-  const availableAutoGenerateCategories = useMemo(
-    () => categories.filter(category => category.language === (autoGenerateForm?.language || 'en')),
-    [categories, autoGenerateForm?.language],
   );
 
   const saveMutation = useMutation({
@@ -1150,7 +1147,7 @@ export default function BlogAdminPage() {
   };
 
   const openAutoGenerate = () => {
-    setAutoGenerateForm(createAutoGenerateForm(authors, categories));
+    setAutoGenerateForm(createAutoGenerateForm(authors));
     setAutoGenerateWorkflow(null);
     setAutoGeneratedPost(null);
     setAutoGenerateError(null);
@@ -1162,7 +1159,7 @@ export default function BlogAdminPage() {
   };
 
   const openTopicPlanner = () => {
-    setPlannerForm(createTopicPlannerForm(categories));
+    setPlannerForm(createTopicPlannerForm());
     setTopicPlan(null);
     setPlannerError(null);
     setPlannerOpen(true);
@@ -1267,10 +1264,6 @@ export default function BlogAdminPage() {
     setAutoGenerateForm(current => current ? { ...current, [key]: value } : current);
   };
 
-  const updatePlannerForm = <K extends keyof TopicPlannerFormState>(key: K, value: TopicPlannerFormState[K]) => {
-    setPlannerForm(current => current ? { ...current, [key]: value } : current);
-  };
-
   const generateDraft = () => {
     if (!generateForm) return;
     generateDraftMutation.mutate(generateForm);
@@ -1306,6 +1299,13 @@ export default function BlogAdminPage() {
       authorId: authors[0]?.id ? String(authors[0].id) : '',
       categoryId: String(candidate.categoryId),
       tagIds: candidate.tagIds,
+      plannedStrategy: {
+        contentPillar: candidate.pillar,
+        patientStage: candidate.patientStage,
+        contentFormat: candidate.contentFormat,
+        searchIntent: candidate.searchIntent,
+        topicStrategyVersion: candidate.strategyVersion,
+      },
     });
     setGenerateError(null);
     setPlannerOpen(false);
@@ -1726,23 +1726,21 @@ export default function BlogAdminPage() {
 
           {plannerForm && (
             <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="max-w-sm space-y-2">
                 <div className="space-y-2">
-                  <Label>Language</Label>
+                  <Label htmlFor="planner-language">Language</Label>
                   <Select
                     value={plannerForm.language}
                     onValueChange={value => {
                       const language = value as BlogLanguage;
-                      const category = categories.find(item => item.language === language);
                       setPlannerForm(current => current ? {
                         ...current,
                         language,
-                        categoryId: category ? String(category.id) : '',
                       } : current);
                       setTopicPlan(null);
                     }}
                   >
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="planner-language"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="en">English</SelectItem>
                       <SelectItem value="es">Spanish</SelectItem>
@@ -1750,42 +1748,10 @@ export default function BlogAdminPage() {
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Category</Label>
-                  <Select value={plannerForm.categoryId} onValueChange={value => updatePlannerForm('categoryId', value)}>
-                    <SelectTrigger><SelectValue placeholder="Any category" /></SelectTrigger>
-                    <SelectContent>
-                      {availablePlannerCategories.map(category => (
-                        <SelectItem key={category.id} value={String(category.id)}>{category.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="planner-limit">Ideas</Label>
-                  <Select value={plannerForm.limit} onValueChange={value => updatePlannerForm('limit', value)}>
-                    <SelectTrigger id="planner-limit"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {[3, 5, 8].map(limit => (
-                        <SelectItem key={limit} value={String(limit)}>{limit}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="planner-focus">Focus</Label>
-                <Input
-                  id="planner-focus"
-                  value={plannerForm.focus}
-                  placeholder="Optional: anxiety, medication, telepsychiatry..."
-                  onChange={event => {
-                    updatePlannerForm('focus', event.target.value);
-                    setTopicPlan(null);
-                  }}
-                />
+              <div className="rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-900">
+                The planner explores the full Healing Minds strategy automatically. Category, pillar, patient stage, and format are outputs—not required inputs.
               </div>
 
               {plannerError && (
@@ -1819,6 +1785,9 @@ export default function BlogAdminPage() {
                             <span>Overlap {Math.round(candidate.overlapScore * 100)}%</span>
                             <span>Novelty {candidate.noveltyScore}%</span>
                             <span>{candidate.categoryName}</span>
+                            <span>{candidate.pillar.replace(/_/g, ' ')}</span>
+                            <span>{candidate.patientStage.replace(/_/g, ' ')}</span>
+                            <span>{candidate.contentFormat.replace(/_/g, ' ')}</span>
                           </div>
                         </div>
                         <Button
@@ -1866,7 +1835,7 @@ export default function BlogAdminPage() {
 
           <DialogFooter className="gap-2 sm:gap-2">
             <Button variant="outline" onClick={() => setPlannerOpen(false)}>Close</Button>
-            <Button onClick={planTopics} disabled={!plannerForm?.categoryId || topicPlanMutation.isPending}>
+            <Button onClick={planTopics} disabled={!plannerForm || topicPlanMutation.isPending}>
               {topicPlanMutation.isPending ? 'Planning...' : 'Plan Topics'}
             </Button>
           </DialogFooter>
@@ -1877,28 +1846,28 @@ export default function BlogAdminPage() {
         <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Auto Generate Draft</DialogTitle>
-            <DialogDescription>Plan a low-overlap topic, generate one unpublished draft, and run verification.</DialogDescription>
+            <DialogDescription>
+              Choose the language. The strategy engine selects a useful low-overlap topic, creates one private draft, and runs verification.
+            </DialogDescription>
           </DialogHeader>
 
           {autoGenerateForm && (
             <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className={authors.length > 1 ? 'grid gap-4 sm:grid-cols-2' : 'space-y-2'}>
                 <div className="space-y-2">
-                  <Label>Language</Label>
+                  <Label htmlFor="auto-language">Language</Label>
                   <Select
                     value={autoGenerateForm.language}
                     onValueChange={value => {
                       const language = value as BlogLanguage;
-                      const category = categories.find(item => item.language === language);
                       setAutoGenerateForm(current => current ? {
                         ...current,
                         language,
-                        categoryId: category ? String(category.id) : '',
                       } : current);
                       setAutoGenerateWorkflow(null);
                     }}
                   >
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="auto-language"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="en">English</SelectItem>
                       <SelectItem value="es">Spanish</SelectItem>
@@ -1906,61 +1875,36 @@ export default function BlogAdminPage() {
                   </Select>
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Author</Label>
-                  <Select value={autoGenerateForm.authorId} onValueChange={value => updateAutoGenerateForm('authorId', value)}>
-                    <SelectTrigger><SelectValue placeholder="Select author" /></SelectTrigger>
-                    <SelectContent>
-                      {authors.map(author => (
-                        <SelectItem key={author.id} value={String(author.id)}>{author.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {authors.length > 1 && (
+                  <div className="space-y-2">
+                    <Label htmlFor="auto-author">Author</Label>
+                    <Select value={autoGenerateForm.authorId} onValueChange={value => updateAutoGenerateForm('authorId', value)}>
+                      <SelectTrigger id="auto-author"><SelectValue placeholder="Select author" /></SelectTrigger>
+                      <SelectContent>
+                        {authors.map(author => (
+                          <SelectItem key={author.id} value={String(author.id)}>{author.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-[1fr_140px]">
-                <div className="space-y-2">
-                  <Label>Category</Label>
-                  <Select value={autoGenerateForm.categoryId} onValueChange={value => updateAutoGenerateForm('categoryId', value)}>
-                    <SelectTrigger><SelectValue placeholder="Any category" /></SelectTrigger>
-                    <SelectContent>
-                      {availableAutoGenerateCategories.map(category => (
-                        <SelectItem key={category.id} value={String(category.id)}>{category.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="auto-limit">Ideas checked</Label>
-                  <Select value={autoGenerateForm.limit} onValueChange={value => updateAutoGenerateForm('limit', value)}>
-                    <SelectTrigger id="auto-limit"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {[3, 5, 8].map(limit => (
-                        <SelectItem key={limit} value={String(limit)}>{limit}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-900">
+                <p className="font-medium">The topic, category, pillar, patient stage, and article format are selected automatically.</p>
+                <p className="mt-1 text-xs text-blue-800">
+                  Up to two batches are checked against every existing draft and published post. If no safe topic remains, no draft is created.
+                </p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="auto-focus">Focus</Label>
-                <Input
-                  id="auto-focus"
-                  value={autoGenerateForm.focus}
-                  placeholder="Optional: anxiety medication, telepsychiatry, Spanish content..."
-                  onChange={event => {
-                    updateAutoGenerateForm('focus', event.target.value);
-                    setAutoGenerateWorkflow(null);
-                  }}
-                />
-                <p className="text-xs text-slate-500">Auto Generate stops if every candidate overlaps too much with existing posts.</p>
-              </div>
+              {authors.length === 0 && (
+                <div className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900" role="alert">
+                  Add a clinical blog author before starting Auto Generate.
+                </div>
+              )}
 
               {displayedAutoGenerateSteps.length > 0 && (
-                <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-4" role="status" aria-live="polite">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <h3 className="text-sm font-semibold text-slate-950">Workflow</h3>
@@ -1980,8 +1924,12 @@ export default function BlogAdminPage() {
                       <div className="mt-2 flex flex-wrap gap-2 text-slate-500">
                         <span>Score {autoGenerateWorkflow.selectedCandidate.score}</span>
                         <span>Overlap {Math.round(autoGenerateWorkflow.selectedCandidate.overlapScore * 100)}%</span>
-                        <span>Novelty {autoGenerateWorkflow.selectedCandidate.noveltyScore}%</span>
+                        <span>{autoGenerateWorkflow.selectedCandidate.categoryName}</span>
+                        <span>{autoGenerateWorkflow.selectedCandidate.pillar.replace(/_/g, ' ')}</span>
+                        <span>{autoGenerateWorkflow.selectedCandidate.patientStage.replace(/_/g, ' ')}</span>
+                        <span>{autoGenerateWorkflow.selectedCandidate.contentFormat.replace(/_/g, ' ')}</span>
                       </div>
+                      <p className="mt-2 text-slate-600">{autoGenerateWorkflow.selectedCandidate.rationale}</p>
                     </div>
                   )}
 
@@ -2029,7 +1977,7 @@ export default function BlogAdminPage() {
           )}
 
           {autoGenerateError && (
-            <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
               {autoGenerateError}
             </div>
           )}
@@ -2043,7 +1991,7 @@ export default function BlogAdminPage() {
             )}
             <Button
               onClick={autoGenerateDraft}
-              disabled={!autoGenerateForm?.authorId || autoGenerateMutation.isPending || autoGenerateStreaming}
+              disabled={authors.length === 0 || (authors.length > 1 && !autoGenerateForm?.authorId) || autoGenerateMutation.isPending || autoGenerateStreaming}
             >
               {autoGenerateMutation.isPending || autoGenerateStreaming ? 'Auto generating...' : 'Auto Generate Draft'}
             </Button>
@@ -2066,7 +2014,11 @@ export default function BlogAdminPage() {
                   id="ai-topic"
                   value={generateForm.topic}
                   placeholder="e.g., Anxiety treatment options in Naples"
-                  onChange={event => updateGenerateForm('topic', event.target.value)}
+                  onChange={event => setGenerateForm(current => current ? {
+                    ...current,
+                    topic: event.target.value,
+                    plannedStrategy: undefined,
+                  } : current)}
                 />
               </div>
 
@@ -2076,7 +2028,11 @@ export default function BlogAdminPage() {
                   id="ai-keyword"
                   value={generateForm.targetKeyword}
                   placeholder="Optional"
-                  onChange={event => updateGenerateForm('targetKeyword', event.target.value)}
+                  onChange={event => setGenerateForm(current => current ? {
+                    ...current,
+                    targetKeyword: event.target.value,
+                    plannedStrategy: undefined,
+                  } : current)}
                 />
               </div>
 
@@ -2087,14 +2043,18 @@ export default function BlogAdminPage() {
                   value={generateForm.additionalContext}
                   rows={4}
                   placeholder="Angle, local focus, or points to include. Do not include patient-identifying information."
-                  onChange={event => updateGenerateForm('additionalContext', event.target.value)}
+                  onChange={event => setGenerateForm(current => current ? {
+                    ...current,
+                    additionalContext: event.target.value,
+                    plannedStrategy: undefined,
+                  } : current)}
                 />
                 <p className="text-xs text-slate-500">Do not paste patient names, emails, phone numbers, dates of birth, or private clinical details.</p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Language</Label>
+                  <Label htmlFor="ai-language">Language</Label>
                   <Select
                     value={generateForm.language}
                     onValueChange={value => {
@@ -2105,10 +2065,11 @@ export default function BlogAdminPage() {
                         language,
                         categoryId: category ? String(category.id) : '',
                         tagIds: [],
+                        plannedStrategy: undefined,
                       } : current);
                     }}
                   >
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="ai-language"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="en">English</SelectItem>
                       <SelectItem value="es">Spanish</SelectItem>
@@ -2117,9 +2078,9 @@ export default function BlogAdminPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Author</Label>
+                  <Label htmlFor="ai-author">Author</Label>
                   <Select value={generateForm.authorId} onValueChange={value => updateGenerateForm('authorId', value)}>
-                    <SelectTrigger><SelectValue placeholder="Select author" /></SelectTrigger>
+                    <SelectTrigger id="ai-author"><SelectValue placeholder="Select author" /></SelectTrigger>
                     <SelectContent>
                       {authors.map(author => (
                         <SelectItem key={author.id} value={String(author.id)}>{author.name}</SelectItem>
@@ -2130,9 +2091,16 @@ export default function BlogAdminPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Category</Label>
-                <Select value={generateForm.categoryId} onValueChange={value => updateGenerateForm('categoryId', value)}>
-                  <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                <Label htmlFor="ai-category">Category</Label>
+                <Select
+                  value={generateForm.categoryId}
+                  onValueChange={value => setGenerateForm(current => current ? {
+                    ...current,
+                    categoryId: value,
+                    plannedStrategy: undefined,
+                  } : current)}
+                >
+                  <SelectTrigger id="ai-category"><SelectValue placeholder="Select category" /></SelectTrigger>
                   <SelectContent>
                     {availableGenerateCategories.map(category => (
                       <SelectItem key={category.id} value={String(category.id)}>{category.name}</SelectItem>

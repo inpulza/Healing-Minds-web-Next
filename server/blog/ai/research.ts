@@ -91,6 +91,10 @@ const TRUSTED_SOURCES: CuratedSource[] = [
   },
 ];
 
+export function getCuratedBlogResearchSourceIds(): string[] {
+  return TRUSTED_SOURCES.map(source => source.id);
+}
+
 function todayIsoDate(): string {
   return new Date().toISOString().slice(0, 10);
 }
@@ -159,8 +163,8 @@ export function selectBlogResearchSources(input: BlogAiGenerateInput): BlogResea
   }));
   const confidence = confidenceFromMatches(ranked.length, ranked[0]?.score || 0);
   const riskNotes = [
-    "Use these sources as educational references, not as a substitute for clinical review.",
-    "Do not add studies, statistics, or URLs beyond the verified source list.",
+    "Use these curated sources as educational references, not as a substitute for clinical review.",
+    "Do not add studies, statistics, or URLs beyond the curated source list.",
   ];
 
   if (confidence === "low") {
@@ -179,7 +183,7 @@ export function selectBlogResearchSources(input: BlogAiGenerateInput): BlogResea
 }
 
 export function formatResearchSourcesForPrompt(sources: BlogResearchSource[]): string {
-  if (sources.length === 0) return "- No verified sources selected.";
+  if (sources.length === 0) return "- No curated sources selected.";
 
   return sources.map(source => (
     `- ${source.title} (${source.publisher}, ${source.domain}, accessed ${source.accessedAt}): ${source.url}\n  Summary: ${source.summary}`

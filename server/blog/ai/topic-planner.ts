@@ -1,52 +1,94 @@
-import type { BlogCategory, BlogTag } from "@shared/schema";
+import type { BlogCategory, BlogTag, InsertBlogTopicCandidate } from "@shared/schema";
 import { buildBlogEditorialBrief } from "./editorial-brief";
-import { buildBlogSemanticMemory } from "./memory";
-import { selectBlogResearchSources } from "./research";
+import { selectBlogResearchSources, getCuratedBlogResearchSourceIds } from "./research";
 import { selectBlogInternalLinks } from "../internal-links";
-import type { BlogLanguage } from "../storage";
+import { getAdminBlogPosts, type BlogLanguage, type BlogPostWithRelations } from "../storage";
 import { selectBlogTagIds } from "../taxonomy";
-
-type TopicTemplate = {
-  topic: string;
-  targetKeyword: string;
-  angle: string;
-  keywords: string[];
-};
+import {
+  BLOG_PATIENT_STAGES,
+  BLOG_TOPIC_THRESHOLDS,
+  HEALING_MINDS_TOPIC_PROMPT_VERSION,
+  HEALING_MINDS_TOPIC_STRATEGY_VERSION,
+  getHealingMindsCategories,
+  inferHealingMindsCategoryKey,
+  type BlogContentFormat,
+  type BlogContentPillar,
+  type BlogPatientStage,
+  type BlogSearchIntent,
+  type HealingMindsCategoryKey,
+} from "../strategy/healing-minds";
+import { buildTopicKey, hasCosmeticFreshness, hasRiskyListicleLanguage, hasUnsafeYmylTopic, normalizeTopicText, topicJaccardSimilarity } from "./topic-normalization";
+import { scoreTopicCandidate, type TopicScoreBreakdown } from "./topic-scoring";
+import { generateTopicCandidateBatch, type TopicInventorySnapshot, type TopicProposal } from "./topic-provider";
+import { judgeTopicCandidates, type TopicJudgeDecision } from "./topic-judge";
+import { persistBlogTopicCandidates, selectBlogTopicCandidate } from "../topic-candidate-storage";
+import type { BlogSemanticMemory } from "./types";
+import { containsLikelyPatientIdentifier } from "../privacy";
 
 type TopicPlannerInput = {
   language: BlogLanguage;
   categories: BlogCategory[];
   tags: BlogTag[];
-  categoryId?: number;
-  focus?: string;
-  limit?: number;
+  runId?: number;
+};
+
+type TopicMatch = {
+  postId: number;
+  title: string;
+  slug: string;
+  status: string;
+  score: number;
+  overlapTerms: string[];
 };
 
 export type BlogTopicPlanCandidate = {
   id: string;
+  topicCandidateId?: number;
+  candidateKey: string;
+  batch: number;
   topic: string;
   targetKeyword: string;
+  topicKey: string;
   language: BlogLanguage;
   categoryId: number;
+  categoryKey: HealingMindsCategoryKey;
   categoryName: string;
+  pillar: BlogContentPillar;
+  patientStage: BlogPatientStage;
+  contentFormat: BlogContentFormat;
+  searchIntent: BlogSearchIntent;
   tagIds: number[];
   tagNames: string[];
   internalLinks: string[];
+  sourceRecommendationIds: string[];
   score: number;
+  scoreBreakdown: TopicScoreBreakdown;
   noveltyScore: number;
   overlapScore: number;
   recommendation: "recommended" | "change_angle" | "update_existing";
+  semanticDecision: TopicJudgeDecision["decision"] | "judge_unavailable";
+  semanticConfidenceBasisPoints: number;
+  semanticMatchedPostId: number | null;
+  semanticRationale: string;
   angle: string;
   rationale: string;
+  whyTimely: string;
   riskNotes: string[];
   research: ReturnType<typeof selectBlogResearchSources>;
-  semanticMemory: Awaited<ReturnType<typeof buildBlogSemanticMemory>>;
+  semanticMemory: BlogSemanticMemory;
   editorialBrief: ReturnType<typeof buildBlogEditorialBrief>;
+  strategyVersion: typeof HEALING_MINDS_TOPIC_STRATEGY_VERSION;
+  promptVersion: typeof HEALING_MINDS_TOPIC_PROMPT_VERSION;
+  providerModel: string;
+  judgeModel?: string;
 };
 
 export type BlogTopicPlan = {
   language: BlogLanguage;
   generatedAt: string;
+  strategyVersion: string;
+  promptVersion: string;
+  selectedCandidateId?: string;
   candidates: BlogTopicPlanCandidate[];
   summary: {
     considered: number;
@@ -54,229 +96,319 @@ export type BlogTopicPlan = {
     recommended: number;
     changeAngle: number;
     updateExisting: number;
+    batches: number;
   };
 };
 
-const TOPIC_TEMPLATES: Record<BlogLanguage, TopicTemplate[]> = {
-  en: [
-    {
-      topic: "Anxiety treatment options in Naples",
-      targetKeyword: "anxiety treatment Naples",
-      angle: "Explain what patients can expect from psychiatric anxiety care without promising outcomes.",
-      keywords: ["anxiety", "panic", "worry", "stress"],
-    },
-    {
-      topic: "When anxiety medication management may help",
-      targetKeyword: "anxiety medication management",
-      angle: "Focus on evaluation, follow-up, questions for the clinician, and safety monitoring.",
-      keywords: ["anxiety", "medication", "management"],
-    },
-    {
-      topic: "Depression treatment and psychiatric care in Naples",
-      targetKeyword: "depression treatment Naples",
-      angle: "Describe signs that may lead adults to seek psychiatric support and how care is reviewed.",
-      keywords: ["depression", "mood", "sadness"],
-    },
-    {
-      topic: "ADHD evaluation and medication management for adults",
-      targetKeyword: "adult ADHD medication management",
-      angle: "Cover adult attention symptoms, evaluation expectations, and conservative medication follow-up.",
-      keywords: ["adhd", "attention", "focus"],
-    },
-    {
-      topic: "PTSD and trauma-related symptoms: when to seek psychiatric care",
-      targetKeyword: "PTSD psychiatric care",
-      angle: "Use careful educational language about trauma symptoms and crisis safety resources.",
-      keywords: ["ptsd", "trauma", "sleep"],
-    },
-    {
-      topic: "Bipolar disorder medication follow-up and mood stability",
-      targetKeyword: "bipolar medication management",
-      angle: "Explain why mood history, monitoring, and follow-up matter before treatment decisions.",
-      keywords: ["bipolar", "mood", "mania"],
-    },
-    {
-      topic: "What to ask before starting mental health medication",
-      targetKeyword: "mental health medication questions",
-      angle: "Give patients a practical list of questions to discuss with a clinician.",
-      keywords: ["medication", "psychiatry", "management"],
-    },
-    {
-      topic: "Telepsychiatry in Florida: what patients should know",
-      targetKeyword: "telepsychiatry Florida",
-      angle: "Explain virtual psychiatric care expectations and when in-person or emergency care may be needed.",
-      keywords: ["telepsychiatry", "florida", "virtual"],
-    },
-  ],
-  es: [
-    {
-      topic: "Opciones de tratamiento para la ansiedad en Naples",
-      targetKeyword: "tratamiento ansiedad Naples",
-      angle: "Explicar que puede esperar un paciente de la atencion psiquiatrica para ansiedad sin prometer resultados.",
-      keywords: ["ansiedad", "panico", "preocupacion", "estres"],
-    },
-    {
-      topic: "Cuando puede ayudar el manejo de medicamentos para la ansiedad",
-      targetKeyword: "manejo medicamentos ansiedad",
-      angle: "Enfocar evaluacion, seguimiento, preguntas para el clinico y monitoreo de seguridad.",
-      keywords: ["ansiedad", "medicamentos", "manejo"],
-    },
-    {
-      topic: "Tratamiento para depresion y cuidado psiquiatrico en Naples",
-      targetKeyword: "tratamiento depresion Naples",
-      angle: "Describir senales generales para buscar apoyo psiquiatrico y como se revisa el cuidado.",
-      keywords: ["depresion", "animo", "tristeza"],
-    },
-    {
-      topic: "Evaluacion de TDAH y manejo de medicamentos en adultos",
-      targetKeyword: "manejo medicamentos TDAH adultos",
-      angle: "Cubrir sintomas de atencion en adultos, expectativas de evaluacion y seguimiento conservador.",
-      keywords: ["tdah", "atencion", "concentracion"],
-    },
-    {
-      topic: "TEPT y sintomas relacionados con trauma: cuando buscar cuidado psiquiatrico",
-      targetKeyword: "cuidado psiquiatrico TEPT",
-      angle: "Usar lenguaje educativo cuidadoso sobre trauma y recursos de seguridad en crisis.",
-      keywords: ["tept", "trauma", "sueno"],
-    },
-    {
-      topic: "Seguimiento de medicamentos para trastorno bipolar y estabilidad del animo",
-      targetKeyword: "manejo medicamentos bipolar",
-      angle: "Explicar por que el historial del animo y el seguimiento importan antes de decidir tratamiento.",
-      keywords: ["bipolar", "animo", "mania"],
-    },
-    {
-      topic: "Que preguntar antes de empezar medicamentos de salud mental",
-      targetKeyword: "preguntas medicamentos salud mental",
-      angle: "Dar una lista practica de preguntas para conversar con un clinico.",
-      keywords: ["medicamentos", "psiquiatria", "manejo"],
-    },
-    {
-      topic: "Telepsiquiatria en Florida: que deben saber los pacientes",
-      targetKeyword: "telepsiquiatria Florida",
-      angle: "Explicar expectativas de cuidado virtual y cuando puede hacer falta cuidado presencial o urgente.",
-      keywords: ["telepsiquiatria", "florida", "virtual"],
-    },
-  ],
-};
-
-function normalize(value: string): string {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+function toCategoryMap(categories: BlogCategory[], language: BlogLanguage): Map<HealingMindsCategoryKey, BlogCategory> {
+  const bySlug = new Map(categories.filter(item => item.language === language).map(item => [item.slug, item]));
+  const result = new Map<HealingMindsCategoryKey, BlogCategory>();
+  for (const strategyCategory of getHealingMindsCategories(language)) {
+    const category = bySlug.get(strategyCategory.slug);
+    if (category) result.set(strategyCategory.key, category);
+  }
+  return result;
 }
 
-function clampScore(value: number): number {
-  return Math.max(0, Math.min(100, Math.round(value)));
+function classifyPost(post: BlogPostWithRelations) {
+  const contentSignals = [
+    post.title,
+    post.targetKeyword,
+    post.tags.map(tag => `${tag.name} ${tag.slug}`).join(" "),
+  ].filter(Boolean).join(" ");
+  const contentCategoryKey = inferHealingMindsCategoryKey(contentSignals);
+  const categoryKey = contentCategoryKey !== "psychiatric_guides"
+    ? contentCategoryKey
+    : post.category
+      ? inferHealingMindsCategoryKey(`${post.category.slug} ${post.category.name} ${contentSignals}`)
+      : contentCategoryKey;
+  return {
+    id: post.id,
+    title: post.title,
+    targetKeyword: post.targetKeyword,
+    topicKey: post.topicKey,
+    categoryKey,
+    pillar: post.contentPillar,
+    patientStage: post.patientStage,
+    contentFormat: post.contentFormat,
+    status: post.status,
+  };
 }
 
-function stableCandidateId(topic: string, language: BlogLanguage): string {
-  return `${language}-${normalize(topic).replace(/\s+/g, "-").slice(0, 80)}`;
+function getSafePostTitleForProvider(post: Pick<BlogPostWithRelations, "id" | "title" | "targetKeyword">): string {
+  return containsLikelyPatientIdentifier(`${post.title} ${post.targetKeyword || ""}`)
+    ? `Private post ${post.id}`
+    : post.title;
 }
 
-function rankTemplate(template: TopicTemplate, focusText: string): number {
-  if (!focusText) return 1;
-  const normalizedFocus = normalize(focusText);
-  const directHit = normalizedFocus.includes(normalize(template.topic)) ? 6 : 0;
-  const keywordHits = template.keywords.reduce((total, keyword) => (
-    normalizedFocus.includes(normalize(keyword)) ? total + 2 : total
-  ), 0);
-  return directHit + keywordHits;
+function buildInventory(posts: BlogPostWithRelations[]): TopicInventorySnapshot {
+  const classified = posts.map(classifyPost);
+  const clusterCounts: Record<string, number> = {};
+  for (const post of classified) {
+    clusterCounts[post.categoryKey] = (clusterCounts[post.categoryKey] || 0) + 1;
+  }
+  return {
+    posts: posts.map((post, index) => {
+      const item = classified[index];
+      const sensitive = getSafePostTitleForProvider(post) !== post.title;
+      return sensitive ? {
+        ...item,
+        title: `Private post ${post.id}`,
+        targetKeyword: null,
+        topicKey: null,
+      } : item;
+    }),
+    clusterCounts,
+    recentCategoryKeys: classified.slice(0, 5).map(post => post.categoryKey),
+    recentPillars: classified.slice(0, 5).map(post => post.pillar).filter((value): value is string => Boolean(value)),
+    recentFormats: classified.slice(0, 5).map(post => post.contentFormat).filter((value): value is string => Boolean(value)),
+  };
 }
 
-function pickCategory(
-  template: TopicTemplate,
-  categories: BlogCategory[],
-  forcedCategoryId: number | undefined,
-): BlogCategory | undefined {
-  if (forcedCategoryId) return categories.find(category => category.id === forcedCategoryId);
-  const normalizedTopic = normalize(`${template.topic} ${template.targetKeyword} ${template.keywords.join(" ")}`);
-  return categories.find(category => normalizedTopic.includes(normalize(category.name)))
-    || categories[0];
+function findTopMatches(
+  proposal: TopicProposal,
+  posts: BlogPostWithRelations[],
+): TopicMatch[] {
+  const candidateText = `${proposal.topic} ${proposal.targetKeyword}`;
+  return posts
+    .map(post => {
+      const postText = `${post.title} ${post.targetKeyword || ""}`;
+      const overlap = topicJaccardSimilarity(candidateText, postText, proposal.language);
+      return {
+        postId: post.id,
+        title: getSafePostTitleForProvider(post),
+        slug: post.slug,
+        status: post.status,
+        score: overlap.score,
+        overlapTerms: overlap.overlapTerms,
+      };
+    })
+    .sort((a, b) => b.score - a.score || a.postId - b.postId)
+    .slice(0, 3);
 }
 
-function recommendationFromSemanticMemory(
-  recommendation: BlogTopicPlanCandidate["semanticMemory"]["recommendation"],
-): BlogTopicPlanCandidate["recommendation"] {
-  if (recommendation === "update_existing") return "update_existing";
-  if (recommendation === "change_angle") return "change_angle";
-  return "recommended";
+function deterministicStatus(input: {
+  proposal: TopicProposal;
+  topMatch?: TopicMatch;
+  existingKeys: Set<string>;
+  clusterCount: number;
+  maximumClusterCount: number;
+  batchDuplicate: boolean;
+  extraListicle: boolean;
+}): "eligible" | "existing_update" | "exact_duplicate" | "high_overlap" | "batch_duplicate" | "saturated" | "unsafe_pattern" {
+  const topicKey = buildTopicKey(`${input.proposal.topic} ${input.proposal.targetKeyword}`, input.proposal.language);
+  if (input.proposal.createOrUpdate === "update_existing") return "existing_update";
+  if (input.existingKeys.has(topicKey)) return "exact_duplicate";
+  if ((input.topMatch?.score || 0) >= BLOG_TOPIC_THRESHOLDS.hardDuplicateOverlap) return "high_overlap";
+  if (input.batchDuplicate) return "batch_duplicate";
+  if (
+    input.extraListicle
+    || hasCosmeticFreshness(input.proposal.topic)
+    || hasUnsafeYmylTopic(
+      `${input.proposal.topic} ${input.proposal.targetKeyword} ${input.proposal.expertiseAngle} ${input.proposal.whyTimely}`,
+      input.proposal.language,
+    )
+    || containsLikelyPatientIdentifier(
+      `${input.proposal.topic} ${input.proposal.targetKeyword} ${input.proposal.expertiseAngle} ${input.proposal.whyTimely}`,
+    )
+  ) return "unsafe_pattern";
+  const saturated = input.maximumClusterCount >= BLOG_TOPIC_THRESHOLDS.saturationMinimumPosts
+    && input.clusterCount >= input.maximumClusterCount
+    && input.proposal.createOrUpdate === "create_new";
+  if (saturated) return "saturated";
+  return "eligible";
 }
 
-function scoreCandidate(input: {
-  noveltyScore: number;
-  tagCount: number;
-  sourceConfidence: "low" | "medium" | "high";
-  recommendation: BlogTopicPlanCandidate["recommendation"];
-  templateRank: number;
-}): number {
-  const confidenceBonus = input.sourceConfidence === "high" ? 10 : input.sourceConfidence === "medium" ? 5 : 0;
-  const recommendationPenalty = input.recommendation === "update_existing" ? 45 : input.recommendation === "change_angle" ? 18 : 0;
-  return clampScore(input.noveltyScore + confidenceBonus + (input.tagCount * 3) + Math.min(input.templateRank, 8) - recommendationPenalty);
+function semanticMemoryFromMatches(
+  proposal: TopicProposal,
+  matches: TopicMatch[],
+  recommendation: BlogTopicPlanCandidate["recommendation"],
+): BlogSemanticMemory {
+  return {
+    topic: proposal.topic,
+    targetKeyword: proposal.targetKeyword,
+    language: proposal.language,
+    matches: matches
+      .filter(match => match.score >= BLOG_TOPIC_THRESHOLDS.meaningfulOverlap)
+      .map(match => ({
+      postId: match.postId,
+      title: match.title,
+      slug: match.slug,
+      language: proposal.language,
+      status: match.status,
+      score: match.score,
+      overlapTerms: match.overlapTerms,
+      recommendation: recommendation === "update_existing"
+        ? "update_existing"
+        : recommendation === "change_angle" ? "change_angle" : "create_new",
+      })),
+    recommendation: recommendation === "update_existing"
+      ? "update_existing"
+      : recommendation === "change_angle" ? "change_angle" : "create_new",
+    riskNotes: recommendation === "recommended"
+      ? []
+      : ["Potential SEO overlap requires explicit editorial review before any new article is published."],
+  };
 }
 
-export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<BlogTopicPlan> {
-  const languageCategories = input.categories.filter(category => category.language === input.language);
-  const languageTags = input.tags.filter(tag => tag.language === input.language);
-  if (languageCategories.length === 0) {
-    throw Object.assign(new Error("No blog categories exist for the selected language"), { statusCode: 400 });
+async function evaluateBatch(input: {
+  proposals: TopicProposal[];
+  batch: 1 | 2;
+  providerModel: string;
+  language: BlogLanguage;
+  posts: BlogPostWithRelations[];
+  inventory: TopicInventorySnapshot;
+  categories: Map<HealingMindsCategoryKey, BlogCategory>;
+  tags: BlogTag[];
+}): Promise<Array<{
+  proposal: TopicProposal;
+  candidate: BlogTopicPlanCandidate;
+  deterministicStatus: string;
+  matches: TopicMatch[];
+}>> {
+  const maximumClusterCount = Math.max(0, ...Object.values(input.inventory.clusterCounts));
+  const existingKeys = new Set(input.posts.map(post => (
+    post.topicKey || buildTopicKey(`${post.title} ${post.targetKeyword || ""}`, input.language)
+  )));
+  let listicleCount = 0;
+  const preliminary = input.proposals.map((proposal, index) => {
+    const matches = findTopMatches(proposal, input.posts);
+    const riskyListicle = hasRiskyListicleLanguage(proposal.topic, input.language);
+    if (riskyListicle) listicleCount += 1;
+    const candidateText = `${proposal.topic} ${proposal.targetKeyword}`;
+    const batchDuplicate = input.proposals.slice(0, index).some(previous => (
+      topicJaccardSimilarity(
+        candidateText,
+        `${previous.topic} ${previous.targetKeyword}`,
+        input.language,
+      ).score >= BLOG_TOPIC_THRESHOLDS.hardDuplicateOverlap
+    ));
+    return {
+      proposal,
+      matches,
+      deterministicStatus: deterministicStatus({
+        proposal,
+        topMatch: matches[0],
+        existingKeys,
+        clusterCount: input.inventory.clusterCounts[proposal.categoryKey] || 0,
+        maximumClusterCount,
+        batchDuplicate,
+        extraListicle: riskyListicle && listicleCount > 1,
+      }),
+    };
+  });
+
+  const eligible = preliminary.filter(item => item.deterministicStatus === "eligible");
+  let decisions = new Map<string, TopicJudgeDecision>();
+  let judgeModel: string | undefined;
+  let judgeUnavailable = false;
+  if (eligible.length > 0) {
+    try {
+      const judged = await judgeTopicCandidates({
+        language: input.language,
+        existingPosts: input.posts.map(post => {
+          const title = getSafePostTitleForProvider(post);
+          return {
+            postId: post.id,
+            title,
+            targetKeyword: title === post.title ? post.targetKeyword : null,
+            categoryKey: classifyPost(post).categoryKey,
+          };
+        }),
+        candidates: eligible.map(item => ({
+          candidateKey: item.proposal.candidateKey,
+          topic: item.proposal.topic,
+          targetKeyword: item.proposal.targetKeyword,
+          expertiseAngle: item.proposal.expertiseAngle,
+          topMatches: item.matches.map(match => ({
+            postId: match.postId,
+            title: match.title,
+            scoreBasisPoints: Math.round(match.score * 10_000),
+          })),
+        })),
+      });
+      judgeModel = judged.model;
+      decisions = new Map(judged.decisions.map(decision => [decision.candidateKey, decision]));
+    } catch (error) {
+      console.error("Topic semantic judge unavailable; applying conservative deterministic fallback:", error);
+      judgeUnavailable = true;
+    }
   }
 
-  const limit = Math.max(1, Math.min(input.limit || 5, 8));
-  const focusText = [input.focus, languageCategories.map(category => category.name).join(" "), languageTags.map(tag => tag.name).join(" ")].filter(Boolean).join(" ");
-  const rankedTemplates = TOPIC_TEMPLATES[input.language]
-    .map(template => ({ template, rank: rankTemplate(template, focusText) }))
-    .sort((a, b) => b.rank - a.rank || a.template.topic.localeCompare(b.template.topic))
-    .slice(0, Math.max(limit + 4, 8));
-
-  const candidates: BlogTopicPlanCandidate[] = [];
-
-  for (const { template, rank } of rankedTemplates) {
-    const category = pickCategory(template, languageCategories, input.categoryId);
-    if (!category) continue;
-
+  return preliminary.map(item => {
+    const category = input.categories.get(item.proposal.categoryKey);
+    if (!category) {
+      throw Object.assign(new Error(`Required category ${input.language}/${item.proposal.categoryKey} is missing; run db:push and the taxonomy seed.`), {
+        statusCode: 409,
+        code: "topic_taxonomy_incomplete",
+      });
+    }
+    const decision = decisions.get(item.proposal.candidateKey);
+    const overlapScore = item.matches[0]?.score || 0;
+    const hardDuplicate = decision?.decision === "duplicate"
+      && decision.confidenceBasisPoints >= BLOG_TOPIC_THRESHOLDS.semanticHardDuplicateConfidenceBasisPoints;
+    const deterministicEligible = item.deterministicStatus === "eligible";
+    const judgeFallbackEligible = judgeUnavailable
+      && overlapScore < BLOG_TOPIC_THRESHOLDS.judgeFallbackMaximumOverlap;
+    const semanticEligible = judgeUnavailable
+      ? judgeFallbackEligible
+      : decision?.decision === "distinct" || decision?.decision === "same_cluster_distinct_intent";
+    const recommended = deterministicEligible && !hardDuplicate && semanticEligible;
+    const recommendation: BlogTopicPlanCandidate["recommendation"] = recommended
+      ? "recommended"
+      : hardDuplicate
+        || item.deterministicStatus === "existing_update"
+        || item.deterministicStatus === "exact_duplicate"
+        || item.deterministicStatus === "high_overlap"
+        ? "update_existing"
+        : "change_angle";
+    const allowedSourceIds = new Set(getCuratedBlogResearchSourceIds());
+    const sourceRecommendationIds = item.proposal.sourceRecommendationIds.filter(id => allowedSourceIds.has(id));
+    const research = selectBlogResearchSources({
+      topic: item.proposal.topic,
+      additionalContext: item.proposal.expertiseAngle,
+      targetKeyword: item.proposal.targetKeyword,
+      language: input.language,
+      categoryName: category.name,
+    });
+    const semanticMemory = semanticMemoryFromMatches(item.proposal, item.matches, recommendation);
     const tagIds = selectBlogTagIds({
       language: input.language,
-      availableTags: languageTags,
-      topic: template.topic,
-      targetKeyword: template.targetKeyword,
-      excerpt: template.angle,
+      availableTags: input.tags,
+      topic: item.proposal.topic,
+      targetKeyword: item.proposal.targetKeyword,
+      excerpt: item.proposal.expertiseAngle,
       categoryName: category.name,
     });
-    const tagNames = languageTags.filter(tag => tagIds.includes(tag.id)).map(tag => tag.name);
+    const tagNames = input.tags.filter(tag => tagIds.includes(tag.id)).map(tag => tag.name);
     const internalLinks = selectBlogInternalLinks({
       language: input.language,
-      topic: template.topic,
-      targetKeyword: template.targetKeyword,
+      topic: item.proposal.topic,
+      targetKeyword: item.proposal.targetKeyword,
       categoryName: category.name,
     });
-    const research = selectBlogResearchSources({
-      topic: template.topic,
-      additionalContext: template.angle,
-      targetKeyword: template.targetKeyword,
-      language: input.language,
-      categoryName: category.name,
-      tagNames,
-      internalLinks,
+    const missingStages = BLOG_PATIENT_STAGES.filter(stage => (
+      !input.inventory.posts.some(post => post.patientStage === stage)
+    ));
+    const scoreBreakdown = scoreTopicCandidate({
+      overlapScore,
+      clusterCount: input.inventory.clusterCounts[item.proposal.categoryKey] || 0,
+      maxClusterCount: maximumClusterCount,
+      pillar: item.proposal.pillar,
+      recentCategoryKeys: input.inventory.recentCategoryKeys,
+      categoryKey: item.proposal.categoryKey,
+      recentPillars: input.inventory.recentPillars,
+      recentFormats: input.inventory.recentFormats,
+      patientStage: item.proposal.patientStage,
+      missingStages,
+      contentFormat: item.proposal.contentFormat,
+      curatedSourceCount: Math.max(sourceRecommendationIds.length, research.sources.length),
+      riskyListicle: hasRiskyListicleLanguage(item.proposal.topic, input.language),
     });
-    const semanticMemory = await buildBlogSemanticMemory({
-      topic: template.topic,
-      targetKeyword: template.targetKeyword,
-      language: input.language,
-      categoryName: category.name,
-      tagNames,
-    });
-    const recommendation = recommendationFromSemanticMemory(semanticMemory.recommendation);
-    const overlapScore = semanticMemory.matches[0]?.score || 0;
-    const noveltyScore = clampScore(100 - (overlapScore * 100));
     const editorialBrief = buildBlogEditorialBrief({
-      topic: template.topic,
-      additionalContext: template.angle,
-      targetKeyword: template.targetKeyword,
+      topic: item.proposal.topic,
+      additionalContext: item.proposal.expertiseAngle,
+      targetKeyword: item.proposal.targetKeyword,
       language: input.language,
       categoryName: category.name,
       tagNames,
@@ -284,54 +416,183 @@ export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<Blog
       researchSources: research.sources,
       semanticMemory,
     });
-    const riskNotes = [
-      ...semanticMemory.riskNotes,
-      ...editorialBrief.riskNotes,
-    ];
-    if (tagIds.length === 0) {
-      riskNotes.push("No existing tags matched this topic; editor should choose tags manually before generation.");
-    }
-
-    candidates.push({
-      id: stableCandidateId(template.topic, input.language),
-      topic: template.topic,
-      targetKeyword: template.targetKeyword,
-      language: input.language,
-      categoryId: category.id,
-      categoryName: category.name,
-      tagIds,
-      tagNames,
-      internalLinks,
-      score: scoreCandidate({
-        noveltyScore,
-        tagCount: tagIds.length,
-        sourceConfidence: research.confidence,
+    const rationale = recommended
+      ? `${item.proposal.whyTimely} The topic passed deterministic overlap and semantic-intent review.`
+      : hardDuplicate
+        ? decision?.rationale || "The semantic judge identified the same reader question and intent."
+        : `Candidate stopped by ${item.deterministicStatus.replace(/_/g, " ")} review.`;
+    const topicKey = buildTopicKey(`${item.proposal.topic} ${item.proposal.targetKeyword}`, input.language);
+    return {
+      proposal: item.proposal,
+      deterministicStatus: item.deterministicStatus,
+      matches: item.matches,
+      candidate: {
+        id: item.proposal.candidateKey,
+        candidateKey: item.proposal.candidateKey,
+        batch: input.batch,
+        topic: item.proposal.topic,
+        targetKeyword: item.proposal.targetKeyword,
+        topicKey,
+        language: input.language,
+        categoryId: category.id,
+        categoryKey: item.proposal.categoryKey,
+        categoryName: category.name,
+        pillar: item.proposal.pillar,
+        patientStage: item.proposal.patientStage,
+        contentFormat: item.proposal.contentFormat,
+        searchIntent: item.proposal.searchIntent,
+        tagIds,
+        tagNames,
+        internalLinks,
+        sourceRecommendationIds,
+        score: recommended ? scoreBreakdown.total : Math.min(scoreBreakdown.total, 49),
+        scoreBreakdown,
+        noveltyScore: Math.round((1 - overlapScore) * 100),
+        overlapScore,
         recommendation,
-        templateRank: rank,
-      }),
-      noveltyScore,
-      overlapScore,
-      recommendation,
-      angle: template.angle,
-      rationale: recommendation === "recommended"
-        ? "Good candidate: low overlap and enough existing editorial structure to generate manually."
-        : recommendation === "change_angle"
-          ? "Similar content exists; use a clearly different angle if generated."
-          : "High overlap detected; consider updating the existing post instead of creating a new one.",
-      riskNotes,
-      research,
-      semanticMemory,
-      editorialBrief,
+        semanticDecision: decision?.decision || "judge_unavailable",
+        semanticConfidenceBasisPoints: decision?.confidenceBasisPoints || 0,
+        semanticMatchedPostId: decision?.matchedPostId || null,
+        semanticRationale: decision?.rationale || (
+          judgeUnavailable
+            ? "Semantic judge unavailable; conservative deterministic fallback applied."
+            : "Candidate was not eligible for semantic review."
+        ),
+        angle: item.proposal.expertiseAngle,
+        rationale,
+        whyTimely: item.proposal.whyTimely,
+        riskNotes: [
+          ...semanticMemory.riskNotes,
+          ...(judgeUnavailable ? ["Semantic judge was unavailable; only very-low-overlap deterministic candidates remain eligible."] : []),
+        ],
+        research,
+        semanticMemory,
+        editorialBrief,
+        strategyVersion: HEALING_MINDS_TOPIC_STRATEGY_VERSION,
+        promptVersion: HEALING_MINDS_TOPIC_PROMPT_VERSION,
+        providerModel: input.providerModel,
+        judgeModel,
+      },
+    };
+  });
+}
+
+function toPersistenceRows(
+  runId: number,
+  evaluated: Awaited<ReturnType<typeof evaluateBatch>>,
+): InsertBlogTopicCandidate[] {
+  return evaluated.map(item => ({
+    runId,
+    batch: item.candidate.batch,
+    candidateKey: item.candidate.candidateKey,
+    topic: item.candidate.topic,
+    targetKeyword: item.candidate.targetKeyword,
+    language: item.candidate.language,
+    categoryId: item.candidate.categoryId,
+    categoryKey: item.candidate.categoryKey,
+    pillar: item.candidate.pillar,
+    patientStage: item.candidate.patientStage,
+    contentFormat: item.candidate.contentFormat,
+    searchIntent: item.candidate.searchIntent,
+    expertiseAngle: item.candidate.angle,
+    whyTimely: item.candidate.whyTimely,
+    sourceRecommendationIds: item.candidate.sourceRecommendationIds,
+    createOrUpdate: item.proposal.createOrUpdate,
+    strategyVersion: item.candidate.strategyVersion,
+    promptVersion: item.candidate.promptVersion,
+    provider: "openai",
+    model: item.candidate.providerModel,
+    deterministicStatus: item.deterministicStatus,
+    overlapBasisPoints: Math.round(item.candidate.overlapScore * 10_000),
+    matchedPostIds: item.matches
+      .filter(match => match.score >= BLOG_TOPIC_THRESHOLDS.meaningfulOverlap)
+      .map(match => match.postId),
+    semanticDecision: item.candidate.semanticDecision,
+    semanticConfidenceBasisPoints: item.candidate.semanticConfidenceBasisPoints,
+    semanticMatchedPostId: item.candidate.semanticMatchedPostId,
+    semanticRationale: item.candidate.semanticRationale,
+    judgeModel: item.candidate.judgeModel,
+    score: item.candidate.score,
+    scoreBreakdown: item.candidate.scoreBreakdown,
+    recommendation: item.candidate.recommendation,
+  }));
+}
+
+export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<BlogTopicPlan> {
+  const categoryMap = toCategoryMap(input.categories, input.language);
+  const requiredCategories = getHealingMindsCategories(input.language);
+  if (categoryMap.size !== requiredCategories.length) {
+    throw Object.assign(new Error(`Healing Minds ${input.language} taxonomy is incomplete. Run db:push and restart the app to seed all categories.`), {
+      statusCode: 409,
+      code: "topic_taxonomy_incomplete",
     });
   }
+  const posts = (await getAdminBlogPosts({
+    status: "all",
+    language: input.language,
+    limit: 200,
+    offset: 0,
+  })).filter(post => post.status !== "rejected");
+  const inventory = buildInventory(posts);
+  const sourceIds = getCuratedBlogResearchSourceIds();
+  const categoryKeys = requiredCategories.map(category => category.key);
+  const allEvaluated: Awaited<ReturnType<typeof evaluateBatch>> = [];
+  const rejectionEvidence: Array<{ topic: string; reason: string }> = [];
 
-  const sorted = candidates
-    .sort((a, b) => b.score - a.score || a.overlapScore - b.overlapScore || a.topic.localeCompare(b.topic));
-  const returned = sorted.slice(0, limit);
+  for (const batch of [1, 2] as const) {
+    const generated = await generateTopicCandidateBatch({
+      language: input.language,
+      inventory,
+      categoryKeys,
+      sourceIds,
+      batch,
+      rejectionEvidence: batch === 2 ? rejectionEvidence : undefined,
+    });
+    const evaluated = await evaluateBatch({
+      proposals: generated.candidates.map((candidate, index) => ({
+        ...candidate,
+        candidateKey: `b${batch}-${index + 1}-${normalizeTopicText(candidate.topic).replace(/\s+/g, "-")}`.slice(0, 120),
+      })),
+      batch,
+      providerModel: generated.model,
+      language: input.language,
+      posts,
+      inventory,
+      categories: categoryMap,
+      tags: input.tags.filter(tag => tag.language === input.language),
+    });
+    allEvaluated.push(...evaluated);
+    if (input.runId) await persistBlogTopicCandidates(toPersistenceRows(input.runId, evaluated));
+    const recommended = allEvaluated.filter(item => item.candidate.recommendation === "recommended");
+    if (recommended.length > 0) break;
+    rejectionEvidence.push(...evaluated.map(item => ({
+      topic: item.candidate.topic,
+      reason: item.candidate.rationale,
+    })));
+  }
 
+  const candidates = allEvaluated
+    .map(item => item.candidate)
+    .sort((a, b) => b.score - a.score || a.overlapScore - b.overlapScore || a.candidateKey.localeCompare(b.candidateKey));
+  const selectedCandidate = candidates.find(candidate => candidate.recommendation === "recommended");
+  if (!selectedCandidate) {
+    throw Object.assign(new Error("No safe unique topic remained after two candidate batches."), {
+      statusCode: 409,
+      code: "no_safe_unique_topic",
+      candidates,
+    });
+  }
+  if (input.runId) {
+    const selectedRow = await selectBlogTopicCandidate(input.runId, selectedCandidate.candidateKey);
+    selectedCandidate.topicCandidateId = selectedRow.id;
+  }
+  const returned = candidates.slice(0, 10);
   return {
     language: input.language,
     generatedAt: new Date().toISOString(),
+    strategyVersion: HEALING_MINDS_TOPIC_STRATEGY_VERSION,
+    promptVersion: HEALING_MINDS_TOPIC_PROMPT_VERSION,
+    selectedCandidateId: selectedCandidate.candidateKey,
     candidates: returned,
     summary: {
       considered: candidates.length,
@@ -339,6 +600,130 @@ export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<Blog
       recommended: returned.filter(candidate => candidate.recommendation === "recommended").length,
       changeAngle: returned.filter(candidate => candidate.recommendation === "change_angle").length,
       updateExisting: returned.filter(candidate => candidate.recommendation === "update_existing").length,
+      batches: Math.max(...returned.map(candidate => candidate.batch)),
     },
   };
+}
+
+export async function assertGuidedBlogTopicSafe(input: {
+  topic: string;
+  targetKeyword?: string;
+  additionalContext?: string;
+  language: BlogLanguage;
+}): Promise<void> {
+  if (
+    hasUnsafeYmylTopic(
+      `${input.topic} ${input.targetKeyword || ""} ${input.additionalContext || ""}`,
+      input.language,
+    )
+    || containsLikelyPatientIdentifier(
+      `${input.topic} ${input.targetKeyword || ""} ${input.additionalContext || ""}`,
+    )
+    || hasCosmeticFreshness(input.topic)
+  ) {
+    throw Object.assign(new Error("This guided topic does not pass the medical-safety or meaningful-uniqueness gate. The requested topic was not replaced."), {
+      statusCode: 400,
+      code: "guided_topic_unsafe",
+    });
+  }
+  const posts = (await getAdminBlogPosts({
+    status: "all",
+    language: input.language,
+    limit: 200,
+    offset: 0,
+  })).filter(post => post.status !== "rejected");
+  const requestedCategoryKey = inferHealingMindsCategoryKey(`${input.topic} ${input.targetKeyword || ""}`);
+  const clusterCounts = posts.reduce<Record<string, number>>((counts, post) => {
+    const key = classifyPost(post).categoryKey;
+    counts[key] = (counts[key] || 0) + 1;
+    return counts;
+  }, {});
+  const maxClusterCount = Math.max(0, ...Object.values(clusterCounts));
+  if (
+    maxClusterCount >= BLOG_TOPIC_THRESHOLDS.saturationMinimumPosts
+    && (clusterCounts[requestedCategoryKey] || 0) >= maxClusterCount
+  ) {
+    throw Object.assign(new Error("This topic belongs to the most saturated content cluster. Choose a meaningfully different category or update an existing article."), {
+      statusCode: 409,
+      code: "guided_topic_cluster_saturated",
+    });
+  }
+  const candidateText = `${input.topic} ${input.targetKeyword || ""}`;
+  const matches = posts
+    .map(post => {
+      const overlap = topicJaccardSimilarity(
+        candidateText,
+        `${post.title} ${post.targetKeyword || ""}`,
+        input.language,
+      );
+      return {
+        postId: post.id,
+        title: getSafePostTitleForProvider(post),
+        slug: post.slug,
+        score: overlap.score,
+      };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+  const top = matches[0];
+  if (top && top.score >= BLOG_TOPIC_THRESHOLDS.hardDuplicateOverlap) {
+    throw Object.assign(new Error(`This topic overlaps too strongly with “${top.title}”. Review that post instead of creating a competing draft.`), {
+      statusCode: 409,
+      code: "guided_topic_duplicate",
+      matchedPostId: top.postId,
+      overlapBasisPoints: Math.round(top.score * 10_000),
+      semanticReason: "Deterministic topic overlap exceeded the hard duplicate threshold.",
+    });
+  }
+  try {
+    const judged = await judgeTopicCandidates({
+      language: input.language,
+      existingPosts: posts.map(post => {
+        const title = getSafePostTitleForProvider(post);
+        return {
+          postId: post.id,
+          title,
+          targetKeyword: title === post.title ? post.targetKeyword : null,
+          categoryKey: classifyPost(post).categoryKey,
+        };
+      }),
+      candidates: [{
+        candidateKey: "guided-topic",
+        topic: input.topic,
+        targetKeyword: input.targetKeyword || input.topic,
+        expertiseAngle: "Use the exact user-selected topic; judge intent overlap only.",
+        topMatches: matches.map(match => ({
+          postId: match.postId,
+          title: match.title,
+          scoreBasisPoints: Math.round(match.score * 10_000),
+        })),
+      }],
+    });
+    const decision = judged.decisions[0];
+    if (
+      decision?.decision === "duplicate"
+      && decision.confidenceBasisPoints >= BLOG_TOPIC_THRESHOLDS.semanticHardDuplicateConfidenceBasisPoints
+    ) {
+      const matched = posts.find(post => post.id === decision.matchedPostId) || posts.find(post => post.id === top?.postId);
+      throw Object.assign(new Error(
+        matched
+          ? `This topic answers the same reader question as “${matched.title}”. The requested topic was not replaced.`
+          : "This topic duplicates an existing reader question. The requested topic was not replaced.",
+      ), {
+        statusCode: 409,
+        code: "guided_topic_duplicate",
+        matchedPostId: matched?.id || decision.matchedPostId,
+        semanticConfidenceBasisPoints: decision.confidenceBasisPoints,
+        semanticReason: decision.rationale,
+      });
+    }
+  } catch (error) {
+    if ((error as { code?: string }).code === "guided_topic_duplicate") throw error;
+    if ((top?.score || 0) >= BLOG_TOPIC_THRESHOLDS.judgeFallbackMaximumOverlap) {
+      throw Object.assign(new Error("The semantic topic review is unavailable and deterministic overlap is not low enough to continue safely."), {
+        statusCode: 503,
+        code: "guided_topic_review_unavailable",
+      });
+    }
+  }
 }

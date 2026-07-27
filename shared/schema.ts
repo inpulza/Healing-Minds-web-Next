@@ -12,6 +12,7 @@ import {
   uniqueIndex,
   uuid,
   varchar,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -139,6 +140,18 @@ export const blogPosts = pgTable(
     metaTitle: varchar("meta_title", { length: 70 }),
     metaDescription: varchar("meta_description", { length: 160 }),
     readingTime: integer("reading_time"),
+    topicCandidateId: integer("topic_candidate_id").references(
+      (): AnyPgColumn => blogTopicCandidates.id,
+      { onDelete: "set null" },
+    ),
+    topicKey: varchar("topic_key", { length: 180 }),
+    targetKeyword: varchar("target_keyword", { length: 120 }),
+    contentPillar: varchar("content_pillar", { length: 80 }),
+    patientStage: varchar("patient_stage", { length: 80 }),
+    contentFormat: varchar("content_format", { length: 80 }),
+    searchIntent: varchar("search_intent", { length: 80 }),
+    expertiseAngle: text("expertise_angle"),
+    topicStrategyVersion: varchar("topic_strategy_version", { length: 100 }),
     publishedAt: timestamp("published_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -148,6 +161,8 @@ export const blogPosts = pgTable(
     index("idx_blog_posts_status").on(table.status),
     index("idx_blog_posts_published_at").on(table.publishedAt),
     index("idx_blog_posts_category_id").on(table.categoryId),
+    index("idx_blog_posts_topic_key").on(table.language, table.topicKey),
+    index("idx_blog_posts_topic_strategy").on(table.language, table.contentPillar, table.patientStage),
     index("idx_blog_posts_translation_group").on(table.translationGroupId),
   ],
 );
@@ -199,6 +214,55 @@ export const blogGenerationEvents = pgTable(
   },
   (table) => [
     index("idx_blog_generation_events_run_id_id").on(table.runId, table.id),
+  ],
+);
+
+export const blogTopicCandidates = pgTable(
+  "blog_topic_candidates",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    runId: integer("run_id").references(() => blogGenerationRuns.id, { onDelete: "cascade" }).notNull(),
+    batch: integer("batch").notNull(),
+    candidateKey: varchar("candidate_key", { length: 120 }).notNull(),
+    topic: varchar("topic", { length: 180 }).notNull(),
+    targetKeyword: varchar("target_keyword", { length: 120 }).notNull(),
+    language: varchar("language", { length: 5 }).notNull(),
+    categoryId: integer("category_id").references(() => blogCategories.id, { onDelete: "restrict" }).notNull(),
+    categoryKey: varchar("category_key", { length: 80 }).notNull(),
+    pillar: varchar("pillar", { length: 80 }).notNull(),
+    patientStage: varchar("patient_stage", { length: 80 }).notNull(),
+    contentFormat: varchar("content_format", { length: 80 }).notNull(),
+    searchIntent: varchar("search_intent", { length: 80 }).notNull(),
+    expertiseAngle: text("expertise_angle").notNull(),
+    whyTimely: text("why_timely").notNull(),
+    sourceRecommendationIds: jsonb("source_recommendation_ids").$type<string[]>().notNull(),
+    createOrUpdate: varchar("create_or_update", { length: 30 }).notNull(),
+    strategyVersion: varchar("strategy_version", { length: 100 }).notNull(),
+    promptVersion: varchar("prompt_version", { length: 100 }).notNull(),
+    provider: varchar("provider", { length: 50 }).notNull(),
+    model: varchar("model", { length: 100 }).notNull(),
+    deterministicStatus: varchar("deterministic_status", { length: 50 }).notNull(),
+    overlapBasisPoints: integer("overlap_basis_points").notNull().default(0),
+    matchedPostIds: jsonb("matched_post_ids").$type<number[]>().notNull(),
+    semanticDecision: varchar("semantic_decision", { length: 50 }),
+    semanticConfidenceBasisPoints: integer("semantic_confidence_basis_points"),
+    semanticMatchedPostId: integer("semantic_matched_post_id").references(() => blogPosts.id, { onDelete: "set null" }),
+    semanticRationale: text("semantic_rationale"),
+    judgeModel: varchar("judge_model", { length: 100 }),
+    score: integer("score").notNull().default(0),
+    scoreBreakdown: jsonb("score_breakdown").$type<Record<string, unknown>>().notNull(),
+    recommendation: varchar("recommendation", { length: 50 }).notNull(),
+    selected: boolean("selected").notNull().default(false),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_topic_candidates_run_key").on(table.runId, table.candidateKey),
+    index("idx_blog_topic_candidates_run_batch").on(table.runId, table.batch),
+    index("idx_blog_topic_candidates_strategy").on(table.language, table.categoryKey, table.pillar),
+    uniqueIndex("idx_blog_topic_candidates_single_selected")
+      .on(table.runId)
+      .where(sql`${table.selected} = true`),
   ],
 );
 
@@ -301,6 +365,10 @@ export const insertBlogPostImageSchema = createInsertSchema(blogPostImages).omit
   createdAt: true,
   updatedAt: true,
 });
+export const insertBlogTopicCandidateSchema = createInsertSchema(blogTopicCandidates).omit({
+  createdAt: true,
+  updatedAt: true,
+});
 export const insertBlogRedirectSchema = z.object({
   sourcePath: z.string().min(1).max(500),
   targetPath: z.string().min(1).max(500),
@@ -349,6 +417,8 @@ export type InsertBlogPostTag = z.infer<typeof insertBlogPostTagSchema>;
 export type BlogPostTag = typeof blogPostTags.$inferSelect;
 export type BlogGenerationRun = typeof blogGenerationRuns.$inferSelect;
 export type BlogGenerationEvent = typeof blogGenerationEvents.$inferSelect;
+export type InsertBlogTopicCandidate = typeof blogTopicCandidates.$inferInsert;
+export type BlogTopicCandidate = typeof blogTopicCandidates.$inferSelect;
 export type BlogPostImageRole = (typeof blogPostImageRoleEnum.enumValues)[number];
 export type BlogPostImageSource = (typeof blogPostImageSourceEnum.enumValues)[number];
 export type BlogPostImageGenerationStatus = (typeof blogPostImageGenerationStatusEnum.enumValues)[number];

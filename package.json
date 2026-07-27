@@ -11,7 +11,8 @@
     "seo:check": "tsx scripts/seo-publish-check.ts",
     "db:push": "drizzle-kit push",
     "blog:seed": "tsx scripts/seed-blog.ts",
-    "blog:image-check": "tsx scripts/blog-image-guards.ts"
+    "blog:image-check": "tsx scripts/blog-image-guards.ts",
+    "blog:topic-check": "tsx scripts/blog-topic-guards.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

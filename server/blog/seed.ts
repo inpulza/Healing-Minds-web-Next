@@ -11,6 +11,7 @@ import {
   type BlogTag,
 } from "@shared/schema";
 import { db } from "../db";
+import { getHealingMindsCategories, type HealingMindsCategory } from "./strategy/healing-minds";
 
 const TRANSLATION_GROUP_ID = "4a6829e5-68cc-4b2a-9c51-19616ec41f8b";
 const PUBLISHED_AT = new Date("2026-06-23T12:00:00.000Z");
@@ -43,19 +44,8 @@ async function getOrCreateAuthor(): Promise<BlogAuthor> {
   return created;
 }
 
-async function getOrCreateCategory(language: "en" | "es"): Promise<BlogCategory> {
-  const category = language === "es"
-    ? {
-        name: "Ansiedad",
-        slug: "ansiedad",
-        description: "Educacion sobre ansiedad, atencion psiquiatrica y opciones de tratamiento.",
-      }
-    : {
-        name: "Anxiety Treatment",
-        slug: "anxiety-treatment",
-        description: "Education about anxiety, psychiatric care, and treatment options.",
-      };
-
+async function getOrCreateCategory(category: HealingMindsCategory): Promise<BlogCategory> {
+  const { language } = category;
   const [existing] = await db
     .select()
     .from(blogCategories)
@@ -67,7 +57,9 @@ async function getOrCreateCategory(language: "en" | "es"): Promise<BlogCategory>
   const [created] = await db
     .insert(blogCategories)
     .values({
-      ...category,
+      name: category.name,
+      slug: category.slug,
+      description: category.description,
       language,
     })
     .onConflictDoNothing()
@@ -156,20 +148,22 @@ async function attachTags(postId: number, tagIds: number[]): Promise<void> {
 export async function seedInitialBlogPosts(options: SeedBlogOptions = {}): Promise<void> {
   const logger = options.logger || console;
   const author = await getOrCreateAuthor();
-  const enCategory = await getOrCreateCategory("en");
-  const esCategory = await getOrCreateCategory("es");
+  const strategyCategories = getHealingMindsCategories();
+  const categoryRows = await Promise.all(strategyCategories.map(getOrCreateCategory));
+  const categoryByKey = new Map(strategyCategories.map((category, index) => (
+    [`${category.language}:${category.key}`, categoryRows[index]]
+  )));
+  const strategyTags = await Promise.all(strategyCategories.map(category => (
+    getOrCreateTag(category.tag.name, category.tag.slug, category.language)
+  )));
+  const enCategory = categoryByKey.get("en:anxiety");
+  const esCategory = categoryByKey.get("es:anxiety");
+  if (!enCategory || !esCategory) throw new Error("Healing Minds anxiety taxonomy could not be seeded");
 
-  const enTags = await Promise.all([
-    getOrCreateTag("Anxiety", "anxiety", "en"),
-    getOrCreateTag("Medication Management", "medication-management", "en"),
-    getOrCreateTag("Naples Psychiatry", "naples-psychiatry", "en"),
-  ]);
-
-  const esTags = await Promise.all([
-    getOrCreateTag("Ansiedad", "ansiedad", "es"),
-    getOrCreateTag("Manejo de Medicamentos", "manejo-medicamentos", "es"),
-    getOrCreateTag("Psiquiatria Naples", "psiquiatria-naples", "es"),
-  ]);
+  const enTags = strategyTags.filter(tag => tag.language === "en" && ["anxiety", "medication-management"].includes(tag.slug));
+  enTags.push(await getOrCreateTag("Naples Psychiatry", "naples-psychiatry", "en"));
+  const esTags = strategyTags.filter(tag => tag.language === "es" && ["ansiedad", "manejo-medicamentos"].includes(tag.slug));
+  esTags.push(await getOrCreateTag("Psiquiatria Naples", "psiquiatria-naples", "es"));
 
   const enPost = await getOrCreatePost({
     title: "Understanding Anxiety Treatment in Naples: What Patients Can Expect",

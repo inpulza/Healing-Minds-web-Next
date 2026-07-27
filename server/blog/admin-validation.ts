@@ -4,6 +4,13 @@ import type { BlogPostWithRelations } from "./storage";
 import { getPlainTextFromHtml } from "./sanitize";
 import { hasMedicalDisclaimer } from "./editorial-rules";
 import { buildBlogVerificationReport } from "./verification";
+import {
+  BLOG_CONTENT_FORMATS,
+  BLOG_CONTENT_PILLARS,
+  BLOG_PATIENT_STAGES,
+  BLOG_SEARCH_INTENTS,
+  HEALING_MINDS_TOPIC_STRATEGY_VERSION,
+} from "./strategy/healing-minds";
 
 const statusSchema = z.enum(["draft", "pending_review", "published", "rejected"]);
 const languageSchema = z.enum(["en", "es"]);
@@ -83,21 +90,20 @@ export const adminBlogGenerateDraftSchema = z.object({
   tagIds: z.array(z.coerce.number().int().positive()).max(8).default([]),
   internalLinks: z.array(z.string().trim().regex(/^\/(?!\/)/).max(200)).max(5).default([]),
   translationGroupId: z.string().uuid().optional(),
+  contentPillar: z.enum(BLOG_CONTENT_PILLARS).optional(),
+  patientStage: z.enum(BLOG_PATIENT_STAGES).optional(),
+  contentFormat: z.enum(BLOG_CONTENT_FORMATS).optional(),
+  searchIntent: z.enum(BLOG_SEARCH_INTENTS).optional(),
+  topicStrategyVersion: z.literal(HEALING_MINDS_TOPIC_STRATEGY_VERSION).optional(),
 });
 
 export const adminBlogTopicPlannerSchema = z.object({
   language: languageSchema.default("en"),
-  categoryId: z.coerce.number().int().positive().optional(),
-  focus: z.string().trim().max(500).optional().default(""),
-  limit: z.coerce.number().int().min(1).max(8).optional().default(5),
 });
 
 export const adminBlogAutoGenerateSchema = z.object({
   language: languageSchema.default("en"),
-  authorId: z.coerce.number().int().positive(),
-  categoryId: z.coerce.number().int().positive().optional(),
-  focus: z.string().trim().max(500).optional().default(""),
-  limit: z.coerce.number().int().min(1).max(8).optional().default(5),
+  authorId: z.coerce.number().int().positive().optional(),
 });
 
 export const adminBlogCategorySchema = z.object({

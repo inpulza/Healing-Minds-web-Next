@@ -49,7 +49,10 @@ import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { buildBlogEditorialBrief } from "./ai/editorial-brief";
 import { buildBlogSemanticMemory } from "./ai/memory";
 import { selectBlogResearchSources } from "./ai/research";
-import { buildBlogTopicPlan, type BlogTopicPlanCandidate } from "./ai/topic-planner";
+import { assertGuidedBlogTopicSafe, buildBlogTopicPlan, type BlogTopicPlanCandidate } from "./ai/topic-planner";
+import { assertBlogTopicGenerationConfigured } from "./ai/responses-client";
+import { buildTopicKey } from "./ai/topic-normalization";
+import { HEALING_MINDS_TOPIC_STRATEGY_VERSION } from "./strategy/healing-minds";
 import { applyDeterministicBlogFix } from "./content-fixes";
 import { getCuratedFeaturedImageAlt, selectCuratedFeaturedImage } from "./featured-images";
 import { ensureBlogInternalLinks, selectBlogInternalLinks } from "./internal-links";
@@ -81,11 +84,26 @@ import {
 import { ensureCuratedHeroImage } from "./images/storage";
 
 function sendValidationError(res: Response, error: unknown): void {
-  const requestError = error as { statusCode?: number; message?: string };
+  const requestError = error as {
+    statusCode?: number;
+    message?: string;
+    code?: string;
+    matchedPostId?: number;
+    overlapBasisPoints?: number;
+    semanticConfidenceBasisPoints?: number;
+    semanticReason?: string;
+  };
   if (requestError.statusCode && requestError.statusCode >= 400 && requestError.statusCode < 600) {
     res.status(requestError.statusCode).json({
       success: false,
       message: requestError.message || "Invalid blog request",
+      ...(requestError.code ? { code: requestError.code } : {}),
+      ...(requestError.matchedPostId ? { matchedPostId: requestError.matchedPostId } : {}),
+      ...(requestError.overlapBasisPoints !== undefined ? { overlapBasisPoints: requestError.overlapBasisPoints } : {}),
+      ...(requestError.semanticConfidenceBasisPoints !== undefined
+        ? { semanticConfidenceBasisPoints: requestError.semanticConfidenceBasisPoints }
+        : {}),
+      ...(requestError.semanticReason ? { semanticReason: requestError.semanticReason } : {}),
     });
     return;
   }
@@ -283,7 +301,11 @@ function normalizePostUpdatePayload(input: unknown) {
   };
 }
 
-type AdminBlogGenerateDraftPayload = z.infer<typeof adminBlogGenerateDraftSchema>;
+type AdminBlogGenerateDraftPayload = z.infer<typeof adminBlogGenerateDraftSchema> & {
+  topicCandidateId?: number;
+  topicKey?: string;
+  expertiseAngle?: string;
+};
 type AdminBlogAutoGeneratePayload = z.infer<typeof adminBlogAutoGenerateSchema>;
 
 type BlogGenerationWorkflowStep = {
@@ -293,11 +315,37 @@ type BlogGenerationWorkflowStep = {
   detail?: string;
 };
 
+type BlogGenerationSelectedCandidate = Pick<
+  BlogTopicPlanCandidate,
+  | "id"
+  | "candidateKey"
+  | "topicCandidateId"
+  | "topic"
+  | "targetKeyword"
+  | "topicKey"
+  | "language"
+  | "categoryId"
+  | "categoryKey"
+  | "categoryName"
+  | "pillar"
+  | "patientStage"
+  | "contentFormat"
+  | "searchIntent"
+  | "tagIds"
+  | "internalLinks"
+  | "score"
+  | "overlapScore"
+  | "recommendation"
+  | "angle"
+  | "rationale"
+  | "strategyVersion"
+>;
+
 type BlogGenerationWorkflow = {
   mode: "manual" | "auto-generate";
   generatedAt: string;
-  selectedCandidate?: BlogTopicPlanCandidate;
-  topicPlan?: Awaited<ReturnType<typeof buildBlogTopicPlan>>;
+  authorId?: number;
+  selectedCandidate?: BlogGenerationSelectedCandidate;
   steps: BlogGenerationWorkflowStep[];
 };
 
@@ -544,7 +592,8 @@ async function createGeneratedBlogDraft(
     status: "in_progress",
     detail: "Sanitizing HTML and saving one private draft.",
   }, reportProgress);
-  const postPayload = normalizePostPayload({
+  const postPayload = {
+    ...normalizePostPayload({
     title: generated.title,
     slug,
     language: payload.language,
@@ -559,8 +608,18 @@ async function createGeneratedBlogDraft(
     isFeatured: false,
     metaTitle: generated.metaTitle,
     metaDescription: generated.metaDescription,
-    tagIds: finalTagIds,
-  });
+      tagIds: finalTagIds,
+    }),
+    ...(payload.topicCandidateId ? { topicCandidateId: payload.topicCandidateId } : {}),
+    ...(payload.topicKey ? { topicKey: payload.topicKey } : {}),
+    ...(payload.targetKeyword ? { targetKeyword: payload.targetKeyword } : {}),
+    ...(payload.contentPillar ? { contentPillar: payload.contentPillar } : {}),
+    ...(payload.patientStage ? { patientStage: payload.patientStage } : {}),
+    ...(payload.contentFormat ? { contentFormat: payload.contentFormat } : {}),
+    ...(payload.searchIntent ? { searchIntent: payload.searchIntent } : {}),
+    ...(payload.expertiseAngle ? { expertiseAngle: payload.expertiseAngle } : {}),
+    ...(payload.topicStrategyVersion ? { topicStrategyVersion: payload.topicStrategyVersion } : {}),
+  };
 
   const post = generationRunId
     ? await createBlogPostForGenerationRun(postPayload, generationRunId)
@@ -612,7 +671,8 @@ async function createGeneratedBlogDraft(
     });
   }
 
-  const verification = buildBlogVerificationReport(post);
+  const persistedPost = await getBlogPostById(post.id) || post;
+  const verification = buildBlogVerificationReport(persistedPost);
   await updateWorkflowStep(workflow, {
     id: "verify",
     label: "Verification",
@@ -627,8 +687,8 @@ async function createGeneratedBlogDraft(
   }, reportProgress);
 
   return {
-    data: post,
-    checks: validatePostForPublish(post),
+    data: persistedPost,
+    checks: validatePostForPublish(persistedPost),
     verification,
     ai: {
       riskNotes: aiRiskNotes,
@@ -641,12 +701,14 @@ async function createGeneratedBlogDraft(
 }
 
 const AUTO_GENERATE_WORKFLOW_STEPS: Array<Pick<BlogGenerationWorkflowStep, "id" | "label">> = [
-  { id: "topic-plan", label: "Topic plan" },
+  { id: "strategy-context", label: "Strategy context" },
+  { id: "topic-ideation", label: "Topic ideation" },
+  { id: "deterministic-review", label: "Deterministic review" },
+  { id: "semantic-review", label: "Semantic review" },
   { id: "topic-selection", label: "Topic selection" },
   { id: "editorial-context", label: "Editorial context" },
   { id: "taxonomy-links", label: "Taxonomy and internal links" },
   { id: "trusted-research", label: "Trusted research" },
-  { id: "semantic-memory", label: "Semantic memory" },
   { id: "editorial-brief", label: "Editorial brief" },
   { id: "ai-draft", label: "AI draft" },
   { id: "featured-image", label: "Featured image" },
@@ -666,13 +728,14 @@ function createAutoGenerateWorkflow(): BlogGenerationWorkflow {
 async function prepareAutoGenerateWorkflow(
   payload: AdminBlogAutoGeneratePayload,
   reportProgress?: BlogGenerationProgressReporter,
+  generationRunId?: number,
 ) : Promise<BlogGenerationWorkflow> {
   const workflow = createAutoGenerateWorkflow();
   await updateWorkflowStep(workflow, {
-    id: "topic-plan",
-    label: "Topic plan",
+    id: "strategy-context",
+    label: "Strategy context",
     status: "in_progress",
-    detail: "Scoring safe topic candidates against existing content.",
+    detail: "Loading the bilingual Healing Minds taxonomy and existing topic inventory.",
   }, reportProgress);
 
   const [authors, categories, tags] = await Promise.all([
@@ -680,34 +743,81 @@ async function prepareAutoGenerateWorkflow(
     getBlogCategories(payload.language),
     getBlogTags(payload.language),
   ]);
-  const author = authors.find(item => item.id === payload.authorId);
+  const author = payload.authorId
+    ? authors.find(item => item.id === payload.authorId)
+    : authors.length === 1 ? authors[0] : undefined;
   if (!author) {
-    throw Object.assign(new Error("Selected author was not found"), { statusCode: 400, workflow });
+    const message = payload.authorId
+      ? "Selected author was not found"
+      : "Choose an author because more than one author is available";
+    throw Object.assign(new Error(message), { statusCode: 400, workflow });
   }
-  if (payload.categoryId && !categories.some(category => category.id === payload.categoryId)) {
-    throw Object.assign(new Error("Selected category must match the auto generation language"), { statusCode: 400, workflow });
-  }
+  workflow.authorId = author.id;
+  await updateWorkflowStep(workflow, {
+    id: "strategy-context",
+    label: "Strategy context",
+    status: "completed",
+    detail: `${categories.length} managed categories; ${tags.length} managed tags; author ${author.name}.`,
+  }, reportProgress);
 
+  await updateWorkflowStep(workflow, {
+    id: "topic-ideation",
+    label: "Topic ideation",
+    status: "in_progress",
+    detail: "Generating five strategy-aware candidates without patient data or article bodies.",
+  }, reportProgress);
   const topicPlan = await buildBlogTopicPlan({
     language: payload.language,
     categories,
     tags,
-    categoryId: payload.categoryId,
-    focus: payload.focus,
-    limit: payload.limit,
+    runId: generationRunId,
   });
-  workflow.topicPlan = topicPlan;
   await updateWorkflowStep(workflow, {
-    id: "topic-plan",
-    label: "Topic plan",
+    id: "topic-ideation",
+    label: "Topic ideation",
     status: "completed",
-    detail: `${topicPlan.summary.returned} candidate${topicPlan.summary.returned === 1 ? "" : "s"}; ${topicPlan.summary.recommended} recommended.`,
+    detail: `${topicPlan.summary.considered} candidate${topicPlan.summary.considered === 1 ? "" : "s"} across ${topicPlan.summary.batches} batch${topicPlan.summary.batches === 1 ? "" : "es"}.`,
+  }, reportProgress);
+  await updateWorkflowStep(workflow, {
+    id: "deterministic-review",
+    label: "Deterministic review",
+    status: "completed",
+    detail: "Exact topic keys, symmetric token overlap, cluster saturation, and unsafe freshness patterns checked.",
+  }, reportProgress);
+  await updateWorkflowStep(workflow, {
+    id: "semantic-review",
+    label: "Semantic review",
+    status: "completed",
+    detail: `${topicPlan.summary.recommended} candidate${topicPlan.summary.recommended === 1 ? "" : "s"} retained after intent review.`,
   }, reportProgress);
 
-  const selectedCandidate = topicPlan.candidates.find(candidate => candidate.recommendation === "recommended");
-  workflow.selectedCandidate = selectedCandidate;
+  const selectedCandidate = topicPlan.candidates.find(candidate => candidate.id === topicPlan.selectedCandidateId);
+  workflow.selectedCandidate = selectedCandidate ? {
+    id: selectedCandidate.id,
+    candidateKey: selectedCandidate.candidateKey,
+    topicCandidateId: selectedCandidate.topicCandidateId,
+    topic: selectedCandidate.topic,
+    targetKeyword: selectedCandidate.targetKeyword,
+    topicKey: selectedCandidate.topicKey,
+    language: selectedCandidate.language,
+    categoryId: selectedCandidate.categoryId,
+    categoryKey: selectedCandidate.categoryKey,
+    categoryName: selectedCandidate.categoryName,
+    pillar: selectedCandidate.pillar,
+    patientStage: selectedCandidate.patientStage,
+    contentFormat: selectedCandidate.contentFormat,
+    searchIntent: selectedCandidate.searchIntent,
+    tagIds: selectedCandidate.tagIds,
+    internalLinks: selectedCandidate.internalLinks,
+    score: selectedCandidate.score,
+    overlapScore: selectedCandidate.overlapScore,
+    recommendation: selectedCandidate.recommendation,
+    angle: selectedCandidate.angle,
+    rationale: selectedCandidate.rationale,
+    strategyVersion: selectedCandidate.strategyVersion,
+  } : undefined;
   if (!selectedCandidate) {
-    const message = "No low-overlap topic was safe for Auto Generate. Use Plan Topics and select a manual angle.";
+    const message = "No safe unique topic remained after two candidate batches.";
     await updateWorkflowStep(workflow, {
       id: "topic-selection",
       label: "Topic selection",
@@ -721,7 +831,7 @@ async function prepareAutoGenerateWorkflow(
     id: "topic-selection",
     label: "Topic selection",
     status: "completed",
-    detail: `${selectedCandidate.topic}; overlap ${Math.round(selectedCandidate.overlapScore * 100)}%; score ${selectedCandidate.score}.`,
+      detail: `${selectedCandidate.topic}; ${selectedCandidate.categoryName}; ${selectedCandidate.pillar.replace(/_/g, " ")}; score ${selectedCandidate.score}.`,
   }, reportProgress);
 
   return workflow;
@@ -733,7 +843,9 @@ async function executeAutoGenerateWorkflow(
   generationRunId?: number,
   preparedWorkflow?: BlogGenerationWorkflow,
 ) {
-  const workflow = preparedWorkflow || await prepareAutoGenerateWorkflow(payload, reportProgress);
+  const workflow = preparedWorkflow?.selectedCandidate
+    ? preparedWorkflow
+    : await prepareAutoGenerateWorkflow(payload, reportProgress, generationRunId);
   const selectedCandidate = workflow.selectedCandidate;
   if (!selectedCandidate) {
     throw Object.assign(new Error("Prepared generation run has no selected topic"), { statusCode: 409, workflow });
@@ -746,10 +858,18 @@ async function executeAutoGenerateWorkflow(
       additionalContext: selectedCandidate.angle,
       targetKeyword: selectedCandidate.targetKeyword,
       language: selectedCandidate.language,
-      authorId: payload.authorId,
+      authorId: workflow.authorId || payload.authorId!,
       categoryId: selectedCandidate.categoryId,
       tagIds: selectedCandidate.tagIds,
       internalLinks: selectedCandidate.internalLinks,
+      topicCandidateId: selectedCandidate.topicCandidateId,
+      topicKey: selectedCandidate.topicKey,
+      contentPillar: selectedCandidate.pillar,
+      patientStage: selectedCandidate.patientStage,
+      contentFormat: selectedCandidate.contentFormat,
+      searchIntent: selectedCandidate.searchIntent,
+      expertiseAngle: selectedCandidate.angle,
+      topicStrategyVersion: selectedCandidate.strategyVersion,
     }, workflow, reportProgress, generationRunId);
   } catch (error) {
     const workflowError = error as Error & { workflow?: BlogGenerationWorkflow };
@@ -809,7 +929,7 @@ async function executePersistedAutoGenerateRun(runId: number): Promise<void> {
       payload: toJsonObject(response),
     }).catch(eventError => console.error("Could not persist generation completion event:", eventError));
   } catch (error) {
-    const runError = error as Error & { statusCode?: number; workflow?: BlogGenerationWorkflow };
+    const runError = error as Error & { statusCode?: number; code?: string; workflow?: BlogGenerationWorkflow };
     const currentRun = await getBlogGenerationRun(runId).catch(() => undefined);
     const workflow = runError.workflow
       || (currentRun?.workflow as unknown as BlogGenerationWorkflow | null)
@@ -824,6 +944,7 @@ async function executePersistedAutoGenerateRun(runId: number): Promise<void> {
       success: false,
       message: runError.message || "Auto generation failed",
       statusCode: runError.statusCode || 500,
+      ...(runError.code ? { code: runError.code } : {}),
       postId: currentRun?.postId || null,
       partialSuccess: Boolean(currentRun?.postId),
       workflow,
@@ -1016,10 +1137,13 @@ export function registerAdminBlogRoutes(app: Express): void {
   app.post("/api/admin/blog/topic-plan", async (req, res) => {
     try {
       const payload = adminBlogTopicPlannerSchema.parse(req.body);
-      if (containsLikelyPatientIdentifier(payload.focus || "")) {
-        return res.status(400).json({
+      assertBlogTopicGenerationConfigured();
+      const rateLimit = checkBlogAiRateLimit(getClientIp(req));
+      if (!rateLimit.allowed) {
+        if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
+        return res.status(429).json({
           success: false,
-          message: "Topic planning inputs must not include patient-identifying information",
+          message: "Blog AI generation rate limit reached",
         });
       }
 
@@ -1027,17 +1151,11 @@ export function registerAdminBlogRoutes(app: Express): void {
         getBlogCategories(payload.language),
         getBlogTags(payload.language),
       ]);
-      if (payload.categoryId && !categories.some(category => category.id === payload.categoryId)) {
-        return res.status(400).json({ success: false, message: "Selected category must match the planner language" });
-      }
 
       const plan = await buildBlogTopicPlan({
         language: payload.language,
         categories,
         tags,
-        categoryId: payload.categoryId,
-        focus: payload.focus,
-        limit: payload.limit,
       });
 
       res.status(200).json({ success: true, data: plan });
@@ -1053,12 +1171,6 @@ export function registerAdminBlogRoutes(app: Express): void {
   app.post("/api/admin/blog/generation-runs", async (req, res) => {
     try {
       const payload = adminBlogAutoGenerateSchema.parse(req.body);
-      if (containsLikelyPatientIdentifier(payload.focus || "")) {
-        return res.status(400).json({
-          success: false,
-          message: "Auto generation inputs must not include patient-identifying information",
-        });
-      }
 
       const idempotencyKey = req.get("Idempotency-Key")?.trim() || "";
       if (!/^[A-Za-z0-9._:-]{8,255}$/.test(idempotencyKey)) {
@@ -1098,6 +1210,7 @@ export function registerAdminBlogRoutes(app: Express): void {
       }
 
       assertBlogAiGenerationConfigured();
+      assertBlogTopicGenerationConfigured();
 
       const rateLimit = checkBlogAiRateLimit(getClientIp(req));
       if (!rateLimit.allowed) {
@@ -1109,9 +1222,9 @@ export function registerAdminBlogRoutes(app: Express): void {
       }
 
       // Persist a safe preflight record before planning so a lost response can
-      // recover by idempotency key. Raw free-form focus is never persisted.
+      // recover by idempotency key. This payload contains no free-form topic text.
       let workflow = createAutoGenerateWorkflow();
-      const persistedPayload = { ...payload, focus: "" };
+      const persistedPayload = payload;
       let run: Awaited<ReturnType<typeof createBlogGenerationRun>>;
       try {
         run = await createBlogGenerationRun({
@@ -1139,37 +1252,13 @@ export function registerAdminBlogRoutes(app: Express): void {
         payload: toJsonObject({ runId: run.id, workflow }),
       });
 
-      try {
-        workflow = await prepareAutoGenerateWorkflow(payload);
-        const queued = await queuePreparedBlogGenerationRun(run.id, toJsonObject(workflow));
-        if (!queued) throw new Error("Generation run could not finish topic planning");
-        await appendBlogGenerationEvent({
-          runId: run.id,
-          eventType: "progress",
-          payload: toJsonObject({ runId: run.id, workflow }),
-        });
-      } catch (error) {
-        const planningError = error as Error & { statusCode?: number; workflow?: BlogGenerationWorkflow };
-        workflow = planningError.workflow || workflow;
-        const failure = {
-          success: false,
-          message: planningError.message || "Topic planning failed",
-          statusCode: planningError.statusCode || 500,
-          workflow,
-          runId: run.id,
-        };
-        await failBlogGenerationRun(run.id, {
-          error: failure.message,
-          workflow: toJsonObject(workflow),
-          result: toJsonObject(failure),
-        });
-        await appendBlogGenerationEvent({
-          runId: run.id,
-          eventType: "failed",
-          payload: toJsonObject(failure),
-        });
-        return res.status(failure.statusCode).json(failure);
-      }
+      const queued = await queuePreparedBlogGenerationRun(run.id, toJsonObject(workflow));
+      if (!queued) throw new Error("Generation run could not be queued");
+      await appendBlogGenerationEvent({
+        runId: run.id,
+        eventType: "progress",
+        payload: toJsonObject({ runId: run.id, workflow }),
+      });
 
       res.status(202).json({
         success: true,
@@ -1337,7 +1426,21 @@ export function registerAdminBlogRoutes(app: Express): void {
         });
       }
 
-      const result = await createGeneratedBlogDraft(payload);
+      await assertGuidedBlogTopicSafe({
+        topic: payload.topic,
+        targetKeyword: payload.targetKeyword,
+        additionalContext: payload.additionalContext,
+        language: payload.language,
+      });
+      const result = await createGeneratedBlogDraft({
+        ...payload,
+        topicKey: buildTopicKey(
+          `${payload.topic} ${payload.targetKeyword || ""}`,
+          payload.language,
+        ),
+        expertiseAngle: payload.additionalContext || undefined,
+        topicStrategyVersion: payload.topicStrategyVersion || HEALING_MINDS_TOPIC_STRATEGY_VERSION,
+      });
       res.status(201).json({
         success: true,
         ...result,
