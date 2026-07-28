@@ -35,6 +35,6 @@ Harden the editorial admin before AI-generated HTML enters the workflow. This sp
 
 ## Notes for Replit
 
-Development can stay in `BLOG_ADMIN_AUTH_MODE=off` for fast testing. Production still blocks `off` mode through the Sprint 3 guard.
+Development must keep authentication ON (`custom` with the existing `BLOG_ADMIN_USERNAME`/`BLOG_ADMIN_PASSWORD` secrets): the development preview is publicly reachable, so `BLOG_ADMIN_AUTH_MODE=off` exposes patient enquiries and the blog write APIs to anyone with the URL. Production blocks `off` mode through the Sprint 3 guard in any case.
 
 Use this sprint as the hardening bridge before Sprint 4, where AI generation will create draft content only and human review will remain required before publish.

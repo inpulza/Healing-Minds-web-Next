@@ -5,6 +5,12 @@ This project is a professional, bilingual (English/Spanish) website for Healing 
 
 ## Recent Changes
 
+### July 21, 2026 - Six New Bilingual Legal/Compliance Pages
+- **New Pages (EN ↔ ES)**: Telehealth Informed Consent (`/telehealth-consent` ↔ `/es/consentimiento-telesalud`), No Surprises Act & Good Faith Estimate (`/no-surprises-act` ↔ `/es/ley-sin-sorpresas`), Accessibility Statement (`/accessibility-statement` ↔ `/es/declaracion-accesibilidad`), Nondiscrimination Notice (`/nondiscrimination-notice` ↔ `/es/aviso-no-discriminacion`), Communications/SMS Policy (`/communications-policy` ↔ `/es/politica-comunicaciones`), Medical Disclaimer (`/medical-disclaimer` ↔ `/es/descargo-responsabilidad-medica`)
+- **Content Highlights**: Telehealth consent cites FL §456.47 and CA B&P §2290.5; No Surprises Act includes Good Faith Estimate rights ($400 dispute threshold, 120-day window, 1-800-985-3059, cms.gov/nosurprises); Nondiscrimination includes HHS OCR complaint contacts; Communications policy covers SMS/WhatsApp consent, STOP/HELP opt-out, and unencrypted-channel risk disclosure; all pages include 911/988 crisis language where relevant
+- **Full Integration**: App.tsx lazy routes, bidirectional urlMapping.ts pairs, Footer links (split across Patient Resources and Legal columns), sitemap.xml with hreflang, llms.txt EN/ES lists, server-side meta injection (canonical, og tags, hreflang pairs) in html-injection.ts
+- **For Patients Page**: Important Policies card grid expanded to 6 cards (added No Surprises Act and Telehealth Consent); No Surprises Act button added to policy button row
+
 ### October 16, 2025 - Patient Rights and Responsibilities Page Implementation
 - **New Legal Page**: Created comprehensive bilingual Patient Rights and Responsibilities page to educate patients about their legal rights and obligations under Florida law
 - **URLs Implemented**: `/patient-rights` (English) and `/es/derechos-paciente` (Spanish)
@@ -57,7 +63,7 @@ Preferred communication style: Simple, everyday language.
 ## System Architecture
 
 ### Frontend Architecture
-- **Framework**: React 19+ with TypeScript, using Vite for building.
+- **Framework**: React 18.3.1 with TypeScript, using Vite for building.
 - **Routing**: Wouter for client-side routing, supporting main pages, individual service pages (6 specialized, bilingual), location pages, legal pages, and animated navigation.
 - **Styling**: Tailwind CSS with shadcn/ui for consistent UI components.
 - **State Management**: React Context for language switching and React Query for server state.

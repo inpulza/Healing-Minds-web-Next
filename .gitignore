@@ -15,3 +15,12 @@ attached_assets/*secret*
 attached_assets/*refresh*token*
 *credenciales*
 *refresh-token*
+
+# Volcados de auditoría de crawl (artefactos locales, no versionados)
+attached_assets/healing-minds-crawl_*.json
+attached_assets/healing-minds-googlebot-crawl_*.json
+attached_assets/healing-minds-rendered_*.json
+
+# Registro local de assets del agente: apunta a ficheros de este entorno
+# (intermedios sin versionar), así que versionarlo deja referencias muertas.
+.agents/agent_assets_metadata.toml

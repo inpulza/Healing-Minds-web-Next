@@ -35,6 +35,16 @@ the practice as `publisher` (Organization/MedicalClinic) — NOT author-as-Organ
 like XL Homes does. Never emit `aggregateRating`/`Review` on Organization/
 MedicalClinic/Service nodes (Google manual-action risk).
 
+## Validating seo:check locally (operational gotcha)
+`npm run seo:check` fetches the **production** base URL by default
+(`SITE_BASE_URL`/`PUBLIC_SITE_URL` else `https://www.healingmindsp.com`). For not-yet-deployed
+pages it false-fails (404, or 410 from the legacy anti-WordPress rule still live in prod).
+**How to apply:** boot the prod build on an isolated port with a matching base URL
+(`SITE_BASE_URL=http://localhost:PORT PORT=PORT NODE_ENV=production node dist/index.js`)
+and run `SITE_BASE_URL=http://localhost:PORT npm run seo:check -- --no-google <paths>`;
+canonical/sitemap only match when server and checker share the base URL. The boot needs a
+dummy `RESEND_API_KEY` just to pass the startup presence check (not a real secret).
+
 ## Division of labor (this project)
 CodeX implements the blog code via GitHub PR; the Replit agent reviews, then **applies
 the Drizzle migration to the real DB** (`npm run db:push`) in-environment after merge
