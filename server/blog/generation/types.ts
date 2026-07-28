@@ -31,6 +31,11 @@ export type CompleteGenerationRunInput = {
   result: JsonObject;
 };
 
+export type CompletePlanningRunInput = {
+  workflow?: JsonObject;
+  result: JsonObject;
+};
+
 export type FailGenerationRunInput = {
   error: string;
   workflow?: JsonObject;

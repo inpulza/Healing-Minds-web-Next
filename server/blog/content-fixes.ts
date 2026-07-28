@@ -13,6 +13,7 @@ import {
   slugifyBlogValue,
   truncateSeoText,
 } from "./editorial-rules";
+import { selectRuntimeBlogInternalLinks } from "./links/runtime";
 import {
   buildBlogVerificationReport,
   type BlogVerificationFixType,
@@ -56,7 +57,10 @@ async function updateAndReport(
   changedFields: string[],
   message: string,
 ): Promise<BlogFixResult> {
-  const updatedPost = await updateBlogPost(post.id, values);
+  const updatedPost = await updateBlogPost(post.id, values, {
+    expectedStatus: post.status,
+    expectedUpdatedAt: post.updatedAt,
+  });
   if (!updatedPost) {
     return {
       success: false,
@@ -221,18 +225,29 @@ export async function applyDeterministicBlogFix(
     }
 
     case "internalLinks": {
+      const internalLinkSelection = await selectRuntimeBlogInternalLinks({
+        language: normalizeLanguage(post.language),
+        title: post.title,
+        excerpt: post.excerpt,
+        categoryName: post.category?.name,
+        contentHtml: post.content,
+      });
       const result = ensureBlogInternalLinks(post.content || "", {
         language: normalizeLanguage(post.language),
         title: post.title,
         excerpt: post.excerpt,
         categoryName: post.category?.name,
+        requestedLinks: internalLinkSelection.hrefs,
       });
 
       if (result.addedLinks.length === 0) {
+        const selectionWarning = internalLinkSelection.warnings[0];
         return {
           success: false,
           fixType,
-          message: "The article already includes internal links or no safe internal link could be added.",
+          message: selectionWarning
+            ? `No safe internal link was added. ${selectionWarning}`
+            : "The article already includes internal links or no safe internal link could be added.",
           changedFields: [],
         };
       }
@@ -242,7 +257,9 @@ export async function applyDeterministicBlogFix(
         fixType,
         { content: result.contentHtml, readingTime: estimateReadingTime(result.contentHtml) },
         ["content", "readingTime"],
-        `Internal links added: ${result.addedLinks.join(", ")}.`,
+        `Internal links added: ${result.addedLinks.join(", ")}.${internalLinkSelection.warnings.length > 0
+          ? ` Review warning: ${internalLinkSelection.warnings.join(" ")}`
+          : ""}`,
       );
     }
 

@@ -1,7 +1,5 @@
 import type { BlogCategory, BlogTag, InsertBlogTopicCandidate } from "@shared/schema";
 import { buildBlogEditorialBrief } from "./editorial-brief";
-import { selectBlogResearchSources, getCuratedBlogResearchSourceIds } from "./research";
-import { selectBlogInternalLinks } from "../internal-links";
 import { getAdminBlogPosts, type BlogLanguage, type BlogPostWithRelations } from "../storage";
 import { selectBlogTagIds } from "../taxonomy";
 import {
@@ -22,8 +20,14 @@ import { scoreTopicCandidate, type TopicScoreBreakdown } from "./topic-scoring";
 import { generateTopicCandidateBatch, type TopicInventorySnapshot, type TopicProposal } from "./topic-provider";
 import { judgeTopicCandidates, type TopicJudgeDecision } from "./topic-judge";
 import { persistBlogTopicCandidates, selectBlogTopicCandidate } from "../topic-candidate-storage";
-import type { BlogSemanticMemory } from "./types";
+import type { BlogResearchBrief, BlogSemanticMemory } from "./types";
 import { containsLikelyPatientIdentifier } from "../privacy";
+import {
+  getRuntimeBlogResearchSourceIds,
+  selectRuntimeBlogInternalLinks,
+  selectRuntimeBlogResearchSources,
+} from "../links/runtime";
+import { snapshotPlannedLinkIds } from "./planned-topic-provenance";
 
 type TopicPlannerInput = {
   language: BlogLanguage;
@@ -60,6 +64,7 @@ export type BlogTopicPlanCandidate = {
   tagIds: number[];
   tagNames: string[];
   internalLinks: string[];
+  internalLinkTargetIds: string[];
   sourceRecommendationIds: string[];
   score: number;
   scoreBreakdown: TopicScoreBreakdown;
@@ -74,7 +79,7 @@ export type BlogTopicPlanCandidate = {
   rationale: string;
   whyTimely: string;
   riskNotes: string[];
-  research: ReturnType<typeof selectBlogResearchSources>;
+  research: BlogResearchBrief;
   semanticMemory: BlogSemanticMemory;
   editorialBrief: ReturnType<typeof buildBlogEditorialBrief>;
   strategyVersion: typeof HEALING_MINDS_TOPIC_STRATEGY_VERSION;
@@ -84,6 +89,7 @@ export type BlogTopicPlanCandidate = {
 };
 
 export type BlogTopicPlan = {
+  runId?: number;
   language: BlogLanguage;
   generatedAt: string;
   strategyVersion: string;
@@ -260,6 +266,7 @@ async function evaluateBatch(input: {
   inventory: TopicInventorySnapshot;
   categories: Map<HealingMindsCategoryKey, BlogCategory>;
   tags: BlogTag[];
+  allowedSourceIds: ReadonlySet<string>;
 }): Promise<Array<{
   proposal: TopicProposal;
   candidate: BlogTopicPlanCandidate;
@@ -335,7 +342,7 @@ async function evaluateBatch(input: {
     }
   }
 
-  return preliminary.map(item => {
+  return Promise.all(preliminary.map(async item => {
     const category = input.categories.get(item.proposal.categoryKey);
     if (!category) {
       throw Object.assign(new Error(`Required category ${input.language}/${item.proposal.categoryKey} is missing; run db:push and the taxonomy seed.`), {
@@ -362,15 +369,15 @@ async function evaluateBatch(input: {
         || item.deterministicStatus === "high_overlap"
         ? "update_existing"
         : "change_angle";
-    const allowedSourceIds = new Set(getCuratedBlogResearchSourceIds());
-    const sourceRecommendationIds = item.proposal.sourceRecommendationIds.filter(id => allowedSourceIds.has(id));
-    const research = selectBlogResearchSources({
+    const requestedSourceIds = item.proposal.sourceRecommendationIds.filter(id => input.allowedSourceIds.has(id));
+    const research = await selectRuntimeBlogResearchSources({
       topic: item.proposal.topic,
       additionalContext: item.proposal.expertiseAngle,
       targetKeyword: item.proposal.targetKeyword,
       language: input.language,
       categoryName: category.name,
-    });
+    }, requestedSourceIds);
+    const sourceRecommendationIds = research.sources.map(source => source.id);
     const semanticMemory = semanticMemoryFromMatches(item.proposal, item.matches, recommendation);
     const tagIds = selectBlogTagIds({
       language: input.language,
@@ -381,12 +388,13 @@ async function evaluateBatch(input: {
       categoryName: category.name,
     });
     const tagNames = input.tags.filter(tag => tagIds.includes(tag.id)).map(tag => tag.name);
-    const internalLinks = selectBlogInternalLinks({
+    const internalLinkSelection = await selectRuntimeBlogInternalLinks({
       language: input.language,
       topic: item.proposal.topic,
       targetKeyword: item.proposal.targetKeyword,
       categoryName: category.name,
     });
+    const internalLinks = internalLinkSelection.hrefs;
     const missingStages = BLOG_PATIENT_STAGES.filter(stage => (
       !input.inventory.posts.some(post => post.patientStage === stage)
     ));
@@ -444,6 +452,7 @@ async function evaluateBatch(input: {
         tagIds,
         tagNames,
         internalLinks,
+        internalLinkTargetIds: internalLinkSelection.targetIds,
         sourceRecommendationIds,
         score: recommended ? scoreBreakdown.total : Math.min(scoreBreakdown.total, 49),
         scoreBreakdown,
@@ -463,6 +472,8 @@ async function evaluateBatch(input: {
         whyTimely: item.proposal.whyTimely,
         riskNotes: [
           ...semanticMemory.riskNotes,
+          ...research.riskNotes,
+          ...internalLinkSelection.warnings,
           ...(judgeUnavailable ? ["Semantic judge was unavailable; only very-low-overlap deterministic candidates remain eligible."] : []),
         ],
         research,
@@ -474,14 +485,16 @@ async function evaluateBatch(input: {
         judgeModel,
       },
     };
-  });
+  }));
 }
 
 function toPersistenceRows(
   runId: number,
   evaluated: Awaited<ReturnType<typeof evaluateBatch>>,
 ): InsertBlogTopicCandidate[] {
-  return evaluated.map(item => ({
+  return evaluated.map(item => {
+    const linkIds = snapshotPlannedLinkIds(item.candidate);
+    return {
     runId,
     batch: item.candidate.batch,
     candidateKey: item.candidate.candidateKey,
@@ -496,7 +509,8 @@ function toPersistenceRows(
     searchIntent: item.candidate.searchIntent,
     expertiseAngle: item.candidate.angle,
     whyTimely: item.candidate.whyTimely,
-    sourceRecommendationIds: item.candidate.sourceRecommendationIds,
+    sourceRecommendationIds: linkIds.sourceRecommendationIds,
+    internalLinkTargetIds: linkIds.internalLinkTargetIds,
     createOrUpdate: item.proposal.createOrUpdate,
     strategyVersion: item.candidate.strategyVersion,
     promptVersion: item.candidate.promptVersion,
@@ -515,7 +529,8 @@ function toPersistenceRows(
     score: item.candidate.score,
     scoreBreakdown: item.candidate.scoreBreakdown,
     recommendation: item.candidate.recommendation,
-  }));
+    };
+  });
 }
 
 export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<BlogTopicPlan> {
@@ -534,7 +549,8 @@ export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<Blog
     offset: 0,
   })).filter(post => post.status !== "rejected");
   const inventory = buildInventory(posts);
-  const sourceIds = getCuratedBlogResearchSourceIds();
+  const sourceIds = await getRuntimeBlogResearchSourceIds();
+  const allowedSourceIds = new Set(sourceIds);
   const categoryKeys = requiredCategories.map(category => category.key);
   const allEvaluated: Awaited<ReturnType<typeof evaluateBatch>> = [];
   const rejectionEvidence: Array<{ topic: string; reason: string }> = [];
@@ -560,9 +576,16 @@ export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<Blog
       inventory,
       categories: categoryMap,
       tags: input.tags.filter(tag => tag.language === input.language),
+      allowedSourceIds,
     });
     allEvaluated.push(...evaluated);
-    if (input.runId) await persistBlogTopicCandidates(toPersistenceRows(input.runId, evaluated));
+    if (input.runId) {
+      const persisted = await persistBlogTopicCandidates(toPersistenceRows(input.runId, evaluated));
+      const persistedByKey = new Map(persisted.map(row => [row.candidateKey, row.id]));
+      for (const item of evaluated) {
+        item.candidate.topicCandidateId = persistedByKey.get(item.candidate.candidateKey);
+      }
+    }
     const recommended = allEvaluated.filter(item => item.candidate.recommendation === "recommended");
     if (recommended.length > 0) break;
     rejectionEvidence.push(...evaluated.map(item => ({
@@ -588,6 +611,7 @@ export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<Blog
   }
   const returned = candidates.slice(0, 10);
   return {
+    runId: input.runId,
     language: input.language,
     generatedAt: new Date().toISOString(),
     strategyVersion: HEALING_MINDS_TOPIC_STRATEGY_VERSION,

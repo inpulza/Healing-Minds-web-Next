@@ -7,8 +7,10 @@ import {
   AlertTriangle,
   ExternalLink,
   Eye,
+  FileText,
   FilePenLine,
   ImageIcon,
+  Link2,
   LogOut,
   Loader2,
   Plus,
@@ -48,6 +50,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
+import { LinkIntelligencePanel } from '@/components/admin/blog/LinkIntelligencePanel';
+import { PostLinkReportCard } from '@/components/admin/blog/PostLinkReportCard';
+import type { BlogPostLinkReport } from '@/components/admin/blog/link-intelligence-types';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 
 type BlogStatus = 'draft' | 'pending_review' | 'published' | 'rejected';
@@ -180,6 +185,7 @@ type ApiResponse<T> = {
   data: T;
   checks?: PublishCheck[];
   verification?: BlogVerificationReport;
+  linkReport?: BlogPostLinkReport;
 };
 
 type FixApiResponse = {
@@ -189,6 +195,7 @@ type FixApiResponse = {
     post: BlogPost;
     verification: BlogVerificationReport;
     checks: PublishCheck[];
+    linkReport?: BlogPostLinkReport;
   };
 };
 
@@ -241,6 +248,7 @@ type BlogEditorialBrief = {
 
 type BlogTopicPlanCandidate = {
   id: string;
+  topicCandidateId?: number;
   candidateKey: string;
   batch: number;
   topic: string;
@@ -257,6 +265,8 @@ type BlogTopicPlanCandidate = {
   tagIds: number[];
   tagNames: string[];
   internalLinks: string[];
+  internalLinkTargetIds: string[];
+  sourceRecommendationIds: string[];
   score: number;
   noveltyScore: number;
   overlapScore: number;
@@ -273,6 +283,7 @@ type BlogTopicPlanCandidate = {
 };
 
 type BlogTopicPlan = {
+  runId?: number;
   language: BlogLanguage;
   generatedAt: string;
   strategyVersion: string;
@@ -343,6 +354,10 @@ type RuntimeInfo = {
   isReplitDeployment: boolean;
 };
 
+type BlogLinkConfig = {
+  enabled: boolean;
+};
+
 type BlogInternalLinkImpact = {
   id: number;
   title: string;
@@ -390,6 +405,12 @@ type GenerateDraftFormState = {
   authorId: string;
   categoryId: string;
   tagIds: number[];
+  internalLinks?: string[];
+  internalLinkTargetIds?: string[];
+  sourceRecommendationIds?: string[];
+  topicCandidateId?: number;
+  topicKey?: string;
+  expertiseAngle?: string;
   plannedStrategy?: {
     contentPillar: string;
     patientStage: string;
@@ -546,6 +567,12 @@ function toGenerateDraftPayload(form: GenerateDraftFormState) {
     authorId: Number(form.authorId),
     categoryId: Number(form.categoryId),
     tagIds: form.tagIds,
+    internalLinks: form.internalLinks || [],
+    internalLinkTargetIds: form.internalLinkTargetIds || [],
+    sourceRecommendationIds: form.sourceRecommendationIds || [],
+    topicCandidateId: form.topicCandidateId,
+    topicKey: form.topicKey,
+    expertiseAngle: form.expertiseAngle,
     ...(form.plannedStrategy || {}),
   };
 }
@@ -595,6 +622,7 @@ async function fetchJson<T>(url: string): Promise<T> {
 
 export default function BlogAdminPage() {
   const [, navigate] = useLocation();
+  const [adminView, setAdminView] = useState<'posts' | 'links'>('posts');
   const [statusFilter, setStatusFilter] = useState<BlogStatus | 'all'>('all');
   const [languageFilter, setLanguageFilter] = useState<BlogLanguage | 'all'>('all');
   const [search, setSearch] = useState('');
@@ -625,6 +653,7 @@ export default function BlogAdminPage() {
   const [unpublishConfirmNoRedirect, setUnpublishConfirmNoRedirect] = useState(false);
   const [checks, setChecks] = useState<PublishCheck[]>([]);
   const [verification, setVerification] = useState<BlogVerificationReport | null>(null);
+  const [linkReport, setLinkReport] = useState<BlogPostLinkReport | null>(null);
   const [fixingCheck, setFixingCheck] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [generateError, setGenerateError] = useState<string | null>(null);
@@ -643,6 +672,11 @@ export default function BlogAdminPage() {
 
   const runtimeQuery = useQuery<ApiResponse<RuntimeInfo>>({
     queryKey: ['/api/admin/runtime'],
+    enabled: authenticated,
+  });
+
+  const linkConfigQuery = useQuery<ApiResponse<BlogLinkConfig>>({
+    queryKey: ['/api/admin/blog/links/config'],
     enabled: authenticated,
   });
 
@@ -694,6 +728,7 @@ export default function BlogAdminPage() {
   const imageConfig = imageConfigQuery.data?.data;
   const stats = statsQuery.data?.data;
   const runtime = runtimeQuery.data?.data?.runtime || 'unknown';
+  const linkIntelligenceEnabled = linkConfigQuery.data?.data?.enabled ?? false;
 
   const availableCategories = useMemo(
     () => categories.filter(category => category.language === (form?.language || 'en')),
@@ -723,6 +758,7 @@ export default function BlogAdminPage() {
       setForm(formFromPost(data.data));
       setChecks(data.checks || []);
       setVerification(data.verification || null);
+      setLinkReport(data.linkReport || null);
       queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
       setActionError(null);
@@ -842,6 +878,7 @@ export default function BlogAdminPage() {
       setForm(formFromPost(data.data));
       setChecks(data.checks || []);
       setVerification(data.verification || null);
+      setLinkReport(data.linkReport || null);
       queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
       setUnpublishTarget(null);
@@ -912,6 +949,7 @@ export default function BlogAdminPage() {
     },
     onSuccess: data => {
       setVerification(data.data);
+      setLinkReport(data.linkReport || null);
       setActionError(null);
     },
     onError: error => {
@@ -929,6 +967,7 @@ export default function BlogAdminPage() {
       setForm(formFromPost(data.data.post));
       setChecks(data.data.checks || []);
       setVerification(data.data.verification);
+      setLinkReport(data.data.linkReport || null);
       queryClient.invalidateQueries({ queryKey: ['/api/admin/blog/stats'] });
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
       setActionError(null);
@@ -975,6 +1014,7 @@ export default function BlogAdminPage() {
       setForm(formFromPost(data.data));
       setChecks(data.checks || []);
       setVerification(data.verification || null);
+      setLinkReport(data.linkReport || null);
       setAiNotes(data.ai || null);
       setAutoGenerateError(null);
       setAutoGenerateStreaming(false);
@@ -1002,6 +1042,7 @@ export default function BlogAdminPage() {
           setForm(formFromPost(partial.data));
           setChecks(partial.checks || []);
           setVerification(partial.verification || null);
+          setLinkReport(partial.linkReport || null);
           setAutoGenerateError('Generation stopped after saving a private draft. Open and review the recovered draft; no duplicate was created.');
         } catch {
           setAutoGenerateError(payload.message || 'Generation stopped after saving a private draft');
@@ -1126,6 +1167,7 @@ export default function BlogAdminPage() {
       setForm(formFromPost(data.data));
       setChecks(data.checks || []);
       setVerification(data.verification || null);
+      setLinkReport(data.linkReport || null);
       setAiNotes(data.ai || null);
       setGenerateOpen(false);
       setEditorOpen(true);
@@ -1169,6 +1211,7 @@ export default function BlogAdminPage() {
     setForm(createEmptyForm(authors, categories));
     setChecks([]);
     setVerification(null);
+    setLinkReport(null);
     setAiNotes(null);
     setActionError(null);
     setEditorOpen(true);
@@ -1178,6 +1221,7 @@ export default function BlogAdminPage() {
     setForm(formFromPost(post));
     setChecks([]);
     setVerification(null);
+    setLinkReport(null);
     setAiNotes(null);
     setActionError(null);
     setEditorOpen(true);
@@ -1260,6 +1304,25 @@ export default function BlogAdminPage() {
     setGenerateForm(current => current ? { ...current, [key]: value } : current);
   };
 
+  const updateGeneratePlanningInput = (
+    updates: Partial<Pick<
+      GenerateDraftFormState,
+      'topic' | 'targetKeyword' | 'additionalContext' | 'language' | 'categoryId' | 'tagIds'
+    >>,
+  ) => {
+    setGenerateForm(current => current ? {
+      ...current,
+      ...updates,
+      internalLinks: undefined,
+      internalLinkTargetIds: undefined,
+      sourceRecommendationIds: undefined,
+      topicCandidateId: undefined,
+      topicKey: undefined,
+      expertiseAngle: undefined,
+      plannedStrategy: undefined,
+    } : current);
+  };
+
   const updateAutoGenerateForm = <K extends keyof AutoGenerateFormState>(key: K, value: AutoGenerateFormState[K]) => {
     setAutoGenerateForm(current => current ? { ...current, [key]: value } : current);
   };
@@ -1290,6 +1353,11 @@ export default function BlogAdminPage() {
     setEditorOpen(true);
   };
 
+  const openLinkIntelligenceFromEditor = () => {
+    setEditorOpen(false);
+    setAdminView('links');
+  };
+
   const useTopicCandidate = (candidate: BlogTopicPlanCandidate) => {
     setGenerateForm({
       topic: candidate.topic,
@@ -1299,6 +1367,12 @@ export default function BlogAdminPage() {
       authorId: authors[0]?.id ? String(authors[0].id) : '',
       categoryId: String(candidate.categoryId),
       tagIds: candidate.tagIds,
+      internalLinks: candidate.internalLinks,
+      internalLinkTargetIds: candidate.internalLinkTargetIds,
+      sourceRecommendationIds: candidate.sourceRecommendationIds,
+      topicCandidateId: candidate.topicCandidateId,
+      topicKey: candidate.topicKey,
+      expertiseAngle: candidate.angle,
       plannedStrategy: {
         contentPillar: candidate.pillar,
         patientStage: candidate.patientStage,
@@ -1324,10 +1398,10 @@ export default function BlogAdminPage() {
   };
 
   const publishCurrent = () => {
-    if (!form?.id) return;
+    if (!form?.id || form.status !== 'pending_review') return;
     statusMutation.mutate({ postId: form.id, status: 'published' });
   };
-  const canPublishCurrent = form?.status === 'pending_review' || form?.status === 'published';
+  const canPublishCurrent = form?.status === 'pending_review';
 
   const logout = async () => {
     await apiRequest('POST', '/api/admin/logout');
@@ -1401,145 +1475,178 @@ export default function BlogAdminPage() {
               <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
               Logout
             </Button>
-            <Button variant="outline" onClick={openTopicPlanner} disabled={categories.length === 0}>
-              <Search className="mr-2 h-4 w-4" aria-hidden="true" />
-              Plan Topics
-            </Button>
-            <Button variant="outline" onClick={openAutoGenerate} disabled={authors.length === 0 || categories.length === 0}>
-              <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
-              Auto Generate
-            </Button>
-            <Button variant="outline" onClick={openGenerateDraft} disabled={authors.length === 0 || categories.length === 0}>
-              <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
-              AI Generate
-            </Button>
-            <Button onClick={openNewPost}>
-              <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-              New Post
-            </Button>
+            {adminView === 'posts' && (
+              <>
+                <Button variant="outline" onClick={openTopicPlanner} disabled={categories.length === 0}>
+                  <Search className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Plan Topics
+                </Button>
+                <Button variant="outline" onClick={openAutoGenerate} disabled={authors.length === 0 || categories.length === 0}>
+                  <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Auto Generate
+                </Button>
+                <Button variant="outline" onClick={openGenerateDraft} disabled={authors.length === 0 || categories.length === 0}>
+                  <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
+                  AI Generate
+                </Button>
+                <Button onClick={openNewPost}>
+                  <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                  New Post
+                </Button>
+              </>
+            )}
           </div>
         </header>
 
-        <section className="grid gap-3 py-5 sm:grid-cols-2 lg:grid-cols-4">
-          {(Object.keys(statusLabels) as BlogStatus[]).map(status => (
-            <div key={status} className="rounded-md border border-slate-200 bg-white p-4">
-              <p className="text-sm text-slate-600">{statusLabels[status]}</p>
-              <p className="mt-2 text-2xl font-semibold">{stats?.[status] ?? 0}</p>
-            </div>
-          ))}
-        </section>
+        <nav className="flex gap-1 py-4" aria-label="Blog admin sections">
+          <Button
+            variant="ghost"
+            size="sm"
+            className={adminView === 'posts' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600'}
+            aria-current={adminView === 'posts' ? 'page' : undefined}
+            onClick={() => setAdminView('posts')}
+          >
+            <FileText className="mr-2 h-4 w-4" aria-hidden="true" />
+            Posts
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={adminView === 'links' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600'}
+            aria-current={adminView === 'links' ? 'page' : undefined}
+            onClick={() => setAdminView('links')}
+          >
+            <Link2 className="mr-2 h-4 w-4" aria-hidden="true" />
+            Link Intelligence
+          </Button>
+        </nav>
 
-        {actionError && (
-          <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {actionError}
-          </div>
-        )}
-
-        <section className="rounded-lg border border-slate-200 bg-white">
-          <div className="flex flex-col gap-3 border-b border-slate-200 p-4 lg:flex-row lg:items-center">
-            <div className="relative flex-1">
-              <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" aria-hidden="true" />
-              <Input
-                className="pl-9"
-                placeholder="Search title, slug, excerpt"
-                value={search}
-                onChange={event => setSearch(event.target.value)}
-              />
-            </div>
-            <Select value={statusFilter} onValueChange={value => setStatusFilter(value as BlogStatus | 'all')}>
-              <SelectTrigger className="w-full lg:w-44">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All statuses</SelectItem>
-                {(Object.keys(statusLabels) as BlogStatus[]).map(status => (
-                  <SelectItem key={status} value={status}>{statusLabels[status]}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={languageFilter} onValueChange={value => setLanguageFilter(value as BlogLanguage | 'all')}>
-              <SelectTrigger className="w-full lg:w-36">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All languages</SelectItem>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Spanish</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Post</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Language</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Updated</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {postsQuery.isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={6}>Loading posts...</TableCell>
-                </TableRow>
-              ) : posts.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6}>No posts found.</TableCell>
-                </TableRow>
-              ) : posts.map(post => (
-                <TableRow key={post.id}>
-                  <TableCell>
-                    <div className="font-medium">{post.title}</div>
-                    <div className="mt-1 text-xs text-slate-500">/{post.slug}</div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={statusClasses[post.status]}>{statusLabels[post.status]}</Badge>
-                  </TableCell>
-                  <TableCell>{post.language.toUpperCase()}</TableCell>
-                  <TableCell>{post.category?.name || 'Uncategorized'}</TableCell>
-                  <TableCell>{new Date(post.updatedAt).toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    <div className="flex justify-end gap-1">
-                      {post.status === 'published' && (
-                        <Button variant="ghost" size="icon" asChild title="Open published post">
-                          <a href={getPostPath(post)} target="_blank" rel="noreferrer">
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        title="Preview"
-                        onClick={() => {
-                          setPreviewPost(post);
-                          setPreviewOpen(true);
-                        }}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" title="Edit" onClick={() => openEditPost(post)}>
-                        <FilePenLine className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        title="Delete"
-                        disabled={deleteMutation.isPending}
-                        onClick={() => openDeletePost(post)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
+        {adminView === 'posts' ? (
+          <>
+            <section className="grid gap-3 pb-5 sm:grid-cols-2 lg:grid-cols-4">
+              {(Object.keys(statusLabels) as BlogStatus[]).map(status => (
+                <div key={status} className="rounded-md border border-slate-200 bg-white p-4">
+                  <p className="text-sm text-slate-600">{statusLabels[status]}</p>
+                  <p className="mt-2 text-2xl font-semibold">{stats?.[status] ?? 0}</p>
+                </div>
               ))}
-            </TableBody>
-          </Table>
-        </section>
+            </section>
+
+            {actionError && (
+              <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                {actionError}
+              </div>
+            )}
+
+            <section className="rounded-lg border border-slate-200 bg-white">
+              <div className="flex flex-col gap-3 border-b border-slate-200 p-4 lg:flex-row lg:items-center">
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" aria-hidden="true" />
+                  <Input
+                    className="pl-9"
+                    placeholder="Search title, slug, excerpt"
+                    value={search}
+                    onChange={event => setSearch(event.target.value)}
+                  />
+                </div>
+                <Select value={statusFilter} onValueChange={value => setStatusFilter(value as BlogStatus | 'all')}>
+                  <SelectTrigger className="w-full lg:w-44">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All statuses</SelectItem>
+                    {(Object.keys(statusLabels) as BlogStatus[]).map(status => (
+                      <SelectItem key={status} value={status}>{statusLabels[status]}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={languageFilter} onValueChange={value => setLanguageFilter(value as BlogLanguage | 'all')}>
+                  <SelectTrigger className="w-full lg:w-36">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All languages</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Post</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Language</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Updated</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {postsQuery.isLoading ? (
+                    <TableRow>
+                      <TableCell colSpan={6}>Loading posts...</TableCell>
+                    </TableRow>
+                  ) : posts.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6}>No posts found.</TableCell>
+                    </TableRow>
+                  ) : posts.map(post => (
+                    <TableRow key={post.id}>
+                      <TableCell>
+                        <div className="font-medium">{post.title}</div>
+                        <div className="mt-1 text-xs text-slate-500">/{post.slug}</div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={statusClasses[post.status]}>{statusLabels[post.status]}</Badge>
+                      </TableCell>
+                      <TableCell>{post.language.toUpperCase()}</TableCell>
+                      <TableCell>{post.category?.name || 'Uncategorized'}</TableCell>
+                      <TableCell>{new Date(post.updatedAt).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        <div className="flex justify-end gap-1">
+                          {post.status === 'published' && (
+                            <Button variant="ghost" size="icon" asChild title="Open published post">
+                              <a href={getPostPath(post)} target="_blank" rel="noreferrer">
+                                <ExternalLink className="h-4 w-4" />
+                              </a>
+                            </Button>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            title="Preview"
+                            onClick={() => {
+                              setPreviewPost(post);
+                              setPreviewOpen(true);
+                            }}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" title="Edit" onClick={() => openEditPost(post)}>
+                            <FilePenLine className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            title="Delete"
+                            disabled={deleteMutation.isPending}
+                            onClick={() => openDeletePost(post)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </section>
+          </>
+        ) : (
+          <LinkIntelligencePanel className="pb-8" enabled={linkIntelligenceEnabled} />
+        )}
       </div>
 
       <Dialog open={Boolean(deleteTarget)} onOpenChange={closeDeleteDialog}>
@@ -1763,6 +1870,7 @@ export default function BlogAdminPage() {
               {topicPlan && (
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                    {topicPlan.runId ? <Badge className="bg-blue-100 text-blue-800">Plan run #{topicPlan.runId}</Badge> : null}
                     <Badge className="bg-slate-100 text-slate-700">{topicPlan.summary.returned} shown</Badge>
                     <Badge className="bg-emerald-100 text-emerald-800">{topicPlan.summary.recommended} recommended</Badge>
                     <Badge className="bg-amber-100 text-amber-800">{topicPlan.summary.changeAngle} change angle</Badge>
@@ -1793,7 +1901,7 @@ export default function BlogAdminPage() {
                         <Button
                           type="button"
                           size="sm"
-                          disabled={authors.length === 0}
+                          disabled={authors.length === 0 || candidate.recommendation !== 'recommended' || !candidate.topicCandidateId}
                           onClick={() => useTopicCandidate(candidate)}
                         >
                           Use for Draft
@@ -2014,11 +2122,7 @@ export default function BlogAdminPage() {
                   id="ai-topic"
                   value={generateForm.topic}
                   placeholder="e.g., Anxiety treatment options in Naples"
-                  onChange={event => setGenerateForm(current => current ? {
-                    ...current,
-                    topic: event.target.value,
-                    plannedStrategy: undefined,
-                  } : current)}
+                  onChange={event => updateGeneratePlanningInput({ topic: event.target.value })}
                 />
               </div>
 
@@ -2028,11 +2132,7 @@ export default function BlogAdminPage() {
                   id="ai-keyword"
                   value={generateForm.targetKeyword}
                   placeholder="Optional"
-                  onChange={event => setGenerateForm(current => current ? {
-                    ...current,
-                    targetKeyword: event.target.value,
-                    plannedStrategy: undefined,
-                  } : current)}
+                  onChange={event => updateGeneratePlanningInput({ targetKeyword: event.target.value })}
                 />
               </div>
 
@@ -2043,11 +2143,7 @@ export default function BlogAdminPage() {
                   value={generateForm.additionalContext}
                   rows={4}
                   placeholder="Angle, local focus, or points to include. Do not include patient-identifying information."
-                  onChange={event => setGenerateForm(current => current ? {
-                    ...current,
-                    additionalContext: event.target.value,
-                    plannedStrategy: undefined,
-                  } : current)}
+                  onChange={event => updateGeneratePlanningInput({ additionalContext: event.target.value })}
                 />
                 <p className="text-xs text-slate-500">Do not paste patient names, emails, phone numbers, dates of birth, or private clinical details.</p>
               </div>
@@ -2060,13 +2156,11 @@ export default function BlogAdminPage() {
                     onValueChange={value => {
                       const language = value as BlogLanguage;
                       const category = categories.find(item => item.language === language);
-                      setGenerateForm(current => current ? {
-                        ...current,
+                      updateGeneratePlanningInput({
                         language,
                         categoryId: category ? String(category.id) : '',
                         tagIds: [],
-                        plannedStrategy: undefined,
-                      } : current);
+                      });
                     }}
                   >
                     <SelectTrigger id="ai-language"><SelectValue /></SelectTrigger>
@@ -2094,11 +2188,7 @@ export default function BlogAdminPage() {
                 <Label htmlFor="ai-category">Category</Label>
                 <Select
                   value={generateForm.categoryId}
-                  onValueChange={value => setGenerateForm(current => current ? {
-                    ...current,
-                    categoryId: value,
-                    plannedStrategy: undefined,
-                  } : current)}
+                  onValueChange={value => updateGeneratePlanningInput({ categoryId: value })}
                 >
                   <SelectTrigger id="ai-category"><SelectValue placeholder="Select category" /></SelectTrigger>
                   <SelectContent>
@@ -2117,15 +2207,10 @@ export default function BlogAdminPage() {
                       <Checkbox
                         checked={generateForm.tagIds.includes(tag.id)}
                         onCheckedChange={checked => {
-                          setGenerateForm(current => {
-                            if (!current) return current;
-                            return {
-                              ...current,
-                              tagIds: checked
-                                ? Array.from(new Set([...current.tagIds, tag.id]))
-                                : current.tagIds.filter(id => id !== tag.id),
-                            };
-                          });
+                          const tagIds = checked
+                            ? Array.from(new Set([...generateForm.tagIds, tag.id]))
+                            : generateForm.tagIds.filter(id => id !== tag.id);
+                          updateGeneratePlanningInput({ tagIds });
                         }}
                       />
                       {tag.name}
@@ -2133,6 +2218,12 @@ export default function BlogAdminPage() {
                   ))}
                 </div>
               </div>
+              {(generateForm.internalLinkTargetIds?.length || generateForm.sourceRecommendationIds?.length) ? (
+                <p className="text-xs text-slate-500">
+                  Planner link recommendations are revalidated by the server. Editing the topic,
+                  language, category, context, keyword, or tags clears them so stale links are not reused.
+                </p>
+              ) : null}
             </div>
           )}
 
@@ -2607,6 +2698,12 @@ export default function BlogAdminPage() {
                             </div>
                           </div>
                         ))}
+                        {linkReport && (
+                          <PostLinkReportCard
+                            report={linkReport}
+                            onOpenLinkIntelligence={openLinkIntelligenceFromEditor}
+                          />
+                        )}
                       </div>
                     ) : checks.length === 0 ? (
                       <p className="text-sm text-slate-600">Save the post to run checks.</p>
@@ -2654,7 +2751,7 @@ export default function BlogAdminPage() {
             <Button onClick={saveCurrentForm} disabled={saveMutation.isPending}>
               {saveMutation.isPending ? 'Saving...' : 'Save draft'}
             </Button>
-            {form?.id && (
+            {form?.id && form.status !== 'published' && (
               <Button
                 onClick={publishCurrent}
                 disabled={statusMutation.isPending || !canPublishCurrent}

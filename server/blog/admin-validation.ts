@@ -14,6 +14,7 @@ import {
 
 const statusSchema = z.enum(["draft", "pending_review", "published", "rejected"]);
 const languageSchema = z.enum(["en", "es"]);
+const managedLinkStableIdSchema = z.string().trim().regex(/^[a-z0-9-]{3,120}$/);
 const blogFixTypeSchema = z.enum([
   "slug",
   "metaTitle",
@@ -89,6 +90,11 @@ export const adminBlogGenerateDraftSchema = z.object({
   categoryId: z.coerce.number().int().positive(),
   tagIds: z.array(z.coerce.number().int().positive()).max(8).default([]),
   internalLinks: z.array(z.string().trim().regex(/^\/(?!\/)/).max(200)).max(5).default([]),
+  internalLinkTargetIds: z.array(managedLinkStableIdSchema).max(5).default([]),
+  sourceRecommendationIds: z.array(managedLinkStableIdSchema).max(4).default([]),
+  topicCandidateId: z.coerce.number().int().positive().optional(),
+  topicKey: z.string().trim().min(3).max(255).optional(),
+  expertiseAngle: z.string().trim().max(2_000).optional(),
   translationGroupId: z.string().uuid().optional(),
   contentPillar: z.enum(BLOG_CONTENT_PILLARS).optional(),
   patientStage: z.enum(BLOG_PATIENT_STAGES).optional(),

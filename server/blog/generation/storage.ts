@@ -1,9 +1,10 @@
-import { and, asc, desc, eq, gt, inArray, isNull, lt, or } from "drizzle-orm";
+import { and, asc, desc, eq, gt, inArray, isNull, lt, or, sql } from "drizzle-orm";
 import { blogGenerationEvents, blogGenerationRuns } from "@shared/schema";
 import { db } from "../../db";
 import type {
   AppendGenerationEventInput,
   CompleteGenerationRunInput,
+  CompletePlanningRunInput,
   CreateGenerationRunInput,
   FailGenerationRunInput,
   GenerationEvent,
@@ -105,6 +106,29 @@ export async function claimBlogGenerationRun(runId: number): Promise<GenerationR
   return claimed;
 }
 
+export async function claimCompletedBlogPlanningRun(
+  runId: number,
+): Promise<GenerationRun | undefined> {
+  const now = new Date();
+  const [claimed] = await db
+    .update(blogGenerationRuns)
+    .set({
+      status: "running",
+      startedAt: now,
+      completedAt: null,
+      heartbeatAt: now,
+      updatedAt: now,
+    })
+    .where(and(
+      eq(blogGenerationRuns.id, runId),
+      eq(blogGenerationRuns.status, "completed"),
+      isNull(blogGenerationRuns.postId),
+      sql`${blogGenerationRuns.input}->>'mode' = 'topic-plan'`,
+    ))
+    .returning();
+  return claimed;
+}
+
 export async function updateBlogGenerationRun(
   runId: number,
   values: UpdateGenerationRunInput,
@@ -163,6 +187,30 @@ export async function completeBlogGenerationRun(
         ),
       ),
     )
+    .returning();
+  return completed;
+}
+
+export async function completeBlogPlanningRun(
+  runId: number,
+  values: CompletePlanningRunInput,
+): Promise<GenerationRun | undefined> {
+  const now = new Date();
+  const [completed] = await db
+    .update(blogGenerationRuns)
+    .set({
+      status: "completed",
+      ...(values.workflow !== undefined ? { workflow: values.workflow } : {}),
+      result: values.result,
+      heartbeatAt: now,
+      completedAt: now,
+      updatedAt: now,
+    })
+    .where(and(
+      eq(blogGenerationRuns.id, runId),
+      eq(blogGenerationRuns.status, "planning"),
+      isNull(blogGenerationRuns.postId),
+    ))
     .returning();
   return completed;
 }

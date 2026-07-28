@@ -148,7 +148,9 @@ export function ensureBlogInternalLinks(
     return { contentHtml: sanitizeBlogContentHtml(contentHtml), addedLinks: [] };
   }
 
-  const selectedLinks = selectBlogInternalLinks({ ...input, contentHtml });
+  const selectedLinks = input.requestedLinks !== undefined
+    ? uniqueInternalLinks(input.requestedLinks).slice(0, input.maxLinks || 3)
+    : selectBlogInternalLinks({ ...input, contentHtml });
   const paragraph = buildInternalLinkParagraph(input.language, selectedLinks);
   if (!paragraph) return { contentHtml: sanitizeBlogContentHtml(contentHtml), addedLinks: [] };
 

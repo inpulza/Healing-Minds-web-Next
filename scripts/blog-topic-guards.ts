@@ -17,6 +17,15 @@ import { scoreTopicCandidate } from "../server/blog/ai/topic-scoring";
 import { assertBlogTopicGenerationConfigured } from "../server/blog/ai/responses-client";
 import { adminBlogAutoGenerateSchema, adminBlogTopicPlannerSchema } from "../server/blog/admin-validation";
 import { assertCompleteTopicJudgeDecisionSet, assertValidTopicJudgeMatches } from "../server/blog/ai/topic-judge";
+import {
+  buildPersistedTopicDraftOverrides,
+  snapshotPlannedLinkIds,
+} from "../server/blog/ai/planned-topic-provenance";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import {
+  legacyBlogTopicCandidates,
+  toLegacyBlogTopicCandidateInsert,
+} from "../server/blog/topic-candidate-legacy-schema";
 
 function checkStrategyRegistry(): void {
   const en = getHealingMindsCategories("en");
@@ -161,9 +170,112 @@ function checkConfigGuardWithoutSecrets(): void {
   else process.env.OPENAI_API_KEY = previousKey;
 }
 
+function checkPlannedLinkProvenance(): void {
+  assert.deepEqual(snapshotPlannedLinkIds({
+    sourceRecommendationIds: ["nimh-anxiety", "nimh-anxiety"],
+    internalLinkTargetIds: ["blog-post-42", "services-anxiety"],
+  }), {
+    sourceRecommendationIds: ["nimh-anxiety"],
+    internalLinkTargetIds: ["blog-post-42", "services-anxiety"],
+  });
+  assert.throws(
+    () => snapshotPlannedLinkIds({
+      sourceRecommendationIds: ["https://invented.example/page"],
+      internalLinkTargetIds: [],
+    }),
+    (error: unknown) => (
+      (error as { code?: string }).code === "topic_candidate_link_provenance_invalid"
+    ),
+  );
+
+  const overrides = buildPersistedTopicDraftOverrides({
+    id: 77,
+    runId: 18,
+    candidateKey: "b1-1-anxiety-evaluation",
+    topic: "Questions to ask during an anxiety evaluation",
+    targetKeyword: "anxiety evaluation questions",
+    language: "en",
+    categoryId: 4,
+    pillar: "evaluation_care_journey",
+    patientStage: "evaluation",
+    contentFormat: "questions_to_ask",
+    searchIntent: "care_navigation",
+    expertiseAngle: "Prepare patients for a collaborative appointment.",
+    strategyVersion: HEALING_MINDS_TOPIC_STRATEGY_VERSION,
+    recommendation: "recommended",
+    sourceRecommendationIds: ["nimh-anxiety"],
+    internalLinkTargetIds: ["blog-post-42"],
+  });
+  assert.equal(overrides.topicCandidateId, 77);
+  assert.equal(overrides.topic, "Questions to ask during an anxiety evaluation");
+  assert.deepEqual(overrides.internalLinks, []);
+  assert.deepEqual(overrides.internalLinkTargetIds, ["blog-post-42"]);
+  assert.deepEqual(overrides.sourceRecommendationIds, ["nimh-anxiety"]);
+  assert.equal(overrides.topicStrategyVersion, HEALING_MINDS_TOPIC_STRATEGY_VERSION);
+}
+
+function checkLegacyTopicCandidateInsertSql(): void {
+  const legacyInsert = toLegacyBlogTopicCandidateInsert({
+    runId: 18,
+    batch: 1,
+    candidateKey: "b1-1-anxiety-evaluation",
+    topic: "Questions to ask during an anxiety evaluation",
+    targetKeyword: "anxiety evaluation questions",
+    language: "en",
+    categoryId: 4,
+    categoryKey: "anxiety",
+    pillar: "evaluation_care_journey",
+    patientStage: "evaluation",
+    contentFormat: "questions_to_ask",
+    searchIntent: "care_navigation",
+    expertiseAngle: "Prepare patients for a collaborative appointment.",
+    whyTimely: "Patients need practical appointment preparation.",
+    sourceRecommendationIds: ["nimh-anxiety"],
+    internalLinkTargetIds: ["blog-post-42"],
+    createOrUpdate: "create",
+    strategyVersion: HEALING_MINDS_TOPIC_STRATEGY_VERSION,
+    promptVersion: "healing-minds-topic-prompt-v1",
+    provider: "openai",
+    model: "gpt-5-mini",
+    deterministicStatus: "very_low_overlap",
+    overlapBasisPoints: 800,
+    matchedPostIds: [],
+    semanticDecision: "distinct",
+    semanticConfidenceBasisPoints: 9200,
+    semanticMatchedPostId: null,
+    semanticRationale: "Distinct reader question and intent.",
+    judgeModel: "gpt-5-mini",
+    score: 84,
+    scoreBreakdown: { novelty: 24 },
+    recommendation: "recommended",
+  });
+  const mockDb = drizzle.mock();
+  const rendered = mockDb
+    .insert(legacyBlogTopicCandidates)
+    .values(legacyInsert)
+    .onConflictDoNothing({
+      target: [
+        legacyBlogTopicCandidates.runId,
+        legacyBlogTopicCandidates.candidateKey,
+      ],
+    })
+    .returning()
+    .toSQL();
+
+  assert.match(rendered.sql, /^insert into "blog_topic_candidates"/);
+  assert.match(rendered.sql, /"source_recommendation_ids"/);
+  assert.doesNotMatch(
+    rendered.sql,
+    /internal_link_target_ids/,
+    "Flag-off INSERT must remain executable against the Sprint 18 schema.",
+  );
+}
+
 checkStrategyRegistry();
 checkDeterministicOverlap();
 checkScoringPenalties();
 checkConfigGuardWithoutSecrets();
+checkPlannedLinkProvenance();
+checkLegacyTopicCandidateInsertSql();
 
-console.log("Blog topic guards passed: registry, bilingual normalization, overlap, scoring, and config.");
+console.log("Blog topic guards passed: registry, bilingual normalization, overlap, scoring, config, planned link provenance, and Sprint 18 insert compatibility.");

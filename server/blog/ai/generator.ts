@@ -95,6 +95,7 @@ export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promi
 
     return parseGeneratedDraftJson(content, input.language, input.topic, {
       allowedExternalSourceUrls: extractAllowedSourceUrls(input.researchSources || []),
+      allowedInternalLinks: input.internalLinks || [],
       minimumWordCount: input.editorialBrief?.minimumWordCount,
       targetWordCount: input.editorialBrief?.targetWordCount,
       minimumH2Count: Math.min(5, input.editorialBrief?.requiredSections.length || 5),

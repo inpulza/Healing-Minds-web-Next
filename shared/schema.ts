@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import {
   boolean,
+  check,
   index,
   integer,
   jsonb,
@@ -81,6 +82,60 @@ export const blogPostImageReviewStatusEnum = pgEnum("blog_post_image_review_stat
   "candidate",
   "selected",
   "rejected",
+]);
+
+export const blogLinkKindEnum = pgEnum("blog_link_kind", [
+  "internal",
+  "external",
+]);
+
+export const blogLinkReviewStatusEnum = pgEnum("blog_link_review_status", [
+  "pending",
+  "approved",
+  "blocked",
+  "retired",
+]);
+
+export const blogLinkHealthStatusEnum = pgEnum("blog_link_health_status", [
+  "unchecked",
+  "healthy",
+  "redirected",
+  "unreachable",
+  "broken",
+  "changed_review_needed",
+  "stale",
+]);
+
+export const blogLinkOriginEnum = pgEnum("blog_link_origin", [
+  "seed",
+  "manual",
+  "ai",
+  "backfill",
+]);
+
+export const blogLinkUsageOriginEnum = pgEnum("blog_link_usage_origin", [
+  "ai",
+  "manual",
+  "backfill",
+  "server_fix",
+]);
+
+export const blogLinkAuditStatusEnum = pgEnum("blog_link_audit_status", [
+  "queued",
+  "running",
+  "completed",
+  "failed",
+  "interrupted",
+]);
+
+export const blogLinkSourceTypeEnum = pgEnum("blog_link_source_type", [
+  "first_party",
+  "government",
+  "professional_guideline",
+  "academic",
+  "health_system",
+  "crisis",
+  "other",
 ]);
 
 export const blogAuthors = pgTable("blog_authors", {
@@ -236,6 +291,7 @@ export const blogTopicCandidates = pgTable(
     expertiseAngle: text("expertise_angle").notNull(),
     whyTimely: text("why_timely").notNull(),
     sourceRecommendationIds: jsonb("source_recommendation_ids").$type<string[]>().notNull(),
+    internalLinkTargetIds: jsonb("internal_link_target_ids").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
     createOrUpdate: varchar("create_or_update", { length: 30 }).notNull(),
     strategyVersion: varchar("strategy_version", { length: 100 }).notNull(),
     promptVersion: varchar("prompt_version", { length: 100 }).notNull(),
@@ -333,6 +389,197 @@ export const blogRedirects = pgTable(
   ],
 );
 
+export const blogLinkSources = pgTable(
+  "blog_link_sources",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    stableKey: varchar("stable_key", { length: 120 }).notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
+    canonicalDomain: varchar("canonical_domain", { length: 255 }).notNull(),
+    sourceType: blogLinkSourceTypeEnum("source_type").notNull(),
+    languages: jsonb("languages").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    reviewStatus: blogLinkReviewStatusEnum("review_status").notNull().default("pending"),
+    reviewedBy: varchar("reviewed_by", { length: 255 }),
+    reviewedAt: timestamp("reviewed_at"),
+    reviewNotes: text("review_notes"),
+    qualityScore: integer("quality_score").notNull().default(0),
+    qualityBreakdown: jsonb("quality_breakdown").$type<Record<string, number>>().notNull().default(sql`'{}'::jsonb`),
+    scoreVersion: varchar("score_version", { length: 100 }).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_link_sources_stable_key").on(table.stableKey),
+    uniqueIndex("idx_blog_link_sources_canonical_domain").on(table.canonicalDomain),
+    index("idx_blog_link_sources_review_type").on(table.reviewStatus, table.sourceType),
+    check("chk_blog_link_sources_languages_array", sql`jsonb_typeof(${table.languages}) = 'array'`),
+    check("chk_blog_link_sources_quality_score", sql`${table.qualityScore} between 0 and 100`),
+    check("chk_blog_link_sources_quality_breakdown_object", sql`jsonb_typeof(${table.qualityBreakdown}) = 'object'`),
+  ],
+);
+
+export const blogLinks = pgTable(
+  "blog_links",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    stableKey: varchar("stable_key", { length: 120 }),
+    sourceId: integer("source_id").references(() => blogLinkSources.id, { onDelete: "restrict" }),
+    kind: blogLinkKindEnum("kind").notNull(),
+    normalizedHref: text("normalized_href").notNull(),
+    canonicalKey: varchar("canonical_key", { length: 64 }).notNull(),
+    displayHref: text("display_href").notNull(),
+    host: varchar("host", { length: 255 }),
+    title: varchar("title", { length: 255 }).notNull(),
+    label: varchar("label", { length: 255 }).notNull(),
+    language: varchar("language", { length: 5 }).notNull().default("all"),
+    sourceCategory: varchar("source_category", { length: 100 }),
+    topicTags: jsonb("topic_tags").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    categoryKeys: jsonb("category_keys").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    contentPillars: jsonb("content_pillars").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    keywords: jsonb("keywords").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    summary: text("summary"),
+    evidenceType: varchar("evidence_type", { length: 100 }),
+    evidenceScope: text("evidence_scope"),
+    evidenceScore: integer("evidence_score").notNull().default(0),
+    freshnessScore: integer("freshness_score").notNull().default(0),
+    reviewStatus: blogLinkReviewStatusEnum("review_status").notNull().default("pending"),
+    reviewedBy: varchar("reviewed_by", { length: 255 }),
+    reviewedAt: timestamp("reviewed_at"),
+    reviewNotes: text("review_notes"),
+    generationEligible: boolean("generation_eligible").notNull().default(false),
+    healthStatus: blogLinkHealthStatusEnum("health_status").notNull().default("unchecked"),
+    httpStatus: integer("http_status"),
+    finalHref: text("final_href"),
+    redirectCount: integer("redirect_count").notNull().default(0),
+    consecutiveFailures: integer("consecutive_failures").notNull().default(0),
+    lastCheckedAt: timestamp("last_checked_at"),
+    lastSuccessfulAt: timestamp("last_successful_at"),
+    nextCheckAt: timestamp("next_check_at"),
+    lastErrorCode: varchar("last_error_code", { length: 100 }),
+    scoreBreakdown: jsonb("score_breakdown").$type<Record<string, unknown>>().notNull().default(sql`'{}'::jsonb`),
+    scoreVersion: varchar("score_version", { length: 100 }).notNull(),
+    origin: blogLinkOriginEnum("origin").notNull(),
+    targetPostId: integer("target_post_id").references(() => blogPosts.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_links_stable_key")
+      .on(table.stableKey)
+      .where(sql`${table.stableKey} is not null`),
+    uniqueIndex("idx_blog_links_canonical_key").on(table.canonicalKey),
+    index("idx_blog_links_library_filters").on(table.kind, table.language, table.reviewStatus, table.healthStatus),
+    index("idx_blog_links_generation_eligible").on(table.generationEligible, table.reviewStatus, table.healthStatus),
+    index("idx_blog_links_source_id").on(table.sourceId),
+    index("idx_blog_links_target_post_id").on(table.targetPostId),
+    check("chk_blog_links_language", sql`${table.language} in ('en', 'es', 'all')`),
+    check("chk_blog_links_topic_tags_array", sql`jsonb_typeof(${table.topicTags}) = 'array'`),
+    check("chk_blog_links_category_keys_array", sql`jsonb_typeof(${table.categoryKeys}) = 'array'`),
+    check("chk_blog_links_content_pillars_array", sql`jsonb_typeof(${table.contentPillars}) = 'array'`),
+    check("chk_blog_links_keywords_array", sql`jsonb_typeof(${table.keywords}) = 'array'`),
+    check("chk_blog_links_evidence_score", sql`${table.evidenceScore} between 0 and 100`),
+    check("chk_blog_links_freshness_score", sql`${table.freshnessScore} between 0 and 100`),
+    check("chk_blog_links_http_status", sql`${table.httpStatus} is null or ${table.httpStatus} between 100 and 599`),
+    check("chk_blog_links_redirect_count", sql`${table.redirectCount} >= 0`),
+    check("chk_blog_links_consecutive_failures", sql`${table.consecutiveFailures} >= 0`),
+    check("chk_blog_links_score_breakdown_object", sql`jsonb_typeof(${table.scoreBreakdown}) = 'object'`),
+  ],
+);
+
+export const blogPostLinks = pgTable(
+  "blog_post_links",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    postId: integer("post_id").references(() => blogPosts.id, { onDelete: "cascade" }).notNull(),
+    linkId: integer("link_id").references(() => blogLinks.id, { onDelete: "restrict" }).notNull(),
+    generationRunId: integer("generation_run_id").references(() => blogGenerationRuns.id, { onDelete: "set null" }),
+    occurrenceKey: varchar("occurrence_key", { length: 64 }).notNull(),
+    ordinal: integer("ordinal").notNull(),
+    rawHref: text("raw_href").notNull(),
+    normalizedHref: text("normalized_href").notNull(),
+    anchorText: text("anchor_text").notNull(),
+    sectionHeading: text("section_heading"),
+    rel: varchar("rel", { length: 255 }),
+    target: varchar("target", { length: 50 }),
+    claimClass: varchar("claim_class", { length: 100 }),
+    origin: blogLinkUsageOriginEnum("origin").notNull(),
+    postContentChecksum: varchar("post_content_checksum", { length: 64 }).notNull(),
+    firstSeenAt: timestamp("first_seen_at").defaultNow().notNull(),
+    lastSeenAt: timestamp("last_seen_at").defaultNow().notNull(),
+    removedAt: timestamp("removed_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_post_links_occurrence").on(table.postId, table.occurrenceKey),
+    index("idx_blog_post_links_current_by_link").on(table.linkId, table.removedAt),
+    index("idx_blog_post_links_current_by_post").on(table.postId, table.removedAt),
+    index("idx_blog_post_links_generation_run").on(table.generationRunId),
+    check("chk_blog_post_links_ordinal", sql`${table.ordinal} >= 0`),
+  ],
+);
+
+export const blogLinkAuditRuns = pgTable(
+  "blog_link_audit_runs",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    idempotencyKey: varchar("idempotency_key", { length: 255 }).notNull(),
+    status: blogLinkAuditStatusEnum("status").notNull().default("queued"),
+    input: jsonb("input").$type<Record<string, unknown>>().notNull(),
+    result: jsonb("result").$type<Record<string, unknown>>(),
+    requestedBy: varchar("requested_by", { length: 255 }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    heartbeatAt: timestamp("heartbeat_at"),
+    leaseToken: varchar("lease_token", { length: 64 }),
+    leaseEpoch: integer("lease_epoch").notNull().default(0),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_link_audit_runs_idempotency_key").on(table.idempotencyKey),
+    uniqueIndex("idx_blog_link_audit_runs_single_open")
+      .on(sql`(1)`)
+      .where(sql`${table.status} in ('queued', 'running')`),
+    index("idx_blog_link_audit_runs_status_heartbeat").on(table.status, table.heartbeatAt),
+    check("chk_blog_link_audit_runs_input_object", sql`jsonb_typeof(${table.input}) = 'object'`),
+    check("chk_blog_link_audit_runs_result_object", sql`${table.result} is null or jsonb_typeof(${table.result}) = 'object'`),
+    check("chk_blog_link_audit_runs_lease_epoch", sql`${table.leaseEpoch} >= 0`),
+    check(
+      "chk_blog_link_audit_runs_active_lease",
+      sql`(
+        (${table.status} = 'running' and ${table.leaseToken} is not null)
+        or (${table.status} <> 'running' and ${table.leaseToken} is null)
+      )`,
+    ),
+  ],
+);
+
+export const blogLinkChecks = pgTable(
+  "blog_link_checks",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    runId: integer("run_id").references(() => blogLinkAuditRuns.id, { onDelete: "set null" }),
+    linkId: integer("link_id").references(() => blogLinks.id, { onDelete: "restrict" }).notNull(),
+    checkedAt: timestamp("checked_at").notNull(),
+    method: varchar("method", { length: 20 }).notNull(),
+    result: varchar("result", { length: 100 }).notNull(),
+    httpStatus: integer("http_status"),
+    resolvedHref: text("resolved_href"),
+    redirectCount: integer("redirect_count").notNull().default(0),
+    durationMs: integer("duration_ms"),
+    errorCategory: varchar("error_category", { length: 100 }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_blog_link_checks_link_checked").on(table.linkId, table.checkedAt),
+    index("idx_blog_link_checks_run_id").on(table.runId),
+    check("chk_blog_link_checks_http_status", sql`${table.httpStatus} is null or ${table.httpStatus} between 100 and 599`),
+    check("chk_blog_link_checks_redirect_count", sql`${table.redirectCount} >= 0`),
+    check("chk_blog_link_checks_duration", sql`${table.durationMs} is null or ${table.durationMs} >= 0`),
+  ],
+);
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -427,6 +674,23 @@ export type InsertBlogPostImage = typeof blogPostImages.$inferInsert;
 export type BlogPostImage = typeof blogPostImages.$inferSelect;
 export type InsertBlogRedirect = z.infer<typeof insertBlogRedirectSchema>;
 export type BlogRedirect = typeof blogRedirects.$inferSelect;
+export type BlogLinkKind = (typeof blogLinkKindEnum.enumValues)[number];
+export type BlogLinkReviewStatus = (typeof blogLinkReviewStatusEnum.enumValues)[number];
+export type BlogLinkHealthStatus = (typeof blogLinkHealthStatusEnum.enumValues)[number];
+export type BlogLinkOrigin = (typeof blogLinkOriginEnum.enumValues)[number];
+export type BlogLinkUsageOrigin = (typeof blogLinkUsageOriginEnum.enumValues)[number];
+export type BlogLinkAuditStatus = (typeof blogLinkAuditStatusEnum.enumValues)[number];
+export type BlogLinkSourceType = (typeof blogLinkSourceTypeEnum.enumValues)[number];
+export type InsertBlogLinkSource = typeof blogLinkSources.$inferInsert;
+export type BlogLinkSource = typeof blogLinkSources.$inferSelect;
+export type InsertBlogLink = typeof blogLinks.$inferInsert;
+export type BlogLink = typeof blogLinks.$inferSelect;
+export type InsertBlogPostLink = typeof blogPostLinks.$inferInsert;
+export type BlogPostLink = typeof blogPostLinks.$inferSelect;
+export type InsertBlogLinkAuditRun = typeof blogLinkAuditRuns.$inferInsert;
+export type BlogLinkAuditRun = typeof blogLinkAuditRuns.$inferSelect;
+export type InsertBlogLinkCheck = typeof blogLinkChecks.$inferInsert;
+export type BlogLinkCheck = typeof blogLinkChecks.$inferSelect;
 
 // Review schemas for Metricool integration
 export const reviewSchema = z.object({

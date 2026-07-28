@@ -3,6 +3,9 @@ import {
   blogAuthors,
   blogCategories,
   blogGenerationRuns,
+  blogLinks,
+  blogLinkSources,
+  blogPostLinks,
   blogPostImages,
   blogPosts,
   blogPostTags,
@@ -11,6 +14,7 @@ import {
   type BlogRedirect,
   type BlogAuthor,
   type BlogCategory,
+  type BlogLink,
   type BlogPost,
   type BlogPostStatus,
   type BlogTag,
@@ -20,6 +24,17 @@ import {
   type InsertBlogTag,
 } from "@shared/schema";
 import { db } from "../db";
+import { isBlogLinkEnabled } from "./links/config";
+import {
+  assertBlogPostSnapshotMatches,
+  assertBlogRedirectPublishSnapshotMatches,
+  planBlogPostImageObjectDeletion,
+  type BlogRedirectSnapshot,
+} from "./lifecycle";
+import {
+  lockBlogRedirectPaths,
+  type BlogRedirectTransaction,
+} from "./redirect-lock";
 
 export type BlogLanguage = "en" | "es";
 
@@ -50,7 +65,40 @@ export type BlogPostInput = InsertBlogPost & {
   tagIds?: number[];
 };
 
+export type BlogPostUpdateGuard = {
+  expectedStatus?: BlogPostStatus;
+  expectedUpdatedAt?: Date;
+};
+
+export type BlogPostStatusTransitionGuard = BlogPostUpdateGuard & {
+  linkVersions?: Array<{ id: number; updatedAt: Date }>;
+  sourceVersions?: Array<{ id: number; updatedAt: Date }>;
+  managedTargetVersion?: {
+    id: number;
+    updatedAt: Date;
+  };
+  redirectSnapshot?: BlogRedirectSnapshot | null;
+};
+
 export type BlogRedirectInput = InsertBlogRedirect;
+
+export type BlogPostStatusTransitionEffects = {
+  redirect?: BlogRedirectInput | null;
+  deactivateRedirectPath?: string | null;
+};
+
+export type BlogPostStatusTransitionResult = {
+  post: BlogPostWithRelations;
+  redirect: BlogRedirect | null;
+  deactivatedRedirect: BlogRedirect | null;
+  managedTarget: BlogLink | null;
+};
+
+export type BlogPostDeleteOptions = {
+  expectedStatus: BlogPostStatus;
+  expectedUpdatedAt: Date;
+  deletePhysicalImageObjects?: (objectKeys: string[]) => Promise<void>;
+};
 
 export type BlogInternalLinkImpact = {
   id: number;
@@ -107,6 +155,59 @@ export function normalizeInternalPath(value: string): string {
   const [pathOnly] = withoutHash.split("?");
   const normalized = pathOnly.startsWith("/") ? pathOnly : `/${pathOnly}`;
   return normalized.length > 1 && normalized.endsWith("/") ? normalized.slice(0, -1) : normalized;
+}
+
+async function assertNoActiveRedirectAtTarget(
+  tx: BlogRedirectTransaction,
+  targetPath: string,
+): Promise<void> {
+  const [activeTargetRedirect] = await tx
+    .select({ id: blogRedirects.id })
+    .from(blogRedirects)
+    .where(and(
+      eq(blogRedirects.sourcePath, normalizeInternalPath(targetPath)),
+      eq(blogRedirects.isActive, true),
+    ))
+    .limit(1)
+    .for("update");
+  if (activeTargetRedirect) {
+    throw Object.assign(
+      new Error("Redirect target became another active redirect; choose the final destination and retry."),
+      {
+        statusCode: 409,
+        code: "blog_redirect_target_changed",
+      },
+    );
+  }
+}
+
+async function assertRedirectSourceIsNotPublished(
+  tx: BlogRedirectTransaction,
+  sourcePath: string,
+): Promise<void> {
+  const parsed = getBlogSlugFromPath(sourcePath);
+  if (!parsed) return;
+  const [sourcePost] = await tx
+    .select({
+      id: blogPosts.id,
+      status: blogPosts.status,
+    })
+    .from(blogPosts)
+    .where(and(
+      eq(blogPosts.language, parsed.language),
+      eq(blogPosts.slug, parsed.slug),
+    ))
+    .limit(1)
+    .for("update");
+  if (sourcePost?.status === "published") {
+    throw Object.assign(
+      new Error("Redirect source is currently a published post URL; unpublish or delete the post before redirecting it"),
+      {
+        statusCode: 409,
+        code: "blog_redirect_source_published",
+      },
+    );
+  }
 }
 
 async function getTagsForPostIds(postIds: number[]): Promise<Map<number, BlogTag[]>> {
@@ -331,21 +432,87 @@ export async function createBlogPostForGenerationRun(
   return created;
 }
 
-export async function updateBlogPost(id: number, values: Partial<BlogPostInput>): Promise<BlogPostWithRelations | undefined> {
+export async function updateBlogPost(
+  id: number,
+  values: Partial<BlogPostInput>,
+  guard: BlogPostUpdateGuard = {},
+): Promise<BlogPostWithRelations | undefined> {
   const { tagIds, ...postValues } = values;
-  const [updated] = await db
-    .update(blogPosts)
-    .set({
-      ...postValues,
-      updatedAt: new Date(),
-    })
-    .where(eq(blogPosts.id, id))
-    .returning();
+  const guarded = guard.expectedStatus !== undefined || guard.expectedUpdatedAt !== undefined;
+  const updated = await db.transaction(async tx => {
+    const conditions: SQL[] = [eq(blogPosts.id, id)];
+    if (guard.expectedStatus !== undefined) {
+      conditions.push(eq(blogPosts.status, guard.expectedStatus));
+    }
+    if (guard.expectedUpdatedAt !== undefined) {
+      conditions.push(eq(blogPosts.updatedAt, guard.expectedUpdatedAt));
+    }
+
+    const [updatedRow] = await tx
+      .update(blogPosts)
+      .set({
+        ...postValues,
+        updatedAt: new Date(),
+      })
+      .where(and(...conditions))
+      .returning({ id: blogPosts.id });
+
+    if (!updatedRow) {
+      if (guarded) {
+        const [current] = await tx
+          .select({ id: blogPosts.id })
+          .from(blogPosts)
+          .where(eq(blogPosts.id, id))
+          .limit(1);
+        if (current) {
+          throw Object.assign(
+            new Error("The post changed while this edit was being applied. Reopen it and review the latest draft before saving again."),
+            {
+              statusCode: 409,
+              code: "blog_post_edit_conflict",
+            },
+          );
+        }
+      }
+      return false;
+    }
+
+    if (tagIds !== undefined) {
+      const uniqueTagIds = Array.from(new Set(tagIds.filter(Number.isFinite)));
+      await tx.delete(blogPostTags).where(eq(blogPostTags.postId, id));
+      if (uniqueTagIds.length > 0) {
+        await tx
+          .insert(blogPostTags)
+          .values(uniqueTagIds.map(tagId => ({ postId: id, tagId })))
+          .onConflictDoNothing();
+      }
+    }
+    if (
+      isBlogLinkEnabled()
+      && (
+        postValues.slug !== undefined
+        || postValues.language !== undefined
+        || postValues.title !== undefined
+      )
+    ) {
+      await tx
+        .update(blogLinks)
+        .set({
+          generationEligible: false,
+          healthStatus: "stale",
+          nextCheckAt: null,
+          lastErrorCode: "target_post_changed",
+          updatedAt: new Date(),
+        })
+        .where(or(
+          eq(blogLinks.targetPostId, id),
+          eq(blogLinks.stableKey, `blog-post-${id}`),
+        ));
+    }
+    return true;
+  });
 
   if (!updated) return undefined;
-  if (tagIds) {
-    await setBlogPostTags(id, tagIds);
-  }
 
   return getBlogPostById(id);
 }
@@ -354,15 +521,133 @@ export async function updateBlogPostStatusWithImageGuard(
   id: number,
   status: BlogPostStatus,
   publishedAt?: Date,
-): Promise<BlogPostWithRelations | undefined> {
-  await db.transaction(async tx => {
+  guard: BlogPostStatusTransitionGuard = {},
+  effects: BlogPostStatusTransitionEffects = {},
+): Promise<BlogPostStatusTransitionResult | undefined> {
+  const transition = await db.transaction(async tx => {
     const [post] = await tx
-      .select({ id: blogPosts.id })
+      .select({
+        id: blogPosts.id,
+        status: blogPosts.status,
+        slug: blogPosts.slug,
+        language: blogPosts.language,
+        updatedAt: blogPosts.updatedAt,
+      })
       .from(blogPosts)
       .where(eq(blogPosts.id, id))
       .limit(1)
       .for("update");
-    if (!post) return;
+    if (!post) return null;
+
+    assertBlogPostSnapshotMatches(
+      post,
+      guard,
+      {
+        message: "The post changed after verification. Reopen it, run Verify again, and then publish.",
+        code: "blog_post_publish_snapshot_changed",
+      },
+    );
+
+    const redirectInput = effects.redirect
+      ? {
+          ...effects.redirect,
+          sourcePath: normalizeInternalPath(effects.redirect.sourcePath),
+          targetPath: normalizeInternalPath(effects.redirect.targetPath),
+        }
+      : null;
+    const deactivateRedirectPath = effects.deactivateRedirectPath
+      ? normalizeInternalPath(effects.deactivateRedirectPath)
+      : null;
+    await lockBlogRedirectPaths(tx, [
+      redirectInput?.sourcePath,
+      redirectInput?.targetPath,
+      deactivateRedirectPath,
+    ]);
+    if (guard.redirectSnapshot !== undefined) {
+      const snapshotPath = guard.redirectSnapshot?.sourcePath || deactivateRedirectPath;
+      if (!snapshotPath) {
+        throw Object.assign(
+          new Error("Publication redirect snapshot is missing its article path. Run Verify again."),
+          {
+            statusCode: 409,
+            code: "blog_redirect_publish_snapshot_missing_path",
+          },
+        );
+      }
+      const [currentRedirect] = await tx
+        .select({
+          id: blogRedirects.id,
+          sourcePath: blogRedirects.sourcePath,
+          targetPath: blogRedirects.targetPath,
+          isActive: blogRedirects.isActive,
+          updatedAt: blogRedirects.updatedAt,
+        })
+        .from(blogRedirects)
+        .where(eq(blogRedirects.sourcePath, snapshotPath))
+        .limit(1)
+        .for("update");
+      assertBlogRedirectPublishSnapshotMatches(
+        currentRedirect,
+        guard.redirectSnapshot,
+      );
+    }
+    if (redirectInput) {
+      await assertNoActiveRedirectAtTarget(tx, redirectInput.targetPath);
+    }
+
+    const sourceVersions = [...(guard.sourceVersions || [])]
+      .sort((left, right) => left.id - right.id);
+    if (sourceVersions.length > 0) {
+      const sourceRows = await tx
+        .select({
+          id: blogLinkSources.id,
+          updatedAt: blogLinkSources.updatedAt,
+        })
+        .from(blogLinkSources)
+        .where(inArray(blogLinkSources.id, sourceVersions.map(item => item.id)))
+        .orderBy(blogLinkSources.id)
+        .for("update");
+      const currentById = new Map(sourceRows.map(row => [row.id, row.updatedAt]));
+      const changed = sourceVersions.some(expected => (
+        currentById.get(expected.id)?.getTime() !== expected.updatedAt.getTime()
+      ));
+      if (changed) {
+        throw Object.assign(
+          new Error("A link publisher review changed after verification. Run Verify again before publishing."),
+          {
+            statusCode: 409,
+            code: "blog_link_source_publish_snapshot_changed",
+          },
+        );
+      }
+    }
+
+    const linkVersions = [...(guard.linkVersions || [])]
+      .sort((left, right) => left.id - right.id);
+    if (linkVersions.length > 0) {
+      const linkRows = await tx
+        .select({
+          id: blogLinks.id,
+          updatedAt: blogLinks.updatedAt,
+        })
+        .from(blogLinks)
+        .where(inArray(blogLinks.id, linkVersions.map(item => item.id)))
+        .orderBy(blogLinks.id)
+        .for("update");
+      const currentById = new Map(linkRows.map(row => [row.id, row.updatedAt]));
+      const changed = linkVersions.some(expected => (
+        currentById.get(expected.id)?.getTime() !== expected.updatedAt.getTime()
+      ));
+      if (changed) {
+        throw Object.assign(
+          new Error("A managed link changed after verification. Run Verify again before publishing."),
+          {
+            statusCode: 409,
+            code: "blog_link_publish_snapshot_changed",
+          },
+        );
+      }
+    }
 
     const [blockingImage] = await tx
       .select({ id: blogPostImages.id })
@@ -382,54 +667,298 @@ export async function updateBlogPostStatusWithImageGuard(
       );
     }
 
+    const now = new Date();
+    let managedTarget: BlogLink | null = null;
+    if (isBlogLinkEnabled() && status === "published") {
+      const expectedTarget = guard.managedTargetVersion;
+      if (!expectedTarget) {
+        throw Object.assign(
+          new Error("The managed article target was not prepared. Run Verify again before publishing."),
+          {
+            statusCode: 409,
+            code: "blog_link_target_not_prepared",
+          },
+        );
+      }
+      const [target] = await tx
+        .select()
+        .from(blogLinks)
+        .where(eq(blogLinks.id, expectedTarget.id))
+        .limit(1)
+        .for("update");
+      const expectedPath = getBlogPostPath(post);
+      if (
+        !target
+        || target.updatedAt.getTime() !== expectedTarget.updatedAt.getTime()
+        || target.targetPostId !== id
+        || target.stableKey !== `blog-post-${id}`
+        || target.kind !== "internal"
+        || target.normalizedHref !== expectedPath
+        || target.reviewStatus !== "approved"
+        || target.sourceId === null
+      ) {
+        throw Object.assign(
+          new Error("The managed article target changed while publication was being prepared. Run Verify again."),
+          {
+            statusCode: 409,
+            code: "blog_link_target_publish_snapshot_changed",
+          },
+        );
+      }
+      const [source] = await tx
+        .select({
+          id: blogLinkSources.id,
+          stableKey: blogLinkSources.stableKey,
+          reviewStatus: blogLinkSources.reviewStatus,
+        })
+        .from(blogLinkSources)
+        .where(eq(blogLinkSources.id, target.sourceId))
+        .limit(1)
+        .for("update");
+      if (
+        !source
+        || source.stableKey !== "healing-minds-psychiatry"
+        || source.reviewStatus !== "approved"
+      ) {
+        throw Object.assign(
+          new Error("The approved Healing Minds source changed before publication. Run Verify again."),
+          {
+            statusCode: 409,
+            code: "blog_link_target_source_publish_snapshot_changed",
+          },
+        );
+      }
+    }
+
     await tx
       .update(blogPosts)
       .set({
         status,
         ...(status === "published" && publishedAt ? { publishedAt } : {}),
-        updatedAt: new Date(),
+        updatedAt: now,
       })
       .where(eq(blogPosts.id, id));
+
+    if (isBlogLinkEnabled()) {
+      if (status === "published") {
+        const [activatedTarget] = await tx
+          .update(blogLinks)
+          .set({
+            generationEligible: true,
+            healthStatus: "healthy",
+            httpStatus: 200,
+            finalHref: getBlogPostPath(post),
+            redirectCount: 0,
+            consecutiveFailures: 0,
+            lastCheckedAt: now,
+            lastSuccessfulAt: now,
+            nextCheckAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1_000),
+            lastErrorCode: null,
+            updatedAt: now,
+          })
+          .where(eq(blogLinks.id, guard.managedTargetVersion!.id))
+          .returning();
+        if (!activatedTarget) {
+          throw Object.assign(
+            new Error("The managed article target disappeared before publication. Run Verify again."),
+            {
+              statusCode: 409,
+              code: "blog_link_target_publish_conflict",
+            },
+          );
+        }
+        managedTarget = activatedTarget;
+      } else {
+        await tx
+          .update(blogLinks)
+          .set({
+            generationEligible: false,
+            healthStatus: "stale",
+            nextCheckAt: null,
+            lastErrorCode: "target_not_published",
+            updatedAt: now,
+          })
+          .where(or(
+            eq(blogLinks.targetPostId, id),
+            eq(blogLinks.stableKey, `blog-post-${id}`),
+          ));
+      }
+    }
+
+    let redirect: BlogRedirect | null = null;
+    if (redirectInput) {
+      const [upsertedRedirect] = await tx
+        .insert(blogRedirects)
+        .values({
+          ...redirectInput,
+          updatedAt: now,
+        })
+        .onConflictDoUpdate({
+          target: blogRedirects.sourcePath,
+          set: {
+            targetPath: redirectInput.targetPath,
+            statusCode: redirectInput.statusCode || 301,
+            reason: redirectInput.reason || null,
+            isActive: redirectInput.isActive ?? true,
+            sourcePostId: redirectInput.sourcePostId || null,
+            updatedAt: now,
+          },
+        })
+        .returning();
+      redirect = upsertedRedirect;
+    }
+
+    let deactivatedRedirect: BlogRedirect | null = null;
+    if (deactivateRedirectPath) {
+      const [deactivated] = await tx
+        .update(blogRedirects)
+        .set({
+          isActive: false,
+          updatedAt: now,
+        })
+        .where(and(
+          eq(blogRedirects.sourcePath, deactivateRedirectPath),
+          eq(blogRedirects.isActive, true),
+        ))
+        .returning();
+      deactivatedRedirect = deactivated || null;
+    }
+
+    return {
+      redirect,
+      deactivatedRedirect,
+      managedTarget,
+    };
   });
-  return getBlogPostById(id);
+  if (!transition) return undefined;
+  const post = await getBlogPostById(id);
+  if (!post) {
+    throw new Error("Blog post status changed but the updated article could not be loaded");
+  }
+  return {
+    post,
+    ...transition,
+  };
 }
 
 export async function deleteBlogPostWithRedirect(
   id: number,
   redirectValues?: BlogRedirectInput,
+  options?: BlogPostDeleteOptions,
 ): Promise<{ deleted: boolean; redirect: BlogRedirect | null }> {
   return db.transaction(async tx => {
+    const [lockedPost] = await tx
+      .select({
+        id: blogPosts.id,
+        status: blogPosts.status,
+        updatedAt: blogPosts.updatedAt,
+      })
+      .from(blogPosts)
+      .where(eq(blogPosts.id, id))
+      .limit(1)
+      .for("update");
+    if (!lockedPost) {
+      return { deleted: false, redirect: null };
+    }
+    if (!options) {
+      throw Object.assign(
+        new Error("Blog post deletion requires an explicit post snapshot"),
+        {
+          statusCode: 409,
+          code: "blog_post_delete_snapshot_required",
+        },
+      );
+    }
+    assertBlogPostSnapshotMatches(
+      lockedPost,
+      options,
+      {
+        message: "The article changed while deletion was being prepared. No files or database rows were deleted; refresh and retry.",
+        code: "blog_post_delete_snapshot_changed",
+      },
+    );
+
+    const normalizedRedirect = redirectValues
+      ? {
+          ...redirectValues,
+          sourcePath: normalizeInternalPath(redirectValues.sourcePath),
+          targetPath: normalizeInternalPath(redirectValues.targetPath),
+        }
+      : null;
+    if (normalizedRedirect) {
+      await lockBlogRedirectPaths(tx, [
+        normalizedRedirect.sourcePath,
+        normalizedRedirect.targetPath,
+      ]);
+      await assertNoActiveRedirectAtTarget(tx, normalizedRedirect.targetPath);
+    }
+
+    const images = await tx
+      .select({
+        source: blogPostImages.source,
+        objectKey: blogPostImages.objectKey,
+        generationStatus: blogPostImages.generationStatus,
+        errorCode: blogPostImages.errorCode,
+      })
+      .from(blogPostImages)
+      .where(eq(blogPostImages.postId, id))
+      .for("update");
+    const objectKeys = planBlogPostImageObjectDeletion(images);
+    if (objectKeys.length > 0 && !options.deletePhysicalImageObjects) {
+      throw Object.assign(
+        new Error("Physical image cleanup is required before deleting this article"),
+        {
+          statusCode: 409,
+          code: "blog_post_delete_image_cleanup_required",
+        },
+      );
+    }
+    await options.deletePhysicalImageObjects?.(objectKeys);
+
+    if (isBlogLinkEnabled()) {
+      await tx
+        .update(blogLinks)
+        .set({
+          reviewStatus: "retired",
+          generationEligible: false,
+          healthStatus: "stale",
+          lastErrorCode: "target_deleted",
+          nextCheckAt: null,
+          updatedAt: new Date(),
+        })
+        .where(or(
+          eq(blogLinks.targetPostId, id),
+          eq(blogLinks.stableKey, `blog-post-${id}`),
+        ));
+    }
+
     const deleted = await tx
       .delete(blogPosts)
       .where(eq(blogPosts.id, id))
       .returning({ id: blogPosts.id });
 
     if (deleted.length === 0) {
-      return { deleted: false, redirect: null };
+      throw new Error("The locked blog post could not be deleted");
     }
 
-    if (!redirectValues) {
+    if (!normalizedRedirect) {
       return { deleted: true, redirect: null };
     }
 
-    const sourcePath = normalizeInternalPath(redirectValues.sourcePath);
-    const targetPath = normalizeInternalPath(redirectValues.targetPath);
     const [redirect] = await tx
       .insert(blogRedirects)
       .values({
-        ...redirectValues,
-        sourcePath,
-        targetPath,
+        ...normalizedRedirect,
         sourcePostId: null,
         updatedAt: new Date(),
       })
       .onConflictDoUpdate({
         target: blogRedirects.sourcePath,
         set: {
-          targetPath,
-          statusCode: redirectValues.statusCode || 301,
-          reason: redirectValues.reason || null,
-          isActive: redirectValues.isActive ?? true,
+          targetPath: normalizedRedirect.targetPath,
+          statusCode: normalizedRedirect.statusCode || 301,
+          reason: normalizedRedirect.reason || null,
+          isActive: normalizedRedirect.isActive ?? true,
           sourcePostId: null,
           updatedAt: new Date(),
         },
@@ -445,6 +974,35 @@ export async function findBlogPostsLinkingToPath(
   options: FindInternalLinkOptions = {},
 ): Promise<BlogInternalLinkImpact[]> {
   const normalizedPath = normalizeInternalPath(targetPath);
+  if (process.env.BLOG_LINK_ENABLED === "true") {
+    const ledgerConditions: SQL[] = [
+      eq(blogLinks.kind, "internal"),
+      eq(blogLinks.normalizedHref, normalizedPath),
+      isNull(blogPostLinks.removedAt),
+    ];
+    if (options.status && options.status !== "all") {
+      ledgerConditions.push(eq(blogPosts.status, options.status));
+    }
+    if (options.excludePostId) {
+      ledgerConditions.push(ne(blogPosts.id, options.excludePostId));
+    }
+    const ledgerRows = await db
+      .selectDistinct({ post: blogPosts })
+      .from(blogPostLinks)
+      .innerJoin(blogPosts, eq(blogPostLinks.postId, blogPosts.id))
+      .innerJoin(blogLinks, eq(blogPostLinks.linkId, blogLinks.id))
+      .where(and(...ledgerConditions))
+      .orderBy(desc(blogPosts.publishedAt), desc(blogPosts.updatedAt));
+    return ledgerRows.map(row => ({
+      id: row.post.id,
+      title: row.post.title,
+      slug: row.post.slug,
+      language: row.post.language as BlogLanguage,
+      status: row.post.status,
+      path: getBlogPostPath(row.post),
+    }));
+  }
+
   const conditions: SQL[] = [
     or(
       ilike(blogPosts.content, `%href="${normalizedPath}"%`),
@@ -496,6 +1054,16 @@ export async function getBlogRedirectById(id: number): Promise<BlogRedirect | un
   return redirect;
 }
 
+export async function getBlogRedirectBySourcePath(sourcePath: string): Promise<BlogRedirect | undefined> {
+  const normalizedPath = normalizeInternalPath(sourcePath);
+  const [redirect] = await db
+    .select()
+    .from(blogRedirects)
+    .where(eq(blogRedirects.sourcePath, normalizedPath))
+    .limit(1);
+  return redirect;
+}
+
 export async function getActiveBlogRedirect(sourcePath: string): Promise<BlogRedirect | undefined> {
   const normalizedPath = normalizeInternalPath(sourcePath);
   const [redirect] = await db
@@ -513,44 +1081,58 @@ export async function getActiveBlogRedirect(sourcePath: string): Promise<BlogRed
 
 export async function deactivateBlogRedirect(sourcePath: string): Promise<BlogRedirect | undefined> {
   const normalizedPath = normalizeInternalPath(sourcePath);
-  const [redirect] = await db
-    .update(blogRedirects)
-    .set({
-      isActive: false,
-      updatedAt: new Date(),
-    })
-    .where(
-      and(
-        eq(blogRedirects.sourcePath, normalizedPath),
-        eq(blogRedirects.isActive, true),
-      ),
-    )
-    .returning();
-  return redirect;
+  return db.transaction(async tx => {
+    await lockBlogRedirectPaths(tx, [normalizedPath]);
+    const [redirect] = await tx
+      .update(blogRedirects)
+      .set({
+        isActive: false,
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(blogRedirects.sourcePath, normalizedPath),
+          eq(blogRedirects.isActive, true),
+        ),
+      )
+      .returning();
+    return redirect;
+  });
 }
 
 export async function upsertBlogRedirect(values: BlogRedirectInput): Promise<BlogRedirect> {
-  const [redirect] = await db
-    .insert(blogRedirects)
-    .values({
-      ...values,
-      sourcePath: normalizeInternalPath(values.sourcePath),
-      targetPath: normalizeInternalPath(values.targetPath),
-      updatedAt: new Date(),
-    })
-    .onConflictDoUpdate({
-      target: blogRedirects.sourcePath,
-      set: {
-        targetPath: normalizeInternalPath(values.targetPath),
-        statusCode: values.statusCode || 301,
-        reason: values.reason || null,
-        isActive: values.isActive ?? true,
-        sourcePostId: values.sourcePostId || null,
+  const normalizedValues = {
+    ...values,
+    sourcePath: normalizeInternalPath(values.sourcePath),
+    targetPath: normalizeInternalPath(values.targetPath),
+  };
+  return db.transaction(async tx => {
+    await assertRedirectSourceIsNotPublished(tx, normalizedValues.sourcePath);
+    await lockBlogRedirectPaths(tx, [
+      normalizedValues.sourcePath,
+      normalizedValues.targetPath,
+    ]);
+    await assertNoActiveRedirectAtTarget(tx, normalizedValues.targetPath);
+    const [redirect] = await tx
+      .insert(blogRedirects)
+      .values({
+        ...normalizedValues,
         updatedAt: new Date(),
-      },
-    })
-    .returning();
-  return redirect;
+      })
+      .onConflictDoUpdate({
+        target: blogRedirects.sourcePath,
+        set: {
+          targetPath: normalizedValues.targetPath,
+          statusCode: normalizedValues.statusCode || 301,
+          reason: normalizedValues.reason || null,
+          isActive: normalizedValues.isActive ?? true,
+          sourcePostId: normalizedValues.sourcePostId || null,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return redirect;
+  });
 }
 
 export async function getBlogAuthors(): Promise<BlogAuthor[]> {

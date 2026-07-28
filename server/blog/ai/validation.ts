@@ -1,16 +1,30 @@
 import { z } from "zod";
+import { DomUtils, parseDocument } from "htmlparser2";
+import type { Element } from "domhandler";
 import { getPlainTextFromHtml, sanitizeBlogContentHtml } from "../sanitize";
 import { getMedicalDisclaimerHtml, hasMedicalDisclaimer, slugifyBlogValue, truncateSeoText } from "../editorial-rules";
+import { normalizeBlogLinkHref } from "../links/normalization";
 import type { BlogAiGeneratedDraft } from "./types";
 import type { BlogLanguage } from "../storage";
 
 type NormalizeOptions = {
   allowedExternalSourceUrls?: string[];
+  allowedInternalLinks?: string[];
   minimumWordCount?: number;
   targetWordCount?: number;
   minimumH2Count?: number;
   requiredSections?: string[];
 };
+
+function isAnchor(node: unknown): node is Element {
+  return Boolean(
+    node
+    && typeof node === "object"
+    && "type" in node
+    && (node as Element).type === "tag"
+    && (node as Element).name.toLowerCase() === "a",
+  );
+}
 
 export const aiGeneratedDraftSchema = z.object({
   title: z.string().trim().min(5).max(255),
@@ -56,13 +70,16 @@ function ensureDisclaimer(contentHtml: string, language: BlogLanguage): string {
   return `${contentHtml}\n${getMedicalDisclaimerHtml(language)}`;
 }
 
-function normalizeUrlForComparison(value: string): string | null {
+function normalizeUrlForComparison(value: string): {
+  kind: "internal" | "external";
+  normalizedHref: string;
+} | null {
   try {
-    const url = new URL(value);
-    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
-    url.hash = "";
-    url.search = "";
-    return `${url.origin}${url.pathname.replace(/\/$/, "")}`;
+    const normalized = normalizeBlogLinkHref(value);
+    return {
+      kind: normalized.kind,
+      normalizedHref: normalized.normalizedHref,
+    };
   } catch {
     return null;
   }
@@ -70,14 +87,16 @@ function normalizeUrlForComparison(value: string): string | null {
 
 function extractExternalUrls(value: string): string[] {
   const urls = new Set<string>();
+  const decodeHrefEntities = (href: string) => href
+    .replace(/&(?:amp|#0*38|#x0*26);/gi, "&");
 
   Array.from(value.matchAll(/<a\b[^>]*\bhref=(["'])(.*?)\1/gi))
-    .map(match => match[2])
+    .map(match => decodeHrefEntities(match[2]))
     .filter(href => /^https?:\/\//i.test(href))
     .forEach(href => urls.add(href));
 
   Array.from(value.matchAll(/\bhttps?:\/\/[^\s"'<>]+/gi))
-    .map(match => match[0].replace(/[).,;:!?]+$/g, ""))
+    .map(match => decodeHrefEntities(match[0]).replace(/[).,;:!?]+$/g, ""))
     .forEach(url => urls.add(url));
 
   return Array.from(urls);
@@ -87,17 +106,90 @@ function assertAllowedExternalUrls(values: string[], allowedUrls: string[] | und
   const foundUrls = values.flatMap(extractExternalUrls);
   if (foundUrls.length === 0) return;
 
-  const allowed = new Set((allowedUrls || []).map(normalizeUrlForComparison).filter(Boolean));
+  const allowed = new Set(
+    (allowedUrls || [])
+      .map(normalizeUrlForComparison)
+      .filter((item): item is NonNullable<ReturnType<typeof normalizeUrlForComparison>> => (
+        Boolean(item) && item?.kind === "external"
+      ))
+      .map(item => item.normalizedHref),
+  );
   const disallowed = foundUrls
     .filter(href => {
       const normalized = normalizeUrlForComparison(href);
-      return !normalized || !allowed.has(normalized);
+      if (!normalized) return true;
+      if (normalized.kind === "internal") return false;
+      return !allowed.has(normalized.normalizedHref);
     });
 
   if (disallowed.length > 0) {
     throw Object.assign(new Error("AI draft included external URLs outside the verified allowlist"), {
       statusCode: 502,
       links: disallowed,
+    });
+  }
+}
+
+function assertAllowedAnchorHrefs(
+  contentHtml: string,
+  allowedInternalLinks: string[] | undefined,
+  allowedExternalUrls: string[] | undefined,
+): void {
+  const allowedInternal = new Set(
+    (allowedInternalLinks || []).map(href => {
+      const normalized = normalizeBlogLinkHref(href);
+      return normalized.kind === "internal" ? normalized.normalizedHref : "";
+    }).filter(Boolean),
+  );
+  const allowedExternal = new Set(
+    (allowedExternalUrls || [])
+      .map(normalizeUrlForComparison)
+      .filter((item): item is NonNullable<ReturnType<typeof normalizeUrlForComparison>> => (
+        Boolean(item) && item?.kind === "external"
+      ))
+      .map(item => item.normalizedHref),
+  );
+  const document = parseDocument(contentHtml, {
+    decodeEntities: true,
+    lowerCaseAttributeNames: true,
+    lowerCaseTags: true,
+  });
+  const disallowedManaged = new Set<string>();
+  const disallowedExternal = new Set<string>();
+  const anchors = DomUtils.findAll(isAnchor, document.children);
+  for (const anchor of anchors) {
+    const href = anchor.attribs?.href;
+    if (typeof href !== "string") continue;
+    let normalized;
+    try {
+      normalized = normalizeBlogLinkHref(href);
+    } catch {
+      disallowedManaged.add(href);
+      continue;
+    }
+    if (
+      normalized.kind === "internal"
+      && !allowedInternal.has(normalized.normalizedHref)
+    ) {
+      disallowedManaged.add(normalized.normalizedHref);
+    }
+    if (
+      normalized.kind === "external"
+      && !allowedExternal.has(normalized.normalizedHref)
+    ) {
+      disallowedExternal.add(normalized.normalizedHref);
+    }
+  }
+  if (disallowedExternal.size > 0) {
+    throw Object.assign(new Error("AI draft included external URLs outside the verified allowlist"), {
+      statusCode: 502,
+      links: Array.from(disallowedExternal),
+    });
+  }
+  if (disallowedManaged.size > 0) {
+    throw Object.assign(new Error("AI draft included anchor targets outside the managed allowlist"), {
+      statusCode: 502,
+      links: Array.from(disallowedManaged),
     });
   }
 }
@@ -120,6 +212,11 @@ export function normalizeAiGeneratedDraft(
 ): BlogAiGeneratedDraft {
   const parsed = aiGeneratedDraftSchema.parse(rawDraft);
   const title = truncateSeoText(parsed.title || fallbackTopic, 255);
+  assertAllowedAnchorHrefs(
+    parsed.contentHtml,
+    options.allowedInternalLinks,
+    options.allowedExternalSourceUrls,
+  );
   const contentWithDisclaimer = ensureDisclaimer(parsed.contentHtml, language);
   const contentHtml = sanitizeBlogContentHtml(contentWithDisclaimer);
   const excerpt = truncateSeoText(parsed.excerpt || getPlainTextFromHtml(contentHtml), 500);

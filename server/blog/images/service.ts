@@ -16,11 +16,9 @@ import { generateImageWithOpenAi } from "./provider";
 import {
   claimBlogPostImageForDeletion,
   createDraftBlogPostImage,
-  deleteBlogPostImageRow,
   ensureCuratedHeroImage,
   finalizeBlogPostImageDeletion,
   getBlogPostImage,
-  listBlogPostImages,
   updateBlogPostImage,
 } from "./storage";
 import {
@@ -283,13 +281,12 @@ export async function deleteBlogImageVariant(postId: number, imageId: number): P
   }
 }
 
-export async function deleteAllBlogImageObjectsForPost(postId: number): Promise<number> {
-  const images = await listBlogPostImages(postId);
-  const generated = images.filter(image => image.source === "ai");
+export async function deleteBlogImageObjectsOnly(objectKeys: string[]): Promise<number> {
+  const uniqueObjectKeys = Array.from(new Set(objectKeys.filter(Boolean)));
   let deletedCount = 0;
-  for (const image of generated) {
-    if (image.objectKey) await deleteBlogImageObject(image.objectKey);
-    if (await deleteBlogPostImageRow(image.id)) deletedCount += 1;
+  for (const objectKey of uniqueObjectKeys) {
+    await deleteBlogImageObject(objectKey);
+    deletedCount += 1;
   }
   return deletedCount;
 }

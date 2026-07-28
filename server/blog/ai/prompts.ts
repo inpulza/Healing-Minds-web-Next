@@ -1,7 +1,6 @@
 import type { BlogAiGenerateInput } from "./types";
 import { formatResearchSourcesForPrompt } from "./research";
 import { formatEditorialBriefForPrompt } from "./editorial-brief";
-import { getDefaultBlogInternalLinkHrefs } from "../internal-links";
 
 function formatList(items: string[]): string {
   return items.length > 0 ? items.map(item => `- ${item}`).join("\n") : "- None provided";
@@ -20,8 +19,10 @@ function formatSemanticMemoryForPrompt(input: BlogAiGenerateInput): string {
 
 export function buildHealingMindsBlogPrompt(input: BlogAiGenerateInput): string {
   const languageName = input.language === "es" ? "Spanish" : "English";
-  const fallbackLinks = getDefaultBlogInternalLinkHrefs(input.language);
-  const internalLinks = input.internalLinks && input.internalLinks.length > 0 ? input.internalLinks : fallbackLinks;
+  const internalLinks = input.internalLinks || [];
+  const internalLinkRule = internalLinks.length > 0
+    ? "- Include at least one natural internal link from the allowed list. Never invent or alter an internal path."
+    : "- No managed internal link is available for this draft. Do not add or invent any internal link.";
   const researchSources = input.researchSources || [];
   const semanticMemory = input.semanticMemory;
 
@@ -76,7 +77,7 @@ HTML rules:
 - Do not use <h1>, <img>, <script>, <style>, iframes, inline styles, classes, or event handlers.
 - Follow the editorial brief sections as <h2> sections where they fit naturally.
 - Include 5 to 7 useful <h2> sections.
-- Include at least one natural internal link from the allowed list.
+${internalLinkRule}
 - Aim for the editorial brief target word count without padding or repeating yourself.
 - Use concise, clinically conservative explanations instead of filler.
 

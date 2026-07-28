@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { Express, Request, Response } from "express";
 import { ZodError, type z } from "zod";
 import {
@@ -21,7 +22,6 @@ import {
   createBlogPost,
   createBlogPostForGenerationRun,
   createBlogTag,
-  deactivateBlogRedirect,
   deleteBlogPostWithRedirect,
   findBlogPostsLinkingToPath,
   findPublishedPostsLinkingToPost,
@@ -31,9 +31,9 @@ import {
   getBlogAuthors,
   getBlogCategories,
   getBlogPostById,
-  getBlogPostBySlug,
   getBlogPostPath,
   getBlogRedirectById,
+  getBlogRedirectBySourcePath,
   getBlogRedirects,
   getBlogStats,
   getBlogTags,
@@ -42,28 +42,31 @@ import {
   upsertBlogRedirect,
   updateBlogPost,
   type BlogLanguage,
+  type BlogPostStatusTransitionGuard,
 } from "./storage";
 import { estimateReadingTime, sanitizeBlogContentHtml } from "./sanitize";
 import { assertBlogAiGenerationConfigured, generateBlogDraftWithAi } from "./ai/generator";
 import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { buildBlogEditorialBrief } from "./ai/editorial-brief";
 import { buildBlogSemanticMemory } from "./ai/memory";
-import { selectBlogResearchSources } from "./ai/research";
+import { buildPersistedTopicDraftOverrides } from "./ai/planned-topic-provenance";
 import { assertGuidedBlogTopicSafe, buildBlogTopicPlan, type BlogTopicPlanCandidate } from "./ai/topic-planner";
 import { assertBlogTopicGenerationConfigured } from "./ai/responses-client";
 import { buildTopicKey } from "./ai/topic-normalization";
 import { HEALING_MINDS_TOPIC_STRATEGY_VERSION } from "./strategy/healing-minds";
 import { applyDeterministicBlogFix } from "./content-fixes";
 import { getCuratedFeaturedImageAlt, selectCuratedFeaturedImage } from "./featured-images";
-import { ensureBlogInternalLinks, selectBlogInternalLinks } from "./internal-links";
+import { ensureBlogInternalLinks } from "./internal-links";
 import { selectBlogTagIds } from "./taxonomy";
 import { buildBlogVerificationReport } from "./verification";
 import { runSeoPublishingCheck } from "../seo/publishing";
 import { getClientIp } from "../utils/client-ip";
 import {
   appendBlogGenerationEvent,
+  claimCompletedBlogPlanningRun,
   claimBlogGenerationRun,
   completeBlogGenerationRun,
+  completeBlogPlanningRun,
   createBlogGenerationRun,
   failBlogGenerationRun,
   getBlogGenerationRun,
@@ -75,19 +78,42 @@ import {
   updateBlogGenerationRun,
 } from "./generation/storage";
 import type { JsonObject } from "./generation/types";
+import {
+  getBlogTopicCandidateById,
+  selectBlogTopicCandidate,
+} from "./topic-candidate-storage";
 import { containsLikelyPatientIdentifier } from "./privacy";
 import {
-  deleteAllBlogImageObjectsForPost,
+  deleteBlogImageObjectsOnly,
   generateBlogImageSet,
   type BlogImageGenerationSummary,
 } from "./images/service";
 import { ensureCuratedHeroImage } from "./images/storage";
+import { registerBlogLinkRoutes } from "./links/routes";
+import {
+  isBlogLinkRuntimeEnabled,
+  selectRuntimeBlogInternalLinks,
+  selectRuntimeBlogResearchSources,
+} from "./links/runtime";
+import { getBlogLinkConfig } from "./links/config";
+import {
+  assertBlogPostLinksPublishReady,
+  getBlogPostLinkReport,
+  prepareManagedBlogPostTargetForPublish,
+} from "./links/service";
+import {
+  reconcileStoredBlogPostLinks,
+  rewriteAndReconcileRedirectLinks,
+} from "./links/storage";
+import { buildBlogPostStatusTransitionPlan } from "./lifecycle";
 
 function sendValidationError(res: Response, error: unknown): void {
   const requestError = error as {
     statusCode?: number;
     message?: string;
     code?: string;
+    checks?: unknown;
+    linkReport?: unknown;
     matchedPostId?: number;
     overlapBasisPoints?: number;
     semanticConfidenceBasisPoints?: number;
@@ -98,6 +124,8 @@ function sendValidationError(res: Response, error: unknown): void {
       success: false,
       message: requestError.message || "Invalid blog request",
       ...(requestError.code ? { code: requestError.code } : {}),
+      ...(requestError.checks ? { checks: requestError.checks } : {}),
+      ...(requestError.linkReport ? { linkReport: requestError.linkReport } : {}),
       ...(requestError.matchedPostId ? { matchedPostId: requestError.matchedPostId } : {}),
       ...(requestError.overlapBasisPoints !== undefined ? { overlapBasisPoints: requestError.overlapBasisPoints } : {}),
       ...(requestError.semanticConfidenceBasisPoints !== undefined
@@ -179,28 +207,6 @@ function assertLocalPathInput(value: string, label: string): void {
   }
 }
 
-function parseBlogPostPath(path: string): { slug: string; language: BlogLanguage } | null {
-  const normalizedPath = normalizeInternalPath(path);
-  if (normalizedPath.startsWith("/es/blog/")) {
-    const slug = normalizedPath.slice("/es/blog/".length);
-    return slug ? { slug, language: "es" } : null;
-  }
-  if (normalizedPath.startsWith("/blog/")) {
-    const slug = normalizedPath.slice("/blog/".length);
-    return slug ? { slug, language: "en" } : null;
-  }
-  return null;
-}
-
-async function assertRedirectSourceIsNotPublishedPost(sourcePath: string): Promise<void> {
-  const parsedPath = parseBlogPostPath(sourcePath);
-  if (!parsedPath) return;
-  const publishedPost = await getBlogPostBySlug(parsedPath.slug, parsedPath.language);
-  if (publishedPost) {
-    throw Object.assign(new Error("Redirect source is currently a published post URL; unpublish or delete the post before redirecting it"), { statusCode: 400 });
-  }
-}
-
 function normalizeRedirectPayload(input: unknown) {
   const parsed = adminBlogRedirectSchema.parse(input);
   assertLocalPathInput(parsed.sourcePath, "Redirect source");
@@ -243,12 +249,6 @@ async function assertRedirectDecision(sourcePath: string, redirectTargetPath?: s
   throw Object.assign(new Error("Removing a published URL requires a redirect target or explicit no-redirect confirmation"), { statusCode: 400 });
 }
 
-function replaceHrefPath(content: string, sourcePath: string, targetPath: string): string {
-  const escapedSource = sourcePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const hrefPattern = new RegExp(`(href=["'])${escapedSource}(?=(?:["'?#]))`, "g");
-  return content.replace(hrefPattern, `$1${targetPath}`);
-}
-
 async function getAvailableBlogSlug(baseSlug: string, language: BlogLanguage): Promise<string> {
   const normalizedBase = baseSlug || "blog-draft";
   let candidate = normalizedBase;
@@ -260,6 +260,39 @@ async function getAvailableBlogSlug(baseSlug: string, language: BlogLanguage): P
   }
 
   return `${normalizedBase}-${Date.now()}`;
+}
+
+async function reconcileBlogPostLinksFailOpen(
+  postId: number,
+  options: {
+    origin: "ai" | "manual" | "server_fix";
+    generationRunId?: number;
+    warnings?: string[];
+  },
+) {
+  if (!isBlogLinkRuntimeEnabled()) return undefined;
+  try {
+    return await reconcileStoredBlogPostLinks(postId, {
+      origin: options.origin,
+      generationRunId: options.generationRunId,
+      publicSiteUrl: getBlogLinkConfig().publicSiteUrl,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Link reconciliation failed";
+    console.error(`Could not reconcile saved blog links for post ${postId}:`, error);
+    options.warnings?.push(`Link Intelligence warning: ${message}. The draft remains saved for review.`);
+    return undefined;
+  }
+}
+
+async function getBlogPostLinkReportFailOpen(postId: number, context: string) {
+  if (!isBlogLinkRuntimeEnabled()) return undefined;
+  try {
+    return await getBlogPostLinkReport(postId);
+  } catch (error) {
+    console.error(`Could not build ${context} link report for post ${postId}:`, error);
+    return undefined;
+  }
 }
 
 function normalizePostPayload(input: unknown) {
@@ -305,6 +338,8 @@ type AdminBlogGenerateDraftPayload = z.infer<typeof adminBlogGenerateDraftSchema
   topicCandidateId?: number;
   topicKey?: string;
   expertiseAngle?: string;
+  sourceRecommendationIds?: string[];
+  internalLinkTargetIds?: string[];
 };
 type AdminBlogAutoGeneratePayload = z.infer<typeof adminBlogAutoGenerateSchema>;
 
@@ -333,6 +368,8 @@ type BlogGenerationSelectedCandidate = Pick<
   | "searchIntent"
   | "tagIds"
   | "internalLinks"
+  | "internalLinkTargetIds"
+  | "sourceRecommendationIds"
   | "score"
   | "overlapScore"
   | "recommendation"
@@ -421,13 +458,15 @@ async function createGeneratedBlogDraft(
     categoryName: category.name,
   });
   const selectedTags = tags.filter(tag => promptTagIds.includes(tag.id));
-  const selectedInternalLinks = selectBlogInternalLinks({
+  const internalLinkSelection = await selectRuntimeBlogInternalLinks({
     language: payload.language,
     requestedLinks: payload.internalLinks,
+    requestedTargetIds: payload.internalLinkTargetIds,
     topic: payload.topic,
     targetKeyword: payload.targetKeyword,
     categoryName: category.name,
   });
+  const selectedInternalLinks = internalLinkSelection.hrefs;
 
   await updateWorkflowStep(workflow, {
     id: "taxonomy-links",
@@ -443,7 +482,7 @@ async function createGeneratedBlogDraft(
     detail: "Selecting sources from the curated medical allowlist.",
   }, reportProgress);
 
-  const research = selectBlogResearchSources({
+  const research = await selectRuntimeBlogResearchSources({
     topic: payload.topic,
     additionalContext: payload.additionalContext,
     targetKeyword: payload.targetKeyword,
@@ -451,7 +490,7 @@ async function createGeneratedBlogDraft(
     categoryName: category.name,
     tagNames: selectedTags.map(tag => tag.name),
     internalLinks: selectedInternalLinks,
-  });
+  }, payload.sourceRecommendationIds);
   await updateWorkflowStep(workflow, {
     id: "trusted-research",
     label: "Trusted research",
@@ -563,6 +602,7 @@ async function createGeneratedBlogDraft(
     tagNames: selectedTags.map(tag => tag.name),
   });
   const aiRiskNotes = [...generated.riskNotes];
+  aiRiskNotes.push(...internalLinkSelection.warnings);
   const autoAddedTagNames = tags
     .filter(tag => finalTagIds.includes(tag.id) && !payload.tagIds.includes(tag.id))
     .map(tag => tag.name);
@@ -624,6 +664,11 @@ async function createGeneratedBlogDraft(
   const post = generationRunId
     ? await createBlogPostForGenerationRun(postPayload, generationRunId)
     : await createBlogPost(postPayload);
+  const linkReconciliation = await reconcileBlogPostLinksFailOpen(post.id, {
+    origin: "ai",
+    generationRunId,
+    warnings: aiRiskNotes,
+  });
   await updateWorkflowStep(workflow, {
     id: "sanitize-save",
     label: "Sanitize and save",
@@ -632,7 +677,7 @@ async function createGeneratedBlogDraft(
   }, reportProgress);
 
   let imageSummary: BlogImageGenerationSummary | undefined;
-  if (generationRunId) {
+  if (generationRunId && workflow?.mode === "auto-generate") {
     await updateWorkflowStep(workflow, {
       id: "ai-images",
       label: "AI image variants",
@@ -673,6 +718,10 @@ async function createGeneratedBlogDraft(
 
   const persistedPost = await getBlogPostById(post.id) || post;
   const verification = buildBlogVerificationReport(persistedPost);
+  const linkReport = await getBlogPostLinkReportFailOpen(
+    persistedPost.id,
+    "generated",
+  );
   await updateWorkflowStep(workflow, {
     id: "verify",
     label: "Verification",
@@ -690,12 +739,14 @@ async function createGeneratedBlogDraft(
     data: persistedPost,
     checks: validatePostForPublish(persistedPost),
     verification,
+    linkReport,
     ai: {
       riskNotes: aiRiskNotes,
       research,
       semanticMemory,
       editorialBrief,
       images: imageSummary,
+      linkReconciliation,
     },
   };
 }
@@ -809,6 +860,8 @@ async function prepareAutoGenerateWorkflow(
     searchIntent: selectedCandidate.searchIntent,
     tagIds: selectedCandidate.tagIds,
     internalLinks: selectedCandidate.internalLinks,
+    internalLinkTargetIds: selectedCandidate.internalLinkTargetIds,
+    sourceRecommendationIds: selectedCandidate.sourceRecommendationIds,
     score: selectedCandidate.score,
     overlapScore: selectedCandidate.overlapScore,
     recommendation: selectedCandidate.recommendation,
@@ -862,6 +915,8 @@ async function executeAutoGenerateWorkflow(
       categoryId: selectedCandidate.categoryId,
       tagIds: selectedCandidate.tagIds,
       internalLinks: selectedCandidate.internalLinks,
+      internalLinkTargetIds: selectedCandidate.internalLinkTargetIds,
+      sourceRecommendationIds: selectedCandidate.sourceRecommendationIds,
       topicCandidateId: selectedCandidate.topicCandidateId,
       topicKey: selectedCandidate.topicKey,
       contentPillar: selectedCandidate.pillar,
@@ -977,6 +1032,8 @@ function runPostPublishCheckInBackground(path: string): void {
 }
 
 export function registerAdminBlogRoutes(app: Express): void {
+  registerBlogLinkRoutes(app);
+
   const recoverStaleGenerationRuns = () => {
     void markStaleBlogGenerationRunsInterrupted(new Date(Date.now() - 5 * 60 * 1000))
       .catch(error => console.error("Could not recover stale blog generation runs:", error));
@@ -1004,7 +1061,6 @@ export function registerAdminBlogRoutes(app: Express): void {
   app.post("/api/admin/blog/redirects", async (req, res) => {
     try {
       const payload = normalizeRedirectPayload(req.body);
-      await assertRedirectSourceIsNotPublishedPost(payload.sourcePath);
       await assertRedirectHasNoActiveChain(payload.targetPath);
       const redirect = await upsertBlogRedirect(payload);
       const linkingPosts = await findBlogPostsLinkingToPath(redirect.sourcePath);
@@ -1075,25 +1131,52 @@ export function registerAdminBlogRoutes(app: Express): void {
       }
 
       const impactedPosts = await findBlogPostsLinkingToPath(sourcePath);
-      const updatedPosts = [];
+      const snapshots = [];
       for (const impact of impactedPosts) {
         const post = await getBlogPostById(impact.id);
         if (!post?.content) continue;
-        const nextContent = replaceHrefPath(post.content, sourcePath, targetPath);
-        if (nextContent === post.content) continue;
-        const updated = await updateBlogPost(post.id, {
-          content: sanitizeBlogContentHtml(nextContent),
+        snapshots.push({
+          id: post.id,
+          expectedStatus: post.status,
+          expectedUpdatedAt: post.updatedAt,
         });
-        if (updated) {
-          updatedPosts.push({
-            id: updated.id,
-            title: updated.title,
-            slug: updated.slug,
-            language: updated.language,
-            status: updated.status,
-            path: getBlogPostPath(updated),
-          });
+      }
+      const cleanupResults = await rewriteAndReconcileRedirectLinks(
+        snapshots,
+        {
+          redirectSnapshot: {
+            id: redirect.id,
+            sourcePath,
+            targetPath,
+            isActive: redirect.isActive,
+            updatedAt: redirect.updatedAt,
+          },
+          publicSiteUrl: getBlogLinkConfig().publicSiteUrl,
+        },
+      );
+      const updatedIds = cleanupResults
+        .filter(result => result.replacements > 0)
+        .map(result => result.postId);
+      const updatedPosts = [];
+      for (const postId of updatedIds) {
+        const updated = await getBlogPostById(postId);
+        if (!updated) {
+          throw Object.assign(
+            new Error("A cleaned article disappeared before the response was built; refresh the redirect report."),
+            {
+              statusCode: 409,
+              code: "blog_redirect_cleanup_result_changed",
+            },
+          );
         }
+        updatedPosts.push({
+          id: updated.id,
+          title: updated.title,
+          slug: updated.slug,
+          language: updated.language,
+          status: updated.status,
+          path: getBlogPostPath(updated),
+        });
       }
 
       res.status(200).json({
@@ -1103,6 +1186,9 @@ export function registerAdminBlogRoutes(app: Express): void {
           scannedPostCount: impactedPosts.length,
           updatedPostCount: updatedPosts.length,
           updatedPosts,
+          linkReconciliations: cleanupResults
+            .filter(result => result.reconciliation !== null)
+            .map(result => result.reconciliation),
         },
       });
     } catch (error) {
@@ -1135,6 +1221,7 @@ export function registerAdminBlogRoutes(app: Express): void {
   });
 
   app.post("/api/admin/blog/topic-plan", async (req, res) => {
+    let planningRunId: number | undefined;
     try {
       const payload = adminBlogTopicPlannerSchema.parse(req.body);
       assertBlogTopicGenerationConfigured();
@@ -1152,14 +1239,67 @@ export function registerAdminBlogRoutes(app: Express): void {
         getBlogTags(payload.language),
       ]);
 
+      const openRun = await getOpenBlogGenerationRun();
+      if (openRun) {
+        return res.status(409).json({
+          success: false,
+          message: `Generation run ${openRun.id} is already ${openRun.status}. Finish or recover it before planning another topic.`,
+          runId: openRun.id,
+        });
+      }
+      const planningWorkflow = {
+        mode: "topic-plan",
+        generatedAt: new Date().toISOString(),
+        language: payload.language,
+      };
+      let planningRun;
+      try {
+        planningRun = await createBlogGenerationRun({
+          idempotencyKey: `topic-plan:${randomUUID()}`,
+          input: toJsonObject({
+            mode: "topic-plan",
+            language: payload.language,
+          }),
+          workflow: toJsonObject(planningWorkflow),
+        });
+      } catch (error) {
+        if ((error as { code?: string }).code === "23505") {
+          throw Object.assign(
+            new Error("Another generation or planning run started at the same time. Reopen it before trying again."),
+            { statusCode: 409, code: "blog_generation_run_conflict" },
+          );
+        }
+        throw error;
+      }
+      planningRunId = planningRun.id;
       const plan = await buildBlogTopicPlan({
         language: payload.language,
         categories,
         tags,
+        runId: planningRun.id,
       });
+      const completed = await completeBlogPlanningRun(planningRun.id, {
+        workflow: toJsonObject(planningWorkflow),
+        result: toJsonObject(plan),
+      });
+      if (!completed) {
+        throw Object.assign(new Error("The durable topic plan could not be completed"), {
+          statusCode: 409,
+          code: "topic_plan_completion_conflict",
+        });
+      }
 
       res.status(200).json({ success: true, data: plan });
     } catch (error) {
+      if (planningRunId) {
+        await failBlogGenerationRun(planningRunId, {
+          error: error instanceof Error ? error.message : "Topic planning failed",
+          result: toJsonObject({
+            success: false,
+            mode: "topic-plan",
+          }),
+        }).catch(dbError => console.error("Could not persist failed topic planning run:", dbError));
+      }
       try {
         sendValidationError(res, error);
       } catch {
@@ -1403,8 +1543,38 @@ export function registerAdminBlogRoutes(app: Express): void {
   });
 
   app.post("/api/admin/blog/generate-draft", async (req, res) => {
+    let claimedPlanningRun: Awaited<ReturnType<typeof claimCompletedBlogPlanningRun>>;
     try {
-      const payload = adminBlogGenerateDraftSchema.parse(req.body);
+      const requestedPayload = adminBlogGenerateDraftSchema.parse(req.body);
+      let payload: AdminBlogGenerateDraftPayload = requestedPayload;
+      let planningRunId: number | undefined;
+      if (requestedPayload.topicCandidateId) {
+        const candidate = await getBlogTopicCandidateById(requestedPayload.topicCandidateId);
+        if (!candidate) {
+          throw Object.assign(new Error("The selected topic plan candidate was not found. Plan topics again."), {
+            statusCode: 409,
+            code: "topic_candidate_missing",
+          });
+        }
+        if (
+          candidate.recommendation !== "recommended"
+          || candidate.strategyVersion !== HEALING_MINDS_TOPIC_STRATEGY_VERSION
+        ) {
+          throw Object.assign(new Error("The selected topic candidate is no longer eligible. Plan topics again."), {
+            statusCode: 409,
+            code: "topic_candidate_not_selectable",
+          });
+        }
+        const selectedCandidate = await selectBlogTopicCandidate(
+          candidate.runId,
+          candidate.candidateKey,
+        );
+        planningRunId = selectedCandidate.runId;
+        payload = {
+          ...requestedPayload,
+          ...buildPersistedTopicDraftOverrides(selectedCandidate),
+        };
+      }
       const possibleSensitiveText = [payload.topic, payload.targetKeyword, payload.additionalContext]
         .filter(Boolean)
         .join(" ");
@@ -1432,6 +1602,25 @@ export function registerAdminBlogRoutes(app: Express): void {
         additionalContext: payload.additionalContext,
         language: payload.language,
       });
+      if (planningRunId) {
+        try {
+          claimedPlanningRun = await claimCompletedBlogPlanningRun(planningRunId);
+        } catch (error) {
+          if ((error as { code?: string }).code === "23505") {
+            throw Object.assign(
+              new Error("Another generation run is active. Finish or recover it before using this topic plan."),
+              { statusCode: 409, code: "blog_generation_run_conflict" },
+            );
+          }
+          throw error;
+        }
+        if (!claimedPlanningRun) {
+          throw Object.assign(
+            new Error("This topic plan was already used or is no longer available. Plan topics again."),
+            { statusCode: 409, code: "topic_plan_already_used" },
+          );
+        }
+      }
       const result = await createGeneratedBlogDraft({
         ...payload,
         topicKey: buildTopicKey(
@@ -1440,12 +1629,42 @@ export function registerAdminBlogRoutes(app: Express): void {
         ),
         expertiseAngle: payload.additionalContext || undefined,
         topicStrategyVersion: payload.topicStrategyVersion || HEALING_MINDS_TOPIC_STRATEGY_VERSION,
-      });
+      }, undefined, undefined, claimedPlanningRun?.id);
+      if (claimedPlanningRun) {
+        const completed = await completeBlogGenerationRun(claimedPlanningRun.id, {
+          postId: result.data.id,
+          result: toJsonObject({
+            success: true,
+            ...result,
+            topicPlan: claimedPlanningRun.result,
+          }),
+        });
+        if (!completed) {
+          throw Object.assign(
+            new Error("The generated draft was saved, but its planning run could not be finalized"),
+            {
+              statusCode: 409,
+              code: "guided_generation_completion_conflict",
+              postId: result.data.id,
+            },
+          );
+        }
+      }
       res.status(201).json({
         success: true,
         ...result,
       });
     } catch (error) {
+      if (claimedPlanningRun) {
+        await failBlogGenerationRun(claimedPlanningRun.id, {
+          error: error instanceof Error ? error.message : "Guided draft generation failed",
+          result: toJsonObject({
+            success: false,
+            topicPlan: claimedPlanningRun.result,
+            postId: (error as { postId?: number }).postId || null,
+          }),
+        }).catch(dbError => console.error("Could not persist failed guided generation run:", dbError));
+      }
       try {
         sendValidationError(res, error);
       } catch {
@@ -1461,11 +1680,15 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const post = await getBlogPostById(id);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      const linkReport = isBlogLinkRuntimeEnabled()
+        ? await getBlogPostLinkReport(post.id)
+        : undefined;
       res.status(200).json({
         success: true,
         data: post,
         checks: validatePostForPublish(post),
         verification: buildBlogVerificationReport(post),
+        linkReport,
       });
     } catch (error) {
       sendDbError(res, error);
@@ -1479,7 +1702,20 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const post = await getBlogPostById(id);
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
-      res.status(200).json({ success: true, data: buildBlogVerificationReport(post) });
+      if (isBlogLinkRuntimeEnabled()) {
+        await reconcileStoredBlogPostLinks(post.id, {
+          origin: "manual",
+          publicSiteUrl: getBlogLinkConfig().publicSiteUrl,
+        });
+      }
+      const linkReport = isBlogLinkRuntimeEnabled()
+        ? await getBlogPostLinkReport(post.id)
+        : undefined;
+      res.status(200).json({
+        success: true,
+        data: buildBlogVerificationReport(post),
+        linkReport,
+      });
     } catch (error) {
       sendDbError(res, error);
     }
@@ -1526,6 +1762,12 @@ export function registerAdminBlogRoutes(app: Express): void {
       if (!result.success) {
         return res.status(400).json({ success: false, message: result.message, data: result });
       }
+      const linkReconciliation = result.post
+        ? await reconcileBlogPostLinksFailOpen(result.post.id, { origin: "server_fix" })
+        : undefined;
+      const linkReport = result.post
+        ? await getBlogPostLinkReportFailOpen(result.post.id, "fixed draft")
+        : undefined;
 
       res.status(200).json({
         success: true,
@@ -1534,6 +1776,8 @@ export function registerAdminBlogRoutes(app: Express): void {
           post: result.post,
           verification: result.verification,
           checks: result.post ? validatePostForPublish(result.post) : validatePostForPublish(post),
+          linkReconciliation,
+          linkReport,
         },
       });
     } catch (error) {
@@ -1549,11 +1793,15 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const payload = normalizePostPayload(req.body);
       const post = await createBlogPost(payload);
+      const linkReconciliation = await reconcileBlogPostLinksFailOpen(post.id, { origin: "manual" });
+      const linkReport = await getBlogPostLinkReportFailOpen(post.id, "saved draft");
       res.status(201).json({
         success: true,
         data: post,
         checks: validatePostForPublish(post),
         verification: buildBlogVerificationReport(post),
+        linkReconciliation,
+        linkReport,
       });
     } catch (error) {
       try {
@@ -1574,6 +1822,20 @@ export function registerAdminBlogRoutes(app: Express): void {
       if (!existing) return res.status(404).json({ success: false, message: "Blog post not found" });
 
       if (existing.status === "published") {
+        if (
+          isBlogLinkRuntimeEnabled()
+          && (
+            Object.prototype.hasOwnProperty.call(payload, "content")
+            || Object.prototype.hasOwnProperty.call(payload, "slug")
+            || Object.prototype.hasOwnProperty.call(payload, "language")
+            || Object.prototype.hasOwnProperty.call(payload, "title")
+          )
+        ) {
+          return res.status(409).json({
+            success: false,
+            message: "Move the published post to draft before changing content, title, slug, or language so links can be reviewed safely.",
+          });
+        }
         const nextSlug = typeof payload.slug === "string" ? payload.slug : existing.slug;
         const nextLanguage = payload.language === "en" || payload.language === "es" ? payload.language : existing.language;
         const nextPath = getBlogPostPath({ slug: nextSlug, language: nextLanguage });
@@ -1586,8 +1848,13 @@ export function registerAdminBlogRoutes(app: Express): void {
         }
       }
 
-      const post = await updateBlogPost(id, payload);
+      const post = await updateBlogPost(id, payload, {
+        expectedStatus: existing.status,
+        expectedUpdatedAt: existing.updatedAt,
+      });
       if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      const linkReconciliation = await reconcileBlogPostLinksFailOpen(post.id, { origin: "manual" });
+      const linkReport = await getBlogPostLinkReportFailOpen(post.id, "saved draft");
       if (
         post.status === "draft"
         && (
@@ -1602,6 +1869,8 @@ export function registerAdminBlogRoutes(app: Express): void {
         data: post,
         checks: validatePostForPublish(post),
         verification: buildBlogVerificationReport(post),
+        linkReconciliation,
+        linkReport,
       });
     } catch (error) {
       try {
@@ -1626,13 +1895,67 @@ export function registerAdminBlogRoutes(app: Express): void {
       } = adminBlogStatusSchema.parse(req.body);
       const existing = await getBlogPostById(id);
       if (!existing) return res.status(404).json({ success: false, message: "Blog post not found" });
+      if (status === existing.status) {
+        return res.status(409).json({
+          success: false,
+          code: "blog_post_status_transition_redundant",
+          message: `The article is already ${status.replace("_", " ")}; choose a different status.`,
+        });
+      }
+      const currentPath = getBlogPostPath(existing);
+      const transitionGuard: BlogPostStatusTransitionGuard = {
+        expectedStatus: existing.status,
+        expectedUpdatedAt: existing.updatedAt,
+      };
 
       if (status === "published") {
+        const redirectSnapshot = await getBlogRedirectBySourcePath(currentPath);
+        transitionGuard.redirectSnapshot = redirectSnapshot
+          ? {
+              id: redirectSnapshot.id,
+              sourcePath: redirectSnapshot.sourcePath,
+              targetPath: redirectSnapshot.targetPath,
+              isActive: redirectSnapshot.isActive,
+              updatedAt: redirectSnapshot.updatedAt,
+            }
+          : null;
         assertPublishReady(existing);
+        if (isBlogLinkRuntimeEnabled()) {
+          await reconcileStoredBlogPostLinks(existing.id, {
+            origin: "manual",
+            publicSiteUrl: getBlogLinkConfig().publicSiteUrl,
+          });
+          const readyReport = await assertBlogPostLinksPublishReady(existing.id);
+          transitionGuard.linkVersions = Array.from(
+            new Map(readyReport.usages.map(usage => [
+              usage.link.id,
+              {
+                id: usage.link.id,
+                updatedAt: usage.link.updatedAt,
+              },
+            ])).values(),
+          );
+          transitionGuard.sourceVersions = Array.from(
+            new Map(readyReport.usages.flatMap(usage => (
+              usage.link.source
+                ? [[
+                    usage.link.source.id,
+                    {
+                      id: usage.link.source.id,
+                      updatedAt: usage.link.source.updatedAt,
+                    },
+                  ] as const]
+                : []
+            ))).values(),
+          );
+          const preparedTarget = await prepareManagedBlogPostTargetForPublish(existing.id);
+          transitionGuard.managedTargetVersion = {
+            id: preparedTarget.id,
+            updatedAt: preparedTarget.updatedAt,
+          };
+        }
       }
 
-      let redirect = null;
-      let deactivatedRedirect = null;
       let redirectSourcePath: string | null = null;
       let redirectTargetPathToCreate: string | null = null;
       if (existing.status === "published" && status !== "published") {
@@ -1646,27 +1969,45 @@ export function registerAdminBlogRoutes(app: Express): void {
         redirectTargetPathToCreate = await assertRedirectDecision(redirectSourcePath, redirectTargetPath, confirmNoRedirect);
       }
 
-      const post = await updateBlogPostStatusWithImageGuard(
+      const transitionPlan = buildBlogPostStatusTransitionPlan({
+        currentStatus: existing.status,
+        nextStatus: status,
+        currentPath,
+        redirectTargetPath: redirectTargetPathToCreate,
+      });
+      const transition = await updateBlogPostStatusWithImageGuard(
         id,
         status,
         status === "published" ? existing.publishedAt || new Date() : undefined,
+        transitionGuard,
+        {
+          redirect: transitionPlan.createRedirect && redirectSourcePath && redirectTargetPathToCreate
+            ? {
+                sourcePath: redirectSourcePath,
+                targetPath: redirectTargetPathToCreate,
+                statusCode: 301,
+                reason: "unpublish",
+                isActive: true,
+                sourcePostId: existing.id,
+              }
+            : null,
+          deactivateRedirectPath: transitionPlan.deactivateRedirectPath,
+        },
       );
 
-      if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
-      if (redirectSourcePath && redirectTargetPathToCreate) {
-        redirect = await upsertBlogRedirect({
-          sourcePath: redirectSourcePath,
-          targetPath: redirectTargetPathToCreate,
-          statusCode: 301,
-          reason: "unpublish",
-          isActive: true,
-          sourcePostId: existing.id,
-        });
-      }
+      if (!transition) return res.status(404).json({ success: false, message: "Blog post not found" });
+      const {
+        post,
+        redirect,
+        deactivatedRedirect,
+        managedTarget,
+      } = transition;
       if (status === "published") {
-        deactivatedRedirect = await deactivateBlogRedirect(getBlogPostPath(post));
         runPostPublishCheckInBackground(getBlogPostPath(post));
       }
+      const linkReport = isBlogLinkRuntimeEnabled()
+        ? await getBlogPostLinkReport(post.id)
+        : undefined;
 
       res.status(200).json({
         success: true,
@@ -1675,6 +2016,8 @@ export function registerAdminBlogRoutes(app: Express): void {
         deactivatedRedirect,
         checks: validatePostForPublish(post),
         verification: buildBlogVerificationReport(post),
+        linkReport,
+        managedTarget,
       });
     } catch (error) {
       try {
@@ -1738,8 +2081,17 @@ export function registerAdminBlogRoutes(app: Express): void {
         }
       }
 
-      await deleteAllBlogImageObjectsForPost(id);
-      const deletion = await deleteBlogPostWithRedirect(id, redirectRequest);
+      const deletion = await deleteBlogPostWithRedirect(
+        id,
+        redirectRequest,
+        {
+          expectedStatus: post.status,
+          expectedUpdatedAt: post.updatedAt,
+          deletePhysicalImageObjects: async objectKeys => {
+            await deleteBlogImageObjectsOnly(objectKeys);
+          },
+        },
+      );
       if (!deletion.deleted) {
         return res.status(404).json({ success: false, message: "Blog post not found" });
       }
