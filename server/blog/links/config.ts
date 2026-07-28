@@ -1,4 +1,13 @@
 export const BLOG_LINK_POLICY_VERSION = "healing-link-policy-v1";
+/**
+ * Durable cutover marker for Link Intelligence, written into
+ * blog_link_audit_runs by scripts/blog-link-backfill.ts after a full apply pass.
+ * Schema presence alone does not prove the library was seeded and the posts
+ * were backfilled: without this marker the feature can be enabled over empty
+ * tables and report that no links exist. scripts/post-merge.sh checks the same
+ * key, so keep both in sync.
+ */
+export const BLOG_LINK_CUTOVER_MARKER_KEY = "link-intelligence-cutover-backfill";
 export const BLOG_LINK_SCORE_VERSION = "healing-link-score-v1";
 export const DEFAULT_BLOG_LINK_PUBLIC_SITE_URL = "https://www.healingmindsp.com";
 export const BLOG_LINK_CRISIS_SOURCE_STABLE_KEY = "988-lifeline";

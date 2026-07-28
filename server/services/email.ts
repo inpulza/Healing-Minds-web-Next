@@ -119,10 +119,10 @@ export class ResendEmailService implements EmailService {
 
         <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 25px 0;">
           <h3 style="color: #16a34a; margin: 0 0 15px 0; font-size: 18px;">Información de Contacto</h3>
-          <p style="margin: 5px 0; color: #374151;"><strong>Teléfono:</strong> (239) 276-3030</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Teléfono:</strong> (239) 423-0272</p>
           <p style="margin: 5px 0; color: #374151;"><strong>Email:</strong> info@healingmindsp.com</p>
           <p style="margin: 5px 0; color: #374151;"><strong>Dirección:</strong> Naples, FL</p>
-          <p style="margin: 5px 0; color: #374151;"><strong>Horarios:</strong> Lunes - Viernes, 9:00 AM - 5:00 PM</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Horarios:</strong> Lunes - Viernes, 8:00 AM - 5:00 PM</p>
         </div>
 
         <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
@@ -158,10 +158,10 @@ export class ResendEmailService implements EmailService {
 
         <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 25px 0;">
           <h3 style="color: #16a34a; margin: 0 0 15px 0; font-size: 18px;">Contact Information</h3>
-          <p style="margin: 5px 0; color: #374151;"><strong>Phone:</strong> (239) 276-3030</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Phone:</strong> (239) 423-0272</p>
           <p style="margin: 5px 0; color: #374151;"><strong>Email:</strong> info@healingmindsp.com</p>
           <p style="margin: 5px 0; color: #374151;"><strong>Address:</strong> Naples, FL</p>
-          <p style="margin: 5px 0; color: #374151;"><strong>Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM</p>
+          <p style="margin: 5px 0; color: #374151;"><strong>Hours:</strong> Monday - Friday, 8:00 AM - 5:00 PM</p>
         </div>
 
         <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">

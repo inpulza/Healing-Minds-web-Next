@@ -117,7 +117,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         !pathname.startsWith('/blog/') &&
         !pathname.startsWith('/es/blog/') &&
         !pathname.startsWith('/images/') &&
-        !pathname.startsWith('/api/')
+        !pathname.startsWith('/api/') &&
+        // Vite dev sirve módulos fuente bajo /src/ (p.ej. /src/components/admin/blog/*).
+        // Solo en desarrollo: en producción esas rutas no existen y deben seguir
+        // devolviendo 410 como cualquier otra URL fantasma heredada.
+        (isProduction || (!pathname.startsWith('/src/') && !pathname.startsWith('/@')))
       )
     ) {
       console.log(`🚫 410 Gone: WordPress legacy URL blocked - ${url}`);

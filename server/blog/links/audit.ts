@@ -15,7 +15,7 @@ import {
 import { db } from "../../db";
 import { getActiveBlogRedirect } from "../storage";
 import { isKnownRoute } from "../../utils/html-injection";
-import { getBlogLinkConfig } from "./config";
+import { BLOG_LINK_CUTOVER_MARKER_KEY, getBlogLinkConfig } from "./config";
 import {
   isForbiddenExternalHostname,
   rememberCrossDomainBlogLinkRedirect,
@@ -628,6 +628,17 @@ export async function createBlogLinkAuditRun(input: {
   linkIds: number[];
   requestedBy?: string | null;
 }): Promise<{ run: BlogLinkAuditRun; created: boolean }> {
+  // The cutover marker lives in this same table (it is the durable evidence the
+  // startup guard looks for) and API callers may choose their own idempotency
+  // key, so that one key is reserved: a normal audit must not be able to occupy
+  // it, overwrite it, or make an unfinished cutover look finished.
+  if (input.idempotencyKey === BLOG_LINK_CUTOVER_MARKER_KEY) {
+    throw Object.assign(
+      new Error("This idempotency key is reserved for the Link Intelligence cutover marker"),
+      { statusCode: 400, code: "blog_link_audit_reserved_idempotency_key" },
+    );
+  }
+
   const canonicalLinkIds = canonicalizeBlogLinkAuditIds(input.linkIds);
   const existing = await getBlogLinkAuditRunByIdempotencyKey(input.idempotencyKey);
   if (existing) {

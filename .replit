@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web", "postgresql-16", "python-3.11"]
+modules = ["nodejs-20", "web", "python-3.11", "postgresql-16"]
 run = "npm run dev"
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
@@ -14,6 +14,14 @@ run = ["npm", "run", "start"]
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3002
+
+[[ports]]
+localPort = 5055
+externalPort = 3000
 
 [env]
 PORT = "5000"
@@ -44,3 +52,21 @@ waitForPort = 5000
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 180000
+
+[userenv]
+
+[userenv.development]
+    # BLOG_ADMIN_AUTH_MODE is deliberately NOT set to "off" here. The development
+    # preview is served on a public URL, so disabling admin auth would expose
+    # /api/contact-messages (patient enquiries) and the blog mutation APIs to anyone
+    # who reaches it. Sign in with BLOG_ADMIN_USERNAME / BLOG_ADMIN_PASSWORD instead.
+    BLOG_IMAGE_ENABLED = "true"
+BLOG_TOPIC_ENABLED = "true"
+BLOG_LINK_ENABLED = "true"
+
+[userenv.production]
+BLOG_IMAGE_ENABLED = "true"
+BLOG_TOPIC_ENABLED = "true"
+
+[objectStorage]
+defaultBucketID = "replit-objstore-325fceb0-c446-4815-996f-ca012b98d415"

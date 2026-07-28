@@ -5,11 +5,13 @@ import {
   inArray,
 } from "drizzle-orm";
 import {
+  blogLinkAuditRuns,
   blogLinks,
   blogPosts,
   type BlogPostStatus,
 } from "@shared/schema";
 import { db, pool } from "../server/db";
+import { BLOG_LINK_CUTOVER_MARKER_KEY } from "../server/blog/links/config";
 import { extractBlogLinkDocument } from "../server/blog/links/extract";
 import { createCanonicalBlogLinkKey } from "../server/blog/links/normalization";
 import { seedBlogLinkLibrary } from "../server/blog/links/seed";
@@ -117,7 +119,61 @@ async function loadKnownLinks(
   return byHref;
 }
 
+/**
+ * Record the durable cutover marker so post-merge startup can tell "schema
+ * applied" apart from "seeded and backfilled". Only a full apply pass counts:
+ * a resumed run (--after-id) says nothing about the posts before the cursor.
+ */
+async function recordCutoverMarker(
+  options: BlogLinkBackfillOptions,
+  report: Record<string, unknown>,
+  startedAt: Date,
+): Promise<void> {
+  const completedAt = new Date();
+  const values = {
+    idempotencyKey: BLOG_LINK_CUTOVER_MARKER_KEY,
+    status: "completed" as const,
+    input: {
+      marker: "link-intelligence-cutover",
+      mode: options.mode,
+      batchSize: options.batchSize,
+      // Recorded so the startup guard can validate the whole signature instead of
+      // trusting the key alone: only a full apply pass from the beginning proves
+      // every post was scanned.
+      resumedAfterId: options.afterId,
+    },
+    result: report,
+    requestedBy: "scripts/blog-link-backfill.ts",
+    startedAt,
+    completedAt,
+    updatedAt: completedAt,
+  };
+
+  await db
+    .insert(blogLinkAuditRuns)
+    .values(values)
+    .onConflictDoUpdate({
+      target: blogLinkAuditRuns.idempotencyKey,
+      set: {
+        status: values.status,
+        input: values.input,
+        result: values.result,
+        requestedBy: values.requestedBy,
+        startedAt: values.startedAt,
+        completedAt: values.completedAt,
+        updatedAt: values.updatedAt,
+        leaseToken: null,
+      },
+    });
+
+  console.log(
+    `Recorded Link Intelligence cutover marker "${BLOG_LINK_CUTOVER_MARKER_KEY}" `
+    + `at ${completedAt.toISOString()}.`,
+  );
+}
+
 async function runBackfill(options: BlogLinkBackfillOptions): Promise<void> {
+  const startedAt = new Date();
   const publicSiteUrl = getSeoSiteConfig().siteBaseUrl;
   const totals = {
     postsScanned: 0,
@@ -249,6 +305,21 @@ async function runBackfill(options: BlogLinkBackfillOptions): Promise<void> {
       + `after resolving them, resume with --after-id=${safeResumeAfterId}`,
     );
   }
+
+  if (options.mode !== "apply") {
+    return;
+  }
+
+  if (options.afterId !== 0) {
+    console.log(
+      "Cutover marker NOT recorded: this run resumed from "
+      + `--after-id=${options.afterId}, so posts before that id were not applied. `
+      + "Re-run without --after-id to record it.",
+    );
+    return;
+  }
+
+  await recordCutoverMarker(options, report, startedAt);
 }
 
 const options = parseBlogLinkBackfillOptions(process.argv.slice(2));
