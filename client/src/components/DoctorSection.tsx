@@ -1,11 +1,23 @@
 import { Link } from 'wouter';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getCorrespondingURL } from '@/utils/urlMapping';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import doctorImage from '@assets/doctor-consultation-square.webp';
+import { doctorSectionContent } from '@/data/pageContent/mainPages/sharedSections';
 
 const DoctorSection = () => {
   const { language } = useLanguage();
+
+  // This section is reused on Spanish routes (including /es/psiquiatra-california),
+  // so the CTA must stay in the visitor's language: a hardcoded /services would
+  // flip the URL-driven language context back to English.
+  const servicesHref = language === 'es'
+    ? getCorrespondingURL('/services', 'es') ?? '/es/servicios'
+    : '/services';
+
+  const content = doctorSectionContent[language];
+  const s = (key: string) => content.sections.find((section) => section.key === key)!;
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
@@ -24,23 +36,20 @@ const DoctorSection = () => {
               <div className="mb-6 sm:mb-8">
                 <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600" data-testid="patient-count">15+</div>
                 <div className="text-gray-600 font-body text-sm sm:text-base" data-testid="patient-label">
-                  {language === 'en' ? 'Years of experience' : 'Años de experiencia'}
+                  {s('yearsLabel').paragraphs![0]}
                 </div>
               </div>
 
               <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed" data-testid="doctor-section-description">
-                {language === 'en'
-                  ? 'We provide compassionate care and advanced treatments tailored to your needs. Experience convenient access to mental healthcare.'
-                  : 'Brindamos atención compasiva y tratamientos avanzados adaptados a sus necesidades. Experimente un acceso conveniente a la atención de salud mental.'
-                }
+                {s('description').paragraphs![0]}
               </p>
 
-              <Link href="/services">
+              <Link href={servicesHref}>
                 <Button
                   className="group inline-flex items-center justify-center gap-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 sm:px-8 py-6 sm:py-7"
                   data-testid="explore-services-button"
                 >
-                  <span>{language === 'en' ? 'Explore services' : 'Explorar servicios'}</span>
+                  <span>{s('cta').bullets![0]}</span>
                   <ArrowRight className="w-8 h-8 sm:w-9 sm:h-9 p-2 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full transition-all duration-300 bg-green-600 text-white flex-shrink-0" />
                 </Button>
               </Link>

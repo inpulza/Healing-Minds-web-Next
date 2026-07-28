@@ -34,14 +34,20 @@ const Footer = () => {
     { href: language === 'en' ? '/cancellation-policy' : '/es/politica-cancelacion', label: language === 'en' ? 'Cancellation Policy' : 'Política de Cancelación' },
     { href: language === 'en' ? '/billing-policy' : '/es/politica-facturacion', label: language === 'en' ? 'Billing Policy' : 'Política de Facturación' },
     { href: language === 'en' ? '/emergency-policy' : '/es/politica-emergencias', label: language === 'en' ? 'Emergency Policy' : 'Política de Emergencias' },
-    { href: language === 'en' ? '/patient-rights' : '/es/derechos-paciente', label: language === 'en' ? 'Patient Rights' : 'Derechos del Paciente' }
+    { href: language === 'en' ? '/patient-rights' : '/es/derechos-paciente', label: language === 'en' ? 'Patient Rights' : 'Derechos del Paciente' },
+    { href: language === 'en' ? '/telehealth-consent' : '/es/consentimiento-telesalud', label: language === 'en' ? 'Telehealth Consent' : 'Consentimiento de Telesalud' },
+    { href: language === 'en' ? '/no-surprises-act' : '/es/ley-sin-sorpresas', label: language === 'en' ? 'No Surprises Act' : 'Ley Sin Sorpresas' },
+    { href: language === 'en' ? '/communications-policy' : '/es/politica-comunicaciones', label: language === 'en' ? 'Communications Policy' : 'Política de Comunicaciones' }
   ];
 
   const legalPolicies = [
     { href: language === 'en' ? '/privacy-policy' : '/es/politica-privacidad', label: language === 'en' ? 'Privacy Policy' : 'Política de Privacidad' },
     { href: language === 'en' ? '/terms-of-service' : '/es/terminos-servicio', label: language === 'en' ? 'Terms of Service' : 'Términos de Servicio' },
     { href: language === 'en' ? '/hipaa-notice' : '/es/aviso-hipaa', label: language === 'en' ? 'HIPAA Notice' : 'Aviso HIPAA' },
-    { href: language === 'en' ? '/cookie-policy' : '/es/politica-cookies', label: language === 'en' ? 'Cookie Policy' : 'Política de Cookies' }
+    { href: language === 'en' ? '/cookie-policy' : '/es/politica-cookies', label: language === 'en' ? 'Cookie Policy' : 'Política de Cookies' },
+    { href: language === 'en' ? '/medical-disclaimer' : '/es/descargo-responsabilidad-medica', label: language === 'en' ? 'Medical Disclaimer' : 'Descargo Médico' },
+    { href: language === 'en' ? '/accessibility-statement' : '/es/declaracion-accesibilidad', label: language === 'en' ? 'Accessibility' : 'Accesibilidad' },
+    { href: language === 'en' ? '/nondiscrimination-notice' : '/es/aviso-no-discriminacion', label: language === 'en' ? 'Nondiscrimination' : 'No Discriminación' }
   ];
 
   const serviceAreas = [

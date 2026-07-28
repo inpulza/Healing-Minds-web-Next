@@ -71,6 +71,7 @@ const TelehealthVideoWidget = () => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const cardVideoRef = useRef<HTMLVideoElement>(null);
   const avatarVideoRef = useRef<HTMLVideoElement>(null);
+  const restoreFocusRef = useRef(false);
 
   // Appear after a beat so the widget never competes with the hero for first paint.
   useEffect(() => {
@@ -89,9 +90,11 @@ const TelehealthVideoWidget = () => {
 
   const collapse = useCallback(() => {
     cardVideoRef.current?.pause();
+    // Focus is restored in an effect, not here: the avatar button is unmounted while the card is
+    // shown, so triggerRef.current is still null at this point and a synchronous focus() is a no-op.
+    restoreFocusRef.current = true;
     setIsExpanded(false);
     setShouldLoadCard(false);
-    triggerRef.current?.focus();
   }, []);
 
   const expand = useCallback(() => {
@@ -115,8 +118,20 @@ const TelehealthVideoWidget = () => {
   }, [isExpanded, collapse]);
 
   useEffect(() => {
-    if (isExpanded) closeRef.current?.focus();
+    if (isExpanded) {
+      closeRef.current?.focus();
+    } else if (restoreFocusRef.current) {
+      restoreFocusRef.current = false;
+      triggerRef.current?.focus();
+    }
   }, [isExpanded]);
+
+  // Reset to the rest state on navigation so an open card doesn't persist across pages.
+  // Intentionally does not set restoreFocusRef: focus should move to the new page, not the avatar.
+  useEffect(() => {
+    setIsExpanded(false);
+    setShouldLoadCard(false);
+  }, [location]);
 
   // Don't burn battery looping video in a background tab.
   useEffect(() => {
@@ -243,12 +258,12 @@ const TelehealthVideoWidget = () => {
             aria-label={copy.open}
             aria-expanded={false}
             data-testid="button-open-telehealth-widget"
-            className="absolute bottom-0 right-0 block w-16 h-16 lg:w-[72px] lg:h-[72px] rounded-full focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-offset-2"
+            className="absolute bottom-0 right-0 block w-16 h-16 lg:w-[72px] lg:h-[72px] rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-green-500 focus-visible:ring-offset-2"
           >
             {/* The circular crop lives on this inner span, not on the button: `overflow-hidden` on the
                 button would also clip the availability dot, burying it inside the circle instead of
                 letting it sit on the edge. */}
-            <span className="block w-full h-full rounded-full overflow-hidden border-[3px] border-white shadow-2xl bg-black">
+            <span className="block w-full h-full rounded-full overflow-hidden border-[3px] border-white shadow-[0_2px_6px_rgba(0,0,0,0.25),0_8px_24px_rgba(0,0,0,0.35)] bg-black">
               {motionKnown && !reduceMotion ? (
                 <video
                   ref={avatarVideoRef}
@@ -268,9 +283,11 @@ const TelehealthVideoWidget = () => {
               )}
             </span>
 
-            {/* Sits at roughly 45 degrees on the circle's edge, straddling it. */}
+            {/* Centered ON the circle's edge at 45°: offset from the corner = R(1 − 1/√2) − dot/2,
+                so the avatar's circumference passes through the dot's center (not tangent to it).
+                R=32 → ~1.5px (mobile); R=36 → ~2.5px (desktop). Border width matches the avatar's. */}
             <span
-              className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-[3px] border-white shadow-sm"
+              className="absolute bottom-[1.5px] right-[1.5px] lg:bottom-[2.5px] lg:right-[2.5px] w-4 h-4 rounded-full bg-green-500 border-[3px] border-white shadow-[0_1px_4px_rgba(0,0,0,0.4)]"
               aria-hidden="true"
             />
           </motion.button>

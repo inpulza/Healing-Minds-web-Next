@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Heart, Brain, Smile, Sun } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
+import { depressionTreatmentContent } from '@/data/pageContent/services/depressionTreatment';
 
 // Import generated images
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp";
@@ -17,15 +18,35 @@ import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5
 import hopeSymbolImage from "@assets/generated_images/Hope_and_growth_symbolism_978bb907.webp";
 import consultationImage from "../../assets/consultation-image.webp";
 
+const markdownToHtml = (text: string) =>
+  text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+const renderHeading = (text: string) =>
+  text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**') ? (
+      <span key={i} className="font-display italic text-green-700">{part.slice(2, -2)}</span>
+    ) : (
+      part
+    ),
+  );
+
 const DepressionTreatment = () => {
   const { language } = useLanguage();
   const { trackServiceView } = useTikTokEvents();
+  const enS = (key: string) => depressionTreatmentContent.en.sections.find((x) => x.key === key)!;
+  const esS = (key: string) => depressionTreatmentContent.es.sections.find((x) => x.key === key)!;
+  const s = (key: string) => depressionTreatmentContent[language].sections.find((x) => x.key === key)!;
+  const bilingualItems = (key: string) => {
+    const en = enS(key).bullets!;
+    const es = esS(key).bullets!;
+    return en.map((e, i) => ({ en: e, es: es[i] }));
+  };
 
   useEffect(() => {
     const seoData = {
       title: language === 'en' 
         ? 'Depression Treatment Naples FL - Expert Psychiatrist | Dr. Melva Reve'
-        : 'Tratamiento para la Depresión Naples FL - Psiquiatra Certificada | Dra. Melva Reve',
+        : 'Tratamiento para la Depresión Naples FL - Psiquiatra con Licencia | Dra. Melva Reve',
       description: language === 'en'
         ? 'Expert depression treatment in Naples, FL. Dr. Melva Reve provides compassionate psychiatric care for major depression, postpartum depression, seasonal depression. Bilingual services available.'
         : 'Tratamiento experto para la depresión en Naples, FL. La Dra. Melva Reve brinda atención psiquiátrica compasiva para depresión mayor, depresión posparto, depresión estacional. Servicios bilingües disponibles.',
@@ -41,115 +62,33 @@ const DepressionTreatment = () => {
     trackServiceView('Depression Treatment', 'depression');
   }, [language, trackServiceView]);
 
-  const symptoms = language === 'en' ? [
-    'Persistent sadness or emptiness',
-    'Loss of interest in activities',
-    'Significant weight or appetite changes',
-    'Sleep disturbances',
-    'Fatigue or loss of energy',
-    'Feelings of worthlessness or guilt',
-    'Difficulty concentrating',
-    'Thoughts of death or suicide'
-  ] : [
-    'Tristeza persistente o vacío',
-    'Pérdida de interés en actividades',
-    'Cambios significativos de peso o apetito',
-    'Trastornos del sueño',
-    'Fatiga o pérdida de energía',
-    'Sentimientos de inutilidad o culpa',
-    'Dificultad para concentrarse',
-    'Pensamientos de muerte o suicidio'
-  ];
+  const symptoms = s('symptoms-list').bullets!;
 
-  const treatments = language === 'en' ? [
-    {
-      title: 'Comprehensive Assessment',
-      description: 'Thorough evaluation to understand your unique depression symptoms and contributing factors.'
-    },
-    {
-      title: 'Medication Management',
-      description: 'Careful selection and monitoring of antidepressant medications tailored to your needs.'
-    },
-    {
-      title: 'Psychotherapy Integration',
-      description: 'Coordination with therapy services for optimal treatment outcomes.'
-    },
-    {
-      title: 'Lifestyle Counseling',
-      description: 'Guidance on sleep, exercise, nutrition, and stress management techniques.'
-    },
-    {
-      title: 'Crisis Support',
-      description: 'Available support during difficult periods with safety planning when needed.'
-    },
-    {
-      title: 'Long-term Recovery',
-      description: 'Ongoing monitoring and adjustment of treatment to maintain wellness.'
-    }
-  ] : [
-    {
-      title: 'Evaluación Integral',
-      description: 'Evaluación exhaustiva para entender sus síntomas únicos de depresión y factores contribuyentes.'
-    },
-    {
-      title: 'Manejo de Medicamentos',
-      description: 'Selección cuidadosa y monitoreo de medicamentos antidepresivos adaptados a sus necesidades.'
-    },
-    {
-      title: 'Integración de Psicoterapia',
-      description: 'Coordinación con servicios de terapia para resultados óptimos de tratamiento.'
-    },
-    {
-      title: 'Consejería de Estilo de Vida',
-      description: 'Orientación sobre sueño, ejercicio, nutrición y técnicas de manejo del estrés.'
-    },
-    {
-      title: 'Apoyo en Crisis',
-      description: 'Apoyo disponible durante períodos difíciles con planificación de seguridad cuando sea necesario.'
-    },
-    {
-      title: 'Recuperación a Largo Plazo',
-      description: 'Monitoreo continuo y ajuste del tratamiento para mantener el bienestar.'
-    }
-  ];
+  const treatments = s('treatments').bullets!.map((title, i) => ({
+    title,
+    description: s('treatment-descriptions').bullets![i]
+  }));
 
   // Data for the ServiceHeroMasonry component
   const heroData = {
     tagline: {
-      en: 'Hope & Healing',
-      es: 'Esperanza y Sanación'
+      en: enS('hero-tagline').paragraphs![0],
+      es: esS('hero-tagline').paragraphs![0]
     },
     title: {
-      en: 'Depression Treatment in Naples, FL',
-      es: 'Tratamiento para la Depresión en Naples, FL'
+      en: depressionTreatmentContent.en.title,
+      es: depressionTreatmentContent.es.title
     },
     description: {
-      en: 'Find hope and healing with expert depression treatment. Dr. Melva Reve provides compassionate, evidence-based psychiatric care to help you reclaim your life and rediscover joy.',
-      es: 'Encuentre esperanza y sanación con tratamiento experto para la depresión. La Dra. Melva Reve brinda atención psiquiátrica compasiva basada en evidencia para ayudarle a reclamar su vida y redescubrir la alegría.'
+      en: enS('hero-description').paragraphs![0],
+      es: esS('hero-description').paragraphs![0]
     },
     facts: {
       title: {
-        en: 'Depression Facts',
-        es: 'Datos sobre Depresión'
+        en: enS('hero-facts').heading!,
+        es: esS('hero-facts').heading!
       },
-      items: [
-        {
-          en: '8.3% of adults experience major depression',
-          es: '8.3% de adultos experimentan depresión mayor'
-        },
-        {
-          en: 'Depression is highly treatable',
-          es: 'La depresión es altamente tratable'
-        },
-        {
-          en: 'Recovery is possible with proper care',
-          es: 'La recuperación es posible con atención adecuada'
-        },
-        {
-          en: 'Available in Spanish and English',
-          es: 'Disponible en español e inglés'
-        }
-      ]
+      items: bilingualItems('hero-facts')
     },
     images: {
       doctorImage,
@@ -157,23 +96,10 @@ const DepressionTreatment = () => {
       symbolImage: hopeSymbolImage
     },
     specialNote: {
-      es: '<strong>La depresión no es una falla personal.</strong> Es una condición médica tratable. Ofrecemos un ambiente seguro y sin juicio donde puede encontrar el apoyo que necesita para sanar.'
+      es: markdownToHtml(esS('hero-special-note').paragraphs![0])
     },
     quickStats: {
-      items: [
-        {
-          en: 'Same-week appointments',
-          es: 'Citas en la misma semana'
-        },
-        {
-          en: 'Insurance accepted',
-          es: 'Se acepta seguro'
-        },
-        {
-          en: 'Bilingual services',
-          es: 'Servicios bilingües'
-        }
-      ]
+      items: bilingualItems('hero-quick-stats')
     }
   };
 
@@ -192,7 +118,7 @@ const DepressionTreatment = () => {
               <div className="flex items-center justify-center gap-4 text-center">
                 <Heart className="w-6 h-6" />
                 <p className="font-body font-semibold">
-                  If you're having thoughts of suicide, call 988 (Suicide & Crisis Lifeline) or go to your nearest emergency room.
+                  {s('crisis-banner').paragraphs![0]}
                 </p>
               </div>
             </div>
@@ -205,7 +131,7 @@ const DepressionTreatment = () => {
               <div className="flex items-center justify-center gap-4 text-center">
                 <Heart className="w-6 h-6" />
                 <p className="font-body font-semibold">
-                  Si tiene pensamientos suicidas, llame al 988 (Línea Nacional de Prevención del Suicidio) o vaya a la sala de emergencias más cercana.
+                  {s('crisis-banner').paragraphs![0]}
                 </p>
               </div>
             </div>
@@ -217,17 +143,10 @@ const DepressionTreatment = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Recognizing <span className="font-display italic text-green-700">Depression</span> Symptoms</>
-                ) : (
-                  <>Reconociendo Síntomas de <span className="font-display italic text-green-700">Depresión</span></>
-                )}
+                {renderHeading(s('symptoms').heading!)}
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Depression is more than just feeling sad. If you\'ve experienced several of these symptoms for two weeks or more, professional help can make a significant difference.'
-                  : 'La depresión es más que simplemente sentirse triste. Si ha experimentado varios de estos síntomas por dos semanas o más, la ayuda profesional puede hacer una diferencia significativa.'
-                }
+                {s('symptoms').paragraphs![0]}
               </p>
             </div>
             
@@ -256,42 +175,35 @@ const DepressionTreatment = () => {
                 {/* Content Side */}
                 <div>
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Evidence-Based Care' : 'Atención Basada en Evidencia'}
+                    {s('approach-badge').paragraphs![0]}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Our <span className="font-display italic text-green-700">Evidence-Based</span> Treatment Approach</>
-                    ) : (
-                      <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Basado en Evidencia</span></>
-                    )}
+                    {renderHeading(s('approach').heading!)}
                   </h2>
                   
                   {/* Key Stats */}
                   <div className="grid grid-cols-2 gap-6 mb-8">
                     <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">80%</div>
+                      <div className="text-3xl font-bold text-blue-600 mb-2">{s('approach-stat-1').paragraphs![0]}</div>
                       <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Treatment success rate' : 'Tasa de éxito del tratamiento'}
+                        {s('approach-stat-1').paragraphs![1]}
                       </div>
                     </div>
                     <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
-                      <div className="text-3xl font-bold text-green-600 mb-2">15+</div>
+                      <div className="text-3xl font-bold text-green-600 mb-2">{s('approach-stat-2').paragraphs![0]}</div>
                       <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Years experience' : 'Años de experiencia'}
+                        {s('approach-stat-2').paragraphs![1]}
                       </div>
                     </div>
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Dr. Melva Reve uses proven treatment methods combined with cultural sensitivity to provide comprehensive depression care.'
-                      : 'La Dra. Melva Reve utiliza métodos de tratamiento comprobados combinados con sensibilidad cultural para brindar atención integral para la depresión.'
-                    }
+                    {s('approach-intro').paragraphs![0]}
                   </p>
 
                   <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Start Treatment' : 'Iniciar Tratamiento'}</span>
+                      <span>{s('approach-cta').paragraphs![0]}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                       </div>
@@ -339,11 +251,7 @@ const DepressionTreatment = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-12 items-center">
               <div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Expert Depression Care in <span className="font-display italic text-green-700">Naples</span></>
-                  ) : (
-                    <>Atención Experta para la Depresión en <span className="font-display italic text-green-700">Naples</span></>
-                  )}
+                  {renderHeading(s('why').heading!)}
                 </h2>
                 
                 <div className="space-y-6">
@@ -353,13 +261,10 @@ const DepressionTreatment = () => {
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Specialized Expertise' : 'Experiencia Especializada'}
+                        {s('why-expertise').heading}
                       </h3>
                       <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Dr. Melva Reve specializes in treating various forms of depression including major depression, seasonal affective disorder, and postpartum depression.'
-                          : 'La Dra. Melva Reve se especializa en tratar varias formas de depresión incluyendo depresión mayor, trastorno afectivo estacional y depresión posparto.'
-                        }
+                        {s('why-expertise').paragraphs![0]}
                       </p>
                     </div>
                   </div>
@@ -370,13 +275,10 @@ const DepressionTreatment = () => {
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Comprehensive Care' : 'Atención Integral'}
+                        {s('why-comprehensive').heading}
                       </h3>
                       <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'From initial assessment through long-term recovery support, we provide comprehensive care tailored to your unique situation.'
-                          : 'Desde la evaluación inicial hasta el apoyo de recuperación a largo plazo, brindamos atención integral adaptada a su situación única.'
-                        }
+                        {s('why-comprehensive').paragraphs![0]}
                       </p>
                     </div>
                   </div>
@@ -387,13 +289,10 @@ const DepressionTreatment = () => {
                     </WellnessIcon>
                     <div>
                       <h3 className="text-xl font-body font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'Hope-Centered Approach' : 'Enfoque Centrado en la Esperanza'}
+                        {s('why-hope').heading}
                       </h3>
                       <p className="text-gray-600 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Our treatment philosophy centers on instilling hope while providing practical tools and strategies for recovery and wellness.'
-                          : 'Nuestra filosofía de tratamiento se centra en infundir esperanza mientras brindamos herramientas prácticas y estrategias para la recuperación y el bienestar.'
-                        }
+                        {s('why-hope').paragraphs![0]}
                       </p>
                     </div>
                   </div>
@@ -403,13 +302,10 @@ const DepressionTreatment = () => {
               <Card className="bg-green-800 text-white border-0">
                 <CardHeader>
                   <CardTitle className="text-2xl font-body font-bold text-white">
-                    {language === 'en' ? 'Start Your Healing Journey' : 'Comience Su Jornada de Sanación'}
+                    {s('practice-info').heading}
                   </CardTitle>
                   <CardDescription className="text-green-200 font-body">
-                    {language === 'en' 
-                      ? 'Take the first step toward feeling better today'
-                      : 'Dé el primer paso hacia sentirse mejor hoy'
-                    }
+                    {s('practice-info').paragraphs![0]}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -417,25 +313,25 @@ const DepressionTreatment = () => {
                     <div className="flex items-center gap-3">
                       <MapPin className="w-5 h-5 text-green-300" />
                       <Link href={language === 'en' ? '/locations/psychiatrist-naples' : '/es/ubicaciones/psiquiatra-naples'} className="font-body hover:text-green-100 transition-colors underline">
-                        {language === 'en' ? 'Visit Our Naples, FL Location' : 'Visite Nuestra Ubicación en Naples, FL'}
+                        {s('practice-link').paragraphs![0]}
                       </Link>
                     </div>
                     <div className="flex items-center gap-3">
                       <Clock className="w-5 h-5 text-green-300" />
                       <span className="font-body">
-                        {language === 'en' ? 'Same-Week Appointments Available' : 'Citas en la Misma Semana Disponibles'}
+                        {s('practice-features').bullets![0]}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-green-300" />
                       <span className="font-body">
-                        {language === 'en' ? 'Insurance Plans Accepted' : 'Se Aceptan Planes de Seguro'}
+                        {s('practice-features').bullets![1]}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-green-300" />
                       <span className="font-body">
-                        {language === 'en' ? 'Confidential & Safe Environment' : 'Ambiente Confidencial y Seguro'}
+                        {s('practice-features').bullets![2]}
                       </span>
                     </div>
                   </div>
@@ -446,7 +342,7 @@ const DepressionTreatment = () => {
                         <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-100">
                           <Calendar className="w-4 h-4 text-green-800" />
                         </div>
-                        {language === 'en' ? 'Schedule Your Consultation' : 'Programe Su Consulta'}
+                        {s('practice-cta').paragraphs![0]}
                       </Button>
                     </Link>
                   </div>

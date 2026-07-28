@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, Activity, TrendingUp, TrendingDown, Sparkles, Zap, Brain, Heart, ChevronUp, ChevronDown } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
+import RichText from '@/components/RichText';
+import { bipolarTreatmentContent } from '@/data/pageContent/services/bipolarTreatment';
 
 // Import generated images
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp";
@@ -17,9 +19,29 @@ import bipolarImage from "@assets/generated_images/Wellness_meditation_space_ae6
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.webp";
 import drMelvaOfficeImage from "../../assets/dr-melva-office.webp";
 
+const markdownToHtml = (text: string) =>
+  text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+const renderHeading = (text: string) =>
+  text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**') ? (
+      <span key={i} className="font-display italic text-green-700">{part.slice(2, -2)}</span>
+    ) : (
+      part
+    ),
+  );
+
 const BipolarTreatment = () => {
   const { language } = useLanguage();
   const { trackServiceView } = useTikTokEvents();
+  const enS = (key: string) => bipolarTreatmentContent.en.sections.find((x) => x.key === key)!;
+  const esS = (key: string) => bipolarTreatmentContent.es.sections.find((x) => x.key === key)!;
+  const s = (key: string) => bipolarTreatmentContent[language].sections.find((x) => x.key === key)!;
+  const bilingualItems = (key: string) => {
+    const en = enS(key).bullets!;
+    const es = esS(key).bullets!;
+    return en.map((e, i) => ({ en: e, es: es[i] }));
+  };
 
   useEffect(() => {
     const seoData = {
@@ -41,172 +63,52 @@ const BipolarTreatment = () => {
     trackServiceView('Bipolar Treatment', 'bipolar');
   }, [language, trackServiceView]);
 
-  const symptoms = language === 'en' ? [
+  const symptoms = [
     {
-      type: 'Manic Episodes',
+      type: s('symptom-manic').heading!,
       icon: ChevronUp,
-      items: [
-        'Elevated, euphoric mood',
-        'Decreased need for sleep',
-        'Racing thoughts or rapid speech',
-        'Increased energy or activity',
-        'Poor judgment or risky behavior',
-        'Grandiose thoughts or inflated self-esteem'
-      ]
+      badge: s('symptom-manic').paragraphs![0],
+      phase: s('symptom-manic').paragraphs![1],
+      label: s('symptom-manic').paragraphs![2],
+      items: s('symptom-manic').bullets!,
     },
     {
-      type: 'Depressive Episodes',
+      type: s('symptom-depressive').heading!,
       icon: ChevronDown,
-      items: [
-        'Persistent sadness or emptiness',
-        'Loss of interest in activities',
-        'Fatigue or loss of energy',
-        'Difficulty concentrating',
-        'Sleep disturbances',
-        'Thoughts of death or suicide'
-      ]
-    }
-  ] : [
-    {
-      type: 'Episodios Maníacos',
-      icon: ChevronUp,
-      items: [
-        'Estado de ánimo elevado, eufórico',
-        'Disminución de la necesidad de dormir',
-        'Pensamientos acelerados o habla rápida',
-        'Aumento de energía o actividad',
-        'Mal juicio o comportamiento arriesgado',
-        'Pensamientos grandiosos o autoestima inflada'
-      ]
+      badge: s('symptom-depressive').paragraphs![0],
+      phase: s('symptom-depressive').paragraphs![1],
+      label: s('symptom-depressive').paragraphs![2],
+      items: s('symptom-depressive').bullets!,
     },
-    {
-      type: 'Episodios Depresivos',
-      icon: ChevronDown,
-      items: [
-        'Tristeza persistente o vacío',
-        'Pérdida de interés en actividades',
-        'Fatiga o pérdida de energía',
-        'Dificultad para concentrarse',
-        'Trastornos del sueño',
-        'Pensamientos de muerte o suicidio'
-      ]
-    }
   ];
 
-  const bipolarTypes = language === 'en' ? [
-    {
-      title: 'Bipolar I Disorder',
-      description: 'Characterized by at least one manic episode that lasts 7 days or requires hospitalization.',
-      features: [
-        'Full manic episodes',
-        'May include depressive episodes',
-        'Significant functional impairment',
-        'Often requires mood stabilizers'
-      ]
-    },
-    {
-      title: 'Bipolar II Disorder',
-      description: 'Involves hypomanic episodes and major depressive episodes, but no full manic episodes.',
-      features: [
-        'Hypomanic episodes (less severe)',
-        'Major depressive episodes',
-        'Often misdiagnosed as depression',
-        'Requires specialized treatment approach'
-      ]
-    },
-    {
-      title: 'Cyclothymic Disorder',
-      description: 'Chronic mood instability with numerous periods of hypomanic and depressive symptoms.',
-      features: [
-        'Milder but chronic symptoms',
-        'Symptoms for at least 2 years',
-        'Periods of normal mood',
-        'May progress to Bipolar I or II'
-      ]
-    }
-  ] : [
-    {
-      title: 'Trastorno Bipolar I',
-      description: 'Caracterizado por al menos un episodio maníaco que dura 7 días o requiere hospitalización.',
-      features: [
-        'Episodios maníacos completos',
-        'Puede incluir episodios depresivos',
-        'Deterioro funcional significativo',
-        'A menudo requiere estabilizadores del ánimo'
-      ]
-    },
-    {
-      title: 'Trastorno Bipolar II',
-      description: 'Involucra episodios hipomaníacos y episodios depresivos mayores, pero no episodios maníacos completos.',
-      features: [
-        'Episodios hipomaníacos (menos severos)',
-        'Episodios depresivos mayores',
-        'A menudo mal diagnosticado como depresión',
-        'Requiere enfoque de tratamiento especializado'
-      ]
-    },
-    {
-      title: 'Trastorno Ciclotímico',
-      description: 'Inestabilidad crónica del ánimo con numerosos períodos de síntomas hipomaníacos y depresivos.',
-      features: [
-        'Síntomas más leves pero crónicos',
-        'Síntomas por al menos 2 años',
-        'Períodos de estado de ánimo normal',
-        'Puede progresar a Bipolar I o II'
-      ]
-    }
-  ];
+  const approachItems = [1, 2, 3, 4].map((n) => ({
+    title: s(`approach-item-${n}`).heading!,
+    description: s(`approach-item-${n}`).paragraphs![0],
+  }));
 
-  const treatments = language === 'en' ? [
+  const bipolarTypes = [
     {
-      title: 'Comprehensive Mood Assessment',
-      description: 'Detailed evaluation to accurately diagnose bipolar disorder type and rule out other conditions.'
+      type: s('type-1').heading!,
+      description: s('type-1').paragraphs![1],
+      severity: s('type-1').paragraphs![0],
+      features: s('type-1').bullets!,
+      color: 'purple',
     },
     {
-      title: 'Mood Stabilizer Management',
-      description: 'Expert ordering and monitoring of mood stabilizers like lithium, anticonvulsants, and atypical antipsychotics.'
+      type: s('type-2').heading!,
+      description: s('type-2').paragraphs![1],
+      severity: s('type-2').paragraphs![0],
+      features: s('type-2').bullets!,
+      color: 'blue',
     },
     {
-      title: 'Episode Prevention Planning',
-      description: 'Strategies to identify early warning signs and prevent manic and depressive episodes.'
+      type: s('type-3').heading!,
+      description: s('type-3').paragraphs![1],
+      severity: s('type-3').paragraphs![0],
+      features: s('type-3').bullets!,
+      color: 'green',
     },
-    {
-      title: 'Psychotherapy Coordination',
-      description: 'Collaboration with therapists specializing in bipolar disorder, including CBT and family therapy.'
-    },
-    {
-      title: 'Lifestyle & Sleep Management',
-      description: 'Guidance on sleep hygiene, routine maintenance, and lifestyle factors crucial for mood stability.'
-    },
-    {
-      title: 'Crisis Intervention Support',
-      description: 'Emergency planning and support during acute manic or depressive episodes.'
-    }
-  ] : [
-    {
-      title: 'Evaluación Integral del Estado de Ánimo',
-      description: 'Evaluación detallada para diagnosticar con precisión el tipo de trastorno bipolar y descartar otras condiciones.'
-    },
-    {
-      title: 'Manejo de Estabilizadores del Ánimo',
-      description: 'Manejo experto y monitoreo de estabilizadores del ánimo como litio, anticonvulsivos y antipsicóticos atípicos.'
-    },
-    {
-      title: 'Planificación de Prevención de Episodios',
-      description: 'Estrategias para identificar señales de advertencia temprana y prevenir episodios maníacos y depresivos.'
-    },
-    {
-      title: 'Coordinación de Psicoterapia',
-      description: 'Colaboración con terapeutas especializados en trastorno bipolar, incluyendo TCC y terapia familiar.'
-    },
-    {
-      title: 'Manejo de Estilo de Vida y Sueño',
-      description: 'Orientación sobre higiene del sueño, mantenimiento de rutina y factores de estilo de vida cruciales para la estabilidad del ánimo.'
-    },
-    {
-      title: 'Apoyo en Intervención de Crisis',
-      description: 'Planificación de emergencia y apoyo durante episodios agudos maníacos o depresivos.'
-    }
   ];
 
   return (
@@ -216,59 +118,29 @@ const BipolarTreatment = () => {
         {/* Hero Section with Masonry Layout */}
         <ServiceHeroMasonry
           tagline={{
-            en: 'Mood Stability',
-            es: 'Estabilidad del Ánimo'
+            en: enS('hero-tagline').paragraphs![0],
+            es: esS('hero-tagline').paragraphs![0]
           }}
           title={{
-            en: 'Bipolar Disorder Treatment in Naples, FL',
-            es: 'Tratamiento de Trastorno Bipolar en Naples, FL'
+            en: bipolarTreatmentContent.en.title,
+            es: bipolarTreatmentContent.es.title
           }}
           description={{
-            en: 'Find balance and stability with expert bipolar disorder treatment. Dr. Melva Reve provides comprehensive care for mood stabilization, helping you manage both manic and depressive episodes effectively.',
-            es: 'Encuentre equilibrio y estabilidad con tratamiento experto de trastorno bipolar. La Dra. Melva Reve brinda atención integral para estabilización del ánimo, ayudándole a manejar episodios maníacos y depresivos efectivamente.'
+            en: enS('hero-description').paragraphs![0],
+            es: esS('hero-description').paragraphs![0]
           }}
           specialNote={{
-            es: '<strong>El trastorno bipolar es una condición médica tratable.</strong> Con el tratamiento adecuado, puede lograr estabilidad del ánimo y vivir una vida plena. Ofrecemos atención especializada que comprende su cultura y necesidades.'
+            es: markdownToHtml(esS('hero-special-note').paragraphs![0])
           }}
           facts={{
             title: {
-              en: 'Bipolar Facts',
-              es: 'Datos sobre Bipolar'
+              en: enS('hero-facts').heading!,
+              es: esS('hero-facts').heading!
             },
-            items: [
-              {
-                en: '2.8% of adults have bipolar disorder',
-                es: '2.8% de adultos tienen trastorno bipolar'
-              },
-              {
-                en: 'Mood stabilizers are highly effective',
-                es: 'Los estabilizadores del ánimo son muy efectivos'
-              },
-              {
-                en: 'Early treatment improves outcomes',
-                es: 'El tratamiento temprano mejora resultados'
-              },
-              {
-                en: 'Cultural sensitivity in treatment',
-                es: 'Sensibilidad cultural en el tratamiento'
-              }
-            ]
+            items: bilingualItems('hero-facts')
           }}
           quickStats={{
-            items: [
-              {
-                en: 'Mood stabilizer management',
-                es: 'Manejo de estabilizadores del ánimo'
-              },
-              {
-                en: 'Episode prevention planning',
-                es: 'Planificación de prevención de episodios'
-              },
-              {
-                en: 'Crisis intervention support',
-                es: 'Apoyo en intervención de crisis'
-              }
-            ]
+            items: bilingualItems('hero-quick-stats')
           }}
           images={{
             doctorImage,
@@ -285,60 +157,19 @@ const BipolarTreatment = () => {
                 {/* Content Side */}
                 <div className="lg:col-span-2">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Comprehensive Care' : 'Atención Integral'}
+                    {s('approach-badge').paragraphs![0]}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Our <span className="font-display italic text-green-700">Comprehensive</span> Treatment Approach</>
-                    ) : (
-                      <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Integral</span></>
-                    )}
+                    {renderHeading(s('approach').heading!)}
                   </h2>
                   
                   <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Bipolar disorder requires specialized expertise and a multifaceted treatment approach addressing both manic and depressive episodes for long-term stability.'
-                      : 'El trastorno bipolar requiere experiencia especializada y un enfoque de tratamiento multifacético que aborde tanto episodios maníacos como depresivos para estabilidad a largo plazo.'
-                    }
+                    {s('approach').paragraphs![0]}
                   </p>
 
                   {/* Treatment List */}
                   <div className="grid gap-4 mb-8">
-                    {(language === 'en' ? [
-                      {
-                        title: 'Mood Stabilization',
-                        description: 'Evidence-based medications including lithium, anticonvulsants, and atypical antipsychotics.'
-                      },
-                      {
-                        title: 'Comprehensive Assessment',
-                        description: 'Thorough evaluation of mood patterns, triggers, and medical history.'
-                      },
-                      {
-                        title: 'Medication Monitoring',
-                        description: 'Regular blood work and careful monitoring to ensure therapeutic levels.'
-                      },
-                      {
-                        title: 'Episode Prevention',
-                        description: 'Strategies to prevent manic and depressive episodes through lifestyle management.'
-                      }
-                    ] : [
-                      {
-                        title: 'Estabilización del Ánimo',
-                        description: 'Medicamentos basados en evidencia incluyendo litio, anticonvulsivos y antipsicóticos atípicos.'
-                      },
-                      {
-                        title: 'Evaluación Integral',
-                        description: 'Evaluación completa de patrones del ánimo, desencadenantes e historial médico.'
-                      },
-                      {
-                        title: 'Monitoreo de Medicamentos',
-                        description: 'Análisis de sangre regulares y monitoreo cuidadoso para asegurar niveles terapéuticos.'
-                      },
-                      {
-                        title: 'Prevención de Episodios',
-                        description: 'Estrategias para prevenir episodios maníacos y depresivos a través del manejo del estilo de vida.'
-                      }
-                    ]).map((treatment, index) => (
+                    {approachItems.map((treatment, index) => (
                       <div key={index} className="p-4">
                         <div className="flex items-start gap-3">
                           <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -355,7 +186,7 @@ const BipolarTreatment = () => {
 
                   <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Get Specialized Care' : 'Obtener Atención Especializada'}</span>
+                      <span>{s('approach-cta').paragraphs![0]}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                       </div>
@@ -368,15 +199,15 @@ const BipolarTreatment = () => {
                   {/* Stats Cards */}
                   <div className="space-y-4 mb-6">
                     <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                      <div className="text-3xl font-bold text-green-600 mb-2">85%</div>
+                      <div className="text-3xl font-bold text-green-600 mb-2">{s('approach-stat-1').paragraphs![0]}</div>
                       <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Achieve mood stability' : 'Logran estabilidad del ánimo'}
+                        {s('approach-stat-1').paragraphs![1]}
                       </div>
                     </div>
                     <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
+                      <div className="text-3xl font-bold text-blue-600 mb-2">{s('approach-stat-2').paragraphs![0]}</div>
                       <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Crisis support available' : 'Apoyo de crisis disponible'}
+                        {s('approach-stat-2').paragraphs![1]}
                       </div>
                     </div>
                   </div>
@@ -406,21 +237,14 @@ const BipolarTreatment = () => {
                   <Brain />
                 </WellnessIcon>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 text-center">
-                  {language === 'en' ? (
-                    <>Understanding <span className="font-display italic text-green-700">Bipolar</span> Symptoms</>
-                  ) : (
-                    <>Entendiendo Síntomas del <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
-                  )}
+                  {renderHeading(s('symptoms').heading!)}
                 </h2>
                 <WellnessIcon size="md" color="green" className="opacity-70">
                   <Heart />
                 </WellnessIcon>
               </div>
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed px-4 sm:px-0">
-                {language === 'en'
-                  ? 'Bipolar disorder involves distinct episodes of mania/hypomania and depression. Understanding these patterns is key to effective treatment.'
-                  : 'El trastorno bipolar involucra episodios distintos de manía/hipomanía y depresión. Entender estos patrones es clave para un tratamiento efectivo.'
-                }
+                {s('symptoms').paragraphs![0]}
               </p>
             </div>
 
@@ -451,10 +275,7 @@ const BipolarTreatment = () => {
                               ? <TrendingUp className="w-3 h-3" />
                               : <TrendingDown className="w-3 h-3" />
                             }
-                            {groupIndex === 0 
-                              ? (language === 'en' ? 'Elevated Mood' : 'Ánimo Elevado')
-                              : (language === 'en' ? 'Depressed Mood' : 'Ánimo Deprimido')
-                            }
+                            {symptomGroup.badge}
                           </div>
                         </div>
                       </div>
@@ -484,17 +305,11 @@ const BipolarTreatment = () => {
                               <Brain className="w-4 h-4 text-green-800" />
                             )}
                             <span className="text-sm font-medium text-green-800">
-                              {groupIndex === 0 
-                                ? (language === 'en' ? 'High Energy Phase' : 'Fase de Alta Energía')
-                                : (language === 'en' ? 'Low Energy Phase' : 'Fase de Baja Energía')
-                              }
+                              {symptomGroup.phase}
                             </span>
                           </div>
                           <div className="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
-                            {groupIndex === 0 
-                              ? (language === 'en' ? 'MANIC' : 'MANÍACO')
-                              : (language === 'en' ? 'DEPRESSIVE' : 'DEPRESIVO')
-                            }
+                            {symptomGroup.label}
                           </div>
                         </div>
                       </div>
@@ -511,60 +326,12 @@ const BipolarTreatment = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Types of <span className="font-display italic text-green-700">Bipolar Disorder</span></>
-                ) : (
-                  <>Tipos de <span className="font-display italic text-green-700">Trastorno Bipolar</span></>
-                )}
+                {renderHeading(s('types').heading!)}
               </h2>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {(language === 'en' ? [
-                {
-                  type: 'Bipolar I Disorder',
-                  description: 'At least one manic episode lasting 7+ days or requiring hospitalization. May include depressive episodes.',
-                  severity: 'High',
-                  features: ['Full manic episodes', 'Severe impairment', 'May require hospitalization'],
-                  color: 'purple'
-                },
-                {
-                  type: 'Bipolar II Disorder',
-                  description: 'At least one hypomanic episode and one major depressive episode. No full manic episodes.',
-                  severity: 'Moderate',
-                  features: ['Hypomanic episodes', 'Major depression', 'Often misdiagnosed'],
-                  color: 'blue'
-                },
-                {
-                  type: 'Cyclothymic Disorder',
-                  description: 'Numerous periods of hypomanic and depressive symptoms for at least 2 years (1 year in children).',
-                  severity: 'Mild',
-                  features: ['Chronic symptoms', 'Milder episodes', 'Long-term pattern'],
-                  color: 'green'
-                }
-              ] : [
-                {
-                  type: 'Trastorno Bipolar I',
-                  description: 'Al menos un episodio maníaco que dura 7+ días o requiere hospitalización. Puede incluir episodios depresivos.',
-                  severity: 'Alto',
-                  features: ['Episodios maníacos completos', 'Deterioro severo', 'Puede requerir hospitalización'],
-                  color: 'purple'
-                },
-                {
-                  type: 'Trastorno Bipolar II',
-                  description: 'Al menos un episodio hipomaníaco y un episodio depresivo mayor. Sin episodios maníacos completos.',
-                  severity: 'Moderado',
-                  features: ['Episodios hipomaníacos', 'Depresión mayor', 'A menudo mal diagnosticado'],
-                  color: 'blue'
-                },
-                {
-                  type: 'Trastorno Ciclotímico',
-                  description: 'Numerosos períodos de síntomas hipomaníacos y depresivos durante al menos 2 años (1 año en niños).',
-                  severity: 'Leve',
-                  features: ['Síntomas crónicos', 'Episodios más leves', 'Patrón a largo plazo'],
-                  color: 'green'
-                }
-              ]).map((type, index) => {
+              {bipolarTypes.map((type, index) => {
                 const backgroundClasses: Record<string, string> = {
                   purple: 'bg-green-50',
                   blue: 'bg-blue-50',
@@ -618,12 +385,12 @@ const BipolarTreatment = () => {
                         <div className="p-4 rounded-xl bg-[#ffffff]">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-green-800">
-                              {language === 'en' ? 'Treatment Focus' : 'Enfoque de Tratamiento'}
+                              {s('types-footer').paragraphs![0]}
                             </span>
                             <div className="flex items-center gap-1">
                               <Sparkles className="w-4 h-4 text-green-800" />
                               <span className="text-xs font-medium text-green-800">
-                                {language === 'en' ? 'Specialized Care' : 'Atención Especializada'}
+                                {s('types-footer').paragraphs![1]}
                               </span>
                             </div>
                           </div>
@@ -642,37 +409,19 @@ const BipolarTreatment = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Why Choose Dr. Reve for <span className="font-display italic text-green-700">Bipolar Treatment</span></>
-                ) : (
-                  <>Por Qué Elegir a la Dra. Reve para <span className="font-display italic text-green-700">Tratamiento Bipolar</span></>
-                )}
+                {renderHeading(s('why').heading!)}
               </h2>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="space-y-6">
-                  {(language === 'en' ? [
-                    'Experienced psychiatrist with mood disorder expertise',
-                    'Bilingual services in English and Spanish',
-                    'Evidence-based medication management',
-                    'Collaborative approach with therapists and support teams',
-                    'Regular monitoring and adjustment of treatment plans',
-                    <>Insurance accepted and flexible scheduling at <Link href="/locations/psychiatrist-naples" className="text-green-700 hover:text-green-800 underline">our Naples, FL location</Link></>
-                  ] : [
-                    'Psiquiatra certificada con experiencia en trastornos del ánimo',
-                    'Servicios bilingües en inglés y español',
-                    'Manejo de medicamentos basado en evidencia',
-                    'Enfoque colaborativo con terapeutas y equipos de apoyo',
-                    'Monitoreo regular y ajuste de planes de tratamiento',
-                    <>Se acepta seguro y horarios flexibles en <Link href="/es/ubicaciones/psiquiatra-naples" className="text-green-700 hover:text-green-800 underline">nuestra ubicación en Naples, FL</Link></>
-                  ]).map((benefit, index) => (
+                  {s('why-benefits').bullets!.map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                         <CheckCircle className="w-4 h-4 text-green-600" />
                       </div>
-                      <span className="text-gray-700 font-body text-lg">{benefit}</span>
+                      <span className="text-gray-700 font-body text-lg"><RichText text={benefit} linkClassName="text-green-700 hover:text-green-800 underline" /></span>
                     </div>
                   ))}
                 </div>
@@ -684,13 +433,10 @@ const BipolarTreatment = () => {
                     <Activity />
                   </WellnessIcon>
                   <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
-                    {language === 'en' ? 'Ready to Stabilize Your Mood?' : '¿Listo para Estabilizar tu Ánimo?'}
+                    {s('why-card').heading!}
                   </h3>
                   <p className="text-gray-600 font-body leading-relaxed mb-6">
-                    {language === 'en'
-                      ? 'Take control of your bipolar disorder with expert psychiatric care. Schedule your consultation today.'
-                      : 'Toma control de tu trastorno bipolar con atención psiquiátrica experta. Programa tu consulta hoy.'
-                    }
+                    {s('why-card').paragraphs![0]}
                   </p>
                   <div className="space-y-4">
                     <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
@@ -702,7 +448,7 @@ const BipolarTreatment = () => {
                         <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
                           <Calendar className="w-4 h-4 text-white" />
                         </div>
-                        {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                        {s('why-card-cta').paragraphs![0]}
                       </Button>
                     </Link>
                     
@@ -716,7 +462,7 @@ const BipolarTreatment = () => {
                         <Phone className="w-4 h-4 text-green-800" />
                       </div>
                       <a href="tel:+12394230272" className="flex items-center gap-3">
-                        {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
+                        {s('why-card-cta').paragraphs![1]}
                       </a>
                     </Button>
                   </div>

@@ -117,12 +117,15 @@ export function useClarity() {
   }, [language]);
 
   // Handle consent revocation with cookie cleanup
+  // Gate on GLOBAL flags: any hook instance must be able to revoke, even if a
+  // different instance performed the initialization.
   const revokeClarity = useCallback(() => {
-    if (initialized.current && !consentRevoked.current) {
+    if (globalClarityInitialized && !globalConsentRevoked) {
       try {
         // Disable further tracking
         Clarity.consent(false);
         consentRevoked.current = true;
+        globalConsentRevoked = true;
         
         // Clear Clarity cookies for FDBR compliance
         clearClarityCookies();
@@ -216,34 +219,37 @@ export function useClarity() {
     }
   }, [language]); // Keep language dependency but check global state before execution
 
-  // Return Clarity API methods for custom tracking
+  // Return Clarity API methods for custom tracking.
+  // IMPORTANT: gate on GLOBAL flags, not per-instance refs. Clarity is
+  // initialized once globally, but many components create their own hook
+  // instance; a per-instance ref would silently drop their events.
   return {
     setTag: (key: string, value: string | string[]) => {
-      if (initialized.current) {
+      if (globalClarityInitialized && !globalConsentRevoked) {
         Clarity.setTag(key, value);
       }
     },
     
     trackEvent: (eventName: string) => {
-      if (initialized.current) {
+      if (globalClarityInitialized && !globalConsentRevoked) {
         Clarity.event(eventName);
       }
     },
     
     identify: (customId: string, sessionId?: string, pageId?: string, friendlyName?: string) => {
-      if (initialized.current) {
+      if (globalClarityInitialized && !globalConsentRevoked) {
         Clarity.identify(customId, sessionId, pageId, friendlyName);
       }
     },
     
     consent: (hasConsent: boolean = true) => {
-      if (initialized.current) {
+      if (globalClarityInitialized) {
         Clarity.consent(hasConsent);
       }
     },
     
     upgrade: (reason: string) => {
-      if (initialized.current) {
+      if (globalClarityInitialized && !globalConsentRevoked) {
         Clarity.upgrade(reason);
       }
     }

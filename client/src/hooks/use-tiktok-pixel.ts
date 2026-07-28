@@ -1,5 +1,11 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'wouter';
+import {
+  bumpConsentGeneration,
+  claimPageView,
+  isCurrentPageView,
+  markPageViewTracked,
+} from '@/lib/pixel-page-view';
 
 const TIKTOK_PIXEL_ID = 'D3IKI7BC77UEJB9HBO0G';
 
@@ -7,6 +13,49 @@ const TIKTOK_PIXEL_ID = 'D3IKI7BC77UEJB9HBO0G';
 let globalTikTokInitialized = false;
 let globalInitializationTimestamp: number | null = null;
 let globalConsentRevoked = false;
+
+/**
+ * Single page-view emitter, shared by the route effect and the consent
+ * listeners. Dedupe lives in pixel-page-view at module scope because App.tsx,
+ * Footer and several pages each mount their own useTikTokPixel(): per-instance
+ * state would emit one ttq.page() per mounted instance and inflate metrics.
+ */
+function emitTikTokPageView(location: string): void {
+  const claim = claimPageView(location);
+  if (!claim) {
+    return;
+  }
+
+  const send = () => {
+    // The send is deferred, so the visitor may have revoked consent or navigated
+    // before this runs. Both invalidate the claim, and sending anyway would
+    // either track without consent or let ttq.page() attribute this view to the
+    // route the visitor moved to (which claims its own view).
+    if (globalConsentRevoked || !isCurrentPageView(claim)) {
+      return;
+    }
+
+    try {
+      if (window.ttq && typeof window.ttq.page === 'function') {
+        window.ttq.page();
+        if (import.meta.env.DEV) {
+          console.log('🎵 TikTok Pixel page view tracked:', location);
+        }
+      }
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.warn('Failed to track TikTok page view:', error);
+      }
+    }
+  };
+
+  // Defer to prevent forced reflows
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(send);
+  } else {
+    setTimeout(send, 50);
+  }
+}
 
 // Declare TikTok global type
 declare global {
@@ -109,6 +158,10 @@ export function useTikTokPixel() {
   const consentRevoked = useRef(false);
   const [location] = useLocation();
   const previousLocation = useRef(location);
+  // Always-current location for listeners registered once: their closures would
+  // otherwise keep the location from the render that registered them.
+  const locationRef = useRef(location);
+  locationRef.current = location;
 
   // Initialize TikTok Pixel when consent is available
   const initTikTokPixel = useCallback(() => {
@@ -139,23 +192,35 @@ export function useTikTokPixel() {
     globalInitializationTimestamp = currentTimestamp;
 
     try {
-      // Check if TikTok Pixel is already loaded
-      if (window.ttq && typeof window.ttq.page === 'function') {
+      // Two ways to end up with a live pixel, and both of them already counted
+      // the current route: our own snippet fires ttq.page() on load, and a pixel
+      // that some other script put on the page did the same. So this branch only
+      // decides whether to inject the snippet; the shared tail below is what
+      // records the entry page.
+      const alreadyLoaded = Boolean(window.ttq && typeof window.ttq.page === 'function');
+
+      if (alreadyLoaded) {
         if (import.meta.env.DEV) {
-          console.log('🎵 TikTok Pixel already loaded in page, skipping init');
+          console.log('🎵 TikTok Pixel already loaded in page, skipping script injection');
         }
-        globalTikTokInitialized = true;
-        initialized.current = true;
-        return;
+      } else {
+        loadTikTokPixel();
       }
 
-      loadTikTokPixel();
       globalTikTokInitialized = true;
       initialized.current = true;
       consentRevoked.current = false;
       globalConsentRevoked = false;
-      
-      console.log('🎵 TikTok Pixel initialized successfully with ID:', TIKTOK_PIXEL_ID);
+      // Single exit for every init path: record the entry page, or the route
+      // effect of this (and every later-mounting) instance emits a second page
+      // view for it. A branch that skips this line is how the entry page got
+      // counted twice, so scripts/analytics-pageview-guards.ts asserts there is
+      // exactly one of them and nothing bails out before it.
+      markPageViewTracked(locationRef.current);
+
+      if (!alreadyLoaded) {
+        console.log('🎵 TikTok Pixel initialized successfully with ID:', TIKTOK_PIXEL_ID);
+      }
     } catch (error) {
       console.error('Failed to initialize TikTok Pixel:', error);
       globalTikTokInitialized = false;
@@ -164,8 +229,10 @@ export function useTikTokPixel() {
   }, []);
 
   // Handle consent revocation with cookie cleanup
+  // Gate on GLOBAL flags: any hook instance must be able to revoke, even if a
+  // different instance performed the initialization.
   const revokeTikTokPixel = useCallback(() => {
-    if (initialized.current && !consentRevoked.current) {
+    if (globalTikTokInitialized && !globalConsentRevoked) {
       try {
         // Revoke consent
         if (window.ttq && typeof window.ttq.revokeConsent === 'function') {
@@ -173,6 +240,11 @@ export function useTikTokPixel() {
         }
         consentRevoked.current = true;
         globalConsentRevoked = true;
+        // Invalidate the page-view dedupe key exactly once per revocation (this
+        // block is guarded by globalConsentRevoked, so only the first listener
+        // runs it). If consent comes back on this same route, the visit must be
+        // counted again.
+        bumpConsentGeneration();
         
         // Clear TikTok cookies for GDPR compliance
         clearTikTokCookies();
@@ -217,6 +289,12 @@ export function useTikTokPixel() {
             if (globalTikTokInitialized && window.ttq && typeof window.ttq.grantConsent === 'function') {
               window.ttq.grantConsent();
               console.log('🎵 TikTok Pixel consent restored - marketing tracking enabled');
+              // The route effect only reacts to location changes, so restoring
+              // consent without navigating would never emit a view for the page
+              // the visitor is actually on. The revocation already invalidated
+              // the dedupe key, so the first listener to run emits and every
+              // other mounted instance is a no-op.
+              emitTikTokPageView(locationRef.current);
             }
           } catch (error) {
             console.error('Error restoring TikTok Pixel consent:', error);
@@ -236,53 +314,23 @@ export function useTikTokPixel() {
     };
   }, [initTikTokPixel, revokeTikTokPixel]);
 
-  // Track page views on route change
+  // Track page views on route change (gate on GLOBAL flags, not per-instance refs)
   useEffect(() => {
-    if (globalTikTokInitialized && initialized.current && !consentRevoked.current) {
-      // Only track if the location has actually changed
-      if (location !== previousLocation.current) {
-        previousLocation.current = location;
-        
-        // Use requestIdleCallback to prevent forced reflows
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(() => {
-            try {
-              if (window.ttq && typeof window.ttq.page === 'function') {
-                window.ttq.page();
-                if (import.meta.env.DEV) {
-                  console.log('🎵 TikTok Pixel page view tracked:', location);
-                }
-              }
-            } catch (error) {
-              if (import.meta.env.DEV) {
-                console.warn('Failed to track TikTok page view:', error);
-              }
-            }
-          });
-        } else {
-          setTimeout(() => {
-            try {
-              if (window.ttq && typeof window.ttq.page === 'function') {
-                window.ttq.page();
-                if (import.meta.env.DEV) {
-                  console.log('🎵 TikTok Pixel page view tracked:', location);
-                }
-              }
-            } catch (error) {
-              if (import.meta.env.DEV) {
-                console.warn('Failed to track TikTok page view:', error);
-              }
-            }
-          }, 50);
-        }
-      }
+    if (globalTikTokInitialized && !globalConsentRevoked) {
+      // emitTikTokPageView owns the dedupe: once per navigation, no matter how
+      // many hook instances are mounted.
+      previousLocation.current = location;
+      emitTikTokPageView(location);
     }
   }, [location]);
 
-  // Return TikTok Pixel API methods for custom tracking
+  // Return TikTok Pixel API methods for custom tracking.
+  // IMPORTANT: gate on GLOBAL flags, not per-instance refs. The pixel is
+  // initialized once globally, but many components create their own hook
+  // instance; a per-instance ref would silently drop their events.
   return {
     track: (eventName: string, properties?: Record<string, any>) => {
-      if (initialized.current && !consentRevoked.current && window.ttq) {
+      if (globalTikTokInitialized && !globalConsentRevoked && window.ttq) {
         try {
           window.ttq.track(eventName, properties);
         } catch (error) {
@@ -294,7 +342,7 @@ export function useTikTokPixel() {
     },
     
     identify: (userData: Record<string, any>) => {
-      if (initialized.current && !consentRevoked.current && window.ttq) {
+      if (globalTikTokInitialized && !globalConsentRevoked && window.ttq) {
         try {
           window.ttq.identify(userData);
         } catch (error) {
@@ -306,7 +354,7 @@ export function useTikTokPixel() {
     },
     
     page: () => {
-      if (initialized.current && !consentRevoked.current && window.ttq) {
+      if (globalTikTokInitialized && !globalConsentRevoked && window.ttq) {
         try {
           window.ttq.page();
         } catch (error) {

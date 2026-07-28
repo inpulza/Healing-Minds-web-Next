@@ -6,10 +6,15 @@ import WellnessIcon from '@/components/WellnessIcon';
 import Reviews from '@/components/Reviews';
 import { useTikTokVideos } from '@/hooks/useTikTokVideos';
 import doctorProfileImage from '@assets/doctor-profile-hq.webp';
+import { aboutContent } from '@/data/pageContent/mainPages/about';
+import { renderRichText } from '@/components/RichText';
 
 const About = () => {
   const { language } = useLanguage();
   const { data: tikTokVideos, isLoading: isLoadingVideos } = useTikTokVideos();
+  const content = aboutContent[language];
+  const section = (key: string) => content.sections.find((x) => x.key === key)!;
+  const bio = section('biography').paragraphs!;
 
   return (
     <div className="min-h-screen bg-green-50">
@@ -38,30 +43,24 @@ const About = () => {
             <div className="text-center lg:text-left order-1 lg:order-2">
               {/* H1 Principal */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-body font-bold text-green-800 mb-6" data-testid="about-hero-title">
-                {language === 'en' 
-                  ? <>A <span className="font-display italic text-green-700">Safe Space</span> to <span className="font-display italic text-green-700">Heal</span> and Find <span className="font-display italic text-green-700">Clarity</span></>
-                  : <>Un <span className="font-display italic text-green-700">Espacio Seguro</span> para <span className="font-display italic text-green-700">Sanar</span> y Encontrar <span className="font-display italic text-green-700">Claridad</span></>
-                }
+                {renderRichText(content.title, undefined, 'font-display italic text-green-700')}
               </h1>
               
               {/* Subtítulo de misión */}
               <p className="text-xl lg:text-2xl text-gray-600 mb-8 font-body leading-relaxed" data-testid="about-hero-subtitle">
-                {language === 'en'
-                  ? 'I am Dr. Melva Reve, and my mission is to accompany you on your journey toward mental wellness with compassionate care, personalized treatments, and renewed hope.'
-                  : 'Soy la Dra. Melva Reve, y mi misión es acompañarte en tu camino hacia el bienestar mental con cuidado compasivo, tratamientos personalizados y esperanza renovada.'
-                }
+                {section('heroSubtitle').paragraphs![0]}
               </p>
 
               {/* Badges de credibilidad */}
               <div className="flex justify-center lg:justify-start gap-4 mb-8 flex-wrap">
                 <span className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium border border-green-200">
-                  {language === 'en' ? '15+ years experience' : '15+ años experiencia'}
+                  {section('heroBadges').bullets![0]}
                 </span>
                 <span className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium border border-blue-200">
-                  {language === 'en' ? 'Bilingual' : 'Bilingüe'}
+                  {section('heroBadges').bullets![1]}
                 </span>
                 <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium border border-purple-200">
-                  {language === 'en' ? 'Licensed Psychiatrist' : 'Psiquiatra Licenciada'}
+                  {section('heroBadges').bullets![2]}
                 </span>
               </div>
 
@@ -71,7 +70,7 @@ const About = () => {
                   className="group inline-flex items-center justify-center gap-3 rounded-full text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-7 hover:shadow-lg hover:-translate-y-1"
                   data-testid="about-hero-cta"
                 >
-                  <span>{language === 'en' ? 'Schedule Consultation' : 'Agendar mi Consulta'}</span>
+                  <span>{section('heroCta').paragraphs![0]}</span>
                   <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-600">
                     <ArrowRight className="w-5 h-5 text-white" />
                   </div>
@@ -89,16 +88,10 @@ const About = () => {
             {/* Encabezado de sección */}
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="video-section-title">
-                {language === 'en' 
-                  ? <>A <span className="font-display italic text-green-700">Conversation</span> with Dr. Reve</>
-                  : <>Una <span className="font-display italic text-green-700">Conversación</span> con la Dra. Reve</>
-                }
+                {renderRichText(section('videoHeading').heading!, undefined, 'font-display italic text-green-700')}
               </h2>
               <p className="text-xl text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Get to know me through these educational videos where I share insights about mental health, answer common questions, and provide guidance for your wellness journey.'
-                  : 'Conóceme a través de estos videos educativos donde comparto conocimientos sobre salud mental, respondo preguntas comunes y brindo orientación para tu viaje de bienestar.'
-                }
+                {section('videoHeading').paragraphs![0]}
               </p>
             </div>
 
@@ -176,16 +169,10 @@ const About = () => {
             <div className="text-center">
               <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
                 <h3 className="text-2xl font-semibold text-green-800 mb-4">
-                  {language === 'en' 
-                    ? 'Have a Question for Dr. Reve?'
-                    : '¿Tienes una Pregunta para la Dra. Reve?'
-                  }
+                  {section('videoCta').heading!}
                 </h3>
                 <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                  {language === 'en'
-                    ? 'Follow me on TikTok for daily mental health tips and feel free to ask your questions directly!'
-                    : '¡Sígueme en TikTok para consejos diarios de salud mental y no dudes en hacer tus preguntas directamente!'
-                  }
+                  {section('videoCta').paragraphs![0]}
                 </p>
                 <a
                   href="https://www.tiktok.com/@dra.melvavidal"
@@ -198,7 +185,7 @@ const About = () => {
                     <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-1.183-.11 6.44 6.44 0 0 0-6.444 6.444 6.44 6.44 0 0 0 6.444 6.444 6.44 6.44 0 0 0 6.444-6.444V8.862a8.23 8.23 0 0 0 4.789 1.515v-3.446a4.792 4.792 0 0 1-.817-.245z"/>
                   </svg>
                   <span>
-                    {language === 'en' ? 'Follow @dra.melvavidal' : 'Seguir @dra.melvavidal'}
+                    {section('videoCta').paragraphs![1]}
                   </span>
                 </a>
               </div>
@@ -213,10 +200,7 @@ const About = () => {
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="biography-title">
-                {language === 'en' 
-                  ? <>Meet <span className="font-display italic text-green-700">Dr. Melva</span> Reve</>
-                  : <>Conoce a la <span className="font-display italic text-green-700">Dra. Melva</span> Reve</>
-                }
+                {renderRichText(section('biographyHeading').heading!, undefined, 'font-display italic text-green-700')}
               </h2>
             </div>
 
@@ -225,40 +209,22 @@ const About = () => {
               <div className="lg:col-span-2">
                 <div className="prose prose-lg max-w-none">
                   <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>My passion for <span className="font-bold text-green-600">psychiatry</span> was born from a deep conviction: we all deserve to live with <span className="font-bold text-green-600">mental clarity</span>, <span className="font-bold text-green-600">emotional peace</span>, and renewed hope. For over <span className="font-bold text-green-600">15 years</span>, I have had the privilege of accompanying people in their most vulnerable moments and witnessing their incredible transformations through <span className="font-bold text-green-600">evidence-based treatment</span> and <span className="font-bold text-green-600">compassionate care</span>.</>
-                      : <>Mi pasión por la <span className="font-bold text-green-600">psiquiatría</span> nació de una profunda convicción: todos merecemos vivir con <span className="font-bold text-green-600">claridad mental</span>, <span className="font-bold text-green-600">paz emocional</span> y esperanza renovada. Durante más de <span className="font-bold text-green-600">15 años</span>, he tenido el privilegio de acompañar a personas en sus momentos más vulnerables y ser testigo de sus increíbles transformaciones a través del <span className="font-bold text-green-600">tratamiento basado en evidencia</span> y <span className="font-bold text-green-600">cuidado compasivo</span>.</>
-                    }
+                    {renderRichText(bio[0], undefined, 'font-bold text-green-600')}
                   </p>
                   <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>As the daughter of immigrants and a <span className="font-bold text-green-600">native Spanish speaker</span>, I deeply understand the unique challenges <span className="font-bold text-green-600">Latino families</span> face when seeking <span className="font-bold text-green-600">mental health care</span>. <span className="font-bold text-green-600">Language barriers</span>, cultural differences, and stigma should not prevent someone from receiving the care they deserve. My <span className="font-bold text-green-600">bilingual practice</span> ensures that every patient feels heard, understood, and respected in their preferred language, creating a bridge of trust that is essential for effective <span className="font-bold text-green-600">psychiatric treatment</span>.</>
-                      : <>Como hija de inmigrantes y <span className="font-bold text-green-600">hablante nativa de español</span>, entiendo profundamente los desafíos únicos que enfrentan las <span className="font-bold text-green-600">familias latinas</span> al buscar <span className="font-bold text-green-600">atención de salud mental</span>. La <span className="font-bold text-green-600">barrera del idioma</span>, las diferencias culturales y el estigma no deberían impedir que alguien reciba el cuidado que merece. Mi <span className="font-bold text-green-600">práctica bilingüe</span> asegura que cada paciente se sienta escuchado, entendido y respetado en su idioma preferido, creando un puente de confianza que es esencial para un <span className="font-bold text-green-600">tratamiento psiquiátrico</span> efectivo.</>
-                    }
+                    {renderRichText(bio[1], undefined, 'font-bold text-green-600')}
                   </p>
                   <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>My philosophy is simple but powerful: <span className="font-bold text-green-600">healing happens in relationship</span>. You are not a diagnosis; you are a complete person with a unique story, innate strengths, and unlimited potential for growth. My job is to walk with you on that journey toward <span className="font-bold text-green-600">wellness</span> and <span className="font-bold text-green-600">recovery</span>.</>
-                      : <>Mi filosofía es simple pero poderosa: <span className="font-bold text-green-600">la sanación sucede en relación</span>. No eres un diagnóstico; eres una persona completa con una historia única, fortalezas innatas y un potencial ilimitado para el crecimiento. Mi trabajo es caminar contigo en ese viaje hacia el <span className="font-bold text-green-600">bienestar</span> y la <span className="font-bold text-green-600">recuperación</span>.</>
-                    }
+                    {renderRichText(bio[2], undefined, 'font-bold text-green-600')}
                   </p>
                   <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>My approach combines the latest advances in <span className="font-bold text-green-600">psychiatric medicine</span> with time-honored principles of <span className="font-bold text-green-600">therapeutic alliance</span>. Whether you're struggling with <span className="font-bold text-green-600">anxiety</span>, <span className="font-bold text-green-600">depression</span>, <span className="font-bold text-green-600">ADHD</span>, <span className="font-bold text-green-600">PTSD</span>, or <span className="font-bold text-green-600">bipolar disorder</span>, I believe in creating a safe space where vulnerability becomes strength and challenges become opportunities for growth.</>
-                      : <>Mi enfoque combina los últimos avances en <span className="font-bold text-green-600">medicina psiquiátrica</span> con principios consagrados de <span className="font-bold text-green-600">alianza terapéutica</span>. Ya sea que estés luchando con <span className="font-bold text-green-600">ansiedad</span>, <span className="font-bold text-green-600">depresión</span>, <span className="font-bold text-green-600">TDAH</span>, <span className="font-bold text-green-600">TEPT</span> o <span className="font-bold text-green-600">trastorno bipolar</span>, creo en crear un espacio seguro donde la vulnerabilidad se convierte en fortaleza y los desafíos se convierten en oportunidades de crecimiento.</>
-                    }
+                    {renderRichText(bio[3], undefined, 'font-bold text-green-600')}
                   </p>
                   <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                    {language === 'en'
-                      ? <>In my practice in <span className="font-bold text-green-600">Naples, Florida</span>, I've witnessed countless stories of transformation. From the anxious professional who learned to manage their stress, to the mother who overcame postpartum depression, to the teenager who found their voice again after trauma - each journey reminds me why I chose this calling. My commitment extends beyond traditional <span className="font-bold text-green-600">medication management</span> to include <span className="font-bold text-green-600">psychoeducation</span>, <span className="font-bold text-green-600">lifestyle interventions</span>, and collaborative care planning that empowers you to be an active participant in your healing.</>
-                      : <>En mi práctica en <span className="font-bold text-green-600">Naples, Florida</span>, he sido testigo de innumerables historias de transformación. Desde el profesional ansioso que aprendió a manejar su estrés, hasta la madre que superó la depresión posparto, hasta el adolescente que encontró su voz nuevamente después del trauma - cada viaje me recuerda por qué elegí esta vocación. Mi compromiso se extiende más allá del tradicional <span className="font-bold text-green-600">manejo de medicamentos</span> para incluir <span className="font-bold text-green-600">psicoeducación</span>, <span className="font-bold text-green-600">intervenciones de estilo de vida</span> y planificación de cuidado colaborativo que te empodera a ser un participante activo en tu sanación.</>
-                    }
+                    {renderRichText(bio[4], undefined, 'font-bold text-green-600')}
                   </p>
                   <p className="text-lg text-gray-700 leading-relaxed">
-                    {language === 'en'
-                      ? <>Every session is an opportunity to reclaim your narrative, to rediscover your resilience, and to build the life you deserve. My role as your <span className="font-bold text-green-600">psychiatrist</span> is not just to diagnose and treat, but to walk alongside you as you navigate the path toward <span className="font-bold text-green-600">mental wellness</span>, <span className="font-bold text-green-600">emotional balance</span>, and renewed hope. Together, we'll create a treatment plan that honors your unique circumstances, respects your cultural background, and aligns with your personal goals for recovery and growth.</>
-                      : <>Cada sesión es una oportunidad para reclamar tu narrativa, redescubrir tu resistencia y construir la vida que mereces. Mi papel como tu <span className="font-bold text-green-600">psiquiatra</span> no es solo diagnosticar y tratar, sino caminar a tu lado mientras navegas el camino hacia el <span className="font-bold text-green-600">bienestar mental</span>, el <span className="font-bold text-green-600">equilibrio emocional</span> y la esperanza renovada. Juntos, crearemos un plan de tratamiento que honre tus circunstancias únicas, respete tu trasfondo cultural y se alinee con tus metas personales de recuperación y crecimiento.</>
-                    }
+                    {renderRichText(bio[5], undefined, 'font-bold text-green-600')}
                   </p>
                 </div>
               </div>
@@ -267,67 +233,45 @@ const About = () => {
               <div className="lg:col-span-1">
                 <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
                   <h3 className="text-xl font-semibold text-gray-900 mb-6">
-                    {language === 'en' ? 'Credentials and Training' : 'Credenciales y Formación'}
+                    {section('credentialsHeading').heading!}
                   </h3>
                   
                   <div className="space-y-6">
                     <div>
                       <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Professional Certification' : 'Certificación Profesional'}
+                        {section('credCertification').heading!}
                       </h4>
                       <p className="text-gray-700">
-                        {language === 'en' 
-                          ? 'Specializing in Adult Psychiatry'
-                          : 'Especializada en Psiquiatría de Adultos'
-                        }
+                        {section('credCertification').paragraphs![0]}
                       </p>
                     </div>
 
                     <div>
                       <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Medical Education' : 'Educación Médica'}
+                        {section('credEducation').heading!}
                       </h4>
                       <p className="text-gray-700 text-sm">
-                        {language === 'en' 
-                          ? <>Doctor of Medicine (M.D.)<br />Psychiatric Residency Training<br />Specialized Training in Cultural Competency</>
-                          : <>Doctora en Medicina (M.D.)<br />Residencia en Psiquiatría<br />Entrenamiento Especializado en Competencia Cultural</>
-                        }
+                        {section('credEducation').paragraphs![0]}<br />{section('credEducation').paragraphs![1]}<br />{section('credEducation').paragraphs![2]}
                       </p>
                     </div>
 
                     <div>
                       <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Areas of Specialization' : 'Áreas de Especialización'}
+                        {section('credSpecialization').heading!}
                       </h4>
                       <ul className="text-gray-700 text-sm space-y-1">
-                        {language === 'en' 
-                          ? <>
-                            <li>• Anxiety Disorders</li>
-                            <li>• Depression</li>
-                            <li>• Adult ADHD</li>
-                            <li>• Trauma and PTSD</li>
-                            <li>• Bipolar Disorder</li>
-                          </>
-                          : <>
-                            <li>• Trastornos de Ansiedad</li>
-                            <li>• Depresión</li>
-                            <li>• TDAH en Adultos</li>
-                            <li>• Trauma y TEPT</li>
-                            <li>• Trastorno Bipolar</li>
-                          </>
-                        }
+                        {section('credSpecialization').bullets!.map((item, i) => (
+                          <li key={i}>• {item}</li>
+                        ))}
                       </ul>
                     </div>
 
                     <div>
                       <h4 className="font-semibold text-green-700 mb-2">
-                        {language === 'en' ? 'Languages' : 'Idiomas'}
+                        {section('credLanguages').heading!}
                       </h4>
                       <p className="text-gray-700">
-                        {language === 'en' 
-                          ? <>Spanish (native)<br />English (fluent)</>
-                          : <>Español (nativo)<br />Inglés (fluido)</>
-                        }
+                        {section('credLanguages').paragraphs![0]}<br />{section('credLanguages').paragraphs![1]}
                       </p>
                     </div>
                   </div>
@@ -378,16 +322,10 @@ const About = () => {
           <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16 shadow-lg border">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6" data-testid="process-title">
-                {language === 'en' 
-                  ? <>Your <span className="font-display italic text-green-700">Journey</span> with Us: What to Expect</>
-                  : <>Tu Viaje con <span className="font-display italic text-green-700">Nosotros</span>: Qué Esperar</>
-                }
+                {renderRichText(section('processHeading').heading!, undefined, 'font-display italic text-green-700')}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Our process is designed to make you feel comfortable, heard, and empowered from the very first moment.'
-                  : 'Nuestro proceso está diseñado para que te sientas cómodo, escuchado y empoderado desde el primer momento.'
-                }
+                {section('processHeading').paragraphs![0]}
               </p>
             </div>
 

@@ -4,6 +4,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { seedInitialBlogPosts } from "./blog/seed";
 import { setupReplitAuth } from "./replit-auth";
+import { findSitemapPathsWithoutBotBody } from "./utils/html-injection";
 
 const app = express();
 
@@ -146,5 +147,24 @@ app.use((req, res, next) => {
 
   server.listen(listenOptions, () => {
     log(`serving on port ${port}`);
+
+    // Warn-only startup guardrail: every sitemap URL must have a crawler body.
+    findSitemapPathsWithoutBotBody()
+      .then((missing) => {
+        if (missing.length === 0) {
+          log("bot-body coverage OK: every sitemap URL has crawler content");
+          return;
+        }
+        console.error("==========================================================");
+        console.error(`⚠️  BOT BODY COVERAGE WARNING: ${missing.length} sitemap URL(s) have NO crawler content.`);
+        console.error("⚠️  These pages will look empty to Google. Fix BOT_CONTENT_PAGES in server/utils/html-injection.ts:");
+        for (const path of missing) {
+          console.error(`⚠️    - ${path}`);
+        }
+        console.error("==========================================================");
+      })
+      .catch((err) => {
+        console.error("Bot-body coverage startup check failed:", err);
+      });
   });
 })();

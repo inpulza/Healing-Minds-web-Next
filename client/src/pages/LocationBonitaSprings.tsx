@@ -155,13 +155,13 @@ const LocationBonitaSprings = () => {
                 />
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">
-                    <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
+                    <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (
                         <>Your Trusted <span className="font-display italic">Psychiatrist</span> in Bonita Springs, FL</>
                       ) : (
                         <>Su <span className="font-display italic">Psiquiatra</span> de Confianza en Bonita Springs, FL</>
                       )}
-                    </h1>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -1090,8 +1090,8 @@ const LocationBonitaSprings = () => {
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
                       {language === 'en' 
-                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
-                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
+                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: Closed\nSunday: Closed'
+                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Cerrado\nDomingo: Cerrado'}
                     </p>
                   </div>
                 </div>
@@ -1109,7 +1109,7 @@ const LocationBonitaSprings = () => {
 
               {/* Telehealth Booking */}
               <div className="lg:col-span-1">
-                <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
+                <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 lg:sticky lg:top-24">
                   <div className="text-center space-y-4">
                     <VideoIcon className="w-8 h-8 text-blue-600 mx-auto" />
                     <h3 className="text-lg font-bold text-blue-800">

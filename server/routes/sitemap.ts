@@ -8,6 +8,7 @@ import {
   type BlogPostWithRelations,
 } from '../blog/storage';
 import { getSeoSiteConfig } from '../seo/config';
+import { getSitemapEntries } from '@shared/routeManifest';
 
 function getBaseUrl(): string {
   return getSeoSiteConfig().siteBaseUrl;
@@ -51,202 +52,16 @@ function getBlogHreflangLinks(baseUrl: string, posts: BlogPostWithRelations[]): 
 export const generateSitemap = async (req: Request, res: Response) => {
   const baseUrl = getBaseUrl();
   
-  // Define bilingual page relationships for hreflang
-  const bilingualPages = [
-    // Homepage with bilingual version
-    {
-      en: '/',
-      es: '/es',
-      changefreq: 'weekly',
-      priority: '1.0'
-    },
-    // Main pages with bilingual versions
-    {
-      en: '/about',
-      es: '/es/acerca-de',
-      changefreq: 'monthly',
-      priority: '0.8'
-    },
-    {
-      en: '/contact',
-      es: '/es/contacto',
-      changefreq: 'monthly',
-      priority: '0.8'
-    },
-    {
-      en: '/for-patients',
-      es: '/es/para-pacientes',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/telepsychiatry-florida',
-      es: '/es/telepsiquiatria-florida',
-      changefreq: 'monthly',
-      priority: '0.8'
-    },
-    // Main service pages with bilingual versions
-    {
-      en: '/services',
-      es: '/es/servicios',
-      changefreq: 'monthly',
-      priority: '0.8'
-    },
-    // Individual service pages with bilingual versions
-    {
-      en: '/services/anxiety-treatment',
-      es: '/es/servicios/tratamiento-ansiedad',
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      en: '/services/depression-treatment',
-      es: '/es/servicios/tratamiento-depresion',
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      en: '/services/adhd-treatment',
-      es: '/es/servicios/tratamiento-adhd',
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      en: '/services/ptsd-treatment',
-      es: '/es/servicios/tratamiento-tept',
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      en: '/services/bipolar-treatment',
-      es: '/es/servicios/tratamiento-bipolar',
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    {
-      en: '/services/medication-management',
-      es: '/es/servicios/manejo-medicamentos',
-      changefreq: 'monthly',
-      priority: '0.7'
-    },
-    // Location pages with bilingual versions (CRITICAL for local SEO)
-    {
-      en: '/locations/psychiatrist-naples',
-      es: '/es/ubicaciones/psiquiatra-naples',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-bonita-springs',
-      es: '/es/ubicaciones/psiquiatra-bonita-springs',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-marco-island',
-      es: '/es/ubicaciones/psiquiatra-marco-island',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-fort-myers',
-      es: '/es/ubicaciones/psiquiatra-fort-myers',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-ave-maria',
-      es: '/es/ubicaciones/psiquiatra-ave-maria',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-estero',
-      es: '/es/ubicaciones/psiquiatra-estero',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-golden-gate',
-      es: '/es/ubicaciones/psiquiatra-golden-gate',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-immokalee',
-      es: '/es/ubicaciones/psiquiatra-immokalee',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-lely-resort',
-      es: '/es/ubicaciones/psiquiatra-lely-resort',
-      changefreq: 'monthly',
-      priority: '0.6'
-    },
-    {
-      en: '/locations/psychiatrist-vanderbilt-beach',
-      es: '/es/ubicaciones/psiquiatra-vanderbilt-beach',
-      changefreq: 'monthly',
-      priority: '0.6'
-    }
-  ];
+  // Static pages come from the single route manifest (shared/routeManifest.ts).
+  // The split below only preserves the historical sitemap block order
+  // (main/service/location pages first, then legal pages).
+  const sitemapEntries = getSitemapEntries();
+  const bilingualPages = sitemapEntries.filter(page => page.changefreq !== 'yearly');
+  const legalPages = sitemapEntries.filter(page => page.changefreq === 'yearly');
 
   // Pages that exist only in English (no Spanish version) - currently empty
   const englishOnlyPages: Array<{url: string, changefreq: string, priority: string}> = [];
-  
-  // Define legal pages with bilingual support (lower priority as per SEO best practices)
-  const legalPages = [
-    {
-      en: '/privacy-policy',
-      es: '/es/politica-privacidad',
-      changefreq: 'yearly',
-      priority: '0.3'
-    },
-    {
-      en: '/terms-of-service',
-      es: '/es/terminos-servicio',
-      changefreq: 'yearly',
-      priority: '0.3'
-    },
-    {
-      en: '/hipaa-notice',
-      es: '/es/aviso-hipaa',
-      changefreq: 'yearly',
-      priority: '0.3'
-    },
-    {
-      en: '/cookie-policy',
-      es: '/es/politica-cookies',
-      changefreq: 'yearly',
-      priority: '0.3'
-    },
-    {
-      en: '/cancellation-policy',
-      es: '/es/politica-cancelacion',
-      changefreq: 'yearly',
-      priority: '0.3'
-    },
-    {
-      en: '/billing-policy',
-      es: '/es/politica-facturacion',
-      changefreq: 'yearly',
-      priority: '0.3'
-    },
-    {
-      en: '/emergency-policy',
-      es: '/es/politica-emergencias',
-      changefreq: 'yearly',
-      priority: '0.3'
-    },
-    {
-      en: '/patient-rights',
-      es: '/es/derechos-paciente',
-      changefreq: 'yearly',
-      priority: '0.3'
-    }
-  ];
-  
+
   // Define site structure with priorities and update frequencies  
   const pages: Array<{url: string, changefreq: string, priority: string}> = [];
 
@@ -520,6 +335,12 @@ ${blogPosts.map(post => `- [${post.title}](${baseUrl}${getBlogPostPath(post)}): 
 - [Billing Policy](${baseUrl}/billing-policy)
 - [Emergency Policy](${baseUrl}/emergency-policy)
 - [Patient Rights](${baseUrl}/patient-rights)
+- [Telehealth Informed Consent](${baseUrl}/telehealth-consent)
+- [No Surprises Act](${baseUrl}/no-surprises-act)
+- [Accessibility Statement](${baseUrl}/accessibility-statement)
+- [Nondiscrimination Notice](${baseUrl}/nondiscrimination-notice)
+- [Communications Policy](${baseUrl}/communications-policy)
+- [Medical Disclaimer](${baseUrl}/medical-disclaimer)
 
 ## Legal en Español
 - [Política de Privacidad](${baseUrl}/es/politica-privacidad)
@@ -530,6 +351,12 @@ ${blogPosts.map(post => `- [${post.title}](${baseUrl}${getBlogPostPath(post)}): 
 - [Política de Facturación](${baseUrl}/es/politica-facturacion)
 - [Política de Emergencias](${baseUrl}/es/politica-emergencias)
 - [Derechos del Paciente](${baseUrl}/es/derechos-paciente)
+- [Consentimiento Informado de Telesalud](${baseUrl}/es/consentimiento-telesalud)
+- [Ley Sin Sorpresas](${baseUrl}/es/ley-sin-sorpresas)
+- [Declaración de Accesibilidad](${baseUrl}/es/declaracion-accesibilidad)
+- [Aviso de No Discriminación](${baseUrl}/es/aviso-no-discriminacion)
+- [Política de Comunicaciones](${baseUrl}/es/politica-comunicaciones)
+- [Descargo de Responsabilidad Médica](${baseUrl}/es/descargo-responsabilidad-medica)
 `;
 
   res.set({

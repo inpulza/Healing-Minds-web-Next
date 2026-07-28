@@ -1,3 +1,5 @@
+import { getRobotsPolicy, normalizeRoutePath } from '@shared/routeManifest';
+
 interface SEOData {
   title: string;
   description: string;
@@ -5,6 +7,72 @@ interface SEOData {
   lang?: string;
   canonical?: string;
   ogImage?: string;
+}
+
+// Path the server rendered the initial document for. For THAT path the server
+// already injected the authoritative robots meta and canonical link, so we must
+// not touch them (rewriting them after hydration is what previously caused
+// "Google chose a different canonical" in Search Console). They only go stale
+// once the user navigates client-side, which is what syncRouteSignals fixes.
+const serverRenderedPath =
+  typeof window === 'undefined' ? '/' : normalizeRoutePath(window.location.pathname);
+
+function productionOrigin(): string {
+  const origin = window.location.origin;
+  return origin.replace('://healingmindsp.com', '://www.healingmindsp.com');
+}
+
+function upsertHeadTag(selector: string, create: () => Element): Element {
+  const existing = document.head.querySelector(selector);
+  if (existing) return existing;
+  const tag = create();
+  document.head.appendChild(tag);
+  return tag;
+}
+
+// Only the very first call happens during hydration; from then on every call
+// follows a client-side navigation.
+let hydrationPass = true;
+
+/**
+ * Keep robots + canonical aligned with the current route during SPA navigation.
+ * Without this, the values the server injected for the entry URL stay in the DOM:
+ * leaving a California landing (noindex) would leave the home page carrying
+ * `noindex` and the landing's canonical.
+ */
+function syncRouteSignals() {
+  if (typeof window === 'undefined') return;
+
+  const currentPath = normalizeRoutePath(window.location.pathname);
+
+  if (hydrationPass) {
+    hydrationPass = false;
+    // On first paint the server tags are authoritative for this exact path.
+    // Later returns to the same path DO need syncing: by then an intermediate
+    // route may have left its own robots/canonical behind.
+    if (currentPath === serverRenderedPath) return;
+  }
+
+  const robots = getRobotsPolicy(currentPath);
+  if (robots) {
+    const tag = upsertHeadTag('meta[name="robots"]', () => {
+      const meta = document.createElement('meta');
+      meta.setAttribute('name', 'robots');
+      return meta;
+    });
+    tag.setAttribute('content', robots);
+  }
+
+  // Always self-referencing, exactly like the server (html-injection.ts picks the
+  // canonical from the requested URL's language). Deliberately NOT data.canonical:
+  // several bilingual pages hardcode the English canonical, which would point the
+  // Spanish route at the English URL.
+  const tag = upsertHeadTag('link[rel="canonical"]', () => {
+    const link = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    return link;
+  });
+  tag.setAttribute('href', `${productionOrigin()}${currentPath}`);
 }
 
 // Global guards for schema initialization to prevent duplicates
@@ -87,12 +155,13 @@ export const updateSEO = (data: SEOData) => {
     createMetaTag('keywords', data.keywords);
   }
   
-  // Step 5: Canonical URL gestionado server-side ÚNICAMENTE.
-  // El servidor inyecta <link rel="canonical"> en el HTML inicial por ruta
-  // (ver server/utils/html-injection.ts). El cliente NO lo toca para evitar
-  // que tras la hidratación de React el canonical cambie respecto al HTML
-  // inicial (causaba "duplicate canonical" / "Google chose different canonical"
-  // en Search Console).
+  // Step 5: Canonical y robots de la ruta de entrada los gestiona el servidor
+  // (ver server/utils/html-injection.ts) y el cliente NO los toca, para evitar
+  // que tras la hidratación cambien respecto al HTML inicial (causaba
+  // "duplicate canonical" / "Google chose different canonical" en Search
+  // Console). Sí los sincronizamos cuando el usuario navega a otra ruta dentro
+  // de la SPA, porque entonces los valores del servidor quedan obsoletos.
+  syncRouteSignals();
 
   // Step 6: Create Open Graph tags
   createMetaTag('og:title', data.title, 'property');

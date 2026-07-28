@@ -13,9 +13,9 @@ const AcercaEspanol = () => {
     setLanguage('es');
     
     const seoData = {
-      title: 'Acerca de la Dra. Melva Reve - Psiquiatra Certificada en Naples, FL',
-      description: 'Conozca a la Dra. Melva Reve, psiquiatra certificada con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.',
-      keywords: 'Dra Melva Reve Naples, biografía psiquiatra, psiquiatra certificada Naples, psiquiatra bilingüe FL',
+      title: 'Acerca de la Dra. Melva Reve - Psiquiatra en Naples, FL',
+      description: 'Conozca a la Dra. Melva Reve, psiquiatra con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.',
+      keywords: 'Dra Melva Reve Naples, biografía psiquiatra, psiquiatra con licencia Naples, psiquiatra bilingüe FL',
       lang: 'es',
       canonical: '/es/acerca-de'
     };

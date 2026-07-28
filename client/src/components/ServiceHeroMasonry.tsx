@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useClarity } from "@/hooks/use-clarity";
+import { trackLeadConversion } from "@/lib/analytics";
 
 interface ServiceHeroMasonryProps {
   tagline: {
@@ -150,6 +151,7 @@ export const ServiceHeroMasonry = ({
                 onClick={() => {
                   trackEvent('phone_call_initiated');
                   setTag('phone_click_location', 'service_hero');
+                  trackLeadConversion('phone_call', { click_location: 'service_hero' });
                 }}
               >
                 {language === 'en' ? 'Call Now' : 'Llamar Ahora'}

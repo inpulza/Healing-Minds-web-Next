@@ -1,3 +1,4 @@
+import { isValidElement, createElement, type ReactNode } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { Button } from '@/components/ui/button';
@@ -6,6 +7,16 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, VideoIcon, Smartphone, Monitor, CheckCircle } from 'lucide-react';
 import telehealthHeroBg from '../assets/telehealth-hero-bg.webp?v=2';
 
+// The hero title is rendered in both the mobile and desktop layouts. To avoid
+// duplicate <h1> elements in the DOM, the mobile copy is demoted to a <p>
+// (same classes/styles) while the desktop copy keeps the semantic <h1>.
+const demoteHeading = (node: ReactNode): ReactNode => {
+  if (isValidElement(node) && node.type === 'h1') {
+    return createElement('p', node.props as Record<string, unknown>);
+  }
+  return node;
+};
+
 interface CharmHealthBookingProps {
   variant?: 'default' | 'compact' | 'prominent';
   showDescription?: boolean;
@@ -13,6 +24,8 @@ interface CharmHealthBookingProps {
   heroTitle?: React.ReactNode;
   heroBadges?: React.ReactNode;
   heroDescription?: React.ReactNode;
+  heroImage?: string;
+  heroImageAlt?: string;
   colorScheme?: 'blue' | 'green';
 }
 
@@ -23,6 +36,8 @@ const CharmHealthBooking = ({
   heroTitle,
   heroBadges,
   heroDescription,
+  heroImage,
+  heroImageAlt,
   colorScheme = 'blue'
 }: CharmHealthBookingProps) => {
   const { language } = useLanguage();
@@ -91,8 +106,8 @@ const CharmHealthBooking = ({
           {/* Mobile Image - Shorter aspect ratio to crop bottom and remove watermark */}
           <div className="relative aspect-[4/5]">
             <img 
-              src={telehealthHeroBg} 
-              alt="Dr. Melva Reve providing secure telehealth psychiatric consultations from modern medical office in Florida"
+              src={heroImage || telehealthHeroBg}
+              alt={heroImageAlt || "Dr. Melva Reve providing secure telehealth psychiatric consultations from modern medical office in Florida"}
               className="absolute inset-0 w-full h-full object-cover"
               style={{ objectPosition: '75% top' }}
             />
@@ -102,7 +117,7 @@ const CharmHealthBooking = ({
           <div className="p-6 bg-white -mt-12 relative z-10 rounded-t-3xl">
             {heroTitle && (
               <div className="mb-6">
-                {heroTitle}
+                {demoteHeading(heroTitle)}
               </div>
             )}
             
@@ -135,8 +150,8 @@ const CharmHealthBooking = ({
         {/* Desktop Layout - Horizontal */}
         <div className="hidden md:block relative aspect-[18/9]">
           <img 
-            src={telehealthHeroBg} 
-            alt="Professional telehealth psychiatric care - Dr. Melva Reve's secure virtual consultation platform in Florida"
+            src={heroImage || telehealthHeroBg}
+            alt={heroImageAlt || "Professional telehealth psychiatric care - Dr. Melva Reve's secure virtual consultation platform in Florida"}
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>

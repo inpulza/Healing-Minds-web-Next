@@ -1,0 +1,413 @@
+import type { BilingualPageContent } from '../types';
+
+// Services index page (EN: client/src/pages/Services.tsx,
+// ES: client/src/pages/ServiciosEspanol.tsx). Both components render from this
+// single module. Decorated headings use **...** for the inline italic accent
+// span (rendered by RichText with the page's span className).
+
+export const servicesIndexContent: BilingualPageContent = {
+  en: {
+    title: `**Psychiatric** Services in Naples, FL`,
+    sections: [
+      {
+        key: 'eyebrow',
+        paragraphs: [`Naples, FL · Southwest Florida`],
+      },
+      {
+        key: 'heroDescription',
+        paragraphs: [
+          `Dr. Melva Reve offers evidence-based psychiatric care for anxiety, depression, ADHD, PTSD, and more. Accepting new patients — in-person in Naples and via telehealth throughout Florida.`,
+        ],
+      },
+      {
+        key: 'heroBookCta',
+        paragraphs: [`Book an Appointment`],
+      },
+      {
+        key: 'quickInfo',
+        bullets: [
+          `Naples, FL 34103`,
+          `Mon–Fri, flexible hours`,
+          `In-person & telehealth`,
+          `Bilingual EN/ES`,
+        ],
+      },
+      {
+        key: 'approachHeading',
+        heading: `Our **Treatment** Approach`,
+        paragraphs: [
+          `What makes psychiatric care at Healing Minds different from a standard clinic visit.`,
+        ],
+      },
+      {
+        key: 'approach-1',
+        level: 3,
+        heading: `Evidence-Based Treatment`,
+        paragraphs: [
+          `Every treatment plan is grounded in the latest psychiatric research — combining medication management with therapeutic approaches proven to work for your specific condition.`,
+        ],
+      },
+      {
+        key: 'approach-2',
+        level: 3,
+        heading: `Personalized Care Plans`,
+        paragraphs: [
+          `No two patients are the same. Dr. Reve develops individualized treatment strategies tailored to your unique history, lifestyle, and goals — not a one-size-fits-all approach.`,
+        ],
+      },
+      {
+        key: 'approach-3',
+        level: 3,
+        heading: `Bilingual & Culturally Sensitive`,
+        paragraphs: [
+          `Fully bilingual care in English and Spanish, with cultural competency that reflects the diverse communities of Naples and Southwest Florida.`,
+        ],
+      },
+      {
+        key: 'approach-4',
+        level: 3,
+        heading: `In-Person & Telehealth Options`,
+        paragraphs: [
+          `Flexible care delivery — visit our Naples office or connect securely online. Telehealth is available across Florida for maximum convenience.`,
+        ],
+      },
+      {
+        key: 'insuranceHeading',
+        heading: `Insurance & **Getting Started**`,
+        paragraphs: [
+          `We accept most major insurance plans and verify your benefits before your first appointment so there are no billing surprises. Self-pay rates and payment plans are available for uninsured patients.`,
+        ],
+      },
+      {
+        key: 'insuranceBullets',
+        bullets: [
+          `Medicare accepted`,
+          `Most major commercial insurance plans`,
+          `Telehealth appointments covered by most plans`,
+          `Good Faith Estimates provided for self-pay`,
+          `Flexible payment plans available`,
+        ],
+      },
+      {
+        key: 'insuranceCta',
+        paragraphs: [`View Full Billing Policy`],
+      },
+      {
+        key: 'expectHeading',
+        heading: `What to **Expect**`,
+      },
+      {
+        key: 'expect-1',
+        level: 3,
+        heading: `Book Your Appointment`,
+        paragraphs: [
+          `Schedule online or call (239) 423-0272. New patients typically seen within 1–2 weeks.`,
+        ],
+      },
+      {
+        key: 'expect-2',
+        level: 3,
+        heading: `Initial Evaluation (40–60 min)`,
+        paragraphs: [
+          `A comprehensive assessment of your mental health history, current symptoms, medications, and treatment goals.`,
+        ],
+      },
+      {
+        key: 'expect-3',
+        level: 3,
+        heading: `Personalized Treatment Plan`,
+        paragraphs: [
+          `Dr. Reve develops a tailored plan that may include medication management, therapy referrals, or both.`,
+        ],
+      },
+      {
+        key: 'expect-4',
+        level: 3,
+        heading: `Ongoing Follow-Up Care`,
+        paragraphs: [
+          `Regular 20–30 min follow-up appointments to monitor progress, adjust treatment, and support your recovery.`,
+        ],
+      },
+      {
+        key: 'expectCta',
+        paragraphs: [`Patient Resources & Info`],
+      },
+      {
+        key: 'faqHeading',
+        heading: `Frequently Asked **Questions**`,
+        paragraphs: [
+          `Common questions about psychiatric services at Healing Minds in Naples, FL.`,
+        ],
+      },
+      {
+        key: 'faq-1',
+        level: 3,
+        heading: `What psychiatric conditions do you treat at Healing Minds?`,
+        paragraphs: [
+          `Dr. Melva Reve provides expert care for anxiety disorders, depression, ADHD (in adults and teens), PTSD, bipolar disorder, and medication management. Each treatment plan is personalized to your symptoms, history, and goals.`,
+        ],
+      },
+      {
+        key: 'faq-2',
+        level: 3,
+        heading: `Do you accept insurance for psychiatric services?`,
+        paragraphs: [
+          `Yes. We accept most major insurance plans including Medicare, Aetna, Cigna, BlueCross BlueShield, United Healthcare, and others. Self-pay rates and flexible payment plans are also available. We verify your benefits before the first appointment.`,
+        ],
+      },
+      {
+        key: 'faq-3',
+        level: 3,
+        heading: `How long does a first psychiatric appointment take?`,
+        paragraphs: [
+          `Initial consultations are 40–60 minutes. This comprehensive evaluation covers your mental health history, current symptoms, medications, and treatment goals. Follow-up appointments are typically 20–30 minutes.`,
+        ],
+      },
+      {
+        key: 'faq-4',
+        level: 3,
+        heading: `Is telehealth available for psychiatric care?`,
+        paragraphs: [
+          `Yes. Healing Minds offers secure, HIPAA-compliant telehealth appointments throughout Florida. Telehealth is especially convenient for follow-up visits, medication management, and patients outside the Naples area.`,
+        ],
+      },
+      {
+        key: 'faq-5',
+        level: 3,
+        heading: `Do you offer bilingual psychiatric services in Spanish?`,
+        paragraphs: [
+          `Yes. Dr. Melva Reve is fully bilingual in English and Spanish, providing culturally sensitive psychiatric care to Naples and Southwest Florida's Hispanic and Latin communities.`,
+        ],
+      },
+      {
+        key: 'faq-6',
+        level: 3,
+        heading: `How soon can I get an appointment?`,
+        paragraphs: [
+          `New patient appointments are typically available within 1–2 weeks. You can book online through our scheduling system or call (239) 423-0272. Telehealth slots often have greater availability.`,
+        ],
+      },
+      {
+        key: 'ctaHeading',
+        heading: `Serving Naples and **Southwest Florida**`,
+        paragraphs: [
+          `Healing Minds Psychiatry serves patients from Naples, Bonita Springs, Marco Island, Estero, Fort Myers, and surrounding communities in Collier and Lee counties. Telehealth extends our reach to all of Florida.`,
+        ],
+      },
+      {
+        key: 'cities',
+        bullets: [`Naples`, `Bonita Springs`, `Marco Island`, `Estero`, `Fort Myers`],
+      },
+      {
+        key: 'ctaBook',
+        paragraphs: [`Book Your Appointment`],
+      },
+      {
+        key: 'ctaLocation',
+        paragraphs: [`Our Naples Location`],
+      },
+    ],
+  },
+  es: {
+    title: `**Servicios** Psiquiátricos en Naples, FL`,
+    sections: [
+      {
+        key: 'eyebrow',
+        paragraphs: [`Naples, FL · Suroeste de Florida`],
+      },
+      {
+        key: 'heroDescription',
+        paragraphs: [
+          `La Dra. Melva Reve ofrece atención psiquiátrica basada en evidencia para ansiedad, depresión, TDAH, TEPT y más. Aceptando nuevos pacientes — en persona en Naples y por telesalud en toda Florida.`,
+        ],
+      },
+      {
+        key: 'heroBookCta',
+        paragraphs: [`Reservar una Cita`],
+      },
+      {
+        key: 'quickInfo',
+        bullets: [
+          `Naples, FL 34103`,
+          `Lun–Vie, horarios flexibles`,
+          `Presencial y telesalud`,
+          `Bilingüe EN/ES`,
+        ],
+      },
+      {
+        key: 'approachHeading',
+        heading: `Nuestro **Enfoque** de Tratamiento`,
+        paragraphs: [
+          `Lo que hace diferente la atención psiquiátrica en Healing Minds de una visita clínica estándar.`,
+        ],
+      },
+      {
+        key: 'approach-1',
+        level: 3,
+        heading: `Tratamiento Basado en Evidencia`,
+        paragraphs: [
+          `Cada plan de tratamiento está fundamentado en la investigación psiquiátrica más reciente, combinando manejo de medicamentos con enfoques terapéuticos comprobados para su condición específica.`,
+        ],
+      },
+      {
+        key: 'approach-2',
+        level: 3,
+        heading: `Planes de Atención Personalizados`,
+        paragraphs: [
+          `No hay dos pacientes iguales. La Dra. Reve desarrolla estrategias de tratamiento individualizadas adaptadas a su historial único, estilo de vida y objetivos — no un enfoque genérico.`,
+        ],
+      },
+      {
+        key: 'approach-3',
+        level: 3,
+        heading: `Bilingüe y Culturalmente Sensible`,
+        paragraphs: [
+          `Atención completamente bilingüe en inglés y español, con competencia cultural que refleja las diversas comunidades de Naples y el suroeste de Florida.`,
+        ],
+      },
+      {
+        key: 'approach-4',
+        level: 3,
+        heading: `Opciones Presenciales y de Telesalud`,
+        paragraphs: [
+          `Atención flexible: visite nuestra oficina en Naples o conéctese de forma segura en línea. La telesalud está disponible en toda Florida para máxima conveniencia.`,
+        ],
+      },
+      {
+        key: 'insuranceHeading',
+        heading: `Seguro y **Cómo Comenzar**`,
+        paragraphs: [
+          `Aceptamos la mayoría de los planes de seguro principales y verificamos sus beneficios antes de su primera cita para que no haya sorpresas de facturación. Las tarifas de pago personal y los planes de pago están disponibles para pacientes sin seguro.`,
+        ],
+      },
+      {
+        key: 'insuranceBullets',
+        bullets: [
+          `Se acepta Medicare`,
+          `La mayoría de los planes de seguro comerciales principales`,
+          `Citas de telesalud cubiertas por la mayoría de los planes`,
+          `Estimados de buena fe para pago personal`,
+          `Planes de pago flexibles disponibles`,
+        ],
+      },
+      {
+        key: 'insuranceCta',
+        paragraphs: [`Ver Política de Facturación`],
+      },
+      {
+        key: 'expectHeading',
+        heading: `Qué **Esperar**`,
+      },
+      {
+        key: 'expect-1',
+        level: 3,
+        heading: `Reservar su Cita`,
+        paragraphs: [
+          `Programe en línea o llame al (239) 423-0272. Los nuevos pacientes generalmente son atendidos en 1–2 semanas.`,
+        ],
+      },
+      {
+        key: 'expect-2',
+        level: 3,
+        heading: `Evaluación Inicial (40–60 min)`,
+        paragraphs: [
+          `Una evaluación integral de su historial de salud mental, síntomas actuales, medicamentos y objetivos de tratamiento.`,
+        ],
+      },
+      {
+        key: 'expect-3',
+        level: 3,
+        heading: `Plan de Tratamiento Personalizado`,
+        paragraphs: [
+          `La Dra. Reve desarrolla un plan personalizado que puede incluir manejo de medicamentos, derivaciones a terapia, o ambos.`,
+        ],
+      },
+      {
+        key: 'expect-4',
+        level: 3,
+        heading: `Atención de Seguimiento Continua`,
+        paragraphs: [
+          `Citas de seguimiento regulares de 20–30 min para monitorear el progreso, ajustar el tratamiento y apoyar su recuperación.`,
+        ],
+      },
+      {
+        key: 'expectCta',
+        paragraphs: [`Recursos e Información para Pacientes`],
+      },
+      {
+        key: 'faqHeading',
+        heading: `Preguntas **Frecuentes**`,
+        paragraphs: [
+          `Preguntas comunes sobre los servicios psiquiátricos en Healing Minds en Naples, FL.`,
+        ],
+      },
+      {
+        key: 'faq-1',
+        level: 3,
+        heading: `¿Qué condiciones psiquiátricas trata Healing Minds?`,
+        paragraphs: [
+          `La Dra. Melva Reve ofrece atención experta para trastornos de ansiedad, depresión, TDAH (en adultos y adolescentes), TEPT, trastorno bipolar y manejo de medicamentos. Cada plan de tratamiento es personalizado según sus síntomas, historial y objetivos.`,
+        ],
+      },
+      {
+        key: 'faq-2',
+        level: 3,
+        heading: `¿Aceptan seguro médico para servicios psiquiátricos?`,
+        paragraphs: [
+          `Sí. Aceptamos la mayoría de los planes de seguro principales, incluyendo Medicare, Aetna, Cigna, BlueCross BlueShield, United Healthcare y otros. También hay tarifas de pago personal y planes de pago flexibles disponibles. Verificamos sus beneficios antes de la primera cita.`,
+        ],
+      },
+      {
+        key: 'faq-3',
+        level: 3,
+        heading: `¿Cuánto dura la primera cita psiquiátrica?`,
+        paragraphs: [
+          `Las consultas iniciales duran 40–60 minutos. Esta evaluación integral cubre su historial de salud mental, síntomas actuales, medicamentos y objetivos de tratamiento. Las citas de seguimiento suelen durar 20–30 minutos.`,
+        ],
+      },
+      {
+        key: 'faq-4',
+        level: 3,
+        heading: `¿Está disponible la telesalud para atención psiquiátrica?`,
+        paragraphs: [
+          `Sí. Healing Minds ofrece citas de telesalud seguras y conformes con HIPAA en toda Florida. La telesalud es especialmente conveniente para citas de seguimiento, manejo de medicamentos y pacientes fuera del área de Naples.`,
+        ],
+      },
+      {
+        key: 'faq-5',
+        level: 3,
+        heading: `¿Ofrecen servicios psiquiátricos en español?`,
+        paragraphs: [
+          `Sí. La Dra. Melva Reve es completamente bilingüe en inglés y español, brindando atención psiquiátrica culturalmente sensible a las comunidades hispanas y latinas de Naples y el suroeste de Florida.`,
+        ],
+      },
+      {
+        key: 'faq-6',
+        level: 3,
+        heading: `¿Qué tan pronto puedo obtener una cita?`,
+        paragraphs: [
+          `Las citas para nuevos pacientes generalmente están disponibles en 1–2 semanas. Puede reservar en línea a través de nuestro sistema de programación o llamar al (239) 423-0272. Los espacios de telesalud suelen tener mayor disponibilidad.`,
+        ],
+      },
+      {
+        key: 'ctaHeading',
+        heading: `Atendiendo Naples y el **Suroeste de Florida**`,
+        paragraphs: [
+          `Healing Minds Psychiatry atiende a pacientes de Naples, Bonita Springs, Marco Island, Estero, Fort Myers y comunidades cercanas en los condados de Collier y Lee. La telesalud extiende nuestro alcance a toda Florida.`,
+        ],
+      },
+      {
+        key: 'cities',
+        bullets: [`Naples`, `Bonita Springs`, `Marco Island`, `Estero`, `Fort Myers`],
+      },
+      {
+        key: 'ctaBook',
+        paragraphs: [`Reservar su Cita`],
+      },
+      {
+        key: 'ctaLocation',
+        paragraphs: [`Nuestra Ubicación en Naples`],
+      },
+    ],
+  },
+};

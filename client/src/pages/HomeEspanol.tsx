@@ -29,8 +29,8 @@ const HomeEspanol = () => {
     
     const seoData = {
       title: 'Atención Psiquiátrica Experta en Naples, FL - Ansiedad, Depresión, TDAH, Terapia | Dra. Melva Reve',
-      description: 'La psiquiatra certificada Dra. Melva Reve brinda atención psiquiátrica experta en Naples, FL. Especializada en ansiedad, depresión, TDAH y terapia. Servicios de salud mental para el suroeste de Florida. Llame (239) 423-0272.',
-      keywords: 'atención psiquiátrica experta Naples FL, psiquiatra certificada Naples, tratamiento ansiedad Naples FL, tratamiento depresión Naples FL, terapia TDAH Naples, salud mental Naples, psiquiatra suroeste Florida, Dra Melva Reve psiquiatra',
+      description: 'La psiquiatra Dra. Melva Reve brinda atención psiquiátrica experta en Naples, FL. Especializada en ansiedad, depresión, TDAH y terapia. Servicios de salud mental para el suroeste de Florida. Llame (239) 423-0272.',
+      keywords: 'atención psiquiátrica experta Naples FL, psiquiatra con licencia Naples, tratamiento ansiedad Naples FL, tratamiento depresión Naples FL, terapia TDAH Naples, salud mental Naples, psiquiatra suroeste Florida, Dra Melva Reve psiquiatra',
       lang: 'es',
       canonical: '/es'
     };

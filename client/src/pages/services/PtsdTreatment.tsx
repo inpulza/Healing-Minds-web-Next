@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Shield, Brain } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
+import RichText from '@/components/RichText';
+import { ptsdTreatmentContent } from '@/data/pageContent/services/ptsdTreatment';
 
 // Import generated images
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp";
@@ -24,9 +26,29 @@ import assaultImage from "@assets/6180c64d-fa53-4c88-8339-6aa0b06bdc93_175521183
 import medicalImage from "@assets/4142165d-97e6-4e50-8313-f705c8e6e93f_1755212013126.webp";
 import consultationImage from "@assets/d7b136b4-35bd-482a-b24a-98a1c5bb1abf_1755212133166.webp";
 
+const markdownToHtml = (text: string) =>
+  text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+const renderHeading = (text: string) =>
+  text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**') ? (
+      <span key={i} className="font-display italic text-green-700">{part.slice(2, -2)}</span>
+    ) : (
+      part
+    ),
+  );
+
 const PtsdTreatment = () => {
   const { language } = useLanguage();
   const { trackServiceView } = useTikTokEvents();
+  const enS = (key: string) => ptsdTreatmentContent.en.sections.find((x) => x.key === key)!;
+  const esS = (key: string) => ptsdTreatmentContent.es.sections.find((x) => x.key === key)!;
+  const s = (key: string) => ptsdTreatmentContent[language].sections.find((x) => x.key === key)!;
+  const bilingualItems = (key: string) => {
+    const en = enS(key).bullets!;
+    const es = esS(key).bullets!;
+    return en.map((e, i) => ({ en: e, es: es[i] }));
+  };
 
   useEffect(() => {
     const seoData = {
@@ -48,129 +70,7 @@ const PtsdTreatment = () => {
     trackServiceView('PTSD Treatment', 'ptsd');
   }, [language, trackServiceView]);
 
-  const symptoms = language === 'en' ? [
-    'Intrusive memories or flashbacks',
-    'Nightmares or sleep disturbances',
-    'Avoidance of trauma reminders',
-    'Emotional numbing or detachment',
-    'Hypervigilance or being easily startled',
-    'Difficulty concentrating',
-    'Irritability or anger outbursts',
-    'Negative thoughts about oneself'
-  ] : [
-    'Memorias intrusivas o flashbacks',
-    'Pesadillas o trastornos del sueño',
-    'Evitación de recordatorios del trauma',
-    'Entumecimiento emocional o desapego',
-    'Hipervigilancia o sobresaltarse fácilmente',
-    'Dificultad para concentrarse',
-    'Irritabilidad o arrebatos de ira',
-    'Pensamientos negativos sobre uno mismo'
-  ];
-
-  const traumaTypes = language === 'en' ? [
-    {
-      title: 'Combat & Military Trauma',
-      description: 'Specialized care for veterans and active military personnel dealing with combat-related PTSD.'
-    },
-    {
-      title: 'Accident & Injury Trauma',
-      description: 'Treatment for PTSD resulting from car accidents, workplace injuries, or other traumatic incidents.'
-    },
-    {
-      title: 'Personal Violence',
-      description: 'Sensitive care for survivors of assault, domestic violence, or other personal trauma.'
-    },
-    {
-      title: 'Medical Trauma',
-      description: 'Support for trauma related to serious illness, medical procedures, or hospital experiences.'
-    },
-    {
-      title: 'Natural Disasters',
-      description: 'Treatment for PTSD resulting from hurricanes, floods, or other natural catastrophes.'
-    },
-    {
-      title: 'Childhood Trauma',
-      description: 'Specialized approach for adults dealing with the lasting effects of childhood trauma.'
-    }
-  ] : [
-    {
-      title: 'Trauma de Combate y Militar',
-      description: 'Atención especializada para veteranos y personal militar activo que trata con TEPT relacionado con combate.'
-    },
-    {
-      title: 'Trauma de Accidentes y Lesiones',
-      description: 'Tratamiento para TEPT resultante de accidentes automovilísticos, lesiones laborales u otros incidentes traumáticos.'
-    },
-    {
-      title: 'Violencia Personal',
-      description: 'Atención sensible para sobrevivientes de asalto, violencia doméstica u otro trauma personal.'
-    },
-    {
-      title: 'Trauma Médico',
-      description: 'Apoyo para trauma relacionado con enfermedad grave, procedimientos médicos o experiencias hospitalarias.'
-    },
-    {
-      title: 'Desastres Naturales',
-      description: 'Tratamiento para TEPT resultante de huracanes, inundaciones u otras catástrofes naturales.'
-    },
-    {
-      title: 'Trauma de la Infancia',
-      description: 'Enfoque especializado para adultos que lidian con los efectos duraderos del trauma infantil.'
-    }
-  ];
-
-  const treatments = language === 'en' ? [
-    {
-      title: 'Trauma-Informed Assessment',
-      description: 'Comprehensive evaluation using trauma-specific tools to understand your unique experience and symptoms.'
-    },
-    {
-      title: 'Medication Management',
-      description: 'Careful selection and management of medications to address PTSD symptoms, including antidepressants and anxiety medications.'
-    },
-    {
-      title: 'Evidence-Based Therapy Coordination',
-      description: 'Coordination with trauma therapists specializing in EMDR, CPT, and other proven PTSD treatments.'
-    },
-    {
-      title: 'Crisis Safety Planning',
-      description: 'Development of personalized safety plans to manage triggers and crisis situations effectively.'
-    },
-    {
-      title: 'Sleep & Nightmare Management',
-      description: 'Specialized treatment for trauma-related sleep disturbances and recurring nightmares.'
-    },
-    {
-      title: 'Family & Support System Education',
-      description: 'Guidance for loved ones on how to provide support and understand PTSD recovery.'
-    }
-  ] : [
-    {
-      title: 'Evaluación Informada en Trauma',
-      description: 'Evaluación integral usando herramientas específicas de trauma para entender su experiencia única y síntomas.'
-    },
-    {
-      title: 'Manejo de Medicamentos',
-      description: 'Selección y manejo cuidadoso de medicamentos para abordar síntomas de TEPT, incluyendo antidepresivos y medicamentos para ansiedad.'
-    },
-    {
-      title: 'Coordinación de Terapia Basada en Evidencia',
-      description: 'Coordinación con terapeutas de trauma especializados en EMDR, CPT y otros tratamientos comprobados para TEPT.'
-    },
-    {
-      title: 'Planificación de Seguridad en Crisis',
-      description: 'Desarrollo de planes de seguridad personalizados para manejar desencadenantes y situaciones de crisis efectivamente.'
-    },
-    {
-      title: 'Manejo del Sueño y Pesadillas',
-      description: 'Tratamiento especializado para trastornos del sueño relacionados con trauma y pesadillas recurrentes.'
-    },
-    {
-      title: 'Educación para Familia y Sistema de Apoyo',
-      description: 'Orientación para seres queridos sobre cómo brindar apoyo y entender la recuperación del TEPT.'
-    }
-  ];
+  const symptoms = s('symptoms-list').bullets!;
 
   return (
     <div className="min-h-screen">
@@ -180,59 +80,29 @@ const PtsdTreatment = () => {
         {/* Hero Section with Masonry Layout */}
         <ServiceHeroMasonry
           tagline={{
-            en: 'Trauma Recovery',
-            es: 'Recuperación del Trauma'
+            en: enS('hero-tagline').paragraphs![0],
+            es: esS('hero-tagline').paragraphs![0]
           }}
           title={{
-            en: 'PTSD Treatment in Naples, FL',
-            es: 'Tratamiento de TEPT en Naples, FL'
+            en: ptsdTreatmentContent.en.title,
+            es: ptsdTreatmentContent.es.title
           }}
           description={{
-            en: 'Find healing and reclaim your life with expert PTSD treatment. Dr. Melva Reve provides trauma-informed psychiatric care with compassion, understanding, and evidence-based approaches.',
-            es: 'Encuentre sanación y reclame su vida con tratamiento experto de TEPT. La Dra. Melva Reve brinda atención psiquiátrica informada en trauma con compasión, comprensión y enfoques basados en evidencia.'
+            en: enS('hero-description').paragraphs![0],
+            es: esS('hero-description').paragraphs![0]
           }}
           specialNote={{
-            es: '<strong>El trauma no define quién es usted.</strong> La recuperación es posible con el apoyo adecuado. Nuestro enfoque respeta su cultura y experiencias, ofreciendo un espacio seguro para sanar sin juicio ni estigma.'
+            es: markdownToHtml(esS('hero-special-note').paragraphs![0])
           }}
           facts={{
             title: {
-              en: 'PTSD Facts',
-              es: 'Datos sobre TEPT'
+              en: enS('hero-facts').heading!,
+              es: esS('hero-facts').heading!
             },
-            items: [
-              {
-                en: '3.5% of adults experience PTSD annually',
-                es: '3.5% de adultos experimentan TEPT anualmente'
-              },
-              {
-                en: 'Trauma-informed care is essential',
-                es: 'La atención informada en trauma es esencial'
-              },
-              {
-                en: 'Recovery is possible with treatment',
-                es: 'La recuperación es posible con tratamiento'
-              },
-              {
-                en: 'Cultural competency matters',
-                es: 'La competencia cultural importa'
-              }
-            ]
+            items: bilingualItems('hero-facts')
           }}
           quickStats={{
-            items: [
-              {
-                en: 'Trauma-informed assessment',
-                es: 'Evaluación informada en trauma'
-              },
-              {
-                en: 'Evidence-based therapy coordination',
-                es: 'Coordinación de terapia basada en evidencia'
-              },
-              {
-                en: 'Crisis safety planning',
-                es: 'Planificación de seguridad en crisis'
-              }
-            ]
+            items: bilingualItems('hero-quick-stats')
           }}
           images={{
             doctorImage,
@@ -249,68 +119,27 @@ const PtsdTreatment = () => {
                 {/* Content Side */}
                 <div className="lg:col-span-2">
                   <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Trauma-Informed Care' : 'Atención Informada por Trauma'}
+                    {s('approach-badge').paragraphs![0]}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Our <span className="font-display italic text-green-700">Trauma-Informed</span> Treatment Approach</>
-                    ) : (
-                      <>Nuestro Enfoque de Tratamiento <span className="font-display italic text-green-700">Informado en Trauma</span></>
-                    )}
+                    {renderHeading(s('approach').heading!)}
                   </h2>
                   
                   <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'PTSD treatment requires specialized expertise addressing trauma, symptoms, and recovery with evidence-based approaches and cultural sensitivity.'
-                      : 'El tratamiento de PTSD requiere experiencia especializada que aborde el trauma, síntomas y recuperación con enfoques basados en evidencia y sensibilidad cultural.'
-                    }
+                    {s('approach-intro').paragraphs![0]}
                   </p>
 
                   {/* Treatment List */}
                   <div className="grid gap-4 mb-8">
-                    {(language === 'en' ? [
-                      {
-                        title: 'Comprehensive Assessment',
-                        description: 'Thorough evaluation of trauma history and personalized treatment plans.'
-                      },
-                      {
-                        title: 'Medication Management',
-                        description: 'Evidence-based medications for PTSD symptoms and sleep disturbances.'
-                      },
-                      {
-                        title: 'Therapy Coordination',
-                        description: 'Collaborative care with specialized trauma therapists for EMDR and CPT.'
-                      },
-                      {
-                        title: 'Crisis Safety Planning',
-                        description: 'Personalized safety plans for managing flashbacks and panic attacks.'
-                      }
-                    ] : [
-                      {
-                        title: 'Evaluación Integral',
-                        description: 'Evaluación completa del historial de trauma y planes personalizados.'
-                      },
-                      {
-                        title: 'Manejo de Medicamentos',
-                        description: 'Medicamentos basados en evidencia para síntomas de TEPT y sueño.'
-                      },
-                      {
-                        title: 'Coordinación de Terapia',
-                        description: 'Atención colaborativa con terapeutas especializados en EMDR y TCC.'
-                      },
-                      {
-                        title: 'Planificación de Seguridad',
-                        description: 'Planes personalizados para manejar flashbacks y ataques de pánico.'
-                      }
-                    ]).map((treatment, index) => (
+                    {s('approach-list').bullets!.map((title, index) => (
                       <div key={index} className="p-4">
                         <div className="flex items-start gap-3">
                           <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                             <span className="text-green-600 font-bold text-sm">{index + 1}</span>
                           </div>
                           <div>
-                            <h3 className="text-lg font-body font-bold text-green-800 mb-1">{treatment.title}</h3>
-                            <p className="text-gray-600 font-body text-sm leading-relaxed">{treatment.description}</p>
+                            <h3 className="text-lg font-body font-bold text-green-800 mb-1">{title}</h3>
+                            <p className="text-gray-600 font-body text-sm leading-relaxed">{s('approach-list-descriptions').bullets![index]}</p>
                           </div>
                         </div>
                       </div>
@@ -319,7 +148,7 @@ const PtsdTreatment = () => {
 
                   <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Get PTSD Care' : 'Obtener Atención PTSD'}</span>
+                      <span>{s('approach-cta').paragraphs![0]}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                       </div>
@@ -332,15 +161,15 @@ const PtsdTreatment = () => {
                   {/* Stats Cards */}
                   <div className="space-y-4 mb-6">
                     <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
-                      <div className="text-3xl font-bold text-green-600 mb-2">90%</div>
+                      <div className="text-3xl font-bold text-green-600 mb-2">{s('approach-stat-1').paragraphs![0]}</div>
                       <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Recovery with treatment' : 'Recuperación con tratamiento'}
+                        {s('approach-stat-1').paragraphs![1]}
                       </div>
                     </div>
                     <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
-                      <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
+                      <div className="text-3xl font-bold text-green-600 mb-2">{s('approach-stat-2').paragraphs![0]}</div>
                       <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Crisis support available' : 'Apoyo de crisis disponible'}
+                        {s('approach-stat-2').paragraphs![1]}
                       </div>
                     </div>
                   </div>
@@ -367,17 +196,10 @@ const PtsdTreatment = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Recognizing <span className="font-display italic text-green-700">PTSD</span> Symptoms</>
-                ) : (
-                  <>Reconociendo Síntomas de <span className="font-display italic text-green-700">TEPT</span></>
-                )}
+                {renderHeading(s('symptoms').heading!)}
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'PTSD can develop after experiencing or witnessing a traumatic event. These symptoms persist for more than a month and significantly impact daily functioning.'
-                  : 'El TEPT puede desarrollarse después de experimentar o presenciar un evento traumático. Estos síntomas persisten por más de un mes e impactan significativamente el funcionamiento diario.'
-                }
+                {s('symptoms-intro').paragraphs![0]}
               </p>
             </div>
             
@@ -404,95 +226,64 @@ const PtsdTreatment = () => {
             <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 lg:p-12 shadow-lg border border-green-100">
               <div className="text-center mb-12">
                 <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                  {language === 'en' ? 'Trauma Specialties' : 'Especialidades en Trauma'}
+                  {s('trauma-badge').paragraphs![0]}
                 </div>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                  {language === 'en' ? (
-                    <>Types of <span className="font-display italic text-green-700">Trauma</span> We Treat</>
-                  ) : (
-                    <>Tipos de <span className="font-display italic text-green-700">Trauma</span> que Tratamos</>
-                  )}
+                  {renderHeading(s('trauma').heading!)}
                 </h2>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'We provide specialized care for various forms of trauma, using evidence-based approaches tailored to each individual experience.'
-                    : 'Proporcionamos atención especializada para varias formas de trauma, usando enfoques basados en evidencia adaptados a cada experiencia individual.'
-                  }
+                  {s('trauma-intro').paragraphs![0]}
                 </p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {(language === 'en' ? [
                   {
-                    title: 'Combat & Military Trauma',
-                    description: 'Specialized care for veterans and military personnel dealing with combat-related PTSD.',
                     image: militaryImage,
                     alt: 'Military uniform with dog tags representing combat trauma and PTSD treatment'
                   },
                   {
-                    title: 'Childhood Abuse',
-                    description: 'Compassionate treatment addressing the long-term effects of childhood trauma.',
                     image: childhoodImage,
                     alt: 'Teddy bear representing childhood trauma and therapeutic healing'
                   },
                   {
-                    title: 'Motor Vehicle Accidents',
-                    description: 'Support for trauma resulting from car accidents and traffic incidents.',
                     image: vehicleImage,
                     alt: 'Car steering wheel representing motor vehicle accident trauma treatment'
                   },
                   {
-                    title: 'Sexual Assault',
-                    description: 'Sensitive, trauma-informed care for survivors of sexual violence.',
                     image: assaultImage,
                     alt: 'Soft pink fabric representing sensitivity and support for sexual assault survivors'
                   },
                   {
-                    title: 'Natural Disasters',
-                    description: 'Recovery assistance for trauma caused by hurricanes, floods, and disasters.',
                     image: naturalDisasterImage,
                     alt: 'Glass jar with seashell and sand representing recovery and resilience after natural disasters'
                   },
                   {
-                    title: 'Medical Trauma',
-                    description: 'Treatment for PTSD resulting from medical procedures or hospital experiences.',
                     image: medicalImage,
                     alt: 'White hospital bracelet representing medical trauma and healthcare-related PTSD treatment'
                   }
                 ] : [
                   {
-                    title: 'Trauma de Combate y Militar',
-                    description: 'Atención especializada para veteranos y personal militar con PTSD relacionado al combate.',
                     image: militaryImage,
                     alt: 'Uniforme militar con placas de identificación representando trauma de combate y tratamiento TEPT'
                   },
                   {
-                    title: 'Abuso Infantil',
-                    description: 'Tratamiento compasivo que aborda los efectos a largo plazo del trauma infantil.',
                     image: childhoodImage,
                     alt: 'Osito de peluche representando trauma infantil y sanación terapéutica'
                   },
                   {
-                    title: 'Accidentes Automovilísticos',
-                    description: 'Apoyo para trauma resultante de accidentes automovilísticos e incidentes de tráfico.',
                     image: vehicleImage,
                     alt: 'Volante de automóvil representando tratamiento de trauma por accidente vehicular'
                   },
                   {
-                    title: 'Agresión Sexual',
-                    description: 'Atención sensible e informada por trauma para sobrevivientes de violencia sexual.',
                     image: assaultImage,
                     alt: 'Tela suave rosa representando sensibilidad y apoyo para sobrevivientes de agresión sexual'
                   },
                   {
-                    title: 'Desastres Naturales',
-                    description: 'Asistencia de recuperación para trauma causado por huracanes, inundaciones y desastres.',
                     image: naturalDisasterImage,
                     alt: 'Frasco de vidrio con concha marina y arena representando recuperación y resistencia después de desastres naturales'
                   },
                   {
-                    title: 'Trauma Médico',
-                    description: 'Tratamiento para PTSD resultante de procedimientos médicos o experiencias hospitalarias.',
                     image: medicalImage,
                     alt: 'Pulsera hospitalaria blanca representando trauma médico y tratamiento de TEPT relacionado con atención médica'
                   }
@@ -523,8 +314,8 @@ const PtsdTreatment = () => {
                     
                     {/* Content - Bottom */}
                     <div className="p-6">
-                      <h3 className="text-lg font-body font-bold text-green-800 mb-3">{trauma.title}</h3>
-                      <p className="text-gray-600 font-body text-sm leading-relaxed">{trauma.description}</p>
+                      <h3 className="text-lg font-body font-bold text-green-800 mb-3">{s('trauma-titles').bullets![index]}</h3>
+                      <p className="text-gray-600 font-body text-sm leading-relaxed">{s('trauma-descriptions').bullets![index]}</p>
                     </div>
                   </div>
                 ))}
@@ -538,37 +329,21 @@ const PtsdTreatment = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Why Choose Dr. Reve for <span className="font-display italic text-green-700">PTSD Treatment</span></>
-                ) : (
-                  <>Por Qué Elegir a la Dra. Reve para <span className="font-display italic text-green-700">Tratamiento de TEPT</span></>
-                )}
+                {renderHeading(s('why').heading!)}
               </h2>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="space-y-6">
-                  {(language === 'en' ? [
-                    'Experienced psychiatrist with specialized trauma training',
-                    'Bilingual services in English and Spanish',
-                    'Trauma-informed care approach',
-                    'Collaborative treatment with specialized therapists',
-                    'Insurance accepted and affordable payment options',
-                    <>Same-week appointment availability at <Link href="/locations/psychiatrist-naples" className="text-green-700 hover:text-green-800 underline">our Naples, FL office</Link></>
-                  ] : [
-                    'Psiquiatra certificada con entrenamiento especializado en trauma',
-                    'Servicios bilingües en inglés y español',
-                    'Enfoque de atención informada en trauma',
-                    'Tratamiento colaborativo con terapeutas especializados',
-                    'Se acepta seguro y opciones de pago accesibles',
-                    <>Disponibilidad de citas en la misma semana en <Link href="/es/ubicaciones/psiquiatra-naples" className="text-green-700 hover:text-green-800 underline">nuestra oficina en Naples, FL</Link></>
-                  ]).map((benefit, index) => (
+                  {s('why-benefits').bullets!.map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                         <CheckCircle className="w-4 h-4 text-green-600" />
                       </div>
-                      <span className="text-gray-700 font-body text-lg">{benefit}</span>
+                      <span className="text-gray-700 font-body text-lg">
+                        <RichText text={benefit} linkClassName="text-green-700 hover:text-green-800 underline" />
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -580,13 +355,10 @@ const PtsdTreatment = () => {
                     <Brain />
                   </WellnessIcon>
                   <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
-                    {language === 'en' ? 'Ready to Begin Healing?' : '¿Listo para Comenzar a Sanar?'}
+                    {s('why-card').heading!}
                   </h3>
                   <p className="text-gray-600 font-body leading-relaxed mb-6">
-                    {language === 'en'
-                      ? 'Take the first step towards recovery. Contact us today to schedule your confidential consultation.'
-                      : 'Da el primer paso hacia la recuperación. Contáctanos hoy para programar tu consulta confidencial.'
-                    }
+                    {s('why-card').paragraphs![0]}
                   </p>
                   <div className="space-y-4">
                     <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
@@ -598,7 +370,7 @@ const PtsdTreatment = () => {
                         <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
                           <Calendar className="w-4 h-4 text-white" />
                         </div>
-                        {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                        {s('why-schedule').paragraphs![0]}
                       </Button>
                     </Link>
                     
@@ -612,7 +384,7 @@ const PtsdTreatment = () => {
                         <Phone className="w-4 h-4 text-green-800" />
                       </div>
                       <a href="tel:+12394230272" className="flex items-center gap-3">
-                        {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
+                        {s('why-call').paragraphs![0]}
                       </a>
                     </Button>
                   </div>

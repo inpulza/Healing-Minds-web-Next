@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import ServicesSection from '@/components/Services';
 import Footer from '@/components/Footer';
 import { updateSEO } from '@/utils/seo';
+import { renderRichText } from '@/components/RichText';
+import { servicesIndexContent } from '@/data/pageContent/services/servicesIndex';
 import { Link } from 'wouter';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,6 +24,17 @@ import { useState } from 'react';
 const ServicesPage = () => {
   const { language } = useLanguage();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const content = servicesIndexContent[language];
+  const section = (key: string) => content.sections.find((x) => x.key === key)!;
+  const approach = content.sections
+    .filter((x) => /^approach-\d+$/.test(x.key ?? ''))
+    .map((x) => ({ title: x.heading!, description: x.paragraphs![0] }));
+  const steps = content.sections
+    .filter((x) => /^expect-\d+$/.test(x.key ?? ''))
+    .map((x, i) => ({ step: String(i + 1), title: x.heading!, desc: x.paragraphs![0] }));
+  const faqs = content.sections
+    .filter((x) => /^faq-\d+$/.test(x.key ?? ''))
+    .map((x) => ({ q: x.heading!, a: x.paragraphs![0] }));
 
   useEffect(() => {
     const seoData = {
@@ -40,94 +53,6 @@ const ServicesPage = () => {
     updateSEO(seoData);
   }, [language]);
 
-  const faqs = language === 'en' ? [
-    {
-      q: 'What psychiatric conditions do you treat at Healing Minds?',
-      a: 'Dr. Melva Reve provides expert care for anxiety disorders, depression, ADHD (in adults and teens), PTSD, bipolar disorder, and medication management. Each treatment plan is personalized to your symptoms, history, and goals.'
-    },
-    {
-      q: 'Do you accept insurance for psychiatric services?',
-      a: 'Yes. We accept most major insurance plans including Medicare, Aetna, Cigna, BlueCross BlueShield, United Healthcare, and others. Self-pay rates and flexible payment plans are also available. We verify your benefits before the first appointment.'
-    },
-    {
-      q: 'How long does a first psychiatric appointment take?',
-      a: 'Initial consultations are 40–60 minutes. This comprehensive evaluation covers your mental health history, current symptoms, medications, and treatment goals. Follow-up appointments are typically 20–30 minutes.'
-    },
-    {
-      q: 'Is telehealth available for psychiatric care?',
-      a: 'Yes. Healing Minds offers secure, HIPAA-compliant telehealth appointments throughout Florida. Telehealth is especially convenient for follow-up visits, medication management, and patients outside the Naples area.'
-    },
-    {
-      q: 'Do you offer bilingual psychiatric services in Spanish?',
-      a: 'Yes. Dr. Melva Reve is fully bilingual in English and Spanish, providing culturally sensitive psychiatric care to Naples and Southwest Florida\'s Hispanic and Latin communities.'
-    },
-    {
-      q: 'How soon can I get an appointment?',
-      a: 'New patient appointments are typically available within 1–2 weeks. You can book online through our scheduling system or call (239) 423-0272. Telehealth slots often have greater availability.'
-    }
-  ] : [
-    {
-      q: '¿Qué condiciones psiquiátricas trata Healing Minds?',
-      a: 'La Dra. Melva Reve ofrece atención experta para trastornos de ansiedad, depresión, TDAH (en adultos y adolescentes), TEPT, trastorno bipolar y manejo de medicamentos. Cada plan de tratamiento es personalizado según sus síntomas, historial y objetivos.'
-    },
-    {
-      q: '¿Aceptan seguro médico para servicios psiquiátricos?',
-      a: 'Sí. Aceptamos la mayoría de los planes de seguro principales, incluyendo Medicare, Aetna, Cigna, BlueCross BlueShield, United Healthcare y otros. También hay tarifas de pago personal y planes de pago flexibles disponibles. Verificamos sus beneficios antes de la primera cita.'
-    },
-    {
-      q: '¿Cuánto dura la primera cita psiquiátrica?',
-      a: 'Las consultas iniciales duran 40–60 minutos. Esta evaluación integral cubre su historial de salud mental, síntomas actuales, medicamentos y objetivos de tratamiento. Las citas de seguimiento suelen durar 20–30 minutos.'
-    },
-    {
-      q: '¿Está disponible la telesalud para atención psiquiátrica?',
-      a: 'Sí. Healing Minds ofrece citas de telesalud seguras y conformes con HIPAA en toda Florida. La telesalud es especialmente conveniente para citas de seguimiento, manejo de medicamentos y pacientes fuera del área de Naples.'
-    },
-    {
-      q: '¿Ofrecen servicios psiquiátricos bilingües en español?',
-      a: 'Sí. La Dra. Melva Reve es completamente bilingüe en inglés y español, brindando atención psiquiátrica culturalmente sensible a las comunidades hispanas y latinas de Naples y el suroeste de Florida.'
-    },
-    {
-      q: '¿Qué tan pronto puedo obtener una cita?',
-      a: 'Las citas para nuevos pacientes generalmente están disponibles en 1–2 semanas. Puede reservar en línea a través de nuestro sistema de programación o llamar al (239) 423-0272. Los espacios de telesalud suelen tener mayor disponibilidad.'
-    }
-  ];
-
-  const approach = language === 'en' ? [
-    {
-      title: 'Evidence-Based Treatment',
-      description: 'Every treatment plan is grounded in the latest psychiatric research — combining medication management with therapeutic approaches proven to work for your specific condition.'
-    },
-    {
-      title: 'Personalized Care Plans',
-      description: 'No two patients are the same. Dr. Reve develops individualized treatment strategies tailored to your unique history, lifestyle, and goals — not a one-size-fits-all approach.'
-    },
-    {
-      title: 'Bilingual & Culturally Sensitive',
-      description: 'Fully bilingual care in English and Spanish, with cultural competency that reflects the diverse communities of Naples and Southwest Florida.'
-    },
-    {
-      title: 'In-Person & Telehealth Options',
-      description: 'Flexible care delivery — visit our Naples office or connect securely online. Telehealth is available across Florida for maximum convenience.'
-    }
-  ] : [
-    {
-      title: 'Tratamiento Basado en Evidencia',
-      description: 'Cada plan de tratamiento está fundamentado en la investigación psiquiátrica más reciente, combinando manejo de medicamentos con enfoques terapéuticos comprobados para su condición específica.'
-    },
-    {
-      title: 'Planes de Atención Personalizados',
-      description: 'No hay dos pacientes iguales. La Dra. Reve desarrolla estrategias de tratamiento individualizadas adaptadas a su historial único, estilo de vida y objetivos — no un enfoque genérico.'
-    },
-    {
-      title: 'Bilingüe y Culturalmente Sensible',
-      description: 'Atención completamente bilingüe en inglés y español, con competencia cultural que refleja las diversas comunidades de Naples y el suroeste de Florida.'
-    },
-    {
-      title: 'Opciones Presenciales y de Telesalud',
-      description: 'Atención flexible: visite nuestra oficina en Naples o conéctese de forma segura en línea. La telesalud está disponible en toda Florida para máxima conveniencia.'
-    }
-  ];
-
   return (
     <div className="min-h-screen">
       <Header />
@@ -138,24 +63,18 @@ const ServicesPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl">
               <p className="text-green-700 font-semibold text-sm uppercase tracking-widest mb-3">
-                {language === 'en' ? 'Naples, FL · Southwest Florida' : 'Naples, FL · Suroeste de Florida'}
+                {section('eyebrow').paragraphs![0]}
               </p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-900 mb-6 leading-tight">
-                {language === 'en'
-                  ? <><span className="font-display italic text-green-700">Psychiatric</span> Services in Naples, FL</>
-                  : <><span className="font-display italic text-green-700">Servicios</span> Psiquiátricos en Naples, FL</>
-                }
+                {renderRichText(content.title, undefined, 'font-display italic text-green-700')}
               </h1>
               <p className="text-lg sm:text-xl text-gray-700 max-w-2xl mb-8 leading-relaxed">
-                {language === 'en'
-                  ? 'Dr. Melva Reve offers evidence-based psychiatric care for anxiety, depression, ADHD, PTSD, and more. Accepting new patients — in-person in Naples and via telehealth throughout Florida.'
-                  : 'La Dra. Melva Reve ofrece atención psiquiátrica basada en evidencia para ansiedad, depresión, TDAH, TEPT y más. Aceptando nuevos pacientes — en persona en Naples y por telesalud en toda Florida.'
-                }
+                {section('heroDescription').paragraphs![0]}
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                   <Button className="bg-green-800 text-white hover:bg-green-700 rounded-full px-7 py-3 font-semibold">
-                    {language === 'en' ? 'Book an Appointment' : 'Reservar Cita'}
+                    {section('heroBookCta').paragraphs![0]}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -176,19 +95,19 @@ const ServicesPage = () => {
             <div className="flex flex-wrap justify-center gap-6 sm:gap-10 text-sm font-medium">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-green-300" />
-                <span>{language === 'en' ? 'Naples, FL 34103' : 'Naples, FL 34103'}</span>
+                <span>{section('quickInfo').bullets![0]}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-green-300" />
-                <span>{language === 'en' ? 'Mon–Fri, flexible hours' : 'Lun–Vie, horarios flexibles'}</span>
+                <span>{section('quickInfo').bullets![1]}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Brain className="w-4 h-4 text-green-300" />
-                <span>{language === 'en' ? 'In-person & telehealth' : 'Presencial y telesalud'}</span>
+                <span>{section('quickInfo').bullets![2]}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Heart className="w-4 h-4 text-green-300" />
-                <span>{language === 'en' ? 'Bilingual EN/ES' : 'Bilingüe EN/ES'}</span>
+                <span>{section('quickInfo').bullets![3]}</span>
               </div>
             </div>
           </div>
@@ -202,16 +121,10 @@ const ServicesPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-body font-bold text-green-900 mb-4">
-                {language === 'en'
-                  ? <>Our <span className="font-display italic text-green-700">Treatment</span> Approach</>
-                  : <>Nuestro <span className="font-display italic text-green-700">Enfoque</span> de Tratamiento</>
-                }
+                {renderRichText(section('approachHeading').heading!, undefined, 'font-display italic text-green-700')}
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-                {language === 'en'
-                  ? 'What makes psychiatric care at Healing Minds different from a standard clinic visit.'
-                  : 'Lo que hace diferente la atención psiquiátrica en Healing Minds de una visita clínica estándar.'
-                }
+                {section('approachHeading').paragraphs![0]}
               </p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -232,31 +145,13 @@ const ServicesPage = () => {
             <div className="grid lg:grid-cols-2 gap-12 items-start">
               <div>
                 <h2 className="text-3xl sm:text-4xl font-body font-bold text-green-900 mb-6">
-                  {language === 'en'
-                    ? <>Insurance & <span className="font-display italic text-green-700">Getting Started</span></>
-                    : <>Seguro y <span className="font-display italic text-green-700">Cómo Comenzar</span></>
-                  }
+                  {renderRichText(section('insuranceHeading').heading!, undefined, 'font-display italic text-green-700')}
                 </h2>
                 <p className="text-gray-700 mb-6 leading-relaxed">
-                  {language === 'en'
-                    ? 'We accept most major insurance plans and verify your benefits before your first appointment so there are no billing surprises. Self-pay rates and payment plans are available for uninsured patients.'
-                    : 'Aceptamos la mayoría de los planes de seguro principales y verificamos sus beneficios antes de su primera cita para que no haya sorpresas de facturación. Las tarifas de pago personal y los planes de pago están disponibles para pacientes sin seguro.'
-                  }
+                  {section('insuranceHeading').paragraphs![0]}
                 </p>
                 <ul className="space-y-3 mb-8">
-                  {(language === 'en' ? [
-                    'Medicare accepted',
-                    'Most major commercial insurance plans',
-                    'Telehealth appointments covered by most plans',
-                    'Good Faith Estimates provided for self-pay',
-                    'Flexible payment plans available'
-                  ] : [
-                    'Se acepta Medicare',
-                    'La mayoría de los planes de seguro comerciales principales',
-                    'Citas de telesalud cubiertas por la mayoría de los planes',
-                    'Estimados de buena fe para pago personal',
-                    'Planes de pago flexibles disponibles'
-                  ]).map((item, i) => (
+                  {section('insuranceBullets').bullets!.map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-700 mt-0.5 flex-shrink-0" />
                       <span className="text-gray-700">{item}</span>
@@ -265,30 +160,17 @@ const ServicesPage = () => {
                 </ul>
                 <Link href={language === 'en' ? '/billing-policy' : '/es/politica-facturacion'}>
                   <Button variant="outline" className="border-green-700 text-green-700 hover:bg-green-50 rounded-full">
-                    {language === 'en' ? 'View Full Billing Policy' : 'Ver Política de Facturación'}
+                    {section('insuranceCta').paragraphs![0]}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
               </div>
               <div>
                 <h2 className="text-3xl sm:text-4xl font-body font-bold text-green-900 mb-6">
-                  {language === 'en'
-                    ? <>What to <span className="font-display italic text-green-700">Expect</span></>
-                    : <>Qué <span className="font-display italic text-green-700">Esperar</span></>
-                  }
+                  {renderRichText(section('expectHeading').heading!, undefined, 'font-display italic text-green-700')}
                 </h2>
                 <div className="space-y-5">
-                  {(language === 'en' ? [
-                    { step: '1', title: 'Book Your Appointment', desc: 'Schedule online or call (239) 423-0272. New patients typically seen within 1–2 weeks.' },
-                    { step: '2', title: 'Initial Evaluation (40–60 min)', desc: 'A comprehensive assessment of your mental health history, current symptoms, medications, and treatment goals.' },
-                    { step: '3', title: 'Personalized Treatment Plan', desc: 'Dr. Reve develops a tailored plan that may include medication management, therapy referrals, or both.' },
-                    { step: '4', title: 'Ongoing Follow-Up Care', desc: 'Regular 20–30 min follow-up appointments to monitor progress, adjust treatment, and support your recovery.' }
-                  ] : [
-                    { step: '1', title: 'Reservar su Cita', desc: 'Programe en línea o llame al (239) 423-0272. Los nuevos pacientes generalmente son atendidos en 1–2 semanas.' },
-                    { step: '2', title: 'Evaluación Inicial (40–60 min)', desc: 'Una evaluación integral de su historial de salud mental, síntomas actuales, medicamentos y objetivos de tratamiento.' },
-                    { step: '3', title: 'Plan de Tratamiento Personalizado', desc: 'La Dra. Reve desarrolla un plan personalizado que puede incluir manejo de medicamentos, derivaciones a terapia, o ambos.' },
-                    { step: '4', title: 'Atención de Seguimiento Continua', desc: 'Citas de seguimiento regulares de 20–30 min para monitorear el progreso, ajustar el tratamiento y apoyar su recuperación.' }
-                  ]).map((item) => (
+                  {steps.map((item) => (
                     <div key={item.step} className="flex gap-4">
                       <div className="w-9 h-9 rounded-full bg-green-800 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
                         {item.step}
@@ -303,7 +185,7 @@ const ServicesPage = () => {
                 <div className="mt-8">
                   <Link href={language === 'en' ? '/for-patients' : '/es/para-pacientes'}>
                     <Button variant="outline" className="border-green-700 text-green-700 hover:bg-green-50 rounded-full">
-                      {language === 'en' ? 'Patient Resources & Info' : 'Recursos e Información para Pacientes'}
+                      {section('expectCta').paragraphs![0]}
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
@@ -318,16 +200,10 @@ const ServicesPage = () => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-body font-bold text-green-900 mb-4">
-                {language === 'en'
-                  ? <>Frequently Asked <span className="font-display italic text-green-700">Questions</span></>
-                  : <>Preguntas <span className="font-display italic text-green-700">Frecuentes</span></>
-                }
+                {renderRichText(section('faqHeading').heading!, undefined, 'font-display italic text-green-700')}
               </h2>
               <p className="text-gray-600">
-                {language === 'en'
-                  ? 'Common questions about psychiatric services at Healing Minds in Naples, FL.'
-                  : 'Preguntas comunes sobre los servicios psiquiátricos en Healing Minds en Naples, FL.'
-                }
+                {section('faqHeading').paragraphs![0]}
               </p>
             </div>
             <div className="space-y-3">
@@ -356,33 +232,27 @@ const ServicesPage = () => {
         <section className="py-16 bg-green-800 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-body font-bold mb-4">
-              {language === 'en'
-                ? <>Serving Naples and <span className="font-display italic text-green-200">Southwest Florida</span></>
-                : <>Atendiendo Naples y el <span className="font-display italic text-green-200">Suroeste de Florida</span></>
-              }
+              {renderRichText(section('ctaHeading').heading!, undefined, 'font-display italic text-green-200')}
             </h2>
             <p className="text-green-100 max-w-2xl mx-auto mb-8 text-lg leading-relaxed">
-              {language === 'en'
-                ? 'Healing Minds Psychiatry serves patients from Naples, Bonita Springs, Marco Island, Estero, Fort Myers, and surrounding communities in Collier and Lee counties. Telehealth extends our reach to all of Florida.'
-                : 'Healing Minds Psychiatry atiende a pacientes de Naples, Bonita Springs, Marco Island, Estero, Fort Myers y comunidades cercanas en los condados de Collier y Lee. La telesalud extiende nuestro alcance a toda Florida.'
-              }
+              {section('ctaHeading').paragraphs![0]}
             </p>
             <div className="flex flex-wrap gap-4 justify-center mb-10">
-              {['Naples', 'Bonita Springs', 'Marco Island', 'Estero', 'Fort Myers'].map(city => (
+              {section('cities').bullets!.map(city => (
                 <span key={city} className="bg-green-700 text-green-100 px-4 py-1.5 rounded-full text-sm font-medium">{city}</span>
               ))}
             </div>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                 <Button className="bg-white text-green-800 hover:bg-green-50 rounded-full px-8 py-3 font-semibold">
-                  {language === 'en' ? 'Book Your Appointment' : 'Reservar su Cita'}
+                  {section('ctaBook').paragraphs![0]}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
               <Link href={language === 'en' ? '/locations/psychiatrist-naples' : '/es/ubicaciones/psiquiatra-naples'}>
                 <Button variant="outline" className="border-white text-white hover:bg-green-700 rounded-full px-8 py-3 font-semibold">
                   <MapPin className="w-4 h-4 mr-2" />
-                  {language === 'en' ? 'Our Naples Location' : 'Nuestra Ubicación en Naples'}
+                  {section('ctaLocation').paragraphs![0]}
                 </Button>
               </Link>
             </div>

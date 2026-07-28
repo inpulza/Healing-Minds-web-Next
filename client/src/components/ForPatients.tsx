@@ -1,48 +1,26 @@
-import { useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Check, AlertTriangle, FileText, Shield, DollarSign, Phone } from 'lucide-react';
+import { Check, FileText, Shield, DollarSign, Phone, Receipt, Video } from 'lucide-react';
 import { Link } from 'wouter';
+import { forPatientsSectionContent } from '@/data/pageContent/mainPages/sharedSections';
 
 const ForPatients = () => {
   const { language } = useLanguage();
 
-  const insuranceFeatures = [
-    language === 'en' ? 'Most major insurance plans accepted' : 'Se aceptan la mayoría de los planes de seguro principales',
-    language === 'en' ? 'Self-pay options available' : 'Opciones de pago por cuenta propia disponibles',
-    language === 'en' ? 'Telehealth appointments covered' : 'Citas de telesalud cubiertas',
-    language === 'en' ? 'Flexible payment plans' : 'Planes de pago flexibles'
-  ];
+  const content = forPatientsSectionContent[language];
+  const s = (key: string) => content.sections.find((section) => section.key === key)!;
 
-  const expectations = [
-    {
-      title: language === 'en' ? 'Initial Consultation (40-60 minutes)' : 'Consulta Inicial (40-60 minutos)',
-      description: language === 'en' 
-        ? 'Comprehensive evaluation of your mental health history, current symptoms, and treatment goals.'
-        : 'Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento.'
-    },
-    {
-      title: language === 'en' ? 'Follow-up Appointments (20-30 minutes)' : 'Citas de Seguimiento (20-30 minutos)',
-      description: language === 'en'
-        ? 'Regular check-ins to monitor progress, adjust medications, and provide ongoing support.'
-        : 'Controles regulares para monitorear el progreso, ajustar medicamentos y brindar apoyo continuo.'
-    },
-    {
-      title: language === 'en' ? 'Treatment Planning' : 'Planificación del Tratamiento',
-      description: language === 'en'
-        ? 'Collaborative approach to developing a personalized treatment plan that fits your lifestyle and goals.'
-        : 'Enfoque colaborativo para desarrollar un plan de tratamiento personalizado que se ajuste a su estilo de vida y objetivos.'
-    },
-    {
-      title: language === 'en' ? 'Between Sessions' : 'Entre Sesiones',
-      description: language === 'en'
-        ? '24/7 on-call support for urgent situations and medication adjustments as needed.'
-        : 'Soporte de guardia 24/7 para situaciones urgentes y ajustes de medicación según sea necesario.'
-    }
-  ];
+  const insuranceFeatures = s('insuranceFeatures').bullets!;
 
+  const expectationsSection = s('expectations');
+  const expectations = expectationsSection.bullets!.map((title, i) => ({
+    title,
+    description: expectationsSection.paragraphs![i]
+  }));
 
+  const policyCardsSection = s('policyCards');
+  const policyTitles = policyCardsSection.bullets!;
+  const policyDescriptions = policyCardsSection.paragraphs!;
 
   return (
     <section id="for-patients" className="py-20 bg-white">
@@ -52,10 +30,7 @@ const ForPatients = () => {
             {language === 'en' ? <>For <span className="font-display italic text-green-700">Patients</span></> : <>Para <span className="font-display italic text-green-700">Pacientes</span></>}
           </h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto" data-testid="for-patients-description">
-            {language === 'en'
-              ? 'Important information about insurance, appointments, and what to expect during your care.'
-              : 'Información importante sobre seguros, citas, y qué esperar durante su atención.'
-            }
+            {s('description').paragraphs![0]}
           </p>
         </div>
 
@@ -63,7 +38,7 @@ const ForPatients = () => {
           {/* Insurance & Payment */}
           <Card className="bg-light-green p-8" data-testid="insurance-payment-card">
             <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-              {language === 'en' ? 'Insurance & Payment' : 'Seguro y Pago'}
+              {s('insurancePaymentHeading').heading}
             </h3>
             <div className="space-y-4 mb-6">
               {insuranceFeatures.map((feature, index) => (
@@ -74,17 +49,14 @@ const ForPatients = () => {
               ))}
             </div>
             <p className="text-sm text-gray-600">
-              {language === 'en'
-                ? 'We verify insurance benefits before your first appointment. Please bring your insurance card and a valid ID to your visit.'
-                : 'Verificamos los beneficios del seguro antes de su primera cita. Por favor traiga su tarjeta de seguro y una identificación válida a su visita.'
-              }
+              {s('insuranceNote').paragraphs![0]}
             </p>
           </Card>
 
           {/* What to Expect */}
           <Card className="bg-light-green-secondary p-8" data-testid="what-to-expect-card">
             <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-              {language === 'en' ? 'What to Expect' : 'Qué Esperar'}
+              {s('whatToExpectHeading').heading}
             </h3>
             <div className="space-y-4">
               {expectations.map((expectation, index) => (
@@ -104,20 +76,18 @@ const ForPatients = () => {
         {/* Important Policies Section */}
         <div className="mt-12">
           <h3 className="text-2xl font-semibold text-gray-900 mb-8 text-center">
-            {language === 'en' ? 'Important Policies' : 'Políticas Importantes'}
+            {s('importantPoliciesHeading').heading}
           </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Link href={language === 'en' ? '/cancellation-policy' : '/es/politica-cancelacion'} data-testid="link-cancellation-policy">
               <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
                 <div className="flex flex-col items-center text-center">
                   <FileText className="w-8 h-8 text-primary-green mb-4" />
                   <h4 className="font-semibold text-gray-900 mb-2">
-                    {language === 'en' ? 'Cancellation Policy' : 'Política de Cancelación'}
+                    {policyTitles[0]}
                   </h4>
                   <p className="text-sm text-gray-600">
-                    {language === 'en' 
-                      ? '24-hour notice required' 
-                      : 'Aviso de 24 horas requerido'}
+                    {policyDescriptions[0]}
                   </p>
                 </div>
               </Card>
@@ -128,12 +98,10 @@ const ForPatients = () => {
                 <div className="flex flex-col items-center text-center">
                   <DollarSign className="w-8 h-8 text-primary-green mb-4" />
                   <h4 className="font-semibold text-gray-900 mb-2">
-                    {language === 'en' ? 'Billing Policy' : 'Política de Facturación'}
+                    {policyTitles[1]}
                   </h4>
                   <p className="text-sm text-gray-600">
-                    {language === 'en' 
-                      ? 'Insurance & payment information' 
-                      : 'Información de seguro y pagos'}
+                    {policyDescriptions[1]}
                   </p>
                 </div>
               </Card>
@@ -144,12 +112,10 @@ const ForPatients = () => {
                 <div className="flex flex-col items-center text-center">
                   <Phone className="w-8 h-8 text-primary-green mb-4" />
                   <h4 className="font-semibold text-gray-900 mb-2">
-                    {language === 'en' ? 'Emergency Policy' : 'Política de Emergencias'}
+                    {policyTitles[2]}
                   </h4>
                   <p className="text-sm text-gray-600">
-                    {language === 'en' 
-                      ? 'Crisis & emergency resources' 
-                      : 'Recursos de crisis y emergencia'}
+                    {policyDescriptions[2]}
                   </p>
                 </div>
               </Card>
@@ -160,12 +126,38 @@ const ForPatients = () => {
                 <div className="flex flex-col items-center text-center">
                   <Shield className="w-8 h-8 text-primary-green mb-4" />
                   <h4 className="font-semibold text-gray-900 mb-2">
-                    {language === 'en' ? 'Patient Rights' : 'Derechos del Paciente'}
+                    {policyTitles[3]}
                   </h4>
                   <p className="text-sm text-gray-600">
-                    {language === 'en' 
-                      ? 'Your rights & responsibilities' 
-                      : 'Sus derechos y responsabilidades'}
+                    {policyDescriptions[3]}
+                  </p>
+                </div>
+              </Card>
+            </Link>
+
+            <Link href={language === 'en' ? '/no-surprises-act' : '/es/ley-sin-sorpresas'} data-testid="link-no-surprises-act">
+              <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <div className="flex flex-col items-center text-center">
+                  <Receipt className="w-8 h-8 text-primary-green mb-4" />
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    {policyTitles[4]}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {policyDescriptions[4]}
+                  </p>
+                </div>
+              </Card>
+            </Link>
+
+            <Link href={language === 'en' ? '/telehealth-consent' : '/es/consentimiento-telesalud'} data-testid="link-telehealth-consent">
+              <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <div className="flex flex-col items-center text-center">
+                  <Video className="w-8 h-8 text-primary-green mb-4" />
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    {policyTitles[5]}
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    {policyDescriptions[5]}
                   </p>
                 </div>
               </Card>

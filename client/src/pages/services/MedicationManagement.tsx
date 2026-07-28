@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { updateSEO } from '@/utils/seo';
 import { ArrowRight, CheckCircle, Phone, Calendar, MapPin, Clock, Zap, Info, Bolt } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
+import RichText from '@/components/RichText';
+import { medicationManagementContent } from '@/data/pageContent/services/medicationManagement';
 
 // Import generated images
 import doctorImage from "@assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp";
@@ -17,9 +19,29 @@ import medicationImage from "@assets/generated_images/Medical_assessment_tools_7
 import therapyRoomImage from "@assets/generated_images/Therapy_room_interior_4b5878fd.webp";
 import medicationCapsules from "@assets/e4031136-1b10-4229-8e1d-2c74e4186617_1755210913815.webp";
 
+const markdownToHtml = (text: string) =>
+  text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+const renderHeading = (text: string) =>
+  text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**') ? (
+      <span key={i} className="font-display italic text-green-700">{part.slice(2, -2)}</span>
+    ) : (
+      part
+    ),
+  );
+
 const MedicationManagement = () => {
   const { language } = useLanguage();
   const { trackServiceView } = useTikTokEvents();
+  const enS = (key: string) => medicationManagementContent.en.sections.find((x) => x.key === key)!;
+  const esS = (key: string) => medicationManagementContent.es.sections.find((x) => x.key === key)!;
+  const s = (key: string) => medicationManagementContent[language].sections.find((x) => x.key === key)!;
+  const bilingualItems = (key: string) => {
+    const en = enS(key).bullets!;
+    const es = esS(key).bullets!;
+    return en.map((e, i) => ({ en: e, es: es[i] }));
+  };
 
   useEffect(() => {
     const seoData = {
@@ -41,141 +63,13 @@ const MedicationManagement = () => {
     trackServiceView('Medication Management', 'medication-management');
   }, [language, trackServiceView]);
 
-  const benefits = language === 'en' ? [
-    'Expert evaluation and monitoring',
-    'Personalized medication plans',
-    'Regular safety assessments',
-    'Side effect management',
-    'Medication interactions review',
-    'Dosage optimization',
-    'Insurance accepted',
-    'Evidence-based pharmacotherapy'
-  ] : [
-    'Evaluación y monitoreo experto',
-    'Planes de medicación personalizados',
-    'Evaluaciones regulares de seguridad',
-    'Manejo de efectos secundarios',
-    'Revisión de interacciones medicamentosas',
-    'Optimización de dosis',
-    'Se acepta seguro',
-    'Farmacoterapia basada en evidencia'
-  ];
+  const benefits = s('benefits-grid').bullets!;
 
-  const candidatesCriteria = language === 'en' ? [
-    {
-      title: 'New Diagnosis',
-      description: 'Recently diagnosed with depression, anxiety, bipolar disorder, or other mental health conditions.'
-    },
-    {
-      title: 'Medication Adjustment',
-      description: 'Current medications aren\'t working effectively or are causing unwanted side effects.'
-    },
-    {
-      title: 'Multiple Medications',
-      description: 'Taking several psychiatric medications that need careful coordination and monitoring.'
-    },
-    {
-      title: 'Complex Medical History',
-      description: 'Have other medical conditions that may interact with psychiatric medications.'
-    },
-    {
-      title: 'Treatment Compliance',
-      description: 'Need support and guidance to maintain consistent medication routines.'
-    },
-    {
-      title: 'Ongoing Monitoring',
-      description: 'Require regular assessment of medication effectiveness and side effects.'
-    }
-  ] : [
-    {
-      title: 'Nuevo Diagnóstico',
-      description: 'Recientemente diagnosticado con depresión, ansiedad, trastorno bipolar u otras condiciones de salud mental.'
-    },
-    {
-      title: 'Ajuste de Medicación',
-      description: 'Los medicamentos actuales no funcionan efectivamente o están causando efectos secundarios no deseados.'
-    },
-    {
-      title: 'Múltiples Medicamentos',
-      description: 'Tomando varios medicamentos psiquiátricos que necesitan coordinación y monitoreo cuidadosos.'
-    },
-    {
-      title: 'Historia Médica Compleja',
-      description: 'Tiene otras condiciones médicas que pueden interactuar con medicamentos psiquiátricos.'
-    },
-    {
-      title: 'Cumplimiento del Tratamiento',
-      description: 'Necesita apoyo y orientación para mantener rutinas de medicación consistentes.'
-    },
-    {
-      title: 'Monitoreo Continuo',
-      description: 'Requiere evaluación regular de efectividad de medicamentos y efectos secundarios.'
-    }
-  ];
-
-  const treatmentProcess = language === 'en' ? [
-    {
-      step: '1',
-      title: 'Initial Assessment',
-      description: 'Comprehensive psychiatric evaluation including medical history, current symptoms, and previous medication experiences.'
-    },
-    {
-      step: '2',
-      title: 'Medication Selection',
-      description: 'Evidence-based medication choice considering your specific diagnosis, medical history, and treatment goals.'
-    },
-    {
-      step: '3',
-      title: 'Treatment Initiation',
-      description: 'Starting medication with careful dosing strategy, clear instructions, and side effect monitoring plan.'
-    },
-    {
-      step: '4',
-      title: 'Regular Monitoring',
-      description: 'Scheduled follow-up appointments to assess effectiveness, monitor side effects, and adjust dosages as needed.'
-    },
-    {
-      step: '5',
-      title: 'Optimization',
-      description: 'Fine-tuning medication regimen based on your response, lifestyle factors, and treatment goals.'
-    },
-    {
-      step: '6',
-      title: 'Long-term Management',
-      description: 'Ongoing medication management with regular reviews, preventive care, and coordination with other providers.'
-    }
-  ] : [
-    {
-      step: '1',
-      title: 'Evaluación Inicial',
-      description: 'Evaluación psiquiátrica integral incluyendo historia médica, síntomas actuales y experiencias previas con medicamentos.'
-    },
-    {
-      step: '2',
-      title: 'Selección de Medicación',
-      description: 'Elección de medicamento basada en evidencia considerando su diagnóstico específico, historia médica y objetivos de tratamiento.'
-    },
-    {
-      step: '3',
-      title: 'Inicio del Tratamiento',
-      description: 'Inicio de medicación con estrategia de dosis cuidadosa, instrucciones claras y plan de monitoreo de efectos secundarios.'
-    },
-    {
-      step: '4',
-      title: 'Monitoreo Regular',
-      description: 'Citas de seguimiento programadas para evaluar efectividad, monitorear efectos secundarios y ajustar dosis según sea necesario.'
-    },
-    {
-      step: '5',
-      title: 'Optimización',
-      description: 'Ajuste fino del régimen de medicación basado en su respuesta, factores de estilo de vida y objetivos de tratamiento.'
-    },
-    {
-      step: '6',
-      title: 'Manejo a Largo Plazo',
-      description: 'Manejo continuo de medicación con revisiones regulares, atención preventiva y coordinación con otros proveedores.'
-    }
-  ];
+  const treatmentProcess = [1, 2, 3, 4, 5, 6].map((n) => ({
+    step: String(n),
+    title: s(`process-step-${n}`).heading!,
+    description: s(`process-step-${n}`).paragraphs![0],
+  }));
 
   return (
     <div className="min-h-screen">
@@ -185,59 +79,29 @@ const MedicationManagement = () => {
         {/* Hero Section with Masonry Layout */}
         <ServiceHeroMasonry
           tagline={{
-            en: 'Expert Medication Care',
-            es: 'Cuidado Experto de Medicación'
+            en: enS('hero-tagline').paragraphs![0],
+            es: esS('hero-tagline').paragraphs![0]
           }}
           title={{
-            en: 'Medication Management in Naples, FL',
-            es: 'Manejo de Medicamentos en Naples, FL'
+            en: medicationManagementContent.en.title,
+            es: medicationManagementContent.es.title
           }}
           description={{
-            en: 'Expert psychiatric medication management for optimal mental health outcomes. Dr. Melva Reve provides comprehensive medication evaluation, monitoring, and adjustment to ensure safe, effective treatment tailored to your individual needs.',
-            es: 'Manejo experto de medicación psiquiátrica para resultados óptimos de salud mental. La Dra. Melva Reve brinda evaluación, monitoreo y ajuste integral de medicamentos para asegurar tratamiento seguro y efectivo adaptado a sus necesidades individuales.'
+            en: enS('hero-description').paragraphs![0],
+            es: esS('hero-description').paragraphs![0]
           }}
           specialNote={{
-            es: '<strong>El manejo adecuado de medicamentos es fundamental para el éxito del tratamiento.</strong> Nuestra experiencia garantiza que reciba la medicación correcta, en la dosis adecuada, con monitoreo continuo para optimizar su bienestar y minimizar efectos secundarios.'
+            es: markdownToHtml(esS('hero-special-note').paragraphs![0])
           }}
           facts={{
             title: {
-              en: 'Medication Management',
-              es: 'Manejo de Medicamentos'
+              en: enS('hero-facts').heading!,
+              es: esS('hero-facts').heading!
             },
-            items: [
-              {
-                en: 'Evidence-based pharmacotherapy practices',
-                es: 'Prácticas de farmacoterapia basadas en evidencia'
-              },
-              {
-                en: 'Comprehensive safety monitoring',
-                es: 'Monitoreo integral de seguridad'
-              },
-              {
-                en: 'Personalized treatment plans',
-                es: 'Planes de tratamiento personalizados'
-              },
-              {
-                en: 'Regular medication reviews',
-                es: 'Revisiones regulares de medicación'
-              }
-            ]
+            items: bilingualItems('hero-facts')
           }}
           quickStats={{
-            items: [
-              {
-                en: 'Expert evaluation and monitoring',
-                es: 'Evaluación y monitoreo experto'
-              },
-              {
-                en: 'Insurance accepted',
-                es: 'Se acepta seguro'
-              },
-              {
-                en: 'Bilingual consultations',
-                es: 'Consultas bilingües'
-              }
-            ]
+            items: bilingualItems('hero-quick-stats')
           }}
           images={{
             doctorImage,
@@ -254,34 +118,27 @@ const MedicationManagement = () => {
                 {/* Content Side */}
                 <div className="order-2 lg:order-1">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Expert Care' : 'Atención Experta'}
+                    {s('benefits-badge').paragraphs![0]}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Benefits of Expert <span className="font-display italic text-green-700">Medication Management</span></>
-                    ) : (
-                      <>Beneficios del <span className="font-display italic text-green-700">Manejo Experto</span> de Medicamentos</>
-                    )}
+                    {renderHeading(s('benefits').heading!)}
                   </h2>
                   
                   {/* Key Stats */}
                   <div className="mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">98%</div>
+                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">{s('benefits-stat').paragraphs![0]}</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Patient satisfaction with medication optimization' : 'Satisfacción del paciente con optimización de medicamentos'}
+                      {s('benefits-stat').paragraphs![1]}
                     </div>
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Professional medication management ensures safe, effective treatment with personalized care and ongoing monitoring for optimal mental health outcomes.'
-                      : 'El manejo profesional de medicamentos asegura tratamiento seguro y efectivo con atención personalizada y monitoreo continuo para resultados óptimos de salud mental.'
-                    }
+                    {s('benefits-intro').paragraphs![0]}
                   </p>
 
                   <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</span>
+                      <span>{s('benefits-cta').paragraphs![0]}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                       </div>
@@ -329,21 +186,14 @@ const MedicationManagement = () => {
                 {/* Content Side */}
                 <div className="lg:col-span-2">
                   <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Personalized Care' : 'Atención Personalizada'}
+                    {s('who-badge').paragraphs![0]}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                    {language === 'en' ? (
-                      <>Who Benefits from <span className="font-display italic text-green-700">Medication Management</span>?</>
-                    ) : (
-                      <>¿Quién se Beneficia del <span className="font-display italic text-green-700">Manejo de Medicamentos</span>?</>
-                    )}
+                    {renderHeading(s('who').heading!)}
                   </h2>
                   
                   <p className="text-lg sm:text-xl text-gray-600 mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Our comprehensive medication management ensures optimal treatment outcomes through careful monitoring, adjustment, and personalized care for each patient.'
-                      : 'Nuestro manejo integral de medicamentos asegura resultados óptimos de tratamiento a través de monitoreo cuidadoso, ajustes y atención personalizada para cada paciente.'
-                    }
+                    {s('who').paragraphs![0]}
                   </p>
 
                   {/* Benefits Grid */}
@@ -355,21 +205,11 @@ const MedicationManagement = () => {
                           <CheckCircle className="w-6 h-6 text-green-600" />
                         </div>
                         <h3 className="text-xl font-body font-bold text-green-800">
-                          {language === 'en' ? 'Ideal Candidates' : 'Candidatos Ideales'}
+                          {s('who-candidates').heading!}
                         </h3>
                       </div>
                       <div className="space-y-2">
-                        {(language === 'en' ? [
-                          'Multiple psychiatric medications',
-                          'Complex medication interactions',
-                          'Side effect management needed',
-                          'Treatment optimization required'
-                        ] : [
-                          'Múltiples medicamentos psiquiátricos',
-                          'Interacciones medicamentosas complejas',
-                          'Necesita manejo de efectos secundarios',
-                          'Requiere optimización del tratamiento'
-                        ]).map((item, index) => (
+                        {s('who-candidates').bullets!.map((item, index) => (
                           <div key={index} className="flex items-start gap-2">
                             <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                             <span className="text-gray-600 font-body text-sm">{item}</span>
@@ -385,21 +225,11 @@ const MedicationManagement = () => {
                           <Info className="w-6 h-6 text-green-600" />
                         </div>
                         <h3 className="text-xl font-body font-bold text-green-800">
-                          {language === 'en' ? 'Key Considerations' : 'Consideraciones Clave'}
+                          {s('who-considerations').heading!}
                         </h3>
                       </div>
                       <div className="space-y-2">
-                        {(language === 'en' ? [
-                          'Regular monitoring required',
-                          'Lab work may be necessary',
-                          'Medication compliance essential',
-                          'Follow-up appointments needed'
-                        ] : [
-                          'Monitoreo regular requerido',
-                          'Trabajo de laboratorio puede ser necesario',
-                          'Cumplimiento de medicación esencial',
-                          'Citas de seguimiento necesarias'
-                        ]).map((item, index) => (
+                        {s('who-considerations').bullets!.map((item, index) => (
                           <div key={index} className="flex items-start gap-2">
                             <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                             <span className="text-gray-600 font-body text-sm">{item}</span>
@@ -411,7 +241,7 @@ const MedicationManagement = () => {
 
                   <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
-                      <span>{language === 'en' ? 'Start Medication Management' : 'Iniciar Manejo de Medicamentos'}</span>
+                      <span>{s('who-cta').paragraphs![0]}</span>
                       <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
                         <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                       </div>
@@ -424,15 +254,15 @@ const MedicationManagement = () => {
                   {/* Stats Cards */}
                   <div className="space-y-4 mb-6">
                     <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                      <div className="text-3xl font-bold text-green-600 mb-2">95%</div>
+                      <div className="text-3xl font-bold text-green-600 mb-2">{s('who-stat-1').paragraphs![0]}</div>
                       <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Medication adherence improvement' : 'Mejora en adherencia a medicación'}
+                        {s('who-stat-1').paragraphs![1]}
                       </div>
                     </div>
                     <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                      <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
+                      <div className="text-3xl font-bold text-green-600 mb-2">{s('who-stat-2').paragraphs![0]}</div>
                       <div className="text-sm text-gray-600 font-body">
-                        {language === 'en' ? 'Emergency consultation available' : 'Consulta de emergencia disponible'}
+                        {s('who-stat-2').paragraphs![1]}
                       </div>
                     </div>
                   </div>
@@ -457,11 +287,7 @@ const MedicationManagement = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Our <span className="font-display italic text-green-700">Medication Management</span> Process</>
-                ) : (
-                  <>Nuestro Proceso de <span className="font-display italic text-green-700">Manejo de Medicamentos</span></>
-                )}
+                {renderHeading(s('process').heading!)}
               </h2>
             </div>
             
@@ -486,37 +312,19 @@ const MedicationManagement = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
-                {language === 'en' ? (
-                  <>Why Choose Dr. Reve for <span className="font-display italic text-green-700">Medication Management</span></>
-                ) : (
-                  <>Por Qué Elegir a la Dra. Reve para <span className="font-display italic text-green-700">Manejo de Medicamentos</span></>
-                )}
+                {renderHeading(s('why').heading!)}
               </h2>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="space-y-6">
-                  {(language === 'en' ? [
-                    'Experienced psychiatrist with medication expertise',
-                    'Comprehensive medication monitoring and adjustments',
-                    'Bilingual services in English and Spanish',
-                    'Insurance coverage assistance',
-                    'Regular follow-up and safety monitoring',
-                    <>Convenient scheduling and <Link href="/locations/psychiatrist-naples" className="text-green-700 hover:text-green-800 underline">accessible Naples, FL location</Link></>
-                  ] : [
-                    'Psiquiatra certificada con experiencia en medicamentos',
-                    'Monitoreo integral y ajustes de medicación',
-                    'Servicios bilingües en inglés y español',
-                    'Asistencia con cobertura de seguro',
-                    'Seguimiento regular y monitoreo de seguridad',
-                    <>Horarios convenientes y <Link href="/es/ubicaciones/psiquiatra-naples" className="text-green-700 hover:text-green-800 underline">ubicación accesible en Naples, FL</Link></>
-                  ]).map((benefit, index) => (
+                  {s('why-benefits').bullets!.map((benefit, index) => (
                     <div key={index} className="flex items-start gap-4">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                         <CheckCircle className="w-4 h-4 text-green-600" />
                       </div>
-                      <span className="text-gray-700 font-body text-lg">{benefit}</span>
+                      <span className="text-gray-700 font-body text-lg"><RichText text={benefit} linkClassName="text-green-700 hover:text-green-800 underline" /></span>
                     </div>
                   ))}
                 </div>
@@ -528,13 +336,10 @@ const MedicationManagement = () => {
                     <Bolt />
                   </WellnessIcon>
                   <h3 className="text-2xl font-body font-bold text-green-800 mb-4">
-                    {language === 'en' ? 'Ready to Optimize Your Medications?' : '¿Listo para Optimizar sus Medicamentos?'}
+                    {s('why-card').heading!}
                   </h3>
                   <p className="text-gray-600 font-body leading-relaxed mb-6">
-                    {language === 'en'
-                      ? 'Take control of your mental health with expert medication management. Schedule a consultation to review your current medications.'
-                      : 'Toma control de tu salud mental con manejo experto de medicamentos. Programa una consulta para revisar tus medicamentos actuales.'
-                    }
+                    {s('why-card').paragraphs![0]}
                   </p>
                   <div className="space-y-4">
                     <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
@@ -546,7 +351,7 @@ const MedicationManagement = () => {
                         <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 bg-green-500">
                           <Calendar className="w-4 h-4 text-white" />
                         </div>
-                        {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                        {s('why-card-cta').paragraphs![0]}
                       </Button>
                     </Link>
                     
@@ -560,7 +365,7 @@ const MedicationManagement = () => {
                         <Phone className="w-4 h-4 text-green-800" />
                       </div>
                       <a href="tel:+12394230272" className="flex items-center gap-3">
-                        {language === 'en' ? 'Call Now' : 'Llamar Ahora'}
+                        {s('why-card-cta').paragraphs![1]}
                       </a>
                     </Button>
                   </div>

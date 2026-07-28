@@ -29,6 +29,8 @@ import doctorsHealthcareLogo from '@assets/3_1755868276797.webp';
 import floridaBlueLogo from '@assets/6_1755868276798.webp';
 import unitedHealthcareLogo from '@assets/8_1755868276798.webp';
 import oscarLogo from '@assets/10_1755868276798.webp';
+import { contactContent } from '@/data/pageContent/mainPages/contact';
+import { renderRichText } from '@/components/RichText';
 
 interface FormData {
   firstName: string;
@@ -44,6 +46,8 @@ const Contact = () => {
   const { toast } = useToast();
   const { trackEvent, setTag } = useClarity();
   const { trackContactFormSubmission, trackPhoneClick } = useTikTokEvents();
+  const content = contactContent[language];
+  const section = (key: string) => content.sections.find((x) => x.key === key)!;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -183,21 +187,21 @@ const Contact = () => {
       title: t('contact.phone'),
       value: '(239) 423-0272',
       link: 'tel:+12394230272',
-      subtext: language === 'en' ? 'Monday - Friday: 8:00 AM - 5:00 PM' : 'Lunes - Viernes: 8:00 AM - 5:00 PM'
+      subtext: section('phoneSubtext').paragraphs![0]
     },
     {
       icon: Mail,
       title: t('contact.email'),
       value: 'info@healingmindsp.com',
       link: 'mailto:info@healingmindsp.com',
-      subtext: language === 'en' ? 'We respond within 24 hours' : 'Respondemos dentro de 24 horas'
+      subtext: section('emailSubtext').paragraphs![0]
     },
     {
       icon: MapPin,
       title: t('contact.address'),
       value: '4760 Tamiami Trl N # 25\nNaples, FL 34103',
       link: 'https://www.google.com/maps/dir/?api=1&destination=Healing+Minds+Psychiatry,4760+Tamiami+Trl+N+%23+25,Naples,FL+34103',
-      subtext: language === 'en' ? 'Get Directions →' : 'Obtener Direcciones →'
+      subtext: section('addressSubtext').paragraphs![0]
     }
   ];
 
@@ -224,7 +228,7 @@ const Contact = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="text-center mb-16">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
-            Get in <span className="font-display italic text-green-700">touch</span>
+            {renderRichText(content.title, undefined, 'font-display italic text-green-700')}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="contact-description">
             {t('contact.description')}
@@ -234,7 +238,7 @@ const Contact = () => {
         {/* Insurance Section */}
         <div className="mb-12">
           <p className="text-center text-xs text-gray-500 mb-4 font-body uppercase tracking-wide">
-            {language === 'en' ? 'Insurance We Accept' : 'Seguros que Aceptamos'}
+            {section('insuranceLabel').paragraphs![0]}
           </p>
           <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
             {insuranceLogos.map((logo, index) => (
@@ -261,7 +265,7 @@ const Contact = () => {
           {/* Contact Information Column - Order 2 on mobile, Order 1 (left) on desktop */}
           <div className="flex flex-col h-full order-2 md:order-1">
             <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-info-title">
-              {language === 'en' ? <>Contact <span className="font-display italic text-green-700">Information</span></> : <>Información de <span className="font-display italic text-green-700">Contacto</span></>}
+              {renderRichText(section('infoTitle').heading!, undefined, 'font-display italic text-green-700')}
             </h3>
             
             <div className="space-y-6 mb-8">
@@ -321,15 +325,12 @@ const Contact = () => {
                     {t('contact.emergency')}
                   </h4>
                   <p className="text-sm text-gray-700 mb-2">
-                    {language === 'en' 
-                      ? 'If you are experiencing a mental health emergency, please call:'
-                      : 'Si está experimentando una emergencia de salud mental, por favor llame:'
-                    }
+                    {section('emergency').paragraphs![0]}
                   </p>
                   <div className="space-y-1 text-sm">
-                    <div><strong>911</strong> - {language === 'en' ? 'Emergency services' : 'Servicios de emergencia'}</div>
-                    <div><strong>988</strong> - {language === 'en' ? 'Suicide & Crisis Lifeline' : 'Línea de Vida de Suicidio y Crisis'}</div>
-                    <div><strong>(239) 263-7158</strong> - {language === 'en' ? 'David Lawrence Center Crisis Line' : 'Línea de Crisis del Centro David Lawrence'}</div>
+                    <div><strong>911</strong> - {section('emergency').bullets![0]}</div>
+                    <div><strong>988</strong> - {section('emergency').bullets![1]}</div>
+                    <div><strong>(239) 455-8500</strong> - {section('emergency').bullets![2]}</div>
                   </div>
                 </div>
               </div>
@@ -338,15 +339,7 @@ const Contact = () => {
             {/* Telehealth Booking */}
             <div className="md:mt-auto">
               <h3 className="text-xl font-body font-semibold text-gray-900 mb-4">
-                {language === 'en' ? (
-                  <>
-                    <span className="font-display italic text-blue-700">Telehealth</span> Appointments
-                  </>
-                ) : (
-                  <>
-                    Citas de <span className="font-display italic text-blue-700">Telesalud</span>
-                  </>
-                )}
+                {renderRichText(section('telehealthHeading').heading!, undefined, 'font-display italic text-blue-700')}
               </h3>
               <CharmHealthBooking variant="default" showDescription={false} />
             </div>
@@ -355,7 +348,7 @@ const Contact = () => {
           {/* Contact Form - Order 1 on mobile, Order 2 (right) on desktop */}
           <Card className="bg-white p-8 shadow-sm order-1 md:order-2" data-testid="contact-form-card">
             <h3 className="text-2xl font-body font-semibold text-gray-900 mb-6" data-testid="contact-form-title">
-              {language === 'en' ? <>Send us a <span className="font-display italic text-green-700">message</span></> : <>Envíanos un <span className="font-display italic text-green-700">mensaje</span></>}
+              {renderRichText(section('formTitle').heading!, undefined, 'font-display italic text-green-700')}
             </h3>
             
             <form onSubmit={handleSubmit} className="space-y-6" data-testid="contact-form">
@@ -483,20 +476,14 @@ const Contact = () => {
                   value={formData.message}
                   onChange={(e) => handleInputChange('message', e.target.value)}
                   className="w-full resize-vertical"
-                  placeholder={language === 'en' 
-                    ? 'Please let us know how we can help you or any questions you have about our services.'
-                    : 'Por favor déjenos saber cómo podemos ayudarle o cualquier pregunta que tenga sobre nuestros servicios.'
-                  }
+                  placeholder={section('formMessagePlaceholder').paragraphs![0]}
                   data-testid="textarea-message"
                 />
               </div>
 
               <div className="text-sm text-gray-600">
                 <p>
-                  {language === 'en' 
-                    ? '* Required fields. By submitting this form, you consent to us contacting you about your inquiry. Your information is kept confidential and secure.'
-                    : '* Campos requeridos. Al enviar este formulario, usted consiente que lo contactemos sobre su consulta. Su información se mantiene confidencial y segura.'
-                  }
+                  {section('formConsent').paragraphs![0]}
                 </p>
               </div>
 
@@ -507,7 +494,7 @@ const Contact = () => {
                 data-testid="button-submit"
               >
                 {isSubmitting 
-                  ? (language === 'en' ? 'Sending...' : 'Enviando...') 
+                  ? section('formSending').paragraphs![0]
                   : t('contact.form.send')
                 }
               </Button>
@@ -519,17 +506,10 @@ const Contact = () => {
         <div className="mt-16 lg:mt-20">
           <div className="text-center mb-8">
             <h3 className="text-2xl sm:text-3xl font-body font-bold text-green-800 mb-4" data-testid="map-section-title">
-              {language === 'en' ? (
-                <>Find Us on the <span className="font-display italic text-green-700">Map</span></>
-              ) : (
-                <>Encuéntranos en el <span className="font-display italic text-green-700">Mapa</span></>
-              )}
+              {renderRichText(section('mapHeading').heading!, undefined, 'font-display italic text-green-700')}
             </h3>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-              {language === 'en'
-                ? 'Visit our Naples office conveniently located on Tamiami Trail. Easy access with ample parking available.'
-                : 'Visite nuestra oficina de Naples convenientemente ubicada en Tamiami Trail. Fácil acceso con amplio estacionamiento disponible.'
-              }
+              {section('mapHeading').paragraphs![0]}
             </p>
           </div>
           

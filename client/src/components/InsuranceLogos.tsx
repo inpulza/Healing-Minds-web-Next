@@ -1,6 +1,8 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { useState, useEffect } from 'react';
 import OptimizedImage from './OptimizedImage';
+import { homeContent } from '@/data/pageContent/mainPages/home';
+import { renderRichText } from '@/components/RichText';
 
 // Import insurance logos - WebP optimized using full path (70% size reduction, same visual quality)
 import aetnaLogo from '../assets/insurance-aetna.webp';           // 38KB vs 110KB PNG
@@ -22,6 +24,8 @@ import oscarLogo from '@assets/10_1755868276798.webp';              // 39KB vs 9
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
+  const content = homeContent[language];
+  const section = (key: string) => content.sections.find((x) => x.key === key)!;
   const [currentLogoIndex, setCurrentLogoIndex] = useState(0);
   
   // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
@@ -64,20 +68,10 @@ const InsuranceLogos = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-green-800 mb-4">
-            {language === 'en' ? (
-              <>
-                Insurance <span className="font-display italic text-green-700">Plans</span> Accepted
-              </>
-            ) : (
-              <>
-                <span className="font-display italic text-green-700">Planes</span> de Seguro Aceptados
-              </>
-            )}
+            {renderRichText(section('insuranceHeading').heading!, undefined, 'font-display italic text-green-700')}
           </h2>
           <p className="text-lg text-gray-600 font-body leading-relaxed max-w-3xl mx-auto">
-            {language === 'en' 
-              ? 'We work with most major insurance providers to make quality mental health care accessible and affordable for our patients.'
-              : 'Trabajamos con la mayoría de los principales proveedores de seguros para hacer que la atención de salud mental de calidad sea accesible y asequible para nuestros pacientes.'}
+            {section('insuranceHeading').paragraphs![0]}
           </p>
         </div>
 
@@ -222,9 +216,7 @@ const InsuranceLogos = () => {
           {/* Bottom Note */}
           <div className="text-center mt-8 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500 font-body">
-              {language === 'en' 
-                ? 'Don\'t see your insurance? Contact us to verify coverage for your specific plan.'
-                : '¿No ve su seguro? Contáctenos para verificar la cobertura de su plan específico.'}
+              {section('insuranceNote').paragraphs![0]}
             </p>
           </div>
         </div>

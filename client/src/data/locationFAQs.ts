@@ -878,5 +878,100 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
         answer: "¡Nuestro equipo está aquí para ayudar! Proporcionamos soporte técnico y podemos solucionar cualquier problema. Si es necesario, podemos cambiar a una llamada telefónica para asegurar que reciba su atención sin interrupción."
       }
     ]
+  },
+
+  californiaTelehealth: {
+    en: [
+      {
+        question: "Does the doctor speak Spanish?",
+        answer: "Yes. Spanish is her native language. Your entire appointment can be in Spanish, from start to finish."
+      },
+      {
+        question: "Can I be seen if I live in California?",
+        answer: "Yes, as long as you are physically in California during the appointment. It is a legal requirement: telehealth care is governed by the state where the patient is located."
+      },
+      {
+        question: "Do you accept health insurance?",
+        answer: "Not in California. Appointments are direct pay. In exchange, the price is clear from the start and there is no paperwork or prior authorizations."
+      },
+      {
+        question: "How much does it cost?",
+        answer: "Appointments are direct pay, with no insurance in between. Write to us on WhatsApp and we will confirm the exact price before you book, so there are no surprises."
+      },
+      {
+        question: "How does payment work?",
+        answer: "You pay for your appointment directly to the practice. \"Cash pay\" does not mean paying in physical cash: it is simply the term used in the United States for care paid without health insurance, with no claims and no prior authorizations."
+      },
+      {
+        question: "What do I need for the video call?",
+        answer: "A phone, tablet, or computer with a camera and microphone, an internet connection, and a place where you can talk privately. Nothing needs to be installed."
+      },
+      {
+        question: "What happens at the first appointment?",
+        answer: "It is a complete psychiatric evaluation, a 60-minute video call. Dr. Reve talks with you about what you are going through, your history and your symptoms, answers your questions, and explains the next steps of your treatment. Follow-up appointments last 30 minutes."
+      },
+      {
+        question: "Do you see minors?",
+        answer: "No. Appointments are for adults 18 and older only."
+      },
+      {
+        question: "Is it the same as going in person?",
+        answer: "For most cases, yes. Psychiatric evaluation and follow-up work just as well by video call, and you do not have to travel."
+      },
+      {
+        question: "Is the video call private?",
+        answer: "Yes. Appointments take place on a secure medical platform and your information is protected by medical privacy laws (HIPAA), just like an in-person visit."
+      },
+      {
+        question: "What if I have an emergency?",
+        answer: "This practice does not handle emergencies. If you are in crisis, call 988 or 911."
+      }
+    ],
+    es: [
+      {
+        question: "¿La doctora habla español?",
+        answer: "Sí. El español es su lengua materna. Toda la consulta puede ser en español, de principio a fin."
+      },
+      {
+        question: "¿Puedo atenderme si vivo en California?",
+        answer: "Sí, siempre que estés físicamente en California durante la cita. Es un requisito legal: la atención médica a distancia se rige por el estado donde está el paciente."
+      },
+      {
+        question: "¿Aceptan seguro médico?",
+        answer: "En California no. La consulta es de pago directo. A cambio, el precio es claro desde el principio y no hay trámites ni autorizaciones."
+      },
+      {
+        question: "¿Cuánto cuesta?",
+        answer: "La consulta es de pago directo, sin seguros de por medio. Escríbenos por WhatsApp y te confirmamos el precio exacto antes de reservar, sin sorpresas."
+      },
+      {
+        question: "¿Cómo funciona el pago?",
+        answer: "Pagas tu consulta directamente a la práctica. \"Cash pay\" no significa pagar en efectivo: es simplemente el término que se usa en Estados Unidos para la atención que se paga sin seguro médico, sin reclamos ni autorizaciones previas."
+      },
+      {
+        question: "¿Qué necesito para la videollamada?",
+        answer: "Un móvil, tablet u ordenador con cámara y micrófono, conexión a internet y un sitio donde puedas hablar tranquilo. No hace falta instalar nada."
+      },
+      {
+        question: "¿Qué pasa en la primera consulta?",
+        answer: "Es una evaluación psiquiátrica completa, una videollamada de 60 minutos. La Dra. Reve conversa contigo sobre lo que estás pasando, tu historia y tus síntomas, responde tus preguntas y te explica los siguientes pasos de tu tratamiento. Las consultas de seguimiento duran 30 minutos."
+      },
+      {
+        question: "¿Atienden a menores de edad?",
+        answer: "No. La consulta es solo para adultos a partir de 18 años."
+      },
+      {
+        question: "¿Es lo mismo que ir en persona?",
+        answer: "Para la mayoría de los casos, sí. La evaluación psiquiátrica y el seguimiento funcionan igual de bien por videollamada, y así no tienes que desplazarte."
+      },
+      {
+        question: "¿La videollamada es privada?",
+        answer: "Sí. La consulta se realiza en una plataforma médica segura y tu información está protegida por las leyes de privacidad médica (HIPAA), igual que una visita en persona."
+      },
+      {
+        question: "¿Y si tengo una urgencia?",
+        answer: "Esta consulta no atiende urgencias. Si estás en crisis, llama al 988 o al 911."
+      }
+    ]
   }
 };

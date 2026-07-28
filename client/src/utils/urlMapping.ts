@@ -1,82 +1,11 @@
 /**
- * Bidirectional URL mapping utility for English ↔ Spanish pages
- * Maps ALL bilingual pages based on sitemap configuration
+ * Bidirectional URL mapping utility for English ↔ Spanish pages.
+ * Derived from the single route manifest in shared/routeManifest.ts.
  */
 
-// Define the complete bilingual URL mapping based on sitemap.ts
-const bilingualURLMapping: Record<string, string> = {
-  // Homepage mapping
-  '/': '/es',
-  '/es': '/',
-  
-  // Main pages mapping
-  '/about': '/es/acerca-de',
-  '/es/acerca-de': '/about',
-  '/contact': '/es/contacto',
-  '/es/contacto': '/contact',
-  '/services': '/es/servicios',
-  '/es/servicios': '/services',
-  '/for-patients': '/es/para-pacientes',
-  '/es/para-pacientes': '/for-patients',
-  '/locations': '/es/ubicaciones',
-  '/es/ubicaciones': '/locations',
-  '/blog': '/es/blog',
-  '/es/blog': '/blog',
-  
-  // Individual service pages mapping
-  '/services/anxiety-treatment': '/es/servicios/tratamiento-ansiedad',
-  '/es/servicios/tratamiento-ansiedad': '/services/anxiety-treatment',
-  '/services/depression-treatment': '/es/servicios/tratamiento-depresion',
-  '/es/servicios/tratamiento-depresion': '/services/depression-treatment',
-  '/services/adhd-treatment': '/es/servicios/tratamiento-adhd',
-  '/es/servicios/tratamiento-adhd': '/services/adhd-treatment',
-  '/services/ptsd-treatment': '/es/servicios/tratamiento-tept',
-  '/es/servicios/tratamiento-tept': '/services/ptsd-treatment',
-  '/services/bipolar-treatment': '/es/servicios/tratamiento-bipolar',
-  '/es/servicios/tratamiento-bipolar': '/services/bipolar-treatment',
-  '/services/medication-management': '/es/servicios/manejo-medicamentos',
-  '/es/servicios/manejo-medicamentos': '/services/medication-management',
-  
-  // Location pages mapping - all satellite location pages
-  '/locations/psychiatrist-naples': '/es/ubicaciones/psiquiatra-naples',
-  '/es/ubicaciones/psiquiatra-naples': '/locations/psychiatrist-naples',
-  '/locations/psychiatrist-bonita-springs': '/es/ubicaciones/psiquiatra-bonita-springs',
-  '/es/ubicaciones/psiquiatra-bonita-springs': '/locations/psychiatrist-bonita-springs',
-  '/locations/psychiatrist-marco-island': '/es/ubicaciones/psiquiatra-marco-island',
-  '/es/ubicaciones/psiquiatra-marco-island': '/locations/psychiatrist-marco-island',
-  '/locations/psychiatrist-fort-myers': '/es/ubicaciones/psiquiatra-fort-myers',
-  '/es/ubicaciones/psiquiatra-fort-myers': '/locations/psychiatrist-fort-myers',
-  '/locations/psychiatrist-ave-maria': '/es/ubicaciones/psiquiatra-ave-maria',
-  '/es/ubicaciones/psiquiatra-ave-maria': '/locations/psychiatrist-ave-maria',
-  '/locations/psychiatrist-estero': '/es/ubicaciones/psiquiatra-estero',
-  '/es/ubicaciones/psiquiatra-estero': '/locations/psychiatrist-estero',
-  '/locations/psychiatrist-golden-gate': '/es/ubicaciones/psiquiatra-golden-gate',
-  '/es/ubicaciones/psiquiatra-golden-gate': '/locations/psychiatrist-golden-gate',
-  '/locations/psychiatrist-immokalee': '/es/ubicaciones/psiquiatra-immokalee',
-  '/es/ubicaciones/psiquiatra-immokalee': '/locations/psychiatrist-immokalee',
-  '/locations/psychiatrist-lely-resort': '/es/ubicaciones/psiquiatra-lely-resort',
-  '/es/ubicaciones/psiquiatra-lely-resort': '/locations/psychiatrist-lely-resort',
-  '/locations/psychiatrist-vanderbilt-beach': '/es/ubicaciones/psiquiatra-vanderbilt-beach',
-  '/es/ubicaciones/psiquiatra-vanderbilt-beach': '/locations/psychiatrist-vanderbilt-beach',
-  
-  // Legal pages mapping
-  '/privacy-policy': '/es/politica-privacidad',
-  '/es/politica-privacidad': '/privacy-policy',
-  '/terms-of-service': '/es/terminos-servicio',
-  '/es/terminos-servicio': '/terms-of-service',
-  '/hipaa-notice': '/es/aviso-hipaa',
-  '/es/aviso-hipaa': '/hipaa-notice',
-  '/cookie-policy': '/es/politica-cookies',
-  '/es/politica-cookies': '/cookie-policy',
-  '/cancellation-policy': '/es/politica-cancelacion',
-  '/es/politica-cancelacion': '/cancellation-policy',
-  '/billing-policy': '/es/politica-facturacion',
-  '/es/politica-facturacion': '/billing-policy',
-  '/emergency-policy': '/es/politica-emergencias',
-  '/es/politica-emergencias': '/emergency-policy',
-  '/patient-rights': '/es/derechos-paciente',
-  '/es/derechos-paciente': '/patient-rights'
-};
+import { getBilingualUrlMap } from '@shared/routeManifest';
+
+const bilingualURLMapping: Record<string, string> = getBilingualUrlMap();
 
 /**
  * Get the corresponding URL for the target language

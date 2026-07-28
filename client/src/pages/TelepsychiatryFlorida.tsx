@@ -9,6 +9,7 @@ import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import InsuranceLogos from '@/components/InsuranceLogos';
 import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
+import { telepsychiatryFloridaContent } from '@/data/pageContent/mainPages/telepsychiatryFlorida';
 import WellnessIcon from '@/components/WellnessIcon';
 import floridaMap from '../assets/florida-map.webp';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -51,7 +52,7 @@ const TelepsychiatryFlorida = () => {
         : 'Telepsiquiatría Florida | Psiquiatra Online (Bilingüe) | Healing Minds',
       description: language === 'en'
         ? 'Access an expert psychiatrist from anywhere in Florida. Dr. Melva Reve offers expert telepsychiatry for anxiety, depression & ADHD. Secure & confidential. Book online.'
-        : 'Acceda a una psiquiatra certificada desde cualquier lugar de Florida. La Dra. Melva Reve ofrece telepsiquiatría experta para ansiedad, depresión y TDAH. Segura y confidencial. Reserve en línea.',
+        : 'Acceda a una psiquiatra con licencia desde cualquier lugar de Florida. La Dra. Melva Reve ofrece telepsiquiatría experta para ansiedad, depresión y TDAH. Segura y confidencial. Reserve en línea.',
       keywords: language === 'en'
         ? 'telepsychiatry Florida, online psychiatrist Florida, telehealth psychiatry FL, virtual psychiatrist Florida, telepsiquiatria Florida'
         : 'telepsiquiatría Florida, psiquiatra online Florida, telepsiquiatría FL, psiquiatra virtual Florida',
@@ -77,186 +78,11 @@ const TelepsychiatryFlorida = () => {
     if (emblaApi2) emblaApi2.scrollNext();
   }, [emblaApi2]);
 
-  const content = {
-    en: {
-      hero: {
-        title: "Expert Psychiatric Care from Anywhere in Florida",
-        subtitle: "Telepsychiatry Services Throughout Florida",
-        description: "Connect with Dr. Melva Reve from the comfort of your home. Professional psychiatric care designed to eliminate distance barriers, wherever you are in Florida."
-      },
-      benefits: {
-        title: "Why Choose Telepsychiatry?",
-        items: [
-          {
-            title: "Access from Anywhere in Florida",
-            description: "Whether you're in Miami, Orlando, Tampa, or a rural community, connect with an expert psychiatrist without the need to travel."
-          },
-          {
-            title: "Convenient & Time-Saving",
-            description: "No traffic, no waiting rooms. Our virtual appointments fit your schedule, allowing you to receive care efficiently from home."
-          },
-          {
-            title: "100% Private & Secure",
-            description: "HIPAA-compliant platform ensures your sessions are completely confidential and encrypted. Your privacy is our priority."
-          },
-          {
-            title: "Continuity of Care",
-            description: "Perfect for seasonal residents, college students, or anyone traveling within Florida. Your treatment never gets interrupted."
-          }
-        ]
-      },
-      coverage: {
-        title: "Statewide Coverage",
-        description: "Dr. Melva Reve is licensed to provide telepsychiatry services throughout the entire state of Florida."
-      },
-      process: {
-        title: "How It Works",
-        description: "Getting started with telepsychiatry is simple and straightforward.",
-        steps: [
-          {
-            number: "1",
-            title: "Book Your Appointment",
-            description: "Call us or use our online booking portal to schedule your first virtual consultation."
-          },
-          {
-            number: "2",
-            title: "Receive Secure Link",
-            description: "You'll get a confirmation email with a unique, HIPAA-compliant video session link."
-          },
-          {
-            number: "3",
-            title: "Connect with Dr. Reve",
-            description: "At your appointment time, click the link from any device and meet with Dr. Reve in English or Spanish."
-          },
-          {
-            number: "4",
-            title: "Ongoing Care",
-            description: "Schedule follow-up appointments as needed and receive continuous psychiatric support, all from the comfort of home."
-          }
-        ]
-      },
-      services: {
-        title: "Complete Psychiatry Services via Telemedicine",
-        description: "Our virtual platform allows us to offer our full range of diagnostic and psychiatric services for adults (18+).",
-        list: [
-          {
-            title: "Initial Psychiatric Evaluation",
-            description: "Comprehensive assessment to understand your mental health needs and create a personalized treatment plan."
-          },
-          {
-            title: "Anxiety & Depression Treatment",
-            description: "Expert psychiatric evaluation and ongoing support for anxiety disorders and depression."
-          },
-          {
-            title: "ADHD Evaluation & Management",
-            description: "Thorough ADHD assessment and personalized psychiatric care for adults seeking focus and productivity."
-          },
-          {
-            title: "PTSD & Trauma Therapy",
-            description: "Trauma-informed psychiatric care and coordinated support for post-traumatic stress disorder."
-          },
-          {
-            title: "Bipolar Disorder Treatment",
-            description: "Specialized mood stabilization and comprehensive bipolar disorder management."
-          },
-          {
-            title: "Ongoing Psychiatric Care",
-            description: "Regular follow-up appointments and continuous psychiatric support to optimize your treatment plan."
-          }
-        ]
-      }
-    },
-    es: {
-      hero: {
-        title: "Atención Psiquiátrica Experta desde Cualquier Lugar de Florida",
-        subtitle: "Servicios de Telepsiquiatría en Toda Florida",
-        description: "Conéctese con la Dra. Melva Reve desde la comodidad de su hogar. Atención psiquiátrica profesional diseñada para eliminar barreras de distancia, esté donde esté en Florida."
-      },
-      benefits: {
-        title: "¿Por Qué Elegir Telepsiquiatría?",
-        items: [
-          {
-            title: "Acceso desde Cualquier Lugar de Florida",
-            description: "Ya sea que esté en Miami, Orlando, Tampa o una comunidad rural, conéctese con una psiquiatra certificada sin necesidad de viajar."
-          },
-          {
-            title: "Conveniente y Ahorra Tiempo",
-            description: "Sin tráfico, sin salas de espera. Nuestras citas virtuales se adaptan a su horario, permitiéndole recibir atención eficientemente desde casa."
-          },
-          {
-            title: "100% Privado y Seguro",
-            description: "Plataforma compatible con HIPAA garantiza que sus sesiones sean completamente confidenciales y encriptadas. Su privacidad es nuestra prioridad."
-          },
-          {
-            title: "Continuidad de la Atención",
-            description: "Perfecto para residentes estacionales, estudiantes universitarios o cualquiera que viaje dentro de Florida. Su tratamiento nunca se interrumpe."
-          }
-        ]
-      },
-      coverage: {
-        title: "Cobertura Estatal",
-        description: "La Dra. Melva Reve tiene licencia para proporcionar servicios de telepsiquiatría en todo el estado de Florida."
-      },
-      process: {
-        title: "Cómo Funciona",
-        description: "Comenzar con la telepsiquiatría es simple y directo.",
-        steps: [
-          {
-            number: "1",
-            title: "Reserve su Cita",
-            description: "Llámenos o use nuestro portal de reservas en línea para programar su primera consulta virtual."
-          },
-          {
-            number: "2",
-            title: "Reciba Enlace Seguro",
-            description: "Recibirá un correo de confirmación con un enlace único de sesión de video compatible con HIPAA."
-          },
-          {
-            number: "3",
-            title: "Conéctese con la Dra. Reve",
-            description: "A la hora de su cita, haga clic en el enlace desde cualquier dispositivo y reúnase con la Dra. Reve en inglés o español."
-          },
-          {
-            number: "4",
-            title: "Atención Continua",
-            description: "Programe citas de seguimiento según sea necesario y reciba apoyo psiquiátrico continuo, todo desde la comodidad de su hogar."
-          }
-        ]
-      },
-      services: {
-        title: "Servicios Completos de Psiquiatría a través de Telemedicina",
-        description: "Nuestra plataforma virtual nos permite ofrecer nuestra gama completa de servicios de diagnóstico y atención psiquiátrica para adultos (18+).",
-        list: [
-          {
-            title: "Evaluación Psiquiátrica Inicial",
-            description: "Evaluación integral para comprender sus necesidades de salud mental y crear un plan de tratamiento personalizado."
-          },
-          {
-            title: "Tratamiento de Ansiedad y Depresión",
-            description: "Evaluación psiquiátrica experta y apoyo continuo para trastornos de ansiedad y depresión."
-          },
-          {
-            title: "Evaluación y Manejo de TDAH",
-            description: "Evaluación exhaustiva de TDAH y atención psiquiátrica personalizada para adultos que buscan enfoque y productividad."
-          },
-          {
-            title: "Terapia de TEPT y Trauma",
-            description: "Atención psiquiátrica informada en trauma y apoyo coordinado para trastorno de estrés postraumático."
-          },
-          {
-            title: "Tratamiento de Trastorno Bipolar",
-            description: "Estabilización del estado de ánimo especializada y manejo integral del trastorno bipolar."
-          },
-          {
-            title: "Atención Psiquiátrica Continua",
-            description: "Citas de seguimiento regulares y apoyo psiquiátrico continuo para optimizar su plan de tratamiento."
-          }
-        ]
-      }
-    }
-  };
-
-  const currentContent = content[language];
+  const content = telepsychiatryFloridaContent[language];
+  const s = (key: string) => content.sections.find((section) => section.key === key)!;
+  const benefitSections = ['benefit-access', 'benefit-convenient', 'benefit-secure', 'benefit-continuity'].map(s);
+  const processSteps = ['process-step-1', 'process-step-2', 'process-step-3', 'process-step-4'].map(s);
+  const serviceSections = ['service-evaluation', 'service-anxiety-depression', 'service-adhd', 'service-ptsd', 'service-bipolar', 'service-medication'].map(s);
 
   return (
     <div className="min-h-screen">
@@ -278,7 +104,7 @@ const TelepsychiatryFlorida = () => {
                           <VideoIcon className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? 'Telehealth Available' : 'Telesalud Disponible'}
+                          {s('hero-badges').bullets![0]}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
@@ -286,7 +112,7 @@ const TelepsychiatryFlorida = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? 'Available 24/7' : 'Disponible 24/7'}
+                          {s('hero-badges').bullets![1]}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
@@ -294,7 +120,7 @@ const TelepsychiatryFlorida = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? 'Mobile Friendly' : 'Móvil Amigable'}
+                          {s('hero-badges').bullets![2]}
                         </span>
                       </div>
                     </div>
@@ -316,7 +142,7 @@ const TelepsychiatryFlorida = () => {
                   }
                   heroDescription={
                     <p className="text-sm md:text-base leading-relaxed font-body text-[#1e6b3b] max-w-md">
-                      {currentContent.hero.description}
+                      {s('hero-description').paragraphs![0]}
                     </p>
                   }
                 />
@@ -337,43 +163,18 @@ const TelepsychiatryFlorida = () => {
                 )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed mb-8">
-                {currentContent.coverage.description}
+                {s('coverage-description').paragraphs![0]}
               </p>
               
               {/* Feature Tags */}
               <div className="flex flex-wrap gap-3 justify-center max-w-4xl mx-auto">
-                {[
-                  {
-                    en: '15+ Years Experience',
-                    es: '15+ Años de Experiencia'
-                  },
-                  {
-                    en: 'Expert Psychiatrist',
-                    es: 'Psiquiatra Experta'
-                  },
-                  {
-                    en: 'Bilingual Services',
-                    es: 'Servicios Bilingües'
-                  },
-                  {
-                    en: 'Statewide Coverage',
-                    es: 'Cobertura Estatal'
-                  },
-                  {
-                    en: 'HIPAA Compliant',
-                    es: 'Compatible con HIPAA'
-                  },
-                  {
-                    en: 'Secure Platform',
-                    es: 'Plataforma Segura'
-                  }
-                ].map((item, index) => (
+                {s('coverage-feature-tags').bullets!.map((item, index) => (
                   <div key={index} className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100" data-testid={`feature-tag-${index}`}>
                     <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="w-3 h-3 text-green-600" />
                     </div>
                     <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                      {language === 'en' ? item.en : item.es}
+                      {item}
                     </span>
                   </div>
                 ))}
@@ -391,7 +192,7 @@ const TelepsychiatryFlorida = () => {
                   <div className="absolute bottom-4 left-4 bg-white bg-opacity-95 rounded-lg shadow-lg px-4 py-3 border border-green-200">
                     <div className="flex items-center gap-2 text-sm text-green-700 font-medium">
                       <VideoIcon className="w-4 h-4" />
-                      <span>{language === 'en' ? 'Available Statewide' : 'Disponible en Todo el Estado'}</span>
+                      <span>{s('coverage-map-badge').paragraphs![0]}</span>
                     </div>
                   </div>
                 </div>
@@ -419,7 +220,7 @@ const TelepsychiatryFlorida = () => {
               <div className="md:hidden">
                 <div className="overflow-hidden" ref={emblaRef}>
                   <div className="flex">
-                    {currentContent.benefits.items.map((benefit, index) => {
+                    {benefitSections.map((benefit, index) => {
                       const benefitImages = [accessFromHomeImg, convenientSchedulingImg, securePrivateImg, continuityCareImg];
                       const benefitAltTexts = [
                         "Patient accessing telepsychiatry services from home in Florida - Dr. Melva Reve",
@@ -441,10 +242,10 @@ const TelepsychiatryFlorida = () => {
                             {/* Content */}
                             <div className="p-6">
                               <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                                {benefit.title}
+                                {benefit.heading}
                               </h3>
                               <p className="text-gray-700 font-body leading-relaxed text-sm">
-                                {benefit.description}
+                                {benefit.paragraphs![0]}
                               </p>
                             </div>
                           </div>
@@ -474,7 +275,7 @@ const TelepsychiatryFlorida = () => {
 
               {/* Desktop Grid */}
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {currentContent.benefits.items.map((benefit, index) => {
+                {benefitSections.map((benefit, index) => {
                   const benefitImages = [accessFromHomeImg, convenientSchedulingImg, securePrivateImg, continuityCareImg];
                   const benefitAltTexts = [
                     "Patient accessing telepsychiatry services from home in Florida - Dr. Melva Reve",
@@ -495,10 +296,10 @@ const TelepsychiatryFlorida = () => {
                       {/* Content */}
                       <div className="p-6">
                         <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                          {benefit.title}
+                          {benefit.heading}
                         </h3>
                         <p className="text-gray-700 font-body leading-relaxed text-sm">
-                          {benefit.description}
+                          {benefit.paragraphs![0]}
                         </p>
                       </div>
                     </div>
@@ -521,23 +322,23 @@ const TelepsychiatryFlorida = () => {
                 )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="process-description">
-                {currentContent.process.description}
+                {s('process-description').paragraphs![0]}
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {currentContent.process.steps.map((step, index) => (
+              {processSteps.map((step, index) => (
                 <div key={index} className="relative" data-testid={`process-step-${index}`}>
                   <div className="bg-white rounded-2xl p-6 border border-green-100 h-full shadow-sm hover:shadow-md transition-shadow duration-300">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-full bg-green-800 text-white flex items-center justify-center text-xl font-bold">
-                        {step.number}
+                        {index + 1}
                       </div>
                       <h3 className="text-lg font-body font-bold text-green-800">
-                        {step.title}
+                        {step.heading}
                       </h3>
                     </div>
                     <p className="text-gray-700 font-body leading-relaxed text-sm">
-                      {step.description}
+                      {step.paragraphs![0]}
                     </p>
                   </div>
                 </div>
@@ -558,7 +359,7 @@ const TelepsychiatryFlorida = () => {
                 )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-6 font-body leading-relaxed" data-testid="services-description">
-                {currentContent.services.description}
+                {s('services-description').paragraphs![0]}
               </p>
             </div>
             
@@ -568,7 +369,7 @@ const TelepsychiatryFlorida = () => {
               <div className="md:hidden">
                 <div className="overflow-hidden" ref={emblaRef2}>
                   <div className="flex">
-                    {currentContent.services.list.map((service, index) => {
+                    {serviceSections.map((service, index) => {
                       const serviceImages = [
                         initialEvaluationImg, 
                         anxietyDepressionImg, 
@@ -599,10 +400,10 @@ const TelepsychiatryFlorida = () => {
                             {/* Content */}
                             <div className="p-6">
                               <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                                {service.title}
+                                {service.heading}
                               </h3>
                               <p className="text-gray-600 font-body text-sm leading-relaxed">
-                                {service.description}
+                                {service.paragraphs![0]}
                               </p>
                             </div>
                           </div>
@@ -632,7 +433,7 @@ const TelepsychiatryFlorida = () => {
 
               {/* Desktop Grid */}
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {currentContent.services.list.map((service, index) => {
+                {serviceSections.map((service, index) => {
                   const serviceImages = [
                     initialEvaluationImg, 
                     anxietyDepressionImg, 
@@ -662,10 +463,10 @@ const TelepsychiatryFlorida = () => {
                       {/* Content */}
                       <div className="p-6">
                         <h3 className="text-lg font-body font-bold text-green-800 mb-3">
-                          {service.title}
+                          {service.heading}
                         </h3>
                         <p className="text-gray-600 font-body text-sm leading-relaxed">
-                          {service.description}
+                          {service.paragraphs![0]}
                         </p>
                       </div>
                     </div>
@@ -704,34 +505,19 @@ const TelepsychiatryFlorida = () => {
         <section className="py-8 bg-green-50 border-t border-green-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap justify-center gap-3 mb-5">
-              {[
-                {
-                  en: 'Florida Licensed Psychiatrist · ME165518',
-                  es: 'Psiquiatra con Licencia en Florida · ME165518'
-                },
-                {
-                  en: 'HIPAA-Compliant Platform',
-                  es: 'Plataforma Compatible con HIPAA'
-                },
-                {
-                  en: 'Clinical Evaluations Only · Not an Online Pharmacy',
-                  es: 'Solo Evaluaciones Clínicas · No es Farmacia en Línea'
-                }
-              ].map((item, index) => (
+              {s('compliance-badges').bullets!.map((item, index) => (
                 <div key={index} className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-green-100">
                   <div className="w-4 h-4 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <CheckCircle className="w-2.5 h-2.5 text-green-600" />
                   </div>
                   <span className="text-gray-600 font-body font-medium text-xs">
-                    {language === 'en' ? item.en : item.es}
+                    {item}
                   </span>
                 </div>
               ))}
             </div>
             <p className="text-center text-xs text-gray-400 font-body max-w-2xl mx-auto">
-              {language === 'en'
-                ? 'Virtual appointments are clinical consultations conducted by a licensed physician. Treatment plans are determined individually after evaluation. Not intended for emergencies — call 988 or 911 in a crisis.'
-                : 'Las citas virtuales son consultas clínicas realizadas por una médica con licencia. Los planes de tratamiento se determinan individualmente tras la evaluación. No es para emergencias — llame al 988 o al 911 en una crisis.'}
+              {s('compliance-footer').paragraphs![0]}
             </p>
           </div>
         </section>
@@ -747,10 +533,7 @@ const TelepsychiatryFlorida = () => {
               )}
             </h2>
             <p className="text-lg sm:text-xl text-gray-700 font-body leading-relaxed mb-8" data-testid="cta-description">
-              {language === 'en' 
-                ? 'Quality mental health care is just a click away.'
-                : 'La atención de salud mental de calidad está a solo un clic de distancia.'
-              }
+              {s('cta-description').paragraphs![0]}
             </p>
             <Button
               onClick={() => {
@@ -761,7 +544,7 @@ const TelepsychiatryFlorida = () => {
               data-testid="cta-schedule-button"
             >
               <Calendar className="w-5 h-5 mr-2 inline" />
-              {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
+              {s('cta-button').bullets![0]}
             </Button>
           </div>
         </section>

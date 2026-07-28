@@ -21,8 +21,8 @@ export const practiceInfo = {
     { number: "911", description: "Emergency services" },
     { number: "988", description: "Suicide & Crisis Lifeline" },
     {
-      number: "(239) 263-7158",
-      description: "David Lawrence Center Crisis Line",
+      number: "(239) 455-8500",
+      description: "David Lawrence Center 24-Hour Line",
     },
   ],
 };
@@ -381,11 +381,11 @@ export const seoContent = {
     },
     about: {
       title:
-        "Acerca de la Dra. Melva Reve - Psiquiatra Certificada en Naples, FL",
+        "Acerca de la Dra. Melva Reve - Psiquiatra en Naples, FL",
       description:
-        "Conozca a la Dra. Melva Reve, psiquiatra certificada con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.",
+        "Conozca a la Dra. Melva Reve, psiquiatra con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.",
       keywords:
-        "Dra Melva Reve Naples, biografía psiquiatra, psiquiatra certificada Naples, psiquiatra bilingüe FL",
+        "Dra Melva Reve Naples, biografía psiquiatra, psiquiatra con licencia Naples, psiquiatra bilingüe FL",
     },
     services: {
       title:

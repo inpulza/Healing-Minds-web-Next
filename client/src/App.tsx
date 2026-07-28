@@ -75,6 +75,9 @@ const MedicationManagement = lazy(() => import('@/pages/services/MedicationManag
 // Telepsychiatry Page - Lazy loaded for performance
 const TelepsychiatryFlorida = lazy(() => import('@/pages/TelepsychiatryFlorida'));
 
+// California Landing Page - Lazy loaded for performance
+const PsiquiatraCalifornia = lazy(() => import('@/pages/PsiquiatraCalifornia'));
+
 // Legal Pages - Lazy loaded for performance
 const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
@@ -84,6 +87,12 @@ const CancellationPolicy = lazy(() => import('@/pages/CancellationPolicy'));
 const BillingPolicy = lazy(() => import('@/pages/BillingPolicy'));
 const EmergencyPolicy = lazy(() => import('@/pages/EmergencyPolicy'));
 const PatientRights = lazy(() => import('@/pages/PatientRights'));
+const TelehealthConsent = lazy(() => import('@/pages/TelehealthConsent'));
+const NoSurprisesAct = lazy(() => import('@/pages/NoSurprisesAct'));
+const AccessibilityStatement = lazy(() => import('@/pages/AccessibilityStatement'));
+const NondiscriminationNotice = lazy(() => import('@/pages/NondiscriminationNotice'));
+const CommunicationsPolicy = lazy(() => import('@/pages/CommunicationsPolicy'));
+const MedicalDisclaimer = lazy(() => import('@/pages/MedicalDisclaimer'));
 
 
 // Loading component for lazy routes
@@ -128,6 +137,7 @@ function Router() {
       <Route path="/services" component={Services} />
       <Route path="/for-patients" component={ForPatients} />
       <Route path="/telepsychiatry-florida" component={TelepsychiatryFlorida} />
+      <Route path="/psychiatrist-california" component={PsiquiatraCalifornia} />
       <Route path="/locations/naples" component={RedirectToNaplesLocation} />
       <Route path="/locations/psychiatrist-naples" component={LocationNaples} />
       <Route path="/locations/psychiatrist-bonita-springs" component={LocationBonitaSprings} />
@@ -167,6 +177,7 @@ function Router() {
       <Route path="/es/para-pacientes" component={ParaPacientesEspanol} />
       <Route path="/es/servicios" component={ServiciosEspanol} />
       <Route path="/es/telepsiquiatria-florida" component={() => <SpanishRouteWrapper Component={TelepsychiatryFlorida} />} />
+      <Route path="/es/psiquiatra-california" component={() => <SpanishRouteWrapper Component={PsiquiatraCalifornia} />} />
       
       {/* Individual Service Pages */}
       <Route path="/services/anxiety-treatment" component={AnxietyTreatment} />
@@ -193,6 +204,12 @@ function Router() {
       <Route path="/billing-policy" component={BillingPolicy} />
       <Route path="/emergency-policy" component={EmergencyPolicy} />
       <Route path="/patient-rights" component={PatientRights} />
+      <Route path="/telehealth-consent" component={TelehealthConsent} />
+      <Route path="/no-surprises-act" component={NoSurprisesAct} />
+      <Route path="/accessibility-statement" component={AccessibilityStatement} />
+      <Route path="/nondiscrimination-notice" component={NondiscriminationNotice} />
+      <Route path="/communications-policy" component={CommunicationsPolicy} />
+      <Route path="/medical-disclaimer" component={MedicalDisclaimer} />
       
       {/* Legal Pages - Spanish */}
       <Route path="/es/politica-privacidad" component={PrivacyPolicy} />
@@ -203,6 +220,12 @@ function Router() {
       <Route path="/es/politica-facturacion" component={BillingPolicy} />
       <Route path="/es/politica-emergencias" component={EmergencyPolicy} />
       <Route path="/es/derechos-paciente" component={PatientRights} />
+      <Route path="/es/consentimiento-telesalud" component={TelehealthConsent} />
+      <Route path="/es/ley-sin-sorpresas" component={NoSurprisesAct} />
+      <Route path="/es/declaracion-accesibilidad" component={AccessibilityStatement} />
+      <Route path="/es/aviso-no-discriminacion" component={NondiscriminationNotice} />
+      <Route path="/es/politica-comunicaciones" component={CommunicationsPolicy} />
+      <Route path="/es/descargo-responsabilidad-medica" component={MedicalDisclaimer} />
       
         <Route component={NotFound} />
       </Switch>

@@ -12,13 +12,13 @@ const AboutPage = () => {
     const seoData = {
       title: language === 'en' 
         ? 'About Dr. Melva Reve - Psychiatrist in Naples, FL'
-        : 'Acerca de la Dra. Melva Reve - Psiquiatra Certificada en Naples, FL',
+        : 'Acerca de la Dra. Melva Reve - Psiquiatra en Naples, FL',
       description: language === 'en'
         ? 'Learn about Dr. Melva Reve, a psychiatrist with 15+ years of experience serving Naples, FL. Bilingual care with cultural sensitivity.'
-        : 'Conozca a la Dra. Melva Reve, psiquiatra certificada con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.',
+        : 'Conozca a la Dra. Melva Reve, psiquiatra con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.',
       keywords: language === 'en'
         ? 'Dr Melva Reve Naples, psychiatrist biography, psychiatrist Naples, bilingual psychiatrist FL'
-        : 'Dra Melva Reve Naples, biografía psiquiatra, psiquiatra certificada Naples, psiquiatra bilingüe FL',
+        : 'Dra Melva Reve Naples, biografía psiquiatra, psiquiatra con licencia Naples, psiquiatra bilingüe FL',
       lang: language,
       canonical: language === 'en' ? '/about' : '/es/acerca-de'
     };

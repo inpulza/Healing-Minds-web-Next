@@ -1,5 +1,36 @@
 import { Request } from 'express';
 import { cityHyperlocal, type Lang } from '@/data/locationHyperlocal';
+import { locationFAQs } from '@/data/locationFAQs';
+import type { BilingualPageContent } from '@/data/pageContent/types';
+import { pageContentToHtml, sectionToHtml, inlineToHtml } from './content-html';
+import { privacyPolicyContent } from '@/data/pageContent/legal/privacyPolicy';
+import { termsOfServiceContent } from '@/data/pageContent/legal/termsOfService';
+import { hipaaNoticeContent } from '@/data/pageContent/legal/hipaaNotice';
+import { cookiePolicyContent } from '@/data/pageContent/legal/cookiePolicy';
+import { cancellationPolicyContent } from '@/data/pageContent/legal/cancellationPolicy';
+import { billingPolicyContent } from '@/data/pageContent/legal/billingPolicy';
+import { emergencyPolicyContent } from '@/data/pageContent/legal/emergencyPolicy';
+import { patientRightsContent } from '@/data/pageContent/legal/patientRights';
+import { telehealthConsentContent } from '@/data/pageContent/legal/telehealthConsent';
+import { noSurprisesActContent } from '@/data/pageContent/legal/noSurprisesAct';
+import { accessibilityStatementContent } from '@/data/pageContent/legal/accessibilityStatement';
+import { nondiscriminationNoticeContent } from '@/data/pageContent/legal/nondiscriminationNotice';
+import { communicationsPolicyContent } from '@/data/pageContent/legal/communicationsPolicy';
+import { medicalDisclaimerContent } from '@/data/pageContent/legal/medicalDisclaimer';
+import { anxietyTreatmentContent } from '@/data/pageContent/services/anxietyTreatment';
+import { depressionTreatmentContent } from '@/data/pageContent/services/depressionTreatment';
+import { adhdTreatmentContent } from '@/data/pageContent/services/adhdTreatment';
+import { ptsdTreatmentContent } from '@/data/pageContent/services/ptsdTreatment';
+import { bipolarTreatmentContent } from '@/data/pageContent/services/bipolarTreatment';
+import { medicationManagementContent } from '@/data/pageContent/services/medicationManagement';
+import { servicesIndexContent } from '@/data/pageContent/services/servicesIndex';
+import { homeContent } from '@/data/pageContent/mainPages/home';
+import { aboutContent } from '@/data/pageContent/mainPages/about';
+import { contactContent } from '@/data/pageContent/mainPages/contact';
+import { forPatientsContent } from '@/data/pageContent/mainPages/forPatients';
+import { naplesLocationContent } from '@/data/pageContent/mainPages/naples';
+import { telepsychiatryFloridaContent } from '@/data/pageContent/mainPages/telepsychiatryFlorida';
+import { forPatientsSectionContent, doctorSectionContent } from '@/data/pageContent/mainPages/sharedSections';
 import {
   getBlogIndexPath,
   getBlogPostBySlug,
@@ -15,6 +46,7 @@ import { sanitizeRenderedBlogContentHtml } from '../blog/sanitize';
 import { getSelectedBlogPostImages } from '../blog/images/storage';
 import { materializeSelectedInlineImages } from '../blog/images/render';
 import { getSeoSiteConfig } from '../seo/config';
+import { getKnownRoutePaths, getBilingualUrlMap, getSitemapEntries } from '@shared/routeManifest';
 
 interface MetaTag {
   name?: string;
@@ -131,10 +163,6 @@ function getPhysicianAuthorSchema(baseUrl: string, author?: BlogPostWithRelation
       {
         "@type": "EducationalOccupationalCredential",
         "credentialCategory": "Medical Doctor"
-      },
-      {
-        "@type": "EducationalOccupationalCredential",
-        "credentialCategory": "Board Certified Psychiatrist"
       }
     ],
     "sameAs": [
@@ -251,6 +279,7 @@ function buildLocationBody(
   links: { contactInfo: string; serviceLinks: string; locationLinks: string },
 ): string {
   const data = cityHyperlocal[city.key];
+  const faqs = locationFAQs[city.key]?.[lang] ?? [];
   const isEs = lang === 'es';
   const home = isEs ? '/es' : '/';
   const altPath = isEs ? `/locations/${city.enSlug}` : `/es/ubicaciones/${city.esSlug}`;
@@ -259,12 +288,29 @@ function buildLocationBody(
   const neighborhoods = data.neighborhoods[lang]
     .map(n => `<li>${escapeHtml(n)}</li>`)
     .join('\n      ');
+  const badges = data.featureBadges
+    .map(b => `<li>${escapeHtml(b[lang])}</li>`)
+    .join('\n      ');
+  const serviceNotes = data.serviceNotes[lang]
+    .map(n => `<li>${escapeHtml(n)}</li>`)
+    .join('\n      ');
+  const routeSteps = data.routeSteps[lang]
+    .map(s => `<li>${escapeHtml(s)}</li>`)
+    .join('\n      ');
+  const faqBlocks = faqs
+    .map(f => `<h3>${escapeHtml(f.question)}</h3>\n    <p>${escapeHtml(f.answer)}</p>`)
+    .join('\n    ');
 
   const t = isEs
     ? {
-        h1: `Psiquiatra para ${city.cityName}, FL — Dra. Melva Reve`,
+        h1: `Su Psiquiatra de Confianza en ${city.cityName}, FL`,
         localHeading: `Atención Local en ${city.cityName}`,
         neighborhoodsHeading: 'Vecindarios que Atendemos',
+        servicesHeading: 'Servicios en Esta Ubicación',
+        directionsHeading: 'Cómo Llegar a Nuestra Oficina',
+        durationLabel: 'Duración del trayecto',
+        faqHeading: 'Preguntas Frecuentes',
+        faqIntro: 'Encuentre respuestas a preguntas comunes sobre atención psiquiátrica y nuestros servicios.',
         servicesNav: 'Servicios',
         areasNav: 'Otras Áreas',
         quickNav: 'Enlaces Rápidos',
@@ -273,9 +319,14 @@ function buildLocationBody(
         altLabel: 'English',
       }
     : {
-        h1: `Psychiatrist for ${city.cityName}, FL — Dr. Melva Reve`,
+        h1: `Your Trusted Psychiatrist in ${city.cityName}, FL`,
         localHeading: `Local Care in ${city.cityName}`,
         neighborhoodsHeading: 'Neighborhoods We Serve',
+        servicesHeading: 'Services at This Location',
+        directionsHeading: 'How to Get to Our Office',
+        durationLabel: 'Drive time',
+        faqHeading: 'Frequently Asked Questions',
+        faqIntro: 'Find answers to common questions about psychiatric care and our services.',
         servicesNav: 'Services',
         areasNav: 'Nearby Areas',
         quickNav: 'Quick Links',
@@ -284,13 +335,33 @@ function buildLocationBody(
         altLabel: 'Español',
       };
 
+  const faqSection = faqs.length
+    ? `
+  <section>
+    <h2>${escapeHtml(t.faqHeading)}</h2>
+    <p>${escapeHtml(t.faqIntro)}</p>
+    ${faqBlocks}
+  </section>`
+    : '';
+
   return `<main>
   <header><a href="${home}">Healing Minds Psychiatry</a></header>
   <section>
     <h1>${escapeHtml(t.h1)}</h1>
     <p>${escapeHtml(data.heroDescription[lang])}</p>
+    <ul>
+      ${badges}
+    </ul>
     <p>${escapeHtml(data.healingParagraph[lang])}</p>
     ${links.contactInfo}
+  </section>
+  <section>
+    <h2>${escapeHtml(t.servicesHeading)}</h2>
+    <p>${escapeHtml(data.servicesIntro[lang])}</p>
+    <p>${escapeHtml(data.seo.serviceDescription[lang])}</p>
+    <ul>
+      ${serviceNotes}
+    </ul>
   </section>
   <section>
     <h2>${escapeHtml(t.localHeading)}</h2>
@@ -299,8 +370,16 @@ function buildLocationBody(
     <ul>
       ${neighborhoods}
     </ul>
-    <p>${escapeHtml(data.routeIntro[lang])}</p>
   </section>
+  <section>
+    <h2>${escapeHtml(t.directionsHeading)}</h2>
+    <p>${escapeHtml(data.routeIntro[lang])}</p>
+    <ol>
+      ${routeSteps}
+    </ol>
+    <p>${escapeHtml(t.durationLabel)}: ${escapeHtml(data.duration[lang])}</p>
+    <p>${escapeHtml(data.bottomNote[lang])}</p>
+  </section>${faqSection}
   <nav aria-label="${escapeHtml(t.servicesNav)}">${links.serviceLinks}</nav>
   <nav aria-label="${escapeHtml(t.areasNav)}">${links.locationLinks}</nav>
   <nav aria-label="${escapeHtml(t.quickNav)}"><ul>
@@ -538,78 +617,10 @@ export async function injectMetaTags(html: string, req: Request): Promise<string
 /**
  * Authoritative allowlist of routes the SPA actually renders.
  * Must stay in sync with the <Route> entries in client/src/App.tsx.
- * This is the source of truth for 404 vs. 200 decisions and is intentionally
- * decoupled from the metadata switch (which can lag behind the routes table).
+ * This is the source of truth for 404 vs. 200 decisions.
+ * Static routes come from the single route manifest (shared/routeManifest.ts).
  */
-const KNOWN_ROUTES: ReadonlySet<string> = new Set([
-  // English
-  '/',
-  '/about',
-  '/contact',
-  '/for-patients',
-  '/blog',
-  '/admin/login',
-  '/admin/blog',
-  '/services',
-  '/services/anxiety-treatment',
-  '/services/depression-treatment',
-  '/services/adhd-treatment',
-  '/services/ptsd-treatment',
-  '/services/bipolar-treatment',
-  '/services/medication-management',
-  '/telepsychiatry-florida',
-  '/locations/psychiatrist-naples',
-  '/locations/psychiatrist-bonita-springs',
-  '/locations/psychiatrist-marco-island',
-  '/locations/psychiatrist-estero',
-  '/locations/psychiatrist-fort-myers',
-  '/locations/psychiatrist-ave-maria',
-  '/locations/psychiatrist-golden-gate',
-  '/locations/psychiatrist-immokalee',
-  '/locations/psychiatrist-lely-resort',
-  '/locations/psychiatrist-vanderbilt-beach',
-  '/privacy-policy',
-  '/terms-of-service',
-  '/hipaa-notice',
-  '/cookie-policy',
-  '/cancellation-policy',
-  '/billing-policy',
-  '/emergency-policy',
-  '/patient-rights',
-  // Spanish
-  '/es',
-  '/es/blog',
-  '/es/acerca-de',
-  '/es/contacto',
-  '/es/para-pacientes',
-  '/es/servicios',
-  '/es/servicios/tratamiento-ansiedad',
-  '/es/servicios/tratamiento-depresion',
-  '/es/servicios/tratamiento-adhd',
-  '/es/servicios/tratamiento-tept',
-  '/es/servicios/tratamiento-bipolar',
-  '/es/servicios/manejo-medicamentos',
-  '/es/telepsiquiatria-florida',
-  '/es/ubicaciones/psiquiatra-naples',
-  '/es/ubicaciones/psiquiatra-bonita-springs',
-  '/es/ubicaciones/psiquiatra-marco-island',
-  '/es/ubicaciones/psiquiatra-estero',
-  '/es/ubicaciones/psiquiatra-fort-myers',
-  '/es/ubicaciones/psiquiatra-ave-maria',
-  '/es/ubicaciones/psiquiatra-golden-gate',
-  '/es/ubicaciones/psiquiatra-immokalee',
-  '/es/ubicaciones/psiquiatra-lely-resort',
-  '/es/ubicaciones/psiquiatra-marco-island',
-  '/es/ubicaciones/psiquiatra-vanderbilt-beach',
-  '/es/politica-privacidad',
-  '/es/terminos-servicio',
-  '/es/aviso-hipaa',
-  '/es/politica-cookies',
-  '/es/politica-cancelacion',
-  '/es/politica-facturacion',
-  '/es/politica-emergencias',
-  '/es/derechos-paciente',
-]);
+const KNOWN_ROUTES: ReadonlySet<string> = new Set(getKnownRoutePaths());
 
 /**
  * Returns true when the given URL path corresponds to a real route we serve.
@@ -1604,7 +1615,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         metaTags: [
           {
             name: 'description',
-            content: 'La psiquiatra certificada Dra. Melva Reve brinda atención psiquiátrica experta en Naples, FL. Especializada en ansiedad, depresión, TDAH y terapia. Servicios de salud mental para el suroeste de Florida.'
+            content: 'La psiquiatra Dra. Melva Reve brinda atención psiquiátrica experta en Naples, FL. Especializada en ansiedad, depresión, TDAH y terapia. Servicios de salud mental para el suroeste de Florida.'
           },
           {
             property: 'og:title',
@@ -1612,7 +1623,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
           },
           {
             property: 'og:description',
-            content: 'Psiquiatra certificada en Naples, FL. Tratamiento experto para ansiedad, depresión, TDAH, TEPT. Atención bilingüe disponible.'
+            content: 'Psiquiatra con licencia en Naples, FL. Tratamiento experto para ansiedad, depresión, TDAH, TEPT. Atención bilingüe disponible.'
           },
           {
             property: 'og:url',
@@ -1644,11 +1655,11 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         metaTags: [
           {
             name: 'description',
-            content: 'Conozca a la Dra. Melva Reve, psiquiatra certificada con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.'
+            content: 'Conozca a la Dra. Melva Reve, psiquiatra con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.'
           },
           {
             property: 'og:title',
-            content: 'Acerca de la Dra. Melva Reve - Psiquiatra Certificada Naples FL | Healing Minds'
+            content: 'Acerca de la Dra. Melva Reve - Psiquiatra Naples FL | Healing Minds'
           },
           {
             property: 'og:url',
@@ -1820,6 +1831,39 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         ],
       };
 
+    // California landing pages (EN + ES) - noindex ad landing pages
+    case '/psychiatrist-california':
+      return {
+        title: 'Online Psychiatrist in Spanish | California | Healing Minds',
+        canonical: `${baseUrl}/psychiatrist-california`,
+        schema: getCaliforniaServiceSchema(baseUrl, 'en'),
+        metaTags: [
+          { name: 'robots', content: 'noindex, follow' },
+          { name: 'description', content: 'A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.' },
+          { property: 'og:title', content: 'Online Psychiatrist in Spanish | California | Healing Minds' },
+          { property: 'og:description', content: 'A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.' },
+          { property: 'og:url', content: `${baseUrl}/psychiatrist-california` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/psychiatrist-california` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/psiquiatra-california` },
+        ],
+      };
+
+    case '/es/psiquiatra-california':
+      return {
+        title: 'Psiquiatra Online en Español | California | Healing Minds',
+        canonical: `${baseUrl}/es/psiquiatra-california`,
+        schema: getCaliforniaServiceSchema(baseUrl, 'es'),
+        metaTags: [
+          { name: 'robots', content: 'noindex, follow' },
+          { name: 'description', content: 'Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.' },
+          { property: 'og:title', content: 'Psiquiatra Online en Español | California | Healing Minds' },
+          { property: 'og:description', content: 'Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.' },
+          { property: 'og:url', content: `${baseUrl}/es/psiquiatra-california` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/psychiatrist-california` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/psiquiatra-california` },
+        ],
+      };
+
     // Legal policy pages (EN)
     case '/billing-policy':
       return {
@@ -1918,6 +1962,150 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         ],
       };
 
+    case '/telehealth-consent':
+      return {
+        canonical: `${baseUrl}/telehealth-consent`,
+        metaTags: [
+          { name: 'description', content: 'Telehealth informed consent at Healing Minds Psychiatry. Benefits, limitations, privacy and patient responsibilities for psychiatric video visits in Florida and California.' },
+          { property: 'og:title', content: 'Telehealth Informed Consent - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/telehealth-consent` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/telehealth-consent` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/consentimiento-telesalud` },
+        ],
+      };
+
+    case '/es/consentimiento-telesalud':
+      return {
+        canonical: `${baseUrl}/es/consentimiento-telesalud`,
+        metaTags: [
+          { name: 'description', content: 'Consentimiento informado de telesalud en Healing Minds Psychiatry. Beneficios, limitaciones, privacidad y responsabilidades del paciente para visitas psiquiátricas por video en Florida y California.' },
+          { property: 'og:title', content: 'Consentimiento Informado de Telesalud - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/consentimiento-telesalud` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/telehealth-consent` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/consentimiento-telesalud` },
+        ],
+      };
+
+    case '/no-surprises-act':
+      return {
+        canonical: `${baseUrl}/no-surprises-act`,
+        metaTags: [
+          { name: 'description', content: 'No Surprises Act notice at Healing Minds Psychiatry. Your rights against surprise medical bills and the right to a Good Faith Estimate for self-pay patients.' },
+          { property: 'og:title', content: 'No Surprises Act and Good Faith Estimate - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/no-surprises-act` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/no-surprises-act` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/ley-sin-sorpresas` },
+        ],
+      };
+
+    case '/es/ley-sin-sorpresas':
+      return {
+        canonical: `${baseUrl}/es/ley-sin-sorpresas`,
+        metaTags: [
+          { name: 'description', content: 'Aviso de la Ley Sin Sorpresas en Healing Minds Psychiatry. Sus derechos contra facturas médicas sorpresa y el derecho a un Estimado de Buena Fe para pacientes de pago directo.' },
+          { property: 'og:title', content: 'Ley Sin Sorpresas y Estimado de Buena Fe - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/ley-sin-sorpresas` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/no-surprises-act` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/ley-sin-sorpresas` },
+        ],
+      };
+
+    case '/accessibility-statement':
+      return {
+        canonical: `${baseUrl}/accessibility-statement`,
+        metaTags: [
+          { name: 'description', content: 'Accessibility statement of Healing Minds Psychiatry. Our commitment to WCAG 2.1 AA web accessibility, available accommodations and how to request assistance.' },
+          { property: 'og:title', content: 'Accessibility Statement - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/accessibility-statement` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/accessibility-statement` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/declaracion-accesibilidad` },
+        ],
+      };
+
+    case '/es/declaracion-accesibilidad':
+      return {
+        canonical: `${baseUrl}/es/declaracion-accesibilidad`,
+        metaTags: [
+          { name: 'description', content: 'Declaración de accesibilidad de Healing Minds Psychiatry. Nuestro compromiso con la accesibilidad web WCAG 2.1 AA, adaptaciones disponibles y cómo solicitar asistencia.' },
+          { property: 'og:title', content: 'Declaración de Accesibilidad - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/declaracion-accesibilidad` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/accessibility-statement` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/declaracion-accesibilidad` },
+        ],
+      };
+
+    case '/nondiscrimination-notice':
+      return {
+        canonical: `${baseUrl}/nondiscrimination-notice`,
+        metaTags: [
+          { name: 'description', content: 'Nondiscrimination notice of Healing Minds Psychiatry. Free language assistance and aids for people with disabilities. How to file a civil rights complaint.' },
+          { property: 'og:title', content: 'Nondiscrimination Notice - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/nondiscrimination-notice` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/nondiscrimination-notice` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/aviso-no-discriminacion` },
+        ],
+      };
+
+    case '/es/aviso-no-discriminacion':
+      return {
+        canonical: `${baseUrl}/es/aviso-no-discriminacion`,
+        metaTags: [
+          { name: 'description', content: 'Aviso de no discriminación de Healing Minds Psychiatry. Asistencia gratuita de idiomas y ayudas para personas con discapacidades. Cómo presentar una queja de derechos civiles.' },
+          { property: 'og:title', content: 'Aviso de No Discriminación - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/aviso-no-discriminacion` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/nondiscrimination-notice` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/aviso-no-discriminacion` },
+        ],
+      };
+
+    case '/communications-policy':
+      return {
+        canonical: `${baseUrl}/communications-policy`,
+        metaTags: [
+          { name: 'description', content: 'Communications policy of Healing Minds Psychiatry. SMS, WhatsApp and email consent, opt-out instructions (STOP/HELP), privacy considerations and emergency guidance.' },
+          { property: 'og:title', content: 'Communications Policy - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/communications-policy` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/communications-policy` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/politica-comunicaciones` },
+        ],
+      };
+
+    case '/es/politica-comunicaciones':
+      return {
+        canonical: `${baseUrl}/es/politica-comunicaciones`,
+        metaTags: [
+          { name: 'description', content: 'Política de comunicaciones de Healing Minds Psychiatry. Consentimiento para SMS, WhatsApp y correo, cómo darse de baja (STOP/AYUDA), privacidad y guía de emergencias.' },
+          { property: 'og:title', content: 'Política de Comunicaciones - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/politica-comunicaciones` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/communications-policy` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/politica-comunicaciones` },
+        ],
+      };
+
+    case '/medical-disclaimer':
+      return {
+        canonical: `${baseUrl}/medical-disclaimer`,
+        metaTags: [
+          { name: 'description', content: 'Medical disclaimer of Healing Minds Psychiatry. Website and blog content is educational only and does not replace professional psychiatric evaluation or treatment.' },
+          { property: 'og:title', content: 'Medical Disclaimer - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/medical-disclaimer` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/medical-disclaimer` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/descargo-responsabilidad-medica` },
+        ],
+      };
+
+    case '/es/descargo-responsabilidad-medica':
+      return {
+        canonical: `${baseUrl}/es/descargo-responsabilidad-medica`,
+        metaTags: [
+          { name: 'description', content: 'Descargo de responsabilidad médica de Healing Minds Psychiatry. El contenido del sitio y del blog es educativo y no reemplaza la evaluación ni el tratamiento psiquiátrico profesional.' },
+          { property: 'og:title', content: 'Descargo de Responsabilidad Médica - Healing Minds Psychiatry' },
+          { property: 'og:url', content: `${baseUrl}/es/descargo-responsabilidad-medica` },
+          { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/medical-disclaimer` },
+          { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/descargo-responsabilidad-medica` },
+        ],
+      };
+
     // Add more routes as needed
     default:
       return null;
@@ -2003,6 +2191,38 @@ function getServiceDetailSchema(baseUrl: string, lang: 'en' | 'es', key: string)
       "@id": "https://www.healingmindsp.com/#organization"
     },
     "availableLanguage": ["English", "Spanish"]
+  };
+}
+
+/**
+ * Service schema for the California telehealth landing pages.
+ * Intentionally has NO address/geo data (the practice has no California office)
+ * and references the organization by @id only, so no Naples clinic data leaks in.
+ * No FAQPage schema is emitted for these pages (they are noindex ad landings).
+ */
+function getCaliforniaServiceSchema(baseUrl: string, lang: 'en' | 'es') {
+  const path = lang === 'en' ? '/psychiatrist-california' : '/es/psiquiatra-california';
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${baseUrl}${path}#service`,
+    "name": lang === 'en'
+      ? 'Online Psychiatric Care in Spanish for California'
+      : 'Atención Psiquiátrica Online en Español para California',
+    "serviceType": lang === 'en' ? 'Telepsychiatry' : 'Telepsiquiatría',
+    "description": lang === 'en'
+      ? 'Psychiatric evaluation and treatment follow-up for adults by video call, in Spanish, for patients located in California. Anxiety, depression and ADHD. Direct pay.'
+      : 'Evaluación psiquiátrica y seguimiento del tratamiento para adultos por videollamada, en español, para pacientes en California. Ansiedad, depresión y TDAH. Pago directo.',
+    "url": `${baseUrl}${path}`,
+    "areaServed": {
+      "@type": "State",
+      "name": "California",
+      "addressCountry": "US"
+    },
+    "provider": {
+      "@id": "https://www.healingmindsp.com/#organization"
+    },
+    "availableLanguage": ["Spanish", "English"]
   };
 }
 
@@ -2094,41 +2314,41 @@ function getServiceSchema(baseUrl: string, cityName: string, lang: Lang = 'en', 
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Psychiatric Services",
+      "name": isEs ? "Servicios Psiquiátricos" : "Psychiatric Services",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Anxiety Treatment"
+            "name": isEs ? "Tratamiento de Ansiedad" : "Anxiety Treatment"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Depression Treatment"
+            "name": isEs ? "Tratamiento de Depresión" : "Depression Treatment"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "ADHD Treatment"
+            "name": isEs ? "Tratamiento de TDAH" : "ADHD Treatment"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "PTSD Treatment"
+            "name": isEs ? "Tratamiento de TEPT" : "PTSD Treatment"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Medication Management"
+            "name": isEs ? "Manejo de Medicamentos" : "Medication Management"
           }
         }
       ]
@@ -2546,6 +2766,159 @@ function buildBlogPostBody(post: BlogPostWithRelations, contactInfo: string): st
  *     cookie-policy, cancellation-policy, billing-policy, emergency-policy,
  *     patient-rights
  */
+// ── Module-backed crawler bodies ─────────────────────────────────────────────
+// Bot bodies for content pages are serialized from the same shared modules the
+// React pages render (client/src/data/pageContent/*), guaranteeing word/H1
+// parity between the crawler view and the visible page.
+
+type BotBodyKind = 'home' | 'main' | 'service' | 'legal' | 'location';
+
+interface BotContentEntry {
+  content: BilingualPageContent;
+  lang: Lang;
+  kind: BotBodyKind;
+  altPath?: string;
+  /** Optional locationFAQs key whose Q&A the visible page also renders. */
+  faqKey?: keyof typeof locationFAQs;
+  /** Shared section modules (sharedSections.ts) the visible page also renders. */
+  extra?: BilingualPageContent[];
+}
+
+const BOT_CONTENT_PAGES: Array<{
+  en: string;
+  content: BilingualPageContent;
+  kind: BotBodyKind;
+  faqKey?: keyof typeof locationFAQs;
+  extra?: BilingualPageContent[];
+}> = [
+  { en: '/', content: homeContent, kind: 'home', extra: [forPatientsSectionContent, doctorSectionContent] },
+  { en: '/about', content: aboutContent, kind: 'main' },
+  { en: '/contact', content: contactContent, kind: 'main' },
+  { en: '/services', content: servicesIndexContent, kind: 'main' },
+  { en: '/for-patients', content: forPatientsContent, kind: 'main', extra: [forPatientsSectionContent] },
+  { en: '/telepsychiatry-florida', content: telepsychiatryFloridaContent, kind: 'main', faqKey: 'telehealth', extra: [doctorSectionContent] },
+  { en: '/locations/psychiatrist-naples', content: naplesLocationContent, kind: 'location' },
+  { en: '/services/anxiety-treatment', content: anxietyTreatmentContent, kind: 'service' },
+  { en: '/services/depression-treatment', content: depressionTreatmentContent, kind: 'service' },
+  { en: '/services/adhd-treatment', content: adhdTreatmentContent, kind: 'service' },
+  { en: '/services/ptsd-treatment', content: ptsdTreatmentContent, kind: 'service' },
+  { en: '/services/bipolar-treatment', content: bipolarTreatmentContent, kind: 'service' },
+  { en: '/services/medication-management', content: medicationManagementContent, kind: 'service' },
+  { en: '/privacy-policy', content: privacyPolicyContent, kind: 'legal' },
+  { en: '/terms-of-service', content: termsOfServiceContent, kind: 'legal' },
+  { en: '/hipaa-notice', content: hipaaNoticeContent, kind: 'legal' },
+  { en: '/cookie-policy', content: cookiePolicyContent, kind: 'legal' },
+  { en: '/cancellation-policy', content: cancellationPolicyContent, kind: 'legal' },
+  { en: '/billing-policy', content: billingPolicyContent, kind: 'legal' },
+  { en: '/emergency-policy', content: emergencyPolicyContent, kind: 'legal' },
+  { en: '/patient-rights', content: patientRightsContent, kind: 'legal' },
+  { en: '/telehealth-consent', content: telehealthConsentContent, kind: 'legal' },
+  { en: '/no-surprises-act', content: noSurprisesActContent, kind: 'legal' },
+  { en: '/accessibility-statement', content: accessibilityStatementContent, kind: 'legal' },
+  { en: '/nondiscrimination-notice', content: nondiscriminationNoticeContent, kind: 'legal' },
+  { en: '/communications-policy', content: communicationsPolicyContent, kind: 'legal' },
+  { en: '/medical-disclaimer', content: medicalDisclaimerContent, kind: 'legal' },
+];
+
+export const BOT_CONTENT_BY_PATH: Record<string, BotContentEntry> = (() => {
+  const bilingualMap = getBilingualUrlMap();
+  const byPath: Record<string, BotContentEntry> = {};
+  for (const page of BOT_CONTENT_PAGES) {
+    const esPath = bilingualMap[page.en];
+    byPath[page.en] = { content: page.content, lang: 'en', kind: page.kind, altPath: esPath, faqKey: page.faqKey, extra: page.extra };
+    if (esPath) {
+      byPath[esPath] = { content: page.content, lang: 'es', kind: page.kind, altPath: page.en, faqKey: page.faqKey, extra: page.extra };
+    }
+  }
+  return byPath;
+})();
+
+interface BotNavContext {
+  contactInfo: string;
+  serviceLinks: string;
+  locationLinks: string;
+  legalLinks: string;
+}
+
+function buildModuleContentBody(entry: BotContentEntry, ctx: BotNavContext): string {
+  const { content, lang, kind, altPath, faqKey, extra } = entry;
+  const es = lang === 'es';
+  let article = pageContentToHtml(content[lang]);
+  for (const shared of extra ?? []) {
+    const sharedContent = shared[lang];
+    const sharedSections = sharedContent.sections
+      .map(s => `    ${sectionToHtml(s)}`)
+      .join('\n');
+    article += `\n  <section>\n    <h2>${inlineToHtml(sharedContent.title)}</h2>\n${sharedSections}\n  </section>`;
+  }
+  if (faqKey) {
+    const faqs = locationFAQs[faqKey]?.[lang] ?? [];
+    if (faqs.length) {
+      const faqBlocks = faqs
+        .map(f => `<h3>${escapeHtml(f.question)}</h3>\n    <p>${escapeHtml(f.answer)}</p>`)
+        .join('\n    ');
+      article += `\n  <section>\n    ${faqBlocks}\n  </section>`;
+    }
+  }
+
+  const switchItem = altPath
+    ? `<li><a href="${altPath}">${es ? 'English' : 'Espa&ntilde;ol'}</a></li>`
+    : '';
+  const quick = (items: string[]) =>
+    `<nav aria-label="${es ? 'Enlaces R&aacute;pidos' : 'Quick Links'}"><ul>
+    ${[...items, switchItem].filter(Boolean).join('\n    ')}
+  </ul></nav>`;
+
+  const servicesNav = `<nav aria-label="${es ? 'Servicios' : 'Services'}">${ctx.serviceLinks}</nav>`;
+  const locationsNav = `<nav aria-label="${es ? 'Ubicaciones' : 'Locations'}">${ctx.locationLinks}</nav>`;
+  const legalNav = `<nav aria-label="Legal">${ctx.legalLinks}</nav>`;
+
+  const homeItem = es
+    ? `<li><a href="/es">Inicio</a></li>`
+    : `<li><a href="/">Home</a></li>`;
+  const contactItem = es
+    ? `<li><a href="/es/contacto">Programar una Cita</a></li>`
+    : `<li><a href="/contact">Schedule an Appointment</a></li>`;
+  const aboutItem = es
+    ? `<li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>`
+    : `<li><a href="/about">About Dr. Melva Reve</a></li>`;
+  const forPatientsItem = es
+    ? `<li><a href="/es/para-pacientes">Para Pacientes</a></li>`
+    : `<li><a href="/for-patients">For Patients</a></li>`;
+  const naplesItem = es
+    ? `<li><a href="/es/ubicaciones/psiquiatra-naples">Oficina en Naples</a></li>`
+    : `<li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>`;
+
+  let navs: string;
+  switch (kind) {
+    case 'home':
+      navs = `${servicesNav}\n  ${locationsNav}\n  ${quick([aboutItem, contactItem, forPatientsItem])}`;
+      break;
+    case 'location':
+      navs = `${servicesNav}\n  ${locationsNav}\n  ${quick([contactItem, aboutItem])}`;
+      break;
+    case 'service':
+      navs = `${servicesNav}\n  ${quick([contactItem, aboutItem, naplesItem])}`;
+      break;
+    case 'legal':
+      navs = `${legalNav}\n  ${quick([homeItem, contactItem])}`;
+      break;
+    case 'main':
+    default:
+      navs = `${servicesNav}\n  ${quick([contactItem, aboutItem, forPatientsItem])}`;
+      break;
+  }
+
+  return `<main>
+  <header><a href="${es ? '/es' : '/'}">Healing Minds Psychiatry</a></header>
+  <article>
+  ${article}
+  </article>
+  <section>${ctx.contactInfo}</section>
+  ${navs}
+</main>`;
+}
+
 async function getStaticPageBody(path: string, baseUrl: string): Promise<string | null> {
   const phone = '(239) 423-0272';
   const address = '4760 Tamiami Trl N #25, Naples, FL 34103';
@@ -2605,6 +2978,12 @@ async function getStaticPageBody(path: string, baseUrl: string): Promise<string 
       <li><a href="/billing-policy">Billing Policy</a></li>
       <li><a href="/emergency-policy">Emergency Policy</a></li>
       <li><a href="/patient-rights">Patient Rights</a></li>
+      <li><a href="/telehealth-consent">Telehealth Consent</a></li>
+      <li><a href="/no-surprises-act">No Surprises Act</a></li>
+      <li><a href="/accessibility-statement">Accessibility Statement</a></li>
+      <li><a href="/nondiscrimination-notice">Nondiscrimination Notice</a></li>
+      <li><a href="/communications-policy">Communications Policy</a></li>
+      <li><a href="/medical-disclaimer">Medical Disclaimer</a></li>
     </ul>`;
 
   const esLegalLinks = `<ul>
@@ -2616,6 +2995,12 @@ async function getStaticPageBody(path: string, baseUrl: string): Promise<string 
       <li><a href="/es/politica-facturacion">Pol&iacute;tica de Facturaci&oacute;n</a></li>
       <li><a href="/es/politica-emergencias">Pol&iacute;tica de Emergencias</a></li>
       <li><a href="/es/derechos-paciente">Derechos del Paciente</a></li>
+      <li><a href="/es/consentimiento-telesalud">Consentimiento de Telesalud</a></li>
+      <li><a href="/es/ley-sin-sorpresas">Ley Sin Sorpresas</a></li>
+      <li><a href="/es/declaracion-accesibilidad">Declaraci&oacute;n de Accesibilidad</a></li>
+      <li><a href="/es/aviso-no-discriminacion">Aviso de No Discriminaci&oacute;n</a></li>
+      <li><a href="/es/politica-comunicaciones">Pol&iacute;tica de Comunicaciones</a></li>
+      <li><a href="/es/descargo-responsabilidad-medica">Descargo de Responsabilidad M&eacute;dica</a></li>
     </ul>`;
 
   if (path === '/blog' || path === '/es/blog') {
@@ -2637,711 +3022,73 @@ async function getStaticPageBody(path: string, baseUrl: string): Promise<string 
     });
   }
 
+  // Content pages backed by shared modules (same source the React pages render).
+  const moduleEntry = BOT_CONTENT_BY_PATH[path];
+  if (moduleEntry) {
+    const es = moduleEntry.lang === 'es';
+    return buildModuleContentBody(moduleEntry, {
+      contactInfo,
+      serviceLinks: es ? esServiceLinks : enServiceLinks,
+      locationLinks: es ? esLocationLinks : enLocationLinks,
+      legalLinks: es ? esLegalLinks : enLegalLinks,
+    });
+  }
+
   switch (path) {
-    // ── English Homepage ────────────────────────────────────────────────────
-    case '/':
+    case '/psychiatrist-california':
       return `<main>
   <header><a href="/">Healing Minds Psychiatry</a></header>
   <section>
-    <h1>Expert Psychiatric Care in Naples, FL</h1>
-    <p>Dr. Melva Reve provides expert psychiatric care in Naples, FL, specializing in anxiety, depression, ADHD, PTSD, and bipolar disorder. Bilingual services in English and Spanish. Most insurance plans accepted. Telehealth and in-office appointments available throughout Southwest Florida.</p>
-    ${contactInfo}
+    <h1>Online Psychiatrist in Spanish for California</h1>
+    <p>Psychiatric care with Dr. Melva Reve, a psychiatrist and native Spanish speaker, by video call for adults located in California. Evaluation and treatment follow-up for anxiety, depression, and ADHD. Direct pay, clear pricing, no insurance. Not for emergencies: call 988 or 911 in a crisis.</p>
   </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Locations">${enLocationLinks}</nav>
-  <nav aria-label="More"><ul>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/contact">Contact &amp; Schedule Appointment</a></li>
-    <li><a href="/for-patients">For Patients</a></li>
-    <li><a href="/es">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── Spanish Homepage ─────────────────────────────────────────────────────
-    case '/es':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Atenci&oacute;n Psiqu&iacute;atrica Experta en Naples, FL</h1>
-    <p>La Dra. Melva Reve ofrece atenci&oacute;n psiqu&iacute;atrica experta en Naples, FL, especializ&aacute;ndose en ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Servicios biling&uuml;es en ingl&eacute;s y espa&ntilde;ol. Se aceptan la mayor&iacute;a de planes de seguro. Consultas de telesalud y en consultorio disponibles en todo el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Ubicaciones">${esLocationLinks}</nav>
-  <nav aria-label="M&aacute;s"><ul>
-    <li><a href="/es/acerca-de">Acerca de la Dra. Melva Reve</a></li>
-    <li><a href="/es/contacto">Contacto y Cita</a></li>
-    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
-    <li><a href="/">English</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── English Service Pages ────────────────────────────────────────────────
-    case '/services/anxiety-treatment':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Anxiety Treatment in Naples, FL</h1>
-    <p>Expert anxiety treatment in Naples, FL. Dr. Melva Reve provides comprehensive care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments and personalized medication management. Bilingual psychiatrist serving Southwest Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Related Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
-    <li><a href="/es/servicios/tratamiento-ansiedad">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/services/depression-treatment':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Depression Treatment in Naples, FL</h1>
-    <p>Professional depression treatment in Naples, FL. Dr. Melva Reve offers expert care for major depression, postpartum depression, and seasonal depression with personalized treatment plans and medication management. Bilingual psychiatrist serving Southwest Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Related Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
-    <li><a href="/es/servicios/tratamiento-depresion">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/services/adhd-treatment':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>ADHD Treatment in Naples, FL</h1>
-    <p>Expert ADHD treatment for adults in Naples, FL. Dr. Melva Reve provides comprehensive ADHD evaluation, medication management, and behavioral strategies to improve focus and daily functioning. Bilingual psychiatrist serving Southwest Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Related Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
-    <li><a href="/es/servicios/tratamiento-adhd">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/services/ptsd-treatment':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>PTSD Treatment in Naples, FL</h1>
-    <p>Trauma-informed psychiatric care for post-traumatic stress disorder in Naples, FL. Dr. Melva Reve uses evidence-based treatments to help patients heal from traumatic experiences, including therapy and medication management. Bilingual psychiatrist serving Southwest Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Related Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
-    <li><a href="/es/servicios/tratamiento-tept">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/services/bipolar-treatment':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Bipolar Disorder Treatment in Naples, FL</h1>
-    <p>Expert psychiatric care for bipolar disorder in Naples, FL. Dr. Melva Reve provides mood stabilization, medication management, and comprehensive support for bipolar I, bipolar II, and cyclothymia. Bilingual psychiatrist serving Southwest Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Related Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
-    <li><a href="/es/servicios/tratamiento-bipolar">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/services/medication-management':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Medication Management in Naples, FL</h1>
-    <p>Expert psychiatric medication evaluation, monitoring, and adjustment in Naples, FL. Dr. Melva Reve provides comprehensive safety assessments and personalized treatment plans for all psychiatric conditions. Bilingual psychiatrist serving Southwest Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Related Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/locations/psychiatrist-naples">Naples Office Location</a></li>
-    <li><a href="/es/servicios/manejo-medicamentos">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── Spanish Service Pages ────────────────────────────────────────────────
-    case '/es/servicios/tratamiento-ansiedad':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Tratamiento de Ansiedad en Naples, FL</h1>
-    <p>Tratamiento experto de ansiedad en Naples, FL. La Dra. Melva Reve proporciona atenci&oacute;n integral para ataques de p&aacute;nico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/services/anxiety-treatment">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/servicios/tratamiento-depresion':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Tratamiento de Depresi&oacute;n en Naples, FL</h1>
-    <p>Tratamiento profesional de depresi&oacute;n en Naples, FL. La Dra. Melva Reve ofrece atenci&oacute;n experta para depresi&oacute;n mayor, depresi&oacute;n posparto y depresi&oacute;n estacional con planes de tratamiento personalizados. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/services/depression-treatment">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/servicios/tratamiento-adhd':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Tratamiento de TDAH en Naples, FL</h1>
-    <p>Tratamiento experto de TDAH para adultos en Naples, FL. La Dra. Melva Reve ofrece evaluaci&oacute;n integral de TDAH, manejo de medicamentos y estrategias conductuales para mejorar el enfoque y funcionamiento diario. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/services/adhd-treatment">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/servicios/tratamiento-tept':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Tratamiento de TEPT en Naples, FL</h1>
-    <p>Atenci&oacute;n psiqu&iacute;atrica informada en trauma para trastorno de estr&eacute;s postraum&aacute;tico en Naples, FL. La Dra. Melva Reve usa tratamientos basados en evidencia para ayudar a los pacientes a sanar de experiencias traum&aacute;ticas. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/services/ptsd-treatment">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/servicios/tratamiento-bipolar':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Tratamiento de Trastorno Bipolar en Naples, FL</h1>
-    <p>Atenci&oacute;n psiqu&iacute;atrica experta para trastorno bipolar en Naples, FL. La Dra. Melva Reve ofrece estabilizaci&oacute;n del &aacute;nimo, manejo de medicamentos y apoyo integral para bipolar I, II y ciclotimia. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/services/bipolar-treatment">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/servicios/manejo-medicamentos':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Manejo de Medicamentos en Naples, FL</h1>
-    <p>Evaluaci&oacute;n, monitoreo y ajuste experto de medicamentos psiqu&iacute;atricos en Naples, FL. La Dra. Melva Reve proporciona evaluaciones de seguridad integrales y planes de tratamiento personalizados para todas las condiciones psiqu&iacute;atricas. Psiquiatra biling&uuml;e que atiende el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios Relacionados">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/services/medication-management">English</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── English Location Pages ───────────────────────────────────────────────
-    case '/locations/psychiatrist-naples':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatrist in Naples, FL &mdash; Dr. Melva Reve</h1>
-    <p>Visit Dr. Melva Reve at our Naples, FL office for expert psychiatric care. Specializing in anxiety, depression, ADHD, PTSD, and bipolar disorder. In-person and telehealth appointments available. Insurance accepted.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Nearby Areas"><ul>
-    <li><a href="/locations/psychiatrist-bonita-springs">Bonita Springs</a></li>
-    <li><a href="/locations/psychiatrist-marco-island">Marco Island</a></li>
-    <li><a href="/locations/psychiatrist-fort-myers">Fort Myers</a></li>
-    <li><a href="/locations/psychiatrist-estero">Estero</a></li>
-    <li><a href="/contact">Schedule Appointment</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── Spanish Location Pages ───────────────────────────────────────────────
-    case '/es/ubicaciones/psiquiatra-naples':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psiquiatra en Naples, FL &mdash; Dra. Melva Reve</h1>
-    <p>Visite a la Dra. Melva Reve en nuestra oficina en Naples, FL para atenci&oacute;n psiqu&iacute;atrica experta. Especializ&aacute;ndose en ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Citas presenciales y de telesalud disponibles. Se acepta seguro.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Otras &Aacute;reas"><ul>
-    <li><a href="/es/ubicaciones/psiquiatra-bonita-springs">Bonita Springs</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-marco-island">Marco Island</a></li>
-    <li><a href="/es/ubicaciones/psiquiatra-fort-myers">Fort Myers</a></li>
-    <li><a href="/es/contacto">Programar Cita</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── About ────────────────────────────────────────────────────────────────
-    case '/about':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>About Dr. Melva Reve &mdash; Naples, FL Psychiatrist</h1>
-    <p>Dr. Melva Reve is a board-certified psychiatrist in Naples, FL specializing in anxiety, depression, ADHD, PTSD, and bipolar disorder. She provides compassionate, evidence-based psychiatric care in both English and Spanish, serving patients throughout Southwest Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/for-patients">For Patients</a></li>
-    <li><a href="/es/acerca-de">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/acerca-de':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Sobre la Dra. Melva Reve &mdash; Psiquiatra en Naples, FL</h1>
-    <p>La Dra. Melva Reve es una psiquiatra certificada en Naples, FL que se especializa en ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar. Brinda atenci&oacute;n psiqu&iacute;atrica compasiva basada en evidencia en ingl&eacute;s y espa&ntilde;ol, atendiendo a pacientes en todo el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
-    <li><a href="/about">English</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── Contact ──────────────────────────────────────────────────────────────
-    case '/contact':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Contact Healing Minds Psychiatry &mdash; Naples, FL</h1>
-    <p>Schedule an appointment with Dr. Melva Reve for expert psychiatric care in Naples, FL. We accept most insurance plans and offer both in-person and telehealth appointments for anxiety, depression, ADHD, PTSD, and bipolar disorder treatment.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/for-patients">For Patients</a></li>
-    <li><a href="/es/contacto">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/contacto':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Contacto &mdash; Healing Minds Psychiatry, Naples, FL</h1>
-    <p>Programe una cita con la Dra. Melva Reve para atenci&oacute;n psiqu&iacute;atrica experta en Naples, FL. Aceptamos la mayor&iacute;a de los planes de seguro y ofrecemos citas presenciales y de telesalud para el tratamiento de ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
-    <li><a href="/contact">English</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── English Hub Pages ────────────────────────────────────────────────────
-    case '/services':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Psychiatric Services in Naples, FL</h1>
-    <p>Comprehensive psychiatric services in Naples, FL. Dr. Melva Reve treats anxiety, depression, ADHD, PTSD, and bipolar disorder with expert medication management. Bilingual care in English and Spanish for patients throughout Southwest Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/for-patients">For Patients</a></li>
-    <li><a href="/es/servicios">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/for-patients':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>For Patients &mdash; Healing Minds Psychiatry</h1>
-    <p>Patient resources and information for Healing Minds Psychiatry. Forms, insurance, appointment scheduling, and what to expect during your visit with Dr. Melva Reve in Naples, FL.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/telepsychiatry-florida">Telepsychiatry in Florida</a></li>
-    <li><a href="/es/para-pacientes">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/telepsychiatry-florida':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Telepsychiatry in Florida</h1>
-    <p>Telepsychiatry throughout Florida with Dr. Melva Reve. Secure, HIPAA-compliant virtual psychiatric care for anxiety, depression, ADHD, and more. Bilingual virtual care with the same quality as in-person, from the comfort of your home.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Services">${enServiceLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/contact">Schedule an Appointment</a></li>
-    <li><a href="/about">About Dr. Melva Reve</a></li>
-    <li><a href="/for-patients">For Patients</a></li>
-    <li><a href="/es/telepsiquiatria-florida">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── Spanish Hub Pages ────────────────────────────────────────────────────
-    case '/es/servicios':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Servicios Psiqui&aacute;tricos en Naples, FL</h1>
-    <p>Servicios psiqui&aacute;tricos completos en Naples, FL. La Dra. Melva Reve trata ansiedad, depresi&oacute;n, TDAH, TEPT y trastorno bipolar con manejo experto de medicamentos. Atenci&oacute;n biling&uuml;e en ingl&eacute;s y espa&ntilde;ol para pacientes en todo el suroeste de Florida.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
-    <li><a href="/services">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/para-pacientes':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Para Pacientes &mdash; Healing Minds Psychiatry</h1>
-    <p>Informaci&oacute;n importante para pacientes sobre seguro, citas y atenci&oacute;n psiqui&aacute;trica en Healing Minds Naples. Preguntas frecuentes y qu&eacute; esperar durante su visita con la Dra. Melva Reve.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/es/telepsiquiatria-florida">Telepsiquiatr&iacute;a en Florida</a></li>
-    <li><a href="/for-patients">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/telepsiquiatria-florida':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Telepsiquiatr&iacute;a en Florida</h1>
-    <p>Telepsiquiatr&iacute;a en toda Florida con la Dra. Melva Reve. Atenci&oacute;n psiqui&aacute;trica virtual segura, conforme con HIPAA, para ansiedad, depresi&oacute;n, TDAH y m&aacute;s. Atenci&oacute;n virtual biling&uuml;e con la misma calidad que en persona, desde la comodidad de su hogar.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Servicios">${esServiceLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es/contacto">Programar una Cita</a></li>
-    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
-    <li><a href="/es/para-pacientes">Para Pacientes</a></li>
-    <li><a href="/telepsychiatry-florida">English</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── English Legal &amp; Trust Pages ──────────────────────────────────────
-    case '/privacy-policy':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Privacy Policy</h1>
-    <p>Privacy Policy for Healing Minds Psychiatry. Learn how we protect your personal health information and comply with HIPAA regulations.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${enLegalLinks}</nav>
   <nav aria-label="Quick Links"><ul>
     <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/es/politica-privacidad">Espa&ntilde;ol</a></li>
+    <li><a href="/about">About Dr. Melva Reve</a></li>
+    <li><a href="/es/psiquiatra-california">Espa&ntilde;ol</a></li>
   </ul></nav>
 </main>`;
 
-    case '/terms-of-service':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Terms of Service</h1>
-    <p>Terms of Service for Healing Minds Psychiatry. Understanding the terms and conditions for psychiatric care with Dr. Melva Reve.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${enLegalLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/es/terminos-servicio">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/hipaa-notice':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>HIPAA Notice of Privacy Practices</h1>
-    <p>HIPAA Notice of Privacy Practices for Healing Minds Psychiatry. Your rights regarding protected health information and privacy.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${enLegalLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/es/aviso-hipaa">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/cookie-policy':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Cookie Policy</h1>
-    <p>Cookie Policy for Healing Minds Psychiatry website. Learn about cookies usage, analytics, and your privacy choices.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${enLegalLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/es/politica-cookies">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/cancellation-policy':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Cancellation and No-Show Policy</h1>
-    <p>Cancellation and no-show policy for Healing Minds Psychiatry. 24-hour notice required, $50 late fee, with medical emergency exceptions. Naples, FL.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${enLegalLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/es/politica-cancelacion">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/billing-policy':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Billing and Payment Policy</h1>
-    <p>Billing and payment policy for Healing Minds Psychiatry. Insurance accepted, copayments, self-pay rates, credit card fees, and payment plans. Naples, FL.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${enLegalLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/es/politica-facturacion">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/emergency-policy':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Emergency and Crisis Policy</h1>
-    <p>Emergency and crisis policy for Healing Minds Psychiatry. We are not an emergency service. Florida crisis resources: 911, 988 Suicide &amp; Crisis Lifeline, and the David Lawrence Center.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${enLegalLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/es/politica-emergencias">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/patient-rights':
-      return `<main>
-  <header><a href="/">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Patient Rights and Responsibilities</h1>
-    <p>Patient rights and responsibilities at Healing Minds Psychiatry. Florida statutory compliance, confidentiality, informed consent, and complaint procedures.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${enLegalLinks}</nav>
-  <nav aria-label="Quick Links"><ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/es/derechos-paciente">Espa&ntilde;ol</a></li>
-  </ul></nav>
-</main>`;
-
-    // ── Spanish Legal &amp; Trust Pages ──────────────────────────────────────
-    case '/es/politica-privacidad':
+    case '/es/psiquiatra-california':
       return `<main>
   <header><a href="/es">Healing Minds Psychiatry</a></header>
   <section>
-    <h1>Pol&iacute;tica de Privacidad</h1>
-    <p>Pol&iacute;tica de Privacidad para Healing Minds Psychiatry. Aprenda c&oacute;mo protegemos su informaci&oacute;n de salud personal y cumplimos con las regulaciones HIPAA.</p>
-    ${contactInfo}
+    <h1>Psiquiatra Online en Espa&ntilde;ol para California</h1>
+    <p>Atenci&oacute;n psiqui&aacute;trica con la Dra. Melva Reve, m&eacute;dica psiquiatra y hablante nativa de espa&ntilde;ol, por videollamada para adultos en California. Evaluaci&oacute;n y seguimiento del tratamiento para ansiedad, depresi&oacute;n y TDAH. Pago directo, precio claro, sin seguros. No es para emergencias: llame al 988 o al 911 en una crisis.</p>
   </section>
-  <nav aria-label="Legal">${esLegalLinks}</nav>
   <nav aria-label="Enlaces R&aacute;pidos"><ul>
     <li><a href="/es">Inicio</a></li>
-    <li><a href="/es/contacto">Contacto</a></li>
-    <li><a href="/privacy-policy">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/terminos-servicio':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>T&eacute;rminos de Servicio</h1>
-    <p>T&eacute;rminos de Servicio para Healing Minds Psychiatry. Entendiendo los t&eacute;rminos y condiciones para la atenci&oacute;n psiqui&aacute;trica con la Dra. Melva Reve.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${esLegalLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es">Inicio</a></li>
-    <li><a href="/es/contacto">Contacto</a></li>
-    <li><a href="/terms-of-service">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/aviso-hipaa':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Aviso de Pr&aacute;cticas de Privacidad HIPAA</h1>
-    <p>Aviso de Pr&aacute;cticas de Privacidad HIPAA para Healing Minds Psychiatry. Sus derechos con respecto a la informaci&oacute;n de salud protegida y privacidad.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${esLegalLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es">Inicio</a></li>
-    <li><a href="/es/contacto">Contacto</a></li>
-    <li><a href="/hipaa-notice">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/politica-cookies':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Pol&iacute;tica de Cookies</h1>
-    <p>Pol&iacute;tica de Cookies para el sitio web de Healing Minds Psychiatry. Aprenda sobre el uso de cookies, an&aacute;lisis y sus opciones de privacidad.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${esLegalLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es">Inicio</a></li>
-    <li><a href="/es/contacto">Contacto</a></li>
-    <li><a href="/cookie-policy">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/politica-cancelacion':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Pol&iacute;tica de Cancelaci&oacute;n y Citas Perdidas</h1>
-    <p>Pol&iacute;tica de cancelaci&oacute;n y citas perdidas de Healing Minds Psychiatry. Aviso de 24 horas requerido, cargo de $50, con excepciones por emergencia m&eacute;dica. Naples, FL.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${esLegalLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es">Inicio</a></li>
-    <li><a href="/es/contacto">Contacto</a></li>
-    <li><a href="/cancellation-policy">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/politica-facturacion':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Pol&iacute;tica de Facturaci&oacute;n y Pago</h1>
-    <p>Pol&iacute;tica de facturaci&oacute;n y pago de Healing Minds Psychiatry. Seguros aceptados, copagos, tarifas particulares, cargos por tarjeta y planes de pago. Naples, FL.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${esLegalLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es">Inicio</a></li>
-    <li><a href="/es/contacto">Contacto</a></li>
-    <li><a href="/billing-policy">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/politica-emergencias':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Pol&iacute;tica de Emergencias y Crisis</h1>
-    <p>Pol&iacute;tica de emergencias y crisis de Healing Minds Psychiatry. No es un servicio de emergencia. Recursos de crisis en Florida: 911, L&iacute;nea 988 de Prevenci&oacute;n del Suicidio y Crisis, y el David Lawrence Center.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${esLegalLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es">Inicio</a></li>
-    <li><a href="/es/contacto">Contacto</a></li>
-    <li><a href="/emergency-policy">English</a></li>
-  </ul></nav>
-</main>`;
-
-    case '/es/derechos-paciente':
-      return `<main>
-  <header><a href="/es">Healing Minds Psychiatry</a></header>
-  <section>
-    <h1>Derechos y Responsabilidades del Paciente</h1>
-    <p>Derechos y responsabilidades del paciente en Healing Minds Psychiatry. Cumplimiento con leyes de Florida, confidencialidad, consentimiento informado y procedimientos de queja.</p>
-    ${contactInfo}
-  </section>
-  <nav aria-label="Legal">${esLegalLinks}</nav>
-  <nav aria-label="Enlaces R&aacute;pidos"><ul>
-    <li><a href="/es">Inicio</a></li>
-    <li><a href="/es/contacto">Contacto</a></li>
-    <li><a href="/patient-rights">English</a></li>
+    <li><a href="/es/acerca-de">Sobre la Dra. Melva Reve</a></li>
+    <li><a href="/psychiatrist-california">English</a></li>
   </ul></nav>
 </main>`;
 
     default:
       return null;
   }
+}
+
+/**
+ * Startup guardrail (warn-only): verifies that every sitemap URL (EN + ES)
+ * produces a non-empty crawler body via getStaticPageBody. Returns the list
+ * of uncovered paths so the caller can log a loud warning at boot.
+ * Sitemap entries are all static (blog posts are appended dynamically to the
+ * sitemap elsewhere and are covered by the blog SSR path), so this never
+ * touches the database.
+ */
+export async function findSitemapPathsWithoutBotBody(
+  baseUrl = 'https://healingmindspsychiatry.com',
+): Promise<string[]> {
+  const missing: string[] = [];
+  for (const entry of getSitemapEntries()) {
+    for (const path of [entry.en, entry.es]) {
+      try {
+        const body = await getStaticPageBody(path, baseUrl);
+        if (!body || !body.trim()) missing.push(path);
+      } catch (err) {
+        missing.push(`${path} (error: ${(err as Error).message})`);
+      }
+    }
+  }
+  return missing;
 }

@@ -61,7 +61,7 @@ function initConsentMode(): void {
     ad_storage: 'denied',
     ad_user_data: 'denied',
     ad_personalization: 'denied',
-    wait_for_update: 500, // milliseconds to wait for update
+    wait_for_update: 2000, // milliseconds to wait for update
   });
 
   window.hmp_consent_mode_initialized = true;
@@ -75,28 +75,29 @@ export function updateGoogleConsent(analyticsConsent: boolean, marketingConsent:
   }
 
   if (typeof window.gtag !== 'undefined') {
-    // Use requestIdleCallback to defer consent updates
-    const updateConsent = () => {
-      window.gtag('consent', 'update', {
-        analytics_storage: analyticsConsent ? 'granted' : 'denied',
-        ad_storage: marketingConsent ? 'granted' : 'denied',
-        ad_user_data: marketingConsent ? 'granted' : 'denied',
-        ad_personalization: marketingConsent ? 'granted' : 'denied',
-      });
+    // Apply consent updates synchronously so subsequent events (page_view, generate_lead)
+    // are emitted AFTER the consent state is updated. Deferring this with
+    // requestIdleCallback caused events to fire under a stale denied state.
+    window.gtag('consent', 'update', {
+      analytics_storage: analyticsConsent ? 'granted' : 'denied',
+      ad_storage: marketingConsent ? 'granted' : 'denied',
+      ad_user_data: marketingConsent ? 'granted' : 'denied',
+      ad_personalization: marketingConsent ? 'granted' : 'denied',
+    });
 
-      console.log(`🔄 Google Consent updated: analytics_storage=${analyticsConsent ? 'granted' : 'denied'}, ad_storage=${marketingConsent ? 'granted' : 'denied'}`);
-    };
-
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(updateConsent);
-    } else {
-      setTimeout(updateConsent, 50);
-    }
+    console.log(`🔄 Google Consent updated: analytics_storage=${analyticsConsent ? 'granted' : 'denied'}, ad_storage=${marketingConsent ? 'granted' : 'denied'}`);
   }
 }
 
 // Initialize Google Analytics with performance optimization and consent checking
 export function initGA(): void {
+  if (import.meta.env.MODE === 'development') {
+    if (import.meta.env.DEV) {
+      console.log('📊 Google Analytics disabled in development mode');
+    }
+    return;
+  }
+
   const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
   
   if (!measurementId) {
@@ -149,6 +150,8 @@ export function initGA(): void {
       const configureGA = () => {
         // Final check before configuration
         if (window.hmp_analytics_initialized) {
+          // Another instance already configured GA: release any held page view.
+          markGaConfigured();
           return;
         }
         
@@ -156,7 +159,9 @@ export function initGA(): void {
         window.gtag('config', measurementId, {
           page_title: document.title,
           page_location: window.location.href,
-          send_page_view: hasAnalyticsConsent(), // Only send if consent is available
+          // page_view is ALWAYS emitted manually via trackPageView (single emitter
+          // with dedupe). Letting config auto-send caused duplicate page_views.
+          send_page_view: false,
           allow_enhanced_conversions: true,
           custom_map: {
             'custom_1': 'service_type',
@@ -169,6 +174,9 @@ export function initGA(): void {
         
         // Mark as initialized
         window.hmp_analytics_initialized = true;
+
+        // Only now is there a measurement destination: emit the held page view.
+        markGaConfigured();
         
         if (import.meta.env.DEV) {
           console.log('📊 Google Analytics initialized successfully with ID:', measurementId);
@@ -208,26 +216,59 @@ export function initGA(): void {
   }
 }
 
-// Track page views with throttling to prevent performance impact
+// Single page_view emitter with dedupe. All page views (initial load, SPA
+// navigation, and post-consent replay) flow through here.
+let lastTrackedPath: string | null = null;
+
+// GA is loaded and configured asynchronously (requestIdleCallback). Until
+// `config` has run, window.gtag is only the consent-mode queue: an `event`
+// queued before `config` has no measurement destination, and because config
+// uses send_page_view:false nothing replays it. So hold the first page view
+// instead of marking it as tracked and losing it.
+let gaConfigured = false;
+let pendingPageView: { path: string; title?: string } | null = null;
+
+/** Called once gtag('config') has run; flushes a page view held during startup. */
+export function markGaConfigured(): void {
+  gaConfigured = true;
+  const pending = pendingPageView;
+  pendingPageView = null;
+  if (pending) {
+    trackPageView(pending.path, pending.title);
+  }
+}
+
 export function trackPageView(path: string, title?: string): void {
   if (!hasAnalyticsConsent()) {
+    // Do NOT record the path: if consent is granted later, the replay for this
+    // same path must still go through.
     return;
   }
-  
-  if (typeof window.gtag !== 'undefined') {
-    // Use requestIdleCallback to defer tracking calls
-    const trackPage = () => {
-      window.gtag('config', import.meta.env.VITE_GA_MEASUREMENT_ID, {
-        page_path: path,
-        page_title: title || document.title,
-      });
-    };
-    
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(trackPage);
-    } else {
-      setTimeout(trackPage, 50);
-    }
+
+  if (typeof window.gtag === 'undefined') {
+    return;
+  }
+
+  if (!gaConfigured) {
+    // Deliberately does NOT touch lastTrackedPath: markGaConfigured() replays it.
+    pendingPageView = { path, title };
+    return;
+  }
+
+  if (path === lastTrackedPath) {
+    return; // Dedupe: this path was already tracked
+  }
+  lastTrackedPath = path;
+
+  // Emit synchronously to preserve ordering relative to consent updates
+  window.gtag('event', 'page_view', {
+    page_path: path,
+    page_title: title || document.title,
+    page_location: window.location.href,
+  });
+
+  if (import.meta.env.DEV) {
+    console.log('📊 GA page_view tracked:', path);
   }
 }
 
@@ -328,7 +369,17 @@ export function handleConsentChange(analyticsConsent: boolean, marketingConsent:
     } else {
       console.log('🔄 Google Analytics consent granted - tracking enabled');
     }
+    // Replay the page_view for the current page: config uses send_page_view:false
+    // and the route-change emission was blocked while consent was denied.
+    // trackPageView dedupes, so this never double-fires.
+    trackPageView(window.location.pathname, document.title);
   } else {
+    // Revoking invalidates the "already tracked" state for the current page.
+    // Without this, re-granting consent on the SAME page is swallowed by the
+    // dedupe in trackPageView (lastTrackedPath still holds this path from
+    // before the revocation) and the visit is never counted.
+    lastTrackedPath = null;
+
     // Analytics consent revoked - keep GA loaded but with denied consent state
     if (window.hmp_analytics_initialized) {
       console.log('🚫 Google Analytics consent revoked - tracking disabled via Consent Mode');

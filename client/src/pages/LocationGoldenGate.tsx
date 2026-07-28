@@ -145,9 +145,9 @@ const LocationGoldenGate = () => {
                 <OptimizedImage src={heroLocationImage} alt="Dr. Melva Reve serving Golden Gate" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: '95% top' }} width={800} height={1000} priority={true} sizes="100vw" />
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">
-                    <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
+                    <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (<>Your Trusted <span className="font-display italic">Psychiatrist</span> in Golden Gate, FL</>) : (<>Su <span className="font-display italic">Psiquiatra</span> de Confianza en Golden Gate, FL</>)}
-                    </h1>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -460,45 +460,44 @@ const LocationGoldenGate = () => {
               </p>
             </div>
             
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+            <div className="max-w-3xl mx-auto">
               {/* Golden Gate to Central Practice */}
               <div className="bg-white rounded-2xl sm:rounded-3xl p-8 shadow-lg border border-green-100">
-                <div className="flex items-start gap-6">
+                <div className="flex items-center gap-4 mb-6">
                   <div className="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center flex-shrink-0">
                     <Navigation className="w-8 h-8 text-green-800" />
                   </div>
-                  
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
-                      {language === 'en' ? 'From Golden Gate to Our Naples Office' : 'Desde Golden Gate a Nuestra Oficina de Naples'}
-                    </h3>
-                    <div className="mb-6">
-                      {local.routeSteps[language].map((step, idx) => (
-                        <div key={idx} className={`flex items-center gap-3 ${idx < local.routeSteps[language].length - 1 ? 'mb-3' : ''}`}>
-                          <div className="w-3 h-3 rounded-full bg-green-600"></div>
-                          <p className="text-gray-700 font-body text-sm">{step}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-auto">
-                    <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
-                      <Clock className="w-4 h-4" />
-                      <span>{local.duration[language]}</span>
-                    </div>
-
-                    <Button 
-                      className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
-                      onClick={() => window.open('https://maps.google.com/?saddr=Golden+Gate,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
-                      data-testid="button-directions-central"
-                    >
-                      <Navigation className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
-                    </Button>
-                  </div>
+                  <h3 className="text-2xl font-display font-bold text-green-800">
+                    {language === 'en' ? 'From Golden Gate to Our Naples Office' : 'Desde Golden Gate a Nuestra Oficina de Naples'}
+                  </h3>
                 </div>
+
+                <div className="space-y-3 mb-6">
+                  {local.routeSteps[language].map((step, idx) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-green-800 font-bold text-xs">{idx + 1}</span>
+                      </div>
+                      <p className="text-sm text-gray-700 font-body leading-relaxed">{step}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
+                  <Clock className="w-4 h-4" />
+                  <span>{local.duration[language]}</span>
+                </div>
+
+                <Button
+                  className="w-full bg-green-800 hover:bg-green-700 text-white font-semibold py-3 rounded-full"
+                  onClick={() => window.open('https://maps.google.com/?saddr=Golden+Gate,+FL&daddr=4760+Tamiami+Trl+N+%23+25,+Naples,+FL+34103', '_blank')}
+                  data-testid="button-directions-central"
+                >
+                  <Navigation className="w-4 h-4 mr-2" />
+                  {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                </Button>
               </div>
+            </div>
 
             {/* Additional Info Section */}
             <div className="mt-16 text-center">
@@ -574,7 +573,6 @@ const LocationGoldenGate = () => {
                   </p>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         </section>
@@ -826,8 +824,8 @@ const LocationGoldenGate = () => {
                       </h3>
                       <p className="text-gray-600 font-body leading-relaxed">
                         {language === 'en' 
-                          ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
-                          : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
+                          ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: Closed\nSunday: Closed'
+                          : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Cerrado\nDomingo: Cerrado'}
                       </p>
                     </div>
                   </div>
@@ -846,7 +844,7 @@ const LocationGoldenGate = () => {
 
               {/* Telehealth Booking */}
               <div className="lg:col-span-1">
-                <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
+                <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 lg:sticky lg:top-24">
                   <div className="text-center space-y-4">
                     <VideoIcon className="w-8 h-8 text-blue-600 mx-auto" />
                     <h3 className="text-lg font-bold text-blue-800">

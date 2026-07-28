@@ -62,12 +62,19 @@
   }
   
   html, body {
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100vw;
   }
   
   body {
     @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  /* Decorative heading accents rendered by RichText as <strong class="font-display ...">
+     replaced former <span> elements; keep the parent heading's font-weight instead of
+     the browser/preflight `bolder` so the rendered look is byte-identical. */
+  strong.font-display {
+    font-weight: inherit;
   }
 }
 

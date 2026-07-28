@@ -9,6 +9,7 @@ import Reviews from '@/components/Reviews';
 import GoogleMapsEmbed from '@/components/GoogleMapsEmbed';
 import { updateSEO } from '@/utils/seo';
 import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
+import { naplesLocationContent } from '@/data/pageContent/mainPages/naples';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -65,82 +66,9 @@ const LocationNaples = () => {
     };
   }, [language]);
 
-  const contentData = {
-    en: {
-      title: "Visit Our Naples Location",
-      subtitle: "Your mental health journey starts here in the heart of Naples, Florida",
-      addressTitle: "Our Address",
-      contactTitle: "Contact Information", 
-      hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
-      insuranceTitle: "Accepted Insurance Plans",
-      areaTitle: "Areas We Serve",
-      mapTitle: "Find Us on the Map",
-      bookNow: "Book Appointment",
-      getDirections: "Get Directions",
-      callNow: "Call Now",
-      features: [
-        {
-          title: "Convenient Location",
-          description: "Easy access from major roads in Naples with ample parking available"
-        },
-        {
-          title: "Modern Facilities", 
-          description: "Comfortable, private setting designed for your peace of mind"
-        },
-        {
-          title: "Bilingual Services",
-          description: "Professional care available in both English and Spanish"
-        }
-      ],
-      services: [
-        "Anxiety & Depression Treatment",
-        "ADHD Evaluation & Management", 
-        "PTSD & Trauma Therapy",
-        "Bipolar Disorder Treatment",
-        "Medication Management",
-        "Telehealth Consultations"
-      ]
-    },
-    es: {
-      title: "Visite Nuestra Ubicación en Naples",
-      subtitle: "Su viaje de salud mental comienza aquí en el corazón de Naples, Florida",
-      addressTitle: "Nuestra Dirección",
-      contactTitle: "Información de Contacto",
-      hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
-      insuranceTitle: "Planes de Seguro Aceptados",
-      areaTitle: "Áreas que Servimos",
-      mapTitle: "Encuéntrenos en el Mapa",
-      bookNow: "Reservar Cita",
-      getDirections: "Obtener Direcciones",
-      callNow: "Llamar Ahora",
-      features: [
-        {
-          title: "Ubicación Conveniente",
-          description: "Fácil acceso desde las principales carreteras de Naples con amplio estacionamiento disponible"
-        },
-        {
-          title: "Instalaciones Modernas",
-          description: "Ambiente cómodo y privado diseñado para su tranquilidad"
-        },
-        {
-          title: "Servicios Bilingües", 
-          description: "Atención profesional disponible tanto en inglés como en español"
-        }
-      ],
-      services: [
-        "Tratamiento de Ansiedad y Depresión",
-        "Evaluación y Manejo de TDAH",
-        "Terapia de TEPT y Trauma", 
-        "Tratamiento de Trastorno Bipolar",
-        "Manejo de Medicamentos",
-        "Consultas de Telesalud"
-      ]
-    }
-  };
-
-  const content = contentData[language];
+  const content = naplesLocationContent[language];
+  const s = (key: string) => content.sections.find((section) => section.key === key)!;
+  const labels = s('labels').bullets!;
 
   return (
     <div className="min-h-screen">
@@ -166,7 +94,7 @@ const LocationNaples = () => {
                 {/* Mobile Title Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">
-                    <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
+                    <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (
                         <>
                           Your Trusted <span className="font-display italic">Psychiatrist</span> in Naples, FL
@@ -176,16 +104,14 @@ const LocationNaples = () => {
                           Su <span className="font-display italic">Psiquiatra</span> de Confianza en Naples, FL
                         </>
                       )}
-                    </h1>
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Mobile Description */}
               <p className="text-sm text-center font-body text-green-700 mb-4 px-4 max-w-sm mx-auto" data-testid="hero-description-mobile">
-                {language === 'en' 
-                  ? 'Comprehensive psychiatric care in Southwest Florida.' 
-                  : 'Atención psiquiátrica integral en el suroeste de Florida.'}
+                {s('hero-description').paragraphs![0]}
               </p>
 
               {/* Mobile Action Buttons */}
@@ -197,7 +123,7 @@ const LocationNaples = () => {
                   data-testid="button-schedule-consultation-mobile"
                 >
                   <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
-                  {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                  {labels[0]}
                 </Button>
                 
                 <Button 
@@ -208,7 +134,7 @@ const LocationNaples = () => {
                   data-testid="button-get-directions-mobile"
                 >
                   <Navigation className="w-4 h-4 sm:w-5 sm:h-5" />
-                  {content.getDirections}
+                  {labels[1]}
                 </Button>
               </div>
             </div>
@@ -237,7 +163,7 @@ const LocationNaples = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? '15+ Years Experience' : '15+ Años de Experiencia'}
+                          {s('hero-badges').bullets![0]}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
@@ -245,7 +171,7 @@ const LocationNaples = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? 'Bilingual Care' : 'Atención Bilingüe'}
+                          {s('hero-badges').bullets![1]}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
@@ -253,7 +179,7 @@ const LocationNaples = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? 'Modern Facilities' : 'Instalaciones Modernas'}
+                          {s('hero-badges').bullets![2]}
                         </span>
                       </div>
                     </div>
@@ -275,9 +201,7 @@ const LocationNaples = () => {
                     
                     {/* Description */}
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">
-                      {language === 'en' 
-                        ? 'Comprehensive psychiatric care in Southwest Florida.' 
-                        : 'Atención psiquiátrica integral en el suroeste de Florida.'}
+                      {s('hero-description').paragraphs![0]}
                     </p>
                     
                     {/* CTA Button */}
@@ -287,7 +211,7 @@ const LocationNaples = () => {
                       data-testid="button-schedule-consultation-desktop"
                     >
                       <Calendar className="w-5 h-5 mr-2" />
-                      {language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}
+                      {labels[0]}
                     </Button>
                   </div>
                 </div>
@@ -304,7 +228,7 @@ const LocationNaples = () => {
                 {/* Content Side */}
                 <div className="order-2 lg:order-1">
                   <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                    {language === 'en' ? 'Premium Location' : 'Ubicación Premium'}
+                    {s('banner-badge').paragraphs![0]}
                   </div>
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-6">
                     {language === 'en' ? (
@@ -316,16 +240,14 @@ const LocationNaples = () => {
                   
                   {/* Key Stats */}
                   <div className="mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">15+</div>
+                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">{s('banner-stat').paragraphs![0]}</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Years serving the Naples community with excellence' : 'Años sirviendo a la comunidad de Naples con excelencia'}
+                      {s('banner-stat').paragraphs![1]}
                     </div>
                   </div>
 
                   <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-body leading-relaxed">
-                    {language === 'en'
-                      ? 'Located in the heart of Naples on Tamiami Trail, our modern facility provides a welcoming, comfortable environment designed specifically for mental health care. Experience compassionate psychiatric treatment in a setting that prioritizes your privacy and comfort.'
-                      : 'Ubicado en el corazón de Naples en Tamiami Trail, nuestra instalación moderna proporciona un ambiente acogedor y cómodo diseñado específicamente para el cuidado de la salud mental. Experimente tratamiento psiquiátrico compasivo en un entorno que prioriza su privacidad y comodidad.'}
+                    {s('banner-body').paragraphs![0]}
                   </p>
 
                   <Button 
@@ -333,7 +255,7 @@ const LocationNaples = () => {
                     onClick={() => window.open(practiceInfo.googleMapsUrl, '_blank')}
                     data-testid="button-view-location"
                   >
-                    <span>{language === 'en' ? 'View Our Location' : 'Ver Nuestra Ubicación'}</span>
+                    <span>{labels[4]}</span>
                     <div className="w-8 h-8 sm:w-9 sm:h-9 min-w-[2rem] min-h-[2rem] sm:min-w-[2.25rem] sm:min-h-[2.25rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-600 flex-shrink-0">
                       <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
@@ -361,20 +283,13 @@ const LocationNaples = () => {
           {/* Features Badges */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             <div className="flex flex-wrap justify-center gap-3">
-              {[
-                { en: 'Easy Parking Available', es: 'Estacionamiento Fácil Disponible' },
-                { en: 'Accessible Location', es: 'Ubicación Accesible' },
-                { en: 'Private & Confidential', es: 'Privado y Confidencial' },
-                { en: 'Modern Facilities', es: 'Instalaciones Modernas' },
-                { en: 'Welcoming Environment', es: 'Ambiente Acogedor' },
-                { en: 'Professional Care', es: 'Atención Profesional' }
-              ].map((feature, index) => (
+              {s('banner-features').bullets!.map((feature, index) => (
                 <div key={index} className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-blue-100">
                   <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                     <CheckCircle className="w-3 h-3 text-blue-600" />
                   </div>
                   <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                    {language === 'en' ? feature.en : feature.es}
+                    {feature}
                   </span>
                 </div>
               ))}
@@ -405,9 +320,7 @@ const LocationNaples = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Comprehensive psychiatric services available at our Naples location, tailored to meet your mental health needs with compassionate care.'
-                  : 'Servicios psiquiátricos integrales disponibles en nuestra ubicación de Naples, adaptados para satisfacer sus necesidades de salud mental con atención compasiva.'}
+                {s('services-intro').paragraphs![0]}
               </p>
             </div>
             
@@ -415,60 +328,37 @@ const LocationNaples = () => {
               {[
                 {
                   id: 'anxiety',
-                  title: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad',
-                  description: language === 'en' 
-                    ? 'Expert care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments.'
-                    : 'Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.',
                   icon: Brain,
                   link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
                 },
                 {
                   id: 'depression',
-                  title: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión',
-                  description: language === 'en'
-                    ? 'Comprehensive care for major depression with personalized treatment plans and ongoing support.'
-                    : 'Atención integral para depresión mayor con planes de tratamiento personalizados y apoyo continuo.',
                   icon: Sun,
                   link: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
                 },
                 {
                   id: 'adhd',
-                  title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
-                  description: language === 'en'
-                    ? 'Specialized evaluation and treatment for adults and teens to improve focus and daily functioning.'
-                    : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
                   icon: Smile,
                   link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
                 },
                 {
                   id: 'ptsd',
-                  title: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT',
-                  description: language === 'en'
-                    ? 'Trauma-informed psychiatric care to help you heal and reclaim your life from traumatic experiences.'
-                    : 'Atención psiquiátrica informada en trauma para ayudarle a sanar y reclamar su vida de experiencias traumáticas.',
                   icon: Leaf,
                   link: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'
                 },
                 {
                   id: 'bipolar',
-                  title: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar',
-                  description: language === 'en'
-                    ? 'Expert mood stabilization to help achieve emotional balance and prevent future episodes.'
-                    : 'Estabilización experta del ánimo para lograr equilibrio emocional y prevenir episodios futuros.',
                   icon: Heart,
                   link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
                 },
                 {
                   id: 'medication-management',
-                  title: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos',
-                  description: language === 'en'
-                    ? 'Expert psychiatric medication evaluation, monitoring, and adjustment with comprehensive safety assessments.'
-                    : 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales.',
                   icon: User,
                   link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
                 }
               ].map((service, index) => {
                 const IconComponent = service.icon;
+                const sc = s(`service-${service.id}`);
                 return (
                   <div
                     key={service.id}
@@ -480,11 +370,11 @@ const LocationNaples = () => {
                     </div>
                     
                     <h3 className="text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 text-green-800">
-                      {service.title}
+                      {sc.heading}
                     </h3>
                     
                     <p className="text-sm sm:text-base font-body leading-relaxed mb-4 sm:mb-5 flex-grow text-gray-600">
-                      {service.description}
+                      {sc.paragraphs![0]}
                     </p>
 
                     <Link href={service.link} className="mt-auto">
@@ -496,30 +386,7 @@ const LocationNaples = () => {
                           <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                         </div>
                         <span className="text-left leading-tight flex-1 py-2">
-                          {language === 'en' 
-                            ? (() => {
-                                switch(service.id) {
-                                  case 'anxiety': return 'Learn About Anxiety Treatment';
-                                  case 'depression': return 'Learn About Depression Treatment';
-                                  case 'adhd': return 'Learn About ADHD Treatment';
-                                  case 'ptsd': return 'Learn About PTSD Treatment';
-                                  case 'bipolar': return 'Learn About Bipolar Treatment';
-                                  case 'medication-management': return 'Learn About Medication Management';
-                                  default: return 'Learn More';
-                                }
-                              })()
-                            : (() => {
-                                switch(service.id) {
-                                  case 'anxiety': return 'Conocer Tratamiento de Ansiedad';
-                                  case 'depression': return 'Conocer Tratamiento de Depresión';
-                                  case 'adhd': return 'Conocer Tratamiento de TDAH';
-                                  case 'ptsd': return 'Conocer Tratamiento de TEPT';
-                                  case 'bipolar': return 'Conocer Tratamiento Bipolar';
-                                  case 'medication-management': return 'Conocer Manejo de Medicamentos';
-                                  default: return 'Saber Más';
-                                }
-                              })()
-                          }
+                          {sc.bullets![0]}
                         </span>
                       </Button>
                     </Link>
@@ -568,9 +435,7 @@ const LocationNaples = () => {
                   </WellnessIcon>
                 </div>
                 <p className="text-lg text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
-                  {language === 'en'
-                    ? 'Our Naples office is conveniently located in the heart of the city. Use these familiar landmarks to find us easily.'
-                    : 'Nuestra oficina de Naples está convenientemente ubicada en el corazón de la ciudad. Use estos puntos de referencia familiares para encontrarnos fácilmente.'}
+                  {s('directions-intro').paragraphs![0]}
                 </p>
               </div>
               
@@ -583,10 +448,10 @@ const LocationNaples = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'From Naples Pier' : 'Desde Naples Pier'}
+                        {s('directions-pier').heading}
                       </h3>
                       <p className="text-sm text-gray-500 font-body">
-                        Downtown Naples
+                        {s('directions-pier').paragraphs![0]}
                       </p>
                     </div>
                   </div>
@@ -597,9 +462,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">1</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'From the Naples Pier at 25 12th Ave S, head east toward 5th Avenue S'
-                          : 'Desde Naples Pier en 25 12th Ave S, diríjase al este hacia 5th Avenue S'}
+                        {s('directions-pier').ordered![0]}
                       </p>
                     </div>
                     
@@ -608,9 +471,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">2</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Turn left on US-41 (Tamiami Trail) and head north for about 3 miles'
-                          : 'Gire a la izquierda en US-41 (Tamiami Trail) y diríjase al norte aproximadamente 3 millas'}
+                        {s('directions-pier').ordered![1]}
                       </p>
                     </div>
 
@@ -619,9 +480,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">3</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Our psychiatric practice is at 4760 Tamiami Trl N # 25, on the right side'
-                          : 'Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25, del lado derecho'}
+                        {s('directions-pier').ordered![2]}
                       </p>
                     </div>
                   </div>
@@ -629,7 +488,7 @@ const LocationNaples = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '8-12 minutes' : '8-12 minutos'}</span>
+                      <span>{s('directions-pier').bullets![0]}</span>
                     </div>
 
                     <Button 
@@ -638,7 +497,7 @@ const LocationNaples = () => {
                       data-testid="button-directions-pier"
                     >
                       <Navigation className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                      {labels[1]}
                     </Button>
                   </div>
                 </div>
@@ -651,10 +510,10 @@ const LocationNaples = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'From Naples Municipal Airport' : 'Desde Aeropuerto Municipal Naples'}
+                        {s('directions-airport').heading}
                       </h3>
                       <p className="text-sm text-gray-500 font-body">
-                        Airport Access
+                        {s('directions-airport').paragraphs![0]}
                       </p>
                     </div>
                   </div>
@@ -665,9 +524,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">1</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Exit the airport and head west on Airport Pulling Road toward US-41'
-                          : 'Salga del aeropuerto y diríjase al oeste por Airport Pulling Road hacia US-41'}
+                        {s('directions-airport').ordered![0]}
                       </p>
                     </div>
                     
@@ -676,9 +533,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">2</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Turn right on US-41 (Tamiami Trail) and head north for about 2 miles'
-                          : 'Gire a la derecha en US-41 (Tamiami Trail) y diríjase al norte aproximadamente 2 millas'}
+                        {s('directions-airport').ordered![1]}
                       </p>
                     </div>
 
@@ -687,9 +542,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">3</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Look for our mental health practice at 4760 Tamiami Trl N # 25, on the right'
-                          : 'Busque nuestra práctica de salud mental en 4760 Tamiami Trl N # 25, a la derecha'}
+                        {s('directions-airport').ordered![2]}
                       </p>
                     </div>
                   </div>
@@ -697,7 +550,7 @@ const LocationNaples = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '6-8 minutes' : '6-8 minutos'}</span>
+                      <span>{s('directions-airport').bullets![0]}</span>
                     </div>
 
                     <Button 
@@ -706,7 +559,7 @@ const LocationNaples = () => {
                       data-testid="button-directions-airport"
                     >
                       <Navigation className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                      {labels[1]}
                     </Button>
                   </div>
                 </div>
@@ -719,10 +572,10 @@ const LocationNaples = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-display font-bold text-green-800 mb-2">
-                        {language === 'en' ? 'From Waterside Shops' : 'Desde Waterside Shops'}
+                        {s('directions-waterside').heading}
                       </h3>
                       <p className="text-sm text-gray-500 font-body">
-                        Shopping District
+                        {s('directions-waterside').paragraphs![0]}
                       </p>
                     </div>
                   </div>
@@ -733,9 +586,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">1</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'From Waterside Shops at 5415 Tamiami Trail N, head north on US-41'
-                          : 'Desde Waterside Shops en 5415 Tamiami Trail N, diríjase al norte por US-41'}
+                        {s('directions-waterside').ordered![0]}
                       </p>
                     </div>
                     
@@ -744,9 +595,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">2</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Continue north on Tamiami Trail for approximately 1.5 miles past Pine Ridge Road'
-                          : 'Continúe al norte por Tamiami Trail aproximadamente 1.5 millas pasando Pine Ridge Road'}
+                        {s('directions-waterside').ordered![1]}
                       </p>
                     </div>
 
@@ -755,9 +604,7 @@ const LocationNaples = () => {
                         <span className="text-green-800 font-bold text-xs">3</span>
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
-                        {language === 'en'
-                          ? 'Our office is at 4760 Tamiami Trl N # 25, on the right side just before Immokalee Road'
-                          : 'Nuestra oficina está en 4760 Tamiami Trl N # 25, del lado derecho justo antes de Immokalee Road'}
+                        {s('directions-waterside').ordered![2]}
                       </p>
                     </div>
                   </div>
@@ -765,7 +612,7 @@ const LocationNaples = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '4-6 minutes' : '4-6 minutos'}</span>
+                      <span>{s('directions-waterside').bullets![0]}</span>
                     </div>
 
                     <Button 
@@ -774,7 +621,7 @@ const LocationNaples = () => {
                       data-testid="button-directions-waterside"
                     >
                       <Navigation className="w-4 h-4 mr-2" />
-                      {language === 'en' ? 'Get Directions' : 'Obtener Direcciones'}
+                      {labels[1]}
                     </Button>
                   </div>
                 </div>
@@ -784,7 +631,7 @@ const LocationNaples = () => {
             <div className="mt-16 text-center">
               <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-lg border border-green-100 max-w-4xl mx-auto">
                 <h3 className="text-2xl font-display font-bold text-green-800 mb-6">
-                  {language === 'en' ? 'Easy Access for Naples Residents' : 'Fácil Acceso para Residentes de Naples'}
+                  {s('access-heading').heading}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                   <div className="space-y-4">
@@ -792,12 +639,10 @@ const LocationNaples = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Convenient Location' : 'Ubicación Conveniente'}
+                          {s('access-location').heading}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
-                          {language === 'en'
-                            ? 'Located directly on US-41, our Naples psychiatric practice is easily accessible from all Naples neighborhoods'
-                            : 'Ubicada directamente en US-41, nuestra práctica psiquiátrica en Naples es fácilmente accesible desde todos los vecindarios de Naples'}
+                          {s('access-location').paragraphs![0]}
                         </p>
                       </div>
                     </div>
@@ -806,12 +651,10 @@ const LocationNaples = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                          {s('access-parking').heading}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
-                          {language === 'en'
-                            ? 'Free, convenient parking available for all Naples patients visiting our facility'
-                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Naples que visiten nuestras instalaciones'}
+                          {s('access-parking').paragraphs![0]}
                         </p>
                       </div>
                     </div>
@@ -822,12 +665,10 @@ const LocationNaples = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Transit Friendly' : 'Amigable para el Transporte'}
+                          {s('access-transit').heading}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
-                          {language === 'en'
-                            ? 'Accessible by public transportation and ride-sharing services from Naples'
-                            : 'Accesible por transporte público y servicios de viajes compartidos desde Naples'}
+                          {s('access-transit').paragraphs![0]}
                         </p>
                       </div>
                     </div>
@@ -836,12 +677,10 @@ const LocationNaples = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Clear Signage' : 'Señalización Clara'}
+                          {s('access-signage').heading}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
-                          {language === 'en'
-                            ? 'Well-marked building with clear signs to help you find our mental health practice easily'
-                            : 'Edificio bien marcado con señales claras para ayudarle a encontrar nuestra práctica de salud mental fácilmente'}
+                          {s('access-signage').paragraphs![0]}
                         </p>
                       </div>
                     </div>
@@ -850,9 +689,7 @@ const LocationNaples = () => {
 
                 <div className="mt-8 pt-6 border-t border-green-100">
                   <p className="text-center text-gray-600 font-body text-sm leading-relaxed">
-                    {language === 'en'
-                      ? 'Serving Naples residents with expert psychiatric care at our conveniently located Naples practice. Call (239) 423-0272 for directions or appointment assistance.'
-                      : 'Sirviendo a los residentes de Naples con atención psiquiátrica experta en nuestra práctica convenientemente ubicada en Naples. Llame al (239) 423-0272 para direcciones o asistencia con citas.'}
+                    {s('access-footer').paragraphs![0]}
                   </p>
                 </div>
               </div>
@@ -880,9 +717,7 @@ const LocationNaples = () => {
                 </WellnessIcon>
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
-                {language === 'en'
-                  ? 'Mental health is fundamental to building a thriving community. We proudly support Naples through our psychiatric care services and by recognizing the vital organizations that enhance our vibrant city.'
-                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Naples a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que mejoran nuestra ciudad vibrante.'}
+                {s('community-intro').paragraphs![0]}
               </p>
             </div>
             
@@ -1091,7 +926,7 @@ const LocationNaples = () => {
                 data-testid="button-schedule-consultation"
               >
                 <Heart className="w-5 h-5 mr-2" />
-                {content.bookNow}
+                {labels[2]}
               </Button>
               <Button 
                 variant="outline"
@@ -1100,7 +935,7 @@ const LocationNaples = () => {
                 data-testid="button-call-now"
               >
                 <Phone className="w-4 h-4 mr-2" />
-                {content.callNow}
+                {labels[3]}
               </Button>
             </div>
           </div>
