@@ -185,7 +185,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
                 size="sm"
                 onClick={handleAcceptAll}
                 data-testid="button-accept-all"
-                className="bg-green-600 hover:bg-green-700 whitespace-nowrap"
+                className="bg-green-700 hover:bg-green-800 whitespace-nowrap"
               >
                 {tr.acceptAll}
               </Button>

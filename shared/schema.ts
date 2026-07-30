@@ -227,6 +227,7 @@ export const blogPostTags = pgTable(
   {
     postId: integer("post_id").references(() => blogPosts.id, { onDelete: "cascade" }).notNull(),
     tagId: integer("tag_id").references(() => blogTags.id, { onDelete: "cascade" }).notNull(),
+    position: integer("position").default(0).notNull(),
   },
   (table) => [
     primaryKey({ columns: [table.postId, table.tagId] }),

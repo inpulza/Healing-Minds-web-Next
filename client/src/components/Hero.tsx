@@ -147,7 +147,7 @@ const Hero = React.memo(() => {
                 <div className="ml-0 flex flex-row items-center gap-4">
                   <Link href="/services">
                     <Button
-                      className="whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 text-white hover:bg-green-900 px-6 md:px-8 py-5 md:py-6 shadow-lg bg-[#16a34a]"
+                      className="whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 text-white hover:bg-green-900 px-6 md:px-8 py-5 md:py-6 shadow-lg bg-[#15803d]"
                       data-testid="hero-book-consultation"
                     >
                       <span>{buttons[0]}</span>

@@ -1,0 +1,72 @@
+# CI, documentation and local verification tooling are not part of the Next runtime.
+.github/
+.agents/
+.windsurf/
+_arnes/
+arnes/
+docs/
+tests/
+scripts/
+migrations/
+
+# Editor/agent instructions and legacy provider configuration.
+.cursorrules
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+skills-lock.json
+.replit
+replit.md
+SCHEMA_VALIDATION_INSTRUCTIONS.md
+seo_strategy.md
+vite.config.ts
+
+# attached_assets mixes audit material with production imports.
+# Keep only the 36 files imported by the application.
+attached_assets/*
+!attached_assets/10_1755868276798.webp
+!attached_assets/2b5aedce-1c8b-495c-a402-1c0a19a1633b_1755211366855.webp
+!attached_assets/3_1755868276797.webp
+!attached_assets/4142165d-97e6-4e50-8313-f705c8e6e93f_1755212013126.webp
+!attached_assets/6180c64d-fa53-4c88-8339-6aa0b06bdc93_1755211836265.webp
+!attached_assets/6_1755868276798.webp
+!attached_assets/8_1755868276798.webp
+!attached_assets/bilingual-consultation-updated.webp
+!attached_assets/d7b136b4-35bd-482a-b24a-98a1c5bb1abf_1755212133166.webp
+!attached_assets/dfb74c06-cc22-4bd4-a763-984d9e0fb151_1755252634353.webp
+!attached_assets/doctor-consultation-square.webp
+!attached_assets/doctor-consultation.webp
+!attached_assets/doctor-profile-hq.webp
+!attached_assets/dr-melva-location-hero.webp
+!attached_assets/e4031136-1b10-4229-8e1d-2c74e4186617_1755210913815.webp
+!attached_assets/e8202da4-08bf-45d6-b0b6-392795b53874_1755211669105.webp
+!attached_assets/f01c7d7e-f4d9-4a02-b3e0-d02f5f47a354_1755211669105.webp
+!attached_assets/f91b2e9a-8ab0-4719-b4c9-15edc522f27f_1755211669104.webp
+!attached_assets/f9744cdb-4b98-4681-9f74-b6f4692a2ced (1)_1755211836264.webp
+
+!attached_assets/generated_images/
+attached_assets/generated_images/*
+!attached_assets/generated_images/ADHD_concentration_challenges_4b3ea4fb.webp
+!attached_assets/generated_images/ADHD_evaluation_management_b7a38ebf.webp
+!attached_assets/generated_images/Access_from_anywhere_Florida_325859e3.webp
+!attached_assets/generated_images/Anxiety_depression_calm_bdd7c98f.webp
+!attached_assets/generated_images/Anxiety_representation_efc2b954.webp
+!attached_assets/generated_images/Bipolar_balance_stability_da9b84ed.webp
+!attached_assets/generated_images/Continuity_of_care_87991256.webp
+!attached_assets/generated_images/Convenient_time_saving_66f1475e.webp
+!attached_assets/generated_images/Hope_and_growth_symbolism_978bb907.webp
+!attached_assets/generated_images/Initial_psychiatric_evaluation_99ae51a4.webp
+!attached_assets/generated_images/Medical_assessment_tools_78e50118.webp
+!attached_assets/generated_images/Medication_management_studio_556b9569.webp
+!attached_assets/generated_images/PTSD_trauma_therapy_61fd2d71.webp
+!attached_assets/generated_images/Private_secure_platform_a7ed7a02.webp
+!attached_assets/generated_images/Professional_psychiatrist_office_photo_e259ed9b.webp
+!attached_assets/generated_images/Therapy_room_interior_4b5878fd.webp
+!attached_assets/generated_images/Wellness_meditation_space_ae6f4d77.webp
+
+# Local and generated state.
+.env*
+.vercel/
+.next/
+dist/
+node_modules/
