@@ -105,6 +105,7 @@ const MobileToolbar = () => {
                 <IconComponent 
                   className={button.icon === SiWhatsapp ? "w-5 h-5 mb-1" : "w-6 h-6 mb-1"}
                   strokeWidth={button.icon === SiWhatsapp ? undefined : 1.5}
+                  aria-hidden="true"
                 />
                 <span className="text-xs font-medium leading-tight text-center">
                   {button.label}

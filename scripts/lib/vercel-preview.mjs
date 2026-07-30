@@ -4,7 +4,6 @@ export function candidateContextOptions(secret = process.env.VERCEL_AUTOMATION_B
   return {
     extraHTTPHeaders: {
       "x-vercel-protection-bypass": secret,
-      "x-vercel-set-bypass-cookie": "true",
     },
   };
 }

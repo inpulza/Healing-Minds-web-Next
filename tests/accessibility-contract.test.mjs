@@ -23,5 +23,6 @@ test("toolbar and dropdown accessible names contain their visible labels", () =>
   const toolbar = read("client/src/components/MobileToolbar.tsx");
 
   assert.match(toolbar, /aria-label=\{`\$\{button\.label\}:/);
+  assert.match(toolbar, /<IconComponent[\s\S]{0,240}aria-hidden="true"/);
   assert.match(header, /aria-label=\{`\$\{item\.label\}:/);
 });

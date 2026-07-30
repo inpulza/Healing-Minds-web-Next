@@ -14,7 +14,6 @@ test("candidate browser contexts use the Vercel automation bypass without exposi
   assert.deepEqual(options, {
     extraHTTPHeaders: {
       "x-vercel-protection-bypass": "test-secret",
-      "x-vercel-set-bypass-cookie": "true",
     },
   });
 });
