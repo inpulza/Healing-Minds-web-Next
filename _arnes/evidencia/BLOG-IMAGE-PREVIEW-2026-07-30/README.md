@@ -81,3 +81,26 @@ Vercel was checked by variable name and target only; no environment value was
 read. `BLOG_IMAGE_ENABLED=true` was added as a non-secret Preview-only variable.
 `OPENAI_API_KEY` and `BLOB_READ_WRITE_TOKEN` were already present for Preview.
 Production was not changed.
+
+## Live Preview evidence
+
+- PR: `https://github.com/inpulza/Healing-Minds-web-Next/pull/4`
+- Head: `3d011489b3b40b009af491ce00ef304585f70a47`
+- Deployment: `dpl_Fg5wpB9K8kjR9WMKD7Z3anqvqtna`
+- Target/status: Preview / Ready
+- Stable branch alias:
+  `https://healing-minds-psychi-git-3e2ff0-inpulzasolutions-6847s-projects.vercel.app`
+- Authenticated Vercel request to `/admin/login`: HTTP 200.
+- Authenticated Vercel request to `/api/admin/session`: success, configured,
+  custom mode, unauthenticated.
+- A clean anonymous browser is redirected to Vercel login by Deployment
+  Protection. This is expected and occurs before the application.
+- GitHub Quality and Vercel checks: PASS.
+
+## Deployment identity note
+
+The repository and PR owner are `inpulza`. The local Git author configured for
+the two commits is `Claude Code <inpulza.media@gmail.com>`, which GitHub links
+to `inpulzamedia`. Vercel can display that commit identity while the deployment
+itself belongs to the `inpulzasolutions-6847s-projects` team. These are separate
+concepts; no account owner or Git identity was changed in this task.

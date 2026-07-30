@@ -61,3 +61,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Ejecutar una generación real en Preview y rechazar cualquier candidato con manos, rostro, contacto, texto, logo, encuadre o implicación clínica defectuosos.
 **Archivos tocados:** `server/blog/images/prompt.ts`, `scripts/blog-image-guards.ts`, `docs/BLOG_VISUAL_EDITORIAL_METHOD.md`, `docs/SEO_PUBLISHING_SPRINT_17.md`, `_arnes/DECISIONES.md`, `_arnes/BITACORA.md`, evidencia del arnés.
 **Evidencia:** El guard focalizado exige versión v3, tratamiento de campaña, look medium-format, adultos ficticios, exclusión de menores y coherencia anatómica/espacial; la validación completa se repite antes del push.
+
+## 2026-07-30T18:41:15+02:00 Codex — cierre de Preview
+**Qué se hizo:** Se publicó el segundo commit de campaña en la rama del PR draft #4, se esperó el deployment de Vercel y se verificaron las rutas vivas sin introducir credenciales reales.
+**Decisiones:** El navegador anónimo queda bloqueado por Deployment Protection de Vercel, como corresponde; no se inició sesión en la cuenta de Jordan ni se desactivó esa protección. No se cambió la identidad Git local.
+**Pendientes/bugs:** Jordan debe abrir el Preview desde su sesión de Vercel, hacer una generación real y aprobar visualmente el candidato. Normalizar `user.name`/`user.email` local si se desea que futuros commits/deployments muestren otra identidad.
+**Archivos tocados:** evidencia y bitácora del arnés.
+**Evidencia:** PR #4 draft, head `3d011489b3b40b009af491ce00ef304585f70a47`, mergeable; GitHub Quality PASS; Vercel PASS; deployment `dpl_Fg5wpB9K8kjR9WMKD7Z3anqvqtna` Preview Ready; `/admin/login` HTTP 200 y `/api/admin/session` confirmó `configured=true`, `mode=custom`, `authenticated=false` mediante la CLI autenticada de Vercel.
