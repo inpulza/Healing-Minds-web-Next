@@ -15,3 +15,20 @@ test("contact email HTML escapes user-controlled fields", () => {
   });
   assert.equal(output, "&lt;img src=x onerror=&quot;alert(1)&quot;&gt;&amp;&#39;");
 });
+
+test("Resend API error responses are treated as delivery failures", () => {
+  const script = [
+    'import { assertResendSuccess } from "./server/services/email.ts";',
+    'try {',
+    '  assertResendSuccess({ data: null, error: { name: "validation_error", message: "rejected" } });',
+    '  process.stdout.write("accepted");',
+    '} catch (error) {',
+    '  process.stdout.write(error instanceof Error ? error.message : "unknown");',
+    '}',
+  ].join("\n");
+  const output = execFileSync(process.execPath, ["--import", "tsx", "--input-type=module", "--eval", script], {
+    cwd,
+    encoding: "utf8",
+  });
+  assert.equal(output, "Resend rejected email: validation_error");
+});
