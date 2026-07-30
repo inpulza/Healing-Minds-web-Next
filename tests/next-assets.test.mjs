@@ -11,6 +11,13 @@ test("the shared image component resolves Next static image modules to browser U
   assert.match(source, /src=\{resolvedSrc\}/);
 });
 
+test("the shared image component reveals assets that completed before hydration", () => {
+  assert.match(source, /imageRef/);
+  assert.match(source, /image\?\.complete/);
+  assert.match(source, /image\.naturalWidth > 0/);
+  assert.match(source, /setIsLoaded\(true\)/);
+});
+
 test("direct img elements resolve imported static assets instead of serializing objects", () => {
   const root = path.join(process.cwd(), "client", "src");
   const files = [];

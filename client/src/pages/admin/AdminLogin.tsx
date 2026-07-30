@@ -72,7 +72,8 @@ export default function AdminLogin() {
         ) : !session.configured ? (
           <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 px-3 py-3 text-sm text-amber-800">
             Admin authentication is not configured. Set the BLOG_ADMIN_USERNAME,
-            BLOG_ADMIN_PASSWORD_HASH and BLOG_ADMIN_SESSION_SECRET environment variables.
+            BLOG_ADMIN_PASSWORD (or BLOG_ADMIN_PASSWORD_HASH) and
+            BLOG_ADMIN_SESSION_SECRET environment variables.
           </div>
         ) : session.mode === 'custom' ? (
           <form className="mt-6 space-y-4" onSubmit={submitCustomLogin}>

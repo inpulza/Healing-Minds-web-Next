@@ -23,7 +23,8 @@
     "blog:topic-check": "tsx scripts/blog-topic-guards.ts",
     "blog:link-check": "tsx scripts/blog-link-guards.ts",
     "blog:link-seed": "tsx scripts/seed-blog-links.ts",
-    "blog:link-backfill": "tsx scripts/blog-link-backfill.ts"
+    "blog:link-backfill": "tsx scripts/blog-link-backfill.ts",
+    "admin:password-hash": "node scripts/admin-password-hash.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
