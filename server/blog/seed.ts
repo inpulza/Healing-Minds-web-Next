@@ -12,6 +12,7 @@ import {
 } from "@shared/schema";
 import { db } from "../db";
 import { getHealingMindsCategories, type HealingMindsCategory } from "./strategy/healing-minds";
+import blogSnapshot from "../../shared/blog-snapshot.json";
 
 const TRANSLATION_GROUP_ID = "4a6829e5-68cc-4b2a-9c51-19616ec41f8b";
 const PUBLISHED_AT = new Date("2026-06-23T12:00:00.000Z");
@@ -158,12 +159,18 @@ export async function seedInitialBlogPosts(options: SeedBlogOptions = {}): Promi
   )));
   const enCategory = categoryByKey.get("en:anxiety");
   const esCategory = categoryByKey.get("es:anxiety");
-  if (!enCategory || !esCategory) throw new Error("Healing Minds anxiety taxonomy could not be seeded");
+  const bipolarCategory = categoryByKey.get("en:bipolar");
+  if (!enCategory || !esCategory || !bipolarCategory) {
+    throw new Error("Healing Minds published-post taxonomy could not be seeded");
+  }
 
   const enTags = strategyTags.filter(tag => tag.language === "en" && ["anxiety", "medication-management"].includes(tag.slug));
   enTags.push(await getOrCreateTag("Naples Psychiatry", "naples-psychiatry", "en"));
   const esTags = strategyTags.filter(tag => tag.language === "es" && ["ansiedad", "manejo-medicamentos"].includes(tag.slug));
   esTags.push(await getOrCreateTag("Psiquiatria Naples", "psiquiatria-naples", "es"));
+  const bipolarTags = strategyTags.filter(tag => (
+    tag.language === "en" && ["bipolar-care", "depression", "medication-management"].includes(tag.slug)
+  ));
 
   const enPost = await getOrCreatePost({
     title: "Understanding Anxiety Treatment in Naples: What Patients Can Expect",
@@ -217,8 +224,37 @@ export async function seedInitialBlogPosts(options: SeedBlogOptions = {}): Promi
     publishedAt: PUBLISHED_AT,
   });
 
+  const bipolarSnapshot = blogSnapshot["/blog/bipolar-medication-follow-up-questions"];
+  const bipolarPost = await getOrCreatePost({
+    title: bipolarSnapshot.title,
+    slug: bipolarSnapshot.slug,
+    language: "en",
+    translationGroupId: bipolarSnapshot.translationGroupId,
+    excerpt: bipolarSnapshot.excerpt,
+    content: bipolarSnapshot.content,
+    featuredImage: bipolarSnapshot.featuredImage,
+    featuredImageAlt: bipolarSnapshot.featuredImageAlt,
+    authorId: author.id,
+    categoryId: bipolarCategory.id,
+    status: "published",
+    isFeatured: bipolarSnapshot.isFeatured,
+    metaTitle: bipolarSnapshot.metaTitle,
+    metaDescription: bipolarSnapshot.metaDescription,
+    readingTime: bipolarSnapshot.readingTime,
+    topicKey: bipolarSnapshot.topicKey,
+    targetKeyword: bipolarSnapshot.targetKeyword,
+    contentPillar: bipolarSnapshot.contentPillar,
+    patientStage: bipolarSnapshot.patientStage,
+    contentFormat: bipolarSnapshot.contentFormat,
+    searchIntent: bipolarSnapshot.searchIntent,
+    expertiseAngle: bipolarSnapshot.expertiseAngle,
+    topicStrategyVersion: bipolarSnapshot.topicStrategyVersion,
+    publishedAt: new Date(bipolarSnapshot.publishedAt),
+  });
+
   await attachTags(enPost.id, enTags.map(tag => tag.id));
   await attachTags(esPost.id, esTags.map(tag => tag.id));
+  await attachTags(bipolarPost.id, bipolarTags.map(tag => tag.id));
 
-  logger.log(`Blog seed ready: ${enPost.slug}, ${esPost.slug}`);
+  logger.log(`Blog seed ready: ${enPost.slug}, ${esPost.slug}, ${bipolarPost.slug}`);
 }

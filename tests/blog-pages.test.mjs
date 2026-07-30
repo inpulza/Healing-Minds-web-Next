@@ -29,3 +29,10 @@ test("the Next public graph and API render the frozen live blog posts", () => {
   assert.match(component, /blog-snapshot\.json/);
   assert.match(component, /typeof window/);
 });
+
+test("the database seed includes every frozen published post", () => {
+  const seed = fs.readFileSync(path.join(root, "server", "blog", "seed.ts"), "utf8");
+  for (const post of Object.values(snapshot)) {
+    assert.ok(seed.includes(post.slug), `seed is missing ${post.slug}`);
+  }
+});
