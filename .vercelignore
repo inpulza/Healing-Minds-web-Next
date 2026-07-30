@@ -19,7 +19,6 @@ skills-lock.json
 replit.md
 SCHEMA_VALIDATION_INSTRUCTIONS.md
 seo_strategy.md
-vite.config.ts
 
 # attached_assets mixes audit material with production imports.
 # Keep only the 36 files imported by the application.
