@@ -1,8 +1,9 @@
 # Next and admin stabilization evidence — 2026-07-30
 
 Scope: post-migration stabilization on `fix/next-admin-stabilization`.
-No Vercel environment, deployment, domain, production database, or real
-credential was read or changed.
+No Vercel secret, production database, or real credential was read by Codex.
+Jordan later updated Vercel environment values manually and confirmed the
+custom login in both Production and the PR #2 Preview. The domain was unchanged.
 
 ## Live baseline diagnosis
 
@@ -48,6 +49,10 @@ avoided touching a real database while proving the authenticated shell and
 protected boundary. The route-handler test covers the protected API without
 real secrets.
 
+The deployed configuration retains the supported Sensitive
+`BLOG_ADMIN_PASSWORD` path. The scrypt utility is an optional hardening/rotation
+path; it is not required while the direct Sensitive password remains in use.
+
 ## Responsive and bilingual browser verification
 
 Real Chromium, local production build:
@@ -89,8 +94,9 @@ Automated structural guards confirm:
   modules, link library/review/report/audit endpoints, and admin panels are
   present.
 - `migrations/0000_initial_schema.sql` contains all required Sprint 17–19
-  tables. `db:verify` applied 94 statements, found 18 tables and 20 foreign
-  keys, and passed its insert smoke.
+  tables. After synchronizing merged PR #1, `db:verify` applied both migrations
+  and 95 statements, found 18 tables and 20 foreign keys, preserved ordered
+  blog tags, and passed its insert smoke.
 - No critical endpoint used by the migrated Sprints 17–19 admin UI is absent
   from the Next catch-all handler.
 
@@ -98,17 +104,22 @@ Automated structural guards confirm:
 
 ```text
 npm test
-tests 47, pass 47, fail 0
+tests 55, pass 55, fail 0
 
 npm run check
 PASS
 
 npm run db:verify
-{"ok":true,"statements":94,"tables":18,"foreignKeys":20,"contactInsert":"pass"}
+{"ok":true,"migrations":["0000_initial_schema.sql","0001_ordered_blog_tags.sql"],"statements":95,"tables":18,"foreignKeys":20,"orderedBlogTags":"pass","contactInsert":"pass"}
 
 RESEND_API_KEY=re_build_placeholder npm run build
 PASS — 89/89 static pages generated; admin pages and APIs dynamic
 ```
+
+PR #2 was synchronized with merged PR #1. The only manual conflict was the
+append-only arnés log; both entries were retained. Header changes merged
+compatibly. Jordan then confirmed the redeployed PR #2 Preview accepts the
+configured credentials and opens the admin.
 
 The arnés clone pipeline still reports phase 2 incomplete because its original
 section inventory/spec checkpoint was never completed. This stabilization did

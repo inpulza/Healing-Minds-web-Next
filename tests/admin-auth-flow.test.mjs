@@ -71,9 +71,19 @@ test("custom Next admin completes login, protected API, session and logout witho
     noStore(logoutResponse);
     assert.match(logoutResponse.headers.get("set-cookie") || "", /Max-Age=0/i);
 
-    process.env.BLOG_ADMIN_AUTH_MODE = "off";
-    delete process.env.BLOG_ADMIN_USERNAME;
     delete process.env.BLOG_ADMIN_PASSWORD_HASH;
+    process.env.BLOG_ADMIN_PASSWORD = ${JSON.stringify(fixturePassword)};
+    const rawPasswordLogin = await login.POST(new NextRequest("https://example.invalid/api/admin/login", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": "192.0.2.12" },
+      body: JSON.stringify({ username: "fixture-editor", password: ${JSON.stringify(fixturePassword)} }),
+    }));
+    assert.equal(rawPasswordLogin.status, 200);
+    noStore(rawPasswordLogin);
+
+    process.env.BLOG_ADMIN_AUTH_MODE = "off";
+    delete process.env.BLOG_ADMIN_PASSWORD;
+    delete process.env.BLOG_ADMIN_USERNAME;
     delete process.env.BLOG_ADMIN_SESSION_SECRET;
     assert.equal(auth.adminAuthMode(), "custom");
     assert.equal(auth.adminAuthConfigured(), false);
@@ -91,6 +101,7 @@ test("custom Next admin completes login, protected API, session and logout witho
       protectedApi: "pass",
       logout: "pass",
       noStore: "pass",
+      rawSensitivePassword: "pass",
       productionFailClosed: "pass",
     }));
   `;
@@ -108,6 +119,7 @@ test("custom Next admin completes login, protected API, session and logout witho
     protectedApi: "pass",
     logout: "pass",
     noStore: "pass",
+    rawSensitivePassword: "pass",
     productionFailClosed: "pass",
   });
 });

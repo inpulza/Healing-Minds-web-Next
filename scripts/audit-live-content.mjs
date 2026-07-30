@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { candidateContextOptions } from "./lib/vercel-preview.mjs";
 
 const SOURCE = process.env.SOURCE_ORIGIN || "https://www.healingmindsp.com";
 const CANDIDATE = process.env.CANDIDATE_ORIGIN || "http://127.0.0.1:3100";
@@ -76,7 +77,10 @@ if (paths.length !== 77) throw new Error(`Expected 77 live sitemap URLs, receive
 
 const browser = await chromium.launch({ headless: true });
 const sourceContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-const candidateContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const candidateContext = await browser.newContext({
+  viewport: { width: 1440, height: 900 },
+  ...candidateContextOptions(),
+});
 const results = new Array(paths.length);
 let cursor = 0;
 

@@ -275,13 +275,13 @@ const Header = () => {
                         : 'text-green-700 hover:text-primary after:w-0 hover:after:w-3/4'
                     }`}
                     data-testid={`nav-${item.href.replace('/', '') || 'home'}`}
-                    aria-label={
+                    aria-label={`${item.label}: ${
                       item.dropdownType === 'services'
-                        ? (isServicesOpen ? (language === 'en' ? 'Close services menu' : 'Cerrar menú de servicios') : (language === 'en' ? 'Open services menu' : 'Abrir menú de servicios'))
+                        ? (isServicesOpen ? (language === 'en' ? 'close menu' : 'cerrar menú') : (language === 'en' ? 'open menu' : 'abrir menú'))
                         : item.dropdownType === 'locations'
-                        ? (isLocationsOpen ? (language === 'en' ? 'Close locations menu' : 'Cerrar menú de ubicaciones') : (language === 'en' ? 'Open locations menu' : 'Abrir menú de ubicaciones'))
+                        ? (isLocationsOpen ? (language === 'en' ? 'close menu' : 'cerrar menú') : (language === 'en' ? 'open menu' : 'abrir menú'))
                         : ''
-                    }
+                    }`}
                     aria-expanded={item.dropdownType === 'services' ? isServicesOpen : item.dropdownType === 'locations' ? isLocationsOpen : false}
                   >
                     {item.label}
@@ -331,7 +331,7 @@ const Header = () => {
             </Button>
             <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
               <Button
-                className="group inline-flex items-center justify-center gap-2 rounded-full text-sm lg:text-base font-semibold transition-all duration-300 bg-green-600 text-white hover:bg-green-700 px-6 lg:px-8 py-5 lg:py-6 whitespace-nowrap"
+                className="group inline-flex items-center justify-center gap-2 rounded-full text-sm lg:text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-6 lg:px-8 py-5 lg:py-6 whitespace-nowrap"
                 data-testid="book-now-button"
               >
                 <div className="w-5 h-5 lg:w-6 lg:h-6 min-w-[1.25rem] lg:min-w-[1.5rem] min-h-[1.25rem] lg:min-h-[1.5rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">

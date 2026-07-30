@@ -138,12 +138,15 @@ async function getOrCreatePost(values: typeof blogPosts.$inferInsert): Promise<B
 }
 
 async function attachTags(postId: number, tagIds: number[]): Promise<void> {
-  if (tagIds.length === 0) return;
+  await db.transaction(async (tx) => {
+    await tx.delete(blogPostTags).where(eq(blogPostTags.postId, postId));
+    if (tagIds.length === 0) return;
 
-  await db
-    .insert(blogPostTags)
-    .values(tagIds.map(tagId => ({ postId, tagId })))
-    .onConflictDoNothing();
+    await tx
+      .insert(blogPostTags)
+      .values(tagIds.map((tagId, position) => ({ postId, tagId, position })))
+      .onConflictDoNothing();
+  });
 }
 
 export async function seedInitialBlogPosts(options: SeedBlogOptions = {}): Promise<void> {
@@ -164,13 +167,25 @@ export async function seedInitialBlogPosts(options: SeedBlogOptions = {}): Promi
     throw new Error("Healing Minds published-post taxonomy could not be seeded");
   }
 
-  const enTags = strategyTags.filter(tag => tag.language === "en" && ["anxiety", "medication-management"].includes(tag.slug));
-  enTags.push(await getOrCreateTag("Naples Psychiatry", "naples-psychiatry", "en"));
-  const esTags = strategyTags.filter(tag => tag.language === "es" && ["ansiedad", "manejo-medicamentos"].includes(tag.slug));
-  esTags.push(await getOrCreateTag("Psiquiatria Naples", "psiquiatria-naples", "es"));
-  const bipolarTags = strategyTags.filter(tag => (
+  const enAvailableTags = [
+    ...strategyTags.filter(tag => tag.language === "en" && ["anxiety", "medication-management"].includes(tag.slug)),
+    await getOrCreateTag("Naples Psychiatry", "naples-psychiatry", "en"),
+  ];
+  const esAvailableTags = [
+    ...strategyTags.filter(tag => tag.language === "es" && ["ansiedad", "manejo-medicamentos"].includes(tag.slug)),
+    await getOrCreateTag("Psiquiatria Naples", "psiquiatria-naples", "es"),
+  ];
+  const bipolarAvailableTags = strategyTags.filter(tag => (
     tag.language === "en" && ["bipolar-care", "depression", "medication-management"].includes(tag.slug)
   ));
+  const orderTags = (available: BlogTag[], slugs: string[]) => slugs.map(slug => {
+    const tag = available.find(candidate => candidate.slug === slug);
+    if (!tag) throw new Error(`Missing seeded blog tag ${slug}`);
+    return tag;
+  });
+  const enTags = orderTags(enAvailableTags, ["anxiety", "medication-management", "naples-psychiatry"]);
+  const esTags = orderTags(esAvailableTags, ["manejo-medicamentos", "psiquiatria-naples", "ansiedad"]);
+  const bipolarTags = orderTags(bipolarAvailableTags, ["medication-management", "depression", "bipolar-care"]);
 
   const enPost = await getOrCreatePost({
     title: "Understanding Anxiety Treatment in Naples: What Patients Can Expect",

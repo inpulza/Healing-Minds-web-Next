@@ -217,11 +217,13 @@ async function getTagsForPostIds(postIds: number[]): Promise<Map<number, BlogTag
   const rows = await db
     .select({
       postId: blogPostTags.postId,
+      position: blogPostTags.position,
       tag: blogTags,
     })
     .from(blogPostTags)
     .innerJoin(blogTags, eq(blogPostTags.tagId, blogTags.id))
-    .where(inArray(blogPostTags.postId, postIds));
+    .where(inArray(blogPostTags.postId, postIds))
+    .orderBy(blogPostTags.postId, blogPostTags.position, blogPostTags.tagId);
 
   for (const row of rows) {
     const existing = tagMap.get(row.postId) || [];
@@ -365,7 +367,7 @@ export async function setBlogPostTags(postId: number, tagIds: number[]): Promise
 
   await db
     .insert(blogPostTags)
-    .values(uniqueTagIds.map(tagId => ({ postId, tagId })))
+    .values(uniqueTagIds.map((tagId, position) => ({ postId, tagId, position })))
     .onConflictDoNothing();
 }
 
@@ -403,7 +405,7 @@ export async function createBlogPostForGenerationRun(
     if (uniqueTagIds.length > 0) {
       await tx
         .insert(blogPostTags)
-        .values(uniqueTagIds.map(tagId => ({ postId: post.id, tagId })))
+        .values(uniqueTagIds.map((tagId, position) => ({ postId: post.id, tagId, position })))
         .onConflictDoNothing();
     }
 
@@ -483,7 +485,7 @@ export async function updateBlogPost(
       if (uniqueTagIds.length > 0) {
         await tx
           .insert(blogPostTags)
-          .values(uniqueTagIds.map(tagId => ({ postId: id, tagId })))
+          .values(uniqueTagIds.map((tagId, position) => ({ postId: id, tagId, position })))
           .onConflictDoNothing();
       }
     }
