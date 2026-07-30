@@ -104,3 +104,17 @@ the two commits is `Claude Code <inpulza.media@gmail.com>`, which GitHub links
 to `inpulzamedia`. Vercel can display that commit identity while the deployment
 itself belongs to the `inpulzasolutions-6847s-projects` team. These are separate
 concepts; no account owner or Git identity was changed in this task.
+
+## Content-depth follow-up
+
+A real Preview generation returned 595 words for an 800-word minimum and a
+1,100-word target. The counter was confirmed as accurate within one copied HTML
+token; the missing behavior was generation depth, not the admin display.
+
+Newly generated drafts now receive exactly one safe expansion pass when the
+first validated response is below the editorial minimum. The second response is
+subject to the same source/link allowlists, sanitizer, disclaimer, structure,
+and word-count checks. Mocked guards cover a successful expansion, no retry for
+an already sufficient draft, and preservation of the first safe draft when the
+provider expansion fails. No real API key, provider call, database write,
+publication, Production environment change, or manual deployment is involved.

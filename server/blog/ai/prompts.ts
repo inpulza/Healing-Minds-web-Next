@@ -1,4 +1,4 @@
-import type { BlogAiGenerateInput } from "./types";
+import type { BlogAiGenerateInput, BlogAiGeneratedDraft } from "./types";
 import { formatResearchSourcesForPrompt } from "./research";
 import { formatEditorialBriefForPrompt } from "./editorial-brief";
 
@@ -15,6 +15,28 @@ function formatSemanticMemoryForPrompt(input: BlogAiGenerateInput): string {
   return matches.map(match => (
     `- ${match.title} (${match.status}, score ${match.score}): overlap terms ${match.overlapTerms.join(", ")}. Recommendation: ${match.recommendation}.`
   )).join("\n");
+}
+
+const GENERATED_DRAFT_JSON_SHAPE = `{
+  "title": "SEO-friendly article title",
+  "slug": "lowercase-hyphenated-slug",
+  "excerpt": "20 to 500 character summary",
+  "contentHtml": "<p>...</p>",
+  "metaTitle": "70 characters max",
+  "metaDescription": "50 to 160 characters",
+  "featuredImageAlt": "descriptive alt text",
+  "riskNotes": ["short note for human reviewer"]
+}`;
+
+function formatDepthRequirement(input: BlogAiGenerateInput): string {
+  const brief = input.editorialBrief;
+  if (!brief) {
+    return "- Develop every useful section fully and avoid padding or repetition.";
+  }
+
+  return `- The article body must contain at least ${brief.minimumWordCount} words and should aim for ${brief.targetWordCount} words without exceeding ${brief.maximumWordCount} words.
+- Do not return the draft before it reaches the ${brief.minimumWordCount}-word minimum.
+- Develop every useful section fully with concrete educational detail; avoid padding or repetition.`;
 }
 
 export function buildHealingMindsBlogPrompt(input: BlogAiGenerateInput): string {
@@ -78,18 +100,60 @@ HTML rules:
 - Follow the editorial brief sections as <h2> sections where they fit naturally.
 - Include 5 to 7 useful <h2> sections.
 ${internalLinkRule}
-- Aim for the editorial brief target word count without padding or repeating yourself.
-- Use concise, clinically conservative explanations instead of filler.
+${formatDepthRequirement(input)}
+- Use clinically conservative explanations and enough useful detail to satisfy the brief.
 
 Return only valid JSON with this exact shape:
-{
-  "title": "SEO-friendly article title",
-  "slug": "lowercase-hyphenated-slug",
-  "excerpt": "20 to 500 character summary",
-  "contentHtml": "<p>...</p>",
-  "metaTitle": "70 characters max",
-  "metaDescription": "50 to 160 characters",
-  "featuredImageAlt": "descriptive alt text",
-  "riskNotes": ["short note for human reviewer"]
-}`;
+${GENERATED_DRAFT_JSON_SHAPE}`;
+}
+
+export function buildHealingMindsBlogExpansionPrompt(
+  input: BlogAiGenerateInput,
+  draft: BlogAiGeneratedDraft,
+  currentWordCount: number,
+): string {
+  const brief = input.editorialBrief;
+  const minimumWordCount = brief?.minimumWordCount || 800;
+  const targetWordCount = brief?.targetWordCount || minimumWordCount;
+  const maximumWordCount = brief?.maximumWordCount || Math.round(targetWordCount * 1.25);
+  const draftForExpansion = {
+    ...draft,
+    riskNotes: draft.riskNotes.filter(note => (
+      !/^Generated draft is \d+ words, below (?:the editorial brief minimum|the target depth)/i.test(note)
+    )),
+  };
+
+  return `Expand this existing Healing Minds Psychiatry draft in ${input.language === "es" ? "Spanish" : "English"}.
+
+Success criteria:
+- The current article body has ${currentWordCount} words.
+- The expanded article body must contain at least ${minimumWordCount} words.
+- Aim for ${targetWordCount} words and never exceed ${maximumWordCount} words.
+- Expand the existing draft; do not replace it with a shorter rewrite.
+- Fully develop the required sections with useful, patient-friendly educational detail.
+- Preserve the title, slug, excerpt, metadata, featured image alt text, existing supported claims, and existing links unless a small correction is required for consistency.
+- Keep every existing internal and external link intact.
+- You may add links only from the allowlists below.
+- Do not introduce new sources, URLs, studies, statistics, diagnoses, patient stories, credentials, treatment guarantees, or personalized medical advice.
+- Do not add filler or repeat the same point merely to reach the word count.
+- Keep the emergency/911 and medical-advice disclaimer near the end.
+- Return the complete expanded draft, not a patch or commentary.
+
+Editorial brief:
+${formatEditorialBriefForPrompt(brief)}
+
+Required sections:
+${formatList(brief?.requiredSections || [])}
+
+Allowed internal links:
+${formatList(input.internalLinks || [])}
+
+Trusted external sources:
+${formatResearchSourcesForPrompt(input.researchSources || [])}
+
+Current validated draft:
+${JSON.stringify(draftForExpansion)}
+
+Return only valid JSON with this exact shape:
+${GENERATED_DRAFT_JSON_SHAPE}`;
 }

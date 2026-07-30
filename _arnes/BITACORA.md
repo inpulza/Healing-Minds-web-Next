@@ -68,3 +68,17 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Jordan debe abrir el Preview desde su sesión de Vercel, hacer una generación real y aprobar visualmente el candidato. Normalizar `user.name`/`user.email` local si se desea que futuros commits/deployments muestren otra identidad.
 **Archivos tocados:** evidencia y bitácora del arnés.
 **Evidencia:** PR #4 draft, head `3d011489b3b40b009af491ce00ef304585f70a47`, mergeable; GitHub Quality PASS; Vercel PASS; deployment `dpl_Fg5wpB9K8kjR9WMKD7Z3anqvqtna` Preview Ready; `/admin/login` HTTP 200 y `/api/admin/session` confirmó `configured=true`, `mode=custom`, `authenticated=false` mediante la CLI autenticada de Vercel.
+
+## 2026-07-30T20:10:00+02:00 Codex — profundidad editorial acotada
+**Qué se hizo:** Se confirmó que el borrador copiado de Preview tenía aproximadamente 595 palabras frente al mínimo editorial de 800; se reforzó el primer prompt con criterios exactos de longitud y se añadió una sola ampliación automática antes de devolver un borrador corto.
+**Decisiones:** La segunda pasada reutiliza el borrador ya validado y las mismas allowlists de fuentes y enlaces. No puede añadir estudios, estadísticas, URLs, historias de pacientes, diagnósticos ni promesas. Si falla o no produce un texto más largo y válido, se conserva el primer borrador con aviso de revisión humana.
+**Pendientes/bugs:** Validar la experiencia con una nueva generación real en Preview después del deployment automático del PR. Los borradores ya guardados no se reescriben.
+**Archivos tocados:** `server/blog/ai/generator.ts`, `server/blog/ai/prompts.ts`, `server/blog/ai/validation.ts`, guard y test de profundidad, documentación Sprint 8 y evidencia del arnés.
+**Evidencia:** Pruebas mock sin API real cubren ampliación exitosa, omisión de la segunda llamada cuando el primer borrador ya cumple y conservación segura cuando la ampliación falla. La evidencia final de test/check/build/db se añadirá tras ejecutar la validación completa.
+
+## 2026-07-30T20:24:00+02:00 Codex — validación de profundidad editorial
+**Qué se hizo:** Se ejecutó la batería completa después de incorporar la ampliación acotada y se actualizó la metodología central reutilizable del motor.
+**Decisiones:** No se hizo una generación pagada ni se tocó Vercel, Neon, Production o un post existente durante la validación.
+**Pendientes/bugs:** Hacer una nueva generación real desde el Preview del PR #4 una vez desplegado el commit; el warning preexistente de `caniuse-lite` permanece fuera de alcance.
+**Archivos tocados:** Evidencia y bitácora del arnés; `CONTEXTO.md` y `ESTADO.md` del command center fuera del repo.
+**Evidencia:** `npm test` PASS 59/59; `npm run blog:depth-check` PASS; `npm run check` PASS; `npm run build` PASS 89/89; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys y tags ordenados; `blog:image-check`, `blog:topic-check` y `blog:link-check` PASS; `git diff --check` PASS.

@@ -82,3 +82,27 @@ After merge/pull:
    - `publishedAt: null`,
    - private from public API/routes/sitemap.
 7. Confirm no images, Search Console submission, or publish action is triggered.
+
+## 2026-07-30 follow-up: bounded depth expansion
+
+The original Sprint 8 intentionally saved a short draft with a warning instead
+of making a second provider call. After a real Preview smoke produced 595 words
+against an 800-word minimum and a 1,100-word target, the generation flow was
+hardened:
+
+1. The first prompt now states the exact minimum, target, and maximum as success
+   criteria.
+2. A validated draft below the minimum receives exactly one expansion pass
+   before it is returned to the admin.
+3. The expansion reuses the saved draft, editorial brief, internal-link
+   allowlist, and curated source allowlist.
+4. The expansion may not add sources, URLs, studies, statistics, patient
+   stories, credentials, diagnoses, guarantees, or personalized advice.
+5. The expanded JSON is run through the same sanitizer, URL allowlists,
+   disclaimer checks, structure checks, and word counter as the first response.
+6. If the second call fails or does not create a longer valid draft, the first
+   safe draft remains available with an explicit human-review warning.
+7. Draft-only and human publish approval remain unchanged.
+
+This follow-up affects newly generated drafts. It does not silently rewrite
+previously saved drafts.

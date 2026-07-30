@@ -20,6 +20,7 @@
     "blob:verify": "node --env-file=.env.local --import tsx scripts/verify-vercel-blob.ts",
     "blog:seed": "tsx scripts/seed-blog.ts",
     "blog:image-check": "tsx scripts/blog-image-guards.ts",
+    "blog:depth-check": "tsx scripts/blog-ai-depth-guards.ts",
     "blog:topic-check": "tsx scripts/blog-topic-guards.ts",
     "blog:link-check": "tsx scripts/blog-link-guards.ts",
     "blog:link-seed": "tsx scripts/seed-blog-links.ts",
