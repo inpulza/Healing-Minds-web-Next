@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inpulza.local/native-reconstruction/noise-calibration.schema.json",
+  "title": "Native Reconstruction noise calibration matrix",
+  "type": "object",
+  "required": ["schemaVersion", "calibrationId", "owner", "minimumRepetitions", "cells", "matrixSha256"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "calibrationId": { "type": "string", "minLength": 1 },
+    "owner": { "type": "string", "minLength": 1 },
+    "minimumRepetitions": { "type": "integer", "minimum": 5 },
+    "cells": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "viewport", "state", "scroll", "interaction", "sampleCount", "distributions", "nondeterminism", "tolerances"],
+        "properties": {
+          "id": { "type": "string" },
+          "viewport": { "type": "object" },
+          "state": { "type": "string" },
+          "scroll": { "type": "object" },
+          "interaction": { "type": "object" },
+          "sampleCount": { "type": "integer", "minimum": 5 },
+          "distributions": { "type": "object" },
+          "nondeterminism": { "type": "array", "items": { "type": "string" } },
+          "tolerances": { "type": "object" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "matrixSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "additionalProperties": true
+}

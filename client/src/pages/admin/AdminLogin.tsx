@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'wouter';
+import { useLocation } from '@/lib/navigation';
 import { LogIn, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +9,7 @@ import { apiRequest, queryClient } from '@/lib/queryClient';
 type AdminSession = {
   success: boolean;
   configured: boolean;
-  mode: 'off' | 'replit' | 'custom';
+  mode: 'off' | 'custom';
   authenticated: boolean;
   loginUrl: string | null;
 };
@@ -48,8 +48,6 @@ export default function AdminLogin() {
     }
   };
 
-  const replitLoginUrl = session?.loginUrl || '/api/login';
-
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950 flex items-center justify-center px-4 py-12">
       <section className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
@@ -69,7 +67,14 @@ export default function AdminLogin() {
           </div>
         )}
 
-        {session?.mode === 'custom' ? (
+        {session === null ? (
+          <p className="mt-6 text-sm text-slate-600">Checking the admin session...</p>
+        ) : !session.configured ? (
+          <div className="mt-6 rounded-md border border-amber-200 bg-amber-50 px-3 py-3 text-sm text-amber-800">
+            Admin authentication is not configured. Set the BLOG_ADMIN_USERNAME,
+            BLOG_ADMIN_PASSWORD_HASH and BLOG_ADMIN_SESSION_SECRET environment variables.
+          </div>
+        ) : session.mode === 'custom' ? (
           <form className="mt-6 space-y-4" onSubmit={submitCustomLogin}>
             <div className="space-y-2">
               <Label htmlFor="admin-username">Username</Label>
@@ -100,12 +105,12 @@ export default function AdminLogin() {
         ) : (
           <div className="mt-6 space-y-4">
             <p className="text-sm leading-6 text-slate-600">
-              Use the configured Replit admin authentication to access the editorial panel.
+              Admin authentication is disabled for this local development environment.
             </p>
             <Button asChild className="w-full">
-              <a href={replitLoginUrl}>
+              <a href="/admin/blog">
                 <LogIn className="mr-2 h-4 w-4" aria-hidden="true" />
-                Sign in with Replit
+                Open the editorial panel
               </a>
             </Button>
           </div>

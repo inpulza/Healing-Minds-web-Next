@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "policyId": "native-reconstruction-role-isolation-v0",
+  "requiredEnforcementMode": "host-workspace-root",
+  "workerRoles": ["capturer", "synthesizer", "constructor", "auditor"],
+  "externalCapabilities": {
+    "capturer": ["browser-original"],
+    "synthesizer": [],
+    "constructor": [],
+    "auditor": []
+  },
+  "roles": {
+    "capturer": {
+      "read": ["forensics/**", "audit-baseline/**"],
+      "write": ["forensics/**", "audit-baseline/**", "vault/**"],
+      "append": ["ledger.jsonl"],
+      "denyRead": ["vault/**", "contract/**", "approved-assets/**", "deliverable/**", "reports/**", ".harness-control/**", "role-workspaces/**"],
+      "denyWrite": ["contract/**", "approved-assets/**", "deliverable/**", "reports/**", ".harness-control/**", "role-workspaces/**", "ledger.jsonl"]
+    },
+    "synthesizer": {
+      "read": ["forensics/**"],
+      "write": ["contract/**"],
+      "append": ["ledger.jsonl"],
+      "denyRead": ["audit-baseline/**", "vault/**", "approved-assets/**", "deliverable/**", "reports/**", ".harness-control/**", "role-workspaces/**"],
+      "denyWrite": ["forensics/**", "audit-baseline/**", "vault/**", "approved-assets/**", "deliverable/**", "reports/**", ".harness-control/**", "role-workspaces/**", "ledger.jsonl"]
+    },
+    "constructor": {
+      "read": ["contract/**", "approved-assets/**"],
+      "write": ["deliverable/**"],
+      "append": ["ledger.jsonl"],
+      "denyRead": ["forensics/**", "audit-baseline/**", "vault/**", "reports/**", ".harness-control/**", "role-workspaces/**", "ledger.jsonl"],
+      "denyWrite": ["forensics/**", "audit-baseline/**", "vault/**", "contract/**", "approved-assets/**", "reports/**", ".harness-control/**", "role-workspaces/**", "ledger.jsonl"]
+    },
+    "auditor": {
+      "read": ["audit-baseline/**", "contract/**", "approved-assets/**", "deliverable/**", "ledger.jsonl"],
+      "write": ["reports/**"],
+      "append": ["ledger.jsonl"],
+      "denyRead": ["forensics/**", "vault/**", ".harness-control/**", "role-workspaces/**"],
+      "denyWrite": ["forensics/**", "audit-baseline/**", "vault/**", "contract/**", "approved-assets/**", "deliverable/**", ".harness-control/**", "role-workspaces/**", "ledger.jsonl"]
+    }
+  }
+}

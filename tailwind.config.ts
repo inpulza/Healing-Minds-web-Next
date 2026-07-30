@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./app/**/*.{js,jsx,ts,tsx}", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       borderRadius: {
@@ -53,8 +53,8 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         serif: ["var(--font-serif)", "Georgia", "serif"],
-        'body': ['"Instrument Sans"', 'sans-serif'],
-        'display': ['"Playfair Display"', 'serif'],
+        'body': ['var(--font-instrument)', 'sans-serif'],
+        'display': ['var(--font-playfair)', 'serif'],
       },
       keyframes: {
         "accordion-down": {

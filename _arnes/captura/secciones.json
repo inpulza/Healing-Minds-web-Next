@@ -1,0 +1,86 @@
+[
+  {
+    "orden": 1,
+    "selector": "main > section:nth-child(1)",
+    "tag": "section",
+    "alturaPx": 704,
+    "texto": "Expert Psychiatrist Naples Mental Health Southwest Florida Expert psychiatric ca"
+  },
+  {
+    "orden": 2,
+    "selector": "main > section:nth-child(2)",
+    "tag": "section",
+    "alturaPx": 1108,
+    "texto": "Insurance Plans Accepted We work with most major insurance providers to make qu"
+  },
+  {
+    "orden": 3,
+    "selector": "main > div:nth-child(3)",
+    "tag": "div",
+    "alturaPx": 1489,
+    "texto": "Telehealth Services Professional psychiatric care available throughout Florida "
+  },
+  {
+    "orden": 4,
+    "selector": "main > div:nth-child(4)",
+    "tag": "div",
+    "alturaPx": 809,
+    "texto": "Dedicated to your mental health, every day 15+ Years of experience We provide c"
+  },
+  {
+    "orden": 5,
+    "selector": "main > div:nth-child(5)",
+    "tag": "div",
+    "alturaPx": 1132,
+    "texto": "Mental Health for every mind Comprehensive psychiatric care tailored to your in"
+  },
+  {
+    "orden": 6,
+    "selector": "main > div:nth-child(6)",
+    "tag": "div",
+    "alturaPx": 999,
+    "texto": "Guided by passion. Driven by purpose. Dr. Reve understands that mental health c"
+  },
+  {
+    "orden": 7,
+    "selector": "main > div:nth-child(7)",
+    "tag": "div",
+    "alturaPx": 1211,
+    "texto": "Serving Southwest Florida Quality psychiatric care delivered across Collier Cou"
+  },
+  {
+    "orden": 8,
+    "selector": "main > div:nth-child(8)",
+    "tag": "div",
+    "alturaPx": 491,
+    "texto": "Ready to Take the First Step? Change begins with a simple conversation. I am he"
+  },
+  {
+    "orden": 9,
+    "selector": "main > div:nth-child(9)",
+    "tag": "div",
+    "alturaPx": 1011,
+    "texto": "What our patients say Real stories from patients who have found hope and healin"
+  },
+  {
+    "orden": 10,
+    "selector": "main > div:nth-child(10)",
+    "tag": "div",
+    "alturaPx": 1228,
+    "texto": "For Patients Important information about insurance, appointments, and what to e"
+  },
+  {
+    "orden": 11,
+    "selector": "main > div:nth-child(11)",
+    "tag": "div",
+    "alturaPx": 1096,
+    "texto": "Frequently Asked Questions Find answers to common questions about psychiatric c"
+  },
+  {
+    "orden": 12,
+    "selector": "main > div:nth-child(12)",
+    "tag": "div",
+    "alturaPx": 2034,
+    "texto": "Get in touch Ready to take the first step toward better mental health? Contact "
+  }
+]

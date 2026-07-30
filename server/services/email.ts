@@ -1,7 +1,28 @@
 import { Resend } from 'resend';
 import type { InsertContactMessage } from '@shared/schema';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export function escapeEmailHtml(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function escapeContactForEmail(contactData: InsertContactMessage): InsertContactMessage {
+  return {
+    ...contactData,
+    firstName: escapeEmailHtml(contactData.firstName),
+    lastName: escapeEmailHtml(contactData.lastName),
+    email: escapeEmailHtml(contactData.email),
+    phone: contactData.phone ? escapeEmailHtml(contactData.phone) : contactData.phone,
+    preferredLanguage: contactData.preferredLanguage
+      ? escapeEmailHtml(contactData.preferredLanguage)
+      : contactData.preferredLanguage,
+    message: escapeEmailHtml(contactData.message),
+  };
+}
 
 export interface EmailService {
   sendContactNotification(
@@ -15,13 +36,22 @@ export class ResendEmailService implements EmailService {
   private readonly fromEmail = 'noreply@healingmindsp.com';
   private readonly practiceEmail = 'info@healingmindsp.com';
 
+  private client(): Resend {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY is not configured');
+    }
+    return new Resend(apiKey);
+  }
+
   async sendContactNotification(
     contactData: InsertContactMessage,
     options?: { test?: boolean },
   ): Promise<void> {
-    console.log('🚀 ENTERED sendContactNotification method');
+
     const prefix = options?.test ? '[TEST] ' : '';
     const subject = `${prefix}Nueva consulta desde el sitio web - ${contactData.firstName} ${contactData.lastName}`;
+    const safeContactData = escapeContactForEmail(contactData);
     
     const htmlContent = `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 0 auto; padding: 30px; background: #ffffff;">
@@ -32,16 +62,16 @@ export class ResendEmailService implements EmailService {
 
         <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h2 style="color: #16a34a; margin: 0 0 15px 0; font-size: 18px;">Información del Contacto</h2>
-          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Nombre:</strong> ${contactData.firstName} ${contactData.lastName}</p>
-          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Email:</strong> ${contactData.email}</p>
-          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Teléfono:</strong> ${contactData.phone || 'No proporcionado'}</p>
-          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Idioma:</strong> ${contactData.preferredLanguage === 'spanish' ? 'Español' : 'Inglés'}</p>
+          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Nombre:</strong> ${safeContactData.firstName} ${safeContactData.lastName}</p>
+          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Email:</strong> ${safeContactData.email}</p>
+          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Teléfono:</strong> ${safeContactData.phone || 'No proporcionado'}</p>
+          <p style="margin: 8px 0; color: #374151; font-size: 15px;"><strong>Idioma:</strong> ${safeContactData.preferredLanguage === 'spanish' ? 'Español' : 'Inglés'}</p>
         </div>
 
         <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #16a34a;">
           <h3 style="color: #374151; margin: 0 0 10px 0; font-size: 16px;">Mensaje:</h3>
           <p style="margin: 0; color: #4b5563; font-size: 15px; line-height: 1.5;">
-            "${contactData.message}"
+            "${safeContactData.message}"
           </p>
         </div>
 
@@ -54,43 +84,38 @@ export class ResendEmailService implements EmailService {
     `;
 
     try {
-      console.log('📧 Sending notification email to:', this.practiceEmail, 'from:', this.fromEmail);
-      const response = await resend.emails.send({
+      await this.client().emails.send({
         from: this.fromEmail,
         to: this.practiceEmail,
         subject: subject,
         html: htmlContent,
       });
-      console.log('✅ Resend notification response:', response);
     } catch (error) {
-      console.error('❌ Error sending contact notification email:', error);
-      console.error('❌ Error details:', JSON.stringify(error, null, 2));
+      console.error('Contact notification email delivery failed');
       throw new Error('Failed to send contact notification email');
     }
   }
 
   async sendConfirmationEmail(contactData: InsertContactMessage): Promise<void> {
-    console.log('🚀 ENTERED sendConfirmationEmail method');
+
     const isSpanish = contactData.preferredLanguage === 'spanish';
     
     const subject = isSpanish 
       ? 'Confirmación de consulta - Healing Minds Psychiatry'
       : 'Contact Confirmation - Healing Minds Psychiatry';
 
-    const htmlContent = isSpanish ? this.getSpanishConfirmationTemplate(contactData) : this.getEnglishConfirmationTemplate(contactData);
+    const safeContactData = escapeContactForEmail(contactData);
+    const htmlContent = isSpanish ? this.getSpanishConfirmationTemplate(safeContactData) : this.getEnglishConfirmationTemplate(safeContactData);
 
     try {
-      console.log('📧 Sending confirmation email to:', contactData.email, 'from:', this.fromEmail);
-      const response = await resend.emails.send({
+      await this.client().emails.send({
         from: this.fromEmail,
         to: contactData.email,
         subject: subject,
         html: htmlContent,
       });
-      console.log('✅ Resend confirmation response:', response);
     } catch (error) {
-      console.error('❌ Error sending confirmation email:', error);
-      console.error('❌ Error details:', JSON.stringify(error, null, 2));
+      console.error('Contact confirmation email delivery failed');
       throw new Error('Failed to send confirmation email');
     }
   }

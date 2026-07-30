@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
+type StaticImageLike = string | { src: string };
+
 interface OptimizedImageProps {
-  src: string;
+  src: StaticImageLike;
   alt: string;
   className?: string;
   width?: number;
@@ -32,6 +34,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   });
 
   const shouldLoad = priority || isIntersecting;
+  const resolvedSrc = typeof src === 'string' ? src : src.src;
   
   const handleLoad = () => {
     setIsLoaded(true);
@@ -64,7 +67,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     <div ref={ref} style={style}>
       {shouldLoad ? (
         <img
-          src={src}
+          src={resolvedSrc}
           alt={alt}
           className={className}
           width={width}

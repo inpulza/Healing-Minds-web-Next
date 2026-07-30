@@ -1,4 +1,4 @@
-import { Client } from "@replit/object-storage";
+import { del, head, put } from "@vercel/blob";
 import {
   getManagedBlogImagePublicUrl,
   isManagedBlogImageKey,
@@ -11,36 +11,64 @@ export {
   isManagedBlogImagePublicUrl,
 } from "@shared/blog-images";
 
-let storageClient: Client | undefined;
-
-function getStorageClient(): Client {
-  storageClient ||= new Client();
-  return storageClient;
+function assertStorageConfigured(): void {
+  if (!process.env.BLOB_READ_WRITE_TOKEN && !process.env.BLOB_STORE_ID) {
+    throw Object.assign(new Error("Vercel Blob storage is not configured"), { statusCode: 503 });
+  }
 }
 
-function storageErrorMessage(error: { message?: string } | string | undefined): string {
-  if (typeof error === "string") return error;
-  return error?.message || "App Storage request failed";
+function assertManagedKey(objectKey: string): void {
+  if (!isManagedBlogImageKey(objectKey)) {
+    throw Object.assign(new Error("Invalid blog image object key"), { statusCode: 400 });
+  }
+}
+
+function storageError(error: unknown): Error & { statusCode?: number } {
+  const value = error as { name?: string; status?: number; statusCode?: number };
+  const notFound = value?.name === "BlobNotFoundError" || value?.status === 404 || value?.statusCode === 404;
+  return Object.assign(
+    new Error(notFound ? "Blog image object was not found" : "Vercel Blob request failed"),
+    { statusCode: notFound ? 404 : 503 },
+  );
 }
 
 export async function uploadBlogImage(objectKey: string, bytes: Buffer): Promise<void> {
-  if (!isManagedBlogImageKey(objectKey)) throw new Error("Invalid blog image object key");
-  const result = await getStorageClient().uploadFromBytes(objectKey, bytes, { compress: false });
-  if (!result.ok) throw new Error(storageErrorMessage(result.error));
+  assertManagedKey(objectKey);
+  assertStorageConfigured();
+  try {
+    await put(objectKey, bytes, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: "image/webp",
+      cacheControlMaxAge: 31_536_000,
+    });
+  } catch (error) {
+    throw storageError(error);
+  }
 }
 
 export async function downloadBlogImage(objectKey: string): Promise<Buffer> {
-  if (!isManagedBlogImageKey(objectKey)) throw new Error("Invalid blog image object key");
-  const result = await getStorageClient().downloadAsBytes(objectKey, { decompress: false });
-  if (!result.ok) throw Object.assign(new Error(storageErrorMessage(result.error)), {
-    statusCode: result.error.statusCode,
-  });
-  const value = result.value as unknown as Buffer | [Buffer];
-  return Array.isArray(value) ? value[0] : value;
+  assertManagedKey(objectKey);
+  assertStorageConfigured();
+  try {
+    const metadata = await head(objectKey);
+    const response = await fetch(metadata.downloadUrl || metadata.url, { cache: "force-cache" });
+    if (!response.ok) {
+      throw Object.assign(new Error("Blob download failed"), { statusCode: response.status });
+    }
+    return Buffer.from(await response.arrayBuffer());
+  } catch (error) {
+    throw storageError(error);
+  }
 }
 
 export async function deleteBlogImageObject(objectKey: string): Promise<void> {
-  if (!isManagedBlogImageKey(objectKey)) throw new Error("Invalid blog image object key");
-  const result = await getStorageClient().delete(objectKey, { ignoreNotFound: true });
-  if (!result.ok) throw new Error(storageErrorMessage(result.error));
+  assertManagedKey(objectKey);
+  assertStorageConfigured();
+  try {
+    await del(objectKey);
+  } catch (error) {
+    const normalized = storageError(error);
+    if (normalized.statusCode !== 404) throw normalized;
+  }
 }

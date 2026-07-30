@@ -334,7 +334,7 @@ function normalizePostUpdatePayload(input: unknown) {
   };
 }
 
-type AdminBlogGenerateDraftPayload = z.infer<typeof adminBlogGenerateDraftSchema> & {
+export type AdminBlogGenerateDraftPayload = z.infer<typeof adminBlogGenerateDraftSchema> & {
   topicCandidateId?: number;
   topicKey?: string;
   expertiseAngle?: string;
@@ -403,7 +403,7 @@ async function updateWorkflowStep(
   await reportProgress?.(workflow, step);
 }
 
-async function createGeneratedBlogDraft(
+export async function createGeneratedBlogDraft(
   payload: AdminBlogGenerateDraftPayload,
   workflow?: BlogGenerationWorkflow,
   reportProgress?: BlogGenerationProgressReporter,
@@ -768,7 +768,7 @@ const AUTO_GENERATE_WORKFLOW_STEPS: Array<Pick<BlogGenerationWorkflowStep, "id" 
   { id: "verify", label: "Verification" },
 ];
 
-function createAutoGenerateWorkflow(): BlogGenerationWorkflow {
+export function createAutoGenerateWorkflow(): BlogGenerationWorkflow {
   return {
     mode: "auto-generate",
     generatedAt: new Date().toISOString(),
@@ -939,7 +939,7 @@ function toJsonObject(value: unknown): JsonObject {
   return JSON.parse(JSON.stringify(value)) as JsonObject;
 }
 
-async function executePersistedAutoGenerateRun(runId: number): Promise<void> {
+export async function executePersistedAutoGenerateRun(runId: number): Promise<void> {
   const claimed = await claimBlogGenerationRun(runId);
   if (!claimed) return;
   const heartbeatTimer = setInterval(() => {

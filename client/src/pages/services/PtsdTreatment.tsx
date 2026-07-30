@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Link } from 'wouter';
+import { assetUrl } from '@/lib/asset-url';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
@@ -177,7 +178,7 @@ const PtsdTreatment = () => {
                   {/* Photo - Fills remaining space */}
                   <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <img 
-                      src={consultationImage} 
+                      src={assetUrl(consultationImage)}
                       alt="Professional psychiatrist Dr. Melva Reve conducting PTSD consultation in modern medical office"
                       className="w-full h-full object-cover object-center"
                       loading="lazy"
@@ -293,7 +294,7 @@ const PtsdTreatment = () => {
                     <div className="h-48 bg-gradient-to-br from-green-50 to-green-100 overflow-hidden">
                       {trauma.image ? (
                         <img 
-                          src={trauma.image} 
+                          src={assetUrl(trauma.image)}
                           alt={trauma.alt}
                           className="w-full h-full object-cover"
                           loading="lazy"

@@ -1,4 +1,5 @@
 import { isValidElement, createElement, type ReactNode } from 'react';
+import { assetUrl } from '@/lib/asset-url';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { Button } from '@/components/ui/button';
@@ -106,7 +107,7 @@ const CharmHealthBooking = ({
           {/* Mobile Image - Shorter aspect ratio to crop bottom and remove watermark */}
           <div className="relative aspect-[4/5]">
             <img 
-              src={heroImage || telehealthHeroBg}
+              src={heroImage || assetUrl(telehealthHeroBg)}
               alt={heroImageAlt || "Dr. Melva Reve providing secure telehealth psychiatric consultations from modern medical office in Florida"}
               className="absolute inset-0 w-full h-full object-cover"
               style={{ objectPosition: '75% top' }}
@@ -150,7 +151,7 @@ const CharmHealthBooking = ({
         {/* Desktop Layout - Horizontal */}
         <div className="hidden md:block relative aspect-[18/9]">
           <img 
-            src={heroImage || telehealthHeroBg}
+            src={heroImage || assetUrl(telehealthHeroBg)}
             alt={heroImageAlt || "Professional telehealth psychiatric care - Dr. Melva Reve's secure virtual consultation platform in Florida"}
             className="absolute inset-0 w-full h-full object-cover object-top"
           />

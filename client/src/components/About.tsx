@@ -1,4 +1,5 @@
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
+import { assetUrl } from '@/lib/asset-url';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Heart, Users, CheckCircle, Play, Linkedin, Facebook, Instagram, Brain } from 'lucide-react';
@@ -26,7 +27,7 @@ const About = () => {
             <div className="relative order-2 lg:order-1">
               <div className="relative bg-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
                 <img
-                  src={doctorProfileImage}
+                  src={assetUrl(doctorProfileImage)}
                   alt="Dr. Melva Reve, MD - Professional headshot of psychiatrist specializing in anxiety, depression, and ADHD treatment in Naples"
                   className="w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover object-top"
                   width={600}

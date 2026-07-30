@@ -2,6 +2,10 @@ import { useEffect, useRef, useCallback } from 'react';
 import Clarity from '@microsoft/clarity';
 import { useLanguage } from './useLanguage';
 
+function isDevelopment(): boolean {
+  return process.env.NODE_ENV === 'development';
+}
+
 const CLARITY_PROJECT_ID = 'sxayts0dzk';
 
 // Global guards to prevent multiple initializations across all hook instances
@@ -42,7 +46,7 @@ function useSafeLanguage(): string {
     return language;
   } catch (error) {
     // If LanguageProvider is not available, default to 'en'
-    if (import.meta.env.DEV) {
+    if (isDevelopment()) {
       console.warn('🔍 useLanguage not available in Clarity hook, defaulting to English');
     }
     return 'en';
@@ -56,8 +60,8 @@ export function useClarity() {
 
   // Initialize Clarity when consent is available
   const initClarity = useCallback(() => {
-    if (import.meta.env.MODE === 'development') {
-      if (import.meta.env.DEV) {
+    if (isDevelopment()) {
+      if (isDevelopment()) {
         console.log('🔍 Microsoft Clarity disabled in development mode');
       }
       return;
@@ -73,7 +77,7 @@ export function useClarity() {
         globalConsentRevoked || 
         consentRevoked.current ||
         recentInitialization) {
-      if (import.meta.env.DEV) {
+      if (isDevelopment()) {
         console.log('🔍 Microsoft Clarity already initialized or blocked, skipping');
       }
       return;
@@ -85,7 +89,7 @@ export function useClarity() {
     try {
       // Check if Clarity is already loaded in the page
       if ((window as any).clarity && typeof (window as any).clarity === 'function') {
-        if (import.meta.env.DEV) {
+        if (isDevelopment()) {
           console.log('🔍 Microsoft Clarity already loaded in page, skipping init');
         }
         globalClarityInitialized = true;
@@ -140,14 +144,14 @@ export function useClarity() {
   // Initial setup and consent change listener
   useEffect(() => {
     // Check initial consent state and initialize if available
-    if (import.meta.env.MODE === 'production' && hasAnalyticsConsent()) {
+    if (process.env.NODE_ENV === 'production' && hasAnalyticsConsent()) {
       initClarity();
-    } else if (import.meta.env.MODE === 'development') {
-      if (import.meta.env.DEV) {
+    } else if (isDevelopment()) {
+      if (isDevelopment()) {
         console.log('🔍 Microsoft Clarity disabled in development mode');
       }
-    } else if (import.meta.env.MODE === 'production') {
-      if (import.meta.env.DEV) {
+    } else if (process.env.NODE_ENV === 'production') {
+      if (isDevelopment()) {
         console.log('🚫 Microsoft Clarity not initialized - no analytics consent');
       }
     }
@@ -200,7 +204,7 @@ export function useClarity() {
           try {
             Clarity.setTag('language', language);
           } catch (error) {
-            if (import.meta.env.DEV) {
+            if (isDevelopment()) {
               console.warn('Failed to update Clarity language tag:', error);
             }
           }
@@ -210,7 +214,7 @@ export function useClarity() {
           try {
             Clarity.setTag('language', language);
           } catch (error) {
-            if (import.meta.env.DEV) {
+            if (isDevelopment()) {
               console.warn('Failed to update Clarity language tag:', error);
             }
           }

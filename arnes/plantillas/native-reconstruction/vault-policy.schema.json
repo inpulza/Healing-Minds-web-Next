@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inpulza.local/native-reconstruction/vault-policy.schema.json",
+  "title": "Native Reconstruction provisional vault policy",
+  "type": "object",
+  "required": ["schemaVersion", "policyId", "defaultDeny", "maxAuthorizationMinutes", "authorization", "purge"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "policyId": { "type": "string", "minLength": 1 },
+    "defaultDeny": { "const": true },
+    "maxAuthorizationMinutes": { "type": "integer", "minimum": 1 },
+    "authorization": {
+      "type": "object",
+      "required": ["requiredFields"],
+      "properties": {
+        "requiredFields": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "purge": {
+      "type": "object",
+      "required": ["mode", "verifyPathAbsent", "recordTombstone", "secureEraseClaim"],
+      "properties": {
+        "mode": { "const": "authorized-delete" },
+        "verifyPathAbsent": { "const": true },
+        "recordTombstone": { "const": true },
+        "secureEraseClaim": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

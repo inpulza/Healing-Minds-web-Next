@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Link } from 'wouter';
+import { assetUrl } from '@/lib/asset-url';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
@@ -215,7 +216,7 @@ const BipolarTreatment = () => {
                   {/* Dr. Melva Office Photo - Fills remaining space */}
                   <div className="flex-1 w-full overflow-hidden rounded-xl shadow-md">
                     <img 
-                      src={drMelvaOfficeImage}
+                      src={assetUrl(drMelvaOfficeImage)}
                       alt="Dr. Melva Reve in her professional psychiatric office - Naples, FL"
                       className="w-full h-full object-cover object-[65%_35%] scale-125"
                       loading="lazy"

@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react';
+import { assetUrl } from '@/lib/asset-url';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -184,7 +185,7 @@ const TelepsychiatryFlorida = () => {
               <div className="bg-green-50 rounded-3xl p-8 border border-green-100">
                 <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
                   <img 
-                    src={floridaMap}
+                    src={assetUrl(floridaMap)}
                     alt="Florida State Map - Telepsychiatry Services Available Statewide"
                     className="w-full h-full object-cover"
                   />
@@ -221,7 +222,7 @@ const TelepsychiatryFlorida = () => {
                 <div className="overflow-hidden" ref={emblaRef}>
                   <div className="flex">
                     {benefitSections.map((benefit, index) => {
-                      const benefitImages = [accessFromHomeImg, convenientSchedulingImg, securePrivateImg, continuityCareImg];
+                      const benefitImages = [assetUrl(accessFromHomeImg), assetUrl(convenientSchedulingImg), assetUrl(securePrivateImg), assetUrl(continuityCareImg)];
                       const benefitAltTexts = [
                         "Patient accessing telepsychiatry services from home in Florida - Dr. Melva Reve",
                         "Convenient online psychiatry scheduling - time-saving telehealth appointments in Florida",
@@ -276,7 +277,7 @@ const TelepsychiatryFlorida = () => {
               {/* Desktop Grid */}
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {benefitSections.map((benefit, index) => {
-                  const benefitImages = [accessFromHomeImg, convenientSchedulingImg, securePrivateImg, continuityCareImg];
+                  const benefitImages = [assetUrl(accessFromHomeImg), assetUrl(convenientSchedulingImg), assetUrl(securePrivateImg), assetUrl(continuityCareImg)];
                   const benefitAltTexts = [
                     "Patient accessing telepsychiatry services from home in Florida - Dr. Melva Reve",
                     "Convenient online psychiatry scheduling - time-saving telehealth appointments in Florida",
@@ -371,13 +372,13 @@ const TelepsychiatryFlorida = () => {
                   <div className="flex">
                     {serviceSections.map((service, index) => {
                       const serviceImages = [
-                        initialEvaluationImg, 
-                        anxietyDepressionImg, 
-                        adhdManagementImg, 
-                        ptsdTherapyImg, 
-                        bipolarTreatmentImg, 
-                        medicationManagementImg
-                      ];
+                                              assetUrl(initialEvaluationImg),
+                                              assetUrl(anxietyDepressionImg),
+                                              assetUrl(adhdManagementImg),
+                                              assetUrl(ptsdTherapyImg),
+                                              assetUrl(bipolarTreatmentImg),
+                                              assetUrl(medicationManagementImg)
+                                            ];
                       const serviceAltTexts = [
                         "Initial psychiatric evaluation via telepsychiatry - Dr. Melva Reve conducting online mental health assessment in Florida",
                         "Online anxiety and depression treatment through telehealth - virtual psychiatric care in Florida",
@@ -435,13 +436,13 @@ const TelepsychiatryFlorida = () => {
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {serviceSections.map((service, index) => {
                   const serviceImages = [
-                    initialEvaluationImg, 
-                    anxietyDepressionImg, 
-                    adhdManagementImg, 
-                    ptsdTherapyImg, 
-                    bipolarTreatmentImg, 
-                    medicationManagementImg
-                  ];
+                                          assetUrl(initialEvaluationImg),
+                                          assetUrl(anxietyDepressionImg),
+                                          assetUrl(adhdManagementImg),
+                                          assetUrl(ptsdTherapyImg),
+                                          assetUrl(bipolarTreatmentImg),
+                                          assetUrl(medicationManagementImg)
+                                        ];
                   const serviceAltTexts = [
                     "Initial psychiatric evaluation via telepsychiatry - Dr. Melva Reve conducting online mental health assessment in Florida",
                     "Online anxiety and depression treatment through telehealth - virtual psychiatric care in Florida",

@@ -1,5 +1,9 @@
 node_modules
+.next
 dist
+.env
+.env.*
+!.env.example
 .DS_Store
 server/public
 vite.config.ts.*
@@ -24,3 +28,10 @@ attached_assets/healing-minds-rendered_*.json
 # Registro local de assets del agente: apunta a ficheros de este entorno
 # (intermedios sin versionar), así que versionarlo deja referencias muertas.
 .agents/agent_assets_metadata.toml
+.vercel
+.env*
+
+# Local capture/render output: keep summaries, not hundreds of generated PNGs.
+_arnes/evidencia/visual/*
+!_arnes/evidencia/visual/PRIORITY-AUDIT.md
+_arnes/verify/

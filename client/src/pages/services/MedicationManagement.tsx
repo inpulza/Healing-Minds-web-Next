@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Link } from 'wouter';
+import { assetUrl } from '@/lib/asset-url';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
@@ -152,7 +153,7 @@ const MedicationManagement = () => {
                   <div className="mb-6">
                     <div className="w-full h-48 rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                       <img 
-                        src={medicationCapsules} 
+                        src={assetUrl(medicationCapsules)}
                         alt="Medication capsules on green background representing psychiatric care"
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -270,7 +271,7 @@ const MedicationManagement = () => {
                   {/* Photo - Fills remaining space */}
                   <div className="flex-1 w-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <img 
-                      src={medicationCapsules} 
+                      src={assetUrl(medicationCapsules)}
                       alt="Medication capsules on green background representing psychiatric care"
                       className="w-full h-full object-cover"
                       loading="lazy"

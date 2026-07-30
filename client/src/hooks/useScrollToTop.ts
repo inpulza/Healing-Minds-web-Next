@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation } from 'wouter';
+import { useLocation } from '@/lib/navigation';
 
 /**
  * Custom hook that scrolls to top whenever the route changes

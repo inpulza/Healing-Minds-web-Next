@@ -1,8 +1,10 @@
 import { useEffect, useMemo } from 'react';
-import { Link, useRoute } from 'wouter';
+import { assetUrl } from '@/lib/asset-url';
+import { Link, useRoute } from '@/lib/navigation';
 import { useQuery } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
 import { isManagedBlogImagePublicUrl } from '@shared/blog-images';
+import blogSnapshot from '@shared/blog-snapshot.json';
 import { ArrowLeft, Calendar, Clock, List, Phone, Tag } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -14,7 +16,7 @@ import doctorConsultation from '@/assets/doctor-consultation.webp';
 
 type BlogLanguage = 'en' | 'es';
 
-type BlogPostDetail = {
+export type BlogPostDetail = {
   id: number;
   slug: string;
   language: BlogLanguage;
@@ -65,11 +67,16 @@ function getBlogPostPath(post: Pick<BlogPostDetail, 'slug' | 'language'>): strin
 }
 
 function getInitialBlogPost(slug: string, language: BlogLanguage): BlogPostResponse | undefined {
-  const payload = window.__SSR_BLOG_POST__;
-  if (payload?.success && payload.data?.slug === slug && payload.data.language === language) {
-    return payload;
+  if (typeof window !== 'undefined') {
+    const payload = window.__SSR_BLOG_POST__;
+    if (payload?.success && payload.data?.slug === slug && payload.data.language === language) {
+      return payload;
+    }
   }
-  return undefined;
+
+  const pathname = language === 'es' ? `/es/blog/${slug}` : `/blog/${slug}`;
+  const frozen = (blogSnapshot as Record<string, BlogPostDetail>)[pathname];
+  return frozen ? { success: true, data: frozen } : undefined;
 }
 
 function formatDate(date: string | null, language: BlogLanguage): string {
@@ -82,6 +89,10 @@ function formatDate(date: string | null, language: BlogLanguage): string {
 }
 
 function sanitizeClientBlogHtml(html: string): string {
+  // The prerendered fallback is a versioned snapshot captured from the trusted
+  // production origin. Dynamic database responses are sanitized by the API.
+  if (typeof window === 'undefined') return html;
+
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a', 'blockquote', 'figure', 'img', 'figcaption'],
     ALLOWED_ATTR: ['href', 'target', 'rel', 'id', 'class', 'src', 'alt', 'loading', 'decoding', 'width', 'height'],
@@ -177,7 +188,12 @@ const copy = {
   },
 };
 
-const BlogPost = () => {
+type BlogPostProps = {
+  initialPost?: BlogPostDetail;
+  language?: BlogLanguage;
+};
+
+const BlogPost = ({ initialPost }: BlogPostProps) => {
   const { setLanguage } = useLanguage();
   const [, enParams] = useRoute('/blog/:slug');
   const [, esParams] = useRoute('/es/blog/:slug');
@@ -189,7 +205,9 @@ const BlogPost = () => {
   const { data, isLoading, isError } = useQuery<BlogPostResponse>({
     queryKey: [`/api/blog/posts/${slug}?language=${language}`],
     enabled: Boolean(slug),
-    initialData: () => getInitialBlogPost(slug, language),
+    initialData: () => initialPost
+      ? { success: true, data: initialPost }
+      : getInitialBlogPost(slug, language),
   });
 
   const post = data?.data;
@@ -315,7 +333,7 @@ const BlogPost = () => {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
               <img
-                src={post.featuredImage || doctorConsultation}
+                src={post.featuredImage || assetUrl(doctorConsultation)}
                 alt={post.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
                 className="mx-auto w-full max-w-4xl aspect-[16/9] object-cover rounded-lg mb-10"
               />
@@ -389,7 +407,7 @@ const BlogPost = () => {
                         {relatedPosts.map(related => (
                           <Link key={related.id} href={getBlogPostPath(related)} className="group block">
                             <img
-                              src={related.featuredImage || doctorConsultation}
+                              src={related.featuredImage || assetUrl(doctorConsultation)}
                               alt={related.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
                               className="mb-3 aspect-[4/3] w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                               loading="lazy"

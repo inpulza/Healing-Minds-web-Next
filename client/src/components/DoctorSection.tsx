@@ -1,10 +1,11 @@
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { getCorrespondingURL } from '@/utils/urlMapping';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import doctorImage from '@assets/doctor-consultation-square.webp';
 import { doctorSectionContent } from '@/data/pageContent/mainPages/sharedSections';
+import { assetUrl } from '@/lib/asset-url';
 
 const DoctorSection = () => {
   const { language } = useLanguage();
@@ -59,7 +60,7 @@ const DoctorSection = () => {
             <div className="relative order-1 lg:order-2">
               <div className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden">
                 <img
-                  src={doctorImage}
+                  src={assetUrl(doctorImage)}
                   alt="Dr. Melva Reve, MD - Engaged in consultation with a patient, demonstrating compassionate psychiatric care approach"
                   className="w-full h-full object-cover"
                   width={800}

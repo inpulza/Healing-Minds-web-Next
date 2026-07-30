@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { useLanguage } from '@/hooks/useLanguage';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import floridaMap from '../assets/florida-map.webp';
+import { assetUrl } from '@/lib/asset-url';
 
 const TelehealthSection = () => {
   const { language } = useLanguage();
@@ -70,7 +71,7 @@ const TelehealthSection = () => {
                 {/* Florida Map as Background */}
                 <div className="absolute inset-0">
                   <img 
-                    src={floridaMap}
+                    src={assetUrl(floridaMap)}
                     alt="Florida State Map - Telehealth Services Available"
                     className="w-full h-full object-cover rounded-xl sm:rounded-2xl"
                   />

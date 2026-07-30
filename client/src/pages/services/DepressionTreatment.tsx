@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Link } from 'wouter';
+import { assetUrl } from '@/lib/asset-url';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
@@ -214,7 +215,7 @@ const DepressionTreatment = () => {
                   <div className="mt-8">
                     <div className="w-full aspect-[16/9] overflow-hidden rounded-xl shadow-md">
                       <img 
-                        src={consultationImage}
+                        src={assetUrl(consultationImage)}
                         alt="Professional consultation - Dr. Melva Reve writing notes during patient consultation"
                         className="w-full h-full object-cover object-center"
                         loading="lazy"

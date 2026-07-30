@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'wouter';
+import { assetUrl } from '@/lib/asset-url';
+import { Link } from '@/lib/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, BookOpen, Calendar, Clock } from 'lucide-react';
 import Header from '@/components/Header';
@@ -195,7 +196,7 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
                     <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
                       <Link href={getBlogPostPath(featuredPost)} aria-label={`${text.read}: ${featuredPost.title}`}>
                         <img
-                          src={featuredPost.featuredImage || doctorConsultation}
+                          src={featuredPost.featuredImage || assetUrl(doctorConsultation)}
                           alt={featuredPost.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
                           className="h-72 w-full object-cover lg:h-full"
                           loading="eager"
@@ -247,7 +248,7 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
                     <Card key={post.id} className="overflow-hidden border-green-100 rounded-lg shadow-sm transition-shadow hover:shadow-md">
                       <Link href={postPath} aria-label={`${text.read}: ${post.title}`}>
                         <img
-                          src={post.featuredImage || doctorConsultation}
+                          src={post.featuredImage || assetUrl(doctorConsultation)}
                           alt={post.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
                           className="w-full h-56 object-cover"
                           loading="lazy"

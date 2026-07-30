@@ -5,7 +5,7 @@ import ForPatientsSection from '@/components/ForPatients';
 import Footer from '@/components/Footer';
 import { updateSEO } from '@/utils/seo';
 import { forPatientsContent } from '@/data/pageContent/mainPages/forPatients';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -17,8 +17,7 @@ import {
   ClipboardList,
   Calendar,
   Shield,
-  Info,
-  Receipt
+  Info
 } from 'lucide-react';
 
 const ParaPacientesEspanol = () => {
@@ -203,12 +202,6 @@ const ParaPacientesEspanol = () => {
                 <Button variant="outline" className="border-green-700 text-green-700 hover:bg-green-50 rounded-full">
                   <Shield className="w-4 h-4 mr-2" />
                   {policyLinks[2]}
-                </Button>
-              </Link>
-              <Link href="/es/ley-sin-sorpresas">
-                <Button variant="outline" className="border-green-700 text-green-700 hover:bg-green-50 rounded-full">
-                  <Receipt className="w-4 h-4 mr-2" />
-                  {policyLinks[3]}
                 </Button>
               </Link>
             </div>

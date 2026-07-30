@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Link, useLocation } from 'wouter';
+import { Link, useLocation } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { getCorrespondingURL, hasBilingualCounterpart } from '@/utils/urlMapping';

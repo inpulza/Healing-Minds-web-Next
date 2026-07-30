@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "requiredEnforcementMode": "host-workspace-root",
+  "requiredCapabilities": {
+    "filesystemReadBoundary": true,
+    "filesystemWriteBoundary": true,
+    "networkDenied": true,
+    "childProcessDeniedOrContained": true,
+    "originalBrowserDenied": true,
+    "hostEvidence": true
+  },
+  "adapters": {
+    "node-permission-model": {
+      "status": "partial",
+      "description": "Node permission model restricts filesystem and child processes, but does not impose a network boundary.",
+      "capabilities": {
+        "filesystemReadBoundary": true,
+        "filesystemWriteBoundary": true,
+        "networkDenied": false,
+        "childProcessDeniedOrContained": true,
+        "originalBrowserDenied": true,
+        "hostEvidence": true
+      }
+    },
+    "container-no-network": {
+      "status": "eligible",
+      "description": "Container with only the role workspace mounted and networking disabled.",
+      "capabilities": {
+        "filesystemReadBoundary": true,
+        "filesystemWriteBoundary": true,
+        "networkDenied": true,
+        "childProcessDeniedOrContained": true,
+        "originalBrowserDenied": true,
+        "hostEvidence": true
+      }
+    },
+    "sandbox-vm-no-network": {
+      "status": "eligible",
+      "description": "Ephemeral VM with only the role workspace mapped and networking disabled.",
+      "capabilities": {
+        "filesystemReadBoundary": true,
+        "filesystemWriteBoundary": true,
+        "networkDenied": true,
+        "childProcessDeniedOrContained": true,
+        "originalBrowserDenied": true,
+        "hostEvidence": true
+      }
+    }
+  }
+}

@@ -1,9 +1,10 @@
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Check, Heart, Sun } from 'lucide-react';
 import WellnessIcon from '@/components/WellnessIcon';
 import bilingualImage from '@assets/bilingual-consultation-updated.webp';
+import { assetUrl } from '@/lib/asset-url';
 
 const BilingualCare = () => {
   const { language } = useLanguage();
@@ -96,7 +97,7 @@ const BilingualCare = () => {
           
           <div>
             <img
-              src={bilingualImage}
+              src={assetUrl(bilingualImage)}
               alt="Bilingual psychiatric care - diverse community support"
               className="rounded-lg sm:rounded-xl shadow-lg w-full h-auto"
               width={600}

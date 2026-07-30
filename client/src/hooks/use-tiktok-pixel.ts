@@ -1,11 +1,15 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { useLocation } from 'wouter';
+import { useLocation } from '@/lib/navigation';
 import {
   bumpConsentGeneration,
   claimPageView,
   isCurrentPageView,
   markPageViewTracked,
 } from '@/lib/pixel-page-view';
+
+function isDevelopment(): boolean {
+  return process.env.NODE_ENV === 'development';
+}
 
 const TIKTOK_PIXEL_ID = 'D3IKI7BC77UEJB9HBO0G';
 
@@ -38,12 +42,12 @@ function emitTikTokPageView(location: string): void {
     try {
       if (window.ttq && typeof window.ttq.page === 'function') {
         window.ttq.page();
-        if (import.meta.env.DEV) {
+        if (isDevelopment()) {
           console.log('🎵 TikTok Pixel page view tracked:', location);
         }
       }
     } catch (error) {
-      if (import.meta.env.DEV) {
+      if (isDevelopment()) {
         console.warn('Failed to track TikTok page view:', error);
       }
     }
@@ -165,8 +169,8 @@ export function useTikTokPixel() {
 
   // Initialize TikTok Pixel when consent is available
   const initTikTokPixel = useCallback(() => {
-    if (import.meta.env.MODE === 'development') {
-      if (import.meta.env.DEV) {
+    if (isDevelopment()) {
+      if (isDevelopment()) {
         console.log('🎵 TikTok Pixel disabled in development mode');
       }
       return;
@@ -182,7 +186,7 @@ export function useTikTokPixel() {
         globalConsentRevoked || 
         consentRevoked.current ||
         recentInitialization) {
-      if (import.meta.env.DEV) {
+      if (isDevelopment()) {
         console.log('🎵 TikTok Pixel already initialized or blocked, skipping');
       }
       return;
@@ -200,7 +204,7 @@ export function useTikTokPixel() {
       const alreadyLoaded = Boolean(window.ttq && typeof window.ttq.page === 'function');
 
       if (alreadyLoaded) {
-        if (import.meta.env.DEV) {
+        if (isDevelopment()) {
           console.log('🎵 TikTok Pixel already loaded in page, skipping script injection');
         }
       } else {
@@ -259,14 +263,14 @@ export function useTikTokPixel() {
   // Initial setup and consent change listener
   useEffect(() => {
     // Check initial consent state and initialize if available
-    if (import.meta.env.MODE === 'production' && hasMarketingConsent()) {
+    if (process.env.NODE_ENV === 'production' && hasMarketingConsent()) {
       initTikTokPixel();
-    } else if (import.meta.env.MODE === 'development') {
-      if (import.meta.env.DEV) {
+    } else if (isDevelopment()) {
+      if (isDevelopment()) {
         console.log('🎵 TikTok Pixel disabled in development mode');
       }
-    } else if (import.meta.env.MODE === 'production') {
-      if (import.meta.env.DEV) {
+    } else if (process.env.NODE_ENV === 'production') {
+      if (isDevelopment()) {
         console.log('🚫 TikTok Pixel not initialized - no marketing consent');
       }
     }
@@ -334,7 +338,7 @@ export function useTikTokPixel() {
         try {
           window.ttq.track(eventName, properties);
         } catch (error) {
-          if (import.meta.env.DEV) {
+          if (isDevelopment()) {
             console.warn('Failed to track TikTok event:', error);
           }
         }
@@ -346,7 +350,7 @@ export function useTikTokPixel() {
         try {
           window.ttq.identify(userData);
         } catch (error) {
-          if (import.meta.env.DEV) {
+          if (isDevelopment()) {
             console.warn('Failed to identify user in TikTok Pixel:', error);
           }
         }
@@ -358,7 +362,7 @@ export function useTikTokPixel() {
         try {
           window.ttq.page();
         } catch (error) {
-          if (import.meta.env.DEV) {
+          if (isDevelopment()) {
             console.warn('Failed to track TikTok page:', error);
           }
         }

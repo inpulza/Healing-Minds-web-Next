@@ -1,0 +1,398 @@
+{
+  "summary": {
+    "generatedAt": "2026-07-30T09:18:01.756Z",
+    "candidate": "http://127.0.0.1:3100",
+    "total": 77,
+    "httpFailures": [],
+    "routesWithBrokenImages": [],
+    "brokenImageCount": 0,
+    "errors": []
+  },
+  "results": [
+    {
+      "pathname": "/",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/about",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/acerca-de",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/contact",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/contacto",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/for-patients",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/para-pacientes",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/telepsychiatry-florida",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/telepsiquiatria-florida",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/services",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/servicios",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/services/anxiety-treatment",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/servicios/tratamiento-ansiedad",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/services/depression-treatment",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/servicios/tratamiento-depresion",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/services/adhd-treatment",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/servicios/tratamiento-adhd",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/services/ptsd-treatment",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/servicios/tratamiento-tept",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/services/bipolar-treatment",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/servicios/tratamiento-bipolar",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/services/medication-management",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/servicios/manejo-medicamentos",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-naples",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-naples",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-bonita-springs",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-bonita-springs",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-marco-island",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-marco-island",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-fort-myers",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-fort-myers",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-ave-maria",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-ave-maria",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-estero",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-estero",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-golden-gate",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-golden-gate",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-immokalee",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-immokalee",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-lely-resort",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-lely-resort",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/locations/psychiatrist-vanderbilt-beach",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ubicaciones/psiquiatra-vanderbilt-beach",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/privacy-policy",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/politica-privacidad",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/terms-of-service",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/terminos-servicio",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/hipaa-notice",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/aviso-hipaa",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/cookie-policy",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/politica-cookies",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/cancellation-policy",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/politica-cancelacion",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/billing-policy",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/politica-facturacion",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/emergency-policy",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/politica-emergencias",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/patient-rights",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/derechos-paciente",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/telehealth-consent",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/consentimiento-telesalud",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/no-surprises-act",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/ley-sin-sorpresas",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/accessibility-statement",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/declaracion-accesibilidad",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/nondiscrimination-notice",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/aviso-no-discriminacion",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/communications-policy",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/politica-comunicaciones",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/medical-disclaimer",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/descargo-responsabilidad-medica",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/blog",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/blog",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/blog/bipolar-medication-follow-up-questions",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/es/blog/tratamiento-ansiedad-naples",
+      "status": 200,
+      "brokenImages": []
+    },
+    {
+      "pathname": "/blog/understanding-anxiety-treatment-naples",
+      "status": 200,
+      "brokenImages": []
+    }
+  ]
+}

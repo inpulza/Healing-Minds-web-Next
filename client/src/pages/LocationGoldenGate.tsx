@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { assetUrl } from '@/lib/asset-url';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -32,7 +33,7 @@ import {
   User,
   Leaf
 } from 'lucide-react';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 
 // Import office photo
 import officePhoto from '@assets/doctor-consultation.webp';
@@ -142,7 +143,7 @@ const LocationGoldenGate = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="md:hidden">
               <div className="relative h-[400px] sm:h-[450px] mb-4 rounded-2xl overflow-hidden">
-                <OptimizedImage src={heroLocationImage} alt="Dr. Melva Reve serving Golden Gate" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: '95% top' }} width={800} height={1000} priority={true} sizes="100vw" />
+                <OptimizedImage src={assetUrl(heroLocationImage)} alt="Dr. Melva Reve serving Golden Gate" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: '95% top' }} width={800} height={1000} priority={true} sizes="100vw" />
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
@@ -161,7 +162,7 @@ const LocationGoldenGate = () => {
             </div>
             <div className="hidden md:block">
               <div className="relative aspect-[18/9] rounded-2xl overflow-hidden border border-blue-200">
-                <OptimizedImage src={heroLocationImage} alt="Dr. Melva Reve serving Golden Gate" className="absolute inset-0 w-full h-full object-cover object-center" width={1800} height={900} priority={true} sizes="(max-width: 1024px) 100vw, 1800px" />
+                <OptimizedImage src={assetUrl(heroLocationImage)} alt="Dr. Melva Reve serving Golden Gate" className="absolute inset-0 w-full h-full object-cover object-center" width={1800} height={900} priority={true} sizes="(max-width: 1024px) 100vw, 1800px" />
                 <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>
                 <div className="relative h-full flex items-start px-8 sm:px-12 lg:px-16 pt-12">
                   <div className="max-w-2xl text-left">
@@ -228,7 +229,7 @@ const LocationGoldenGate = () => {
                 <div className="order-1 lg:order-2 flex flex-col h-full">
                   <div className="w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[4/5] rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <OptimizedImage
-                      src={officePhoto}
+                      src={assetUrl(officePhoto)}
                       alt="Dr. Melva Reve serving Golden Gate - Professional and compassionate mental health care"
                       className="w-full h-full object-cover object-center"
                       width={800}
@@ -824,8 +825,8 @@ const LocationGoldenGate = () => {
                       </h3>
                       <p className="text-gray-600 font-body leading-relaxed">
                         {language === 'en' 
-                          ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: Closed\nSunday: Closed'
-                          : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Cerrado\nDomingo: Cerrado'}
+                          ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
+                          : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
                       </p>
                     </div>
                   </div>

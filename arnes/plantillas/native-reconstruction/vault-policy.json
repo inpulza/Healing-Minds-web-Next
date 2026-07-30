@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "policyId": "native-reconstruction-vault-v0",
+  "defaultDeny": true,
+  "maxAuthorizationMinutes": 60,
+  "authorization": {
+    "requiredFields": ["authorizationId", "authorizedBy", "reason", "scope", "issuedAt", "expiresAt"]
+  },
+  "purge": {
+    "mode": "authorized-delete",
+    "verifyPathAbsent": true,
+    "recordTombstone": true,
+    "secureEraseClaim": false
+  }
+}

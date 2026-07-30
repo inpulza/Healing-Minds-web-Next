@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react';
+import { assetUrl } from '@/lib/asset-url';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -424,7 +425,7 @@ const PsiquiatraCalifornia = () => {
               <div className="bg-green-50 rounded-3xl p-8 border border-green-100">
                 <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
                   <img
-                    src={californiaMap}
+                    src={assetUrl(californiaMap)}
                     alt={language === 'en'
                       ? 'California state map - online psychiatric care available throughout the state'
                       : 'Mapa del estado de California - atención psiquiátrica online disponible en todo el estado'}

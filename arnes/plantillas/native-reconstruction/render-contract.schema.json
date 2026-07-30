@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inpulza.local/native-reconstruction/render-contract.schema.json",
+  "title": "Native Reconstruction Render Contract v0",
+  "type": "object",
+  "required": ["schemaVersion", "contractId", "providerAgnostic", "briefId", "briefCoverage", "tokens", "pages", "components", "assets", "decisions", "assertions", "gaps"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contractId": { "type": "string", "minLength": 1 },
+    "providerAgnostic": { "const": true },
+    "briefId": { "type": "string", "minLength": 1 },
+    "briefCoverage": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["requirementId", "contractRefs", "assertionIds"],
+        "properties": {
+          "requirementId": { "type": "string" },
+          "contractRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/jsonPointer" } },
+          "assertionIds": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "required": ["colors", "typography", "spacing", "radii", "motion", "trace"],
+      "properties": {
+        "colors": { "type": "object", "minProperties": 1 },
+        "typography": { "type": "object", "minProperties": 1 },
+        "spacing": { "type": "object", "minProperties": 1 },
+        "radii": { "type": "object", "minProperties": 1 },
+        "motion": { "type": "object", "minProperties": 1 },
+        "trace": { "$ref": "#/$defs/trace" }
+      },
+      "additionalProperties": false
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "route", "sections", "trace"],
+        "properties": {
+          "id": { "$ref": "#/$defs/semanticId" },
+          "route": { "type": "string", "pattern": "^/" },
+          "sections": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "order", "componentIds", "seams", "layout", "trace"],
+              "properties": {
+                "id": { "$ref": "#/$defs/semanticId" },
+                "order": { "type": "integer", "minimum": 0 },
+                "componentIds": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/semanticId" } },
+                "seams": {
+                  "type": "object",
+                  "required": ["previousSectionId", "nextSectionId", "overlapPx", "coupling"],
+                  "properties": {
+                    "previousSectionId": { "type": ["string", "null"] },
+                    "nextSectionId": { "type": ["string", "null"] },
+                    "overlapPx": { "type": "number" },
+                    "coupling": { "enum": ["independent", "overlap", "shared-scroll", "sticky-handoff"] }
+                  },
+                  "additionalProperties": false
+                },
+                "layout": {
+                  "type": "object",
+                  "required": ["container", "flow", "minHeightPx"],
+                  "properties": {
+                    "container": {
+                      "type": "object",
+                      "required": ["mode", "maxWidthPx", "inlinePaddingPx", "alignment"],
+                      "properties": {
+                        "mode": { "enum": ["full-width", "max-width", "intrinsic"] },
+                        "maxWidthPx": { "type": ["number", "null"], "minimum": 0 },
+                        "inlinePaddingPx": { "type": "number", "minimum": 0 },
+                        "alignment": { "enum": ["start", "center", "end"] }
+                      },
+                      "additionalProperties": false
+                    },
+                    "flow": { "enum": ["normal", "grid", "stack", "sticky-stack", "carousel"] },
+                    "minHeightPx": { "type": "number", "minimum": 0 }
+                  },
+                  "additionalProperties": false
+                },
+                "trace": { "$ref": "#/$defs/trace" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "trace": { "$ref": "#/$defs/trace" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "assets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/asset" }
+    },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "selected", "rationale"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^D-[A-Z0-9-]+$" },
+          "question": { "type": "string", "minLength": 1 },
+          "selected": { "type": "string", "minLength": 1 },
+          "rationale": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "targetRef", "metric", "expected", "tolerance"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^A-[A-Z0-9-]+$" },
+          "targetRef": { "$ref": "#/$defs/jsonPointer" },
+          "metric": { "type": "string", "minLength": 1 },
+          "expected": {},
+          "tolerance": {}
+        },
+        "additionalProperties": false
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "targetRef", "description", "blocking"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^G-[A-Z0-9-]+$" },
+          "targetRef": { "$ref": "#/$defs/jsonPointer" },
+          "description": { "type": "string", "minLength": 1 },
+          "blocking": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "semanticId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "jsonPointer": { "type": "string", "pattern": "^#/" },
+    "trace": {
+      "type": "object",
+      "required": ["basis", "confidence", "gap", "decisionIds", "assertionIds"],
+      "properties": {
+        "basis": { "enum": ["measured", "inferred"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "gap": { "type": ["string", "null"] },
+        "decisionIds": { "type": "array", "items": { "type": "string" } },
+        "assertionIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "component": {
+      "type": "object",
+      "required": ["id", "sectionId", "kind", "geometry", "typography", "paint", "layers", "overflow", "responsive", "states", "sticky", "scroll", "media", "accessibility", "trace"],
+      "properties": {
+        "id": { "$ref": "#/$defs/semanticId" },
+        "sectionId": { "$ref": "#/$defs/semanticId" },
+        "kind": { "type": "string", "minLength": 1 },
+        "geometry": { "type": "object", "minProperties": 1 },
+        "typography": { "type": "object", "minProperties": 1 },
+        "paint": { "type": "object", "minProperties": 1 },
+        "layers": { "type": "array" },
+        "overflow": { "type": "object", "minProperties": 1 },
+        "responsive": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/responsiveRule" } },
+        "states": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/state" } },
+        "sticky": { "type": "object", "required": ["enabled", "topPx"], "properties": { "enabled": { "type": "boolean" }, "topPx": { "type": ["number", "null"] } }, "additionalProperties": false },
+        "scroll": { "type": "object", "required": ["root", "linked", "physics"], "properties": { "root": { "type": "string" }, "linked": { "type": "boolean" }, "physics": { "type": "object" } }, "additionalProperties": false },
+        "media": { "type": "object", "required": ["kind", "assetIds"], "properties": { "kind": { "enum": ["none", "image", "video", "audio", "canvas", "3d"] }, "assetIds": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": false },
+        "accessibility": { "type": "object", "required": ["role", "keyboard", "reducedMotion"], "properties": { "role": { "type": "string" }, "keyboard": { "type": "array", "items": { "type": "string" } }, "reducedMotion": { "type": "string" } }, "additionalProperties": false },
+        "trace": { "$ref": "#/$defs/trace" }
+      },
+      "additionalProperties": false
+    },
+    "responsiveRule": {
+      "type": "object",
+      "required": ["id", "minWidthPx", "maxWidthPx", "deltas", "trace"],
+      "properties": {
+        "id": { "$ref": "#/$defs/semanticId" },
+        "minWidthPx": { "type": "number", "minimum": 0 },
+        "maxWidthPx": { "type": ["number", "null"], "minimum": 0 },
+        "deltas": { "type": "object", "minProperties": 1 },
+        "trace": { "$ref": "#/$defs/trace" }
+      },
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "required": ["id", "trigger", "preconditions", "result", "motion", "trace"],
+      "properties": {
+        "id": { "$ref": "#/$defs/semanticId" },
+        "trigger": { "type": "object", "required": ["type"], "properties": { "type": { "enum": ["initial", "hover", "focus", "click", "scroll", "timer", "drag"] } }, "additionalProperties": true },
+        "preconditions": { "type": "array", "items": { "type": "string" } },
+        "result": { "type": "object", "minProperties": 1 },
+        "motion": { "type": "object", "required": ["durationMs", "delayMs", "easing", "physics"], "properties": { "durationMs": { "type": "number", "minimum": 0 }, "delayMs": { "type": "number", "minimum": 0 }, "easing": { "type": "string" }, "physics": { "type": "object" } }, "additionalProperties": false },
+        "trace": { "$ref": "#/$defs/trace" }
+      },
+      "additionalProperties": false
+    },
+    "asset": {
+      "type": "object",
+      "required": ["id", "kind", "localPath", "approval", "provenance", "substitution", "loading", "trace"],
+      "properties": {
+        "id": { "$ref": "#/$defs/semanticId" },
+        "kind": { "enum": ["image", "video", "audio", "font", "model", "data"] },
+        "localPath": { "type": "string", "minLength": 1 },
+        "approval": { "const": "approved" },
+        "provenance": { "enum": ["client-owned", "licensed", "generated", "temporary-reference"] },
+        "substitution": { "type": "string" },
+        "loading": { "enum": ["eager", "lazy", "preload"] },
+        "trace": { "$ref": "#/$defs/trace" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

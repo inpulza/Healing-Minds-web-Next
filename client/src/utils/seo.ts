@@ -1,5 +1,9 @@
 import { getRobotsPolicy, normalizeRoutePath } from '@shared/routeManifest';
 
+function isDevelopment(): boolean {
+  return process.env.NODE_ENV === 'development';
+}
+
 interface SEOData {
   title: string;
   description: string;
@@ -195,7 +199,7 @@ export const updateSEO = (data: SEOData) => {
 // This prevents duplicate schemas and conflicts with Google Rich Results
 // Keeping this function for backward compatibility but it does nothing
 export const addMedicalBusinessSchema = () => {
-  if (import.meta.env.DEV) {
+  if (isDevelopment()) {
     console.log('ℹ️ Schema injection is now handled server-side only. Client-side schema injection is disabled to prevent duplicates.');
   }
   // All schema injection has been moved to server-side for better SEO and to prevent duplicates

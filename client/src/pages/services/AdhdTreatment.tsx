@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'wouter';
+import { assetUrl } from '@/lib/asset-url';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
@@ -257,7 +258,7 @@ const AdhdTreatment = () => {
                 <div className="w-full">
                   <div className="w-full aspect-[4/3] overflow-hidden rounded-xl shadow-lg mb-6 max-w-full">
                     <img 
-                      src={focusImage}
+                      src={assetUrl(focusImage)}
                       alt="Professional therapist reviewing ADHD treatment plans - Dr. Melva Reve's modern psychiatric practice"
                       className="w-full h-full object-cover object-center"
                       loading="lazy"

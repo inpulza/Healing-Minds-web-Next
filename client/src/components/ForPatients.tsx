@@ -1,7 +1,7 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
 import { Check, FileText, Shield, DollarSign, Phone, Receipt, Video } from 'lucide-react';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { forPatientsSectionContent } from '@/data/pageContent/mainPages/sharedSections';
 
 const ForPatients = () => {

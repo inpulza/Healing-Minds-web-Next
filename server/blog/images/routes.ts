@@ -64,7 +64,7 @@ export function registerBlogImageRoutes(app: Express): void {
       data: {
         enabled: isBlogImageEnabled(),
         model: process.env.BLOG_IMAGE_MODEL?.trim() || "gpt-image-2",
-        storage: "replit-app-storage",
+        storage: process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID ? "vercel-blob" : "not-configured",
       },
     });
   });

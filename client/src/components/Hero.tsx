@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { trackLeadConversion } from '@/lib/analytics';
@@ -8,10 +8,13 @@ import heroImage from '../assets/hero-doctor-latest.webp';
 import mobileHeroImage from '../assets/hero-doctor-latest.webp';
 import { homeContent } from '@/data/pageContent/mainPages/home';
 import { renderRichText } from '@/components/RichText';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { assetUrl } from '@/lib/asset-url';
 
 // Optimized Hero component with performance improvements
 const Hero = React.memo(() => {
   const { language, t } = useLanguage();
+  const isMobile = useIsMobile();
   const content = homeContent[language];
   const section = (key: string) => content.sections.find((x) => x.key === key)!;
 
@@ -36,7 +39,7 @@ const Hero = React.memo(() => {
           <div className="relative rounded-2xl overflow-hidden h-[400px] sm:h-[450px] mb-6">
             {/* Mobile Background Image */}
             <img 
-              src={mobileHeroImage}
+              src={assetUrl(mobileHeroImage)}
               alt="Dr. Melva Reve, MD - Psychiatrist providing compassionate mental health care in Naples, FL"
               className="absolute inset-0 w-full h-full object-cover"
               style={{ objectPosition: '95% top' }}
@@ -52,9 +55,9 @@ const Hero = React.memo(() => {
             <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
               <div className="max-w-sm mx-auto">
                 {/* Mobile Title */}
-                <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
+                <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid={isMobile ? 'hero-title' : undefined}>
                   {renderRichText(content.title, undefined, 'font-display italic')}
-                </p>
+                </h1>
               </div>
             </div>
           </div>
@@ -95,7 +98,7 @@ const Hero = React.memo(() => {
           <div className="relative rounded-3xl overflow-hidden aspect-[18/9] flex items-start hero-container border border-blue-200">
             {/* Background Image */}
             <img 
-              src={heroImage}
+              src={assetUrl(heroImage)}
               alt="Dr. Melva Reve, MD - Psychiatrist providing compassionate mental health care in her modern Naples office"
               className="absolute inset-0 w-full h-full object-cover object-top hero-image"
               width={1200}
@@ -133,7 +136,7 @@ const Hero = React.memo(() => {
                   </div>
                 </div>
                 
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight text-green-800 text-left mb-5 font-body font-bold" data-testid="hero-title">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight text-green-800 text-left mb-5 font-body font-bold" data-testid={!isMobile ? 'hero-title' : undefined}>
                   {renderRichText(content.title, undefined, 'font-display italic text-green-700')}
                 </h1>
                 

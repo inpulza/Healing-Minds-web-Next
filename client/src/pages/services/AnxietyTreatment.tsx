@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Link } from 'wouter';
+import { assetUrl } from '@/lib/asset-url';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import Header from '@/components/Header';
@@ -158,7 +159,7 @@ const AnxietyTreatment = () => {
                   <div className="flex-1">
                     <div className="w-full h-full rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100 min-h-[10rem]">
                       <img 
-                        src={zenStonesImage} 
+                        src={assetUrl(zenStonesImage)}
                         alt="Zen stones stacked on green background representing meditation and relaxation for anxiety treatment"
                         className="w-full h-full object-cover"
                         loading="lazy"

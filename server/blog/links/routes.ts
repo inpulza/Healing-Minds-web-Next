@@ -38,8 +38,8 @@ import {
 import { reconcileStoredBlogPostLinks } from "./storage";
 
 const languageSchema = z.enum(["en", "es", "all"]);
-const reviewStatusSchema = z.enum(["pending", "approved", "blocked", "retired"]);
-const healthStatusSchema = z.enum([
+export const reviewStatusSchema = z.enum(["pending", "approved", "blocked", "retired"]);
+export const healthStatusSchema = z.enum([
   "unchecked",
   "healthy",
   "redirected",
@@ -59,7 +59,7 @@ const sourceTypeSchema = z.enum([
 ]);
 const boundedStringArray = z.array(z.string().trim().min(1).max(120)).max(30);
 
-const createLinkSchema = z.object({
+export const createLinkSchema = z.object({
   kind: z.enum(["internal", "external"]).optional(),
   href: z.string().trim().min(1).max(2_000),
   stableKey: z.string().trim().regex(/^[a-z0-9-]{3,120}$/).optional().nullable(),
@@ -79,7 +79,7 @@ const createLinkSchema = z.object({
   evidenceScope: z.string().trim().max(2_000).optional().nullable(),
 });
 
-const updateLinkSchema = z.object({
+export const updateLinkSchema = z.object({
   title: z.string().trim().min(2).max(255).optional(),
   label: z.string().trim().min(2).max(255).optional(),
   language: languageSchema.optional(),
@@ -95,7 +95,7 @@ const updateLinkSchema = z.object({
   freshnessScore: z.number().int().min(0).max(100).optional(),
 }).strict();
 
-const reviewLinkSchema = z.object({
+export const reviewLinkSchema = z.object({
   reviewStatus: reviewStatusSchema,
   reason: z.string().trim().max(2_000).optional().nullable(),
   reviewNotes: z.string().trim().max(2_000).optional().nullable(),
@@ -119,14 +119,14 @@ const sourceQualitySchema = z.object({
   stableIdentifier: z.number().int().min(0).max(5),
 });
 
-const reviewSourceSchema = z.object({
+export const reviewSourceSchema = z.object({
   reviewStatus: reviewStatusSchema,
   reviewNotes: z.string().trim().max(2_000).default(""),
   qualityBreakdown: sourceQualitySchema,
   languages: z.array(z.enum(["en", "es"])).min(1).max(2),
 });
 
-const auditRunSchema = z.object({
+export const auditRunSchema = z.object({
   idempotencyKey: z.string().trim().min(8).max(255).optional(),
   linkIds: z.array(z.number().int().positive()).min(1).max(25),
 }).strict();
@@ -151,7 +151,7 @@ function requestIdentity(req: Request): string {
   ).slice(0, 255);
 }
 
-function publicBlogLinkAuditRun(
+export function publicBlogLinkAuditRun(
   run: BlogLinkAuditRun,
 ): Omit<BlogLinkAuditRun, "leaseToken" | "leaseEpoch"> {
   const {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useLocation } from 'wouter';
+import { useLocation } from '@/lib/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, CalendarCheck, Video } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';

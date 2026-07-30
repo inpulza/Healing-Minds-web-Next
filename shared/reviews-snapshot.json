@@ -1,0 +1,395 @@
+{
+  "stats": {
+    "averageRating": 5,
+    "totalReviews": 38,
+    "ratingDistribution": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 38
+    }
+  },
+  "reviews": [
+    {
+      "id": "F4B3D0E98C6D568A49FA5C6E765D1DFF",
+      "name": "Brett Duffy",
+      "image": "/assets/reviews/f4b3d0e98c6d568a49fa5c6e765d1dff.jpg",
+      "date": "hace 13 días",
+      "rating": 5,
+      "comment": "Very friendly and personable",
+      "fullComment": "Very friendly and personable",
+      "createdAt": "2026-07-17T13:48:02.000Z"
+    },
+    {
+      "id": "89C822DC2E6357AEFCD41CFDB12CE26E",
+      "name": "Saundra Kielborn",
+      "image": "/assets/reviews/89c822dc2e6357aefcd41cfdb12ce26e.jpg",
+      "date": "hace 1 mes",
+      "rating": 5,
+      "comment": "Dr. Reve has been my psychiatrist for only a short time, but I am already very impressed with her. She is an excellent l...",
+      "fullComment": "Dr. Reve has been my psychiatrist for only a short time, but I am already very impressed with her. She is an excellent listener, easy to communicate with, and has a warm, friendly demeanor that immediately puts you at ease. Her office is beautiful, welcoming, and even smells wonderful.\n\nAs a complex patient who sees a team of physicians, I have unfortunately encountered many doctors who have been dismissive of what I have experienced. Dr. Reve is different. She is compassionate, nonjudgmental, and genuinely takes the time to understand her patients.\n\nHer approach has given me hope that I may one day return to living a normal and fulfilling life. I am truly grateful for her care and support.\n\nI would also like to recognize her front desk receptionist, who is always friendly, kind, and professional. They both make every visit a positive experience.\n\nGod bless Dr. Reve and her staff.",
+      "createdAt": "2026-06-02T19:42:29.000Z"
+    },
+    {
+      "id": "715C889F5866ACE8EF59232F225770DC",
+      "name": "Em Moran",
+      "image": "/assets/reviews/715c889f5866ace8ef59232f225770dc.jpg",
+      "date": "hace 3 meses",
+      "rating": 5,
+      "comment": "",
+      "fullComment": "",
+      "createdAt": "2026-04-29T12:53:55.000Z"
+    },
+    {
+      "id": "8F2CD6935FA8DA6EECC0B98AA42FF3B0",
+      "name": "Mike Lexa",
+      "image": "/assets/reviews/8f2cd6935fa8da6eecc0b98aa42ff3b0.jpg",
+      "date": "hace 3 meses",
+      "rating": 5,
+      "comment": "I was skeptical at first because I've tried SO many doctors and literally every medication imaginable.  But Dr. Reve was...",
+      "fullComment": "I was skeptical at first because I've tried SO many doctors and literally every medication imaginable.  But Dr. Reve was very willing to listen and help me in any way she could, and I'm so grateful for her!  I feel like I can finally breathe again, it's been so long since I've felt normal and it's all because of Dr. Reve.  Thank you again, and if any potential patients are reading this, TRUST ME, this doctor will do anything in her power to help you feel like yourself again.  She gave me back my life, so Thank You Dr. Reve!",
+      "createdAt": "2026-04-09T18:49:12.000Z"
+    },
+    {
+      "id": "C5BEB32A7B0025C61D4B7B199899EA67",
+      "name": "liz pisani",
+      "image": "/assets/reviews/c5beb32a7b0025c61d4b7b199899ea67.jpg",
+      "date": "hace 3 meses",
+      "rating": 5,
+      "comment": "Dr. Reve is very thorough, and able to address my needs for the proper medication and ongoing treatment plan.  She is ea...",
+      "fullComment": "Dr. Reve is very thorough, and able to address my needs for the proper medication and ongoing treatment plan.  She is easy to talk to and very empathetic.  The receptionist Claudia is great.   She is excellent in booking my appointments around my busy work schedule.  Healing Minds is great. 10 stars if possible.",
+      "createdAt": "2026-04-06T13:28:10.000Z"
+    },
+    {
+      "id": "26599C91B3D7E9830AD208F819242DF0",
+      "name": "Jean Benoit",
+      "image": "/assets/reviews/26599c91b3d7e9830ad208f819242df0.jpg",
+      "date": "hace 4 meses",
+      "rating": 5,
+      "comment": "Dr. Reve is an outstanding psychiatrist. She is compassionate, attentive, and take the time to truly listen. I always fe...",
+      "fullComment": "Dr. Reve is an outstanding psychiatrist. She is compassionate, attentive, and take the time to truly listen. I always felt respected and never rushed, and her guidance and approach made a real difference in my progress. I very highly recommend Dr. Reve to anyone looking for thoughtful and effective care. Her assistant, Claudia, is also very welcoming, efficient and professional.  I would give more than 5 stars if I could!",
+      "createdAt": "2026-03-23T00:16:32.000Z"
+    },
+    {
+      "id": "B1DE1FDC7D569EA76E3EBE2D01D73EDF",
+      "name": "Rosa Arcia",
+      "image": "/assets/reviews/b1de1fdc7d569ea76e3ebe2d01d73edf.jpg",
+      "date": "hace 4 meses",
+      "rating": 5,
+      "comment": "Excelente  maravillosa doctora. Me ha ayudado muchísimo con mis cosas\n\n",
+      "fullComment": "Excelente  maravillosa doctora. Me ha ayudado muchísimo con mis cosas\n\n",
+      "createdAt": "2026-03-20T13:21:21.000Z"
+    },
+    {
+      "id": "01287E7CD7620C80D22B0AF3860B32FF",
+      "name": "Iveth martinez",
+      "image": "/assets/reviews/01287e7cd7620c80d22b0af3860b32ff.jpg",
+      "date": "hace 4 meses",
+      "rating": 5,
+      "comment": "100% recomendada , muy profesional . Si necesitan ayuda vayan con ella. 🤍\n\n",
+      "fullComment": "100% recomendada , muy profesional . Si necesitan ayuda vayan con ella. 🤍\n\n",
+      "createdAt": "2026-03-06T15:25:15.000Z"
+    },
+    {
+      "id": "F567020B1DEE2B652A02EEE8ED3C6B77",
+      "name": "Joe Nebbia",
+      "image": "/assets/reviews/f567020b1dee2b652a02eee8ed3c6b77.jpg",
+      "date": "hace 4 meses",
+      "rating": 5,
+      "comment": "Excellent physician. She helped craft a unique medication regimen to finally pull me out of depression. Beyond grateful.",
+      "fullComment": "Excellent physician. She helped craft a unique medication regimen to finally pull me out of depression. Beyond grateful.",
+      "createdAt": "2026-03-06T15:06:22.000Z"
+    },
+    {
+      "id": "756CB20C73A8E6B5C7B4E221971BD941",
+      "name": "Cyndi Sobe",
+      "image": "/assets/reviews/756cb20c73a8e6b5c7b4e221971bd941.jpg",
+      "date": "hace 4 meses",
+      "rating": 5,
+      "comment": "",
+      "fullComment": "",
+      "createdAt": "2026-03-04T14:40:56.000Z"
+    },
+    {
+      "id": "E54D95A4895B0A6AF87D66C0B4801FB0",
+      "name": "CLB",
+      "image": "/assets/reviews/e54d95a4895b0a6af87d66c0b4801fb0.jpg",
+      "date": "hace 5 meses",
+      "rating": 5,
+      "comment": "I felt SO comfortable and understood. I am so happy that I found someone that really listens!",
+      "fullComment": "I felt SO comfortable and understood. I am so happy that I found someone that really listens!",
+      "createdAt": "2026-03-02T15:47:13.000Z"
+    },
+    {
+      "id": "643336E91EB5FA67E149F58E1A841239",
+      "name": "Lauren Bradley",
+      "image": "/assets/reviews/643336e91eb5fa67e149f58e1a841239.jpg",
+      "date": "hace 5 meses",
+      "rating": 5,
+      "comment": "I’ve had such an amazing and beneficial experience after coming to Healing Minds. Dr. Reve is so kind and helpful as is ...",
+      "fullComment": "I’ve had such an amazing and beneficial experience after coming to Healing Minds. Dr. Reve is so kind and helpful as is Claudia at the front desk. If you’re struggling and looking for a little support to help find your way, Healing Minds is the perfect first step.",
+      "createdAt": "2026-02-24T18:50:21.000Z"
+    },
+    {
+      "id": "5C599C94EEF5CEDEEDE9950006D581B7",
+      "name": "Sidileni Urrutia",
+      "image": "/assets/reviews/5c599c94eef5cedeede9950006d581b7.jpg",
+      "date": "hace 5 meses",
+      "rating": 5,
+      "comment": "My husband and I have no words to thank you Dr. Melva enough. She has incredible  Knowledge, she brings wisdom for our l...",
+      "fullComment": "My husband and I have no words to thank you Dr. Melva enough. She has incredible  Knowledge, she brings wisdom for our life’s.\nWe do recommended her 1000%.\nHer Assistant Claudia it’s also amazing. She knows what she’s doing very helpful and kind.",
+      "createdAt": "2026-02-19T23:03:02.000Z"
+    },
+    {
+      "id": "A365736C70B6D9A8A4E53184E3DFEF33",
+      "name": "Abe Bernstein",
+      "image": "/assets/reviews/a365736c70b6d9a8a4e53184e3dfef33.jpg",
+      "date": "hace 5 meses",
+      "rating": 5,
+      "comment": "I had a great experience at this office. The environment was welcoming, and Claudia made me feel comfortable right away....",
+      "fullComment": "I had a great experience at this office. The environment was welcoming, and Claudia made me feel comfortable right away. And the doctor was thorough I truly felt cared for and listened to, which made all the difference. It's clear they value their patients and take the time to understand my concerns.",
+      "createdAt": "2026-02-19T17:06:28.000Z"
+    },
+    {
+      "id": "F594AD2E59FF8949F1658E58EDDDE53D",
+      "name": "Elhro Elhro",
+      "image": "/assets/reviews/f594ad2e59ff8949f1658e58eddde53d.jpg",
+      "date": "hace 5 meses",
+      "rating": 5,
+      "comment": "Excelent, compassionate care with a provider who truly listen. Healing Minds Psychiatry creates a supportive environment...",
+      "fullComment": "Excelent, compassionate care with a provider who truly listen. Healing Minds Psychiatry creates a supportive environment and delivers personalized treatment. Highly recommed.",
+      "createdAt": "2026-02-13T15:18:13.000Z"
+    },
+    {
+      "id": "6F57207C93893FBFB68C0EABE1C96E59",
+      "name": "Charlie Wiley",
+      "image": "/assets/reviews/6f57207c93893fbfb68c0eabe1c96e59.jpg",
+      "date": "hace 8 meses",
+      "rating": 5,
+      "comment": "Charlie\nDID A GREAT JOB FELT AT EASE    HER ASSISTANT HELP AND WAS WONDERFUL",
+      "fullComment": "Charlie\nDID A GREAT JOB FELT AT EASE    HER ASSISTANT HELP AND WAS WONDERFUL",
+      "createdAt": "2025-11-26T18:16:15.000Z"
+    },
+    {
+      "id": "9FDCDBD493B8A1E99F1F33A2A8AEB604",
+      "name": "Teresita Borges",
+      "image": "/assets/reviews/9fdcdbd493b8a1e99f1f33a2a8aeb604.jpg",
+      "date": "hace 8 meses",
+      "rating": 5,
+      "comment": "Excellent service from Dr.Reve very caring and made me feel very  comfortable.",
+      "fullComment": "Excellent service from Dr.Reve very caring and made me feel very  comfortable.",
+      "createdAt": "2025-11-05T17:12:59.000Z"
+    },
+    {
+      "id": "ABC6C0C1EEEF44BA97F779CAF3704B77",
+      "name": "Carlos Auto",
+      "image": "/assets/reviews/abc6c0c1eeef44ba97f779caf3704b77.jpg",
+      "date": "hace 9 meses",
+      "rating": 5,
+      "comment": "",
+      "fullComment": "",
+      "createdAt": "2025-10-27T15:36:41.000Z"
+    },
+    {
+      "id": "CD71447395A48995C0A9247B80703A30",
+      "name": "Dr. Dawn Matera",
+      "image": "/assets/reviews/cd71447395a48995c0a9247b80703a30.jpg",
+      "date": "hace 9 meses",
+      "rating": 5,
+      "comment": "",
+      "fullComment": "",
+      "createdAt": "2025-10-17T12:46:28.000Z"
+    },
+    {
+      "id": "923B6DA58EE345CD1E292D92D1D97BE9",
+      "name": "Yauniel Ortiz",
+      "image": "/assets/reviews/923b6da58ee345cd1e292d92d1d97be9.jpg",
+      "date": "hace 9 meses",
+      "rating": 5,
+      "comment": "Excelente atención y profesionalismo de la Doctora Melva\n\n",
+      "fullComment": "Excelente atención y profesionalismo de la Doctora Melva\n\n",
+      "createdAt": "2025-10-13T21:07:38.000Z"
+    },
+    {
+      "id": "AF21AA696A06EDEA853E3C1C46E926F1",
+      "name": "Yunia Machado",
+      "image": "/assets/reviews/af21aa696a06edea853e3c1c46e926f1.jpg",
+      "date": "hace 9 meses",
+      "rating": 5,
+      "comment": "Excelente servicio! Muy recomendada la Dra Reve\n\n",
+      "fullComment": "Excelente servicio! Muy recomendada la Dra Reve\n\n",
+      "createdAt": "2025-10-13T20:40:51.000Z"
+    },
+    {
+      "id": "02E1399F739FEDA43354C0274ED7E36F",
+      "name": "Y.Lopez",
+      "image": "/assets/reviews/02e1399f739feda43354c0274ed7e36f.jpg",
+      "date": "hace 9 meses",
+      "rating": 5,
+      "comment": "I had a wonderful experience at Healing Minds Psychiatry. The entire staff was very professional, caring, and patient th...",
+      "fullComment": "I had a wonderful experience at Healing Minds Psychiatry. The entire staff was very professional, caring, and patient throughout my visits. They truly take the time to listen and make sure you feel comfortable and supported. The doctor was extremely professional, kind, and understanding, which made a big difference in my treatment. I highly recommend Healing Minds to anyone looking for compassionate and professional mental health care.",
+      "createdAt": "2025-10-09T15:42:25.000Z"
+    },
+    {
+      "id": "489E9427AB9D64EB4A2927045C98EAA3",
+      "name": "Julio Gonzalez",
+      "image": "/assets/reviews/489e9427ab9d64eb4a2927045c98eaa3.jpg",
+      "date": "hace 9 meses",
+      "rating": 5,
+      "comment": "My visit was genuinely a positive and reassuring experience. The provider was compassionate, patient, and really took th...",
+      "fullComment": "My visit was genuinely a positive and reassuring experience. The provider was compassionate, patient, and really took the time to listen and understand what I was going through. I felt comfortable opening up, and the conversation flowed naturally without feeling rushed.\n\nThey explained everything clearly, offered helpful insight, and created a safe, supportive environment that made me feel heard and respected. I left the session feeling lighter, more hopeful, and with a clearer plan moving forward.\n\nHighly recommend this provider to anyone seeking professional, kind, and effective mental health care.",
+      "createdAt": "2025-10-07T19:46:21.000Z"
+    },
+    {
+      "id": "B0A8D7E450099D8DB8886398FBE17C00",
+      "name": "Noel Lopez",
+      "image": "/assets/reviews/b0a8d7e450099d8db8886398fbe17c00.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "Since beginning treatment, I’ve noticed a huge improvement in my mental health. I feel more balanced, confident, and equ...",
+      "fullComment": "Since beginning treatment, I’ve noticed a huge improvement in my mental health. I feel more balanced, confident, and equipped to manage the challenges I was facing. Dr. Reve’s consistent follow-up and the open communication make me feel supported every step of the way.",
+      "createdAt": "2025-10-03T01:13:33.000Z"
+    },
+    {
+      "id": "58DBCE451BAA8C1ACA95AE82A86EB1ED",
+      "name": "Ismael Gonzalez",
+      "image": "/assets/reviews/58dbce451baa8c1aca95ae82a86eb1ed.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "“My experience with Dr Reve has been truly life-changing. From the moment I walked in, I felt welcomed and respected. Th...",
+      "fullComment": "“My experience with Dr Reve has been truly life-changing. From the moment I walked in, I felt welcomed and respected. The staff is kind, organized, and professional, and Dr Reve take the time to really listen and understand. I never feel rushed, and every visit leaves me feeling supported and hopeful. The care I receive is not only thorough and compassionate but also tailored to my needs. I’m very grateful to have found this office and would recommend it to anyone looking for excellent psychiatric care in Naples.”",
+      "createdAt": "2025-10-03T01:11:51.000Z"
+    },
+    {
+      "id": "CA547533DD85A53EE8992FCD59D08B78",
+      "name": "Irina Carrasco Cabrera",
+      "image": "/assets/reviews/ca547533dd85a53ee8992fcd59d08b78.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "Dr. Reve is an exceptional psychiatrist with a unique ability to connect with her patients. Her approach is empathetic, ...",
+      "fullComment": "Dr. Reve is an exceptional psychiatrist with a unique ability to connect with her patients. Her approach is empathetic, understanding, and highly professional, creating an atmosphere of trust that facilitates the therapeutic process.",
+      "createdAt": "2025-10-02T20:41:48.000Z"
+    },
+    {
+      "id": "1CE2802063FE60FC9F06CE59CE5CEBF2",
+      "name": "Osmany Valdes Galan",
+      "image": "/assets/reviews/1ce2802063fe60fc9f06ce59ce5cebf2.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "He tenido varias experiencias y puedo decir con seguridad que la Dra. Melva Reve es la mejor psiquiatra de Naples. Su cl...",
+      "fullComment": "He tenido varias experiencias y puedo decir con seguridad que la Dra. Melva Reve es la mejor psiquiatra de Naples. Su clínica, Healing Minds Psychiatry, ofrece un nivel de cuidado que es difícil de encontrar.\n\n",
+      "createdAt": "2025-10-02T15:39:27.000Z"
+    },
+    {
+      "id": "C8996ADE57C1E60F0B7777E8980A2D4F",
+      "name": "Mark Armero",
+      "image": "/assets/reviews/c8996ade57c1e60f0b7777e8980a2d4f.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "Dr Melba is very compassionate and understanding. Her help has been inspirational.",
+      "fullComment": "Dr Melba is very compassionate and understanding. Her help has been inspirational.",
+      "createdAt": "2025-10-02T15:19:36.000Z"
+    },
+    {
+      "id": "4138A828F625CA9EA3FB72425C766805",
+      "name": "Michael Tocci",
+      "image": "/assets/reviews/4138a828f625ca9ea3fb72425c766805.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "Whenever I read numerous wonderful reviews, I skeptically think to myself that sounds too good to be true.  After meetin...",
+      "fullComment": "Whenever I read numerous wonderful reviews, I skeptically think to myself that sounds too good to be true.  After meeting with Dr. Reve, I agree with or believe every amazing review, and I hope the same will happen for you.\nThoughtfully,\nMT",
+      "createdAt": "2025-09-22T06:28:18.000Z"
+    },
+    {
+      "id": "52389C9C7B59817CB04B17EB8861710B",
+      "name": "Maylin Garcia Gonzalez",
+      "image": "/assets/reviews/52389c9c7b59817cb04b17eb8861710b.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "The best bilingual psychiatrist I’ve ever met! Finding mental health care in your own language makes a huge difference, ...",
+      "fullComment": "The best bilingual psychiatrist I’ve ever met! Finding mental health care in your own language makes a huge difference, and Dr. Melva Reve makes it possible with top-quality psychiatry services here in Naples. Her ability to connect in Spanish provides trust and closeness, making the whole process much more human and effective. I highly recommend Healing Minds Psychiatry without hesitation.",
+      "createdAt": "2025-09-18T23:43:28.000Z"
+    },
+    {
+      "id": "118D5E72947DB2C30464E4A354CD5EE0",
+      "name": "Dr.Octavio Avila Zamora",
+      "image": "/assets/reviews/118d5e72947db2c30464e4a354cd5ee0.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "Excellent psychiatrist. Dr. Melva Reve will play a key role in keeping her community healthy. Her dedication to patient ...",
+      "fullComment": "Excellent psychiatrist. Dr. Melva Reve will play a key role in keeping her community healthy. Her dedication to patient care will be a true asset to Naples.",
+      "createdAt": "2025-09-17T21:04:10.000Z"
+    },
+    {
+      "id": "978B5D6F28DE9E80B029297FA8C8A4D1",
+      "name": "E mar",
+      "image": "/assets/reviews/978b5d6f28de9e80b029297fa8c8a4d1.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "I had an excellent experience in my consultation with Dr. Reve. I felt listened to and understood. She was very patient ...",
+      "fullComment": "I had an excellent experience in my consultation with Dr. Reve. I felt listened to and understood. She was very patient and professional, which gave me a lot of confidence. Her vocation and commitment to her patients are evident. I totally recommend her.",
+      "createdAt": "2025-09-13T12:47:09.000Z"
+    },
+    {
+      "id": "DD454ECD88E0DD179FD6BD7F07B42EDD",
+      "name": "Meily gonzalez",
+      "image": "/assets/reviews/dd454ecd88e0dd179fd6bd7f07b42edd.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "La Dr Reve es una psiquiatra excepcional, con una capacidad única para conectar con sus pacientes. Su trato es empático,...",
+      "fullComment": "La Dr Reve es una psiquiatra excepcional, con una capacidad única para conectar con sus pacientes. Su trato es empático, comprensivo y muy profesional, creando un ambiente de confianza que facilita el proceso terapéutico. Además, su experiencia y conocimiento la convierten en una aliada invaluable para quienes buscan un cuidado psiquiátrico de calidad!!\n\n",
+      "createdAt": "2025-09-13T03:27:03.000Z"
+    },
+    {
+      "id": "53A0216A94D6FE7F72ACA748F3DD5824",
+      "name": "Anay Rodriguez",
+      "image": "/assets/reviews/53a0216a94d6fe7f72aca748f3dd5824.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "I would like to thank Healing Minds Psychiatry and Dr. Melva Reve for her dedicated care as a psychiatrist. Her professi...",
+      "fullComment": "I would like to thank Healing Minds Psychiatry and Dr. Melva Reve for her dedicated care as a psychiatrist. Her professionalism, empathy, and commitment have made a great difference in my experience. I also want to acknowledge her entire clinical staff for the excellent support and human warmth they provided.",
+      "createdAt": "2025-09-13T00:12:02.000Z"
+    },
+    {
+      "id": "C12E116CEBB639EF6650863E44264345",
+      "name": "lissette martinez",
+      "image": "/assets/reviews/c12e116cebb639ef6650863e44264345.jpg",
+      "date": "hace 10 meses",
+      "rating": 5,
+      "comment": "I cannot say enough wonderful things about Dr.Reve. From the very first visit, I felt listened to, cared for, and respec...",
+      "fullComment": "I cannot say enough wonderful things about Dr.Reve. From the very first visit, I felt listened to, cared for, and respected. Dr. Reve takes the time to explain everything clearly, answers every question with patience, and never makes you feel rushed. Their compassion, professionalism, and deep knowledge make such a difference.\nIf you are looking for a doctor who combines expertise with a caring heart, I highly recommend Dr. Reve. Truly an amazing doctor who goes above and beyond for their patients.",
+      "createdAt": "2025-09-12T20:31:16.000Z"
+    },
+    {
+      "id": "19B039B338E034EDD6C10B6CE00233DF",
+      "name": "Ivan Banguela",
+      "image": "/assets/reviews/19b039b338e034edd6c10b6ce00233df.jpg",
+      "date": "hace 11 meses",
+      "rating": 5,
+      "comment": "Dr. Reve is truly exceptional — not only is she highly professional, but she also has a genuine compassion for her patie...",
+      "fullComment": "Dr. Reve is truly exceptional — not only is she highly professional, but she also has a genuine compassion for her patients that makes all the difference. From the very first visit, she took the time to really listen and understand, creating a safe and welcoming environment where you immediately feel at ease.\n\nHer knowledge, dedication, and thoughtful approach make every session valuable. You can tell she truly cares about helping her patients achieve real progress and well-being. The clinic itself is very organized, warm, and comfortable, which adds to the overall positive experience.\n\nIf you are looking for outstanding psychiatric care with a doctor who is both professional and caring, this is the place to go. Highly recommended",
+      "createdAt": "2025-08-30T16:35:33.000Z"
+    },
+    {
+      "id": "67ED6AAD4B98B558D9EE63173F70BCAA",
+      "name": "Jose Guerra",
+      "image": "/assets/reviews/67ed6aad4b98b558d9ee63173f70bcaa.jpg",
+      "date": "hace 11 meses",
+      "rating": 5,
+      "comment": "I’ve had a wonderful experience at Healing Minds Psychiatry, thanks to Dr. Melva Reve. From the very beginning, Dr. Reve...",
+      "fullComment": "I’ve had a wonderful experience at Healing Minds Psychiatry, thanks to Dr. Melva Reve. From the very beginning, Dr. Reve’s compassionate and attentive approach made me feel comfortable and supported. She took the time to understand my needs and created a personalized treatment plan that really works for me. The staff is professional and caring, and the clinic itself has a welcoming atmosphere that makes it easy to feel at ease. If you're looking for expert care in a warm and supportive environment, I highly recommend Dr. Melva Reve and Healing Minds Psychiatry.",
+      "createdAt": "2025-08-30T15:35:58.000Z"
+    },
+    {
+      "id": "93D35BDA53A3C2D9242AC5D2B1C0C562",
+      "name": "Tiffany Torres",
+      "image": "/assets/reviews/93d35bda53a3c2d9242ac5d2b1c0c562.jpg",
+      "date": "hace 11 meses",
+      "rating": 5,
+      "comment": "Dr. Reve is amazing! She’s been so helpful and understanding. I’ve had such a positive experience with Healing Minds Psy...",
+      "fullComment": "Dr. Reve is amazing! She’s been so helpful and understanding. I’ve had such a positive experience with Healing Minds Psychiatry. The staff is professional, compassionate, and truly listens. They take the time to understand your needs and provide thoughtful guidance and support. Scheduling was easy, and I always felt comfortable and cared for during my visits. Highly recommend to anyone seeking quality mental health care.",
+      "createdAt": "2025-08-30T14:36:10.000Z"
+    }
+  ]
+}

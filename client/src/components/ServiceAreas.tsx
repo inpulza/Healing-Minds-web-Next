@@ -1,8 +1,11 @@
 import React from 'react';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { MapPin, Navigation, Clock, Users } from 'lucide-react';
 import southwestFloridaMap from '../assets/southwest-florida-map.webp';
+import southwestFloridaMap400 from '../assets/southwest-florida-map-400w.webp';
+import southwestFloridaMap600 from '../assets/southwest-florida-map-600w.webp';
+import { assetUrl } from '@/lib/asset-url';
 
 const ServiceAreas: React.FC = () => {
   const { language } = useLanguage();
@@ -106,11 +109,11 @@ const ServiceAreas: React.FC = () => {
                 {/* Google Maps Screenshot as Background */}
                 <div className="absolute inset-0">
                   <img 
-                    src={southwestFloridaMap}
+                    src={assetUrl(southwestFloridaMap)}
                     srcSet={`
-                      ${southwestFloridaMap.replace('.webp', '-400w.webp')} 400w,
-                      ${southwestFloridaMap.replace('.webp', '-600w.webp')} 600w,
-                      ${southwestFloridaMap} 800w
+                      ${assetUrl(southwestFloridaMap400)} 400w,
+                      ${assetUrl(southwestFloridaMap600)} 600w,
+                      ${assetUrl(southwestFloridaMap)} 800w
                     `}
                     sizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"
                     alt="Southwest Florida service area map showing Naples, Marco Island, Bonita Springs, and Estero with psychiatric care coverage locations"

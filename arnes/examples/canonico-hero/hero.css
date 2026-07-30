@@ -1,0 +1,23 @@
+/* Clon del #hero — valores tomados de _arnes/spec/raw-hero-1440.json (NO medidos a ojo). */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Georgia, 'Times New Roman', serif; color: #1a202c; background: #ffffff; }
+
+/* section#hero: flex col, gap 20px, align center, padding 96/24/88, gradiente 160deg */
+#hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 96px 24px 88px;
+  background: linear-gradient(160deg, #ebf8ff 0%, #fefcbf 100%);
+  gap: 20px;
+}
+/* h1: 44px / 700 / line-height 52.8px (1.2) / #1a202c / max-width 720 (rect.w del raw) */
+#hero h1 { font-size: 44px; font-weight: 700; line-height: 1.2; color: #1a202c; max-width: 720px; }
+/* p.sub: 18px / 400 / line-height 27px (1.5) / #4a5568 / max-width 560 (rect.w del raw) */
+#hero .sub { font-size: 18px; font-weight: 400; line-height: 1.5; color: #4a5568; max-width: 560px; }
+/* variante mobile del original: oculta en desktop, no se mide a 1440 */
+.solo-movil { display: none; }
+/* a.cta: pill #2b6cb0, texto blanco, padding 14/32, radio 28px */
+.cta { background: #2b6cb0; color: #ffffff; padding: 14px 32px; border-radius: 28px;
+  text-decoration: none; font-size: 16px; }

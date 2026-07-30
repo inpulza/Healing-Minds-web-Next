@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inpulza.local/native-reconstruction/ledger-entry.schema.json",
+  "title": "Native Reconstruction append-only ledger entry",
+  "type": "object",
+  "required": ["schemaVersion", "seq", "ts", "event", "prevHash", "entryHash"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "seq": { "type": "integer", "minimum": 1 },
+    "ts": { "type": "string", "format": "date-time" },
+    "event": { "type": "string", "minLength": 1 },
+    "prevHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "entryHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  },
+  "additionalProperties": true
+}

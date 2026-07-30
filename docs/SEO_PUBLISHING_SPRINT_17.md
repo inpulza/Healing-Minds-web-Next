@@ -68,10 +68,10 @@ into the provider prompt. Prompts must not request or imply:
 Visuals should be calm, educational, non-diagnostic, inclusive, and suitable
 for a psychiatry practice article under human review.
 
-## App Storage
+## Vercel Blob
 
-The implementation uses the official `@replit/object-storage` SDK for upload,
-download, and physical deletion.
+The production migration uses the official `@vercel/blob` SDK for upload,
+download, and physical deletion with stable managed object keys.
 
 Only keys matching `blog-images/posts/*.webp` are accepted. Public reads go
 through the application route:
@@ -140,7 +140,7 @@ autopublish, scheduler, sitemap mutation, or Search Console submission.
 Before a real smoke test:
 
 1. Pull the branch and run `npm run db:push`.
-2. Add/enable Replit App Storage for development and deployment.
+2. Connect a Vercel Blob store and configure its project credentials.
 3. Set `BLOG_IMAGE_ENABLED=true`.
 4. Confirm `OPENAI_API_KEY` exists without printing it.
 5. Optionally set `BLOG_IMAGE_MODEL=gpt-image-2`.

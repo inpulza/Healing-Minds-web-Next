@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { assetUrl } from '@/lib/asset-url';
 import { useLanguage } from '@/hooks/useLanguage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -32,7 +33,7 @@ import {
   User,
   Leaf
 } from 'lucide-react';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 
 // Import office photo
 import officePhoto from '@assets/doctor-consultation.webp';
@@ -145,7 +146,7 @@ const LocationVanderbiltBeach = () => {
               {/* Mobile Image */}
               <div className="relative h-[400px] sm:h-[450px] mb-4 rounded-2xl overflow-hidden">
                 <OptimizedImage
-                  src={heroLocationImage}
+                  src={assetUrl(heroLocationImage)}
                   alt="Dr. Melva Reve serving Vanderbilt Beach"
                   className="absolute inset-0 w-full h-full object-cover"
                   style={{ objectPosition: '95% top' }}
@@ -206,7 +207,7 @@ const LocationVanderbiltBeach = () => {
             <div className="hidden md:block">
               <div className="relative aspect-[18/9] rounded-2xl overflow-hidden border border-blue-200">
                 <OptimizedImage
-                  src={heroLocationImage}
+                  src={assetUrl(heroLocationImage)}
                   alt="Dr. Melva Reve serving Vanderbilt Beach"
                   className="absolute inset-0 w-full h-full object-cover object-center"
                   width={1800}
@@ -329,7 +330,7 @@ const LocationVanderbiltBeach = () => {
                 <div className="order-1 lg:order-2 flex flex-col h-full">
                   <div className="w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[4/5] rounded-xl overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
                     <OptimizedImage
-                      src={officePhoto}
+                      src={assetUrl(officePhoto)}
                       alt="Dr. Melva Reve serving Vanderbilt Beach - Professional and compassionate mental health care"
                       className="w-full h-full object-cover object-center"
                       width={800}
@@ -1114,8 +1115,8 @@ const LocationVanderbiltBeach = () => {
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
                       {language === 'en' 
-                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: Closed\nSunday: Closed'
-                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Cerrado\nDomingo: Cerrado'}
+                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
+                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
                     </p>
                   </div>
                 </div>

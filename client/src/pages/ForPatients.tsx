@@ -5,7 +5,7 @@ import ForPatientsSection from '@/components/ForPatients';
 import Footer from '@/components/Footer';
 import { updateSEO } from '@/utils/seo';
 import { forPatientsContent } from '@/data/pageContent/mainPages/forPatients';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'wouter';
+import { useLocation } from '@/lib/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
 import {
@@ -2480,7 +2480,7 @@ export default function BlogAdminPage() {
                     <p className="text-xs text-amber-800">Image variants are read-only after the draft leaves draft status.</p>
                   ) : !imageConfig?.enabled ? (
                     <p className="text-xs text-amber-800">
-                      AI images are disabled. Replit must set BLOG_IMAGE_ENABLED=true and configure App Storage for a real smoke test.
+                      AI images are disabled. Set BLOG_IMAGE_ENABLED=true and connect Vercel Blob for a real smoke test.
                     </p>
                   ) : null}
 
@@ -2577,7 +2577,7 @@ export default function BlogAdminPage() {
                                     className="text-red-700 hover:bg-red-50 hover:text-red-800"
                                     disabled={form.status !== 'draft' || mutationBusy}
                                     onClick={() => {
-                                      if (window.confirm('Delete this image variant and its physical App Storage object?')) {
+                                      if (window.confirm('Delete this image variant and its physical Vercel Blob object?')) {
                                         deleteImageMutation.mutate({ postId: form.id!, imageId: image.id });
                                       }
                                     }}

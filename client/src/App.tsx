@@ -164,9 +164,9 @@ function Router() {
       
       <Route path="/contact" component={Contact} />
       <Route path="/blog" component={() => <BlogIndex />} />
-      <Route path="/blog/:slug" component={BlogPost} />
+      <Route path="/blog/:slug" component={() => <BlogPost />} />
       <Route path="/es/blog" component={() => <BlogIndex language="es" />} />
-      <Route path="/es/blog/:slug" component={BlogPost} />
+      <Route path="/es/blog/:slug" component={() => <BlogPost />} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/blog" component={BlogAdminPage} />
       

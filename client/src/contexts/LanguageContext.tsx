@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { useLocation } from 'wouter';
+import { useLocation } from '@/lib/navigation';
 import { hasBilingualCounterpart } from '../utils/urlMapping';
 import { translations } from '../data/translations';
 

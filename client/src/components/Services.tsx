@@ -1,4 +1,4 @@
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Brain, Heart, Smile, User, Sun, Leaf } from 'lucide-react';

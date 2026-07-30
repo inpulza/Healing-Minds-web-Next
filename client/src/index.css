@@ -27,8 +27,8 @@
   --input: hsl(210, 20%, 93%);
   --ring: hsl(142, 69%, 28%);
   --radius: 1.5rem;
-  --font-sans: 'Instrument Sans', sans-serif;
-  --font-serif: 'Playfair Display', serif;
+  --font-sans: var(--font-instrument), sans-serif;
+  --font-serif: var(--font-playfair), serif;
 }
 
 .dark {
@@ -177,13 +177,13 @@
 
 @layer components {
   .font-display {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-playfair), serif;
     font-display: swap;
     font-variation-settings: normal;
   }
   
   .font-body {
-    font-family: 'Instrument Sans', sans-serif;
+    font-family: var(--font-instrument), sans-serif;
     font-display: swap;
     font-variation-settings: normal;
   }
@@ -214,7 +214,7 @@
   .blog-article h2,
   .blog-article h3 {
     color: hsl(142, 60%, 14%);
-    font-family: 'Instrument Sans', sans-serif;
+    font-family: var(--font-instrument), sans-serif;
     font-weight: 800;
     letter-spacing: 0;
     scroll-margin-top: 7rem;

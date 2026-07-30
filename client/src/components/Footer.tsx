@@ -2,7 +2,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useClarity } from '@/hooks/use-clarity';
 import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { trackLeadConversion } from '@/lib/analytics';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { Button } from '@/components/ui/button';
 import { Mail, Phone, MapPin, ArrowRight, Calendar, Linkedin, Facebook, Instagram } from 'lucide-react';
 import { useState } from 'react';

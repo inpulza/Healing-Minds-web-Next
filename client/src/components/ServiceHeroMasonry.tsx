@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
 import WellnessIcon from "@/components/WellnessIcon";
 import { 

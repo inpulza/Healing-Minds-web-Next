@@ -1,0 +1,15 @@
+{
+  "TARGET_URL": "",
+  "MODO": "inspiracion",
+  "STACK": "nextjs-tailwind",
+  "VIEWPORTS": [390, 768, 1440],
+  "REQUIRED_VIEWPORTS": ["390x844", "768x1024", "1024x900", "1440x900", "1920x1080", "2560x1440"],
+  "UMBRAL_DIFF": 3,
+  "SRC_DIR": "src",
+  "BUILD_CMD": "npm run build",
+  "EVAL_SUITE_DIR": "_arnes/eval-suite",
+  "REQUIRE_TRACE": true,
+  "REQUIRE_CODE_GRADERS": true,
+  "REQUIRE_EXTERNAL_AUDITOR": true,
+  "ALLOW_MODEL_GRADER_TO_OVERRIDE_CODE_FAIL": false
+}

@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { updateSEO } from '@/utils/seo';
 import { renderRichText } from '@/components/RichText';
 import { servicesIndexContent } from '@/data/pageContent/services/servicesIndex';
-import { Link } from 'wouter';
+import { Link } from '@/lib/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {

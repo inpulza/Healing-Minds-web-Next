@@ -1,3 +1,7 @@
+
+function isDevelopment(): boolean {
+  return process.env.NODE_ENV === 'development';
+}
 // Google Analytics 4 integration with Google Consent Mode v2 and cookie consent support
 declare global {
   interface Window {
@@ -43,7 +47,7 @@ function initConsentMode(): void {
   // Enhanced guard: Check multiple conditions to prevent duplicate initialization
   if (window.hmp_consent_mode_initialized || 
       (window.dataLayer && window.gtag && typeof window.gtag === 'function')) {
-    if (import.meta.env.DEV) {
+    if (isDevelopment()) {
       console.log('🔒 Google Consent Mode already initialized, skipping');
     }
     return;
@@ -91,14 +95,14 @@ export function updateGoogleConsent(analyticsConsent: boolean, marketingConsent:
 
 // Initialize Google Analytics with performance optimization and consent checking
 export function initGA(): void {
-  if (import.meta.env.MODE === 'development') {
-    if (import.meta.env.DEV) {
+  if (isDevelopment()) {
+    if (isDevelopment()) {
       console.log('📊 Google Analytics disabled in development mode');
     }
     return;
   }
 
-  const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+  const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   
   if (!measurementId) {
     console.warn('Google Analytics measurement ID not provided');
@@ -115,7 +119,7 @@ export function initGA(): void {
       window.hmp_ga_script_loaded || 
       existingScript || 
       recentInitialization) {
-    if (import.meta.env.DEV) {
+    if (isDevelopment()) {
       console.log('📊 Google Analytics already initialized or in progress, skipping');
     }
     return;
@@ -178,7 +182,7 @@ export function initGA(): void {
         // Only now is there a measurement destination: emit the held page view.
         markGaConfigured();
         
-        if (import.meta.env.DEV) {
+        if (isDevelopment()) {
           console.log('📊 Google Analytics initialized successfully with ID:', measurementId);
         }
       };
@@ -267,7 +271,7 @@ export function trackPageView(path: string, title?: string): void {
     page_location: window.location.href,
   });
 
-  if (import.meta.env.DEV) {
+  if (isDevelopment()) {
     console.log('📊 GA page_view tracked:', path);
   }
 }
@@ -286,7 +290,7 @@ export function trackEvent(action: string, category: string, label?: string, val
         value: value,
       });
 
-      if (import.meta.env.DEV) {
+      if (isDevelopment()) {
         console.log('GA Event tracked:', { action, category, label, value });
       }
     };
@@ -346,7 +350,7 @@ export function trackLeadConversion(source: LeadSource, detail: Record<string, a
     ...detail,
   });
 
-  if (import.meta.env.DEV) {
+  if (isDevelopment()) {
     console.log('GA lead conversion tracked:', { source, ...detail });
   }
 }
@@ -392,7 +396,7 @@ export function handleConsentChange(analyticsConsent: boolean, marketingConsent:
   }
   
   // Log marketing consent changes for compliance tracking (only in dev for debugging)
-  if (import.meta.env.DEV) {
+  if (isDevelopment()) {
     if (marketingConsent) {
       console.log('🔄 Marketing consent granted - ad tracking enabled');
     } else {
@@ -403,7 +407,7 @@ export function handleConsentChange(analyticsConsent: boolean, marketingConsent:
 
 // Clear analytics cookies when consent is revoked
 function clearAnalyticsCookies(): void {
-  const cookiesToClear = ['_ga', '_ga_' + import.meta.env.VITE_GA_MEASUREMENT_ID?.replace('G-', ''), '_gid', '_gat'];
+  const cookiesToClear = ['_ga', '_ga_' + process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.replace('G-', ''), '_gid', '_gat'];
   
   cookiesToClear.forEach(cookie => {
     document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname}`;
