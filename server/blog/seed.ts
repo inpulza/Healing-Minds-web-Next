@@ -138,13 +138,15 @@ async function getOrCreatePost(values: typeof blogPosts.$inferInsert): Promise<B
 }
 
 async function attachTags(postId: number, tagIds: number[]): Promise<void> {
-  await db.delete(blogPostTags).where(eq(blogPostTags.postId, postId));
-  if (tagIds.length === 0) return;
+  await db.transaction(async (tx) => {
+    await tx.delete(blogPostTags).where(eq(blogPostTags.postId, postId));
+    if (tagIds.length === 0) return;
 
-  await db
-    .insert(blogPostTags)
-    .values(tagIds.map((tagId, position) => ({ postId, tagId, position })))
-    .onConflictDoNothing();
+    await tx
+      .insert(blogPostTags)
+      .values(tagIds.map((tagId, position) => ({ postId, tagId, position })))
+      .onConflictDoNothing();
+  });
 }
 
 export async function seedInitialBlogPosts(options: SeedBlogOptions = {}): Promise<void> {
