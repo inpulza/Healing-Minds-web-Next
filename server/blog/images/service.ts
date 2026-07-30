@@ -101,7 +101,12 @@ export async function generateBlogImageVariant(
   }
 
   const config = getBlogImageConfig();
-  const safeVisualBrief = buildSafeVisualBrief(input.post, input.role, input.anchorHeading);
+  const safeVisualBrief = buildSafeVisualBrief(
+    input.post,
+    input.role,
+    input.anchorHeading,
+    input.slot,
+  );
   const prompt = buildBlogImagePrompt(safeVisualBrief);
   const startedAt = new Date();
   const variant = await createDraftBlogPostImage({

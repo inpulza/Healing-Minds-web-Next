@@ -12,7 +12,12 @@ import {
   sanitizeRenderedBlogContentHtml,
 } from "../server/blog/sanitize";
 import { containsLikelyPatientIdentifier } from "../server/blog/privacy";
-import { buildSafeVisualBrief } from "../server/blog/images/prompt";
+import {
+  BLOG_IMAGE_PROMPT_VERSION,
+  buildBlogImageAlt,
+  buildBlogImagePrompt,
+  buildSafeVisualBrief,
+} from "../server/blog/images/prompt";
 
 const originalEnabled = process.env.BLOG_IMAGE_ENABLED;
 const originalApiKey = process.env.OPENAI_API_KEY;
@@ -65,7 +70,7 @@ try {
     caption: "Educational editorial image.",
     safeVisualBrief: "Safe visual brief",
     prompt: "Safe prompt",
-    promptVersion: "healing-minds-v1",
+    promptVersion: BLOG_IMAGE_PROMPT_VERSION,
     provider: "openai",
     model: "gpt-image-2",
     generationRunId: null,
@@ -125,11 +130,35 @@ try {
     tags: [],
   };
   const visualBrief = buildSafeVisualBrief(privateDraft, "hero");
-  assert.match(visualBrief, /Approved article theme: anxiety education/);
+  assert.match(visualBrief, /APPROVED THEME: anxiety education/);
   assert.equal(visualBrief.includes("Maria Garcia"), false);
   assert.equal(visualBrief.includes("123 Main Street"), false);
 
-  console.log("Blog image config, path, PHI, sanitizer, and render guards passed.");
+  const telehealthDraft = {
+    ...privateDraft,
+    id: 43,
+    title: "Preparing for a Telepsychiatry Appointment in Florida",
+    translationGroupId: "00000000-0000-4000-8000-000000000043",
+    excerpt: "A general educational guide to virtual care.",
+    content: "<h2>What patients can expect</h2><p>General educational content.</p>",
+  };
+  const telehealthHeroBrief = buildSafeVisualBrief(telehealthDraft, "hero", null, "hero");
+  const telehealthInlineBrief = buildSafeVisualBrief(
+    telehealthDraft,
+    "inline",
+    "What patients can expect",
+    "inline:1",
+  );
+  assert.match(telehealthHeroBrief, /APPROVED THEME: private telehealth access/);
+  assert.match(telehealthHeroBrief, /fictional adult/i);
+  assert.doesNotMatch(telehealthHeroBrief, /still life|desk with a window/i);
+  assert.notEqual(telehealthHeroBrief, telehealthInlineBrief);
+  assert.match(buildBlogImagePrompt(telehealthHeroBrief), /horizontal 3:2 photograph/);
+  assert.match(buildBlogImagePrompt(telehealthHeroBrief), /five fingers when fully visible/);
+  assert.match(buildBlogImageAlt(telehealthDraft, "hero"), /editorial photograph/i);
+  assert.equal(BLOG_IMAGE_PROMPT_VERSION, "healing-minds-v2");
+
+  console.log("Blog image config, topic variety, PHI, sanitizer, and render guards passed.");
 } finally {
   if (originalEnabled === undefined) delete process.env.BLOG_IMAGE_ENABLED;
   else process.env.BLOG_IMAGE_ENABLED = originalEnabled;

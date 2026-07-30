@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { prepareBlogArticleHtml } from '@/lib/blog-article';
 import { useLocation } from '@/lib/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import DOMPurify from 'dompurify';
 import {
   CheckCircle2,
   AlertTriangle,
@@ -468,14 +468,6 @@ function getBlogIndexPath(language: BlogLanguage): string {
   return language === 'es' ? '/es/blog' : '/blog';
 }
 
-function sanitizePreviewHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a', 'blockquote'],
-    ALLOWED_ATTR: ['href', 'target', 'rel'],
-    ALLOW_DATA_ATTR: false,
-  });
-}
-
 function slugify(value: string): string {
   return value
     .toLowerCase()
@@ -631,6 +623,8 @@ export default function BlogAdminPage() {
   const [autoGenerateOpen, setAutoGenerateOpen] = useState(false);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState<string | null>(null);
   const [form, setForm] = useState<FormState | null>(null);
   const [generateForm, setGenerateForm] = useState<GenerateDraftFormState | null>(null);
   const [autoGenerateForm, setAutoGenerateForm] = useState<AutoGenerateFormState | null>(null);
@@ -642,6 +636,7 @@ export default function BlogAdminPage() {
   const [autoGenerateStreaming, setAutoGenerateStreaming] = useState(false);
   const autoGenerateEventSourceRef = useRef<EventSource | null>(null);
   const autoGenerateIdempotencyKeyRef = useRef<string | null>(null);
+  const previewRequestIdRef = useRef(0);
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState('');
@@ -729,6 +724,10 @@ export default function BlogAdminPage() {
   const stats = statsQuery.data?.data;
   const runtime = runtimeQuery.data?.data?.runtime || 'unknown';
   const linkIntelligenceEnabled = linkConfigQuery.data?.data?.enabled ?? false;
+  const previewContent = useMemo(
+    () => prepareBlogArticleHtml(previewPost?.content || '').content,
+    [previewPost?.content],
+  );
 
   const availableCategories = useMemo(
     () => categories.filter(category => category.language === (form?.language || 'en')),
@@ -1227,6 +1226,25 @@ export default function BlogAdminPage() {
     setEditorOpen(true);
   };
 
+  const openPostPreview = async (post: BlogPost) => {
+    const requestId = previewRequestIdRef.current + 1;
+    previewRequestIdRef.current = requestId;
+    setPreviewPost(null);
+    setPreviewError(null);
+    setPreviewLoading(true);
+    setPreviewOpen(true);
+    try {
+      const response = await fetchJson<ApiResponse<BlogPost>>(`/api/admin/blog/posts/${post.id}/preview`);
+      if (previewRequestIdRef.current !== requestId) return;
+      setPreviewPost(response.data);
+    } catch (error) {
+      if (previewRequestIdRef.current !== requestId) return;
+      setPreviewError(error instanceof Error ? error.message : 'Editorial preview could not load');
+    } finally {
+      if (previewRequestIdRef.current === requestId) setPreviewLoading(false);
+    }
+  };
+
   const openDeletePost = (post: BlogPost) => {
     setDeleteTarget(post);
     setDeleteConfirmSlug('');
@@ -1617,10 +1635,7 @@ export default function BlogAdminPage() {
                             variant="ghost"
                             size="icon"
                             title="Preview"
-                            onClick={() => {
-                              setPreviewPost(post);
-                              setPreviewOpen(true);
-                            }}
+                            onClick={() => void openPostPreview(post)}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
@@ -2764,17 +2779,105 @@ export default function BlogAdminPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{previewPost?.title || 'Preview'}</DialogTitle>
-            <DialogDescription>{previewPost?.excerpt}</DialogDescription>
+      <Dialog
+        open={previewOpen}
+        onOpenChange={open => {
+          setPreviewOpen(open);
+          if (!open) {
+            previewRequestIdRef.current += 1;
+            setPreviewPost(null);
+            setPreviewError(null);
+            setPreviewLoading(false);
+          }
+        }}
+      >
+        <DialogContent className="max-h-[92vh] max-w-5xl gap-0 overflow-hidden p-0">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Editorial article preview</DialogTitle>
+            <DialogDescription>
+              Preview of the saved draft using the same article renderer and selected images as the public blog.
+            </DialogDescription>
           </DialogHeader>
-          {previewPost && (
-            <article className="prose prose-slate max-w-none">
-              <div dangerouslySetInnerHTML={{ __html: sanitizePreviewHtml(previewPost.content || '') }} />
-            </article>
-          )}
+
+          <div className="border-b border-emerald-100 bg-white px-5 py-3 pr-12">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-semibold text-emerald-950">Editorial preview</span>
+              {previewPost && (
+                <Badge className={statusClasses[previewPost.status]}>{statusLabels[previewPost.status]}</Badge>
+              )}
+              <span className="text-xs text-slate-500">Nothing is published from this window.</span>
+            </div>
+          </div>
+
+          <div className="max-h-[calc(92vh-3.25rem)] overflow-y-auto bg-white">
+            {previewLoading && (
+              <div className="flex min-h-80 items-center justify-center gap-3 text-sm text-slate-600">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Loading the complete article preview...
+              </div>
+            )}
+
+            {previewError && (
+              <div className="m-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {previewError === '401' ? 'Your admin session expired. Sign in again to preview this post.' : previewError}
+              </div>
+            )}
+
+            {previewPost && !previewLoading && (
+              <article>
+                <section className="border-b border-green-100 bg-green-50">
+                  <div className="mx-auto max-w-4xl px-5 py-10 sm:px-8 sm:py-12">
+                    <div className="mb-5 flex flex-wrap items-center gap-3 text-sm text-gray-700">
+                      <span className="font-semibold text-green-800">
+                        {previewPost.category?.name || 'Mental Health'}
+                      </span>
+                      <span>{previewPost.readingTime || 5} min read</span>
+                      <span>{previewPost.language.toUpperCase()}</span>
+                    </div>
+                    <h1 className="mb-5 font-body text-3xl font-bold leading-tight text-green-950 sm:text-5xl">
+                      {previewPost.title}
+                    </h1>
+                    {previewPost.excerpt && (
+                      <p className="text-lg leading-relaxed text-gray-700 sm:text-xl">
+                        {previewPost.excerpt}
+                      </p>
+                    )}
+                    {previewPost.author && (
+                      <p className="mt-5 text-sm font-semibold text-green-900">
+                        {previewPost.author.name}{previewPost.author.title ? `, ${previewPost.author.title}` : ''}
+                      </p>
+                    )}
+                  </div>
+                </section>
+
+                <div className="mx-auto max-w-4xl px-5 py-8 sm:px-8 sm:py-10">
+                  {previewPost.featuredImage && (
+                    <img
+                      src={previewPost.featuredImage}
+                      alt={previewPost.featuredImageAlt || previewPost.title}
+                      className="mb-10 aspect-[16/9] w-full rounded-lg object-cover"
+                    />
+                  )}
+                  <div
+                    className="blog-article"
+                    dangerouslySetInnerHTML={{ __html: previewContent }}
+                  />
+                  {previewPost.tags.length > 0 && (
+                    <div className="mt-10 flex flex-wrap gap-2 border-t border-green-100 pt-7">
+                      {previewPost.tags.map(tag => (
+                        <span
+                          key={tag.id}
+                          className="rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-800"
+                        >
+                          {tag.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </article>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </main>

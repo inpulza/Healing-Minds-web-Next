@@ -232,6 +232,24 @@ export async function GET(request: NextRequest, context: RouteContext) {
       if (post.status === "draft") await images.ensureCuratedHeroImage(post);
       return json({ success: true, data: await images.listBlogPostImages(postId) });
     }
+    if (segments.length === 3 && segments[0] === "posts" && segments[2] === "preview") {
+      const postId = Number(segments[1]);
+      if (!Number.isInteger(postId) || postId <= 0) return json({ success: false, message: "Invalid post id" }, 400);
+      const post = await storage.getBlogPostById(postId);
+      if (!post) return json({ success: false, message: "Blog post not found" }, 404);
+      const [images, renderer] = await Promise.all([
+        import("../../../../../server/blog/images/storage"),
+        import("../../../../../server/blog/images/render"),
+      ]);
+      const selectedImages = await images.getSelectedBlogPostImages(postId);
+      return json({
+        success: true,
+        data: {
+          ...post,
+          content: renderer.materializeSelectedInlineImages(post.content || "", selectedImages),
+        },
+      });
+    }
     if (segments.length === 3 && segments[0] === "posts" && segments[2] === "verify") {
       const postId = Number(segments[1]);
       if (!Number.isInteger(postId) || postId <= 0) return json({ success: false, message: "Invalid post id" }, 400);

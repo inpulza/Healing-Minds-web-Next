@@ -40,6 +40,8 @@ test("App Router exposes the existing admin UI outside the public shell", () => 
   assert.match(read("app/admin/login/page.tsx"), /AdminLogin/);
   assert.match(read("app/admin/blog/page.tsx"), /BlogAdminPage/);
   assert.match(read("client/src/pages/admin/AdminLogin.tsx"), /BLOG_ADMIN_PASSWORD \(or BLOG_ADMIN_PASSWORD_HASH\)/);
+  assert.match(read("client/src/pages/admin/AdminLogin.tsx"), /showPassword \? 'text' : 'password'/);
+  assert.match(read("client/src/pages/admin/AdminLogin.tsx"), /aria-label=\{showPassword \? 'Hide password' : 'Show password'\}/);
   assert.match(read("app/admin/layout.tsx"), /dynamic = ["']force-dynamic["']/);
   assert.match(read("app/admin/layout.tsx"), /fetchCache = ["']force-no-store["']/);
 });
