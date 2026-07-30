@@ -10,6 +10,12 @@ export function escapeEmailHtml(value: string): string {
     .replaceAll("'", '&#39;');
 }
 
+export function assertResendSuccess(result: { error: { name: string } | null }): void {
+  if (result.error) {
+    throw new Error(`Resend rejected email: ${result.error.name}`);
+  }
+}
+
 function escapeContactForEmail(contactData: InsertContactMessage): InsertContactMessage {
   return {
     ...contactData,
@@ -84,12 +90,13 @@ export class ResendEmailService implements EmailService {
     `;
 
     try {
-      await this.client().emails.send({
+      const result = await this.client().emails.send({
         from: this.fromEmail,
         to: this.practiceEmail,
         subject: subject,
         html: htmlContent,
       });
+      assertResendSuccess(result);
     } catch (error) {
       console.error('Contact notification email delivery failed');
       throw new Error('Failed to send contact notification email');
@@ -108,12 +115,13 @@ export class ResendEmailService implements EmailService {
     const htmlContent = isSpanish ? this.getSpanishConfirmationTemplate(safeContactData) : this.getEnglishConfirmationTemplate(safeContactData);
 
     try {
-      await this.client().emails.send({
+      const result = await this.client().emails.send({
         from: this.fromEmail,
         to: contactData.email,
         subject: subject,
         html: htmlContent,
       });
+      assertResendSuccess(result);
     } catch (error) {
       console.error('Contact confirmation email delivery failed');
       throw new Error('Failed to send confirmation email');

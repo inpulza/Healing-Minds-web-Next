@@ -6,16 +6,20 @@ const origin = process.env.VERIFY_ORIGIN || "http://127.0.0.1:3100";
 let id: string | undefined;
 try {
   await db.delete(contactMessages).where(ilike(contactMessages.email, "workflow-%@healingmindsp.com"));
+  const verificationEmail = process.env.VERIFY_CONTACT_EMAIL || `workflow-${Date.now()}@healingmindsp.com`;
   const response = await fetch(`${origin}/api/contact`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
       "x-forwarded-for": `198.51.100.${Math.floor(Math.random() * 150) + 1}`,
+      ...(process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+        ? { "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
+        : {}),
     },
     body: JSON.stringify({
       firstName: "Workflow",
       lastName: "Verification",
-      email: `workflow-${Date.now()}@healingmindsp.com`,
+      email: verificationEmail,
       phone: "+1 239 000 0000",
       preferredLanguage: "English",
       message: "Controlled infrastructure verification. This is not a patient inquiry and contains no health information.",
