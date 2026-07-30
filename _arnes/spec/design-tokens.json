@@ -1,0 +1,124 @@
+{
+  "colores": [
+    {
+      "valor": "#020817",
+      "usos": 253
+    },
+    {
+      "valor": "#4b5563",
+      "usos": 112
+    },
+    {
+      "valor": "#166534",
+      "usos": 77
+    },
+    {
+      "valor": "#ffffff",
+      "usos": 73
+    },
+    {
+      "valor": "#16a34a",
+      "usos": 43
+    },
+    {
+      "valor": "#15803d",
+      "usos": 28
+    },
+    {
+      "valor": "#f3f4f6",
+      "usos": 10
+    },
+    {
+      "valor": "#dcfce7",
+      "usos": 9
+    },
+    {
+      "valor": "#2563eb",
+      "usos": 8
+    },
+    {
+      "valor": "#374151",
+      "usos": 3
+    },
+    {
+      "valor": "#dbeafe",
+      "usos": 2
+    },
+    {
+      "valor": "#9333ea",
+      "usos": 2
+    }
+  ],
+  "tipografia": {
+    "familias": [
+      {
+        "valor": "Instrument Sans",
+        "usos": 544
+      },
+      {
+        "valor": "Playfair Display",
+        "usos": 10
+      }
+    ],
+    "tamanos": [
+      {
+        "valor": "16px",
+        "usos": 124
+      },
+      {
+        "valor": "18px",
+        "usos": 106
+      },
+      {
+        "valor": "14px",
+        "usos": 79
+      },
+      {
+        "valor": "24px",
+        "usos": 6
+      },
+      {
+        "valor": "20px",
+        "usos": 4
+      },
+      {
+        "valor": "60px",
+        "usos": 4
+      },
+      {
+        "valor": "36px",
+        "usos": 3
+      },
+      {
+        "valor": "12px",
+        "usos": 2
+      },
+      {
+        "valor": "48px",
+        "usos": 2
+      }
+    ]
+  },
+  "espaciados": [
+    4,
+    6,
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    40,
+    48,
+    64,
+    80
+  ],
+  "radios": [
+    "9999px",
+    "2px",
+    "24px",
+    "16px",
+    "22px"
+  ]
+}

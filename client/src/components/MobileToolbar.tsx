@@ -90,21 +90,22 @@ const MobileToolbar = () => {
               <button
                 key={index}
                 onClick={button.onClick}
-                className="flex flex-col items-center justify-center p-2 text-green-600 hover:text-green-700 active:text-green-800 transition-colors duration-200 active:scale-95"
+                className="flex flex-col items-center justify-center p-2 text-green-700 hover:text-green-800 active:text-green-900 transition-colors duration-200 active:scale-95"
                 data-testid={button.testId}
-                aria-label={
+                aria-label={`${button.label}: ${
                   button.label === 'Book Now' || button.label === 'Reservar Ahora'
-                    ? (language === 'en' ? 'Book telehealth appointment' : 'Reservar cita de telesalud')
+                    ? (language === 'en' ? 'telehealth appointment' : 'cita de telesalud')
                     : button.label === 'Call Now' || button.label === 'Llamar Ahora'
-                      ? (language === 'en' ? 'Call (239) 423-0272' : 'Llamar (239) 423-0272')
+                      ? '(239) 423-0272'
                       : button.label === 'WhatsApp'
-                        ? (language === 'en' ? 'Chat on WhatsApp' : 'Chatear por WhatsApp')
-                        : (language === 'en' ? 'Open contact form' : 'Abrir formulario de contacto')
-                }
+                        ? (language === 'en' ? 'open chat' : 'abrir chat')
+                        : (language === 'en' ? 'open form' : 'abrir formulario')
+                }`}
               >
                 <IconComponent 
                   className={button.icon === SiWhatsapp ? "w-5 h-5 mb-1" : "w-6 h-6 mb-1"}
                   strokeWidth={button.icon === SiWhatsapp ? undefined : 1.5}
+                  aria-hidden="true"
                 />
                 <span className="text-xs font-medium leading-tight text-center">
                   {button.label}

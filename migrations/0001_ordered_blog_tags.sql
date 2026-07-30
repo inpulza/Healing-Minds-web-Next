@@ -1,0 +1,1 @@
+ALTER TABLE "blog_post_tags" ADD COLUMN "position" integer DEFAULT 0 NOT NULL;
