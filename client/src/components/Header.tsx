@@ -98,19 +98,20 @@ const Header = () => {
     
     // Check if current URL has a bilingual counterpart
     const correspondingURL = getCorrespondingURL(location, newLanguage);
+
+    // Track the intent before a document navigation can unload the page.
+    trackEvent('language_changed');
+    setTag('selected_language', newLanguage);
     
     if (correspondingURL && hasBilingualCounterpart(location)) {
-      // Navigate to corresponding URL in target language
-      navigate(correspondingURL);
-      // Language will be set automatically by SpanishRouteWrapper or route detection
+      // A full document navigation keeps the server-rendered locale, <html lang>
+      // and the large legacy page tree in sync. Replacing that tree in place can
+      // leave React reconciling already-replaced lazy/Suspense nodes.
+      window.location.assign(correspondingURL);
     } else {
       // No bilingual counterpart exists, just change language context
       setLanguage(newLanguage);
     }
-    
-    // Track language change with Clarity (preserve existing functionality)
-    trackEvent('language_changed');
-    setTag('selected_language', newLanguage);
   };
 
   const navigationItems = [
@@ -253,7 +254,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation - Full Width */}
-          <div className="hidden md:flex flex-1 justify-center px-4 lg:px-8" ref={servicesRef}>
+          <div className="hidden xl:flex flex-1 justify-center px-8" ref={servicesRef}>
             <nav className="flex items-center gap-1 lg:gap-2" data-testid="desktop-nav">
             {navigationItems.map((item) => (
               <div key={item.href} className="relative">
@@ -307,7 +308,7 @@ const Header = () => {
           </div>
 
           {/* Language Toggle & CTA */}
-          <div className="hidden md:flex items-center gap-3 lg:gap-4 flex-shrink-0">
+          <div className="hidden xl:flex items-center gap-4 flex-shrink-0">
             <Button
               variant="ghost"
               size="sm"
@@ -342,7 +343,7 @@ const Header = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden ml-auto">
+          <div className="xl:hidden ml-auto">
             <Button
               variant="ghost"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -366,7 +367,7 @@ const Header = () => {
             ? 'max-h-[500px] opacity-100 py-8' 
             : 'max-h-0 opacity-0 py-0 pointer-events-none'
         }`}>
-          <div className="hidden md:block">
+          <div className="hidden xl:block">
             <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 mx-4 relative z-50">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {serviceItems.map((service, index) => (
@@ -414,7 +415,7 @@ const Header = () => {
             ? 'max-h-[600px] opacity-100 py-4 md:py-6 overflow-hidden' 
             : 'max-h-0 opacity-0 py-0 pointer-events-none'
         }`}>
-          <div className="hidden md:block">
+          <div className="hidden xl:block">
             <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 md:p-8 mx-0 relative z-50">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                 {locationItems.map((location, index) => (
@@ -449,7 +450,7 @@ const Header = () => {
       </div>
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 shadow-lg relative z-50" data-testid="mobile-menu">
+        <div className="xl:hidden bg-white/98 backdrop-blur-md border-t border-gray-100 shadow-lg relative z-50" data-testid="mobile-menu">
           <div className="px-6 pt-4 pb-6 space-y-3 max-h-[80vh] overflow-y-auto">
             {navigationItems.map((item) => (
               <div key={item.href}>

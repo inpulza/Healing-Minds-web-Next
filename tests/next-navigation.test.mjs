@@ -21,3 +21,19 @@ test("Next-owned production components do not depend on the Wouter runtime", () 
 
   assert.deepEqual(offenders, []);
 });
+
+test("language switching uses a document navigation and keeps the full header below xl", () => {
+  const header = fs.readFileSync(path.join(sourceRoot, "components", "Header.tsx"), "utf8");
+  assert.match(header, /window\.location\.assign\(correspondingURL\)/);
+  assert.doesNotMatch(header, /navigate\(correspondingURL\)/);
+  assert.match(header, /hidden xl:flex flex-1/);
+  assert.match(header, /xl:hidden ml-auto/);
+  assert.match(header, /xl:hidden bg-white\/98/);
+});
+
+test("the Next navigation adapter keeps navigate stable across renders", () => {
+  const navigation = fs.readFileSync(path.join(sourceRoot, "lib", "navigation.tsx"), "utf8");
+  assert.match(navigation, /useCallback/);
+  assert.match(navigation, /const navigate = useCallback/);
+  assert.match(navigation, /\}, \[router\]\)/);
+});

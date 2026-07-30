@@ -2,7 +2,7 @@
 
 import NextLink, { type LinkProps as NextLinkProps } from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import type { AnchorHTMLAttributes, ReactNode } from "react";
+import { useCallback, type AnchorHTMLAttributes, type ReactNode } from "react";
 
 export type NavigateOptions = { replace?: boolean };
 
@@ -23,10 +23,10 @@ export function useLocation(): [string, (to: string, options?: NavigateOptions) 
   const pathname = usePathname() || "/";
   const router = useRouter();
 
-  const navigate = (to: string, options?: NavigateOptions) => {
+  const navigate = useCallback((to: string, options?: NavigateOptions) => {
     if (options?.replace) router.replace(to);
     else router.push(to);
-  };
+  }, [router]);
 
   return [pathname, navigate];
 }

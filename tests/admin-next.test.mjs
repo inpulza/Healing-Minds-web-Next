@@ -36,6 +36,9 @@ test("Next owns the admin login, session and logout boundary without Replit Auth
 test("App Router exposes the existing admin UI outside the public shell", () => {
   assert.equal(exists("app/admin/login/page.tsx"), true);
   assert.equal(exists("app/admin/blog/page.tsx"), true);
+  assert.equal(exists("app/admin/layout.tsx"), true);
   assert.match(read("app/admin/login/page.tsx"), /AdminLogin/);
   assert.match(read("app/admin/blog/page.tsx"), /BlogAdminPage/);
+  assert.match(read("app/admin/layout.tsx"), /dynamic = ["']force-dynamic["']/);
+  assert.match(read("app/admin/layout.tsx"), /fetchCache = ["']force-no-store["']/);
 });
