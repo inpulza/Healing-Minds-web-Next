@@ -2,7 +2,7 @@ import type { BlogPostImageRole } from "@shared/schema";
 import type { BlogPostWithRelations } from "../storage";
 import { getPlainTextFromHtml } from "../sanitize";
 
-export const BLOG_IMAGE_PROMPT_VERSION = "healing-minds-v2";
+export const BLOG_IMAGE_PROMPT_VERSION = "healing-minds-v3";
 
 type VisualTheme = {
   key: string;
@@ -154,6 +154,14 @@ const INLINE_COMPOSITIONS = [
   "Over-the-shoulder detail with shallow depth of field and an uncluttered background.",
 ] as const;
 
+const CAMPAIGN_TREATMENTS = [
+  "STUDIO EDITORIAL: Seamless cream, pale sage, or clear sky-blue studio background; sculpted soft key light with a defined but believable shadow; elegant negative space and a restrained color-block composition.",
+  "SUNLIT LIFESTYLE: Bright South Florida daylight, direct sun shaped by architecture or foliage, lively defined shadows, a low or three-quarter camera angle, and a candid sense of movement.",
+  "TEXTURED INTERIOR: Warm cream plaster, natural linen, caramel, walnut, or muted terracotta textures; directional side light, dimensional contrast, and a relaxed editorial pose that feels observed rather than staged.",
+  "CLEAN CINEMATIC: Cool daylight balanced with a subtle warm practical accent, luminous skin, controlled contrast, crisp color separation, and a polished contemporary campaign finish without becoming dark or theatrical.",
+  "DOCUMENTARY FASHION: Natural location, slight off-center framing, believable mid-action gesture, expressive but unforced face, tactile wardrobe, fine film grain, and the energy of a premium lifestyle campaign.",
+] as const;
+
 function compact(value: string | null | undefined, maxLength: number): string {
   return (value || "").replace(/\s+/g, " ").trim().slice(0, maxLength);
 }
@@ -213,17 +221,23 @@ export function buildSafeVisualBrief(
   const scene = primaryTheme.scenes[stableIndex(seed, primaryTheme.scenes.length)];
   const compositions = role === "hero" ? HERO_COMPOSITIONS : INLINE_COMPOSITIONS;
   const composition = compositions[stableIndex(`${seed}|composition`, compositions.length)];
+  const campaignTreatment = CAMPAIGN_TREATMENTS[
+    stableIndex(`${seed}|campaign-treatment`, CAMPAIGN_TREATMENTS.length)
+  ];
   const approvedTopics = themes.map(theme => theme.label).join(" and ");
 
   return [
     `PURPOSE: ${role === "hero" ? "Editorial hero" : "Editorial inline"} image for a ${language} educational mental health article.`,
     `APPROVED THEME: ${approvedTopics}.`,
     `SCENE: ${scene}`,
-    "PEOPLE: When people appear, use fictional adult models only. Vary age, skin tone, body type, and cultural background across the image library to reflect South Florida. Keep expressions natural, calm, and engaged. Do not imitate Dr. Melva Reve, any real clinician, celebrity, or identifiable patient.",
+    "PEOPLE: When people appear, cast fictional adults only. Vary age, skin tone, body type, hair texture, and cultural background across the library to reflect South Florida. Use one or two adults unless the scene explicitly needs a small group. Do not depict children or infants. Do not imitate Dr. Melva Reve, any real clinician, celebrity, or identifiable patient.",
+    "WARDROBE AND EXPRESSION: Elevated contemporary everyday clothing in tactile cotton, linen, knit, or denim, completely unbranded. Favor cream, sage, sky blue, cobalt, warm yellow, denim, or restrained terracotta accents. Expressions must feel specific and unforced: attentive, curious, quietly confident, reflective, or naturally joyful as the scene requires. Avoid frozen smiles, exaggerated sadness, wellness poses, hospital styling, or everyone looking at the camera.",
     `COMPOSITION: ${composition}`,
-    "ART DIRECTION: Photorealistic candid editorial healthcare photography. Bright cream, soft sage, pale blue, and warm-neutral palette. Clean light background, soft diffused daylight, subtle realistic shadows, authentic skin and fabric texture, gentle contrast, and no heavy retouching. Premium and modern without looking staged or like generic stock photography.",
+    `CAMPAIGN TREATMENT: ${campaignTreatment}`,
+    "ART DIRECTION: Campaign-grade photorealistic editorial lifestyle photography with a medium-format feel and professional 50mm-to-80mm lens rendering. Bright cream, soft sage, clear blue, warm neutral, denim, and occasional vibrant accent colors. Punchy but natural color, strong clean blacks, luminous whites, preserved highlights, lifted shadow detail, crisp microcontrast, accurate skin tone, realistic fabric texture, and subtle fine grain. The image should feel art-directed and premium, never like generic healthcare stock.",
+    "PHYSICAL REALISM: Preserve individual facial structure, natural pores, catchlights, flyaway hair, fabric folds, plausible body weight, and believable contact between people and objects. Hands, feet, joints, furniture, and devices must be anatomically and spatially coherent. No waxy skin, mannequin expressions, duplicated features, merged bodies, extra digits, floating objects, impossible grips, or broken perspective.",
     "SAFETY: Educational atmosphere only. No crisis, self-harm, violence, visible distress, restraint, hospitalization, before-and-after transformation, diagnosis, treatment outcome, cure, testimonial, or guaranteed result.",
-    "EXCLUSIONS: No pills, medication packaging, prescriptions, branded medical devices, stethoscopes, readable screens, readable records, labels, charts, logos, watermarks, brand marks, or decorative text.",
+    "EXCLUSIONS: No pills, medication packaging, prescriptions, branded medical devices, stethoscopes, readable screens, readable records, labels, charts, logos, watermarks, brand marks, decorative text, split-screen layout, collage, poster, or magazine cover.",
   ].join("\n");
 }
 

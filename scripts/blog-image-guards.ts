@@ -151,12 +151,16 @@ try {
   );
   assert.match(telehealthHeroBrief, /APPROVED THEME: private telehealth access/);
   assert.match(telehealthHeroBrief, /fictional adult/i);
+  assert.match(telehealthHeroBrief, /CAMPAIGN TREATMENT:/);
+  assert.match(telehealthHeroBrief, /medium-format feel/);
+  assert.match(telehealthHeroBrief, /Do not depict children or infants/);
+  assert.match(telehealthHeroBrief, /anatomically and spatially coherent/);
   assert.doesNotMatch(telehealthHeroBrief, /still life|desk with a window/i);
   assert.notEqual(telehealthHeroBrief, telehealthInlineBrief);
   assert.match(buildBlogImagePrompt(telehealthHeroBrief), /horizontal 3:2 photograph/);
   assert.match(buildBlogImagePrompt(telehealthHeroBrief), /five fingers when fully visible/);
   assert.match(buildBlogImageAlt(telehealthDraft, "hero"), /editorial photograph/i);
-  assert.equal(BLOG_IMAGE_PROMPT_VERSION, "healing-minds-v2");
+  assert.equal(BLOG_IMAGE_PROMPT_VERSION, "healing-minds-v3");
 
   console.log("Blog image config, topic variety, PHI, sanitizer, and render guards passed.");
 } finally {

@@ -58,11 +58,35 @@ Every provider prompt is assembled from fixed layers:
 5. **Composition**: hero and inline images use different shot families so the
    article does not repeat the same desk/window view.
 6. **Brand art direction**: bright cream, soft sage, pale blue, warm neutrals,
-   diffused daylight, authentic skin and fabric texture, and a clean background.
+   vibrant but natural accents, campaign lighting, authentic skin and fabric
+   texture, and a clean background.
 7. **Medical safety**: no crisis, diagnosis, outcome, cure, testimonial,
    before/after claim, medication packaging, readable records, logos, or text.
 8. **Output constraints**: horizontal 3:2 crop, coherent objects and anatomy,
    and safe responsive cropping.
+
+### Healing Minds campaign treatments
+
+The approved visual bar is a premium fashion/lifestyle campaign, adapted to a
+psychiatry practice without copying any specific brand, photographer, person,
+wardrobe, or artwork. A deterministic treatment adds variety while the shared
+color and realism rules keep the library cohesive:
+
+- seamless cream, sage, or sky-blue studio with sculpted light;
+- sunlit South Florida lifestyle with defined architectural shadows;
+- textured warm interior with directional side light;
+- clean cinematic cool/warm color separation;
+- candid documentary-fashion movement with subtle fine grain.
+
+Images should have a medium-format editorial feel, professional portrait-lens
+rendering, punchy but believable color, clean blacks, luminous whites, preserved
+highlights, lifted shadow detail, skin texture, flyaway hair, fabric folds, and
+unforced expressions. Wardrobe is elevated everyday clothing in unbranded
+cotton, linen, knit, or denim.
+
+Reference images containing children define lighting, color, framing, texture,
+and campaign energy only. Healing Minds generation uses fictional adults and
+does not add children or infants.
 
 The prompt version is persisted with every candidate. A material methodology
 change must increment that version so editors can identify older variants.

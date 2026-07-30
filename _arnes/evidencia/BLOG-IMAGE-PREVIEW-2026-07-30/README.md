@@ -54,6 +54,18 @@ layout and rendering, not a paid provider generation.
 - `npm run blog:link-check` -> PASS.
 - `git diff --check` -> PASS.
 
+## Approved visual direction
+
+Jordan supplied a campaign reference board after the first implementation.
+Prompt version `healing-minds-v3` translates its lighting, color, texture,
+camera energy, natural expression, and art direction into five reusable
+treatments: studio editorial, sunlit lifestyle, textured interior, clean
+cinematic, and documentary fashion.
+
+The reference board is not copied into the repository or sent to the provider.
+References containing children influence style only; generated Healing Minds
+briefs explicitly use fictional adults and exclude children and infants.
+
 ## Safety result
 
 - Drafts remain unpublished until human review and publish approval.

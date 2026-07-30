@@ -170,11 +170,13 @@ delivery:
 - the admin eye action rendered plain sanitized text without the public article
   typography or selected inline images.
 
-The hardening changes the prompt to `healing-minds-v2`, adds deterministic
+The hardening changes the prompt to `healing-minds-v3`, adds deterministic
 topic-specific scene and composition families, and incorporates the approved
 Healing Minds light editorial direction: fictional diverse adults, cream/sage
-neutrals, clear backgrounds, natural daylight, authentic texture, and
-anti-cliche mental-health constraints.
+neutrals, clear backgrounds, vibrant but natural color, studio and location
+campaign treatments, controlled directional light, authentic skin/fabric
+texture, believable expressions, physical-realism constraints, and anti-cliche
+mental-health rules.
 
 The admin now loads a dedicated authenticated preview response that
 materializes selected inline variants with the same server renderer used by the
