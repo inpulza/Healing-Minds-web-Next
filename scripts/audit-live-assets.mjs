@@ -1,6 +1,7 @@
 import { chromium } from "playwright";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { candidateContextOptions } from "./lib/vercel-preview.mjs";
 
 const SOURCE = "https://www.healingmindsp.com";
 const CANDIDATE = process.env.CANDIDATE_URL || "http://127.0.0.1:3100";
@@ -11,7 +12,10 @@ const paths = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => new URL
 if (paths.length !== 77) throw new Error(`Expected 77 sitemap routes, received ${paths.length}`);
 
 const browser = await chromium.launch({ headless: true });
-const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const context = await browser.newContext({
+  viewport: { width: 1440, height: 900 },
+  ...candidateContextOptions(),
+});
 const results = new Array(paths.length);
 let cursor = 0;
 
