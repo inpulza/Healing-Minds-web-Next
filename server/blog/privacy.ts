@@ -4,6 +4,7 @@ const datePattern = String.raw`(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}[/-]\d{1,2}
 const titleCaseNameToken = String.raw`(?:\p{Lu}[\p{Ll}\p{M}]+(?:[-'’]\p{Lu}?[\p{Ll}\p{M}]+)*|\p{Lu}['’]\p{Lu}[\p{Ll}\p{M}]+)`;
 const uppercaseNameToken = String.raw`(?:\p{Lu}{2,}|\p{Lu}+(?:[-'’]\p{Lu}+)+)`;
 const nameToken = String.raw`(?:${titleCaseNameToken}|${uppercaseNameToken})`;
+const lowercaseNameToken = String.raw`\p{Ll}[\p{Ll}\p{M}'’\-]*`;
 const nameInitial = String.raw`\p{Lu}\.`;
 const nameConnector = String.raw`(?:de(?:\s+la)?|del|da|dos|van|von)`;
 const namePattern = String.raw`${nameToken}(?:\s+(?:${nameInitial}|(?:${nameConnector}\s+)?${nameToken})){1,3}`;
@@ -14,11 +15,29 @@ const headingConnectorTokens = new Set([
   "around", "as", "at", "bajo", "before", "behind", "below", "beneath", "beside",
   "between", "beyond", "but", "by", "con", "contra", "de", "del", "desde",
   "despues", "during", "durante", "en", "entre", "for", "from", "hasta", "hacia",
-  "in", "inside", "into", "la", "las", "like", "los", "near", "nor", "o", "of",
+  "el", "in", "inside", "into", "la", "las", "like", "los", "near", "nor", "o", "of",
   "off", "on", "onto", "or", "out", "outside", "over", "para", "pero", "por",
   "segun", "sin", "sobre", "the", "through", "throughout", "till", "to", "toward",
   "under", "underneath", "until", "versus", "via", "vs", "with", "within",
   "without", "y",
+]);
+const patientEditorialLeadTokens = new Set([
+  "access", "adult", "adults", "anxiety", "are", "asked", "behavioral", "bipolar", "called", "can",
+  "care", "centered", "clinical", "community", "contacted", "depression", "disclosed", "education", "emailed", "engagement",
+  "experience", "feedback", "feels", "has", "have", "is", "medication", "mental", "mood", "needs",
+  "outcomes", "portal", "psychiatric", "ptsd", "receives", "resources", "rights", "safety",
+  "reported", "requested", "said", "scheduled", "services", "should", "sleep", "started", "stopped", "stress", "support", "therapy", "trauma", "treatment",
+  "was", "wellness", "were",
+  "acceso", "adulto", "adultos", "ansiedad", "apoyo", "atencion", "bipolar", "bienestar",
+  "clinica", "clinico", "comunitaria", "comunitario", "contacto", "cuidado", "dejo", "depresion", "derechos", "dijo",
+  "educacion", "empezo", "entienda", "entiende", "es", "esta", "estan", "experiencia", "llamo", "medicacion", "mental", "necesita", "pidio", "portal",
+  "puede", "pueden", "psiquiatrica", "psiquiatrico", "recibe", "recursos", "resultados",
+  "quiere", "reporto", "salud", "seguridad", "servicios", "solicito", "sueno", "terapia", "trauma", "tratamiento",
+]);
+const ambiguousModalLeadTokens = new Set(["may", "will"]);
+const modalContinuationTokens = new Set([
+  "access", "also", "be", "benefit", "experience", "feel", "find", "have", "need",
+  "not", "often", "receive", "require", "see", "sometimes", "want",
 ]);
 
 function normalizeLowercaseToken(value: string): string {
@@ -27,6 +46,50 @@ function normalizeLowercaseToken(value: string): string {
     .replace(/\p{M}/gu, "")
     .replace(/[^\p{L}]/gu, "")
     .toLocaleLowerCase();
+}
+
+function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
+  const nameLabelAtEnd = new RegExp(
+    String.raw`(?:\b(?:(?:patient|paciente)\s+(?:name|nombre)|nombre\s+(?:del\s+)?paciente|name|nombre)\s*[:#-]?|\b(?:patient|paciente|case|caso)\s*[:#-])\s*$`,
+    "iu",
+  );
+  const nameValueAtStart = new RegExp(String.raw`^\s*${labeledNamePattern}\b`, "iu");
+  const birthDateLabelAtEnd = /\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|fecha de nacimiento|nacimiento)\s*[:#-]?\s*$/iu;
+  const birthDateValueAtStart = new RegExp(String.raw`^\s*${datePattern}\b`, "iu");
+  const medicalIdLabelAtEnd = /\b(?:mrn|medical record|member id|patient id|record number|chart number|insurance id|policy number|ssn|social security number|historia cl[ií]nica|n[uú]mero de paciente|id de paciente)\s*[:#-]?\s*$/iu;
+  const medicalIdValueAtStart = /^\s*[A-Z0-9-]{4,}\b/iu;
+  const emailLabelAtEnd = /\b(?:email|e-mail|correo electr[oó]nico)\s*[:#-]?\s*$/iu;
+  const emailValueAtStart = /^\s*[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/iu;
+  const phoneLabelAtEnd = /\b(?:phone|telephone|mobile|cell|tel[eé]fono|m[oó]vil|celular)\s*[:#-]?\s*$/iu;
+  const phoneValueAtStart = /^\s*(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/u;
+  const addressLabelAtEnd = /\b(?:address|street address|direcci[oó]n)\s*[:#-]?\s*$/iu;
+  const addressValueAtStart = /^\s*\d{1,6}\s+[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5}\s+(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\b/iu;
+  const patientMarkerAtEnd = /\b(patient|paciente)\s*$/iu;
+  const rightLeadAtStart = /^\s*(\p{L}[\p{L}\p{M}'’\-]*)/u;
+
+  for (let boundary = 1; boundary < fields.length; boundary += 1) {
+    const left = fields.slice(0, boundary).join(" ").trim();
+    const right = fields.slice(boundary).join(" ").trim();
+    const patientMarker = patientMarkerAtEnd.exec(left)?.[1];
+    const normalizedRightLead = normalizeLowercaseToken(rightLeadAtStart.exec(right)?.[1] || "");
+    const hasSplitPatientNarrative = Boolean(patientMarker)
+      && Boolean(normalizedRightLead)
+      && !headingConnectorTokens.has(normalizedRightLead)
+      && !patientEditorialLeadTokens.has(normalizedRightLead)
+      && containsLikelyPatientIdentifier(`${patientMarker} ${right}`);
+    if (
+      (nameLabelAtEnd.test(left) && nameValueAtStart.test(right))
+      || (birthDateLabelAtEnd.test(left) && birthDateValueAtStart.test(right))
+      || (medicalIdLabelAtEnd.test(left) && medicalIdValueAtStart.test(right))
+      || (emailLabelAtEnd.test(left) && emailValueAtStart.test(right))
+      || (phoneLabelAtEnd.test(left) && phoneValueAtStart.test(right))
+      || (addressLabelAtEnd.test(left) && addressValueAtStart.test(right))
+      || hasSplitPatientNarrative
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export function containsHighConfidencePersonName(value: string): boolean {
@@ -67,20 +130,42 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
   const hasBirthDate = new RegExp(String.raw`\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|fecha de nacimiento|nacimiento)\b.{0,50}\b${datePattern}\b`, "i").test(normalized);
   const hasMedicalId = /\b(?:mrn|medical record|member id|patient id|record number|chart number|insurance id|policy number|historia cl[ií]nica|n[uú]mero de paciente|id de paciente)\b\s*[:#-]?\s*[A-Z0-9-]{4,}\b/i.test(normalized);
   const hasStreetAddress = /\b\d{1,6}\s+[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5}\s+(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\b/i.test(normalized);
-  const hasExplicitPatientName = new RegExp(
-    String.raw`\b(?:(?:patient|paciente)\s+name|(?:patient|paciente)|case|caso)\s*[:#-]\s*${labeledNamePattern}\b`,
+  const hasExplicitNameLabel = new RegExp(
+    String.raw`\b(?:(?:patient|paciente)\s+(?:name|nombre)|nombre\s+(?:del\s+)?paciente)(?:\s*[:#-]\s*|\s+)${labeledNamePattern}\b`,
     "iu",
   ).test(normalized);
-  const patientNarrativePattern = /\b(?:patient|paciente)\s+([^,.;:]{1,100})/giu;
+  const hasExplicitPatientCase = new RegExp(
+    String.raw`\b(?:patient|paciente|case|caso)(?:\s*[:#]\s*|\s+-\s+)${labeledNamePattern}\b`,
+    "iu",
+  ).test(normalized);
+  const patientNarrativePattern = /\b(?:patient|paciente)\b\s+([^,.;:]{1,100})/giu;
   const namedPatientNarrativePattern = new RegExp(
     String.raw`^${nameToken}(?:\s+(?:${nameInitial}|(?:${nameConnector}\s+)?${nameToken})){0,3}\s+(\p{Ll}[\p{Ll}\p{M}'’\-]*)`,
     "u",
   );
+  const lowercasePatientNarrativePattern = new RegExp(
+    String.raw`^(${lowercaseNameToken})\s+(?:(?:${nameConnector})\s+)?(${lowercaseNameToken})(?:\s|$)`,
+    "u",
+  );
   const hasNamedPatientNarrative = [...normalized.matchAll(patientNarrativePattern)]
     .some(match => {
-      const continuation = namedPatientNarrativePattern.exec((match[1] || "").trim())?.[1];
-      return Boolean(continuation)
-        && !headingConnectorTokens.has(normalizeLowercaseToken(continuation || ""));
+      const narrative = (match[1] || "").trim();
+      const namedContinuation = namedPatientNarrativePattern.exec(narrative)?.[1];
+      if (namedContinuation) {
+        return !headingConnectorTokens.has(normalizeLowercaseToken(namedContinuation));
+      }
+      const lowercaseMatch = lowercasePatientNarrativePattern.exec(narrative);
+      const normalizedLead = normalizeLowercaseToken(lowercaseMatch?.[1] || "");
+      const normalizedSecondToken = normalizeLowercaseToken(lowercaseMatch?.[2] || "");
+      if (
+        ambiguousModalLeadTokens.has(normalizedLead)
+        && modalContinuationTokens.has(normalizedSecondToken)
+      ) {
+        return false;
+      }
+      return Boolean(normalizedLead)
+        && !headingConnectorTokens.has(normalizedLead)
+        && !patientEditorialLeadTokens.has(normalizedLead);
     });
   const hasGenericNameLabel = new RegExp(
     String.raw`\b(?:name|nombre)\s*[:#-]\s*${labeledNamePattern}\b`,
@@ -93,7 +178,8 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
     || hasBirthDate
     || hasMedicalId
     || hasStreetAddress
-    || hasExplicitPatientName
+    || hasExplicitNameLabel
+    || hasExplicitPatientCase
     || hasNamedPatientNarrative
     || hasGenericNameLabel;
 }
@@ -104,7 +190,8 @@ export function containsLikelyPatientIdentifierInAiFields(input: {
   additionalContext?: string | null;
 }): boolean {
   const fields = [input.topic, input.targetKeyword, input.additionalContext]
-    .filter((value): value is string => Boolean(value));
+    .filter((value): value is string => Boolean(value?.trim()));
   return fields.some(containsLikelyPatientIdentifier)
+    || containsIdentifierAcrossAiFieldBoundaries(fields)
     || containsHighConfidencePersonName(input.additionalContext || "");
 }

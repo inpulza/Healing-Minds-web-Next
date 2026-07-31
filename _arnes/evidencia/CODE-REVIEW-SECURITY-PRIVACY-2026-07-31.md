@@ -19,6 +19,10 @@
 - El filtro reconoce identificadores explícitos, `Número de paciente`, `Historia clínica`, fechas españolas con mes escrito y estructuras de nombre de alta confianza con tildes, guiones, apóstrofos, iniciales, partículas o mayúsculas.
 - Los endpoints Next y Express revisan `topic`, `targetKeyword` y `additionalContext` por separado antes de usar IA. Los identificadores explícitos se bloquean en cualquier campo y el contexto libre aplica además una forma conservadora de nombre propio sin depender de listas culturales finitas.
 - El planificador nunca envía títulos o keywords históricos en claro: usa una referencia `Private post <id>` y conserva el análisis de duplicados determinista dentro del servidor.
+- La limpieza del inventario y de ambos payloads del juez es incondicional: también protege un post cuyo título literal ya sea `Private post <id>` y elimina `targetKeyword`/`topicKey` sin comparaciones de sentinel.
+- La generación de borradores recibe una copia de memoria semántica con título y slug históricos reemplazados; la copia local conserva los datos reales para deduplicación y administración.
+- Las narrativas lowercase EN/ES tras `patient/paciente`, incluso repartidas entre campos, se bloquean con fixtures adversariales. Las fronteras estructuradas detectan nombre, fecha de nacimiento, ID médico, email, teléfono y dirección sin concatenar indiscriminadamente topics editoriales.
+- Las etiquetas `Patient name`/`Nombre del paciente` funcionan con o sin puntuación, mientras compuestos editoriales como `Patient-Centered Care` y `Case-Based Approaches` permanecen permitidos.
 - La ruta Express deja de imprimir el objeto de contacto y un test impide reintroducir logs del body persistido.
 
 ## Límites

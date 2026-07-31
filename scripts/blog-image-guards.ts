@@ -153,6 +153,42 @@ try {
   assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan called yesterday"), true);
   assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan said she needs help"), true);
   assert.equal(containsLikelyPatientIdentifier("paciente Fátima Khan llamó ayer"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient jane doe called yesterday"), true);
+  assert.equal(containsLikelyPatientIdentifier("paciente maría garcía llamó ayer"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient jane doe needs help"), true);
+  assert.equal(containsLikelyPatientIdentifier("paciente maría garcía necesita ayuda"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient will smith called yesterday"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient may lee called yesterday"), true);
+  assert.equal(containsLikelyPatientIdentifier("Patient name Jane Doe"), true);
+  assert.equal(containsLikelyPatientIdentifier("Nombre del paciente María García"), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "Patient name:",
+    targetKeyword: "Jane Doe",
+  }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "Date of birth",
+    targetKeyword: "5 de enero de 1980",
+  }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient-Centered Care in Psychiatry" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Case-Based Approaches to Anxiety" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient support services started in 2020" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient may benefit from therapy" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient will receive follow-up care" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "Date",
+    targetKeyword: "of birth:",
+    additionalContext: "01/05/1980",
+  }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "Patient",
+    targetKeyword: "Care Options",
+    additionalContext: "support services",
+  }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "Patient",
+    targetKeyword: "jane doe",
+    additionalContext: "called yesterday",
+  }), true);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Care Options" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Resources and Treatment Options" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Resources across Florida" }), false);

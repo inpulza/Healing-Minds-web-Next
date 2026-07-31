@@ -155,16 +155,12 @@ function buildInventory(posts: BlogPostWithRelations[]): TopicInventorySnapshot 
     clusterCounts[post.categoryKey] = (clusterCounts[post.categoryKey] || 0) + 1;
   }
   return {
-    posts: posts.map((post, index) => {
-      const item = classified[index];
-      const sensitive = getSafePostTitleForProvider(post) !== post.title;
-      return sensitive ? {
-        ...item,
-        title: `Private post ${post.id}`,
-        targetKeyword: null,
-        topicKey: null,
-      } : item;
-    }),
+    posts: posts.map((post, index) => ({
+      ...classified[index],
+      title: getSafePostTitleForProvider(post),
+      targetKeyword: null,
+      topicKey: null,
+    })),
     clusterCounts,
     recentCategoryKeys: classified.slice(0, 5).map(post => post.categoryKey),
     recentPillars: classified.slice(0, 5).map(post => post.pillar).filter((value): value is string => Boolean(value)),
@@ -318,11 +314,10 @@ async function evaluateBatch(input: {
       const judged = await judgeTopicCandidates({
         language: input.language,
         existingPosts: input.posts.map(post => {
-          const title = getSafePostTitleForProvider(post);
           return {
             postId: post.id,
-            title,
-            targetKeyword: title === post.title ? post.targetKeyword : null,
+            title: getSafePostTitleForProvider(post),
+            targetKeyword: null,
             categoryKey: classifyPost(post).categoryKey,
           };
         }),
@@ -705,11 +700,10 @@ export async function assertGuidedBlogTopicSafe(input: {
     const judged = await judgeTopicCandidates({
       language: input.language,
       existingPosts: posts.map(post => {
-        const title = getSafePostTitleForProvider(post);
         return {
           postId: post.id,
-          title,
-          targetKeyword: title === post.title ? post.targetKeyword : null,
+          title: getSafePostTitleForProvider(post),
+          targetKeyword: null,
           categoryKey: classifyPost(post).categoryKey,
         };
       }),

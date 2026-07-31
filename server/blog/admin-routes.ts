@@ -48,7 +48,7 @@ import { estimateReadingTime, sanitizeBlogContentHtml } from "./sanitize";
 import { assertBlogAiGenerationConfigured, generateBlogDraftWithAi } from "./ai/generator";
 import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { buildBlogEditorialBrief } from "./ai/editorial-brief";
-import { buildBlogSemanticMemory } from "./ai/memory";
+import { buildBlogSemanticMemory, redactBlogSemanticMemoryForProvider } from "./ai/memory";
 import { buildPersistedTopicDraftOverrides } from "./ai/planned-topic-provenance";
 import { assertGuidedBlogTopicSafe, buildBlogTopicPlan, type BlogTopicPlanCandidate } from "./ai/topic-planner";
 import { assertBlogTopicGenerationConfigured } from "./ai/responses-client";
@@ -512,6 +512,7 @@ export async function createGeneratedBlogDraft(
     categoryName: category.name,
     tagNames: selectedTags.map(tag => tag.name),
   });
+  const providerSemanticMemory = redactBlogSemanticMemoryForProvider(semanticMemory);
   await updateWorkflowStep(workflow, {
     id: "semantic-memory",
     label: "Semantic memory",
@@ -560,7 +561,7 @@ export async function createGeneratedBlogDraft(
     tagNames: selectedTags.map(tag => tag.name),
     internalLinks: selectedInternalLinks,
     researchSources: research.sources,
-    semanticMemory,
+    semanticMemory: providerSemanticMemory,
     editorialBrief,
   });
   await updateWorkflowStep(workflow, {

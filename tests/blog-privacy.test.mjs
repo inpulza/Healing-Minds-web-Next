@@ -15,6 +15,8 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
 
     for (const explicitIdentifier of [
       "patient name: Jane Example",
+      "Patient name Jane Doe",
+      "Nombre del paciente María García",
       "Name: jane doe",
       "Name: Maria Garcia",
       "Nombre: Maria Care",
@@ -99,6 +101,13 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       "Paciente Apoyo durante Tratamiento",
       "Paciente Recursos antes de la Cita",
       "Paciente Cuidado desde Casa",
+      "Patient-Centered Care in Psychiatry",
+      "Case-Based Approaches to Anxiety",
+      "patient support services started in 2020",
+      "patient care services scheduled for launch",
+      "paciente apoyo familiar empezó en 2020",
+      "patient may benefit from therapy",
+      "patient will receive follow-up care",
     ]) {
       assert.equal(containsLikelyPatientIdentifier(editorialText), false, editorialText);
       assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: editorialText }), false, editorialText);
@@ -148,11 +157,60 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       "paciente Fátima Khan quiere una cita",
       "paciente Fátima Khan contactó la oficina",
       "paciente Fátima Khan se siente ansiosa",
+      "patient jane doe called yesterday",
+      "paciente maría garcía llamó ayer",
+      "patient jane doe needs help",
+      "patient jane doe has severe anxiety",
+      "patient jane doe wrote yesterday",
+      "patient will smith called yesterday",
+      "patient may lee called yesterday",
+      "paciente maría garcía necesita ayuda",
+      "paciente maría garcía escribió ayer",
+      "paciente maría garcía tuvo una crisis",
     ]) {
       assert.equal(containsLikelyPatientIdentifier(narrative), true, narrative);
     }
     assert.equal(containsLikelyPatientIdentifier("Name: Madonna"), true);
     assert.equal(containsLikelyPatientIdentifier("Nombre: Pelé"), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient name:",
+      targetKeyword: "Jane Doe",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient name",
+      targetKeyword: "Jane Doe",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Date of birth",
+      targetKeyword: "5 de enero de 1980",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Date",
+      targetKeyword: "of birth:",
+      additionalContext: "01/05/1980",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient",
+      targetKeyword: "jane doe",
+      additionalContext: "called yesterday",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Paciente",
+      targetKeyword: "maría garcía",
+      additionalContext: "necesita ayuda",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "anxiety",
+      targetKeyword: "Maria Garcia",
+    }), false);
+    for (const editorialFields of [
+      { topic: "Patient", targetKeyword: "Care Options", additionalContext: "support services" },
+      { topic: "Patient Care Options", targetKeyword: "support services", additionalContext: "for Florida adults" },
+      { topic: "Patient Resources", targetKeyword: "Treatment Options", additionalContext: "support guide" },
+      { topic: "Patient", targetKeyword: "Support Services", additionalContext: "started in 2020" },
+    ]) {
+      assert.equal(containsLikelyPatientIdentifierInAiFields(editorialFields), false, JSON.stringify(editorialFields));
+    }
 
     const publishedSnapshot = JSON.parse(readFileSync("shared/blog-snapshot.json", "utf8"));
     for (const post of Object.values(publishedSnapshot)) {
@@ -185,6 +243,18 @@ test("both draft endpoints evaluate AI fields independently", () => {
 test("topic planning never sends raw historical titles or keywords to providers", () => {
   const source = fs.readFileSync("server/blog/ai/topic-planner.ts", "utf8");
   assert.match(source, /function getSafePostTitleForProvider[\s\S]*return `Private post \$\{post\.id\}`;/);
+  assert.doesNotMatch(source, /getSafePostTitleForProvider\(post\)\s*!==\s*post\.title/);
+  assert.doesNotMatch(source, /title\s*===\s*post\.title/);
+});
+
+test("draft generation sends only provider-safe semantic memory", () => {
+  const memorySource = fs.readFileSync("server/blog/ai/memory.ts", "utf8");
+  const routeSource = fs.readFileSync("server/blog/admin-routes.ts", "utf8");
+  assert.match(memorySource, /export function redactBlogSemanticMemoryForProvider/);
+  assert.match(memorySource, /title: `Private post \$\{match\.postId\}`/);
+  assert.match(memorySource, /slug: `private-post-\$\{match\.postId\}`/);
+  assert.match(routeSource, /const providerSemanticMemory = redactBlogSemanticMemoryForProvider\(semanticMemory\)/);
+  assert.match(routeSource, /semanticMemory: providerSemanticMemory,\s*editorialBrief/);
 });
 
 test("image generation checks explicit identifiers without treating public editorial names as patients", () => {
