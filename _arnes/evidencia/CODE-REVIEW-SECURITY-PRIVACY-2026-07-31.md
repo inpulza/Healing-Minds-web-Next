@@ -112,6 +112,12 @@ El juez independiente emitió **GO final sin hallazgos accionables** después de
 
 Verificación integrada final: `npm test` PASS 72/72; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas; `git diff --check` PASS.
 
+## Clasificación del Code Review exacto de `bf09b98`
+
+- `3693800947` / `PRRT_kwDOToJ8Pc6VjZ_g` — **válida y resuelta localmente**. Un SSN como `Benefits 123-45` + `6789` escapaba porque la nueva reconstrucción no incluía esa familia. El guard conserva ventanas de dos o tres campos, valida el patrón completo 3-2-4 y cubre todos los cortes posibles de nueve dígitos cuando la primera frontera incluye prosa y el resto son fragmentos numéricos. `SSN`, `Social Security` y `seguro social` son contexto fuerte para casos con prosa al final. Los cuatro primeros dígitos acumulados excluyen años 1900–2099 salvo etiqueta inequívoca.
+
+El juez independiente emitió **GO final**. La matriz permanente prueba 8 cortes de dos campos, 28 cortes de tres campos, guiones, puntos, separadores aislados, prosa en extremos, años partidos y controles editoriales. Verificación integrada final: 72/72 tests, TypeScript, DB con 2 migraciones/95 statements/18 tablas/20 FKs, image/topic guards, build 89/89 y diff-check PASS. La fusión sigue bloqueada hasta los tres gates externos del próximo SHA.
+
 ## Límites
 
 No se accedió a secretos ni datos reales de pacientes. No se cambia la autenticación custom de Production o Preview. Un topic o keyword administrativo sin los marcadores `patient/paciente/name/nombre` conserva semántica editorial; el campo libre `additionalContext` sigue siendo deliberadamente más estricto. Esta frontera por función no reemplaza la prohibición humana de introducir PII ni constituye un detector clínico universal. El contenido completo de un artículo puede mencionar personal público, por lo que la salida de imágenes exige identificadores explícitos en vez de inferir que cualquier nombre es un paciente.

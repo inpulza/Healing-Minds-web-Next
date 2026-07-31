@@ -524,6 +524,18 @@ test("patient identifier guard fail-closes marked AI fields while preserving pub
       { topic: "Contact +", targetKeyword: "34 612 345 678" },
       { topic: "Call 305-", targetKeyword: "555-1212" },
       { topic: "Call 305", targetKeyword: "-", additionalContext: "555-1212" },
+      { topic: "Benefits 123-45", targetKeyword: "6789" },
+      { topic: "Benefits 123", targetKeyword: "45", additionalContext: "6789" },
+      { topic: "Benefits 1", targetKeyword: "23-45-6789" },
+      { topic: "Benefits 123-4", targetKeyword: "5-6789" },
+      { topic: "Benefits 123", targetKeyword: "-", additionalContext: "45-6789" },
+      { topic: "Benefits 1", targetKeyword: "23456789" },
+      { topic: "Benefits 1234", targetKeyword: "56789" },
+      { topic: "Benefits 1", targetKeyword: "2345", additionalContext: "6789" },
+      { topic: "Benefits 123456", targetKeyword: "789" },
+      { topic: "SSN 1234", targetKeyword: "56789 guide" },
+      { topic: "Social Security 1234", targetKeyword: "56789 guide" },
+      { topic: "SSN 20", targetKeyword: "26", additionalContext: "12345 guide" },
       { topic: "Visit us at 123 Main", targetKeyword: "Street" },
       { topic: "Visit us at 123", targetKeyword: "Main Street" },
       { topic: "Visit us at 123", targetKeyword: "Main", additionalContext: "Street" },
@@ -547,6 +559,14 @@ test("patient identifier guard fail-closes marked AI fields while preserving pub
       { topic: "Contact +", targetKeyword: "34 coping ideas" },
       { topic: "Guide 305-", targetKeyword: "555 recovery ideas" },
       { topic: "Guide 305", targetKeyword: "-", additionalContext: "555 recovery ideas" },
+      { topic: "Benefits 123", targetKeyword: "456 coping ideas" },
+      { topic: "2026", targetKeyword: "12345" },
+      { topic: "Benefits 2026", targetKeyword: "12345" },
+      { topic: "Benefits 1234", targetKeyword: "56789 guide" },
+      { topic: "Benefits 20", targetKeyword: "26", additionalContext: "12345" },
+      { topic: "Benefits 202", targetKeyword: "6", additionalContext: "12345" },
+      { topic: "Section 12", targetKeyword: "3456789 ways to recover" },
+      { topic: "Benefits 1", targetKeyword: "23 coping skills" },
       { topic: "123 reasons to seek care", targetKeyword: "Street stress and recovery" },
       { topic: "Visit us for 123 reasons", targetKeyword: "Main Street wellness" },
       { topic: "Main Street Psychiatry", targetKeyword: "telehealth guide" },
@@ -556,6 +576,22 @@ test("patient identifier guard fail-closes marked AI fields while preserving pub
         false,
         JSON.stringify(splitEditorialControl),
       );
+    }
+    const compactSsn = "123456789";
+    for (let cut = 1; cut < compactSsn.length; cut += 1) {
+      assert.equal(containsLikelyPatientIdentifierInAiFields({
+        topic: "Benefits " + compactSsn.slice(0, cut),
+        targetKeyword: compactSsn.slice(cut),
+      }), true, "two-field compact SSN cut " + cut);
+    }
+    for (let firstCut = 1; firstCut < compactSsn.length - 1; firstCut += 1) {
+      for (let secondCut = firstCut + 1; secondCut < compactSsn.length; secondCut += 1) {
+        assert.equal(containsLikelyPatientIdentifierInAiFields({
+          topic: "Benefits " + compactSsn.slice(0, firstCut),
+          targetKeyword: compactSsn.slice(firstCut, secondCut),
+          additionalContext: compactSsn.slice(secondCut),
+        }), true, "three-field compact SSN cuts " + firstCut + "/" + secondCut);
+      }
     }
     for (const editorialFields of [
       { topic: "Patient", targetKeyword: "Care Options", additionalContext: "support services" },

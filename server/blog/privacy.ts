@@ -199,6 +199,8 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
   const phoneValueAtStart = /^\s*(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/u;
   const completePhoneValue = /^\s*(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\s*$/u;
   const phoneFragment = /^(?=.*[\d+().-])[+\d().\s-]+$/u;
+  const completeSsnValue = /^\s*\d{3}[-.\s]?\d{2}[-.\s]?\d{4}\s*$/u;
+  const ssnFragment = /^(?=.*[\d.-])[\d.\s-]+$/u;
   const addressLabelAtEnd = /\b(?:address|street address|direcci[oó]n)\s*[:#-]?\s*$/iu;
   const addressValueAtStart = /^\s*\d{1,6}\s+[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5}\s+(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\b/iu;
   const completeAddressValue = /^\s*\d{1,6}\s+[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5}\s+(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\.?\s*$/iu;
@@ -207,6 +209,8 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
   const streetSuffixOnly = /^\s*(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\.?\s*$/iu;
   const trailingPhoneFragment = /(?:^|[^\d])([+\d().-][\d().\s-]{0,23})\s*$/u;
   const leadingPhoneFragment = /^\s*([+\d().-][\d().\s-]{0,23})/u;
+  const trailingSsnFragment = /(?:^|[^\d])([\d.-][\d.\s-]{0,12})\s*$/u;
+  const leadingSsnFragment = /^\s*([\d.-][\d.\s-]{0,12})/u;
   const trailingAddressBody = /(?:^|[^\d])(\d{1,6}\s+[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5})\s*$/iu;
   const trailingHouseNumber = /(?:^|[^\d])(\d{1,6})\s*$/u;
   const patientMarkerAtEnd = /\b(patient|paciente)\s*$/iu;
@@ -254,6 +258,40 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
           || containsInternationalPhoneNumber(extractedPhone)
           || containsInternationalPhoneNumber(extractedPhoneCompact)
         );
+      const extractedSsnParts = [
+        trailingSsnFragment.exec(window[0])?.[1] || "",
+        ...window.slice(1, -1),
+        leadingSsnFragment.exec(window[window.length - 1])?.[1] || "",
+      ];
+      const extractedSsn = extractedSsnParts.join(" ");
+      const extractedSsnCompact = extractedSsnParts.join("").replace(/\s+/g, "");
+      const firstSsnFragment = extractedSsnParts[0] || "";
+      const firstSsnPrefix = window[0]
+        .slice(0, Math.max(0, window[0].length - firstSsnFragment.length))
+        .trim();
+      const compactDigitParts = extractedSsnParts.map(value => value.replace(/\s+/g, ""));
+      const hasStrongSsnContext = /\b(?:ssn|social security(?:\s+number)?|seguro social)\b/iu.test(window[0]);
+      const leadingFourDigits = compactDigitParts.join("").slice(0, 4);
+      const startsWithEditorialYear = /^\d{4}$/u.test(leadingFourDigits)
+        && Number(leadingFourDigits) >= 1900
+        && Number(leadingFourDigits) <= 2099;
+      const compactDigitOnlySplit = compactDigitParts.every(value => /^\d+$/u.test(value))
+        && /^\d{9}$/u.test(extractedSsnCompact)
+        && /\p{L}/u.test(firstSsnPrefix)
+        && (!startsWithEditorialYear || hasStrongSsnContext)
+        && (
+          hasStrongSsnContext
+          || window.slice(1).every(value => /^\s*\d+\s*$/u.test(value))
+        );
+      const splitSsnFromBoundaryFragments = extractedSsnParts.every(value => ssnFragment.test(value))
+        && (
+          completeSsnValue.test(extractedSsn)
+          || compactDigitOnlySplit
+          || (
+            /[.-]/u.test(extractedSsnCompact)
+            && completeSsnValue.test(extractedSsnCompact)
+          )
+        );
       const splitAddressFromWholeFields = completeAddressValue.test(combined)
         && (houseNumberOnly.test(window[0]) || streetSuffixOnly.test(window[window.length - 1]));
       const extractedAddressBody = trailingAddressBody.exec(window[0])?.[1] || "";
@@ -270,6 +308,7 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
       );
       return splitPhoneFromWholeFields
         || splitPhoneFromBoundaryFragments
+        || splitSsnFromBoundaryFragments
         || splitAddressFromWholeFields
         || splitAddressFromBoundaryFragments;
     })
