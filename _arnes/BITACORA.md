@@ -104,6 +104,20 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Archivos tocados:** `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
 **Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
 
+## 2026-07-31 Codex — semántica completa del guard adult-only
+**Qué se hizo:** CodeX detectó que el guard aún podía omitir sinónimos de elegibilidad infantil. Se añadió detección contextual EN/ES para children, minors, pediatric patients, all ages y equivalentes, además de exigir el texto adultos 18+ en cada fuente con una oferta clínica explícita.
+**Decisiones:** El detector no cruza límites de oración y prueba fixtures permitidos, por lo que referencias a recursos comunitarios, historia clínica o preguntas que niegan atención a menores permanecen válidas.
+**Pendientes/bugs:** Verificación completa, nuevo SHA, Code Review y juez final.
+**Archivos tocados:** `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** thread P2 `PRRT_kwDOToJ8Pc6VdGBj`, comentario `3691378428`, clasificado válido; corrección pendiente de ejecución.
+
+## 2026-07-31 Codex — verificación del guard semántico adult-only
+**Qué se hizo:** Se ejecutó la batería completa con los patrones contextuales y las aserciones positivas de adultos 18+.
+**Decisiones:** El detector permite referencias comunitarias a niños separadas por oración, pero rechaza ofertas clínicas equivalentes en EN/ES y prueba ambos comportamientos con fixtures.
+**Pendientes/bugs:** Último Code Review, CI y juez del SHA resultante.
+**Archivos tocados:** `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
+
 ## 2026-07-31 Codex — ampliación final del guard adult-only
 **Qué se hizo:** CodeX clasificó como P2 válida la omisión de `locationFAQs.ts` y `shared/seo-manifest.json` en la lista de superficies protegidas. Ambas fuentes publicadas se añadieron al guard.
 **Decisiones:** El hallazgo es preventivo: no había una oferta actual a menores en FAQ o metadata, pero futuras ediciones deben quedar bloqueadas igual que el contenido visible.

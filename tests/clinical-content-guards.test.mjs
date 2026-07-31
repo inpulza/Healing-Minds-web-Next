@@ -25,6 +25,21 @@ const sectionBetween = (source, startMarker, endMarker) => {
   return source.slice(start, end);
 };
 
+const underageEligibilityPatterns = [
+  /\b(?:we|healing minds(?: psychiatry)?|dr\.? (?:melva )?reve)\s+(?:offers?|provides?|treats?|sees?|serves?|accepts?|welcomes?)[^.!?\n]{0,120}\b(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?|patients? of all ages)\b/iu,
+  /\b(?:care|treatment|therapy|services?|evaluations?|appointments?)\b[^.!?\n]{0,80}\b(?:for|to)\s+(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?|patients? of all ages)\b/iu,
+  /\b(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?|patients? of all ages)\b[^.!?\n]{0,80}\b(?:care|treatment|therapy|services?|evaluations?|appointments?)\b/iu,
+  /\b(?:care|treatment|therapy|services?|evaluations?|appointments?|adhd|anxiety|depression|ptsd|psychiatric)\b[^.!?\n]{0,100}\badults?\s+(?:and|&)\s+(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?)\b/iu,
+  /\badults?\s+(?:and|&)\s+(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?)\b[^.!?\n]{0,100}\b(?:care|treatment|therapy|services?|evaluations?|appointments?|adhd|anxiety|depression|ptsd|psychiatric)\b/iu,
+  /\b(?:ofrecemos|brindamos|tratamos|atendemos|aceptamos|recibimos)[^.!?\n]{0,120}\b(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?|pacientes de todas las edades)\b/iu,
+  /\b(?:atención|tratamiento|terapia|servicios?|evaluaciones?|citas)\b[^.!?\n]{0,80}\b(?:para|a)\s+(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?|pacientes de todas las edades)\b/iu,
+  /\b(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?|pacientes de todas las edades)\b[^.!?\n]{0,80}\b(?:atención|tratamiento|terapia|servicios?|evaluaciones?|citas)\b/iu,
+  /\b(?:atención|tratamiento|terapia|servicios?|evaluaciones?|citas|tdah|ansiedad|depresión|tept|psiquiátric[oa])\b[^.!?\n]{0,100}\badultos?\s+(?:y|&)\s+(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?)\b/iu,
+  /\badultos?\s+(?:y|&)\s+(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?)\b[^.!?\n]{0,100}\b(?:atención|tratamiento|terapia|servicios?|evaluaciones?|citas|tdah|ansiedad|depresión|tept|psiquiátric[oa])\b/iu,
+];
+
+const containsUnderageEligibilityOffer = source => underageEligibilityPatterns.some(pattern => pattern.test(source));
+
 test("telehealth consent does not publish an unverified board-certification claim", () => {
   const consent = read("client", "src", "data", "pageContent", "legal", "telehealthConsent.ts");
   assert.doesNotMatch(consent, /board[- ]certified/i);
@@ -78,6 +93,13 @@ test("public clinical eligibility consistently limits services to adults 18 and 
     ["shared/seo-manifest.json", read("shared", "seo-manifest.json")],
     ...locationPageFiles.map(filename => [filename, read("client", "src", "pages", filename)]),
   ];
+  const explicitAdultOfferSources = [
+    ["components/Services.tsx", read("client", "src", "components", "Services.tsx")],
+    ["locationHyperlocal.ts", read("client", "src", "data", "locationHyperlocal.ts")],
+    ["servicesIndex.ts", read("client", "src", "data", "pageContent", "services", "servicesIndex.ts")],
+    ["naples.ts", read("client", "src", "data", "pageContent", "mainPages", "naples.ts")],
+    ...locationPageFiles.map(filename => [filename, read("client", "src", "pages", filename)]),
+  ];
 
   assert.match(telehealthConsent, /Services are available to adults 18 and older/);
   assert.match(telehealthConsent, /servicios están disponibles para adultos de 18 años en adelante/i);
@@ -85,6 +107,34 @@ test("public clinical eligibility consistently limits services to adults 18 and 
   assert.match(medicalDisclaimer, /servicios están disponibles para adultos de 18 años en adelante/i);
 
   for (const [filename, source] of eligibilitySources) {
-    assert.doesNotMatch(source, /\bteen(?:ager|s)?\b|\badolescents?\b|\badolescentes?\b/i, filename);
+    assert.equal(containsUnderageEligibilityOffer(source), false, filename);
+  }
+
+  for (const [filename, source] of explicitAdultOfferSources) {
+    assert.match(source, /adults 18(?:\+| and older)/i, filename);
+    assert.match(source, /adultos (?:18\+|de 18 años en adelante)/i, filename);
+  }
+
+  for (const underageOffer of [
+    "We offer ADHD treatment for children.",
+    "Appointments are available to minors.",
+    "Healing Minds welcomes pediatric patients.",
+    "Psychiatric services for patients of all ages.",
+    "Adult and adolescent evaluations are available.",
+    "Ofrecemos tratamiento para niños.",
+    "Citas para menores de edad.",
+    "Atendemos a pacientes de todas las edades.",
+    "Evaluaciones para adultos y adolescentes.",
+  ]) {
+    assert.equal(containsUnderageEligibilityOffer(underageOffer), true, underageOffer);
+  }
+
+  for (const allowedContext of [
+    "Families with school-age children. We offer adult ADHD care.",
+    'question: "Do you see minors?", answer: "No. Appointments are for adults 18 and older only."',
+    "Children's Privacy: this website is not directed to children.",
+    "Symptoms may begin in childhood and continue into adulthood.",
+  ]) {
+    assert.equal(containsUnderageEligibilityOffer(allowedContext), false, allowedContext);
   }
 });
