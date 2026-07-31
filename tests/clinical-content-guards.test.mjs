@@ -41,6 +41,7 @@ const underageEligibilityPatterns = [
 ];
 
 const containsUnderageEligibilityOffer = source => underageEligibilityPatterns.some(pattern => pattern.test(source));
+const exclusiveAdultAgeBoundaryPattern = /\b(?:over|above) 18(?: years old)?\b|\bolder than 18(?: years old)?\b|\b(?:mayor(?:es)? de|más de|por encima de) 18 años\b/iu;
 
 test("telehealth consent does not publish an unverified board-certification claim", () => {
   const consent = read("client", "src", "data", "pageContent", "legal", "telehealthConsent.ts");
@@ -110,7 +111,7 @@ test("public clinical eligibility consistently limits services to adults 18 and 
 
   for (const [filename, source] of eligibilitySources) {
     assert.equal(containsUnderageEligibilityOffer(source), false, filename);
-    assert.doesNotMatch(source, /\b(?:over 18(?: years old)?|older than 18|mayores? de 18 años|más de 18 años)\b/iu, filename);
+    assert.doesNotMatch(source, exclusiveAdultAgeBoundaryPattern, filename);
   }
 
   for (const [filename, source] of explicitAdultOfferSources) {
@@ -143,5 +144,17 @@ test("public clinical eligibility consistently limits services to adults 18 and 
     "Symptoms may begin in childhood and continue into adulthood.",
   ]) {
     assert.equal(containsUnderageEligibilityOffer(allowedContext), false, allowedContext);
+  }
+
+  for (const exclusiveBoundary of [
+    "Patients over 18 years old.",
+    "Adults above 18.",
+    "Patients older than 18 years old.",
+    "Paciente mayor de 18 años.",
+    "Pacientes mayores de 18 años.",
+    "Adultos de más de 18 años.",
+    "Personas por encima de 18 años.",
+  ]) {
+    assert.match(exclusiveBoundary, exclusiveAdultAgeBoundaryPattern, exclusiveBoundary);
   }
 });

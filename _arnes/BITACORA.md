@@ -152,3 +152,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Repetir CI, preview y Code Review sobre el nuevo SHA; no fusionar mientras exista un hilo válido abierto.
 **Archivos tocados:** `client/src/data/locationFAQs.ts`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
 **Evidencia:** threads P2 `PRRT_kwDOToJ8Pc6VdUCq` y `PRRT_kwDOToJ8Pc6VdUCu`, comentarios `3691461648` y `3691461653`, clasificados válidos; guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys, ordered tags y contact insert; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — cierre singular/plural del límite de edad
+**Qué se hizo:** El Code Review de `1cddcd2` detectó que `mayor de 18 años` podía eludir el bloqueo preventivo porque el patrón cubría solo una forma plural incorrectamente construida. Se normalizó el detector para singular, plural y variantes equivalentes EN/ES, con siete fixtures explícitos.
+**Decisiones:** Cualquier fórmula que excluya a la persona de exactamente 18 años debe fallar; la redacción aprobada sigue siendo 18 años en adelante.
+**Pendientes/bugs:** Completar CI, preview y Code Review del nuevo SHA antes del merge.
+**Archivos tocados:** `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** thread P2 `PRRT_kwDOToJ8Pc6Vdd_C`, comentario `3691521515`, clasificado válido; guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys, ordered tags y contact insert; `npm run build` PASS con 89/89 páginas.
