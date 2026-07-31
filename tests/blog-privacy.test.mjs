@@ -541,6 +541,7 @@ test("patient identifier guard fail-closes marked AI fields while preserving pub
 
 test("both draft endpoints evaluate AI fields independently", () => {
   const generationStorage = fs.readFileSync("server/blog/generation/storage.ts", "utf8");
+  const candidateStorage = fs.readFileSync("server/blog/topic-candidate-storage.ts", "utf8");
   const availabilityHelper = generationStorage.slice(
     generationStorage.indexOf("export async function getAvailableCompletedBlogPlanningRun"),
     generationStorage.indexOf("export async function queuePreparedBlogGenerationRun"),
@@ -549,6 +550,20 @@ test("both draft endpoints evaluate AI fields independently", () => {
   assert.doesNotMatch(availabilityHelper, /\.update\(|\.insert\(|\.delete\(/);
   assert.match(availabilityHelper, /eq\(blogGenerationRuns\.status, "completed"\)/);
   assert.match(availabilityHelper, /isNull\(blogGenerationRuns\.postId\)/);
+  const atomicClaimHelper = candidateStorage.slice(
+    candidateStorage.indexOf("export async function claimBlogTopicCandidateForGeneration"),
+  );
+  const runClaimIndex = atomicClaimHelper.indexOf(".update(blogGenerationRuns)");
+  const legacySelectionIndex = atomicClaimHelper.indexOf(".update(legacyBlogTopicCandidates)");
+  const currentSelectionIndex = atomicClaimHelper.indexOf(".update(blogTopicCandidates)");
+  assert.match(atomicClaimHelper, /db\.transaction\(async tx/);
+  assert.match(atomicClaimHelper, /eq\(blogGenerationRuns\.status, "completed"\)/);
+  assert.match(atomicClaimHelper, /isNull\(blogGenerationRuns\.postId\)/);
+  assert.match(atomicClaimHelper, /code === "23505"/);
+  assert.match(atomicClaimHelper, /statusCode: 409, code: "blog_generation_run_conflict"/);
+  assert.ok(runClaimIndex >= 0, "missing conditional planning-run claim");
+  assert.ok(runClaimIndex < legacySelectionIndex, "legacy candidate selected before winning plan claim");
+  assert.ok(runClaimIndex < currentSelectionIndex, "current candidate selected before winning plan claim");
 
   for (const [filename, flowMarker] of [
     ["server/blog/admin-routes.ts", 'app.post("/api/admin/blog/generate-draft"'],
@@ -559,16 +574,19 @@ test("both draft endpoints evaluate AI fields independently", () => {
     assert.doesNotMatch(source, /possibleSensitiveText/, filename);
     const flow = source.slice(source.indexOf(flowMarker), source.indexOf(flowMarker) + 9_000);
     const privacyGateIndex = flow.indexOf("containsLikelyPatientIdentifierInAiFields(payload)");
-    const candidateSelectionIndex = flow.indexOf("selectBlogTopicCandidate(");
-    const planningClaimIndex = flow.indexOf("claimCompletedBlogPlanningRun(");
+    const atomicClaimIndex = flow.indexOf("claimBlogTopicCandidateForGeneration(");
     const availabilityIndex = flow.indexOf("getAvailableCompletedBlogPlanningRun(");
     const rateLimitIndex = flow.indexOf("const rateLimit = checkBlogAiRateLimit(");
+    const semanticJudgeIndex = flow.indexOf("assertGuidedBlogTopicSafe({");
     assert.ok(privacyGateIndex >= 0, `${filename}: missing privacy gate`);
     assert.ok(availabilityIndex >= 0, `${filename}: missing non-mutating plan availability check`);
     assert.ok(availabilityIndex < privacyGateIndex, `${filename}: consumed plan checked after privacy gate`);
     assert.ok(availabilityIndex < rateLimitIndex, `${filename}: consumed plan checked after rate limit`);
-    assert.ok(candidateSelectionIndex > privacyGateIndex, `${filename}: candidate selected before privacy gate`);
-    assert.ok(planningClaimIndex > privacyGateIndex, `${filename}: planning run claimed before privacy gate`);
+    assert.ok(atomicClaimIndex > privacyGateIndex, `${filename}: planning run claimed before privacy gate`);
+    assert.ok(atomicClaimIndex > rateLimitIndex, `${filename}: planning run claimed before rate limit`);
+    assert.ok(atomicClaimIndex > semanticJudgeIndex, `${filename}: planning run claimed before semantic judge`);
+    assert.equal(flow.indexOf("selectBlogTopicCandidate("), -1, `${filename}: candidate selection is not atomic with plan claim`);
+    assert.equal(flow.indexOf("claimCompletedBlogPlanningRun("), -1, `${filename}: legacy standalone plan claim remains in route`);
   }
 });
 

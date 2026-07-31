@@ -101,7 +101,8 @@ function hostnameFromHostHeader(value: string | null): string | null {
   return match[1] || null;
 }
 
-function isLoopbackHostHeader(value: string, allowList: boolean): boolean {
+function isLoopbackHostHeader(value: string | null, allowList: boolean): boolean {
+  if (!value) return false;
   const hosts = value.split(",").map(host => host.trim());
   return hosts.length > 0
     && (allowList || hosts.length === 1)
@@ -109,12 +110,43 @@ function isLoopbackHostHeader(value: string, allowList: boolean): boolean {
     && hosts.every(host => isLoopbackHostname(hostnameFromHostHeader(host)));
 }
 
+function isLoopbackClientAddress(value: string): boolean {
+  const normalized = value.trim().toLowerCase().split("%")[0];
+  return normalized === "127.0.0.1"
+    || normalized === "::1"
+    || normalized === "::ffff:127.0.0.1";
+}
+
+function isLoopbackClientHeader(value: string | null, allowList: boolean): boolean {
+  if (!value) return false;
+  const addresses = value.split(",").map(address => address.trim());
+  return addresses.length > 0
+    && (allowList || addresses.length === 1)
+    && addresses.every(Boolean)
+    && addresses.every(isLoopbackClientAddress);
+}
+
 export function isLocalAdminRequest(request: NextRequest): boolean {
+  const hasForwardedHost = request.headers.has("x-forwarded-host");
+  const hasForwardedFor = request.headers.has("x-forwarded-for");
+  const hasRealIp = request.headers.has("x-real-ip");
   const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const realIp = request.headers.get("x-real-ip");
+  const hasProxyMetadata = hasForwardedHost
+    || request.headers.has("x-forwarded-proto")
+    || request.headers.has("x-forwarded-port");
+  const hasVerifiedClientChain = (hasForwardedFor || hasRealIp)
+    && (!hasForwardedFor || isLoopbackClientHeader(forwardedFor, true))
+    && (!hasRealIp || isLoopbackClientHeader(realIp, false));
   const host = request.headers.get("host");
   return isLoopbackHostname(request.nextUrl.hostname)
     && Boolean(host)
-    && (!forwardedHost || isLoopbackHostHeader(forwardedHost, true))
+    && !request.headers.has("forwarded")
+    && (!hasProxyMetadata || hasVerifiedClientChain)
+    && (!hasForwardedFor || isLoopbackClientHeader(forwardedFor, true))
+    && (!hasRealIp || isLoopbackClientHeader(realIp, false))
+    && (!hasForwardedHost || isLoopbackHostHeader(forwardedHost, true))
     && isLoopbackHostHeader(host || "", false);
 }
 

@@ -102,10 +102,77 @@ test("custom Next admin completes login, protected API, session and logout witho
       headers: { host: "127.0.0.1:3100" },
     });
     const localhostRequest = new NextRequest("http://localhost:3100/api/admin/session", {
-      headers: { host: "localhost:3100", "x-forwarded-host": "localhost:3100" },
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "127.0.0.1",
+      },
     });
     const ipv6Request = new NextRequest("http://[::1]:3100/api/admin/session", {
-      headers: { host: "[::1]:3100", "x-forwarded-host": "[::1]:3100" },
+      headers: {
+        host: "[::1]:3100",
+        "x-forwarded-host": "[::1]:3100",
+        "x-forwarded-for": "::1",
+      },
+    });
+    const tunneledRemoteClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "198.51.100.20",
+      },
+    });
+    const mixedForwardedClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "127.0.0.1, 198.51.100.20",
+      },
+    });
+    const prependedRemoteClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "198.51.100.20, 127.0.0.1",
+      },
+    });
+    const contradictoryClientHeadersRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "127.0.0.1",
+        "x-real-ip": "198.51.100.20",
+      },
+    });
+    const emptyForwardedClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: { host: "localhost:3100", "x-forwarded-for": "" },
+    });
+    const malformedForwardedClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: { host: "localhost:3100", "x-forwarded-for": "not-an-ip" },
+    });
+    const mappedLoopbackClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "::ffff:127.0.0.1, ::1",
+        "x-real-ip": "127.0.0.1",
+      },
+    });
+    const remoteRealIpRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-real-ip": "198.51.100.20",
+      },
+    });
+    const missingForwardedClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: { host: "localhost:3100", "x-forwarded-host": "localhost:3100" },
+    });
+    const standardForwardedRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        forwarded: "for=127.0.0.1;host=localhost:3100",
+      },
     });
     const spoofedForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
       headers: { host: "127.0.0.1:3100", "x-forwarded-host": "preview.example" },
@@ -138,6 +205,16 @@ test("custom Next admin completes login, protected API, session and logout witho
     assert.equal(auth.getAdminSession(localRequest)?.username, "development");
     assert.equal(auth.getAdminSession(localhostRequest)?.username, "development");
     assert.equal(auth.getAdminSession(ipv6Request)?.username, "development");
+    assert.equal(auth.getAdminSession(tunneledRemoteClientRequest), null);
+    assert.equal(auth.getAdminSession(mixedForwardedClientRequest), null);
+    assert.equal(auth.getAdminSession(prependedRemoteClientRequest), null);
+    assert.equal(auth.getAdminSession(contradictoryClientHeadersRequest), null);
+    assert.equal(auth.getAdminSession(emptyForwardedClientRequest), null);
+    assert.equal(auth.getAdminSession(malformedForwardedClientRequest), null);
+    assert.equal(auth.getAdminSession(mappedLoopbackClientRequest)?.username, "development");
+    assert.equal(auth.getAdminSession(remoteRealIpRequest), null);
+    assert.equal(auth.getAdminSession(missingForwardedClientRequest), null);
+    assert.equal(auth.getAdminSession(standardForwardedRequest), null);
     assert.equal(auth.getAdminSession(spoofedForwardedHostRequest), null);
     assert.equal(auth.getAdminSession(appendedForwardedHostRequest), null);
     assert.equal(auth.getAdminSession(prependedForwardedHostRequest), null);
@@ -154,6 +231,17 @@ test("custom Next admin completes login, protected API, session and logout witho
       body: JSON.stringify({ username: "ignored", password: "ignored" }),
     }));
     assert.equal(localOffLogin.status, 200);
+    const tunneledOffLogin = await login.POST(new NextRequest("http://localhost:3100/api/admin/login", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "198.51.100.20",
+      },
+      body: JSON.stringify({ username: "ignored", password: "ignored" }),
+    }));
+    assert.equal(tunneledOffLogin.status, 403);
     const remoteOffLogin = await login.POST(new NextRequest("https://preview.example/api/admin/login", {
       method: "POST",
       headers: { "content-type": "application/json", host: "preview.example", "x-forwarded-host": "preview.example" },

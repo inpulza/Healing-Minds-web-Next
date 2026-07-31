@@ -86,6 +86,15 @@ El juez independiente emitió **GO 4/4 sin hallazgos accionables**. Verificó qu
 
 Verificación integrada del árbol final: `npm test` PASS 72/72; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas. La publicación y el merge siguen bloqueados hasta obtener Quality, Preview Ready y Code Review exacto sobre el nuevo SHA.
 
+## Clasificación del Code Review exacto de `a2f0675`
+
+- `3693600713` / `PRRT_kwDOToJ8Pc6Vi4L9` — **válida y resuelta localmente**. Next comprobaba las autoridades loopback pero no el cliente efectivo. `isLocalAdminRequest` exige ahora que `x-forwarded-for` completo y `x-real-ip` sean loopback; toda presencia vacía, malformada, remota, mixta o contradictoria falla en cerrado. Si existe metadata proxy debe existir una cadena de cliente verificada, y `Forwarded` se rechaza explícitamente.
+- `3693600717` / `PRRT_kwDOToJ8Pc6Vi4MB` — **válida y resuelta localmente**. La selección previa al claim permitía que un perdedor concurrente dejara su candidato marcado. `claimBlogTopicCandidateForGeneration` ejecuta una sola transacción: claim condicionado primero y selección después, tanto en el esquema actual como en el legacy. Si no gana no toca candidatos; si la selección falla, el claim revierte.
+
+El juez independiente detectó además una paridad P2: el índice de run abierto puede producir `23505`, que Express convertía a 409 mientras Next podía devolver 500. El helper compartido lo traduce ahora a `409 blog_generation_run_conflict` después del rollback. Veredicto final independiente: **GO total sin findings accionables**.
+
+Verificación integrada del árbol final: `npm test` PASS 72/72; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas. La publicación continúa bloqueada hasta obtener Preview Ready y Code Review exacto sobre el nuevo SHA.
+
 ## Límites
 
 No se accedió a secretos ni datos reales de pacientes. No se cambia la autenticación custom de Production o Preview. Un topic o keyword administrativo sin los marcadores `patient/paciente/name/nombre` conserva semántica editorial; el campo libre `additionalContext` sigue siendo deliberadamente más estricto. Esta frontera por función no reemplaza la prohibición humana de introducir PII ni constituye un detector clínico universal. El contenido completo de un artículo puede mencionar personal público, por lo que la salida de imágenes exige identificadores explícitos en vez de inferir que cualquier nombre es un paciente.

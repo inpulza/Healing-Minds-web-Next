@@ -1,4 +1,5 @@
 import { after, NextRequest, NextResponse } from "next/server";
+import type { BlogGenerationRun } from "@shared/schema";
 import { getAdminSession, noStoreHeaders } from "../../../../../server/next-admin-auth";
 
 export const runtime = "nodejs";
@@ -505,7 +506,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
     if (segments.length === 1 && segments[0] === "generate-draft") {
       const requestedPayload = validation.adminBlogGenerateDraftSchema.parse(body);
       let payload = requestedPayload;
-      let claimedPlanningRun: Awaited<ReturnType<typeof import("../../../../../server/blog/generation/storage").claimCompletedBlogPlanningRun>> | undefined;
+      let claimedPlanningRun: BlogGenerationRun | undefined;
       let topicCandidateSelection: { runId: number; candidateKey: string } | undefined;
       if (requestedPayload.topicCandidateId) {
         const [candidates, planned, strategy, generation] = await Promise.all([
@@ -558,15 +559,12 @@ export async function POST(request: NextRequest, context: RouteContext) {
         language: payload.language,
       });
       if (topicCandidateSelection) {
-        const [candidates, generation] = await Promise.all([
-          import("../../../../../server/blog/topic-candidate-storage"),
-          import("../../../../../server/blog/generation/storage"),
-        ]);
-        const selected = await candidates.selectBlogTopicCandidate(
+        const candidates = await import("../../../../../server/blog/topic-candidate-storage");
+        const claimedSelection = await candidates.claimBlogTopicCandidateForGeneration(
           topicCandidateSelection.runId,
           topicCandidateSelection.candidateKey,
         );
-        claimedPlanningRun = await generation.claimCompletedBlogPlanningRun(selected.runId);
+        claimedPlanningRun = claimedSelection?.planningRun;
         if (!claimedPlanningRun) {
           throw Object.assign(new Error("This topic plan was already used or is no longer available. Plan topics again."), { statusCode: 409 });
         }

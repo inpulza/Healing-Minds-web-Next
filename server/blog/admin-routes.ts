@@ -63,7 +63,6 @@ import { runSeoPublishingCheck } from "../seo/publishing";
 import { getClientIp } from "../utils/client-ip";
 import {
   appendBlogGenerationEvent,
-  claimCompletedBlogPlanningRun,
   claimBlogGenerationRun,
   completeBlogGenerationRun,
   completeBlogPlanningRun,
@@ -78,10 +77,10 @@ import {
   queuePreparedBlogGenerationRun,
   updateBlogGenerationRun,
 } from "./generation/storage";
-import type { JsonObject } from "./generation/types";
+import type { GenerationRun, JsonObject } from "./generation/types";
 import {
+  claimBlogTopicCandidateForGeneration,
   getBlogTopicCandidateById,
-  selectBlogTopicCandidate,
 } from "./topic-candidate-storage";
 import { containsLikelyPatientIdentifierInAiFields } from "./privacy";
 import {
@@ -1547,7 +1546,7 @@ export function registerAdminBlogRoutes(app: Express): void {
   });
 
   app.post("/api/admin/blog/generate-draft", async (req, res) => {
-    let claimedPlanningRun: Awaited<ReturnType<typeof claimCompletedBlogPlanningRun>>;
+    let claimedPlanningRun: GenerationRun | undefined;
     try {
       const requestedPayload = adminBlogGenerateDraftSchema.parse(req.body);
       let payload: AdminBlogGenerateDraftPayload = requestedPayload;
@@ -1607,12 +1606,12 @@ export function registerAdminBlogRoutes(app: Express): void {
         language: payload.language,
       });
       if (topicCandidateSelection) {
-        const selectedCandidate = await selectBlogTopicCandidate(
-          topicCandidateSelection.runId,
-          topicCandidateSelection.candidateKey,
-        );
         try {
-          claimedPlanningRun = await claimCompletedBlogPlanningRun(selectedCandidate.runId);
+          const claimedSelection = await claimBlogTopicCandidateForGeneration(
+            topicCandidateSelection.runId,
+            topicCandidateSelection.candidateKey,
+          );
+          claimedPlanningRun = claimedSelection?.planningRun;
         } catch (error) {
           if ((error as { code?: string }).code === "23505") {
             throw Object.assign(
