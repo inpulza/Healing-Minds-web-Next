@@ -70,10 +70,12 @@ test("public clinical eligibility consistently limits services to adults 18 and 
   const medicalDisclaimer = read("client", "src", "data", "pageContent", "legal", "medicalDisclaimer.ts");
   const eligibilitySources = [
     ["components/Services.tsx", read("client", "src", "components", "Services.tsx")],
+    ["locationFAQs.ts", read("client", "src", "data", "locationFAQs.ts")],
     ["locationHyperlocal.ts", read("client", "src", "data", "locationHyperlocal.ts")],
     ["servicesIndex.ts", read("client", "src", "data", "pageContent", "services", "servicesIndex.ts")],
     ["naples.ts", read("client", "src", "data", "pageContent", "mainPages", "naples.ts")],
     ["about.ts", read("client", "src", "data", "pageContent", "mainPages", "about.ts")],
+    ["shared/seo-manifest.json", read("shared", "seo-manifest.json")],
     ...locationPageFiles.map(filename => [filename, read("client", "src", "pages", filename)]),
   ];
 

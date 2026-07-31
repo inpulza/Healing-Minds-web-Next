@@ -26,6 +26,6 @@ No se modifican diagnósticos, planes terapéuticos ni datos de pacientes. Las p
 
 ## Guard automático
 
-`tests/clinical-content-guards.test.mjs` impide reintroducir el claim no corroborado en el consentimiento, verifica que las nueve páginas mantengan sábado y domingo cerrados en EN/ES, bloquea nuevas promesas de tardes, fines de semana o adaptación al horario agrícola en Immokalee y exige que las fuentes clínicas revisadas no vuelvan a ofrecer servicios a teens/adolescentes cuando la política pública es adultos 18+.
+`tests/clinical-content-guards.test.mjs` impide reintroducir el claim no corroborado en el consentimiento, verifica que las nueve páginas mantengan sábado y domingo cerrados en EN/ES, bloquea nuevas promesas de tardes, fines de semana o adaptación al horario agrícola en Immokalee y exige que las fuentes clínicas revisadas, los FAQ y el manifiesto SEO no vuelvan a ofrecer servicios a teens/adolescentes cuando la política pública es adultos 18+.
 
 Validación final tras todos los hallazgos: guard focalizado PASS 4/4; suite integrada PASS 62/62; TypeScript PASS; verificación de base de datos PASS (2 migraciones, 95 statements, 18 tablas, 20 foreign keys); build Next PASS con 89/89 páginas.

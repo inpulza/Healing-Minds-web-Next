@@ -104,6 +104,20 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Archivos tocados:** `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
 **Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
 
+## 2026-07-31 Codex — ampliación final del guard adult-only
+**Qué se hizo:** CodeX clasificó como P2 válida la omisión de `locationFAQs.ts` y `shared/seo-manifest.json` en la lista de superficies protegidas. Ambas fuentes publicadas se añadieron al guard.
+**Decisiones:** El hallazgo es preventivo: no había una oferta actual a menores en FAQ o metadata, pero futuras ediciones deben quedar bloqueadas igual que el contenido visible.
+**Pendientes/bugs:** Repetir batería, deployment, Code Review del nuevo SHA y pase final del juez.
+**Archivos tocados:** `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** thread P2 `PRRT_kwDOToJ8Pc6Vc8e9`, comentario `3691322189`, clasificado válido; corrección pendiente de verificación final.
+
+## 2026-07-31 Codex — verificación final de superficies adult-only
+**Qué se hizo:** Se repitió la batería completa con FAQ y manifiesto SEO incluidos en el guard.
+**Decisiones:** El nuevo SHA se somete al último Code Review y al juez antes del merge.
+**Pendientes/bugs:** Cerrar los gates externos del HEAD resultante.
+**Archivos tocados:** `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
+
 ## 2026-07-31 Codex — cierre del componente compartido adult-only
 **Qué se hizo:** El segundo pase del juez encontró la misma oferta a teens/adolescentes en `client/src/components/Services.tsx`, fuera del inventario inicial de páginas y datos. Se corrigió EN/ES y se incorporó el componente al guard.
 **Decisiones:** La auditoría textual se amplía a todo `client/src`; las referencias contextuales a menores que no sean ofertas de atención no se confunden con elegibilidad clínica.
