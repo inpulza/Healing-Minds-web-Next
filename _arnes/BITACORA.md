@@ -52,8 +52,8 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Qué se hizo:** Se contrastaron los claims de licencia y certificación con los registros oficiales; se retiró de EN/ES el claim de certificación de junta no corroborado y se unificaron nueve páginas de ubicación con el horario oficial de fin de semana cerrado.
 **Decisiones:** La licencia California A 198275 permanece porque DCA la muestra vigente. La ausencia en ABPN no se presenta como prueba negativa; el claim se retira preventivamente hasta que Healing Minds aporte verificación oficial. No se autoaprueba contenido YMYL.
 **Pendientes/bugs:** Revisión humana de Healing Minds y, si existe, incorporación futura de documentación oficial de board certification.
-**Archivos tocados:** `client/src/data/pageContent/legal/telehealthConsent.ts`, nueve `client/src/pages/Location*.tsx`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
-**Evidencia:** California DCA consultado el 2026-07-31: licencia A 198275 vigente; ABPN VerifyCERT sin coincidencias en tres variantes del nombre, con advertencia oficial de que la ausencia no es prueba de no certificación.
+**Archivos tocados:** `client/src/data/pageContent/legal/telehealthConsent.ts`, nueve `client/src/pages/Location*.tsx`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** California DCA consultado el 2026-07-31: licencia A 198275 vigente; ABPN VerifyCERT sin coincidencias en tres variantes del nombre, con advertencia oficial de que la ausencia no es prueba de no certificación. Guard clínico focalizado PASS 2/2; suite integrada, typecheck, DB y build se repitieron después de actualizar la rama con `main`.
 
 ## 2026-07-31 Codex — aislamiento del verificador de contacto
 **Qué se hizo:** Se corrigieron los dos P2 vigentes del PR #3. Cada ejecución del verificador usa ahora una dirección única y borra por correo además de por id para cubrir respuestas perdidas después de persistir. Tras Code Review, la limpieza histórica se restringió a filas antiguas con los tres marcadores exactos del workflow.

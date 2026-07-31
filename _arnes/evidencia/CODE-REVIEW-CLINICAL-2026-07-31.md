@@ -20,3 +20,7 @@ Revisión focalizada de claims clínicos, licencia de California, rutas legales 
 ## Seguridad editorial
 
 No se modifican diagnósticos, tratamientos, promesas clínicas ni datos de pacientes. La retirada del claim de junta queda sujeta a revisión humana de Healing Minds.
+
+## Guard automático
+
+`tests/clinical-content-guards.test.mjs` impide reintroducir el claim no corroborado en el consentimiento y verifica que las nueve páginas mantengan sábado y domingo cerrados en EN/ES.
