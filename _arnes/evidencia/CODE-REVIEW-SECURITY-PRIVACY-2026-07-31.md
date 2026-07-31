@@ -66,6 +66,15 @@ La prueba no se limita a inspección estática: intercepta el `fetch` real de `g
 
 El juez independiente emitió **GO 3/3 sin otros hallazgos accionables** después de reproducir las dos evasiones residuales y verificar sus correcciones. La fusión sigue bloqueada hasta publicar el SHA y obtener de nuevo Quality, Preview Ready y Code Review exacto sin notas.
 
+## Clasificación del Code Review exacto de `837c850`
+
+- `3693358195` / `PRRT_kwDOToJ8Pc6ViP6h` — **válida y resuelta localmente**. El binding loopback de `npm run dev` rompía la preview pública declarada en `.replit`. La preview usa ahora `npm run dev:replit` en `0.0.0.0:5000`; el wrapper carga los mismos `.env.local` y `.env.development.local` de Next antes de validar y rechaza tanto `BLOG_ADMIN_AUTH_MODE` como `ADMIN_AUTH_MODE` en `off/disabled`. El desarrollo normal conserva `127.0.0.1:3100`.
+- `3693358202` / `PRRT_kwDOToJ8Pc6ViP6n` — **válida y resuelta localmente**. La generación de imágenes revisaba cada campo por separado y omitía una etiqueta en un campo con el valor en el siguiente. `containsLikelyPatientIdentifierAcrossTextFields` conserva límites y solo reconstruye identificadores etiquetados. Cubre nombres envueltos, etiquetas EN/ES y valores repartidos; las etiquetas fuertes fallan en cerrado y las genéricas preservan títulos editoriales comprobados.
+
+El juez encontró primero dos evasiones adicionales y evitó un falso cierre: variables cargadas después desde `.env*`, nombres entre comillas/paréntesis y la ambigüedad de `Journey` como heading o nombre real. El diseño final separa etiquetas fuertes de etiquetas genéricas. Veredicto final: **GO para Replit y GO para PII cross-field, sin bypasses accionables dentro del alcance**.
+
+Verificación integrada del árbol final: `npm test` PASS 71/71; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas; `git diff --check` PASS.
+
 ## Límites
 
 No se accedió a secretos ni datos reales de pacientes. No se cambia la autenticación custom de Production o Preview. Un topic o keyword administrativo sin los marcadores `patient/paciente/name/nombre` conserva semántica editorial; el campo libre `additionalContext` sigue siendo deliberadamente más estricto. Esta frontera por función no reemplaza la prohibición humana de introducir PII ni constituye un detector clínico universal. El contenido completo de un artículo puede mencionar personal público, por lo que la salida de imágenes exige identificadores explícitos en vez de inferir que cualquier nombre es un paciente.

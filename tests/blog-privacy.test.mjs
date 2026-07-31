@@ -699,7 +699,7 @@ test("draft provider never receives raw free-form editorial context", () => {
 
 test("image generation checks explicit identifiers without treating public editorial names as patients", () => {
   const source = fs.readFileSync("server/blog/images/service.ts", "utf8");
-  assert.match(source, /sensitiveInputs\.some\(containsLikelyPatientIdentifier\)/);
+  assert.match(source, /containsLikelyPatientIdentifierAcrossTextFields\(sensitiveInputs\)/);
   assert.doesNotMatch(source, /containsHighConfidencePersonName|containsLikelyPatientIdentifierInTexts/);
 });
 

@@ -14,6 +14,7 @@ import {
 import {
   containsHighConfidencePersonName,
   containsLikelyPatientIdentifier,
+  containsLikelyPatientIdentifierAcrossTextFields,
   containsLikelyPatientIdentifierInAiFields,
 } from "../server/blog/privacy";
 import { buildSafeVisualBrief } from "../server/blog/images/prompt";
@@ -125,6 +126,21 @@ try {
   assert.equal(containsLikelyPatientIdentifier("Healing Minds Psychiatry"), false);
   assert.equal(containsLikelyPatientIdentifier("About Us"), false);
   assert.equal(containsLikelyPatientIdentifier("Patient Resources"), false);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Patient name:", "Jane Doe"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Patient name:", "\"Jane Doe\""]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Patient name:", "(Jane Doe)"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Patient name:", "Journey Smith"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Nombre del paciente:", "María García"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Nombre del paciente:", "«María García»"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Nombre legal:", "María García"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Nombre completo:", "María García"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Patient email:", "jane.doe", "@example.com"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Patient Resources", "Care Options"]), false);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Name and Identity in Therapy", "Legal considerations"]), false);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Legal Name:", "What Patients Should Know"]), true);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Name:", "and Identity in Therapy"]), false);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Names:", "Why Preferred Terms Matter"]), false);
+  assert.equal(containsLikelyPatientIdentifierAcrossTextFields(["Understanding the Patient", "Journey Through Recovery"]), false);
   assert.equal(containsLikelyPatientIdentifier("Understanding Seasonal Affective Disorder"), false);
   assert.equal(containsLikelyPatientIdentifier("Managing Panic Attacks"), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Depresión Estacional" }), false);

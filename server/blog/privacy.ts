@@ -155,14 +155,30 @@ function containsLaterNamedPatientNarrative(value: string): boolean {
 }
 
 function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
-  const nameLabelAtEnd = new RegExp(
-    String.raw`(?:\b(?:(?:patient|paciente)\s+(?:name|nombre)|nombre\s+(?:del\s+)?paciente|name|nombre)\s*[:#-]?|\b(?:patient|paciente|case|caso)\s*[:#-])\s*$`,
+  const boundaryEditorialLeadTokens = new Set([
+    ...headingConnectorTokens,
+    ...patientEditorialLeadTokens,
+    "guide", "guides", "how", "identity", "journey", "managing", "overview",
+    "perspectives", "terms", "understanding", "what", "when", "where", "which",
+    "who", "whose", "why",
+  ]);
+  const strongNameLabelAtEnd = new RegExp(
+    String.raw`(?:\b(?:(?:patient|paciente)\s+(?:name|nombre)|nombre\s+(?:del\s+)?paciente|(?:(?:full|legal|preferred)\s+){1,2}name|name(?:\s+(?:full|legal|preferred)){1,2}|nombre(?:\s+(?:completo|legal|preferido)){1,2})\s*[:#-]?|\b(?:patient|paciente|case|caso)\s*[:#-])\s*$`,
     "iu",
   );
-  const nameValueAtStart = new RegExp(String.raw`^\s*${labeledNamePattern}\b`, "iu");
-  const pluralNameLabelWithSeparatorAtEnd = /\b(?:patients|pacientes|names|nombres)\s*[:#=-]\s*$/iu;
-  const pluralNameLabelBareAtEnd = /\b(?:patients|pacientes|names|nombres)\s*$/iu;
-  const pluralNameSeparatedValueAtStart = new RegExp(String.raw`^\s*[:#=-]\s*${labeledNamePattern}\b`, "iu");
+  const genericNameLabelAtEnd = /\b(?:name|nombre)\s*[:#-]?\s*$/iu;
+  const nameValueAtStart = new RegExp(
+    String.raw`^\s*["“'‘(«]*(${labeledNamePattern})["”'’»)]*(?=$|[^\p{L}\p{M}])`,
+    "iu",
+  );
+  const pluralPatientLabelWithSeparatorAtEnd = /\b(?:patients|pacientes)\s*[:#=-]\s*$/iu;
+  const pluralPatientLabelBareAtEnd = /\b(?:patients|pacientes)\s*$/iu;
+  const pluralNameLabelWithSeparatorAtEnd = /\b(?:names|nombres)\s*[:#=-]\s*$/iu;
+  const pluralNameLabelBareAtEnd = /\b(?:names|nombres)\s*$/iu;
+  const pluralNameSeparatedValueAtStart = new RegExp(
+    String.raw`^\s*[:#=-]\s*["“'‘(«]*(${labeledNamePattern})["”'’»)]*(?=$|[^\p{L}\p{M}])`,
+    "iu",
+  );
   const birthDateLabelAtEnd = /\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|fecha de nacimiento|nacimiento)\s*[:#-]?\s*$/iu;
   const birthDateValueAtStart = new RegExp(String.raw`^\s*${datePattern}\b`, "iu");
   const medicalIdLabelAtEnd = /\b(?:mrn|medical record|member id|patient id|record number|chart number|insurance id|policy number|ssn|social security number|historia cl[ií]nica|n[uú]mero de paciente|id de paciente)\s*[:#-]?\s*$/iu;
@@ -176,6 +192,19 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
   const patientMarkerAtEnd = /\b(patient|paciente)\s*$/iu;
   const rightLeadAtStart = /^\s*(\p{L}[\p{L}\p{M}'’\-]*)/u;
 
+  const hasLikelyNameValueAtStart = (value: string): boolean => {
+    const candidate = nameValueAtStart.exec(value)?.[1] || "";
+    const firstToken = candidate.split(/\s+/)[0] || "";
+    return Boolean(candidate)
+      && !boundaryEditorialLeadTokens.has(normalizeLowercaseToken(firstToken));
+  };
+  const hasLikelySeparatedNameValueAtStart = (value: string): boolean => {
+    const candidate = pluralNameSeparatedValueAtStart.exec(value)?.[1] || "";
+    const firstToken = candidate.split(/\s+/)[0] || "";
+    return Boolean(candidate)
+      && !boundaryEditorialLeadTokens.has(normalizeLowercaseToken(firstToken));
+  };
+
   for (let boundary = 1; boundary < fields.length; boundary += 1) {
     const left = fields.slice(0, boundary).join(" ").trim();
     const right = fields.slice(boundary).join(" ").trim();
@@ -186,11 +215,15 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
       && Boolean(normalizedRightLead)
       && !headingConnectorTokens.has(normalizedRightLead)
       && !patientEditorialLeadTokens.has(normalizedRightLead)
+      && !boundaryEditorialLeadTokens.has(normalizedRightLead)
       && containsLikelyPatientIdentifier(`${patientMarker} ${right}`);
     if (
-      (nameLabelAtEnd.test(left) && nameValueAtStart.test(right))
-      || (pluralNameLabelWithSeparatorAtEnd.test(left) && nameValueAtStart.test(right))
-      || (pluralNameLabelBareAtEnd.test(left) && pluralNameSeparatedValueAtStart.test(right))
+      (strongNameLabelAtEnd.test(left) && nameValueAtStart.test(right))
+      || (genericNameLabelAtEnd.test(left) && hasLikelyNameValueAtStart(right))
+      || (pluralPatientLabelWithSeparatorAtEnd.test(left) && nameValueAtStart.test(right))
+      || (pluralPatientLabelBareAtEnd.test(left) && pluralNameSeparatedValueAtStart.test(right))
+      || (pluralNameLabelWithSeparatorAtEnd.test(left) && hasLikelyNameValueAtStart(right))
+      || (pluralNameLabelBareAtEnd.test(left) && hasLikelySeparatedNameValueAtStart(right))
       || (birthDateLabelAtEnd.test(left) && (birthDateValueAtStart.test(right) || birthDateValueAtStart.test(rightCompact)))
       || (medicalIdLabelAtEnd.test(left) && (medicalIdValueAtStart.test(right) || medicalIdValueAtStart.test(rightCompact)))
       || (emailLabelAtEnd.test(left) && emailValueAtStart.test(rightCompact))
@@ -312,6 +345,14 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
     || hasGenericNameLabel;
 }
 
+export function containsLikelyPatientIdentifierAcrossTextFields(
+  values: readonly (string | null | undefined)[],
+): boolean {
+  const fields = values.filter((value): value is string => Boolean(value?.trim()));
+  return fields.some(containsLikelyPatientIdentifier)
+    || containsIdentifierAcrossAiFieldBoundaries(fields);
+}
+
 export function containsLikelyPatientIdentifierInAiFields(input: {
   topic?: string | null;
   targetKeyword?: string | null;
@@ -320,8 +361,7 @@ export function containsLikelyPatientIdentifierInAiFields(input: {
   const fields = [input.topic, input.targetKeyword, input.additionalContext]
     .filter((value): value is string => Boolean(value?.trim()));
   return fields.some(containsExplicitSensitiveAiMarker)
-    || fields.some(containsLikelyPatientIdentifier)
-    || containsIdentifierAcrossAiFieldBoundaries(fields)
+    || containsLikelyPatientIdentifierAcrossTextFields(fields)
     || containsLaterNamedPatientNarrative(fields.join(" "))
     || containsHighConfidencePersonName(input.additionalContext || "");
 }
