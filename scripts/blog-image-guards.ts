@@ -148,6 +148,29 @@ try {
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "María García" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ targetKeyword: "Maria Garcia" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ additionalContext: "Fatima Khan" }), true);
+  for (const legitimateLowercaseContext of [
+    "quality improvement",
+    "substance use",
+    "panic prevention",
+    "grief counseling",
+    "mindfulness exercises",
+    "screen time",
+    "side effects",
+    "emotional regulation",
+    "executive function",
+    "burnout prevention",
+    "duelo complicado",
+    "regulación emocional",
+    "habilidades sociales",
+    "crisis de pareja",
+    "prevención del suicidio",
+    "violencia doméstica",
+    "estrés laboral",
+    "funciones ejecutivas",
+    "adicción y recuperación",
+  ]) {
+    assert.equal(containsLikelyPatientIdentifierInAiFields({ additionalContext: legitimateLowercaseContext }), false);
+  }
   assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan requested help"), true);
   assert.equal(containsLikelyPatientIdentifier("Patient Fatima requested help"), true);
   assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan called yesterday"), true);

@@ -161,6 +161,33 @@ test("patient identifier guard fail-closes marked AI fields while preserving pub
     assert.equal(containsLikelyPatientIdentifierInAiFields({ targetKeyword: "María García" }), false);
     assert.equal(containsLikelyPatientIdentifierInAiFields({ additionalContext: "Fatima Khan" }), true);
     assert.equal(containsLikelyPatientIdentifierInAiFields({ additionalContext: "Grace Under Pressure" }), true);
+    for (const legitimateLowercaseContext of [
+      "quality improvement",
+      "substance use",
+      "panic prevention",
+      "grief counseling",
+      "mindfulness exercises",
+      "screen time",
+      "side effects",
+      "emotional regulation",
+      "executive function",
+      "burnout prevention",
+      "duelo complicado",
+      "regulación emocional",
+      "habilidades sociales",
+      "crisis de pareja",
+      "prevención del suicidio",
+      "violencia doméstica",
+      "estrés laboral",
+      "funciones ejecutivas",
+      "adicción y recuperación",
+    ]) {
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields({ additionalContext: legitimateLowercaseContext }),
+        false,
+        legitimateLowercaseContext,
+      );
+    }
     assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan requested help"), true);
     assert.equal(containsLikelyPatientIdentifier("Patient Fatima requested help"), true);
     assert.equal(containsLikelyPatientIdentifier("Paciente Fátima Khan solicitó ayuda"), true);
@@ -546,6 +573,73 @@ test("draft generation sends only provider-safe semantic memory", () => {
   assert.match(memorySource, /slug: `private-post-\$\{match\.postId\}`/);
   assert.match(routeSource, /const providerSemanticMemory = redactBlogSemanticMemoryForProvider\(semanticMemory\)/);
   assert.match(routeSource, /semanticMemory: providerSemanticMemory,\s*editorialBrief/);
+});
+
+test("draft provider never receives raw free-form editorial context", () => {
+  const generatorSource = fs.readFileSync("server/blog/ai/generator.ts", "utf8");
+  assert.match(generatorSource, /buildProviderSafeBlogInput\(input\)/);
+  assert.match(generatorSource, /buildHealingMindsBlogPrompt\(providerInput\)/);
+  assert.doesNotMatch(generatorSource, /buildHealingMindsBlogPrompt\(input\)/);
+
+  const program = `
+    import assert from "node:assert/strict";
+    process.env.OPENAI_API_KEY = "test-provider-key";
+    process.env.BLOG_AI_ENABLED = "true";
+    const { buildProviderSafeBlogInput, generateBlogDraftWithAi } = await import("./server/blog/ai/generator.ts");
+    const { selectBlogResearchSources } = await import("./server/blog/ai/research.ts");
+    const privateContext = "notes about jane doe and maría garcía for follow up";
+    const input = {
+      topic: "Anxiety coping options",
+      targetKeyword: "anxiety coping",
+      additionalContext: privateContext,
+      language: "en",
+      editorialBrief: {
+        targetWordCount: 1000,
+        minimumWordCount: 800,
+        maximumWordCount: 1200,
+        searchIntent: "Educational",
+        audience: "Florida adults",
+        requiredSections: ["Coping options"],
+        requiredInternalLinks: [],
+        sourceRequirement: "Curated sources only",
+        riskNotes: [],
+      },
+    };
+    const safe = buildProviderSafeBlogInput(input);
+    assert.equal(Object.hasOwn(safe, "additionalContext"), false);
+    assert.equal(JSON.stringify(safe).includes(privateContext), false);
+    assert.equal(safe.topic, "Anxiety coping options");
+    assert.deepEqual(safe.editorialBrief.requiredSections, ["Coping options"]);
+
+    let providerBody = "";
+    globalThis.fetch = async (_url, init) => {
+      providerBody = String(init?.body || "");
+      return new Response(JSON.stringify({ error: { message: "intentional test stop" } }), {
+        status: 500,
+        headers: { "content-type": "application/json" },
+      });
+    };
+    await assert.rejects(generateBlogDraftWithAi(input), /Blog AI provider request failed/);
+    assert.equal(providerBody.includes("jane doe"), false);
+    assert.equal(providerBody.includes("maría garcía"), false);
+    assert.equal(providerBody.includes(privateContext), false);
+    assert.equal(providerBody.includes("No additional editorial context provided."), true);
+    assert.equal(providerBody.includes("Coping options"), true);
+
+    const localResearch = selectBlogResearchSources({
+      topic: "General wellness overview",
+      targetKeyword: "wellness overview",
+      additionalContext: "medication safety",
+      language: "en",
+    });
+    assert.equal(localResearch.sources.some(source => source.id === "nimh-medications"), true);
+  `;
+  const result = spawnSync(
+    process.execPath,
+    ["--import", "tsx", "--input-type=module", "-e", program],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+  assert.equal(result.status, 0, result.stderr || result.stdout);
 });
 
 test("image generation checks explicit identifiers without treating public editorial names as patients", () => {

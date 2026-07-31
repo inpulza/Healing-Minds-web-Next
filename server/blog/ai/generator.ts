@@ -45,8 +45,18 @@ function getProviderErrorMessage(status: number): string {
   return "Blog AI provider request failed";
 }
 
+export function buildProviderSafeBlogInput(input: BlogAiGenerateInput): BlogAiGenerateInput {
+  const providerInput = { ...input };
+  delete providerInput.additionalContext;
+  return providerInput;
+}
+
 export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promise<BlogAiGeneratedDraft> {
   const config = getBlogAiConfig();
+  // Free-form editor context is useful for local source/tag/brief selection, but
+  // it is never sent verbatim to the external provider. The provider receives
+  // the deterministic editorial brief assembled locally instead.
+  const providerInput = buildProviderSafeBlogInput(input);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), config.timeoutMs);
 
@@ -69,7 +79,7 @@ export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promi
           },
           {
             role: "user",
-            content: buildHealingMindsBlogPrompt(input),
+            content: buildHealingMindsBlogPrompt(providerInput),
           },
         ],
       }),
@@ -93,13 +103,13 @@ export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promi
       throw Object.assign(new Error("Blog AI provider returned an empty draft"), { statusCode: 502 });
     }
 
-    return parseGeneratedDraftJson(content, input.language, input.topic, {
-      allowedExternalSourceUrls: extractAllowedSourceUrls(input.researchSources || []),
-      allowedInternalLinks: input.internalLinks || [],
-      minimumWordCount: input.editorialBrief?.minimumWordCount,
-      targetWordCount: input.editorialBrief?.targetWordCount,
-      minimumH2Count: Math.min(5, input.editorialBrief?.requiredSections.length || 5),
-      requiredSections: input.editorialBrief?.requiredSections,
+    return parseGeneratedDraftJson(content, providerInput.language, providerInput.topic, {
+      allowedExternalSourceUrls: extractAllowedSourceUrls(providerInput.researchSources || []),
+      allowedInternalLinks: providerInput.internalLinks || [],
+      minimumWordCount: providerInput.editorialBrief?.minimumWordCount,
+      targetWordCount: providerInput.editorialBrief?.targetWordCount,
+      minimumH2Count: Math.min(5, providerInput.editorialBrief?.requiredSections.length || 5),
+      requiredSections: providerInput.editorialBrief?.requiredSections,
     });
   } catch (error) {
     if ((error as { name?: string }).name === "AbortError") {
