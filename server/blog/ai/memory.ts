@@ -69,6 +69,19 @@ function overallRecommendation(matches: BlogSemanticMemoryMatch[]): BlogSemantic
   return top.recommendation;
 }
 
+export function redactBlogSemanticMemoryForProvider(
+  memory: BlogSemanticMemory,
+): BlogSemanticMemory {
+  return {
+    ...memory,
+    matches: memory.matches.map(match => ({
+      ...match,
+      title: `Private post ${match.postId}`,
+      slug: `private-post-${match.postId}`,
+    })),
+  };
+}
+
 export async function buildBlogSemanticMemory(input: MemoryInput): Promise<BlogSemanticMemory> {
   const inputTokens = tokenize([
     input.topic,
