@@ -27,11 +27,13 @@ const sectionBetween = (source, startMarker, endMarker) => {
 
 const underageEligibilityPatterns = [
   /\b(?:we|healing minds(?: psychiatry)?|dr\.? (?:melva )?reve)\s+(?:offers?|provides?|treats?|sees?|serves?|accepts?|welcomes?)[^.!?\n]{0,120}\b(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?|patients? of all ages)\b/iu,
+  /\b(?:we|healing minds(?: psychiatry)?|dr\.? (?:melva )?reve)\s+(?:offers?|provides?|treats?|sees?|serves?|accepts?|welcomes?)[^.!?\n]{0,120}\b(?:pediatric|child(?:ren's)?|teen(?:age)?|adolescent)\s+(?:care|psychiatry|services?|treatment|therapy|evaluations?|appointments?)\b/iu,
   /\b(?:care|treatment|therapy|services?|evaluations?|appointments?)\b[^.!?\n]{0,80}\b(?:for|to)\s+(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?|patients? of all ages)\b/iu,
   /\b(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?|patients? of all ages)\b[^.!?\n]{0,80}\b(?:care|treatment|therapy|services?|evaluations?|appointments?)\b/iu,
   /\b(?:care|treatment|therapy|services?|evaluations?|appointments?|adhd|anxiety|depression|ptsd|psychiatric)\b[^.!?\n]{0,100}\badults?\s+(?:and|&)\s+(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?)\b/iu,
   /\badults?\s+(?:and|&)\s+(?:teens?|teenagers?|adolescents?|children|minors?|pediatric patients?)\b[^.!?\n]{0,100}\b(?:care|treatment|therapy|services?|evaluations?|appointments?|adhd|anxiety|depression|ptsd|psychiatric)\b/iu,
   /\b(?:ofrecemos|brindamos|tratamos|atendemos|aceptamos|recibimos)[^.!?\n]{0,120}\b(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?|pacientes de todas las edades)\b/iu,
+  /\b(?:ofrecemos|brindamos|tratamos|atendemos|aceptamos|recibimos)[^.!?\n]{0,120}\b(?:atención|psiquiatría|servicios?|tratamiento|terapia|evaluaciones?|citas)\s+(?:pediátric[oa]s?|infantil(?:es)?|adolescente(?:s)?)\b/iu,
   /\b(?:atención|tratamiento|terapia|servicios?|evaluaciones?|citas)\b[^.!?\n]{0,80}\b(?:para|a)\s+(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?|pacientes de todas las edades)\b/iu,
   /\b(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?|pacientes de todas las edades)\b[^.!?\n]{0,80}\b(?:atención|tratamiento|terapia|servicios?|evaluaciones?|citas)\b/iu,
   /\b(?:atención|tratamiento|terapia|servicios?|evaluaciones?|citas|tdah|ansiedad|depresión|tept|psiquiátric[oa])\b[^.!?\n]{0,100}\badultos?\s+(?:y|&)\s+(?:adolescentes?|niños?|menores(?: de edad)?|pacientes pediátricos?)\b/iu,
@@ -108,6 +110,7 @@ test("public clinical eligibility consistently limits services to adults 18 and 
 
   for (const [filename, source] of eligibilitySources) {
     assert.equal(containsUnderageEligibilityOffer(source), false, filename);
+    assert.doesNotMatch(source, /\b(?:over 18(?: years old)?|older than 18|mayores? de 18 años|más de 18 años)\b/iu, filename);
   }
 
   for (const [filename, source] of explicitAdultOfferSources) {
@@ -121,10 +124,14 @@ test("public clinical eligibility consistently limits services to adults 18 and 
     "Healing Minds welcomes pediatric patients.",
     "Psychiatric services for patients of all ages.",
     "Adult and adolescent evaluations are available.",
+    "We offer pediatric care.",
+    "We provide child psychiatry.",
     "Ofrecemos tratamiento para niños.",
     "Citas para menores de edad.",
     "Atendemos a pacientes de todas las edades.",
     "Evaluaciones para adultos y adolescentes.",
+    "Ofrecemos atención pediátrica.",
+    "Brindamos psiquiatría infantil.",
   ]) {
     assert.equal(containsUnderageEligibilityOffer(underageOffer), true, underageOffer);
   }

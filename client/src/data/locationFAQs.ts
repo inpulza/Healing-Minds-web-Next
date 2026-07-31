@@ -137,7 +137,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What age should patients be for ADHD treatment?",
-        answer: "Our practice specializes in treating ADHD in adults (over 18 years old). We conduct comprehensive evaluations for adults who may have been late-diagnosed or undiagnosed."
+        answer: "Our practice specializes in treating ADHD in adults 18 and older. We conduct comprehensive evaluations for adults who may have been late-diagnosed or undiagnosed."
       }
     ],
     es: [
@@ -179,7 +179,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Qué edad deben tener los pacientes para el tratamiento de TDAH?",
-        answer: "Nuestra práctica se especializa en el tratamiento de TDAH en adultos (mayores de 18 años). Realizamos evaluaciones integrales para adultos que pueden haber sido diagnosticados tarde o no diagnosticados."
+        answer: "Nuestra práctica se especializa en el tratamiento de TDAH en adultos de 18 años en adelante. Realizamos evaluaciones integrales para adultos que pueden haber sido diagnosticados tarde o no diagnosticados."
       }
     ]
   },
