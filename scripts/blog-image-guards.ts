@@ -91,6 +91,7 @@ try {
   assert.equal(rendered.includes("https://example.com"), false);
 
   assert.equal(containsLikelyPatientIdentifier("patient name: Jane Example"), true);
+  assert.equal(containsLikelyPatientIdentifier("Name: jane doe"), true);
   assert.equal(containsLikelyPatientIdentifier("Our patient Maria Garcia sought psychiatric care last week."), true);
   assert.equal(containsLikelyPatientIdentifier("Case: Maria Garcia, 123 Main Street, Naples, Florida."), true);
   assert.equal(containsLikelyPatientIdentifier("Name: Maria Garcia"), true);
@@ -103,6 +104,17 @@ try {
   assert.equal(containsHighConfidencePersonName("MARÍA GARCÍA"), true);
   assert.equal(containsHighConfidencePersonName("María J. García"), true);
   assert.equal(containsHighConfidencePersonName("María de la Cruz"), true);
+  assert.equal(containsHighConfidencePersonName("Maria Garcia"), true);
+  assert.equal(containsHighConfidencePersonName("Maria Care"), true);
+  assert.equal(containsHighConfidencePersonName("Notes about Maria Garcia for follow up"), true);
+  assert.equal(containsHighConfidencePersonName("Context: Maria Garcia"), true);
+  assert.equal(containsHighConfidencePersonName("anxiety María García"), true);
+  assert.equal(containsHighConfidencePersonName("Fatima Khan"), true);
+  assert.equal(containsHighConfidencePersonName("Saoirse O'Connor"), true);
+  assert.equal(containsHighConfidencePersonName("Zoë Kravitz"), true);
+  assert.equal(containsHighConfidencePersonName("Łukasz Kowalski"), true);
+  assert.equal(containsHighConfidencePersonName("FÁTIMA KHAN"), true);
+  assert.equal(containsHighConfidencePersonName("José-Luis Pérez"), true);
   assert.equal(containsLikelyPatientIdentifier("Paciente María García fue diagnosticada con ansiedad."), true);
   assert.equal(containsLikelyPatientIdentifier("Patient José O’Neill was prescribed medication."), true);
   assert.equal(containsLikelyPatientIdentifier("Número de paciente: AB-12345"), true);
@@ -115,14 +127,38 @@ try {
   assert.equal(containsLikelyPatientIdentifier("Patient Resources"), false);
   assert.equal(containsLikelyPatientIdentifier("Understanding Seasonal Affective Disorder"), false);
   assert.equal(containsLikelyPatientIdentifier("Managing Panic Attacks"), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Depresión Estacional" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Anxiety Treatment" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Medication Management" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "ADHD Evaluation" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Mind Body Connection" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Trauma Recovery Tools" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({
     topic: "anxiety",
     additionalContext: "María García",
   }), true);
   assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "anxiety",
+    additionalContext: "Maria Garcia",
+  }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
     topic: "Managing Panic Attacks",
     additionalContext: "educational coping strategies",
   }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "María García" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ targetKeyword: "Maria Garcia" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ additionalContext: "Fatima Khan" }), true);
+  assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan requested help"), true);
+  assert.equal(containsLikelyPatientIdentifier("Patient Fatima requested help"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan called yesterday"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan said she needs help"), true);
+  assert.equal(containsLikelyPatientIdentifier("paciente Fátima Khan llamó ayer"), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Care Options" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Resources and Treatment Options" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Resources across Florida" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Safety during Telehealth" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Paciente Cuidado desde Casa" }), false);
+  assert.equal(containsLikelyPatientIdentifier("Name: Madonna"), true);
 
   const privateDraft = {
     id: 42,

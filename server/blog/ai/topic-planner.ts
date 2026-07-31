@@ -144,12 +144,8 @@ function classifyPost(post: BlogPostWithRelations) {
   };
 }
 
-function getSafePostTitleForProvider(post: Pick<BlogPostWithRelations, "id" | "title" | "targetKeyword">): string {
-  return [post.title, post.targetKeyword]
-    .filter((value): value is string => Boolean(value))
-    .some(containsLikelyPatientIdentifier)
-    ? `Private post ${post.id}`
-    : post.title;
+function getSafePostTitleForProvider(post: Pick<BlogPostWithRelations, "id">): string {
+  return `Private post ${post.id}`;
 }
 
 function buildInventory(posts: BlogPostWithRelations[]): TopicInventorySnapshot {

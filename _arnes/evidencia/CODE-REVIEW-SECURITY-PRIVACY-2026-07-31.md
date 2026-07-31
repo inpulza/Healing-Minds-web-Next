@@ -17,9 +17,10 @@
 - El filtro de PII bloquea nombres aislados por línea y campos `Name/Nombre`, además de los identificadores ya cubiertos.
 - El parser de hosts acepta `localhost`, IPv4 e IPv6 loopback, pero exige que todos los valores reenviados sean locales y rechaza listas mixtas.
 - El filtro reconoce identificadores explícitos, `Número de paciente`, `Historia clínica`, fechas españolas con mes escrito y estructuras de nombre de alta confianza con tildes, guiones, apóstrofos, iniciales, partículas o mayúsculas.
-- Los endpoints Next y Express revisan `topic`, `targetKeyword` y `additionalContext` por separado antes de usar IA; los títulos editoriales normales no se infieren como nombres por una lista exhaustiva de palabras.
+- Los endpoints Next y Express revisan `topic`, `targetKeyword` y `additionalContext` por separado antes de usar IA. Los identificadores explícitos se bloquean en cualquier campo y el contexto libre aplica además una forma conservadora de nombre propio sin depender de listas culturales finitas.
+- El planificador nunca envía títulos o keywords históricos en claro: usa una referencia `Private post <id>` y conserva el análisis de duplicados determinista dentro del servidor.
 - La ruta Express deja de imprimir el objeto de contacto y un test impide reintroducir logs del body persistido.
 
 ## Límites
 
-No se accedió a secretos, datos reales de pacientes ni variables de Vercel. No se cambia la autenticación custom de Production o Preview. Un nombre simple sin etiqueta ni señal lingüística distintiva no puede separarse con fiabilidad de un tema editorial; por eso el guard exige contexto explícito o una estructura de alta confianza y la prohibición humana de introducir PII sigue vigente.
+No se accedió a secretos ni datos reales de pacientes. No se cambia la autenticación custom de Production o Preview. Un topic o keyword sin etiqueta se trata como tema editorial para no bloquear expresiones clínicas normales; el campo libre `additionalContext` es deliberadamente más estricto. Esta frontera por función no reemplaza la prohibición humana de introducir PII ni constituye un detector clínico universal. El contenido completo de un artículo puede mencionar personal público, por lo que la salida de imágenes exige identificadores explícitos en vez de inferir que cualquier nombre es un paciente.
