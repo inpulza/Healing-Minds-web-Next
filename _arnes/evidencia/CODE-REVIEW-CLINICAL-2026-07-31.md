@@ -12,6 +12,7 @@ Revisión focalizada de claims clínicos, licencia de California, rutas legales 
 - **Horarios — válido.** Nueve páginas de ubicación prometían atención los sábados con cita, mientras contacto, correo, emergencia y schema indican fines de semana cerrados. Se unifican las nueve páginas a sábado y domingo cerrados.
 - **Disponibilidad de Immokalee — válido tras Code Review.** CodeX detectó que la fuente hiperlócal y el FAQ todavía prometían telesalud por la tarde, fines de semana o adaptada al horario agrícola. Se sustituyeron esos claims por disponibilidad entre semana dentro del horario publicado de lunes a viernes, 8:00 AM–5:00 PM, y se añadió un guard específico para las fuentes renderizadas.
 - **Metadatos SEO de Immokalee — válido en verificación del preview.** El HTML visible ya estaba corregido, pero `shared/seo-manifest.json` seguía publicando “evening telehealth” en description, Open Graph y Twitter para EN, además de “telesalud por la tarde” en ES. Se alinearon las seis descripciones y el manifiesto SEO se incorporó al guard.
+- **Elegibilidad de menores — válido tras juez independiente.** Immokalee y otras ubicaciones, Golden Gate, el índice de servicios, Naples y About todavía presentaban atención a teens/adolescentes, mientras Telehealth Consent, Medical Disclaimer y el servicio de TDAH limitan la práctica a adultos de 18 años en adelante. Se hizo una corrección sistémica de todas las coincidencias clínicas EN/ES y se añadió un guard adult-only.
 
 ## Fuentes oficiales
 
@@ -21,10 +22,10 @@ Revisión focalizada de claims clínicos, licencia de California, rutas legales 
 
 ## Seguridad editorial
 
-No se modifican diagnósticos, tratamientos, promesas clínicas ni datos de pacientes. La retirada del claim de junta queda sujeta a revisión humana de Healing Minds.
+No se modifican diagnósticos, planes terapéuticos ni datos de pacientes. Las promesas de disponibilidad y elegibilidad se corrigen únicamente para que coincidan con las políticas públicas de Healing Minds. La retirada del claim de junta queda sujeta a revisión humana de Healing Minds.
 
 ## Guard automático
 
-`tests/clinical-content-guards.test.mjs` impide reintroducir el claim no corroborado en el consentimiento, verifica que las nueve páginas mantengan sábado y domingo cerrados en EN/ES y bloquea nuevas promesas de tardes, fines de semana o adaptación al horario agrícola en la sección Immokalee, su FAQ y sus metadatos SEO.
+`tests/clinical-content-guards.test.mjs` impide reintroducir el claim no corroborado en el consentimiento, verifica que las nueve páginas mantengan sábado y domingo cerrados en EN/ES, bloquea nuevas promesas de tardes, fines de semana o adaptación al horario agrícola en Immokalee y exige que las fuentes clínicas revisadas no vuelvan a ofrecer servicios a teens/adolescentes cuando la política pública es adultos 18+.
 
-Validación final tras corregir la nota P1: guard focalizado PASS 3/3; suite integrada PASS 61/61; TypeScript PASS; verificación de base de datos PASS (2 migraciones, 95 statements, 18 tablas, 20 foreign keys); build Next PASS con 89/89 páginas.
+Validación final tras todos los hallazgos: guard focalizado PASS 4/4; suite integrada PASS 62/62; TypeScript PASS; verificación de base de datos PASS (2 migraciones, 95 statements, 18 tablas, 20 foreign keys); build Next PASS con 89/89 páginas.

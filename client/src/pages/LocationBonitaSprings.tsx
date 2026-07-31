@@ -411,8 +411,8 @@ const LocationBonitaSprings = () => {
                   id: 'adhd',
                   title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
                   description: language === 'en'
-                    ? 'ADHD evaluation and treatment Bonita Springs FL. Specialized assessment and treatment for adults and teens to improve focus and daily functioning with medication management near me.'
-                    : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
+                    ? 'ADHD evaluation and treatment Bonita Springs FL. Specialized assessment and treatment for adults 18 and older to improve focus and daily functioning with medication management near me.'
+                    : 'Evaluación especializada y tratamiento para adultos de 18 años en adelante para mejorar el enfoque y funcionamiento diario.',
                   icon: Smile,
                   link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
                 },

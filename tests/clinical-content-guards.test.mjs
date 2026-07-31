@@ -5,6 +5,18 @@ import test from "node:test";
 
 const read = (...segments) => fs.readFileSync(path.join(process.cwd(), ...segments), "utf8");
 
+const locationPageFiles = [
+  "LocationAveMaria.tsx",
+  "LocationBonitaSprings.tsx",
+  "LocationEstero.tsx",
+  "LocationFortMyers.tsx",
+  "LocationGoldenGate.tsx",
+  "LocationImmokalee.tsx",
+  "LocationLelyResorts.tsx",
+  "LocationMarcoIsland.tsx",
+  "LocationVanderbiltBeach.tsx",
+];
+
 const sectionBetween = (source, startMarker, endMarker) => {
   const start = source.indexOf(startMarker);
   const end = source.indexOf(endMarker, start + startMarker.length);
@@ -20,19 +32,7 @@ test("telehealth consent does not publish an unverified board-certification clai
 });
 
 test("location pages consistently show weekends as closed", () => {
-  const locationFiles = [
-    "LocationAveMaria.tsx",
-    "LocationBonitaSprings.tsx",
-    "LocationEstero.tsx",
-    "LocationFortMyers.tsx",
-    "LocationGoldenGate.tsx",
-    "LocationImmokalee.tsx",
-    "LocationLelyResorts.tsx",
-    "LocationMarcoIsland.tsx",
-    "LocationVanderbiltBeach.tsx",
-  ];
-
-  for (const filename of locationFiles) {
+  for (const filename of locationPageFiles) {
     const source = read("client", "src", "pages", filename);
     assert.doesNotMatch(source, /Saturday: By appointment|Sábado: Con cita/, filename);
     assert.match(source, /Saturday: Closed\\nSunday: Closed/, filename);
@@ -63,4 +63,25 @@ test("Immokalee content does not promise unpublished evening or weekend availabi
   assert.match(faqs, /lunes a viernes de 8:00 AM a 5:00 PM/);
   assert.match(immokaleeSeo, /weekday telehealth/i);
   assert.match(immokaleeSeo, /telesalud entre semana/i);
+});
+
+test("public clinical eligibility consistently limits services to adults 18 and older", () => {
+  const telehealthConsent = read("client", "src", "data", "pageContent", "legal", "telehealthConsent.ts");
+  const medicalDisclaimer = read("client", "src", "data", "pageContent", "legal", "medicalDisclaimer.ts");
+  const eligibilitySources = [
+    ["locationHyperlocal.ts", read("client", "src", "data", "locationHyperlocal.ts")],
+    ["servicesIndex.ts", read("client", "src", "data", "pageContent", "services", "servicesIndex.ts")],
+    ["naples.ts", read("client", "src", "data", "pageContent", "mainPages", "naples.ts")],
+    ["about.ts", read("client", "src", "data", "pageContent", "mainPages", "about.ts")],
+    ...locationPageFiles.map(filename => [filename, read("client", "src", "pages", filename)]),
+  ];
+
+  assert.match(telehealthConsent, /Services are available to adults 18 and older/);
+  assert.match(telehealthConsent, /servicios están disponibles para adultos de 18 años en adelante/i);
+  assert.match(medicalDisclaimer, /Services are available to adults 18 and older/);
+  assert.match(medicalDisclaimer, /servicios están disponibles para adultos de 18 años en adelante/i);
+
+  for (const [filename, source] of eligibilitySources) {
+    assert.doesNotMatch(source, /\bteen(?:ager|s)?\b|\badolescents?\b|\badolescentes?\b/i, filename);
+  }
 });

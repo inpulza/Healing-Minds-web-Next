@@ -581,8 +581,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
         es: 'psiquiatra en español Golden Gate FL, psiquiatra bilingüe 34116, salud mental Golden Gate, psiquiatra hispanohablante Naples',
       },
       serviceDescription: {
-        en: "Bilingual psychiatric care for Golden Gate (ZIP 34116) — a community of roughly 28,000–34,000 with a young median age (about 35.4), where approximately 58.9% of residents identify as Hispanic and 79.6% of households speak Spanish at home. Dr. Melva Reve, fluent in Spanish, treats anxiety, depression, ADHD in adults and adolescents, PTSD, bipolar disorder and manages psychiatric medications.",
-        es: "Atención psiquiátrica bilingüe para Golden Gate (ZIP 34116) — comunidad de aproximadamente 28,000 a 34,000 habitantes con edad mediana joven (cerca de 35.4), donde aproximadamente el 58.9% se identifica como hispano y el 79.6% de los hogares habla español en casa. La Dra. Melva Reve, fluida en español, trata ansiedad, depresión, TDAH en adultos y adolescentes, TEPT, trastorno bipolar y maneja medicamentos psiquiátricos.",
+        en: "Bilingual psychiatric care for Golden Gate (ZIP 34116) — a community of roughly 28,000–34,000 with a young median age (about 35.4), where approximately 58.9% of residents identify as Hispanic and 79.6% of households speak Spanish at home. Dr. Melva Reve, fluent in Spanish, treats anxiety, depression, ADHD in adults 18 and older, PTSD, bipolar disorder and manages psychiatric medications.",
+        es: "Atención psiquiátrica bilingüe para Golden Gate (ZIP 34116) — comunidad de aproximadamente 28,000 a 34,000 habitantes con edad mediana joven (cerca de 35.4), donde aproximadamente el 58.9% se identifica como hispano y el 79.6% de los hogares habla español en casa. La Dra. Melva Reve, fluida en español, trata ansiedad, depresión, TDAH en adultos de 18 años en adelante, TEPT, trastorno bipolar y maneja medicamentos psiquiátricos.",
       },
     },
     heroDescription: {
@@ -590,8 +590,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: "Atención psiquiátrica bilingüe (inglés/español) para familias de Golden Gate — 12–15 minutos hasta nuestra oficina de Park Shore sobre US-41.",
     },
     healingParagraph: {
-      en: "Golden Gate (ZIP 34116) is a young, working-family community of roughly 28,000–34,000 residents — median age around 35.4, with about 58.9% of residents identifying as Hispanic and roughly 79.6% of households speaking Spanish at home. Sessions with Dr. Reve can be conducted entirely in Spanish, including for ADHD evaluations, postpartum care, anxiety and depression, and we are used to coordinating with Collier County Public Schools when teens are involved. Our Park Shore office is a 12–15 minute drive via Golden Gate Pkwy and US-41.",
-      es: "Golden Gate (ZIP 34116) es una comunidad joven de familias trabajadoras con aproximadamente 28,000 a 34,000 residentes — edad mediana alrededor de 35.4, con cerca del 58.9% identificándose como hispanos y aproximadamente el 79.6% de los hogares hablando español en casa. Las sesiones con la Dra. Reve pueden realizarse completamente en español, incluyendo evaluaciones de TDAH, atención postparto, ansiedad y depresión, y estamos acostumbrados a coordinar con las escuelas públicas del condado de Collier cuando hay adolescentes involucrados. Nuestra oficina de Park Shore queda a 12–15 minutos por Golden Gate Pkwy y US-41.",
+      en: "Golden Gate (ZIP 34116) is a young, working-family community of roughly 28,000–34,000 residents — median age around 35.4, with about 58.9% of residents identifying as Hispanic and roughly 79.6% of households speaking Spanish at home. Sessions with Dr. Reve can be conducted entirely in Spanish for adults 18 and older, including ADHD evaluations, postpartum care, anxiety and depression. Our Park Shore office is a 12–15 minute drive via Golden Gate Pkwy and US-41.",
+      es: "Golden Gate (ZIP 34116) es una comunidad joven de familias trabajadoras con aproximadamente 28,000 a 34,000 residentes — edad mediana alrededor de 35.4, con cerca del 58.9% identificándose como hispanos y aproximadamente el 79.6% de los hogares hablando español en casa. Las sesiones con la Dra. Reve pueden realizarse completamente en español para adultos de 18 años en adelante, incluyendo evaluaciones de TDAH, atención postparto, ansiedad y depresión. Nuestra oficina de Park Shore queda a 12–15 minutos por Golden Gate Pkwy y US-41.",
     },
     servicesIntro: {
       en: "These are the services Golden Gate families ask about most — many of which can be delivered entirely in Spanish, in person or by telehealth.",
@@ -617,12 +617,12 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     },
     duration: { en: '12-15 minutes', es: '12-15 minutos' },
     bottomNote: {
-      en: "Serving Golden Gate (ZIP 34116) with fully bilingual psychiatric care — sessions in Spanish, school-coordinated teen care, and telehealth between visits. Call (239) 423-0272.",
-      es: "Atendiendo a Golden Gate (ZIP 34116) con atención psiquiátrica completamente bilingüe — sesiones en español, atención coordinada con escuelas para adolescentes, y telesalud entre visitas. (239) 423-0272.",
+      en: "Serving Golden Gate (ZIP 34116) with fully bilingual psychiatric care for adults 18 and older — sessions in Spanish and telehealth between visits. Call (239) 423-0272.",
+      es: "Atendiendo a Golden Gate (ZIP 34116) con atención psiquiátrica completamente bilingüe para adultos de 18 años en adelante — sesiones en español y telesalud entre visitas. (239) 423-0272.",
     },
     featureBadges: [
       { en: 'Sessions in Spanish', es: 'Sesiones en Español' },
-      { en: 'School-Coordinated Teen Care', es: 'Atención Coordinada con Escuelas' },
+      { en: 'Adults 18 and Older', es: 'Adultos de 18 Años en Adelante' },
       { en: '12-15 Min via US-41', es: '12-15 Min por US-41' },
       { en: 'Family-Focused Care', es: 'Atención Centrada en la Familia' },
       { en: 'Telehealth Available', es: 'Telesalud Disponible' },
@@ -632,7 +632,7 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       en: [
         "Delivered entirely in Spanish when preferred, including postpartum anxiety.",
         "Care for working Golden Gate families, in Spanish or English.",
-        "Evaluations for adults and adolescents, coordinated with Collier County schools.",
+        "Evaluations for adults 18 and older, with treatment personalized to daily needs.",
         "Trauma-informed, culturally sensitive care for Golden Gate's Hispanic community.",
         "Long-term mood stabilization, with sessions available in Spanish.",
         "Medication management in person or by telehealth, just 12–15 minutes away.",
@@ -640,7 +640,7 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: [
         "Ofrecida completamente en español cuando se prefiere, incluida la ansiedad postparto.",
         "Atención para familias trabajadoras de Golden Gate, en español o inglés.",
-        "Evaluaciones para adultos y adolescentes, coordinadas con las escuelas del condado de Collier.",
+        "Evaluaciones para adultos de 18 años en adelante, con tratamiento personalizado según sus necesidades diarias.",
         "Atención informada en trauma y culturalmente sensible para la comunidad hispana de Golden Gate.",
         "Estabilización del ánimo a largo plazo, con sesiones disponibles en español.",
         "Manejo de medicamentos en persona o por telesalud, a solo 12–15 minutos.",
@@ -722,7 +722,7 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       en: [
         "Offered in Spanish, with weekday telehealth during published office hours.",
         "Care for Immokalee's young, hardworking agricultural community.",
-        "Adult and adolescent evaluations, with available weekday times confirmed when scheduling.",
+        "Evaluations for adults 18 and older, with available weekday times confirmed when scheduling.",
         "Trauma-informed, confidential care in Spanish, by secure video when needed.",
         "Long-term mood stabilization with telehealth between the longer in-person visits.",
         "Refills sent to your Immokalee pharmacy, with weekday follow-ups by video when appropriate.",
@@ -730,7 +730,7 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: [
         "Ofrecida en español, con telesalud entre semana dentro del horario de oficina publicado.",
         "Atención para la joven y trabajadora comunidad agrícola de Immokalee.",
-        "Evaluaciones para adultos y adolescentes, con horarios disponibles entre semana confirmados al programar.",
+        "Evaluaciones para adultos de 18 años en adelante, con horarios disponibles entre semana confirmados al programar.",
         "Atención confidencial e informada en trauma en español, por video seguro cuando se necesite.",
         "Estabilización del ánimo a largo plazo con telesalud entre las visitas presenciales más largas.",
         "Resurtidos enviados a su farmacia de Immokalee, con seguimientos entre semana por video cuando sea apropiado.",
