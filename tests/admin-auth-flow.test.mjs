@@ -250,11 +250,12 @@ test("custom Next admin completes login, protected API, session and logout witho
     assert.equal(remoteOffLogin.status, 403);
     noStore(remoteOffLogin);
 
-    const expressRequest = (host, forwardedHost, remoteAddress = "127.0.0.1", clientIp = remoteAddress) => ({
+    const expressRequest = (host, forwardedHost, remoteAddress = "127.0.0.1", clientIp = remoteAddress, extraHeaders = {}) => ({
       headers: {
         ...(host ? { host } : {}),
         ...(forwardedHost ? { "x-forwarded-host": forwardedHost } : {}),
-        ...(clientIp !== remoteAddress ? { "x-forwarded-for": clientIp } : {}),
+        ...(forwardedHost || clientIp !== remoteAddress ? { "x-forwarded-for": clientIp } : {}),
+        ...extraHeaders,
       },
       socket: { remoteAddress },
       ip: clientIp,
@@ -283,6 +284,48 @@ test("custom Next admin completes login, protected API, session and logout witho
     assert.equal(runExpressGuard(expressRequest("127.0.0.1:5000", "preview.example")).response.statusCode, 403);
     assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "198.51.100.20")).response.statusCode, 403);
     assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "127.0.0.1", "198.51.100.20")).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "127.0.0.1", "127.0.0.1", {
+      "x-real-ip": "198.51.100.20",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-real-ip": "198.51.100.20",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "198.51.100.20",
+      "x-real-ip": "127.0.0.1",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "127.0.0.1", "127.0.0.1", {
+      forwarded: "for=198.51.100.20;host=localhost:5000",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      forwarded: "for=127.0.0.1;host=localhost:5000",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "127.0.0.1, 198.51.100.20",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "198.51.100.20, 127.0.0.1",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "not-an-ip",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-real-ip": "",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-proto": "http",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-proto": "http",
+      "x-real-ip": "::1",
+    })).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "::1", "::1", {
+      "x-forwarded-for": "::ffff:127.0.0.1, ::1",
+      "x-real-ip": "127.0.0.1",
+    })).nextCalled, true);
 
     const expressHandlers = new Map();
     expressAuth.registerAdminAuthRoutes({

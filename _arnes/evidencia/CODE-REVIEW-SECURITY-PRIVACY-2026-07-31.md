@@ -95,6 +95,14 @@ El juez independiente detectó además una paridad P2: el índice de run abierto
 
 Verificación integrada del árbol final: `npm test` PASS 72/72; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas. La publicación continúa bloqueada hasta obtener Preview Ready y Code Review exacto sobre el nuevo SHA.
 
+## Clasificación del Code Review exacto de `f2befa0`
+
+- `3693670395` / `PRRT_kwDOToJ8Pc6VjD_C` — **válida y resuelta localmente**. Express confiaba en socket, `req.ip` y autoridades, pero no contrastaba `X-Real-IP` ni `Forwarded`. Un proxy local podía conservar `req.ip` loopback y declarar el cliente remoto solo en esos headers. La frontera Express comparte ahora la validación por presencia de Next: XFF completo y X-Real-IP único deben ser loopback, metadata proxy exige cadena verificada y `Forwarded` se rechaza.
+
+El juez independiente emitió **GO final sin bypasses accionables** tras comprobar contradicciones XFF/X-Real-IP en ambos sentidos, remotos al inicio o final de la lista, valores vacíos/malformados, metadata sin cadena, `Forwarded` local/remoto y loopbacks IPv4/IPv6/mapped.
+
+Verificación integrada del árbol final: `npm test` PASS 72/72; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas. La publicación permanece bloqueada hasta obtener Preview Ready y Code Review exacto sobre el nuevo SHA.
+
 ## Límites
 
 No se accedió a secretos ni datos reales de pacientes. No se cambia la autenticación custom de Production o Preview. Un topic o keyword administrativo sin los marcadores `patient/paciente/name/nombre` conserva semántica editorial; el campo libre `additionalContext` sigue siendo deliberadamente más estricto. Esta frontera por función no reemplaza la prohibición humana de introducir PII ni constituye un detector clínico universal. El contenido completo de un artículo puede mencionar personal público, por lo que la salida de imágenes exige identificadores explícitos en vez de inferir que cualquier nombre es un paciente.

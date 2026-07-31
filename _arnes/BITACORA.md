@@ -271,3 +271,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar el SHA, responder/resolver los dos threads y exigir otra vez Quality, Preview y Code Review exacto.
 **Archivos tocados:** `server/next-admin-auth.ts`, `server/blog/topic-candidate-storage.ts`, rutas Next/Express, tests de auth/privacidad, evidencia, decisiones y bitácora.
 **Evidencia:** `3693600713` / `PRRT_kwDOToJ8Pc6Vi4L9` y `3693600717` / `PRRT_kwDOToJ8Pc6Vi4MB`, ambos válidos. El juez pasó de NO-GO a GO total: IPv4/IPv6/mapped, listas remotas prepend/append, headers contradictorios/vacíos/malformados, rollback, un único ganador y paridad 409. Batería integrada final: 72/72 tests, TypeScript PASS, DB PASS con 2 migraciones/95 statements/18 tablas/20 FKs, image/topic guards PASS y build 89/89.
+
+## 2026-07-31 Codex — paridad proxy fail-closed en Express
+**Qué se hizo:** El Code Review exacto de `f2befa0` detectó que Express podía conservar socket y `req.ip` loopback mientras un proxy declaraba el cliente remoto solo en `X-Real-IP` o `Forwarded`. `isLocalExpressAdminRequest` valida ahora la presencia y contenido de toda la metadata proxy con el mismo contrato de Next.
+**Decisiones:** Socket, `req.ip`, Host y XFH siguen siendo obligatorios y no se sustituyen. Además, XFF completo y X-Real-IP único deben ser loopback; metadata proxy exige cadena verificada y `Forwarded` se rechaza sin interpretarlo.
+**Pendientes/bugs:** Publicar el SHA, responder/resolver el thread y repetir Quality, Preview y Code Review exacto.
+**Archivos tocados:** `server/admin-auth.ts`, `tests/admin-auth-flow.test.mjs`, evidencia, decisiones y bitácora.
+**Evidencia:** `3693670395` / `PRRT_kwDOToJ8Pc6VjD_C`, válido. Juez independiente GO final para X-Real-IP aislado, contradicciones en ambos sentidos, remotos prepend/append, metadata sin cadena, `Forwarded` local/remoto, headers vacíos/malformados y loopbacks IPv4/IPv6/mapped. Batería integrada final: 72/72 tests, TypeScript PASS, DB PASS con 2 migraciones/95 statements/18 tablas/20 FKs, image/topic guards PASS y build 89/89.

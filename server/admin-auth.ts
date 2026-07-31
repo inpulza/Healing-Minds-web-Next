@@ -94,6 +94,10 @@ function headerValue(value: string | string[] | undefined): string | null {
   return value || null;
 }
 
+function hasHeader(req: Request, name: string): boolean {
+  return Object.prototype.hasOwnProperty.call(req.headers, name);
+}
+
 function isLoopbackPeerAddress(value: string | undefined): boolean {
   const normalized = value?.trim().toLowerCase().split("%")[0];
   return normalized === "127.0.0.1"
@@ -101,14 +105,38 @@ function isLoopbackPeerAddress(value: string | undefined): boolean {
     || normalized === "::ffff:127.0.0.1";
 }
 
+function isLoopbackClientHeader(value: string | null, allowList: boolean): boolean {
+  if (!value) return false;
+  const addresses = value.split(",").map(address => address.trim());
+  return addresses.length > 0
+    && (allowList || addresses.length === 1)
+    && addresses.every(Boolean)
+    && addresses.every(address => isLoopbackPeerAddress(address));
+}
+
 export function isLocalExpressAdminRequest(req: Request): boolean {
+  const hasForwardedHost = hasHeader(req, "x-forwarded-host");
+  const hasForwardedFor = hasHeader(req, "x-forwarded-for");
+  const hasRealIp = hasHeader(req, "x-real-ip");
   const host = headerValue(req.headers.host);
   const forwardedHost = headerValue(req.headers["x-forwarded-host"]);
+  const forwardedFor = headerValue(req.headers["x-forwarded-for"]);
+  const realIp = headerValue(req.headers["x-real-ip"]);
+  const hasProxyMetadata = hasForwardedHost
+    || hasHeader(req, "x-forwarded-proto")
+    || hasHeader(req, "x-forwarded-port");
+  const hasVerifiedClientChain = (hasForwardedFor || hasRealIp)
+    && (!hasForwardedFor || isLoopbackClientHeader(forwardedFor, true))
+    && (!hasRealIp || isLoopbackClientHeader(realIp, false));
   return isLoopbackPeerAddress(req.socket.remoteAddress)
     && isLoopbackPeerAddress(req.ip)
     && Boolean(host)
+    && !hasHeader(req, "forwarded")
+    && (!hasProxyMetadata || hasVerifiedClientChain)
+    && (!hasForwardedFor || isLoopbackClientHeader(forwardedFor, true))
+    && (!hasRealIp || isLoopbackClientHeader(realIp, false))
     && isLoopbackHostHeader(host || "", false)
-    && (!forwardedHost || isLoopbackHostHeader(forwardedHost, true));
+    && (!hasForwardedHost || isLoopbackHostHeader(forwardedHost || "", true));
 }
 
 function sha256(value: string): string {
