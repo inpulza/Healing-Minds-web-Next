@@ -114,7 +114,7 @@ export async function generateTopicCandidateBatch(input: {
       "Never include PHI, patient stories, a fabricated Dr. Reve quote, diagnosis, guaranteed outcomes, medication instructions, dosages, crisis dramatization, or promotional superlatives.",
       "Avoid cosmetic uniqueness based only on a year, season, location, or list number.",
       "Use at most one listicle-like idea in the batch. Prefer questions people searching for care may ask and meaningful search-intent gaps.",
-      "Do not use the words patient, paciente, name, or nombre in topic, targetKeyword, or expertiseAngle; those administrative AI fields are fail-closed and must use neutral public-topic language.",
+      "Do not use patient, paciente, client, cliente, name, nombre, or labeled contact details in topic, targetKeyword, or expertiseAngle; those administrative AI fields are fail-closed and must use neutral public-topic language.",
       "Treat the inventory as the complete existing-topic record and diversify categories, pillars, stages, and formats.",
     ].join(" "),
     user: {

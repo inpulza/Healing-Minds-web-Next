@@ -71,6 +71,7 @@ import {
   failBlogGenerationRun,
   getBlogGenerationRun,
   getBlogGenerationRunByIdempotencyKey,
+  getAvailableCompletedBlogPlanningRun,
   getOpenBlogGenerationRun,
   listBlogGenerationEvents,
   markStaleBlogGenerationRunsInterrupted,
@@ -1568,6 +1569,13 @@ export function registerAdminBlogRoutes(app: Express): void {
             code: "topic_candidate_not_selectable",
           });
         }
+        const availablePlanningRun = await getAvailableCompletedBlogPlanningRun(candidate.runId);
+        if (!availablePlanningRun) {
+          throw Object.assign(
+            new Error("This topic plan was already used or is no longer available. Plan topics again."),
+            { statusCode: 409, code: "topic_plan_already_used" },
+          );
+        }
         payload = {
           ...requestedPayload,
           ...buildPersistedTopicDraftOverrides(candidate),
@@ -1577,7 +1585,7 @@ export function registerAdminBlogRoutes(app: Express): void {
       if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return res.status(400).json({
           success: false,
-          message: "AI generation inputs must not include patient/name markers or patient-identifying information. Rephrase public topics without patient/paciente/name/nombre.",
+          message: "AI generation inputs must not include patient/client/name markers, labeled contact details, or patient-identifying information. Rephrase the public topic with neutral language.",
         });
       }
 

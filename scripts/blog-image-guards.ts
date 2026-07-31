@@ -144,6 +144,13 @@ try {
   assert.equal(containsLikelyPatientIdentifier("Understanding Seasonal Affective Disorder"), false);
   assert.equal(containsLikelyPatientIdentifier("Managing Panic Attacks"), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Depresión Estacional" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Client: jane doe" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Cliente: maría garcía" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Clients: jane doe" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Clientes: maría garcía" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Phone: +34 612 345 678" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Teléfono: +52 55 1234 5678" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "International access to telepsychiatry" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Anxiety Treatment" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Medication Management" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "ADHD Evaluation" }), false);

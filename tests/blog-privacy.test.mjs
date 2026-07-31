@@ -540,6 +540,16 @@ test("patient identifier guard fail-closes marked AI fields while preserving pub
 });
 
 test("both draft endpoints evaluate AI fields independently", () => {
+  const generationStorage = fs.readFileSync("server/blog/generation/storage.ts", "utf8");
+  const availabilityHelper = generationStorage.slice(
+    generationStorage.indexOf("export async function getAvailableCompletedBlogPlanningRun"),
+    generationStorage.indexOf("export async function queuePreparedBlogGenerationRun"),
+  );
+  assert.match(availabilityHelper, /\.select\(\)/);
+  assert.doesNotMatch(availabilityHelper, /\.update\(|\.insert\(|\.delete\(/);
+  assert.match(availabilityHelper, /eq\(blogGenerationRuns\.status, "completed"\)/);
+  assert.match(availabilityHelper, /isNull\(blogGenerationRuns\.postId\)/);
+
   for (const [filename, flowMarker] of [
     ["server/blog/admin-routes.ts", 'app.post("/api/admin/blog/generate-draft"'],
     ["app/api/admin/blog/[[...path]]/route.ts", 'segments[0] === "generate-draft"'],
@@ -551,7 +561,12 @@ test("both draft endpoints evaluate AI fields independently", () => {
     const privacyGateIndex = flow.indexOf("containsLikelyPatientIdentifierInAiFields(payload)");
     const candidateSelectionIndex = flow.indexOf("selectBlogTopicCandidate(");
     const planningClaimIndex = flow.indexOf("claimCompletedBlogPlanningRun(");
+    const availabilityIndex = flow.indexOf("getAvailableCompletedBlogPlanningRun(");
+    const rateLimitIndex = flow.indexOf("const rateLimit = checkBlogAiRateLimit(");
     assert.ok(privacyGateIndex >= 0, `${filename}: missing privacy gate`);
+    assert.ok(availabilityIndex >= 0, `${filename}: missing non-mutating plan availability check`);
+    assert.ok(availabilityIndex < privacyGateIndex, `${filename}: consumed plan checked after privacy gate`);
+    assert.ok(availabilityIndex < rateLimitIndex, `${filename}: consumed plan checked after rate limit`);
     assert.ok(candidateSelectionIndex > privacyGateIndex, `${filename}: candidate selected before privacy gate`);
     assert.ok(planningClaimIndex > privacyGateIndex, `${filename}: planning run claimed before privacy gate`);
   }
@@ -562,7 +577,7 @@ test("automatic topic planning shares the fail-closed AI input contract", () => 
   const providerSource = fs.readFileSync("server/blog/ai/topic-provider.ts", "utf8");
   assert.match(plannerSource, /containsUnsafePlannedTopicAiInput\(input\.proposal\)/);
   assert.doesNotMatch(providerSource, /Prefer patient questions/);
-  assert.match(providerSource, /Do not use the words patient, paciente, name, or nombre/);
+  assert.match(providerSource, /Do not use patient, paciente, client, cliente, name, nombre, or labeled contact details/);
 
   const program = `
     import assert from "node:assert/strict";
@@ -595,6 +610,45 @@ test("topic planning never sends raw historical titles or keywords to providers"
   assert.match(source, /function getSafePostTitleForProvider[\s\S]*return `Private post \$\{post\.id\}`;/);
   assert.doesNotMatch(source, /getSafePostTitleForProvider\(post\)\s*!==\s*post\.title/);
   assert.doesNotMatch(source, /title\s*===\s*post\.title/);
+  assert.match(source, /semanticProfile:\s*safeProfilesByPostId\.get\(post\.id\)/);
+  assert.match(source, /semanticProfile:\s*buildSafeProposalSemanticProfile\(item\.proposal\)/);
+});
+
+test("topic judge receives finite semantic profiles without raw historical text", () => {
+  const program = `
+    import assert from "node:assert/strict";
+    process.env.DATABASE_URL = "postgres://user:pass@localhost:5432/test";
+    const { buildSafePostSemanticProfile } = await import("./server/blog/ai/topic-planner.ts");
+    const privateTitle = "Coping With Panic Attacks for Jane Doe";
+    const privateKeyword = "managing sudden anxiety episodes for jane doe";
+    const profile = buildSafePostSemanticProfile({
+      id: 42,
+      title: privateTitle,
+      targetKeyword: privateKeyword,
+      expertiseAngle: null,
+      category: null,
+      tags: [],
+      contentPillar: null,
+      patientStage: null,
+      contentFormat: null,
+      searchIntent: null,
+    });
+    const serialized = JSON.stringify(profile);
+    assert.equal(profile.categoryKey, "anxiety");
+    assert.equal(profile.intentFacet, "acute_symptom_coping");
+    assert.equal(profile.pillar, "daily_function");
+    assert.equal(serialized.includes(privateTitle), false);
+    assert.equal(serialized.includes(privateKeyword), false);
+    assert.deepEqual(Object.keys(profile).sort(), [
+      "categoryKey", "contentFormat", "intentFacet", "patientStage", "pillar", "searchIntent",
+    ]);
+  `;
+  const result = spawnSync(
+    process.execPath,
+    ["--import", "tsx", "--input-type=module", "-e", program],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+  assert.equal(result.status, 0, result.stderr || result.stdout);
 });
 
 test("draft generation sends only provider-safe semantic memory", () => {

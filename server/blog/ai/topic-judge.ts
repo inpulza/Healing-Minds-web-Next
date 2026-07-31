@@ -1,5 +1,12 @@
 import { z } from "zod";
 import { createStructuredResponse } from "./responses-client";
+import type {
+  BlogContentFormat,
+  BlogContentPillar,
+  BlogPatientStage,
+  BlogSearchIntent,
+  HealingMindsCategoryKey,
+} from "../strategy/healing-minds";
 
 const judgeDecisionSchema = z.object({
   candidateKey: z.string(),
@@ -14,6 +21,28 @@ const judgeBatchSchema = z.object({
 });
 
 export type TopicJudgeDecision = z.infer<typeof judgeDecisionSchema>;
+
+export type SafeIntentFacet =
+  | "acute_symptom_coping"
+  | "symptom_recognition"
+  | "evaluation_process"
+  | "treatment_options"
+  | "medication_safety"
+  | "access_logistics"
+  | "family_support"
+  | "privacy_confidentiality"
+  | "follow_up_monitoring"
+  | "daily_function"
+  | "general_education";
+
+export type SafeExistingTopicProfile = {
+  categoryKey: HealingMindsCategoryKey;
+  pillar: BlogContentPillar;
+  patientStage: BlogPatientStage;
+  contentFormat: BlogContentFormat;
+  searchIntent: BlogSearchIntent;
+  intentFacet: SafeIntentFacet;
+};
 
 export function assertCompleteTopicJudgeDecisionSet(
   requestedCandidateKeys: string[],
@@ -79,13 +108,20 @@ export async function judgeTopicCandidates(input: {
     title: string;
     targetKeyword?: string | null;
     categoryKey: string;
+    semanticProfile: SafeExistingTopicProfile;
   }>;
   candidates: Array<{
     candidateKey: string;
     topic: string;
     targetKeyword: string;
     expertiseAngle: string;
-    topMatches: Array<{ postId: number; title: string; scoreBasisPoints: number }>;
+    semanticProfile: SafeExistingTopicProfile;
+    topMatches: Array<{
+      postId: number;
+      title: string;
+      scoreBasisPoints: number;
+      semanticProfile: SafeExistingTopicProfile;
+    }>;
   }>;
 }): Promise<{ decisions: TopicJudgeDecision[]; model: string; durationMs: number }> {
   const call = async () => createStructuredResponse({
@@ -93,6 +129,7 @@ export async function judgeTopicCandidates(input: {
     system: [
       "You are a conservative SEO cannibalization judge for a medical psychiatry blog.",
       "Compare every candidate against the complete supplied safe existing-post inventory, not only lexical top matches. Do not add medical claims.",
+      "Historical titles and keywords are intentionally redacted. Use each canonical semanticProfile to compare category, reader stage, format, search intent, and intent facet without reconstructing private text.",
       "duplicate means substantially the same reader question and intent, not merely the same condition.",
       "same_cluster_distinct_intent means the condition overlaps but the patient question and useful outcome differ.",
       "distinct means no material competition. Return one decision for every candidate key.",

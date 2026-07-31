@@ -12,8 +12,9 @@ const labeledNameToken = String.raw`\p{L}[\p{L}\p{M}'’\-]*`;
 const labeledNamePattern = String.raw`${labeledNameToken}(?:\s+${labeledNameToken}){0,3}`;
 // Administrative AI inputs are fail-closed: editors must describe public topics
 // without patient/name markers. Published content still uses the narrower detector.
-const explicitSensitiveAiMarkerPattern = /\b(?:patient|paciente|name|nombre)\b/iu;
-const explicitPluralSensitiveAiLabelPattern = /\b(?:patients|pacientes|names|nombres)\s*[:#=-]/iu;
+const explicitSensitiveAiMarkerPattern = /\b(?:patient|paciente|client|cliente|name|nombre)\b/iu;
+const explicitPluralSensitiveAiLabelPattern = /\b(?:patients|pacientes|clients|clientes|names|nombres)\s*[:#=-]/iu;
+const explicitSensitiveAiContactLabelPattern = /\b(?:phone(?:\s+number)?|telephone(?:\s+number)?|mobile|cell|tel[eé]fono|m[oó]vil|celular)(?:\s*[:#=-]|\s+(?:number|n[uú]mero)\b)/iu;
 const headingConnectorTokens = new Set([
   "a", "across", "after", "against", "along", "amid", "among", "and", "antes",
   "around", "as", "at", "bajo", "before", "behind", "below", "beneath", "beside",
@@ -106,7 +107,16 @@ function containsExplicitSensitiveAiMarker(value: string): boolean {
     .replace(/_/g, " ")
     .replace(/(\p{Ll})(\p{Lu})/gu, "$1 $2");
   return explicitSensitiveAiMarkerPattern.test(tokenized)
-    || explicitPluralSensitiveAiLabelPattern.test(tokenized);
+    || explicitPluralSensitiveAiLabelPattern.test(tokenized)
+    || explicitSensitiveAiContactLabelPattern.test(tokenized);
+}
+
+function containsInternationalPhoneNumber(value: string): boolean {
+  return [...value.matchAll(/(?:\+|00)\d[\d().\s-]{5,24}\d/gu)]
+    .some(match => {
+      const digitCount = (match[0].match(/\d/g) || []).length;
+      return digitCount >= 7 && digitCount <= 15;
+    });
 }
 
 function isPatientGeographicNarrative(narrative: string): boolean {
@@ -227,7 +237,12 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
       || (birthDateLabelAtEnd.test(left) && (birthDateValueAtStart.test(right) || birthDateValueAtStart.test(rightCompact)))
       || (medicalIdLabelAtEnd.test(left) && (medicalIdValueAtStart.test(right) || medicalIdValueAtStart.test(rightCompact)))
       || (emailLabelAtEnd.test(left) && emailValueAtStart.test(rightCompact))
-      || (phoneLabelAtEnd.test(left) && (phoneValueAtStart.test(right) || phoneValueAtStart.test(rightCompact)))
+      || (phoneLabelAtEnd.test(left) && (
+        phoneValueAtStart.test(right)
+        || phoneValueAtStart.test(rightCompact)
+        || containsInternationalPhoneNumber(right)
+        || containsInternationalPhoneNumber(rightCompact)
+      ))
       || (addressLabelAtEnd.test(left) && addressValueAtStart.test(right))
       || hasSplitPatientNarrative
     ) {
@@ -271,6 +286,7 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
 
   const hasEmail = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(normalized);
   const hasPhone = /\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/.test(normalized);
+  const hasInternationalPhone = containsInternationalPhoneNumber(normalized);
   const hasSsn = /\b\d{3}[-.\s]?\d{2}[-.\s]?\d{4}\b/.test(normalized);
   const hasBirthDate = new RegExp(String.raw`\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|fecha de nacimiento|nacimiento)\b.{0,50}\b${datePattern}\b`, "i").test(normalized);
   const hasMedicalId = /\b(?:mrn|medical record|member id|patient id|record number|chart number|insurance id|policy number|historia cl[ií]nica|n[uú]mero de paciente|id de paciente)\b\s*[:#-]?\s*[A-Z0-9-]{4,}\b/i.test(normalized);
@@ -333,6 +349,7 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
 
   return hasEmail
     || hasPhone
+    || hasInternationalPhone
     || hasSsn
     || hasBirthDate
     || hasMedicalId

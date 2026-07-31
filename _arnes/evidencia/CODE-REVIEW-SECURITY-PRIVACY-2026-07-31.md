@@ -75,6 +75,17 @@ El juez encontró primero dos evasiones adicionales y evitó un falso cierre: va
 
 Verificación integrada del árbol final: `npm test` PASS 71/71; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas; `git diff --check` PASS.
 
+## Clasificación del Code Review exacto de `0a82905`
+
+- `3693498793` / `PRRT_kwDOToJ8Pc6VinN7` — **válida y resuelta localmente**. `client/cliente` se incorpora a los marcadores administrativos fail-closed; `clients/clientes` exige separador explícito como los plurales ya cubiertos. Planner, respuesta 400 y fixtures quedan alineados.
+- `3693498795` / `PRRT_kwDOToJ8Pc6VinN9` — **válida y resuelta localmente**. Títulos y keywords históricos siguen sustituidos por `Private post <id>`/`null`. El judge recibe en cambio un perfil calculado localmente y formado solo por categoría, pilar, etapa, formato, search intent y una faceta cerrada. El caso coping/panic frente a managing/sudden anxiety converge en `acute_symptom_coping` sin conservar ninguna frase.
+- `3693498797` / `PRRT_kwDOToJ8Pc6VinN-` — **válida y resuelta localmente**. Se detectan teléfonos internacionales con `+`/`00` y 7–15 dígitos, además de labels Phone/Telephone/Mobile/Cell/Teléfono/Móvil/Celular dentro de un campo o en frontera.
+- `3693498799` / `PRRT_kwDOToJ8Pc6VinOA` — **válida y resuelta localmente**. `getAvailableCompletedBlogPlanningRun` hace solo `SELECT` por id, status completed, postId nulo y mode topic-plan. Ambas rutas lo llaman al cargar el candidato, antes de privacidad, rate limit y juez. Selección y claim siguen después de los gates; el update condicionado decide el único ganador.
+
+El juez independiente emitió **GO 4/4 sin hallazgos accionables**. Verificó que el texto privado se usa únicamente para clasificación local hacia enums finitos, que el payload no contiene fragmentos libres y que no se adelanta ninguna mutación de plan.
+
+Verificación integrada del árbol final: `npm test` PASS 72/72; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas. La publicación y el merge siguen bloqueados hasta obtener Quality, Preview Ready y Code Review exacto sobre el nuevo SHA.
+
 ## Límites
 
 No se accedió a secretos ni datos reales de pacientes. No se cambia la autenticación custom de Production o Preview. Un topic o keyword administrativo sin los marcadores `patient/paciente/name/nombre` conserva semántica editorial; el campo libre `additionalContext` sigue siendo deliberadamente más estricto. Esta frontera por función no reemplaza la prohibición humana de introducir PII ni constituye un detector clínico universal. El contenido completo de un artículo puede mencionar personal público, por lo que la salida de imágenes exige identificadores explícitos en vez de inferir que cualquier nombre es un paciente.

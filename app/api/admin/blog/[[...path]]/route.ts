@@ -508,14 +508,22 @@ export async function POST(request: NextRequest, context: RouteContext) {
       let claimedPlanningRun: Awaited<ReturnType<typeof import("../../../../../server/blog/generation/storage").claimCompletedBlogPlanningRun>> | undefined;
       let topicCandidateSelection: { runId: number; candidateKey: string } | undefined;
       if (requestedPayload.topicCandidateId) {
-        const [candidates, planned, strategy] = await Promise.all([
+        const [candidates, planned, strategy, generation] = await Promise.all([
           import("../../../../../server/blog/topic-candidate-storage"),
           import("../../../../../server/blog/ai/planned-topic-provenance"),
           import("../../../../../server/blog/strategy/healing-minds"),
+          import("../../../../../server/blog/generation/storage"),
         ]);
         const candidate = await candidates.getBlogTopicCandidateById(requestedPayload.topicCandidateId);
         if (!candidate || candidate.recommendation !== "recommended" || candidate.strategyVersion !== strategy.HEALING_MINDS_TOPIC_STRATEGY_VERSION) {
           throw Object.assign(new Error("The selected topic candidate is no longer eligible. Plan topics again."), { statusCode: 409 });
+        }
+        const availablePlanningRun = await generation.getAvailableCompletedBlogPlanningRun(candidate.runId);
+        if (!availablePlanningRun) {
+          throw Object.assign(
+            new Error("This topic plan was already used or is no longer available. Plan topics again."),
+            { statusCode: 409, code: "topic_plan_already_used" },
+          );
         }
         payload = { ...requestedPayload, ...planned.buildPersistedTopicDraftOverrides(candidate) };
         topicCandidateSelection = { runId: candidate.runId, candidateKey: candidate.candidateKey };
@@ -532,7 +540,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
       if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return json({
           success: false,
-          message: "AI generation inputs must not include patient/name markers or patient-identifying information. Rephrase public topics without patient/paciente/name/nombre.",
+          message: "AI generation inputs must not include patient/client/name markers, labeled contact details, or patient-identifying information. Rephrase the public topic with neutral language.",
         }, 400);
       }
       generator.assertBlogAiGenerationConfigured();
