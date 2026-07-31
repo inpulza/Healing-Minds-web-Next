@@ -140,12 +140,17 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
     "iu",
   ).test(normalized);
   const barePatientNamePattern = /\b(?:patient|paciente)\b\s+([^,.;:]{1,100})/giu;
+  const leadingBareNamePattern = new RegExp(
+    String.raw`^(${namePattern})(?=$|[^\p{L}\p{M}])`,
+    "u",
+  );
   const hasBarePatientName = [...normalized.matchAll(barePatientNamePattern)]
     .some(match => {
       const candidate = (match[1] || "").trim();
-      const firstToken = candidate.split(/\s+/)[0] || "";
+      const leadingName = leadingBareNamePattern.exec(candidate)?.[1] || "";
+      const firstToken = leadingName.split(/\s+/)[0] || "";
       return !patientEditorialLeadTokens.has(normalizeLowercaseToken(firstToken))
-        && containsHighConfidencePersonName(candidate);
+        && Boolean(leadingName);
     });
   const patientNarrativePattern = /\b(?:patient|paciente)\b\s+([^,.;:]{1,100})/giu;
   const namedPatientNarrativePattern = new RegExp(

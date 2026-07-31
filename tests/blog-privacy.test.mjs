@@ -114,6 +114,8 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       "Patient Privacy Rights",
       "Patient HIPAA Privacy Rules",
       "Patient Telehealth Privacy",
+      "Patient Guide to Managing Anxiety",
+      "Patient Perspectives on Mental Health",
       "patient chronic pain management",
       "patient housing needs",
       "patient family needs assessment",

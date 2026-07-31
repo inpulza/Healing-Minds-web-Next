@@ -26,7 +26,14 @@
 - Los nombres title-case directamente ligados a `Patient/Paciente`, incluso si marcador y nombre viven en campos distintos, se bloquean sin exigir puntuación ni un verbo posterior.
 - Email, fecha de nacimiento, identificador médico y teléfono pueden reconstruirse a través de dos fronteras cuando existe una etiqueta explícita; los mismos fragmentos sin etiqueta no se unen.
 - Para narrativas lowercase se aplica una frontera privacy-first basada en el primer lead después de `patient/paciente`: topics sanitarios y operacionales verificados se permiten, pero una secuencia ambigua se rechaza para evitar que un verbo no enumerado abra una fuga.
+- La detección de nombre bare exige que la estructura de nombre comience inmediatamente tras `Patient/Paciente`; no busca nombres más adelante en títulos editoriales como `Patient Guide to Managing Anxiety` o `Patient Perspectives on Mental Health`.
 - La ruta Express deja de imprimir el objeto de contacto y un test impide reintroducir logs del body persistido.
+
+## Clasificación final del Code Review exacto
+
+- `3692390069` / `PRRT_kwDOToJ8Pc6VfuPD` — **válida y resuelta**. La búsqueda no estaba anclada al comienzo del fragmento posterior al marcador y producía falsos positivos en títulos editoriales. Se ancló la coincidencia, se añadieron fixtures EN y un juez independiente confirmó que nombres directos/split y narrativas adversariales siguen bloqueados, mientras las variantes editoriales permanecen permitidas.
+
+Verificación local final: 68/68 tests, TypeScript PASS, 2 migraciones/95 statements/18 tablas/20 foreign keys PASS, image guard PASS, build 89/89 y diff-check PASS.
 
 ## Límites
 

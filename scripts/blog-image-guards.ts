@@ -184,6 +184,8 @@ try {
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient confidentiality and HIPAA" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient HIPAA Privacy Rules" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Telehealth Privacy" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Guide to Managing Anxiety" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Perspectives on Mental Health" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient housing needs" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient family needs assessment" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({
