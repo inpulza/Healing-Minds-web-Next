@@ -171,6 +171,30 @@ try {
   ]) {
     assert.equal(containsLikelyPatientIdentifierInAiFields({ additionalContext: legitimateLowercaseContext }), false);
   }
+  for (const explicitPluralLabel of [
+    { topic: "Patients: jane doe" },
+    { topic: "Pacientes: maría garcía" },
+    { targetKeyword: "Names: jane doe" },
+    { targetKeyword: "Nombres: maría garcía" },
+    { topic: "Patients:", targetKeyword: "jane doe" },
+    { topic: "Nombres=", targetKeyword: "maría garcía" },
+    { topic: "Patients", targetKeyword: ": jane doe" },
+    { topic: "Nombres", targetKeyword: "= maría garcía" },
+    { topic: "Names", targetKeyword: ":", additionalContext: "jane doe" },
+    { topic: "Pacientes-", targetKeyword: "maría garcía" },
+  ]) {
+    assert.equal(containsLikelyPatientIdentifierInAiFields(explicitPluralLabel), true);
+  }
+  for (const legitimatePluralEditorialText of [
+    { topic: "Patients and Families Seeking Care" },
+    { topic: "Resources for patients in Florida" },
+    { topic: "Names used for common therapy approaches" },
+    { topic: "Apoyo para pacientes y familias" },
+    { topic: "Patients", targetKeyword: "Care Options" },
+    { topic: "Nombres", targetKeyword: "de enfoques terapéuticos" },
+  ]) {
+    assert.equal(containsLikelyPatientIdentifierInAiFields(legitimatePluralEditorialText), false);
+  }
   assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan requested help"), true);
   assert.equal(containsLikelyPatientIdentifier("Patient Fatima requested help"), true);
   assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan called yesterday"), true);

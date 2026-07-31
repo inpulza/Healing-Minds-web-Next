@@ -46,16 +46,20 @@ function getProviderErrorMessage(status: number): string {
 }
 
 export function buildProviderSafeBlogInput(input: BlogAiGenerateInput): BlogAiGenerateInput {
-  const providerInput = { ...input };
-  delete providerInput.additionalContext;
+  const providerInput = {
+    ...input,
+    additionalContext: input.providerEditorialContext,
+  };
+  delete providerInput.providerEditorialContext;
+  if (!providerInput.additionalContext) delete providerInput.additionalContext;
   return providerInput;
 }
 
 export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promise<BlogAiGeneratedDraft> {
   const config = getBlogAiConfig();
-  // Free-form editor context is useful for local source/tag/brief selection, but
-  // it is never sent verbatim to the external provider. The provider receives
-  // the deterministic editorial brief assembled locally instead.
+  // Human free-form context is useful for local source/tag/brief selection, but
+  // is never sent verbatim. Only a separately-provenanced planner angle may be
+  // restored here alongside the deterministic editorial brief.
   const providerInput = buildProviderSafeBlogInput(input);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), config.timeoutMs);

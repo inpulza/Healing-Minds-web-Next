@@ -188,6 +188,38 @@ test("patient identifier guard fail-closes marked AI fields while preserving pub
         legitimateLowercaseContext,
       );
     }
+    for (const explicitPluralLabel of [
+      { topic: "Patients: jane doe" },
+      { topic: "Pacientes: maría garcía" },
+      { targetKeyword: "Names: jane doe" },
+      { targetKeyword: "Nombres: maría garcía" },
+      { topic: "Patients:", targetKeyword: "jane doe" },
+      { topic: "Nombres=", targetKeyword: "maría garcía" },
+      { topic: "Patients", targetKeyword: ": jane doe" },
+      { topic: "Nombres", targetKeyword: "= maría garcía" },
+      { topic: "Names", targetKeyword: ":", additionalContext: "jane doe" },
+      { topic: "Pacientes-", targetKeyword: "maría garcía" },
+    ]) {
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields(explicitPluralLabel),
+        true,
+        JSON.stringify(explicitPluralLabel),
+      );
+    }
+    for (const legitimatePluralEditorialText of [
+      { topic: "Patients and Families Seeking Care" },
+      { topic: "Resources for patients in Florida" },
+      { topic: "Names used for common therapy approaches" },
+      { topic: "Apoyo para pacientes y familias" },
+      { topic: "Patients", targetKeyword: "Care Options" },
+      { topic: "Nombres", targetKeyword: "de enfoques terapéuticos" },
+    ]) {
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields(legitimatePluralEditorialText),
+        false,
+        JSON.stringify(legitimatePluralEditorialText),
+      );
+    }
     assert.equal(containsLikelyPatientIdentifier("patient Fatima Khan requested help"), true);
     assert.equal(containsLikelyPatientIdentifier("Patient Fatima requested help"), true);
     assert.equal(containsLikelyPatientIdentifier("Paciente Fátima Khan solicitó ayuda"), true);
@@ -577,9 +609,16 @@ test("draft generation sends only provider-safe semantic memory", () => {
 
 test("draft provider never receives raw free-form editorial context", () => {
   const generatorSource = fs.readFileSync("server/blog/ai/generator.ts", "utf8");
+  const expressRouteSource = fs.readFileSync("server/blog/admin-routes.ts", "utf8");
+  const nextRouteSource = fs.readFileSync("app/api/admin/blog/[[...path]]/route.ts", "utf8");
   assert.match(generatorSource, /buildProviderSafeBlogInput\(input\)/);
   assert.match(generatorSource, /buildHealingMindsBlogPrompt\(providerInput\)/);
   assert.doesNotMatch(generatorSource, /buildHealingMindsBlogPrompt\(input\)/);
+  assert.match(expressRouteSource, /generationRunId, selectedCandidate\.angle\)/);
+  assert.match(expressRouteSource, /claimedPlanningRun\?\.id, topicCandidateSelection \? payload\.expertiseAngle : undefined\)/);
+  assert.match(nextRouteSource, /claimedPlanningRun\?\.id, topicCandidateSelection \? payload\.expertiseAngle : undefined\)/);
+  assert.doesNotMatch(expressRouteSource, /claimedPlanningRun\?\.id, payload\.additionalContext\)/);
+  assert.doesNotMatch(nextRouteSource, /claimedPlanningRun\?\.id, payload\.additionalContext\)/);
 
   const program = `
     import assert from "node:assert/strict";
@@ -610,6 +649,14 @@ test("draft provider never receives raw free-form editorial context", () => {
     assert.equal(JSON.stringify(safe).includes(privateContext), false);
     assert.equal(safe.topic, "Anxiety coping options");
     assert.deepEqual(safe.editorialBrief.requiredSections, ["Coping options"]);
+    const trustedPlannerAngle = "Differentiate coping skills by daily routine and care setting.";
+    const trusted = buildProviderSafeBlogInput({
+      ...input,
+      providerEditorialContext: trustedPlannerAngle,
+    });
+    assert.equal(trusted.additionalContext, trustedPlannerAngle);
+    assert.equal(Object.hasOwn(trusted, "providerEditorialContext"), false);
+    assert.equal(JSON.stringify(trusted).includes(privateContext), false);
 
     let providerBody = "";
     globalThis.fetch = async (_url, init) => {
@@ -625,6 +672,14 @@ test("draft provider never receives raw free-form editorial context", () => {
     assert.equal(providerBody.includes(privateContext), false);
     assert.equal(providerBody.includes("No additional editorial context provided."), true);
     assert.equal(providerBody.includes("Coping options"), true);
+
+    providerBody = "";
+    await assert.rejects(generateBlogDraftWithAi({
+      ...input,
+      providerEditorialContext: trustedPlannerAngle,
+    }), /Blog AI provider request failed/);
+    assert.equal(providerBody.includes(privateContext), false);
+    assert.equal(providerBody.includes(trustedPlannerAngle), true);
 
     const localResearch = selectBlogResearchSources({
       topic: "General wellness overview",

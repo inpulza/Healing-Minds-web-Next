@@ -61,6 +61,56 @@ function getAdminAuthMode(): "off" | "replit" | "custom" {
   return "replit";
 }
 
+function isLoopbackHostname(value: string | null): boolean {
+  if (!value) return false;
+  const normalized = value.trim().toLowerCase().replace(/^\[|\]$/g, "");
+  return normalized === "localhost"
+    || normalized === "127.0.0.1"
+    || normalized === "::1";
+}
+
+function hostnameFromHostHeader(value: string | null): string | null {
+  const host = value?.trim();
+  if (!host) return null;
+  const bracketedIpv6 = host.match(/^\[([0-9a-f:.]+)\](?::(\d{1,5}))?$/i);
+  const hostnameOrIpv4 = host.match(/^([^:/?#@\s]+)(?::(\d{1,5}))?$/);
+  const match = bracketedIpv6 || hostnameOrIpv4;
+  if (!match) return null;
+  const port = match[2] ? Number(match[2]) : null;
+  if (port !== null && (port < 1 || port > 65535)) return null;
+  return match[1] || null;
+}
+
+function isLoopbackHostHeader(value: string, allowList: boolean): boolean {
+  const hosts = value.split(",").map(host => host.trim());
+  return hosts.length > 0
+    && (allowList || hosts.length === 1)
+    && hosts.every(Boolean)
+    && hosts.every(host => isLoopbackHostname(hostnameFromHostHeader(host)));
+}
+
+function headerValue(value: string | string[] | undefined): string | null {
+  if (Array.isArray(value)) return value.join(",");
+  return value || null;
+}
+
+function isLoopbackPeerAddress(value: string | undefined): boolean {
+  const normalized = value?.trim().toLowerCase().split("%")[0];
+  return normalized === "127.0.0.1"
+    || normalized === "::1"
+    || normalized === "::ffff:127.0.0.1";
+}
+
+export function isLocalExpressAdminRequest(req: Request): boolean {
+  const host = headerValue(req.headers.host);
+  const forwardedHost = headerValue(req.headers["x-forwarded-host"]);
+  return isLoopbackPeerAddress(req.socket.remoteAddress)
+    && isLoopbackPeerAddress(req.ip)
+    && Boolean(host)
+    && isLoopbackHostHeader(host || "", false)
+    && (!forwardedHost || isLoopbackHostHeader(forwardedHost, true));
+}
+
 function sha256(value: string): string {
   return crypto.createHash("sha256").update(value).digest("hex");
 }
@@ -240,6 +290,13 @@ export function isAdminAuthConfigured(): boolean {
 export function requireAdmin(req: Request, res: Response, next: NextFunction): void {
   const mode = getAdminAuthMode();
   if (mode === "off") {
+    if (!isLocalExpressAdminRequest(req)) {
+      res.status(403).json({
+        success: false,
+        message: "Development authentication is only available on localhost",
+      });
+      return;
+    }
     next();
     return;
   }
@@ -314,7 +371,8 @@ export function registerAdminAuthRoutes(app: Express): void {
     const mode = getAdminAuthMode();
     const replitUser = mode === "replit" ? getReplitUser(req) : null;
     const session = mode === "custom" && configured ? getAdminSession(req) : null;
-    const authenticated = mode === "off" || Boolean(session) || Boolean(replitUser && isAllowedReplitAdmin(replitUser));
+    const localDevelopmentSession = mode === "off" && isLocalExpressAdminRequest(req);
+    const authenticated = localDevelopmentSession || Boolean(session) || Boolean(replitUser && isAllowedReplitAdmin(replitUser));
     res.status(200).json({
       success: true,
       configured,
@@ -325,7 +383,7 @@ export function registerAdminAuthRoutes(app: Express): void {
         ? { username: session.username, role: session.role }
         : replitUser
           ? { username: replitUser.claims?.email || replitUser.email || "admin", role: "admin" }
-          : mode === "off"
+          : localDevelopmentSession
             ? { username: "development", role: "admin" }
             : null,
     });
@@ -336,6 +394,12 @@ export function registerAdminAuthRoutes(app: Express): void {
 
     const mode = getAdminAuthMode();
     if (mode === "off") {
+      if (!isLocalExpressAdminRequest(req)) {
+        return res.status(403).json({
+          success: false,
+          message: "Development authentication is only available on localhost",
+        });
+      }
       return res.status(200).json({
         success: true,
         admin: { username: "development", role: "admin" },

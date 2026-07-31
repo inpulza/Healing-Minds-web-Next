@@ -408,6 +408,7 @@ export async function createGeneratedBlogDraft(
   workflow?: BlogGenerationWorkflow,
   reportProgress?: BlogGenerationProgressReporter,
   generationRunId?: number,
+  providerEditorialContext?: string,
 ) {
   await updateWorkflowStep(workflow, {
     id: "editorial-context",
@@ -555,6 +556,7 @@ export async function createGeneratedBlogDraft(
   const generated = await generateBlogDraftWithAi({
     topic: payload.topic,
     additionalContext: payload.additionalContext,
+    providerEditorialContext,
     targetKeyword: payload.targetKeyword,
     language: payload.language,
     categoryName: category.name,
@@ -926,7 +928,7 @@ async function executeAutoGenerateWorkflow(
       searchIntent: selectedCandidate.searchIntent,
       expertiseAngle: selectedCandidate.angle,
       topicStrategyVersion: selectedCandidate.strategyVersion,
-    }, workflow, reportProgress, generationRunId);
+    }, workflow, reportProgress, generationRunId, selectedCandidate.angle);
   } catch (error) {
     const workflowError = error as Error & { workflow?: BlogGenerationWorkflow };
     workflowError.workflow = workflow;
@@ -1627,7 +1629,7 @@ export function registerAdminBlogRoutes(app: Express): void {
         ),
         expertiseAngle: payload.additionalContext || undefined,
         topicStrategyVersion: payload.topicStrategyVersion || HEALING_MINDS_TOPIC_STRATEGY_VERSION,
-      }, undefined, undefined, claimedPlanningRun?.id);
+      }, undefined, undefined, claimedPlanningRun?.id, topicCandidateSelection ? payload.expertiseAngle : undefined);
       if (claimedPlanningRun) {
         const completed = await completeBlogGenerationRun(claimedPlanningRun.id, {
           postId: result.data.id,

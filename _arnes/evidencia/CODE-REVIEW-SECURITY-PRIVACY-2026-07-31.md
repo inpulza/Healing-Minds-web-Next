@@ -58,6 +58,14 @@ Verificación final del árbol local: el juez independiente emitió **GO sin hal
 
 La prueba no se limita a inspección estática: intercepta el `fetch` real de `generateBlogDraftWithAi` y verifica que `jane doe`, `maría garcía` y el sentinel libre completo no existen en el body externo, mientras el topic y las secciones canónicas del brief sí. Una matriz separada conserva expresiones legítimas como `substance use`, `emotional regulation`, `duelo complicado`, `prevención del suicidio` y `adicción y recuperación`; `medication safety` sigue seleccionando localmente la fuente canónica de NIMH. La UI explica que el texto libre no se envía verbatim.
 
+## Clasificación del Code Review exacto de `65c4da1`
+
+- `3693243874` / `PRRT_kwDOToJ8Pc6Vh86A` — **válida y resuelta localmente**. Con `trust proxy=1`, comprobar solo el peer y la autoridad no distinguía un túnel que reescribiera ambos valores. El modo off de Express exige ahora peer, `req.ip` efectivo y autoridades loopback; middleware, sesión y login comparten el mismo helper. La matriz cubre IPv4, IPv6, IPv4-mapped, peer remoto, Host/XFH público y peer/autoridad local con cliente efectivo remoto.
+- `3693243877` / `PRRT_kwDOToJ8Pc6Vh86E` — **válida y resuelta localmente**. `Patients/Pacientes/Names/Nombres` con `:`, `#`, `=`, o `-` se bloquean sin convertir cada uso plural editorial en PII. La recomposición de fronteras exige un separador explícito y cubre marcador+valor, marcador+separador+valor y separador al final del campo izquierdo. `Patients` + `Care Options` y el equivalente español sin separador permanecen permitidos.
+- `3693243881` / `PRRT_kwDOToJ8Pc6Vh86H` — **válida y resuelta localmente**. El ángulo seguro del planner no se mezcla de nuevo con el texto humano: viaja por `providerEditorialContext`, argumento que solo aportan los call sites con candidato verificado o seleccionado. El test runtime prueba que el contexto humano no aparece y que el ángulo trusted sí llega al body externo.
+
+El juez independiente emitió **GO 3/3 sin otros hallazgos accionables** después de reproducir las dos evasiones residuales y verificar sus correcciones. La fusión sigue bloqueada hasta publicar el SHA y obtener de nuevo Quality, Preview Ready y Code Review exacto sin notas.
+
 ## Límites
 
 No se accedió a secretos ni datos reales de pacientes. No se cambia la autenticación custom de Production o Preview. Un topic o keyword administrativo sin los marcadores `patient/paciente/name/nombre` conserva semántica editorial; el campo libre `additionalContext` sigue siendo deliberadamente más estricto. Esta frontera por función no reemplaza la prohibición humana de introducir PII ni constituye un detector clínico universal. El contenido completo de un artículo puede mencionar personal público, por lo que la salida de imágenes exige identificadores explícitos en vez de inferir que cualquier nombre es un paciente.

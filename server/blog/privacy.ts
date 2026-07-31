@@ -13,6 +13,7 @@ const labeledNamePattern = String.raw`${labeledNameToken}(?:\s+${labeledNameToke
 // Administrative AI inputs are fail-closed: editors must describe public topics
 // without patient/name markers. Published content still uses the narrower detector.
 const explicitSensitiveAiMarkerPattern = /\b(?:patient|paciente|name|nombre)\b/iu;
+const explicitPluralSensitiveAiLabelPattern = /\b(?:patients|pacientes|names|nombres)\s*[:#=-]/iu;
 const headingConnectorTokens = new Set([
   "a", "across", "after", "against", "along", "amid", "among", "and", "antes",
   "around", "as", "at", "bajo", "before", "behind", "below", "beneath", "beside",
@@ -104,7 +105,8 @@ function containsExplicitSensitiveAiMarker(value: string): boolean {
   const tokenized = value
     .replace(/_/g, " ")
     .replace(/(\p{Ll})(\p{Lu})/gu, "$1 $2");
-  return explicitSensitiveAiMarkerPattern.test(tokenized);
+  return explicitSensitiveAiMarkerPattern.test(tokenized)
+    || explicitPluralSensitiveAiLabelPattern.test(tokenized);
 }
 
 function isPatientGeographicNarrative(narrative: string): boolean {
@@ -158,6 +160,9 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
     "iu",
   );
   const nameValueAtStart = new RegExp(String.raw`^\s*${labeledNamePattern}\b`, "iu");
+  const pluralNameLabelWithSeparatorAtEnd = /\b(?:patients|pacientes|names|nombres)\s*[:#=-]\s*$/iu;
+  const pluralNameLabelBareAtEnd = /\b(?:patients|pacientes|names|nombres)\s*$/iu;
+  const pluralNameSeparatedValueAtStart = new RegExp(String.raw`^\s*[:#=-]\s*${labeledNamePattern}\b`, "iu");
   const birthDateLabelAtEnd = /\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|fecha de nacimiento|nacimiento)\s*[:#-]?\s*$/iu;
   const birthDateValueAtStart = new RegExp(String.raw`^\s*${datePattern}\b`, "iu");
   const medicalIdLabelAtEnd = /\b(?:mrn|medical record|member id|patient id|record number|chart number|insurance id|policy number|ssn|social security number|historia cl[ií]nica|n[uú]mero de paciente|id de paciente)\s*[:#-]?\s*$/iu;
@@ -184,6 +189,8 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
       && containsLikelyPatientIdentifier(`${patientMarker} ${right}`);
     if (
       (nameLabelAtEnd.test(left) && nameValueAtStart.test(right))
+      || (pluralNameLabelWithSeparatorAtEnd.test(left) && nameValueAtStart.test(right))
+      || (pluralNameLabelBareAtEnd.test(left) && pluralNameSeparatedValueAtStart.test(right))
       || (birthDateLabelAtEnd.test(left) && (birthDateValueAtStart.test(right) || birthDateValueAtStart.test(rightCompact)))
       || (medicalIdLabelAtEnd.test(left) && (medicalIdValueAtStart.test(right) || medicalIdValueAtStart.test(rightCompact)))
       || (emailLabelAtEnd.test(left) && emailValueAtStart.test(rightCompact))

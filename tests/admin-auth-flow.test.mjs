@@ -23,6 +23,7 @@ test("custom Next admin completes login, protected API, session and logout witho
     const runtime = await import("./app/api/admin/runtime/route.ts");
     const blog = await import("./app/api/admin/blog/[[...path]]/route.ts");
     const auth = await import("./server/next-admin-auth.ts");
+    const expressAuth = await import("./server/admin-auth.ts");
 
     const noStore = response => assert.match(response.headers.get("cache-control") || "", /no-store/);
     const request = new NextRequest("https://example.invalid/api/admin/login", {
@@ -161,6 +162,72 @@ test("custom Next admin completes login, protected API, session and logout witho
     assert.equal(remoteOffLogin.status, 403);
     noStore(remoteOffLogin);
 
+    const expressRequest = (host, forwardedHost, remoteAddress = "127.0.0.1", clientIp = remoteAddress) => ({
+      headers: {
+        ...(host ? { host } : {}),
+        ...(forwardedHost ? { "x-forwarded-host": forwardedHost } : {}),
+        ...(clientIp !== remoteAddress ? { "x-forwarded-for": clientIp } : {}),
+      },
+      socket: { remoteAddress },
+      ip: clientIp,
+      body: {},
+    });
+    const expressResponse = () => ({
+      statusCode: 200,
+      body: null,
+      headers: {},
+      status(code) { this.statusCode = code; return this; },
+      json(body) { this.body = body; return this; },
+      set(name, value) { this.headers[name.toLowerCase()] = value; return this; },
+      cookie() { return this; },
+    });
+    const runExpressGuard = request => {
+      const response = expressResponse();
+      let nextCalled = false;
+      expressAuth.requireAdmin(request, response, () => { nextCalled = true; });
+      return { response, nextCalled };
+    };
+    assert.equal(runExpressGuard(expressRequest("127.0.0.1:5000")).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000")).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("[::1]:5000", "[::1]:5000", "::1")).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("127.0.0.1:5000", undefined, "::ffff:127.0.0.1")).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("preview.example", "preview.example")).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("127.0.0.1:5000", "preview.example")).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "198.51.100.20")).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "127.0.0.1", "198.51.100.20")).response.statusCode, 403);
+
+    const expressHandlers = new Map();
+    expressAuth.registerAdminAuthRoutes({
+      get(path, handler) { expressHandlers.set("GET " + path, handler); },
+      post(path, handler) { expressHandlers.set("POST " + path, handler); },
+    });
+    const localExpressSession = expressResponse();
+    expressHandlers.get("GET /api/admin/session")(
+      expressRequest("127.0.0.1:5000"),
+      localExpressSession,
+    );
+    assert.equal(localExpressSession.body.authenticated, true);
+    assert.equal(localExpressSession.body.admin.username, "development");
+    const tunneledExpressSession = expressResponse();
+    expressHandlers.get("GET /api/admin/session")(
+      expressRequest("preview.example", "preview.example"),
+      tunneledExpressSession,
+    );
+    assert.equal(tunneledExpressSession.body.authenticated, false);
+    assert.equal(tunneledExpressSession.body.admin, null);
+    const tunneledExpressLogin = expressResponse();
+    expressHandlers.get("POST /api/admin/login")(
+      expressRequest("preview.example", "preview.example"),
+      tunneledExpressLogin,
+    );
+    assert.equal(tunneledExpressLogin.statusCode, 403);
+    const localExpressLogin = expressResponse();
+    expressHandlers.get("POST /api/admin/login")(
+      expressRequest("127.0.0.1:5000"),
+      localExpressLogin,
+    );
+    assert.equal(localExpressLogin.statusCode, 200);
+
     console.log(JSON.stringify({
       login: "pass",
       session: "pass",
@@ -170,6 +237,7 @@ test("custom Next admin completes login, protected API, session and logout witho
       rawSensitivePassword: "pass",
       productionFailClosed: "pass",
       developmentLoopbackOnly: "pass",
+      legacyExpressLoopbackOnly: "pass",
     }));
   `;
 
@@ -189,6 +257,7 @@ test("custom Next admin completes login, protected API, session and logout witho
     rawSensitivePassword: "pass",
     productionFailClosed: "pass",
     developmentLoopbackOnly: "pass",
+    legacyExpressLoopbackOnly: "pass",
   });
 });
 

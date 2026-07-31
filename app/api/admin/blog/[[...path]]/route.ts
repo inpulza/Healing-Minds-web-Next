@@ -569,7 +569,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
           topicKey: topic.buildTopicKey(`${payload.topic} ${payload.targetKeyword || ""}`, payload.language),
           expertiseAngle: payload.additionalContext || undefined,
           topicStrategyVersion: payload.topicStrategyVersion || strategy.HEALING_MINDS_TOPIC_STRATEGY_VERSION,
-        }, undefined, undefined, claimedPlanningRun?.id);
+        }, undefined, undefined, claimedPlanningRun?.id, topicCandidateSelection ? payload.expertiseAngle : undefined);
         if (claimedPlanningRun) {
           const generation = await import("../../../../../server/blog/generation/storage");
           const completed = await generation.completeBlogGenerationRun(claimedPlanningRun.id, {
