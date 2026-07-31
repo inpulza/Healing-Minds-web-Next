@@ -48,9 +48,114 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Archivos tocados:** `client/src/components/Header.tsx`, `client/src/components/OptimizedImage.tsx`, `client/src/lib/navigation.tsx`, `client/src/pages/admin/AdminLogin.tsx`, `app/admin/layout.tsx`, `scripts/admin-password-hash.mjs`, `docs/ADMIN_AUTH_VERCEL.md`, `tests/admin-auth-flow.test.mjs`, `tests/editorial-next-parity.test.mjs`, tests Next existentes, `_arnes/evidencia/NEXT-STABILIZATION-2026-07-30.md`, `_arnes/BITACORA.md`, `package.json`.
 **Evidencia:** Tras sincronizar PR #1: `npm test` PASS 55/55; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys y orden de tags PASS; build Next PASS, 89/89 páginas, admin dinámico; Chromium 1440/914/390 EN↔ES PASS, 0 errores; logos visibles `complete=true`, `naturalWidth=1920`, `opacity=1`; login→dashboard→logout local PASS y Jordan confirmó credenciales reales en Production y Preview. El único conflicto manual fue el log append-only del arnés; se conservaron ambas entradas. Evidencia detallada: `_arnes/evidencia/NEXT-STABILIZATION-2026-07-30.md`.
 
+## 2026-07-31 Codex — revisión clínica, licencia y horarios
+**Qué se hizo:** Se contrastaron los claims de licencia y certificación con los registros oficiales; se retiró de EN/ES el claim de certificación de junta no corroborado y se unificaron nueve páginas de ubicación con el horario oficial de fin de semana cerrado.
+**Decisiones:** La licencia California A 198275 permanece porque DCA la muestra vigente. La ausencia en ABPN no se presenta como prueba negativa; el claim se retira preventivamente hasta que Healing Minds aporte verificación oficial. No se autoaprueba contenido YMYL.
+**Pendientes/bugs:** Revisión humana de Healing Minds y, si existe, incorporación futura de documentación oficial de board certification.
+**Archivos tocados:** `client/src/data/pageContent/legal/telehealthConsent.ts`, nueve `client/src/pages/Location*.tsx`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** California DCA consultado el 2026-07-31: licencia A 198275 vigente; ABPN VerifyCERT sin coincidencias en tres variantes del nombre, con advertencia oficial de que la ausencia no es prueba de no certificación. Guard clínico focalizado PASS 2/2; suite integrada, typecheck, DB y build se repitieron después de actualizar la rama con `main`.
+
 ## 2026-07-31 Codex — aislamiento del verificador de contacto
 **Qué se hizo:** Se corrigieron los dos P2 vigentes del PR #3. Cada ejecución del verificador usa ahora una dirección única y borra por correo además de por id para cubrir respuestas perdidas después de persistir. Tras Code Review, la limpieza histórica se restringió a filas antiguas con los tres marcadores exactos del workflow.
 **Decisiones:** El cambio queda aislado del corte de dominio y no altera la ruta pública de contacto. `VERIFY_CONTACT_EMAIL` es una plantilla explícita que debe contener `{run}`; así el operador declara una dirección única que su proveedor enruta, sin que el código asuma soporte universal de plus-addressing. Sin variable se usa la dirección de prueba documentada `delivered+{run}@resend.dev`.
 **Pendientes/bugs:** El preview inmutable del PR está detrás de Vercel Authentication; la verificación funcional se ejecutó contra la URL estable del mismo proyecto. El warning de `caniuse-lite` y las vulnerabilidades informadas por `npm audit` no se modificaron.
 **Archivos tocados:** `scripts/verify-live-contact.ts`, `tests/contact-verification-workflow.test.mjs`, `_arnes/BITACORA.md`.
 **Evidencia:** prueba enfocada PASS 3/3; `npm test` PASS 58/58; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys, ordered tags y contact insert; `npm run build` PASS con 89/89 páginas; implementación final ejecutada de forma controlada contra `healing-minds-psychiatry-nextjs.vercel.app` con plantilla `delivered+{run}@resend.dev`: PASS 200, persistencia confirmada y limpieza confirmada. El preview inmutable devolvió 401 en el borde antes de ejecutar la ruta.
+
+## 2026-07-31 Codex — seguimiento de Code Review clínico
+**Qué se hizo:** Se clasificó como válida la nota P1 de CodeX sobre promesas residuales de disponibilidad en Immokalee; se corrigieron todas las fuentes hiperlócales y FAQ en EN/ES para reflejar únicamente telesalud entre semana dentro del horario publicado.
+**Decisiones:** No se promete disponibilidad por la tarde, fines de semana ni citas adaptadas al horario agrícola. El texto publicado indica lunes a viernes, 8:00 AM–5:00 PM, y pide confirmar un horario disponible al programar.
+**Pendientes/bugs:** Revisión final de CodeX y revisión humana de Healing Minds para cualquier futura ampliación de horarios.
+**Archivos tocados:** `client/src/data/locationHyperlocal.ts`, `client/src/data/locationFAQs.ts`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** guard clínico ampliado para rechazar `evening`, `weekend`, equivalentes en español y claims de adaptación al horario del campo dentro de las secciones Immokalee; suite completa y build pendientes de repetición sobre el diff final.
+
+## 2026-07-31 Codex — verificación final del seguimiento clínico
+**Qué se hizo:** Se repitió toda la batería sobre el diff que corrige la nota P1 de CodeX.
+**Decisiones:** La corrección queda lista para una segunda revisión independiente; no se fusiona hasta recibirla y clasificar cualquier nota nueva.
+**Pendientes/bugs:** Segunda revisión de CodeX y deployment inmutable del HEAD final.
+**Archivos tocados:** `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 3/3; `npm test` PASS 61/61; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys, ordered tags y contact insert; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — reconciliación de metadatos clínicos en preview
+**Qué se hizo:** La lectura HTTP del preview inmutable reveló que las descripciones SEO congeladas de Immokalee todavía prometían telesalud por la tarde. Se alinearon description, Open Graph y Twitter en EN/ES con la disponibilidad entre semana y se añadió el manifiesto al guard.
+**Decisiones:** La comprobación de claims clínicos incluye tanto el contenido renderizado como el metadata que pueden mostrar buscadores y redes sociales.
+**Pendientes/bugs:** Repetir batería, deployment inmutable y Code Review sobre el nuevo HEAD.
+**Archivos tocados:** `shared/seo-manifest.json`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** preview `dpl_8HhQX8yA3Um1MgFTF12dLSfScGd2` READY; lectura HTTP de `/locations/psychiatrist-immokalee` confirmó el claim obsoleto en meta description antes de esta corrección.
+
+## 2026-07-31 Codex — verificación del manifiesto SEO corregido
+**Qué se hizo:** Se ejecutó la batería completa después de incorporar las seis descripciones SEO de Immokalee al cambio y al guard.
+**Decisiones:** El HEAD final volverá a pasar por CI, preview inmutable y Code Review antes del merge.
+**Pendientes/bugs:** Deployment y revisión independiente del nuevo SHA.
+**Archivos tocados:** `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 3/3; `npm test` PASS 61/61; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — reconciliación sistémica de elegibilidad adult-only
+**Qué se hizo:** Un juez independiente detectó que Immokalee aún ofrecía atención a teens/adolescentes pese a las políticas de adultos 18+. Se auditó el patrón completo y se corrigieron las nueve páginas de ubicación afectadas, Golden Gate e Immokalee hiperlócales, el índice de servicios, Naples y About en EN/ES.
+**Decisiones:** Las referencias comunitarias a niños o familias no se alteran cuando no describen pacientes de Healing Minds. Toda oferta clínica revisada se limita a adultos de 18 años en adelante.
+**Pendientes/bugs:** Repetir batería, deployment inmutable y Code Review del nuevo HEAD.
+**Archivos tocados:** nueve `client/src/pages/Location*.tsx`, `client/src/data/locationHyperlocal.ts`, `client/src/data/pageContent/services/servicesIndex.ts`, `client/src/data/pageContent/mainPages/naples.ts`, `client/src/data/pageContent/mainPages/about.ts`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** búsqueda global de `teen|adolescent` en `client/src/pages`, `client/src/data` y `shared/seo-manifest.json` sin coincidencias después de la corrección; suite completa y build pendientes sobre el diff final.
+
+## 2026-07-31 Codex — verificación final de elegibilidad adult-only
+**Qué se hizo:** Se repitió toda la batería después de corregir el patrón sistémico y añadir el guard adult-only.
+**Decisiones:** El cambio vuelve a Code Review y a un preview inmutable; el PR no se fusiona hasta clasificar cualquier nota nueva.
+**Pendientes/bugs:** Deployment y revisión independiente del nuevo SHA.
+**Archivos tocados:** `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — semántica completa del guard adult-only
+**Qué se hizo:** CodeX detectó que el guard aún podía omitir sinónimos de elegibilidad infantil. Se añadió detección contextual EN/ES para children, minors, pediatric patients, all ages y equivalentes, además de exigir el texto adultos 18+ en cada fuente con una oferta clínica explícita.
+**Decisiones:** El detector no cruza límites de oración y prueba fixtures permitidos, por lo que referencias a recursos comunitarios, historia clínica o preguntas que niegan atención a menores permanecen válidas.
+**Pendientes/bugs:** Verificación completa, nuevo SHA, Code Review y juez final.
+**Archivos tocados:** `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** thread P2 `PRRT_kwDOToJ8Pc6VdGBj`, comentario `3691378428`, clasificado válido; corrección pendiente de ejecución.
+
+## 2026-07-31 Codex — verificación del guard semántico adult-only
+**Qué se hizo:** Se ejecutó la batería completa con los patrones contextuales y las aserciones positivas de adultos 18+.
+**Decisiones:** El detector permite referencias comunitarias a niños separadas por oración, pero rechaza ofertas clínicas equivalentes en EN/ES y prueba ambos comportamientos con fixtures.
+**Pendientes/bugs:** Último Code Review, CI y juez del SHA resultante.
+**Archivos tocados:** `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — ampliación final del guard adult-only
+**Qué se hizo:** CodeX clasificó como P2 válida la omisión de `locationFAQs.ts` y `shared/seo-manifest.json` en la lista de superficies protegidas. Ambas fuentes publicadas se añadieron al guard.
+**Decisiones:** El hallazgo es preventivo: no había una oferta actual a menores en FAQ o metadata, pero futuras ediciones deben quedar bloqueadas igual que el contenido visible.
+**Pendientes/bugs:** Repetir batería, deployment, Code Review del nuevo SHA y pase final del juez.
+**Archivos tocados:** `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** thread P2 `PRRT_kwDOToJ8Pc6Vc8e9`, comentario `3691322189`, clasificado válido; corrección pendiente de verificación final.
+
+## 2026-07-31 Codex — verificación final de superficies adult-only
+**Qué se hizo:** Se repitió la batería completa con FAQ y manifiesto SEO incluidos en el guard.
+**Decisiones:** El nuevo SHA se somete al último Code Review y al juez antes del merge.
+**Pendientes/bugs:** Cerrar los gates externos del HEAD resultante.
+**Archivos tocados:** `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — cierre del componente compartido adult-only
+**Qué se hizo:** El segundo pase del juez encontró la misma oferta a teens/adolescentes en `client/src/components/Services.tsx`, fuera del inventario inicial de páginas y datos. Se corrigió EN/ES y se incorporó el componente al guard.
+**Decisiones:** La auditoría textual se amplía a todo `client/src`; las referencias contextuales a menores que no sean ofertas de atención no se confunden con elegibilidad clínica.
+**Pendientes/bugs:** Repetir batería, deployment inmutable, Code Review y pase final del juez sobre el nuevo SHA.
+**Archivos tocados:** `client/src/components/Services.tsx`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** búsqueda completa de `teen|adolescent` en `client/src` y `shared/seo-manifest.json` sin coincidencias después de esta corrección.
+
+## 2026-07-31 Codex — verificación del componente compartido adult-only
+**Qué se hizo:** Se repitió la batería completa con el componente de servicios dentro del guard.
+**Decisiones:** El nuevo HEAD vuelve a CI, preview, Code Review y juez independiente antes del merge.
+**Pendientes/bugs:** Completar los cuatro gates externos del nuevo SHA.
+**Archivos tocados:** `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — cierre de variantes pediátricas y límite 18 inclusivo
+**Qué se hizo:** El Code Review exacto de `688cc80` detectó dos P2 válidos: el guard omitía ofertas adjetivales pediátricas EN/ES y un FAQ excluía involuntariamente a pacientes de exactamente 18 años. Se ampliaron patrones y fixtures, se corrigió el FAQ a 18 años en adelante y se bloqueó la redacción exclusiva en todas las superficies publicadas.
+**Decisiones:** La regla clínica queda normalizada como adultos de 18 años en adelante. El guard debe detectar tanto sustantivos como adjetivos pediátricos sin bloquear menciones contextuales que no sean ofertas de atención.
+**Pendientes/bugs:** Repetir CI, preview y Code Review sobre el nuevo SHA; no fusionar mientras exista un hilo válido abierto.
+**Archivos tocados:** `client/src/data/locationFAQs.ts`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** threads P2 `PRRT_kwDOToJ8Pc6VdUCq` y `PRRT_kwDOToJ8Pc6VdUCu`, comentarios `3691461648` y `3691461653`, clasificados válidos; guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys, ordered tags y contact insert; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — cierre singular/plural del límite de edad
+**Qué se hizo:** El Code Review de `1cddcd2` detectó que `mayor de 18 años` podía eludir el bloqueo preventivo porque el patrón cubría solo una forma plural incorrectamente construida. Se normalizó el detector para singular, plural y variantes equivalentes EN/ES, con siete fixtures explícitos.
+**Decisiones:** Cualquier fórmula que excluya a la persona de exactamente 18 años debe fallar; la redacción aprobada sigue siendo 18 años en adelante.
+**Pendientes/bugs:** Completar CI, preview y Code Review del nuevo SHA antes del merge.
+**Archivos tocados:** `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** thread P2 `PRRT_kwDOToJ8Pc6Vdd_C`, comentario `3691521515`, clasificado válido; guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys, ordered tags y contact insert; `npm run build` PASS con 89/89 páginas.
