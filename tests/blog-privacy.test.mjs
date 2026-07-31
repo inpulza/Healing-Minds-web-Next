@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import test from "node:test";
 
-test("patient identifier guard preserves AI field boundaries without rejecting editorial topics", () => {
+test("patient identifier guard fail-closes marked AI fields while preserving public editorial content", () => {
   const program = `
     import assert from "node:assert/strict";
     const {
@@ -125,7 +125,12 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       "patient family needs assessment",
     ]) {
       assert.equal(containsLikelyPatientIdentifier(editorialText), false, editorialText);
-      assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: editorialText }), false, editorialText);
+      const hasExplicitPatientMarker = /\\b(?:patient|paciente)\\b/iu.test(editorialText);
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields({ topic: editorialText }),
+        hasExplicitPatientMarker,
+        editorialText,
+      );
     }
 
     assert.equal(containsLikelyPatientIdentifier("Maria Garcia"), false);
@@ -231,11 +236,11 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
     assert.equal(containsLikelyPatientIdentifierInAiFields({
       topic: "Patient Guide to",
       targetKeyword: "Jane Doe",
-    }), false);
+    }), true);
     assert.equal(containsLikelyPatientIdentifierInAiFields({
       topic: "patient guide to",
       targetKeyword: "Jane Doe",
-    }), false);
+    }), true);
     assert.equal(containsLikelyPatientIdentifierInAiFields({
       topic: "Patient provided",
       targetKeyword: "Madonna",
@@ -262,6 +267,35 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       topic: "Paciente remitió a",
       targetKeyword: "María García",
     }), true);
+    for (const patientMarkedAiInput of [
+      { topic: "Patient said jane doe during intake" },
+      { topic: "Patient emailed john smith yesterday" },
+      { topic: "paciente dijo maría garcía durante la admisión" },
+      { topic: "The patient's full legal name is jane doe" },
+      { topic: "El nombre legal de la paciente es maría garcía" },
+      { topic: "patient lives in New York and mentioned Jane Doe" },
+      { topic: "paciente vive en Nueva York y mencionó María García" },
+      { topic: "Patient legal name", targetKeyword: "jane doe" },
+      { topic: "patient lives in New York and mentioned", targetKeyword: "jane doe" },
+    ]) {
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields(patientMarkedAiInput),
+        true,
+        JSON.stringify(patientMarkedAiInput),
+      );
+    }
+    for (const rephrasedEditorialInput of [
+      { topic: "New York resources for adults" },
+      { topic: "Telehealth resources across Florida" },
+      { topic: "Coping skills for anxiety" },
+      { topic: "Billing department workflow" },
+    ]) {
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields(rephrasedEditorialInput),
+        false,
+        JSON.stringify(rephrasedEditorialInput),
+      );
+    }
     for (const editorialFields of [
       { topic: "patient confidentiality in Florida" },
       { topic: "patient access to Florida care" },
@@ -289,7 +323,13 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       { topic: "patient lives in", targetKeyword: "New York" },
       { topic: "paciente vive en", targetKeyword: "Nueva York" },
     ]) {
-      assert.equal(containsLikelyPatientIdentifierInAiFields(editorialFields), false, JSON.stringify(editorialFields));
+      const hasExplicitPatientMarker = Object.values(editorialFields)
+        .some(value => /\\b(?:patient|paciente)\\b/iu.test(value || ""));
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields(editorialFields),
+        hasExplicitPatientMarker,
+        JSON.stringify(editorialFields),
+      );
     }
     assert.equal(containsLikelyPatientIdentifier("Name: Madonna"), true);
     assert.equal(containsLikelyPatientIdentifier("Nombre: Pelé"), true);
@@ -353,7 +393,13 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       { topic: "Patient", targetKeyword: "HIPAA Privacy Rules" },
       { topic: "Patient", targetKeyword: "Telehealth Privacy" },
     ]) {
-      assert.equal(containsLikelyPatientIdentifierInAiFields(editorialFields), false, JSON.stringify(editorialFields));
+      const hasExplicitPatientMarker = Object.values(editorialFields)
+        .some(value => /\\b(?:patient|paciente)\\b/iu.test(value || ""));
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields(editorialFields),
+        hasExplicitPatientMarker,
+        JSON.stringify(editorialFields),
+      );
     }
 
     const publishedSnapshot = JSON.parse(readFileSync("shared/blog-snapshot.json", "utf8"));
@@ -374,14 +420,54 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
 });
 
 test("both draft endpoints evaluate AI fields independently", () => {
-  for (const filename of [
-    "server/blog/admin-routes.ts",
-    "app/api/admin/blog/[[...path]]/route.ts",
+  for (const [filename, flowMarker] of [
+    ["server/blog/admin-routes.ts", 'app.post("/api/admin/blog/generate-draft"'],
+    ["app/api/admin/blog/[[...path]]/route.ts", 'segments[0] === "generate-draft"'],
   ]) {
     const source = fs.readFileSync(filename, "utf8");
     assert.match(source, /containsLikelyPatientIdentifierInAiFields\(payload\)/, filename);
     assert.doesNotMatch(source, /possibleSensitiveText/, filename);
+    const flow = source.slice(source.indexOf(flowMarker), source.indexOf(flowMarker) + 9_000);
+    const privacyGateIndex = flow.indexOf("containsLikelyPatientIdentifierInAiFields(payload)");
+    const candidateSelectionIndex = flow.indexOf("selectBlogTopicCandidate(");
+    const planningClaimIndex = flow.indexOf("claimCompletedBlogPlanningRun(");
+    assert.ok(privacyGateIndex >= 0, `${filename}: missing privacy gate`);
+    assert.ok(candidateSelectionIndex > privacyGateIndex, `${filename}: candidate selected before privacy gate`);
+    assert.ok(planningClaimIndex > privacyGateIndex, `${filename}: planning run claimed before privacy gate`);
   }
+});
+
+test("automatic topic planning shares the fail-closed AI input contract", () => {
+  const plannerSource = fs.readFileSync("server/blog/ai/topic-planner.ts", "utf8");
+  const providerSource = fs.readFileSync("server/blog/ai/topic-provider.ts", "utf8");
+  assert.match(plannerSource, /containsUnsafePlannedTopicAiInput\(input\.proposal\)/);
+  assert.doesNotMatch(providerSource, /Prefer patient questions/);
+  assert.match(providerSource, /Do not use the words patient or paciente/);
+
+  const program = `
+    import assert from "node:assert/strict";
+    const { containsUnsafePlannedTopicAiInput } = await import("./server/blog/ai/topic-planner.ts");
+    assert.equal(containsUnsafePlannedTopicAiInput({
+      topic: "Patient Guide to Managing Anxiety",
+      targetKeyword: "anxiety care",
+      expertiseAngle: "educational guide",
+    }), true);
+    assert.equal(containsUnsafePlannedTopicAiInput({
+      topic: "Questions about managing anxiety",
+      targetKeyword: "anxiety care",
+      expertiseAngle: "educational guide",
+    }), false);
+  `;
+  const result = spawnSync(
+    process.execPath,
+    ["--import", "tsx", "--input-type=module", "-e", program],
+    {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, DATABASE_URL: "postgres://user:pass@localhost:5432/test" },
+    },
+  );
+  assert.equal(result.status, 0, result.stderr || result.stdout);
 });
 
 test("topic planning never sends raw historical titles or keywords to providers", () => {

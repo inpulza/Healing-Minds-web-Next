@@ -211,18 +211,26 @@ function deterministicStatus(input: {
       `${input.proposal.topic} ${input.proposal.targetKeyword} ${input.proposal.expertiseAngle} ${input.proposal.whyTimely}`,
       input.proposal.language,
     )
-    || [
-      input.proposal.topic,
-      input.proposal.targetKeyword,
-      input.proposal.expertiseAngle,
-      input.proposal.whyTimely,
-    ].some(containsLikelyPatientIdentifier)
+    || containsUnsafePlannedTopicAiInput(input.proposal)
+    || containsLikelyPatientIdentifier(input.proposal.whyTimely)
   ) return "unsafe_pattern";
   const saturated = input.maximumClusterCount >= BLOG_TOPIC_THRESHOLDS.saturationMinimumPosts
     && input.clusterCount >= input.maximumClusterCount
     && input.proposal.createOrUpdate === "create_new";
   if (saturated) return "saturated";
   return "eligible";
+}
+
+export function containsUnsafePlannedTopicAiInput(input: {
+  topic: string;
+  targetKeyword: string;
+  expertiseAngle: string;
+}): boolean {
+  return containsLikelyPatientIdentifierInAiFields({
+    topic: input.topic,
+    targetKeyword: input.targetKeyword,
+    additionalContext: input.expertiseAngle,
+  });
 }
 
 function semanticMemoryFromMatches(

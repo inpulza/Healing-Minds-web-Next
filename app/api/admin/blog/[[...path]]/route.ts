@@ -505,24 +505,20 @@ export async function POST(request: NextRequest, context: RouteContext) {
     if (segments.length === 1 && segments[0] === "generate-draft") {
       const requestedPayload = validation.adminBlogGenerateDraftSchema.parse(body);
       let payload = requestedPayload;
-      let claimedPlanningRun: Awaited<ReturnType<typeof import("../../../../../server/blog/generation/storage").claimCompletedBlogPlanningRun>>;
+      let claimedPlanningRun: Awaited<ReturnType<typeof import("../../../../../server/blog/generation/storage").claimCompletedBlogPlanningRun>> | undefined;
+      let topicCandidateSelection: { runId: number; candidateKey: string } | undefined;
       if (requestedPayload.topicCandidateId) {
-        const [candidates, planned, generation, strategy] = await Promise.all([
+        const [candidates, planned, strategy] = await Promise.all([
           import("../../../../../server/blog/topic-candidate-storage"),
           import("../../../../../server/blog/ai/planned-topic-provenance"),
-          import("../../../../../server/blog/generation/storage"),
           import("../../../../../server/blog/strategy/healing-minds"),
         ]);
         const candidate = await candidates.getBlogTopicCandidateById(requestedPayload.topicCandidateId);
         if (!candidate || candidate.recommendation !== "recommended" || candidate.strategyVersion !== strategy.HEALING_MINDS_TOPIC_STRATEGY_VERSION) {
           throw Object.assign(new Error("The selected topic candidate is no longer eligible. Plan topics again."), { statusCode: 409 });
         }
-        const selected = await candidates.selectBlogTopicCandidate(candidate.runId, candidate.candidateKey);
-        payload = { ...requestedPayload, ...planned.buildPersistedTopicDraftOverrides(selected) };
-        claimedPlanningRun = await generation.claimCompletedBlogPlanningRun(selected.runId);
-        if (!claimedPlanningRun) {
-          throw Object.assign(new Error("This topic plan was already used or is no longer available. Plan topics again."), { statusCode: 409 });
-        }
+        payload = { ...requestedPayload, ...planned.buildPersistedTopicDraftOverrides(candidate) };
+        topicCandidateSelection = { runId: candidate.runId, candidateKey: candidate.candidateKey };
       }
       const [{ containsLikelyPatientIdentifierInAiFields }, generator, { checkBlogAiRateLimit }, planner, topic, strategy, admin] = await Promise.all([
         import("../../../../../server/blog/privacy"),
@@ -536,7 +532,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
       if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return json({
           success: false,
-          message: "AI generation inputs must not include patient-identifying information",
+          message: "AI generation inputs must not include patient language or patient-identifying information. Rephrase public topics without patient/paciente.",
         }, 400);
       }
       generator.assertBlogAiGenerationConfigured();
@@ -553,6 +549,20 @@ export async function POST(request: NextRequest, context: RouteContext) {
         additionalContext: payload.additionalContext,
         language: payload.language,
       });
+      if (topicCandidateSelection) {
+        const [candidates, generation] = await Promise.all([
+          import("../../../../../server/blog/topic-candidate-storage"),
+          import("../../../../../server/blog/generation/storage"),
+        ]);
+        const selected = await candidates.selectBlogTopicCandidate(
+          topicCandidateSelection.runId,
+          topicCandidateSelection.candidateKey,
+        );
+        claimedPlanningRun = await generation.claimCompletedBlogPlanningRun(selected.runId);
+        if (!claimedPlanningRun) {
+          throw Object.assign(new Error("This topic plan was already used or is no longer available. Plan topics again."), { statusCode: 409 });
+        }
+      }
       try {
         const result = await admin.createGeneratedBlogDraft({
           ...payload,

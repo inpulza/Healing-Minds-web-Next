@@ -1548,7 +1548,7 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const requestedPayload = adminBlogGenerateDraftSchema.parse(req.body);
       let payload: AdminBlogGenerateDraftPayload = requestedPayload;
-      let planningRunId: number | undefined;
+      let topicCandidateSelection: { runId: number; candidateKey: string } | undefined;
       if (requestedPayload.topicCandidateId) {
         const candidate = await getBlogTopicCandidateById(requestedPayload.topicCandidateId);
         if (!candidate) {
@@ -1566,20 +1566,16 @@ export function registerAdminBlogRoutes(app: Express): void {
             code: "topic_candidate_not_selectable",
           });
         }
-        const selectedCandidate = await selectBlogTopicCandidate(
-          candidate.runId,
-          candidate.candidateKey,
-        );
-        planningRunId = selectedCandidate.runId;
         payload = {
           ...requestedPayload,
-          ...buildPersistedTopicDraftOverrides(selectedCandidate),
+          ...buildPersistedTopicDraftOverrides(candidate),
         };
+        topicCandidateSelection = { runId: candidate.runId, candidateKey: candidate.candidateKey };
       }
       if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return res.status(400).json({
           success: false,
-          message: "AI generation inputs must not include patient-identifying information",
+          message: "AI generation inputs must not include patient language or patient-identifying information. Rephrase public topics without patient/paciente.",
         });
       }
 
@@ -1600,9 +1596,13 @@ export function registerAdminBlogRoutes(app: Express): void {
         additionalContext: payload.additionalContext,
         language: payload.language,
       });
-      if (planningRunId) {
+      if (topicCandidateSelection) {
+        const selectedCandidate = await selectBlogTopicCandidate(
+          topicCandidateSelection.runId,
+          topicCandidateSelection.candidateKey,
+        );
         try {
-          claimedPlanningRun = await claimCompletedBlogPlanningRun(planningRunId);
+          claimedPlanningRun = await claimCompletedBlogPlanningRun(selectedCandidate.runId);
         } catch (error) {
           if ((error as { code?: string }).code === "23505") {
             throw Object.assign(
