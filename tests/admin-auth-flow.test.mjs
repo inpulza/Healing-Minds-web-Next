@@ -100,10 +100,52 @@ test("custom Next admin completes login, protected API, session and logout witho
     const localRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
       headers: { host: "127.0.0.1:3100" },
     });
+    const localhostRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: { host: "localhost:3100", "x-forwarded-host": "localhost:3100" },
+    });
+    const ipv6Request = new NextRequest("http://[::1]:3100/api/admin/session", {
+      headers: { host: "[::1]:3100", "x-forwarded-host": "[::1]:3100" },
+    });
+    const spoofedForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": "preview.example" },
+    });
+    const appendedForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": "localhost:3100, preview.example" },
+    });
+    const prependedForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": "preview.example, localhost:3100" },
+    });
+    const hostWithPathRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "localhost:3100/path" },
+    });
+    const hostWithUserInfoRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "attacker@localhost:3100" },
+    });
+    const multipleHostAuthoritiesRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "localhost:3100, 127.0.0.1:3100" },
+    });
+    const trailingEmptyForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": "localhost:3100," },
+    });
+    const leadingEmptyForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": ",localhost:3100" },
+    });
+    const missingHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session");
     const remoteRequest = new NextRequest("https://preview.example/api/admin/session", {
       headers: { host: "preview.example", "x-forwarded-host": "preview.example" },
     });
     assert.equal(auth.getAdminSession(localRequest)?.username, "development");
+    assert.equal(auth.getAdminSession(localhostRequest)?.username, "development");
+    assert.equal(auth.getAdminSession(ipv6Request)?.username, "development");
+    assert.equal(auth.getAdminSession(spoofedForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(appendedForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(prependedForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(hostWithPathRequest), null);
+    assert.equal(auth.getAdminSession(hostWithUserInfoRequest), null);
+    assert.equal(auth.getAdminSession(multipleHostAuthoritiesRequest), null);
+    assert.equal(auth.getAdminSession(trailingEmptyForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(leadingEmptyForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(missingHostRequest), null);
     assert.equal(auth.getAdminSession(remoteRequest), null);
     const localOffLogin = await login.POST(new NextRequest("http://127.0.0.1:3100/api/admin/login", {
       method: "POST",

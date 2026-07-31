@@ -89,12 +89,33 @@ function isLoopbackHostname(value: string | null): boolean {
     || normalized === "::1";
 }
 
+function hostnameFromHostHeader(value: string | null): string | null {
+  const host = value?.trim();
+  if (!host) return null;
+  const bracketedIpv6 = host.match(/^\[([0-9a-f:.]+)\](?::(\d{1,5}))?$/i);
+  const hostnameOrIpv4 = host.match(/^([^:/?#@\s]+)(?::(\d{1,5}))?$/);
+  const match = bracketedIpv6 || hostnameOrIpv4;
+  if (!match) return null;
+  const port = match[2] ? Number(match[2]) : null;
+  if (port !== null && (port < 1 || port > 65535)) return null;
+  return match[1] || null;
+}
+
+function isLoopbackHostHeader(value: string, allowList: boolean): boolean {
+  const hosts = value.split(",").map(host => host.trim());
+  return hosts.length > 0
+    && (allowList || hosts.length === 1)
+    && hosts.every(Boolean)
+    && hosts.every(host => isLoopbackHostname(hostnameFromHostHeader(host)));
+}
+
 export function isLocalAdminRequest(request: NextRequest): boolean {
-  const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim() || null;
-  const host = request.headers.get("host")?.split(":")[0]?.trim() || null;
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const host = request.headers.get("host");
   return isLoopbackHostname(request.nextUrl.hostname)
-    && (!forwardedHost || isLoopbackHostname(forwardedHost.split(":")[0] || null))
-    && (!host || isLoopbackHostname(host));
+    && Boolean(host)
+    && (!forwardedHost || isLoopbackHostHeader(forwardedHost, true))
+    && isLoopbackHostHeader(host || "", false);
 }
 
 function sign(payload: string, secret: string): string {

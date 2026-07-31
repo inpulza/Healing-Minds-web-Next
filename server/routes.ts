@@ -334,8 +334,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // The contact message is still saved in storage
       }
       
-      console.log("New contact message received:", contactMessage);
-      
       // Return success response
       res.status(200).json({ 
         success: true, 

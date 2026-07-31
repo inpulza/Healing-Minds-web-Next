@@ -92,9 +92,25 @@ try {
   assert.equal(containsLikelyPatientIdentifier("Maria Garcia"), true);
   assert.equal(containsLikelyPatientIdentifier("Draft notes\nMaria Garcia\nanxiety education"), true);
   assert.equal(containsLikelyPatientIdentifier("Name: Maria Garcia"), true);
+  assert.equal(containsLikelyPatientIdentifier("María García"), true);
+  assert.equal(containsLikelyPatientIdentifier("María García-López"), true);
+  assert.equal(containsLikelyPatientIdentifier("José O’Neill"), true);
+  assert.equal(containsLikelyPatientIdentifier("Ana-María O'Neill"), true);
+  assert.equal(containsLikelyPatientIdentifier("José Luis Pérez"), true);
+  assert.equal(containsLikelyPatientIdentifier("MARÍA GARCÍA"), true);
+  assert.equal(containsLikelyPatientIdentifier("María J. García"), true);
+  assert.equal(containsLikelyPatientIdentifier("María de la Cruz"), true);
+  assert.equal(containsLikelyPatientIdentifier("Maria Care"), true);
+  assert.equal(containsLikelyPatientIdentifier("Paciente María García fue diagnosticada con ansiedad."), true);
+  assert.equal(containsLikelyPatientIdentifier("Patient José O’Neill was prescribed medication."), true);
+  assert.equal(containsLikelyPatientIdentifier("Número de paciente: AB-12345"), true);
+  assert.equal(containsLikelyPatientIdentifier("Historia clínica: HM-67890"), true);
+  assert.equal(containsLikelyPatientIdentifier("Fecha de nacimiento: 5 de enero de 1980"), true);
   assert.equal(containsLikelyPatientIdentifier("general educational article about anxiety"), false);
   assert.equal(containsLikelyPatientIdentifier("Anxiety Treatment Options"), false);
   assert.equal(containsLikelyPatientIdentifier("Healing Minds Psychiatry"), false);
+  assert.equal(containsLikelyPatientIdentifier("About Us"), false);
+  assert.equal(containsLikelyPatientIdentifier("Patient Resources"), false);
 
   const privateDraft = {
     id: 42,

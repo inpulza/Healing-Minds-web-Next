@@ -5,6 +5,9 @@
 - El servidor Next de desarrollo escuchaba en todas las interfaces y el modo de autenticación desactivado concedía sesión administrativa a cualquier request no productiva.
 - El servidor Express histórico también escuchaba en todas las interfaces durante desarrollo y registraba fragmentos del cuerpo JSON de APIs, con riesgo de incluir consultas o datos de contacto.
 - El filtro de PII detectaba nombres asociados explícitamente con “patient”, pero no un nombre aislado ni un campo genérico `Name:`.
+- El primer hardening no interpretaba correctamente hosts IPv6 y aceptaba el primer valor de un `x-forwarded-host` mixto aunque otro salto fuera público.
+- Los nombres internacionales, etiquetas médicas españolas con tildes y fechas españolas con mes escrito podían eludir el filtro conservador.
+- La ruta Express histórica todavía registraba el objeto completo del contacto después de persistirlo.
 
 ## Correcciones
 
@@ -12,7 +15,10 @@
 - El modo admin `off` solo concede sesión/login a requests inequívocamente locales; producción continúa fail-closed.
 - El servidor Express solo expone `0.0.0.0` en producción y deja de registrar cuerpos de respuesta.
 - El filtro de PII bloquea nombres aislados por línea y campos `Name/Nombre`, además de los identificadores ya cubiertos.
+- El parser de hosts acepta `localhost`, IPv4 e IPv6 loopback, pero exige que todos los valores reenviados sean locales y rechaza listas mixtas.
+- El filtro reconoce tildes, guiones y apóstrofos, `Número de paciente`, `Historia clínica` y fechas españolas con mes escrito.
+- La ruta Express deja de imprimir el objeto de contacto y un test impide reintroducir logs del body persistido.
 
 ## Límites
 
-No se accedió a secretos, datos reales de pacientes ni variables de Vercel. No se cambia la autenticación custom de Production o Preview.
+No se accedió a secretos, datos reales de pacientes ni variables de Vercel. No se cambia la autenticación custom de Production o Preview. El filtro es deliberadamente conservador y cualquier rechazo editorial sigue requiriendo revisión humana.
