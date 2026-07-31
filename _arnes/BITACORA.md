@@ -305,3 +305,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Crear commit y push, esperar Preview READY, ejecutar el ciclo real de consentimiento, clasificar Code Review exacto, obtener GO del juez y después añadir el ID a Production antes del merge.
 **Archivos tocados:** analytics/cookie cleanup, hooks Clarity/TikTok, App/env, banner/política/dialog, CTAs globales y de ubicaciones, guards, prueba Chromium, registro de tags y evidencia.
 **Evidencia:** TypeScript PASS, analytics guard PASS, Chromium 2/2 PASS, suite 74/74 PASS, build Next 89/89 con `G-WMRK41PX2E`, diff-check PASS.
+
+## 2026-07-31 Codex - corrección del paquete de build Vercel
+**Qué se hizo:** El primer Preview de `802efab` falló antes de compilar porque `.vercelignore` omitía toda la carpeta `scripts/`. Se mantuvo la exclusión del tooling, pero se incluyó expresamente el único guard que `npm run build` necesita.
+**Decisiones:** El guard permanece como script versionado y ejecutable tanto localmente como en Vercel; no se duplica su lógica dentro de `package.json`.
+**Pendientes/bugs:** Publicar el ajuste y validar que el siguiente deployment exacto alcance READY y reciba `G-WMRK41PX2E`.
+**Archivos tocados:** `.vercelignore`, evidencia y bitácora.
+**Evidencia:** deployment `healing-minds-psychiatry-nextjs-41gzjru5q.vercel.app`, log `MODULE_NOT_FOUND /vercel/path0/scripts/verify-public-analytics-config.mjs`; `vercel env ls` confirma `NEXT_PUBLIC_GA_MEASUREMENT_ID` en Preview.

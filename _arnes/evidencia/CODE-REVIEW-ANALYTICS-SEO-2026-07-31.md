@@ -61,3 +61,11 @@
 - Añadir el ID validado a Production solo después del Preview. Confirmar la
   importación de `generate_lead` dentro de Google Ads por la ruta nativa GCC;
   el código no puede demostrar el estado de esa cuenta.
+
+## Incidencia de primer Preview
+
+El deployment de `802efab` falló antes del build porque `.vercelignore`
+excluía toda la carpeta `scripts/`, incluido el nuevo guard invocado por
+`package.json`. La variable Preview sí existía. Se restringió la exclusión para
+que Vercel reciba únicamente `scripts/verify-public-analytics-config.mjs`; el
+resto del tooling sigue fuera del bundle de deployment.
