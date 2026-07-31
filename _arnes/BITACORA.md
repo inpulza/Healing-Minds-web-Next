@@ -103,3 +103,17 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Deployment y revisión independiente del nuevo SHA.
 **Archivos tocados:** `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
 **Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
+
+## 2026-07-31 Codex — cierre del componente compartido adult-only
+**Qué se hizo:** El segundo pase del juez encontró la misma oferta a teens/adolescentes en `client/src/components/Services.tsx`, fuera del inventario inicial de páginas y datos. Se corrigió EN/ES y se incorporó el componente al guard.
+**Decisiones:** La auditoría textual se amplía a todo `client/src`; las referencias contextuales a menores que no sean ofertas de atención no se confunden con elegibilidad clínica.
+**Pendientes/bugs:** Repetir batería, deployment inmutable, Code Review y pase final del juez sobre el nuevo SHA.
+**Archivos tocados:** `client/src/components/Services.tsx`, `tests/clinical-content-guards.test.mjs`, `_arnes/evidencia/CODE-REVIEW-CLINICAL-2026-07-31.md`, `_arnes/BITACORA.md`.
+**Evidencia:** búsqueda completa de `teen|adolescent` en `client/src` y `shared/seo-manifest.json` sin coincidencias después de esta corrección.
+
+## 2026-07-31 Codex — verificación del componente compartido adult-only
+**Qué se hizo:** Se repitió la batería completa con el componente de servicios dentro del guard.
+**Decisiones:** El nuevo HEAD vuelve a CI, preview, Code Review y juez independiente antes del merge.
+**Pendientes/bugs:** Completar los cuatro gates externos del nuevo SHA.
+**Archivos tocados:** `_arnes/BITACORA.md`.
+**Evidencia:** guard focalizado PASS 4/4; `npm test` PASS 62/62; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `npm run build` PASS con 89/89 páginas.
