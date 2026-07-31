@@ -3,11 +3,13 @@ import {
   BLOG_CONTENT_PILLARS,
   BLOG_PATIENT_STAGES,
   BLOG_SEARCH_INTENTS,
+  HEALING_MINDS_CATEGORY_KEYS,
   HEALING_MINDS_TOPIC_STRATEGY_VERSION,
   type BlogContentFormat,
   type BlogContentPillar,
   type BlogPatientStage,
   type BlogSearchIntent,
+  type HealingMindsCategoryKey,
 } from "../strategy/healing-minds";
 import { buildTopicKey } from "./topic-normalization";
 
@@ -26,6 +28,7 @@ type PersistedTopicCandidateForDraft = PlannedLinkIds & {
   targetKeyword: string;
   language: string;
   categoryId: number;
+  categoryKey: string;
   pillar: string;
   patientStage: string;
   contentFormat: string;
@@ -52,6 +55,15 @@ export type PersistedTopicDraftOverrides = {
   contentFormat: BlogContentFormat;
   searchIntent: BlogSearchIntent;
   topicStrategyVersion: typeof HEALING_MINDS_TOPIC_STRATEGY_VERSION;
+};
+
+export type PersistedTopicSafetyContext = {
+  categoryKey: HealingMindsCategoryKey;
+  pillar: BlogContentPillar;
+  patientStage: BlogPatientStage;
+  contentFormat: BlogContentFormat;
+  searchIntent: BlogSearchIntent;
+  expertiseAngle: string;
 };
 
 function normalizeStableIds(values: readonly string[], field: string): string[] {
@@ -91,6 +103,7 @@ export function buildPersistedTopicDraftOverrides(
     || !Number.isInteger(candidate.categoryId)
     || candidate.categoryId <= 0
     || (candidate.language !== "en" && candidate.language !== "es")
+    || !(HEALING_MINDS_CATEGORY_KEYS as readonly string[]).includes(candidate.categoryKey)
     || !(BLOG_CONTENT_PILLARS as readonly string[]).includes(candidate.pillar)
     || !(BLOG_PATIENT_STAGES as readonly string[]).includes(candidate.patientStage)
     || !(BLOG_CONTENT_FORMATS as readonly string[]).includes(candidate.contentFormat)
@@ -124,5 +137,25 @@ export function buildPersistedTopicDraftOverrides(
     contentFormat: candidate.contentFormat as BlogContentFormat,
     searchIntent: candidate.searchIntent as BlogSearchIntent,
     topicStrategyVersion: HEALING_MINDS_TOPIC_STRATEGY_VERSION,
+  };
+}
+
+export function buildPersistedTopicSafetyContext(
+  candidate: PersistedTopicCandidateForDraft,
+  overrides: PersistedTopicDraftOverrides,
+): PersistedTopicSafetyContext {
+  if (!(HEALING_MINDS_CATEGORY_KEYS as readonly string[]).includes(candidate.categoryKey)) {
+    throw Object.assign(new Error("The persisted topic candidate has an invalid category"), {
+      statusCode: 409,
+      code: "topic_candidate_not_selectable",
+    });
+  }
+  return {
+    categoryKey: candidate.categoryKey as HealingMindsCategoryKey,
+    pillar: overrides.contentPillar,
+    patientStage: overrides.patientStage,
+    contentFormat: overrides.contentFormat,
+    searchIntent: overrides.searchIntent,
+    expertiseAngle: overrides.expertiseAngle,
   };
 }

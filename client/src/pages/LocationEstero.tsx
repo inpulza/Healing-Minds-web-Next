@@ -337,8 +337,8 @@ const LocationEstero = () => {
                   id: 'adhd',
                   title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
                   description: language === 'en'
-                    ? 'ADHD evaluation and treatment Estero FL. Specialized assessment and treatment for adults and teens to improve focus and daily functioning with medication management near me.'
-                    : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
+                    ? 'ADHD evaluation and treatment Estero FL. Specialized assessment and treatment for adults 18 and older to improve focus and daily functioning with medication management near me.'
+                    : 'Evaluación especializada y tratamiento para adultos de 18 años en adelante para mejorar el enfoque y funcionamiento diario.',
                   icon: Smile,
                   link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
                 },
@@ -974,8 +974,8 @@ const LocationEstero = () => {
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
                       {language === 'en' 
-                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
-                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
+                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: Closed\nSunday: Closed'
+                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Cerrado\nDomingo: Cerrado'}
                     </p>
                   </div>
                 </div>

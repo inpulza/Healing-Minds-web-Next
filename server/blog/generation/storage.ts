@@ -65,6 +65,22 @@ export async function getOpenBlogGenerationRun(): Promise<GenerationRun | undefi
   return run;
 }
 
+export async function getAvailableCompletedBlogPlanningRun(
+  runId: number,
+): Promise<GenerationRun | undefined> {
+  const [run] = await db
+    .select()
+    .from(blogGenerationRuns)
+    .where(and(
+      eq(blogGenerationRuns.id, runId),
+      eq(blogGenerationRuns.status, "completed"),
+      isNull(blogGenerationRuns.postId),
+      sql`${blogGenerationRuns.input}->>'mode' = 'topic-plan'`,
+    ))
+    .limit(1);
+  return run;
+}
+
 export async function queuePreparedBlogGenerationRun(
   runId: number,
   workflow: UpdateGenerationRunInput["workflow"],
