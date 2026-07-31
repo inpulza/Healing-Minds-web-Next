@@ -43,10 +43,16 @@ test("location pages consistently show weekends as closed", () => {
 test("Immokalee content does not promise unpublished evening or weekend availability", () => {
   const hyperlocalSource = read("client", "src", "data", "locationHyperlocal.ts");
   const faqSource = read("client", "src", "data", "locationFAQs.ts");
+  const seoManifest = read("shared", "seo-manifest.json");
   const hyperlocal = sectionBetween(hyperlocalSource, "  immokalee: {", "\n  aveMaria: {");
   const faqs = sectionBetween(faqSource, "  immokalee: {", "\n  aveMaria: {");
+  const immokaleeSeo = [...seoManifest.matchAll(/"\/(?:es\/ubicaciones\/psiquiatra-|locations\/psychiatrist-)immokalee"\s*:\s*\{[\s\S]*?\n  \}/g)]
+    .map(match => match[0])
+    .join("\n");
 
-  for (const source of [hyperlocal, faqs]) {
+  assert.notEqual(immokaleeSeo, "", "missing Immokalee SEO manifest entries");
+
+  for (const source of [hyperlocal, faqs, immokaleeSeo]) {
     assert.doesNotMatch(source, /evening|weekend|nocturn|fin(?:es)? de semana|por la(?:s)? tarde(?:s)?/i);
     assert.doesNotMatch(source, /around field hours|scheduled around|adaptad[oa] a horarios del campo|según (?:los )?horarios (?:de trabajo )?en el campo|calendario de cosecha/i);
   }
@@ -55,4 +61,6 @@ test("Immokalee content does not promise unpublished evening or weekend availabi
   assert.match(hyperlocal, /telesalud entre semana/i);
   assert.match(faqs, /Monday through Friday, 8:00 AM to 5:00 PM/);
   assert.match(faqs, /lunes a viernes de 8:00 AM a 5:00 PM/);
+  assert.match(immokaleeSeo, /weekday telehealth/i);
+  assert.match(immokaleeSeo, /telesalud entre semana/i);
 });

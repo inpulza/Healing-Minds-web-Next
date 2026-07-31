@@ -11,6 +11,7 @@ Revisión focalizada de claims clínicos, licencia de California, rutas legales 
 - **Rutas legales y California — resuelto.** Las rutas EN/ES existen en el manifiesto Next, las páginas de California se mantienen `noindex` y fuera del sitemap.
 - **Horarios — válido.** Nueve páginas de ubicación prometían atención los sábados con cita, mientras contacto, correo, emergencia y schema indican fines de semana cerrados. Se unifican las nueve páginas a sábado y domingo cerrados.
 - **Disponibilidad de Immokalee — válido tras Code Review.** CodeX detectó que la fuente hiperlócal y el FAQ todavía prometían telesalud por la tarde, fines de semana o adaptada al horario agrícola. Se sustituyeron esos claims por disponibilidad entre semana dentro del horario publicado de lunes a viernes, 8:00 AM–5:00 PM, y se añadió un guard específico para las fuentes renderizadas.
+- **Metadatos SEO de Immokalee — válido en verificación del preview.** El HTML visible ya estaba corregido, pero `shared/seo-manifest.json` seguía publicando “evening telehealth” en description, Open Graph y Twitter para EN, además de “telesalud por la tarde” en ES. Se alinearon las seis descripciones y el manifiesto SEO se incorporó al guard.
 
 ## Fuentes oficiales
 
@@ -24,6 +25,6 @@ No se modifican diagnósticos, tratamientos, promesas clínicas ni datos de paci
 
 ## Guard automático
 
-`tests/clinical-content-guards.test.mjs` impide reintroducir el claim no corroborado en el consentimiento, verifica que las nueve páginas mantengan sábado y domingo cerrados en EN/ES y bloquea nuevas promesas de tardes, fines de semana o adaptación al horario agrícola en la sección Immokalee y su FAQ.
+`tests/clinical-content-guards.test.mjs` impide reintroducir el claim no corroborado en el consentimiento, verifica que las nueve páginas mantengan sábado y domingo cerrados en EN/ES y bloquea nuevas promesas de tardes, fines de semana o adaptación al horario agrícola en la sección Immokalee, su FAQ y sus metadatos SEO.
 
 Validación final tras corregir la nota P1: guard focalizado PASS 3/3; suite integrada PASS 61/61; TypeScript PASS; verificación de base de datos PASS (2 migraciones, 95 statements, 18 tablas, 20 foreign keys); build Next PASS con 89/89 páginas.
