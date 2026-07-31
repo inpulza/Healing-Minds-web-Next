@@ -89,7 +89,7 @@ export const naplesLocationContent: BilingualPageContent = {
         key: 'service-adhd',
         heading: 'ADHD Treatment',
         paragraphs: [
-          'Specialized evaluation and treatment for adults and teens to improve focus and daily functioning.',
+          'Specialized evaluation and treatment for adults 18 and older to improve focus and daily functioning.',
         ],
         bullets: ['Learn About ADHD Treatment'],
       },
@@ -355,7 +355,7 @@ export const naplesLocationContent: BilingualPageContent = {
         key: 'service-adhd',
         heading: 'Tratamiento de TDAH',
         paragraphs: [
-          'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
+          'Evaluación especializada y tratamiento para adultos de 18 años en adelante para mejorar el enfoque y funcionamiento diario.',
         ],
         bullets: ['Conocer Tratamiento de TDAH'],
       },
