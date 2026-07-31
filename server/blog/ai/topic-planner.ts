@@ -246,6 +246,38 @@ function buildSafeProposalSemanticProfile(proposal: TopicProposal): SafeExisting
   };
 }
 
+export type GuidedTopicTrustedContext = Omit<SafeExistingTopicProfile, "intentFacet"> & {
+  expertiseAngle: string;
+};
+
+export function buildGuidedTopicSemanticProfile(input: {
+  topic: string;
+  targetKeyword?: string;
+  trustedCandidate?: GuidedTopicTrustedContext;
+}): SafeExistingTopicProfile {
+  const trustedAngle = input.trustedCandidate?.expertiseAngle || "";
+  const semanticSignals = `${input.topic} ${input.targetKeyword || ""} ${trustedAngle}`.trim();
+  const intentFacet = inferSafeIntentFacet(semanticSignals);
+  if (input.trustedCandidate) {
+    return {
+      categoryKey: input.trustedCandidate.categoryKey,
+      pillar: input.trustedCandidate.pillar,
+      patientStage: input.trustedCandidate.patientStage,
+      contentFormat: input.trustedCandidate.contentFormat,
+      searchIntent: input.trustedCandidate.searchIntent,
+      intentFacet,
+    };
+  }
+  return {
+    categoryKey: inferHealingMindsCategoryKey(semanticSignals),
+    pillar: inferredPillar(intentFacet),
+    patientStage: inferredPatientStage(intentFacet),
+    contentFormat: inferredContentFormat(semanticSignals, intentFacet),
+    searchIntent: inferredSearchIntent(intentFacet),
+    intentFacet,
+  };
+}
+
 function buildInventory(posts: BlogPostWithRelations[]): TopicInventorySnapshot {
   const classified = posts.map(classifyPost);
   const clusterCounts: Record<string, number> = {};
@@ -751,6 +783,7 @@ export async function assertGuidedBlogTopicSafe(input: {
   targetKeyword?: string;
   additionalContext?: string;
   language: BlogLanguage;
+  trustedCandidate?: GuidedTopicTrustedContext;
 }): Promise<void> {
   if (
     hasUnsafeYmylTopic(
@@ -771,7 +804,8 @@ export async function assertGuidedBlogTopicSafe(input: {
     limit: 200,
     offset: 0,
   })).filter(post => post.status !== "rejected");
-  const requestedCategoryKey = inferHealingMindsCategoryKey(`${input.topic} ${input.targetKeyword || ""}`);
+  const guidedSemanticProfile = buildGuidedTopicSemanticProfile(input);
+  const requestedCategoryKey = guidedSemanticProfile.categoryKey;
   const clusterCounts = posts.reduce<Record<string, number>>((counts, post) => {
     const key = classifyPost(post).categoryKey;
     counts[key] = (counts[key] || 0) + 1;
@@ -787,16 +821,8 @@ export async function assertGuidedBlogTopicSafe(input: {
       code: "guided_topic_cluster_saturated",
     });
   }
-  const candidateText = `${input.topic} ${input.targetKeyword || ""}`;
-  const guidedIntentFacet = inferSafeIntentFacet(candidateText);
-  const guidedSemanticProfile: SafeExistingTopicProfile = {
-    categoryKey: requestedCategoryKey,
-    pillar: inferredPillar(guidedIntentFacet),
-    patientStage: inferredPatientStage(guidedIntentFacet),
-    contentFormat: inferredContentFormat(candidateText, guidedIntentFacet),
-    searchIntent: inferredSearchIntent(guidedIntentFacet),
-    intentFacet: guidedIntentFacet,
-  };
+  const trustedExpertiseAngle = input.trustedCandidate?.expertiseAngle || "";
+  const candidateText = `${input.topic} ${input.targetKeyword || ""} ${trustedExpertiseAngle}`.trim();
   const safeProfilesByPostId = new Map(
     posts.map(post => [post.id, buildSafePostSemanticProfile(post)]),
   );
@@ -842,7 +868,7 @@ export async function assertGuidedBlogTopicSafe(input: {
         candidateKey: "guided-topic",
         topic: input.topic,
         targetKeyword: input.targetKeyword || input.topic,
-        expertiseAngle: "Use the exact user-selected topic; judge intent overlap only.",
+        expertiseAngle: trustedExpertiseAngle || "Use the exact user-selected topic; judge intent overlap only.",
         semanticProfile: guidedSemanticProfile,
         topMatches: matches.map(match => ({
           postId: match.postId,

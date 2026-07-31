@@ -505,6 +505,58 @@ test("patient identifier guard fail-closes marked AI fields while preserving pub
       targetKeyword: "AB",
       additionalContext: "-12345",
     }), true);
+    for (const unlabeledSplitIdentifier of [
+      { topic: "123 Main", targetKeyword: "Street" },
+      { topic: "123", targetKeyword: "Main Street" },
+      { topic: "305-555", targetKeyword: "1212" },
+      { topic: "(305) 555", targetKeyword: "0123" },
+      { topic: "+34 612", targetKeyword: "345 678" },
+      { topic: "00 52 55", targetKeyword: "1234 5678" },
+      { topic: "123", targetKeyword: "Main", additionalContext: "Street" },
+      { topic: "305", targetKeyword: "555", additionalContext: "1212" },
+      { topic: "+34", targetKeyword: "612", additionalContext: "345 678" },
+      { topic: "Reach me at 305-555", targetKeyword: "1212" },
+      { topic: "phone 305-555", targetKeyword: "1212" },
+      { topic: "Contact +34 612", targetKeyword: "345 678" },
+      { topic: "Call 3", targetKeyword: "05-555-1212" },
+      { topic: "Call 305-555-121", targetKeyword: "2" },
+      { topic: "Contact +3", targetKeyword: "4 612 345 678" },
+      { topic: "Contact +", targetKeyword: "34 612 345 678" },
+      { topic: "Call 305-", targetKeyword: "555-1212" },
+      { topic: "Call 305", targetKeyword: "-", additionalContext: "555-1212" },
+      { topic: "Visit us at 123 Main", targetKeyword: "Street" },
+      { topic: "Visit us at 123", targetKeyword: "Main Street" },
+      { topic: "Visit us at 123", targetKeyword: "Main", additionalContext: "Street" },
+    ]) {
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields(unlabeledSplitIdentifier),
+        true,
+        JSON.stringify(unlabeledSplitIdentifier),
+      );
+    }
+    for (const splitEditorialControl of [
+      { topic: "123 reasons to seek care", targetKeyword: "Street stress and recovery" },
+      { topic: "10 Ways", targetKeyword: "Road to Better Sleep" },
+      { topic: "2026", targetKeyword: "Anxiety Guide" },
+      { topic: "305 coping strategies", targetKeyword: "555 community resources" },
+      { topic: "2026", targetKeyword: "10 ways", additionalContext: "to reduce anxiety" },
+      { topic: "Top 305-555 reasons", targetKeyword: "1212 coping ideas" },
+      { topic: "Top 3", targetKeyword: "05 coping ideas" },
+      { topic: "Guide 30-555-121", targetKeyword: "2 ways to recover" },
+      { topic: "Level +3", targetKeyword: "4 coping skills" },
+      { topic: "Contact +", targetKeyword: "34 coping ideas" },
+      { topic: "Guide 305-", targetKeyword: "555 recovery ideas" },
+      { topic: "Guide 305", targetKeyword: "-", additionalContext: "555 recovery ideas" },
+      { topic: "123 reasons to seek care", targetKeyword: "Street stress and recovery" },
+      { topic: "Visit us for 123 reasons", targetKeyword: "Main Street wellness" },
+      { topic: "Main Street Psychiatry", targetKeyword: "telehealth guide" },
+    ]) {
+      assert.equal(
+        containsLikelyPatientIdentifierInAiFields(splitEditorialControl),
+        false,
+        JSON.stringify(splitEditorialControl),
+      );
+    }
     for (const editorialFields of [
       { topic: "Patient", targetKeyword: "Care Options", additionalContext: "support services" },
       { topic: "Patient Care Options", targetKeyword: "support services", additionalContext: "for Florida adults" },
@@ -572,6 +624,9 @@ test("both draft endpoints evaluate AI fields independently", () => {
     const source = fs.readFileSync(filename, "utf8");
     assert.match(source, /containsLikelyPatientIdentifierInAiFields\(payload\)/, filename);
     assert.doesNotMatch(source, /possibleSensitiveText/, filename);
+    assert.match(source, /payload\s*=\s*\{\s*\.\.\.requestedPayload,\s*\.\.\.persistedOverrides/s, `${filename}: persisted candidate must override request`);
+    assert.match(source, /trustedCandidate:\s*(?:planned\.)?buildPersistedTopicSafetyContext\(/, `${filename}: missing persisted safety context`);
+    assert.match(source, /trustedCandidate:\s*topicCandidateSelection\?\.trustedCandidate/, `${filename}: guided judge misses persisted context`);
     const flow = source.slice(source.indexOf(flowMarker), source.indexOf(flowMarker) + 9_000);
     const privacyGateIndex = flow.indexOf("containsLikelyPatientIdentifierInAiFields(payload)");
     const atomicClaimIndex = flow.indexOf("claimBlogTopicCandidateForGeneration(");
@@ -633,10 +688,13 @@ test("topic planning never sends raw historical titles or keywords to providers"
 });
 
 test("topic judge receives finite semantic profiles without raw historical text", () => {
+  const plannerSource = fs.readFileSync("server/blog/ai/topic-planner.ts", "utf8");
+  assert.match(plannerSource, /expertiseAngle:\s*trustedExpertiseAngle\s*\|\|/);
+  assert.match(plannerSource, /const requestedCategoryKey = guidedSemanticProfile\.categoryKey/);
   const program = `
     import assert from "node:assert/strict";
     process.env.DATABASE_URL = "postgres://user:pass@localhost:5432/test";
-    const { buildSafePostSemanticProfile } = await import("./server/blog/ai/topic-planner.ts");
+    const { buildGuidedTopicSemanticProfile, buildSafePostSemanticProfile } = await import("./server/blog/ai/topic-planner.ts");
     const privateTitle = "Coping With Panic Attacks for Jane Doe";
     const privateKeyword = "managing sudden anxiety episodes for jane doe";
     const profile = buildSafePostSemanticProfile({
@@ -660,6 +718,26 @@ test("topic judge receives finite semantic profiles without raw historical text"
     assert.deepEqual(Object.keys(profile).sort(), [
       "categoryKey", "contentFormat", "intentFacet", "patientStage", "pillar", "searchIntent",
     ]);
+    const trustedGuidedProfile = buildGuidedTopicSemanticProfile({
+      topic: "Understanding Anxiety",
+      targetKeyword: "anxiety overview",
+      trustedCandidate: {
+        categoryKey: "anxiety",
+        pillar: "medication_safety",
+        patientStage: "treatment_consideration",
+        contentFormat: "questions_to_ask",
+        searchIntent: "treatment_consideration",
+        expertiseAngle: "Medication safety and side effect questions for follow-up care.",
+      },
+    });
+    assert.deepEqual(trustedGuidedProfile, {
+      categoryKey: "anxiety",
+      pillar: "medication_safety",
+      patientStage: "treatment_consideration",
+      contentFormat: "questions_to_ask",
+      searchIntent: "treatment_consideration",
+      intentFacet: "medication_safety",
+    });
   `;
   const result = spawnSync(
     process.execPath,

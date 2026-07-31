@@ -103,6 +103,15 @@ El juez independiente emitió **GO final sin bypasses accionables** tras comprob
 
 Verificación integrada del árbol final: `npm test` PASS 72/72; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas. La publicación permanece bloqueada hasta obtener Preview Ready y Code Review exacto sobre el nuevo SHA.
 
+## Clasificación del Code Review exacto de `297e745`
+
+- `3693716793` / `PRRT_kwDOToJ8Pc6VjLxa` — **válida y resuelta localmente**. Un teléfono o una dirección natural podían repartirse entre campos de IA sin etiqueta y eludir la revisión independiente por campo. La reconstrucción está limitada a ventanas contiguas de dos o tres campos y solo bloquea cuando el resultado completo valida como teléfono US/internacional de 7–15 dígitos o dirección con número, cuerpo y sufijo postal. Cubre fragmentos de un solo dígito, `+`, guiones, paréntesis y puntuación intermedia sin concatenar indiscriminadamente todo el input.
+- `3693716797` / `PRRT_kwDOToJ8Pc6VjLxe` — **válida y resuelta localmente**. Seleccionar un candidato por `topicCandidateId` conservaba el título visible pero descartaba el perfil y ángulo persistidos antes del juez. Ambas rutas reconstruyen un contexto trusted validado; categoría, pilar, etapa, formato, search intent y expertise angle persistidos ganan sobre el request y alimentan tanto la saturación local como el juez externo.
+
+El juez independiente emitió **GO final sin hallazgos accionables** después de tres pases adversariales. Los primeros pases descubrieron fragmentos de un dígito y separadores aislados; el final cubrió teléfonos US e internacionales, direcciones y ventanas de tres campos, mantuvo permitidos los controles editoriales y confirmó que el perfil persisted sigue autoritativo en Next y Express.
+
+Verificación integrada final: `npm test` PASS 72/72; TypeScript PASS; DB PASS con 2 migraciones, 95 statements, 18 tablas y 20 foreign keys; `blog:image-check` y `blog:topic-check` PASS; build Next PASS con 89/89 páginas; `git diff --check` PASS.
+
 ## Límites
 
 No se accedió a secretos ni datos reales de pacientes. No se cambia la autenticación custom de Production o Preview. Un topic o keyword administrativo sin los marcadores `patient/paciente/name/nombre` conserva semántica editorial; el campo libre `additionalContext` sigue siendo deliberadamente más estricto. Esta frontera por función no reemplaza la prohibición humana de introducir PII ni constituye un detector clínico universal. El contenido completo de un artículo puede mencionar personal público, por lo que la salida de imágenes exige identificadores explícitos en vez de inferir que cualquier nombre es un paciente.

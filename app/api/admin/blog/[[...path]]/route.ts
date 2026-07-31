@@ -1,5 +1,6 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import type { BlogGenerationRun } from "@shared/schema";
+import type { GuidedTopicTrustedContext } from "../../../../../server/blog/ai/topic-planner";
 import { getAdminSession, noStoreHeaders } from "../../../../../server/next-admin-auth";
 
 export const runtime = "nodejs";
@@ -507,7 +508,11 @@ export async function POST(request: NextRequest, context: RouteContext) {
       const requestedPayload = validation.adminBlogGenerateDraftSchema.parse(body);
       let payload = requestedPayload;
       let claimedPlanningRun: BlogGenerationRun | undefined;
-      let topicCandidateSelection: { runId: number; candidateKey: string } | undefined;
+      let topicCandidateSelection: {
+        runId: number;
+        candidateKey: string;
+        trustedCandidate: GuidedTopicTrustedContext;
+      } | undefined;
       if (requestedPayload.topicCandidateId) {
         const [candidates, planned, strategy, generation] = await Promise.all([
           import("../../../../../server/blog/topic-candidate-storage"),
@@ -526,8 +531,13 @@ export async function POST(request: NextRequest, context: RouteContext) {
             { statusCode: 409, code: "topic_plan_already_used" },
           );
         }
-        payload = { ...requestedPayload, ...planned.buildPersistedTopicDraftOverrides(candidate) };
-        topicCandidateSelection = { runId: candidate.runId, candidateKey: candidate.candidateKey };
+        const persistedOverrides = planned.buildPersistedTopicDraftOverrides(candidate);
+        payload = { ...requestedPayload, ...persistedOverrides };
+        topicCandidateSelection = {
+          runId: candidate.runId,
+          candidateKey: candidate.candidateKey,
+          trustedCandidate: planned.buildPersistedTopicSafetyContext(candidate, persistedOverrides),
+        };
       }
       const [{ containsLikelyPatientIdentifierInAiFields }, generator, { checkBlogAiRateLimit }, planner, topic, strategy, admin] = await Promise.all([
         import("../../../../../server/blog/privacy"),
@@ -557,6 +567,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
         targetKeyword: payload.targetKeyword,
         additionalContext: payload.additionalContext,
         language: payload.language,
+        trustedCandidate: topicCandidateSelection?.trustedCandidate,
       });
       if (topicCandidateSelection) {
         const candidates = await import("../../../../../server/blog/topic-candidate-storage");

@@ -112,7 +112,7 @@ function containsExplicitSensitiveAiMarker(value: string): boolean {
 }
 
 function containsInternationalPhoneNumber(value: string): boolean {
-  return [...value.matchAll(/(?:\+|00)\d[\d().\s-]{5,24}\d/gu)]
+  return [...value.matchAll(/(?:\+|00)\s*\d[\d().\s-]{5,24}\d/gu)]
     .some(match => {
       const digitCount = (match[0].match(/\d/g) || []).length;
       return digitCount >= 7 && digitCount <= 15;
@@ -197,8 +197,18 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
   const emailValueAtStart = /^\s*[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/iu;
   const phoneLabelAtEnd = /\b(?:phone|telephone|mobile|cell|tel[eé]fono|m[oó]vil|celular)\s*[:#-]?\s*$/iu;
   const phoneValueAtStart = /^\s*(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/u;
+  const completePhoneValue = /^\s*(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\s*$/u;
+  const phoneFragment = /^(?=.*[\d+().-])[+\d().\s-]+$/u;
   const addressLabelAtEnd = /\b(?:address|street address|direcci[oó]n)\s*[:#-]?\s*$/iu;
   const addressValueAtStart = /^\s*\d{1,6}\s+[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5}\s+(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\b/iu;
+  const completeAddressValue = /^\s*\d{1,6}\s+[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5}\s+(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\.?\s*$/iu;
+  const completeAddressTail = /^\s*[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5}\s+(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\.?\s*$/iu;
+  const houseNumberOnly = /^\s*\d{1,6}\s*$/u;
+  const streetSuffixOnly = /^\s*(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|court|ct|way|highway|hwy|calle|avenida|carretera)\.?\s*$/iu;
+  const trailingPhoneFragment = /(?:^|[^\d])([+\d().-][\d().\s-]{0,23})\s*$/u;
+  const leadingPhoneFragment = /^\s*([+\d().-][\d().\s-]{0,23})/u;
+  const trailingAddressBody = /(?:^|[^\d])(\d{1,6}\s+[A-Z0-9][A-Z0-9.'-]*(?:\s+[A-Z0-9][A-Z0-9.'-]*){0,5})\s*$/iu;
+  const trailingHouseNumber = /(?:^|[^\d])(\d{1,6})\s*$/u;
   const patientMarkerAtEnd = /\b(patient|paciente)\s*$/iu;
   const rightLeadAtStart = /^\s*(\p{L}[\p{L}\p{M}'’\-]*)/u;
 
@@ -214,6 +224,57 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
     return Boolean(candidate)
       && !boundaryEditorialLeadTokens.has(normalizeLowercaseToken(firstToken));
   };
+
+  const hasUnlabeledAdjacentIdentifier = fields.some((_, start) => (
+    [2, 3].some(windowSize => {
+      const window = fields.slice(start, start + windowSize);
+      if (window.length !== windowSize) return false;
+      const combined = window.join(" ");
+      const compact = window.join("");
+      const individualFieldsAreClean = window.every(value => !containsLikelyPatientIdentifier(value));
+      if (!individualFieldsAreClean) return false;
+      const splitPhoneFromWholeFields = window.every(value => phoneFragment.test(value))
+        && (
+          completePhoneValue.test(combined)
+          || completePhoneValue.test(compact)
+          || containsInternationalPhoneNumber(combined)
+          || containsInternationalPhoneNumber(compact)
+        );
+      const extractedPhoneParts = [
+        trailingPhoneFragment.exec(window[0])?.[1] || "",
+        ...window.slice(1, -1),
+        leadingPhoneFragment.exec(window[window.length - 1])?.[1] || "",
+      ];
+      const extractedPhone = extractedPhoneParts.join(" ");
+      const extractedPhoneCompact = extractedPhoneParts.join("");
+      const splitPhoneFromBoundaryFragments = extractedPhoneParts.every(value => phoneFragment.test(value))
+        && (
+          completePhoneValue.test(extractedPhone)
+          || completePhoneValue.test(extractedPhoneCompact)
+          || containsInternationalPhoneNumber(extractedPhone)
+          || containsInternationalPhoneNumber(extractedPhoneCompact)
+        );
+      const splitAddressFromWholeFields = completeAddressValue.test(combined)
+        && (houseNumberOnly.test(window[0]) || streetSuffixOnly.test(window[window.length - 1]));
+      const extractedAddressBody = trailingAddressBody.exec(window[0])?.[1] || "";
+      const extractedHouseNumber = trailingHouseNumber.exec(window[0])?.[1] || "";
+      const addressRemainder = window.slice(1).join(" ");
+      const splitAddressFromBoundaryFragments = (
+        Boolean(extractedAddressBody)
+        && streetSuffixOnly.test(window[window.length - 1])
+        && completeAddressValue.test(`${extractedAddressBody} ${addressRemainder}`)
+      ) || (
+        Boolean(extractedHouseNumber)
+        && completeAddressTail.test(addressRemainder)
+        && completeAddressValue.test(`${extractedHouseNumber} ${addressRemainder}`)
+      );
+      return splitPhoneFromWholeFields
+        || splitPhoneFromBoundaryFragments
+        || splitAddressFromWholeFields
+        || splitAddressFromBoundaryFragments;
+    })
+  ));
+  if (hasUnlabeledAdjacentIdentifier) return true;
 
   for (let boundary = 1; boundary < fields.length; boundary += 1) {
     const left = fields.slice(0, boundary).join(" ").trim();

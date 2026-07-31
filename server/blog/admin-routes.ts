@@ -49,8 +49,8 @@ import { assertBlogAiGenerationConfigured, generateBlogDraftWithAi } from "./ai/
 import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { buildBlogEditorialBrief } from "./ai/editorial-brief";
 import { buildBlogSemanticMemory, redactBlogSemanticMemoryForProvider } from "./ai/memory";
-import { buildPersistedTopicDraftOverrides } from "./ai/planned-topic-provenance";
-import { assertGuidedBlogTopicSafe, buildBlogTopicPlan, type BlogTopicPlanCandidate } from "./ai/topic-planner";
+import { buildPersistedTopicDraftOverrides, buildPersistedTopicSafetyContext } from "./ai/planned-topic-provenance";
+import { assertGuidedBlogTopicSafe, buildBlogTopicPlan, type BlogTopicPlanCandidate, type GuidedTopicTrustedContext } from "./ai/topic-planner";
 import { assertBlogTopicGenerationConfigured } from "./ai/responses-client";
 import { buildTopicKey } from "./ai/topic-normalization";
 import { HEALING_MINDS_TOPIC_STRATEGY_VERSION } from "./strategy/healing-minds";
@@ -1550,7 +1550,11 @@ export function registerAdminBlogRoutes(app: Express): void {
     try {
       const requestedPayload = adminBlogGenerateDraftSchema.parse(req.body);
       let payload: AdminBlogGenerateDraftPayload = requestedPayload;
-      let topicCandidateSelection: { runId: number; candidateKey: string } | undefined;
+      let topicCandidateSelection: {
+        runId: number;
+        candidateKey: string;
+        trustedCandidate: GuidedTopicTrustedContext;
+      } | undefined;
       if (requestedPayload.topicCandidateId) {
         const candidate = await getBlogTopicCandidateById(requestedPayload.topicCandidateId);
         if (!candidate) {
@@ -1575,11 +1579,16 @@ export function registerAdminBlogRoutes(app: Express): void {
             { statusCode: 409, code: "topic_plan_already_used" },
           );
         }
+        const persistedOverrides = buildPersistedTopicDraftOverrides(candidate);
         payload = {
           ...requestedPayload,
-          ...buildPersistedTopicDraftOverrides(candidate),
+          ...persistedOverrides,
         };
-        topicCandidateSelection = { runId: candidate.runId, candidateKey: candidate.candidateKey };
+        topicCandidateSelection = {
+          runId: candidate.runId,
+          candidateKey: candidate.candidateKey,
+          trustedCandidate: buildPersistedTopicSafetyContext(candidate, persistedOverrides),
+        };
       }
       if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return res.status(400).json({
@@ -1604,6 +1613,7 @@ export function registerAdminBlogRoutes(app: Express): void {
         targetKeyword: payload.targetKeyword,
         additionalContext: payload.additionalContext,
         language: payload.language,
+        trustedCandidate: topicCandidateSelection?.trustedCandidate,
       });
       if (topicCandidateSelection) {
         try {
