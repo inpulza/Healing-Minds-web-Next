@@ -81,6 +81,22 @@ export function adminAuthConfigured(): boolean {
   return adminAuthMode() === "off" || config() !== null;
 }
 
+function isLoopbackHostname(value: string | null): boolean {
+  if (!value) return false;
+  const normalized = value.trim().toLowerCase().replace(/^\[|\]$/g, "");
+  return normalized === "localhost"
+    || normalized === "127.0.0.1"
+    || normalized === "::1";
+}
+
+export function isLocalAdminRequest(request: NextRequest): boolean {
+  const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim() || null;
+  const host = request.headers.get("host")?.split(":")[0]?.trim() || null;
+  return isLoopbackHostname(request.nextUrl.hostname)
+    && (!forwardedHost || isLoopbackHostname(forwardedHost.split(":")[0] || null))
+    && (!host || isLoopbackHostname(host));
+}
+
 function sign(payload: string, secret: string): string {
   return crypto.createHmac("sha256", secret).update(payload).digest("base64url");
 }
@@ -113,6 +129,7 @@ export function verifyAdminSessionToken(token: string | undefined): AdminSession
 
 export function getAdminSession(request: NextRequest): AdminSession | null {
   if (adminAuthMode() === "off") {
+    if (!isLocalAdminRequest(request)) return null;
     return { username: "development", role: "admin", exp: Date.now() + ADMIN_SESSION_TTL_SECONDS * 1000 };
   }
   return verifyAdminSessionToken(request.cookies.get(ADMIN_COOKIE_NAME)?.value);

@@ -7,6 +7,7 @@ import {
   adminCookieOptions,
   clearAdminLoginFailures,
   createAdminSessionToken,
+  isLocalAdminRequest,
   loginRateLimit,
   noStoreHeaders,
   recordFailedAdminLogin,
@@ -29,6 +30,12 @@ function clientIp(request: NextRequest): string {
 
 export async function POST(request: NextRequest) {
   if (adminAuthMode() === "off") {
+    if (!isLocalAdminRequest(request)) {
+      return NextResponse.json(
+        { success: false, message: "Development authentication is only available on localhost" },
+        { status: 403, headers: noStoreHeaders },
+      );
+    }
     return NextResponse.json(
       { success: true, admin: { username: "development", role: "admin" } },
       { headers: noStoreHeaders },

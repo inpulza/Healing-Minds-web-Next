@@ -89,7 +89,12 @@ try {
   assert.equal(containsLikelyPatientIdentifier("patient name: Jane Example"), true);
   assert.equal(containsLikelyPatientIdentifier("Our patient Maria Garcia sought psychiatric care last week."), true);
   assert.equal(containsLikelyPatientIdentifier("Case: Maria Garcia, 123 Main Street, Naples, Florida."), true);
+  assert.equal(containsLikelyPatientIdentifier("Maria Garcia"), true);
+  assert.equal(containsLikelyPatientIdentifier("Draft notes\nMaria Garcia\nanxiety education"), true);
+  assert.equal(containsLikelyPatientIdentifier("Name: Maria Garcia"), true);
   assert.equal(containsLikelyPatientIdentifier("general educational article about anxiety"), false);
+  assert.equal(containsLikelyPatientIdentifier("Anxiety Treatment Options"), false);
+  assert.equal(containsLikelyPatientIdentifier("Healing Minds Psychiatry"), false);
 
   const privateDraft = {
     id: 42,

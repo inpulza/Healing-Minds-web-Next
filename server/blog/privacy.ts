@@ -15,6 +15,29 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
     || new RegExp(String.raw`\b(?:(?:our|the|a|this|un|una|el|la|nuestro|nuestra)\s+)?(?:patient|paciente)\s+${namePattern}\b`, "i").test(normalized)
     || new RegExp(String.raw`\b(?:case|caso)\s*[:#-]\s*${namePattern}\b`, "i").test(normalized);
   const hasNamedPatientContext = new RegExp(String.raw`\b(?:patient|paciente)\s+${namePattern}\b.{0,80}\b(?:dob|d\.o\.b\.|date of birth|birth date|birthday|born|diagnosed|diagnosis|medication|prescribed|symptoms|mrn|medical record|member id|patient id)\b`, "i").test(normalized);
+  const hasGenericNameLabel = new RegExp(String.raw`\b(?:name|nombre)\s*[:#-]\s*${namePattern}\b`, "i").test(normalized);
+  const editorialTitleWords = new Set([
+    "adhd", "anxiety", "bipolar", "care", "depression", "disorder", "florida",
+    "healing", "health", "medication", "mental", "minds", "naples", "options",
+    "psychiatrist", "psychiatry", "symptoms", "telehealth", "telepsychiatry",
+    "therapy", "treatment", "understanding",
+  ]);
+  const hasStandaloneNameLine = value
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .some(line => {
+      if (!new RegExp(String.raw`^${namePattern}$`).test(line)) return false;
+      return line.split(/\s+/).every(token => !editorialTitleWords.has(token.toLowerCase()));
+    });
 
-  return hasEmail || hasPhone || hasSsn || hasBirthDate || hasMedicalId || hasStreetAddress || hasExplicitPatientName || hasNamedPatientContext;
+  return hasEmail
+    || hasPhone
+    || hasSsn
+    || hasBirthDate
+    || hasMedicalId
+    || hasStreetAddress
+    || hasExplicitPatientName
+    || hasNamedPatientContext
+    || hasGenericNameLabel
+    || hasStandaloneNameLine;
 }

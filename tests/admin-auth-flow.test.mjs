@@ -95,6 +95,30 @@ test("custom Next admin completes login, protected API, session and logout witho
     assert.equal(failClosed.status, 503);
     noStore(failClosed);
 
+    process.env.NODE_ENV = "development";
+    process.env.BLOG_ADMIN_AUTH_MODE = "off";
+    const localRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100" },
+    });
+    const remoteRequest = new NextRequest("https://preview.example/api/admin/session", {
+      headers: { host: "preview.example", "x-forwarded-host": "preview.example" },
+    });
+    assert.equal(auth.getAdminSession(localRequest)?.username, "development");
+    assert.equal(auth.getAdminSession(remoteRequest), null);
+    const localOffLogin = await login.POST(new NextRequest("http://127.0.0.1:3100/api/admin/login", {
+      method: "POST",
+      headers: { "content-type": "application/json", host: "127.0.0.1:3100" },
+      body: JSON.stringify({ username: "ignored", password: "ignored" }),
+    }));
+    assert.equal(localOffLogin.status, 200);
+    const remoteOffLogin = await login.POST(new NextRequest("https://preview.example/api/admin/login", {
+      method: "POST",
+      headers: { "content-type": "application/json", host: "preview.example", "x-forwarded-host": "preview.example" },
+      body: JSON.stringify({ username: "ignored", password: "ignored" }),
+    }));
+    assert.equal(remoteOffLogin.status, 403);
+    noStore(remoteOffLogin);
+
     console.log(JSON.stringify({
       login: "pass",
       session: "pass",
@@ -103,6 +127,7 @@ test("custom Next admin completes login, protected API, session and logout witho
       noStore: "pass",
       rawSensitivePassword: "pass",
       productionFailClosed: "pass",
+      developmentLoopbackOnly: "pass",
     }));
   `;
 
@@ -121,6 +146,7 @@ test("custom Next admin completes login, protected API, session and logout witho
     noStore: "pass",
     rawSensitivePassword: "pass",
     productionFailClosed: "pass",
+    developmentLoopbackOnly: "pass",
   });
 });
 
