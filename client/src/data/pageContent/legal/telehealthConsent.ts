@@ -15,7 +15,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'what-is',
         heading: 'What Telehealth Is at This Practice',
         paragraphs: [
-          'Healing Minds Psychiatry is a telepsychiatry practice led by Dr. Melva Reve, a board-certified psychiatrist. Telehealth means that your psychiatric evaluation and follow-up appointments are conducted remotely through a secure, real-time video connection rather than a traditional in-person office visit. This allows you to receive care from a private location of your choosing.',
+          'Healing Minds Psychiatry is a telepsychiatry practice led by Dr. Melva Reve, a psychiatrist. Telehealth means that your psychiatric evaluation and follow-up appointments are conducted remotely through a secure, real-time video connection rather than a traditional in-person office visit. This allows you to receive care from a private location of your choosing.',
         ],
       },
       {
@@ -29,7 +29,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'benefits',
         heading: 'Expected Benefits',
         bullets: [
-          '**Access:** Reach a board-certified psychiatrist without the need to travel to an office.',
+          '**Access:** Reach a psychiatrist without the need to travel to an office.',
           '**Convenience:** Attend appointments from a private, comfortable setting that fits your schedule.',
           '**Continuity:** Maintain consistent follow-up care and medication management over time.',
           '**Care in your language:** Receive services in English or Spanish with a bilingual provider.',
@@ -116,7 +116,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'what-is',
         heading: 'Qué es la Telesalud en Esta Práctica',
         paragraphs: [
-          'Healing Minds Psychiatry es una práctica de telepsiquiatría dirigida por la Dra. Melva Reve, psiquiatra certificada por la junta médica. La telesalud significa que su evaluación psiquiátrica y sus citas de seguimiento se realizan de forma remota a través de una conexión de video segura y en tiempo real, en lugar de una visita tradicional en persona. Esto le permite recibir atención desde un lugar privado de su elección.',
+          'Healing Minds Psychiatry es una práctica de telepsiquiatría dirigida por la Dra. Melva Reve, psiquiatra. La telesalud significa que su evaluación psiquiátrica y sus citas de seguimiento se realizan de forma remota a través de una conexión de video segura y en tiempo real, en lugar de una visita tradicional en persona. Esto le permite recibir atención desde un lugar privado de su elección.',
         ],
       },
       {
@@ -130,7 +130,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'benefits',
         heading: 'Beneficios Esperados',
         bullets: [
-          '**Acceso:** Comuníquese con una psiquiatra certificada por la junta médica sin necesidad de trasladarse a una oficina.',
+          '**Acceso:** Comuníquese con una psiquiatra sin necesidad de trasladarse a una oficina.',
           '**Comodidad:** Asista a sus citas desde un entorno privado y cómodo que se ajuste a su horario.',
           '**Continuidad:** Mantenga una atención de seguimiento constante y un manejo de medicamentos a lo largo del tiempo.',
           '**Atención en su idioma:** Reciba servicios en inglés o español con una proveedora bilingüe.',

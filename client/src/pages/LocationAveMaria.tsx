@@ -1116,8 +1116,8 @@ const LocationAveMaria = () => {
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
                       {language === 'en' 
-                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
-                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
+                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: Closed\nSunday: Closed'
+                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Cerrado\nDomingo: Cerrado'}
                     </p>
                   </div>
                 </div>
