@@ -303,6 +303,61 @@ try {
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Safety during Telehealth" }), true);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Paciente Cuidado desde Casa" }), true);
   assert.equal(containsLikelyPatientIdentifier("Name: Madonna"), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Legal name jane doe" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Nombre completo maría garcía" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Full legal name john smith" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Nombre legal completo maría de la cruz" }), true);
+  for (const wrappedGenericName of [
+    "Legal name — jane doe",
+    "Legal name – Jane Doe",
+    "Legal name (jane doe)",
+    'Legal name "Jane Doe"',
+    'Legal name: "Jane Doe"',
+    "Nombre completo — maría garcía",
+    "Nombre completo «maría garcía»",
+    "Nombre completo: «María García»",
+    "Legal name is Jane Doe.",
+    "Nombre completo es María García.",
+    'Legal name: "Jane Doe".',
+    "Nombre completo: «María García».",
+    "The legal name is Jane Doe",
+    "Her legal name is Jane Doe",
+    "Su nombre completo es María García",
+    "El nombre legal es Juan Pérez",
+    "Legal name; Jane Doe",
+    "Legal name. Jane Doe",
+    "legal_name=jane_doe",
+    "nombreCompleto=maríaGarcía",
+  ]) {
+    assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: wrappedGenericName }), true);
+  }
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Preferred full legal name: jane doe" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Nombre legal completo: maría garcía" }), true);
+  for (const publicEditorialTitle of [
+    "Legal Name Change Process",
+    "Preferred Name Policy Guide",
+    "Full Name Formatting Standards",
+    "Legal Name Requirements",
+    "Name and Identity in Therapy",
+    "Name Change and Mental Health",
+    "Nombre Legal Requisitos Generales",
+    "Nombre Completo Guía Práctica",
+    "Nombre e Identidad en Terapia",
+  ]) {
+    assert.equal(containsLikelyPatientIdentifier(publicEditorialTitle), false);
+  }
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Legal name", targetKeyword: "jane doe" }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Nombre completo", targetKeyword: "maría garcía" }), true);
+  for (const wrappedSplitName of [
+    { topic: "Legal name", targetKeyword: '"Jane Doe"' },
+    { topic: "Preferred full legal name", targetKeyword: "(jane doe)" },
+    { topic: "Legal name:", targetKeyword: '"Jane Doe"' },
+    { topic: "Nombre completo:", targetKeyword: "(maría garcía)" },
+    { topic: "Legal name —", targetKeyword: "[Jane Doe]" },
+    { topic: "Nombre completo es", targetKeyword: "{María García}" },
+  ]) {
+    assert.equal(containsLikelyPatientIdentifierInAiFields(wrappedSplitName), true);
+  }
 
   const privateDraft = {
     id: 42,

@@ -1575,7 +1575,7 @@ export function registerAdminBlogRoutes(app: Express): void {
       if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return res.status(400).json({
           success: false,
-          message: "AI generation inputs must not include patient language or patient-identifying information. Rephrase public topics without patient/paciente.",
+          message: "AI generation inputs must not include patient/name markers or patient-identifying information. Rephrase public topics without patient/paciente/name/nombre.",
         });
       }
 

@@ -11,8 +11,8 @@ const namePattern = String.raw`${nameToken}(?:\s+(?:${nameInitial}|(?:${nameConn
 const labeledNameToken = String.raw`\p{L}[\p{L}\p{M}'’\-]*`;
 const labeledNamePattern = String.raw`${labeledNameToken}(?:\s+${labeledNameToken}){0,3}`;
 // Administrative AI inputs are fail-closed: editors must describe public topics
-// without patient language. Published content still uses the narrower detector.
-const explicitPatientMarkerPattern = /\b(?:patient|paciente)\b/iu;
+// without patient/name markers. Published content still uses the narrower detector.
+const explicitSensitiveAiMarkerPattern = /\b(?:patient|paciente|name|nombre)\b/iu;
 const headingConnectorTokens = new Set([
   "a", "across", "after", "against", "along", "amid", "among", "and", "antes",
   "around", "as", "at", "bajo", "before", "behind", "below", "beneath", "beside",
@@ -98,6 +98,13 @@ function normalizeLowercaseToken(value: string): string {
     .replace(/\p{M}/gu, "")
     .replace(/[^\p{L}]/gu, "")
     .toLocaleLowerCase();
+}
+
+function containsExplicitSensitiveAiMarker(value: string): boolean {
+  const tokenized = value
+    .replace(/_/g, " ")
+    .replace(/(\p{Ll})(\p{Lu})/gu, "$1 $2");
+  return explicitSensitiveAiMarkerPattern.test(tokenized);
 }
 
 function isPatientGeographicNarrative(narrative: string): boolean {
@@ -305,7 +312,7 @@ export function containsLikelyPatientIdentifierInAiFields(input: {
 }): boolean {
   const fields = [input.topic, input.targetKeyword, input.additionalContext]
     .filter((value): value is string => Boolean(value?.trim()));
-  return fields.some(value => explicitPatientMarkerPattern.test(value))
+  return fields.some(containsExplicitSensitiveAiMarker)
     || fields.some(containsLikelyPatientIdentifier)
     || containsIdentifierAcrossAiFieldBoundaries(fields)
     || containsLaterNamedPatientNarrative(fields.join(" "))
