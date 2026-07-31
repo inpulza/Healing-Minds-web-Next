@@ -1,10 +1,13 @@
 import { randomUUID } from "node:crypto";
-import { eq, ilike } from "drizzle-orm";
+import { and, eq, lt } from "drizzle-orm";
 import { db, pool } from "../server/db";
 import { contactMessages } from "../shared/schema";
 
 const origin = process.env.VERIFY_ORIGIN || "http://127.0.0.1:3100";
-const configuredVerificationEmail = process.env.VERIFY_CONTACT_EMAIL?.trim();
+const verificationEmailTemplate = process.env.VERIFY_CONTACT_EMAIL?.trim()
+  || "delivered+{run}@resend.dev";
+const verificationMessage = "Controlled infrastructure verification. This is not a patient inquiry and contains no health information.";
+const staleVerificationCutoff = new Date(Date.now() - 15 * 60 * 1_000);
 
 function splitEmail(email: string): { local: string; domain: string } {
   const separator = email.lastIndexOf("@");
@@ -17,27 +20,30 @@ function splitEmail(email: string): { local: string; domain: string } {
   };
 }
 
-function createVerificationEmail(configuredEmail?: string): string {
-  const uniqueLabel = `workflow-${Date.now()}-${randomUUID().slice(0, 8)}`;
-  if (!configuredEmail) return `${uniqueLabel}@healingmindsp.com`;
-  const { local, domain } = splitEmail(configuredEmail);
-  return `${local}+${uniqueLabel}@${domain}`;
+function createVerificationEmail(template: string): string {
+  if (!template.includes("{run}")) {
+    throw new Error("VERIFY_CONTACT_EMAIL must contain the {run} placeholder so every verification has a routable unique address");
+  }
+  const runId = `workflow-${Date.now()}-${randomUUID().slice(0, 8)}`;
+  const verificationEmail = template.replaceAll("{run}", runId);
+  splitEmail(verificationEmail);
+  return verificationEmail;
 }
 
-async function removeOrphanedVerificationRows(configuredEmail?: string): Promise<void> {
-  await db.delete(contactMessages).where(ilike(contactMessages.email, "workflow-%@healingmindsp.com"));
-  if (!configuredEmail) return;
-
-  const { local, domain } = splitEmail(configuredEmail);
-  await db.delete(contactMessages).where(eq(contactMessages.email, configuredEmail));
-  await db.delete(contactMessages).where(ilike(contactMessages.email, `${local}+workflow-%@${domain}`));
+async function removeOrphanedVerificationRows(): Promise<void> {
+  await db.delete(contactMessages).where(and(
+    eq(contactMessages.firstName, "Workflow"),
+    eq(contactMessages.lastName, "Verification"),
+    eq(contactMessages.message, verificationMessage),
+    lt(contactMessages.createdAt, staleVerificationCutoff),
+  ));
 }
 
 let id: string | undefined;
-const verificationEmail = createVerificationEmail(configuredVerificationEmail);
+const verificationEmail = createVerificationEmail(verificationEmailTemplate);
 let verified = false;
 try {
-  await removeOrphanedVerificationRows(configuredVerificationEmail);
+  await removeOrphanedVerificationRows();
   const response = await fetch(`${origin}/api/contact`, {
     method: "POST",
     headers: {
@@ -53,7 +59,7 @@ try {
       email: verificationEmail,
       phone: "+1 239 000 0000",
       preferredLanguage: "English",
-      message: "Controlled infrastructure verification. This is not a patient inquiry and contains no health information.",
+      message: verificationMessage,
       formStartedAt: Date.now() - 15_000,
       website: "",
       url: "",
