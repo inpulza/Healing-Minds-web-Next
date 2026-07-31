@@ -663,25 +663,25 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
         es: 'Psiquiatra Bilingüe para Immokalee, FL — Atención por Telesalud o CR-846 | Healing Minds',
       },
       description: {
-        en: "Bilingual psychiatric care for Immokalee (ZIP 34142) — Spanish-speaking psychiatrist, evening telehealth options for agricultural workers, and in-person visits at our Park Shore office in Naples.",
-        es: "Atención psiquiátrica bilingüe para Immokalee (ZIP 34142) — psiquiatra que habla español, opciones de telesalud por la tarde para trabajadores del campo, y visitas presenciales en Park Shore, Naples.",
+        en: "Bilingual psychiatric care for Immokalee (ZIP 34142) — Spanish-speaking psychiatrist, weekday telehealth options for agricultural workers, and in-person visits at our Park Shore office in Naples.",
+        es: "Atención psiquiátrica bilingüe para Immokalee (ZIP 34142) — psiquiatra que habla español, opciones de telesalud entre semana para trabajadores del campo, y visitas presenciales en Park Shore, Naples.",
       },
       keywords: {
         en: 'psychiatrist Immokalee FL, bilingual mental health Immokalee, Spanish psychiatrist 34142, agricultural worker mental health Collier',
         es: 'psiquiatra Immokalee FL, salud mental bilingüe Immokalee, psiquiatra en español 34142, salud mental trabajadores agrícolas Collier',
       },
       serviceDescription: {
-        en: "Bilingual psychiatric care for Immokalee (ZIP 34142), a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic and roughly 21.9% as Black, with a median age near 30 and a sizable agricultural workforce. Dr. Melva Reve, fluent in Spanish, offers evaluation and treatment for anxiety, depression, PTSD, ADHD, bipolar disorder and medication management, with telehealth scheduled around field hours.",
-        es: "Atención psiquiátrica bilingüe para Immokalee (ZIP 34142), comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano y aproximadamente el 21.9% como afroamericano, con edad mediana cerca de 30 y una fuerza laboral agrícola importante. La Dra. Melva Reve, fluida en español, ofrece evaluación y tratamiento para ansiedad, depresión, TEPT, TDAH, trastorno bipolar y manejo de medicamentos, con telesalud programada según los horarios de trabajo en el campo.",
+        en: "Bilingual psychiatric care for Immokalee (ZIP 34142), a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic and roughly 21.9% as Black, with a median age near 30 and a sizable agricultural workforce. Dr. Melva Reve, fluent in Spanish, offers evaluation and treatment for anxiety, depression, PTSD, ADHD, bipolar disorder and medication management, with telehealth available during published weekday office hours.",
+        es: "Atención psiquiátrica bilingüe para Immokalee (ZIP 34142), comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano y aproximadamente el 21.9% como afroamericano, con edad mediana cerca de 30 y una fuerza laboral agrícola importante. La Dra. Melva Reve, fluida en español, ofrece evaluación y tratamiento para ansiedad, depresión, TEPT, TDAH, trastorno bipolar y manejo de medicamentos, con telesalud disponible dentro del horario de oficina publicado entre semana.",
       },
     },
     heroDescription: {
-      en: "Bilingual psychiatric care for Immokalee — Spanish-speaking sessions, telehealth that fits around field hours, and in-person visits at our Naples office.",
-      es: "Atención psiquiátrica bilingüe para Immokalee — sesiones en español, telesalud adaptada a horarios del campo, y visitas presenciales en nuestra oficina de Naples.",
+      en: "Bilingual psychiatric care for Immokalee — Spanish-speaking sessions, weekday telehealth, and in-person visits at our Naples office.",
+      es: "Atención psiquiátrica bilingüe para Immokalee — sesiones en español, telesalud entre semana, y visitas presenciales en nuestra oficina de Naples.",
     },
     healingParagraph: {
-      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic, around 21.9% as Black, and the median age is near 30. The local agricultural economy — Immokalee tomato production accounts for roughly 90% of US winter tomatoes — sets the rhythm of family life. We schedule sessions in Spanish, offer telehealth for evenings and weekends so workers don't lose a day in the fields for a follow-up, and reserve in-person visits at our Park Shore office (about 50–60 minutes via CR-846) for the initial evaluation when possible.",
-      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano, alrededor del 21.9% como afroamericano, y la edad mediana es cercana a 30. La economía agrícola local — Immokalee produce aproximadamente el 90% de los tomates de invierno de EE.UU. — marca el ritmo familiar. Programamos sesiones en español, ofrecemos telesalud por las tardes y fines de semana para que los trabajadores no pierdan un día en el campo por un seguimiento, y reservamos las visitas presenciales en Park Shore (aproximadamente 50–60 minutos por CR-846) para la evaluación inicial cuando es posible.",
+      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic, around 21.9% as Black, and the median age is near 30. The local agricultural economy — Immokalee tomato production accounts for roughly 90% of US winter tomatoes — sets the rhythm of family life. We offer sessions in Spanish and weekday telehealth during published office hours, with in-person visits available at our Park Shore office (about 50–60 minutes via CR-846).",
+      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano, alrededor del 21.9% como afroamericano, y la edad mediana es cercana a 30. La economía agrícola local — Immokalee produce aproximadamente el 90% de los tomates de invierno de EE.UU. — marca el ritmo familiar. Ofrecemos sesiones en español y telesalud entre semana dentro del horario de oficina publicado, con visitas presenciales disponibles en nuestra oficina de Park Shore (aproximadamente 50–60 minutos por CR-846).",
     },
     servicesIntro: {
       en: "These are the services our Immokalee patients ask about most — in Spanish or English, by telehealth when getting time off work is hard, in person when it isn't.",
@@ -707,33 +707,33 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     },
     duration: { en: '50-60 minutes', es: '50-60 minutos' },
     bottomNote: {
-      en: "Serving Immokalee (ZIP 34142) with bilingual psychiatric care designed around the realities of agricultural work — Spanish-language sessions, evening telehealth and a single longer in-person visit when needed. Call (239) 423-0272.",
-      es: "Atendiendo a Immokalee (ZIP 34142) con atención psiquiátrica bilingüe diseñada para la realidad del trabajo agrícola — sesiones en español, telesalud por la tarde y una sola visita presencial más larga cuando se necesite. (239) 423-0272.",
+      en: "Serving Immokalee (ZIP 34142) with bilingual psychiatric care — Spanish-language sessions, weekday telehealth during published office hours, and in-person visits at our Naples office. Call (239) 423-0272.",
+      es: "Atendiendo a Immokalee (ZIP 34142) con atención psiquiátrica bilingüe — sesiones en español, telesalud entre semana dentro del horario de oficina publicado, y visitas presenciales en nuestra oficina de Naples. (239) 423-0272.",
     },
     featureBadges: [
       { en: 'Sessions in Spanish', es: 'Sesiones en Español' },
-      { en: 'Evening & Weekend Telehealth', es: 'Telesalud Tarde y Fines de Semana' },
-      { en: 'Scheduled Around Field Hours', es: 'Adaptada a Horarios del Campo' },
+      { en: 'Weekday Telehealth', es: 'Telesalud Entre Semana' },
+      { en: 'Call to Check Availability', es: 'Llame para Consultar Disponibilidad' },
       { en: 'One In-Person Visit', es: 'Una Visita en Persona' },
       { en: 'Culturally Sensitive Care', es: 'Atención Culturalmente Sensible' },
       { en: 'Most Major Insurance', es: 'Mayoría de Seguros' },
     ],
     serviceNotes: {
       en: [
-        "Offered in Spanish, with evening telehealth so you don't lose a day in the fields.",
+        "Offered in Spanish, with weekday telehealth during published office hours.",
         "Care for Immokalee's young, hardworking agricultural community.",
-        "Adult and adolescent evaluations scheduled around the harvest calendar.",
+        "Adult and adolescent evaluations, with available weekday times confirmed when scheduling.",
         "Trauma-informed, confidential care in Spanish, by secure video when needed.",
         "Long-term mood stabilization with telehealth between the longer in-person visits.",
-        "Refills sent to your Immokalee pharmacy, with evening follow-ups by video.",
+        "Refills sent to your Immokalee pharmacy, with weekday follow-ups by video when appropriate.",
       ],
       es: [
-        "Ofrecida en español, con telesalud por la tarde para no perder un día en el campo.",
+        "Ofrecida en español, con telesalud entre semana dentro del horario de oficina publicado.",
         "Atención para la joven y trabajadora comunidad agrícola de Immokalee.",
-        "Evaluaciones para adultos y adolescentes programadas según el calendario de cosecha.",
+        "Evaluaciones para adultos y adolescentes, con horarios disponibles entre semana confirmados al programar.",
         "Atención confidencial e informada en trauma en español, por video seguro cuando se necesite.",
         "Estabilización del ánimo a largo plazo con telesalud entre las visitas presenciales más largas.",
-        "Resurtidos enviados a su farmacia de Immokalee, con seguimientos por video por la tarde.",
+        "Resurtidos enviados a su farmacia de Immokalee, con seguimientos entre semana por video cuando sea apropiado.",
       ],
     },
     neighborhoods: {
@@ -741,8 +741,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: ['Centro de Immokalee', 'corredor de Main St (SR-29)', 'Lake Trafford', 'Farm Worker Village', 'Eden Park', 'área de Carson Rd'],
     },
     localContext: {
-      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic and the median age is near 30. With a large agricultural workforce setting the rhythm of family life, we schedule Spanish-language sessions and evening or weekend telehealth so workers don't lose a day in the fields — reserving the 50–60 minute drive via CR-846 for the initial evaluation when possible.",
-      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano y la edad mediana es cercana a 30. Con una gran fuerza laboral agrícola marcando el ritmo familiar, programamos sesiones en español y telesalud por la tarde o los fines de semana para que los trabajadores no pierdan un día en el campo — reservando el viaje de 50–60 minutos por CR-846 para la evaluación inicial cuando es posible.",
+      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic and the median age is near 30. With a large agricultural workforce setting the rhythm of family life, we offer Spanish-language sessions and weekday telehealth during published office hours, with in-person visits available at our Naples office about 50–60 minutes away via CR-846.",
+      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano y la edad mediana es cercana a 30. Con una gran fuerza laboral agrícola marcando el ritmo familiar, ofrecemos sesiones en español y telesalud entre semana dentro del horario de oficina publicado, con visitas presenciales disponibles en nuestra oficina de Naples a unos 50–60 minutos por CR-846.",
     },
   },
 

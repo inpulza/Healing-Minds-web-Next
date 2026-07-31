@@ -559,8 +559,8 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
         answer: "Absolutely. We treat anxiety, depression, and stress-related conditions that may stem from challenging work conditions, seasonal employment patterns, and other occupational stressors common in agricultural work."
       },
       {
-        question: "Do you offer evening or weekend appointments for Immokalee patients who work during the day?",
-        answer: "We try to accommodate work schedules whenever possible. Please let us know your availability when scheduling, and we'll work with you to find appointment times that fit around agricultural work schedules."
+        question: "What weekday appointment options are available for Immokalee patients?",
+        answer: "Appointments are offered during our published Monday through Friday, 8:00 AM to 5:00 PM office hours. Tell us your availability when scheduling, and we'll help identify an available weekday time."
       },
       {
         question: "How do you handle language barriers or cultural concerns for Immokalee patients?",
@@ -601,8 +601,8 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
         answer: "Absolutamente. Tratamos ansiedad, depresión, y condiciones relacionadas al estrés que pueden surgir de condiciones de trabajo desafiantes, patrones de empleo estacional, y otros factores estresantes ocupacionales comunes en el trabajo agrícola."
       },
       {
-        question: "¿Ofrecen citas nocturnas o de fin de semana para pacientes de Immokalee que trabajan durante el día?",
-        answer: "Tratamos de acomodar horarios de trabajo cuando sea posible. Por favor infórmenos su disponibilidad al programar, y trabajaremos con usted para encontrar horarios de cita que se ajusten a los horarios de trabajo agrícola."
+        question: "¿Qué opciones de citas entre semana están disponibles para pacientes de Immokalee?",
+        answer: "Las citas se ofrecen dentro de nuestro horario de oficina publicado, de lunes a viernes de 8:00 AM a 5:00 PM. Indíquenos su disponibilidad al programar y le ayudaremos a identificar un horario disponible entre semana."
       },
       {
         question: "¿Cómo manejan las barreras del idioma o preocupaciones culturales para pacientes de Immokalee?",
