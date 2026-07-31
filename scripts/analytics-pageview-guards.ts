@@ -303,6 +303,50 @@ function checkRepeatedConsentCyclesKeepEmittingOnce(): void {
   }
 }
 
+function checkLeadMeasurementCoverage(): void {
+  const analyticsSource = readFileSync(
+    new URL("../client/src/lib/analytics.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    analyticsSource,
+    /if \(!gaConfigured\)[\s\S]*pendingLeadConversions\.push/,
+    "lead conversions must wait until GA has a configured destination",
+  );
+  assert.match(
+    analyticsSource,
+    /pendingLeads\.forEach\(\(\{ source, detail \}\) => trackLeadConversion/,
+    "held lead conversions must flush after gtag config",
+  );
+  assert.match(
+    analyticsSource,
+    /pendingLeadConversions = \[\]/,
+    "pending lead conversions must be clearable on consent revocation",
+  );
+
+  const charmSource = readFileSync(
+    new URL("../client/src/components/CharmHealthBooking.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.equal(
+    (charmSource.match(/trackLeadConversion\('appointment_booking'/g) ?? []).length,
+    4,
+    "all four CharmHealth booking variants must emit the GA lead conversion",
+  );
+
+  for (const component of ["MobileToolbar.tsx", "Footer.tsx"]) {
+    const source = readFileSync(
+      new URL(`../client/src/components/${component}`, import.meta.url),
+      "utf8",
+    );
+    assert.match(
+      source,
+      /trackLeadConversion\('appointment_booking'/,
+      `${component} booking must emit the GA lead conversion`,
+    );
+  }
+}
+
 function main(): void {
   checkInitialLoadIsNotDoubleCounted();
   checkNavigationEmitsOncePerRoute();
@@ -315,6 +359,7 @@ function main(): void {
   checkDeferredSendIsDroppedAfterRevocation();
   checkHookRecordsEntryPageOnEveryInitPath();
   checkClaimTokensAreMonotonic();
+  checkLeadMeasurementCoverage();
 
   console.log(
     `Page-view dedupe guards passed with ${MOUNTED_INSTANCES} mounted instances: `

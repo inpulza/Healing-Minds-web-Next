@@ -231,6 +231,8 @@ let lastTrackedPath: string | null = null;
 // instead of marking it as tracked and losing it.
 let gaConfigured = false;
 let pendingPageView: { path: string; title?: string } | null = null;
+const MAX_PENDING_LEADS = 20;
+let pendingLeadConversions: Array<{ source: LeadSource; detail: Record<string, any> }> = [];
 
 /** Called once gtag('config') has run; flushes a page view held during startup. */
 export function markGaConfigured(): void {
@@ -240,6 +242,9 @@ export function markGaConfigured(): void {
   if (pending) {
     trackPageView(pending.path, pending.title);
   }
+  const pendingLeads = pendingLeadConversions;
+  pendingLeadConversions = [];
+  pendingLeads.forEach(({ source, detail }) => trackLeadConversion(source, detail));
 }
 
 export function trackPageView(path: string, title?: string): void {
@@ -322,7 +327,7 @@ export function trackContactFormEvent(action: 'start' | 'submit' | 'error', form
   trackEvent(`contact_form_${action}`, 'lead_generation', formType);
 }
 
-export type LeadSource = 'contact_form' | 'phone_call' | 'whatsapp' | 'email';
+export type LeadSource = 'appointment_booking' | 'contact_form' | 'phone_call' | 'whatsapp' | 'email';
 
 /**
  * Fires the GA4 recommended `generate_lead` event — the one Google Ads imports as a conversion.
@@ -336,6 +341,14 @@ export type LeadSource = 'contact_form' | 'phone_call' | 'whatsapp' | 'email';
  */
 export function trackLeadConversion(source: LeadSource, detail: Record<string, any> = {}): void {
   if (!hasAnalyticsConsent()) {
+    return;
+  }
+
+  if (!gaConfigured) {
+    if (pendingLeadConversions.length >= MAX_PENDING_LEADS) {
+      pendingLeadConversions.shift();
+    }
+    pendingLeadConversions.push({ source, detail });
     return;
   }
 
@@ -383,6 +396,8 @@ export function handleConsentChange(analyticsConsent: boolean, marketingConsent:
     // dedupe in trackPageView (lastTrackedPath still holds this path from
     // before the revocation) and the visit is never counted.
     lastTrackedPath = null;
+    pendingPageView = null;
+    pendingLeadConversions = [];
 
     // Analytics consent revoked - keep GA loaded but with denied consent state
     if (window.hmp_analytics_initialized) {

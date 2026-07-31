@@ -47,3 +47,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** El warning local de GA sin ID y `caniuse-lite` desactualizado quedan fuera de alcance. No se ejecutó `npm audit fix`.
 **Archivos tocados:** `client/src/components/Header.tsx`, `client/src/components/OptimizedImage.tsx`, `client/src/lib/navigation.tsx`, `client/src/pages/admin/AdminLogin.tsx`, `app/admin/layout.tsx`, `scripts/admin-password-hash.mjs`, `docs/ADMIN_AUTH_VERCEL.md`, `tests/admin-auth-flow.test.mjs`, `tests/editorial-next-parity.test.mjs`, tests Next existentes, `_arnes/evidencia/NEXT-STABILIZATION-2026-07-30.md`, `_arnes/BITACORA.md`, `package.json`.
 **Evidencia:** Tras sincronizar PR #1: `npm test` PASS 55/55; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys y orden de tags PASS; build Next PASS, 89/89 páginas, admin dinámico; Chromium 1440/914/390 EN↔ES PASS, 0 errores; logos visibles `complete=true`, `naturalWidth=1920`, `opacity=1`; login→dashboard→logout local PASS y Jordan confirmó credenciales reales en Production y Preview. El único conflicto manual fue el log append-only del arnés; se conservaron ambas entradas. Evidencia detallada: `_arnes/evidencia/NEXT-STABILIZATION-2026-07-30.md`.
+
+## 2026-07-31 Codex — analítica de reservas y semántica SEO
+**Qué se hizo:** Las reservas CharmHealth ahora generan la conversión GA4 consentida; los leads esperan a que GA tenga destino configurado; la home conserva un único H1 en el DOM.
+**Decisiones:** La cola de leads es acotada, no contiene PII y se elimina al revocar consentimiento. TikTok y canonical no se reescriben porque sus hallazgos históricos ya están resueltos en main.
+**Pendientes/bugs:** Validar en Preview con un contenedor GA real tras revisión del PR; no se modifica ninguna variable ni se publica.
+**Archivos tocados:** `client/src/lib/analytics.ts`, componentes CharmHealth/MobileToolbar/Footer/Hero, guard de analítica y evidencia del arnés.
+**Evidencia:** Guard automático exige cobertura en las cuatro variantes CharmHealth y en los otros puntos de reserva; detalle en `_arnes/evidencia/CODE-REVIEW-ANALYTICS-SEO-2026-07-31.md`.

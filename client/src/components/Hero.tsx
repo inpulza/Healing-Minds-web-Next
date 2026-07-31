@@ -55,9 +55,9 @@ const Hero = React.memo(() => {
             <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
               <div className="max-w-sm mx-auto">
                 {/* Mobile Title */}
-                <h1 className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid={isMobile ? 'hero-title' : undefined}>
+                <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid={isMobile ? 'hero-title' : undefined}>
                   {renderRichText(content.title, undefined, 'font-display italic')}
-                </h1>
+                </p>
               </div>
             </div>
           </div>

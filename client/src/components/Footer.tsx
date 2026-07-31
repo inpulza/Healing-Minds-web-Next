@@ -108,6 +108,7 @@ const Footer = () => {
               </p>
               <Button
                 onClick={() => {
+                  trackLeadConversion('appointment_booking', { click_location: 'footer' });
                   trackTelehealthClick('footer');
                   window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
                 }}
