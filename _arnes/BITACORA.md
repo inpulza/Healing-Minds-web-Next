@@ -298,3 +298,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar SHA, responder/resolver el thread y exigir de nuevo Quality, Preview y Code Review exacto.
 **Archivos tocados:** `server/blog/privacy.ts`, `tests/blog-privacy.test.mjs`, evidencia, decisiones y bitácora.
 **Evidencia:** `3693800947` / `PRRT_kwDOToJ8Pc6VjZ_g`, válido. Juez independiente GO final: los 8 cortes posibles en dos campos y los 28 en tres quedan bloqueados; años partidos, prosa final con contexto fuerte, variante inversa y controles genéricos verificados. Batería integrada final: 72/72 tests, TypeScript PASS, DB PASS con 2 migraciones/95 statements/18 tablas/20 FKs, image/topic guards PASS, build 89/89 y diff-check PASS.
+
+## 2026-07-31 Codex - hardening integral de analytics y consentimiento
+**Qué se hizo:** El PR de analytics quedó sincronizado con `main` y se corrigieron la variable pública heredada de Vite, el orden de Google Consent Mode/config/eventos, la limpieza de cookies host/root, los listeners duplicados de Clarity/TikTok, el banner bloqueado por el widget y la cobertura completa de leads de cita, teléfono, email y WhatsApp. Se registraron todos los IDs públicos verificados y se añadió un guard de build Vercel.
+**Decisiones:** Un clic de CharmHealth es `generate_lead`, no una cita confirmada. Los eventos de salida se encolan detrás de `gtag('config')` sin depender de una cola en memoria. TikTok se revoca por API y solo se prometen borrar sus cookies first-party. Production recibe el ID después de validar Preview.
+**Pendientes/bugs:** Crear commit y push, esperar Preview READY, ejecutar el ciclo real de consentimiento, clasificar Code Review exacto, obtener GO del juez y después añadir el ID a Production antes del merge.
+**Archivos tocados:** analytics/cookie cleanup, hooks Clarity/TikTok, App/env, banner/política/dialog, CTAs globales y de ubicaciones, guards, prueba Chromium, registro de tags y evidencia.
+**Evidencia:** TypeScript PASS, analytics guard PASS, Chromium 2/2 PASS, suite 74/74 PASS, build Next 89/89 con `G-WMRK41PX2E`, diff-check PASS.

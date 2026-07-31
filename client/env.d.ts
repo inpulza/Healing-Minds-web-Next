@@ -10,10 +10,8 @@ declare module "*.webp?v=2" {
   export default src;
 }
 
-interface ImportMetaEnv {
-  readonly VITE_GA_MEASUREMENT_ID: string;
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
+declare namespace NodeJS {
+  interface ProcessEnv {
+    readonly NEXT_PUBLIC_GA_MEASUREMENT_ID?: string;
+  }
 }

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import {
   bumpConsentGeneration,
   claimPageView,
@@ -308,20 +308,21 @@ function checkLeadMeasurementCoverage(): void {
     new URL("../client/src/lib/analytics.ts", import.meta.url),
     "utf8",
   );
-  assert.match(
+  assert.doesNotMatch(
     analyticsSource,
-    /if \(!gaConfigured\)[\s\S]*pendingLeadConversions\.push/,
-    "lead conversions must wait until GA has a configured destination",
+    /pendingLeadConversions/,
+    "outbound leads must not depend on an in-memory queue that is lost during navigation",
   );
-  assert.match(
-    analyticsSource,
-    /pendingLeads\.forEach\(\(\{ source, detail \}\) => trackLeadConversion/,
-    "held lead conversions must flush after gtag config",
+  assert.ok(
+    analyticsSource.indexOf("window.gtag('config'") <
+      analyticsSource.indexOf("window.gtag('event', 'generate_lead'"),
+    "the Google destination must be queued before lead events",
   );
+  assert.match(analyticsSource, /transport_type: 'beacon'/);
   assert.match(
     analyticsSource,
-    /pendingLeadConversions = \[\]/,
-    "pending lead conversions must be clearable on consent revocation",
+    /installOutboundLeadTracking[\s\S]*href\.startsWith\('tel:'\)[\s\S]*href\.startsWith\('mailto:'\)[\s\S]*wa\.me\/[\s\S]*charmtracker\.com\/publicCal\.sas/,
+    "telephone, email, WhatsApp and CharmHealth links need an exhaustive delegated guard",
   );
 
   const charmSource = readFileSync(
@@ -345,6 +346,108 @@ function checkLeadMeasurementCoverage(): void {
       `${component} booking must emit the GA lead conversion`,
     );
   }
+
+  const telehealthWidget = readFileSync(
+    new URL("../client/src/components/TelehealthVideoWidget.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(telehealthWidget, /trackLeadConversion\('appointment_booking'/);
+  assert.match(telehealthWidget, /trackLeadConversion\('phone_call'/);
+
+  const california = readFileSync(
+    new URL("../client/src/pages/PsiquiatraCalifornia.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.ok(
+    (california.match(/trackLeadConversion\('appointment_booking'/g) ?? []).length >= 2,
+    "both direct California booking buttons must emit a lead click",
+  );
+
+  const florida = readFileSync(
+    new URL("../client/src/pages/TelepsychiatryFlorida.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(florida, /trackLeadConversion\('appointment_booking'/);
+
+  const naples = readFileSync(
+    new URL("../client/src/pages/LocationNaples.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(naples, /trackLeadConversion\('phone_call'/);
+
+  const pagesDirectory = new URL("../client/src/pages/", import.meta.url);
+  for (const entry of readdirSync(pagesDirectory, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.tsx')) {
+      continue;
+    }
+    const source = readFileSync(new URL(entry.name, pagesDirectory), 'utf8');
+    if (/window\.(?:open|location\.href)[\s\S]{0,40}tel:/.test(source)) {
+      assert.match(
+        source,
+        /trackLeadConversion\('phone_call'/,
+        `${entry.name} launches a phone call from a button and must record the lead first`,
+      );
+    }
+  }
+}
+
+function checkConsentAndTagRegistry(): void {
+  const appSource = readFileSync(new URL("../client/src/App.tsx", import.meta.url), "utf8");
+  assert.match(appSource, /useClarity\(true\)/);
+  assert.match(appSource, /useTikTokPixel\(true\)/);
+  assert.doesNotMatch(appSource, /VITE_GA_MEASUREMENT_ID/);
+
+  const claritySource = readFileSync(
+    new URL("../client/src/hooks/use-clarity.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(claritySource, /useClarity\(manageConsentLifecycle = false\)/);
+  assert.match(claritySource, /clearFirstPartyCookies/);
+
+  const tiktokSource = readFileSync(
+    new URL("../client/src/hooks/use-tiktok-pixel.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(tiktokSource, /useTikTokPixel\(manageConsentLifecycle = false\)/);
+  assert.match(tiktokSource, /window\.ttq\.revokeConsent\(\)/);
+  assert.match(tiktokSource, /clearFirstPartyCookies/);
+
+  const cleanupSource = readFileSync(
+    new URL("../client/src/lib/cookie-cleanup.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(cleanupSource, /PRODUCTION_COOKIE_DOMAIN = 'healingmindsp\.com'/);
+  assert.doesNotMatch(cleanupSource, /vercel\.app/);
+
+  const analyticsSource = readFileSync(
+    new URL("../client/src/lib/analytics.ts", import.meta.url),
+    "utf8",
+  );
+  for (const cookieName of ["_ga", "_gcl_au", "_gcl_aw"]) {
+    assert.match(analyticsSource, new RegExp(cookieName));
+  }
+
+  const bannerSource = readFileSync(
+    new URL("../client/src/components/CookieBanner.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(bannerSource, /TikTok Pixel/);
+  assert.doesNotMatch(bannerSource, /Facebook Pixel/);
+  assert.match(bannerSource, /z-\[10000\]/);
+
+  const policySource = readFileSync(
+    new URL("../client/src/data/pageContent/legal/cookiePolicy.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(policySource, /TikTok Pixel/);
+  assert.match(policySource, /third-party cookies remain under TikTok's control/);
+
+  const environmentGuard = readFileSync(
+    new URL("./verify-public-analytics-config.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.match(environmentGuard, /G-WMRK41PX2E/);
+  assert.match(environmentGuard, /G-42LWDS101X/);
 }
 
 function main(): void {
@@ -360,6 +463,7 @@ function main(): void {
   checkHookRecordsEntryPageOnEveryInitPath();
   checkClaimTokensAreMonotonic();
   checkLeadMeasurementCoverage();
+  checkConsentAndTagRegistry();
 
   console.log(
     `Page-view dedupe guards passed with ${MOUNTED_INSTANCES} mounted instances: `

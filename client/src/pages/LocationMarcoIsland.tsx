@@ -13,6 +13,7 @@ import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
+import { trackLeadConversion } from '@/lib/analytics';
 import { 
   MapPin, 
   Phone, 
@@ -1084,7 +1085,10 @@ const LocationMarcoIsland = () => {
                 <Button 
                   variant="outline"
                   className="border-green-800 text-green-800 hover:bg-green-50"
-                  onClick={() => window.open(`tel:${practiceInfo.phone}`, '_self')}
+                  onClick={() => {
+                    trackLeadConversion('phone_call', { click_location: 'marco_island_final_cta' });
+                    window.open(`tel:${practiceInfo.phone}`, '_self');
+                  }}
                   data-testid="button-call-now"
                 >
                   <Phone className="w-5 h-5 mr-2" />

@@ -586,6 +586,7 @@ const PsiquiatraCalifornia = () => {
               </p>
               <Button
                 onClick={() => {
+                  trackLeadConversion('appointment_booking', { click_location: 'california_symptoms' });
                   trackTelehealthClick('california-symptoms-section');
                   window.open("https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2", '_blank', 'noopener,noreferrer');
                 }}
@@ -858,6 +859,7 @@ const PsiquiatraCalifornia = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
                 onClick={() => {
+                  trackLeadConversion('appointment_booking', { click_location: 'california_final_cta' });
                   trackTelehealthClick('california-cta-section');
                   window.open("https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2", '_blank', 'noopener,noreferrer');
                 }}

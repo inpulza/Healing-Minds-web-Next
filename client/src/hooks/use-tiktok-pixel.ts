@@ -6,6 +6,7 @@ import {
   isCurrentPageView,
   markPageViewTracked,
 } from '@/lib/pixel-page-view';
+import { clearFirstPartyCookies } from '@/lib/cookie-cleanup';
 
 function isDevelopment(): boolean {
   return process.env.NODE_ENV === 'development';
@@ -85,11 +86,15 @@ function hasMarketingConsent(): boolean {
 
 // Clear TikTok cookies for GDPR compliance
 function clearTikTokCookies(): void {
-  const cookiesToClear = ['_ttp', '_tt_enable_cookie', '_ttp_pixel'];
-  
-  cookiesToClear.forEach(cookie => {
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname}`;
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  clearFirstPartyCookies({
+    exactNames: [
+      '_ttp',
+      '_tt_enable_cookie',
+      '_ttp_pixel',
+      '_tt_sessionId',
+      '_tt_pixel_session_index',
+      '_tt_appInfo',
+    ],
   });
   
   console.log('🧹 TikTok Pixel cookies cleared for compliance');
@@ -157,7 +162,7 @@ function loadTikTokPixel(): void {
   ttq.page();
 }
 
-export function useTikTokPixel() {
+export function useTikTokPixel(manageConsentLifecycle = false) {
   const initialized = useRef(false);
   const consentRevoked = useRef(false);
   const [location] = useLocation();
@@ -262,6 +267,10 @@ export function useTikTokPixel() {
 
   // Initial setup and consent change listener
   useEffect(() => {
+    if (!manageConsentLifecycle) {
+      return;
+    }
+
     // Check initial consent state and initialize if available
     if (process.env.NODE_ENV === 'production' && hasMarketingConsent()) {
       initTikTokPixel();
@@ -316,17 +325,17 @@ export function useTikTokPixel() {
     return () => {
       window.removeEventListener('consentChanged', handleConsentChange as EventListener);
     };
-  }, [initTikTokPixel, revokeTikTokPixel]);
+  }, [initTikTokPixel, manageConsentLifecycle, revokeTikTokPixel]);
 
   // Track page views on route change (gate on GLOBAL flags, not per-instance refs)
   useEffect(() => {
-    if (globalTikTokInitialized && !globalConsentRevoked) {
+    if (manageConsentLifecycle && globalTikTokInitialized && !globalConsentRevoked) {
       // emitTikTokPageView owns the dedupe: once per navigation, no matter how
       // many hook instances are mounted.
       previousLocation.current = location;
       emitTikTokPageView(location);
     }
-  }, [location]);
+  }, [location, manageConsentLifecycle]);
 
   // Return TikTok Pixel API methods for custom tracking.
   // IMPORTANT: gate on GLOBAL flags, not per-instance refs. The pixel is
