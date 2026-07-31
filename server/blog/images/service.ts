@@ -19,6 +19,7 @@ import {
   ensureCuratedHeroImage,
   finalizeBlogPostImageDeletion,
   getBlogPostImage,
+  markStaleGeneratingBlogImagesFailed,
   updateBlogPostImage,
 } from "./storage";
 import {
@@ -189,6 +190,7 @@ export async function generateBlogImageSet(
     maxInline?: number;
   } = {},
 ): Promise<BlogImageGenerationSummary> {
+  await markStaleGeneratingBlogImagesFailed(post.id);
   await ensureCuratedHeroImage(post);
   if (!isBlogImageEnabled()) {
     return {
@@ -252,6 +254,7 @@ export async function regenerateBlogImageVariant(
   post: BlogPostWithRelations,
   imageId: number,
 ): Promise<BlogPostImage> {
+  await markStaleGeneratingBlogImagesFailed(post.id);
   const source = await getBlogPostImage(imageId);
   if (!source || source.postId !== post.id) {
     throw Object.assign(new Error("Blog image variant not found"), { statusCode: 404 });

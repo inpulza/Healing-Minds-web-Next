@@ -36,6 +36,23 @@ type TopicPlannerInput = {
   runId?: number;
 };
 
+const TOPIC_INVENTORY_PAGE_SIZE = 200;
+
+async function loadTopicInventoryPosts(language: BlogLanguage): Promise<BlogPostWithRelations[]> {
+  const posts: BlogPostWithRelations[] = [];
+  for (let offset = 0; ; offset += TOPIC_INVENTORY_PAGE_SIZE) {
+    const page = await getAdminBlogPosts({
+      status: "all",
+      language,
+      limit: TOPIC_INVENTORY_PAGE_SIZE,
+      offset,
+    });
+    posts.push(...page);
+    if (page.length < TOPIC_INVENTORY_PAGE_SIZE) break;
+  }
+  return posts.filter(post => post.status !== "rejected");
+}
+
 type TopicMatch = {
   postId: number;
   title: string;
@@ -542,12 +559,7 @@ export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<Blog
       code: "topic_taxonomy_incomplete",
     });
   }
-  const posts = (await getAdminBlogPosts({
-    status: "all",
-    language: input.language,
-    limit: 200,
-    offset: 0,
-  })).filter(post => post.status !== "rejected");
+  const posts = await loadTopicInventoryPosts(input.language);
   const inventory = buildInventory(posts);
   const sourceIds = await getRuntimeBlogResearchSourceIds();
   const allowedSourceIds = new Set(sourceIds);
@@ -650,12 +662,7 @@ export async function assertGuidedBlogTopicSafe(input: {
       code: "guided_topic_unsafe",
     });
   }
-  const posts = (await getAdminBlogPosts({
-    status: "all",
-    language: input.language,
-    limit: 200,
-    offset: 0,
-  })).filter(post => post.status !== "rejected");
+  const posts = await loadTopicInventoryPosts(input.language);
   const requestedCategoryKey = inferHealingMindsCategoryKey(`${input.topic} ${input.targetKeyword || ""}`);
   const clusterCounts = posts.reduce<Record<string, number>>((counts, post) => {
     const key = classifyPost(post).categoryKey;

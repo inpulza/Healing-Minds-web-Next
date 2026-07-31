@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray, lt } from "drizzle-orm";
 import {
   blogPostImages,
   blogPosts,
@@ -45,6 +45,27 @@ export async function getSelectedBlogPostImages(postId: number): Promise<BlogPos
       eq(blogPostImages.generationStatus, "completed"),
     ))
     .orderBy(asc(blogPostImages.sortOrder), asc(blogPostImages.createdAt));
+}
+
+export async function markStaleGeneratingBlogImagesFailed(
+  postId: number,
+  staleBefore = new Date(Date.now() - 15 * 60 * 1000),
+): Promise<BlogPostImage[]> {
+  return db
+    .update(blogPostImages)
+    .set({
+      generationStatus: "failed",
+      completedAt: new Date(),
+      errorCode: "generation_interrupted",
+      errorMessage: "Image generation was interrupted before completion. Retry from the draft.",
+      updatedAt: new Date(),
+    })
+    .where(and(
+      eq(blogPostImages.postId, postId),
+      eq(blogPostImages.generationStatus, "generating"),
+      lt(blogPostImages.updatedAt, staleBefore),
+    ))
+    .returning();
 }
 
 export async function createBlogPostImage(values: InsertBlogPostImage): Promise<BlogPostImage> {

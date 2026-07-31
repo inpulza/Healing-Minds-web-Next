@@ -16,6 +16,12 @@ import type {
 export async function createBlogGenerationRun(
   values: CreateGenerationRunInput,
 ): Promise<GenerationRun> {
+  return (await createBlogGenerationRunIfAbsent(values)).run;
+}
+
+export async function createBlogGenerationRunIfAbsent(
+  values: CreateGenerationRunInput,
+): Promise<{ run: GenerationRun; created: boolean }> {
   const [created] = await db
     .insert(blogGenerationRuns)
     .values({
@@ -26,13 +32,13 @@ export async function createBlogGenerationRun(
     .onConflictDoNothing({ target: blogGenerationRuns.idempotencyKey })
     .returning();
 
-  if (created) return created;
+  if (created) return { run: created, created: true };
 
   const existing = await getBlogGenerationRunByIdempotencyKey(values.idempotencyKey);
   if (!existing) {
     throw new Error("Blog generation run conflict could not be resolved");
   }
-  return existing;
+  return { run: existing, created: false };
 }
 
 export async function getBlogGenerationRun(runId: number): Promise<GenerationRun | undefined> {
@@ -161,6 +167,21 @@ export async function updateBlogGenerationRun(
   return updated;
 }
 
+export async function heartbeatBlogGenerationRun(
+  runId: number,
+): Promise<GenerationRun | undefined> {
+  const now = new Date();
+  const [updated] = await db
+    .update(blogGenerationRuns)
+    .set({ heartbeatAt: now, updatedAt: now })
+    .where(and(
+      eq(blogGenerationRuns.id, runId),
+      inArray(blogGenerationRuns.status, ["planning", "queued", "running"]),
+    ))
+    .returning();
+  return updated;
+}
+
 export async function completeBlogGenerationRun(
   runId: number,
   values: CompleteGenerationRunInput,
@@ -282,7 +303,7 @@ export async function markStaleBlogGenerationRunsInterrupted(
     })
     .where(
       and(
-        inArray(blogGenerationRuns.status, ["planning", "running"]),
+        inArray(blogGenerationRuns.status, ["planning", "queued", "running"]),
         or(
           lt(blogGenerationRuns.heartbeatAt, staleBefore),
           and(

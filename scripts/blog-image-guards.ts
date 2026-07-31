@@ -13,6 +13,7 @@ import {
 } from "../server/blog/sanitize";
 import { containsLikelyPatientIdentifier } from "../server/blog/privacy";
 import { buildSafeVisualBrief } from "../server/blog/images/prompt";
+import { checkBlogImageRateLimit } from "../server/blog/images/rate-limit";
 
 const originalEnabled = process.env.BLOG_IMAGE_ENABLED;
 const originalApiKey = process.env.OPENAI_API_KEY;
@@ -90,6 +91,15 @@ try {
   assert.equal(containsLikelyPatientIdentifier("Our patient Maria Garcia sought psychiatric care last week."), true);
   assert.equal(containsLikelyPatientIdentifier("Case: Maria Garcia, 123 Main Street, Naples, Florida."), true);
   assert.equal(containsLikelyPatientIdentifier("general educational article about anxiety"), false);
+
+  const previousImageLimit = process.env.BLOG_IMAGE_HOURLY_LIMIT;
+  process.env.BLOG_IMAGE_HOURLY_LIMIT = "2";
+  const rateLimitKey = `guard-${Date.now()}`;
+  assert.equal(checkBlogImageRateLimit(rateLimitKey).allowed, true);
+  assert.equal(checkBlogImageRateLimit(rateLimitKey).allowed, true);
+  assert.equal(checkBlogImageRateLimit(rateLimitKey).allowed, false);
+  if (previousImageLimit === undefined) delete process.env.BLOG_IMAGE_HOURLY_LIMIT;
+  else process.env.BLOG_IMAGE_HOURLY_LIMIT = previousImageLimit;
 
   const privateDraft = {
     id: 42,

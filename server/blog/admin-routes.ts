@@ -2087,13 +2087,17 @@ export function registerAdminBlogRoutes(app: Express): void {
         {
           expectedStatus: post.status,
           expectedUpdatedAt: post.updatedAt,
-          deletePhysicalImageObjects: async objectKeys => {
-            await deleteBlogImageObjectsOnly(objectKeys);
-          },
         },
       );
       if (!deletion.deleted) {
         return res.status(404).json({ success: false, message: "Blog post not found" });
+      }
+      let imageCleanupWarning: string | null = null;
+      try {
+        await deleteBlogImageObjectsOnly(deletion.imageObjectKeys);
+      } catch (error) {
+        imageCleanupWarning = "The article was deleted, but one or more unreferenced image objects still need cleanup.";
+        console.error(`Blog post ${id} committed before image cleanup failed:`, error);
       }
       res.status(200).json({
         success: true,
@@ -2103,6 +2107,7 @@ export function registerAdminBlogRoutes(app: Express): void {
           deletedStatus: post.status,
           publicPath: getBlogPostPath(post),
           redirect: deletion.redirect,
+          imageCleanupWarning,
         },
       });
     } catch (error) {
