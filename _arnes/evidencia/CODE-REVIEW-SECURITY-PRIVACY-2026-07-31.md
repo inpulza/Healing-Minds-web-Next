@@ -23,6 +23,9 @@
 - La generación de borradores recibe una copia de memoria semántica con título y slug históricos reemplazados; la copia local conserva los datos reales para deduplicación y administración.
 - Las narrativas lowercase EN/ES tras `patient/paciente`, incluso repartidas entre campos, se bloquean con fixtures adversariales. Las fronteras estructuradas detectan nombre, fecha de nacimiento, ID médico, email, teléfono y dirección sin concatenar indiscriminadamente topics editoriales.
 - Las etiquetas `Patient name`/`Nombre del paciente` funcionan con o sin puntuación, mientras compuestos editoriales como `Patient-Centered Care` y `Case-Based Approaches` permanecen permitidos.
+- Los nombres title-case directamente ligados a `Patient/Paciente`, incluso si marcador y nombre viven en campos distintos, se bloquean sin exigir puntuación ni un verbo posterior.
+- Email, fecha de nacimiento, identificador médico y teléfono pueden reconstruirse a través de dos fronteras cuando existe una etiqueta explícita; los mismos fragmentos sin etiqueta no se unen.
+- Para narrativas lowercase se aplica una frontera privacy-first basada en el primer lead después de `patient/paciente`: topics sanitarios y operacionales verificados se permiten, pero una secuencia ambigua se rechaza para evitar que un verbo no enumerado abra una fuga.
 - La ruta Express deja de imprimir el objeto de contacto y un test impide reintroducir logs del body persistido.
 
 ## Límites

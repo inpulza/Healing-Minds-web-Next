@@ -22,17 +22,17 @@ const headingConnectorTokens = new Set([
   "without", "y",
 ]);
 const patientEditorialLeadTokens = new Set([
-  "access", "adult", "adults", "anxiety", "are", "asked", "behavioral", "bipolar", "called", "can",
-  "care", "centered", "clinical", "community", "contacted", "depression", "disclosed", "education", "emailed", "engagement",
-  "experience", "feedback", "feels", "has", "have", "is", "medication", "mental", "mood", "needs",
-  "outcomes", "portal", "psychiatric", "ptsd", "receives", "resources", "rights", "safety",
-  "reported", "requested", "said", "scheduled", "services", "should", "sleep", "started", "stopped", "stress", "support", "therapy", "trauma", "treatment",
-  "was", "wellness", "were",
-  "acceso", "adulto", "adultos", "ansiedad", "apoyo", "atencion", "bipolar", "bienestar",
-  "clinica", "clinico", "comunitaria", "comunitario", "contacto", "cuidado", "dejo", "depresion", "derechos", "dijo",
-  "educacion", "empezo", "entienda", "entiende", "es", "esta", "estan", "experiencia", "llamo", "medicacion", "mental", "necesita", "pidio", "portal",
-  "puede", "pueden", "psiquiatrica", "psiquiatrico", "recibe", "recursos", "resultados",
-  "quiere", "reporto", "salud", "seguridad", "servicios", "solicito", "sueno", "terapia", "trauma", "tratamiento",
+  "access", "adherence", "advocacy", "adult", "adults", "affordability", "anxiety", "are", "asked", "assessment", "autonomy", "barriers", "behavioral", "bipolar", "called", "can",
+  "care", "centered", "chronic", "clinical", "communication", "community", "compliance", "confidentiality", "consent", "contacted", "data", "depression", "disclosed", "education", "emailed", "empowerment", "engagement", "evaluation",
+  "experience", "family", "feedback", "feels", "financial", "follow-up", "has", "have", "hipaa", "housing", "insurance", "is", "legal", "literacy", "medication", "mental", "monitoring", "mood", "navigation", "needs",
+  "options", "outcomes", "portal", "privacy", "protection", "protections", "psychiatric", "ptsd", "receives", "resources", "retention", "rights", "safety", "satisfaction", "screening", "social",
+  "reported", "requested", "said", "scheduled", "services", "should", "sleep", "started", "stopped", "stress", "support", "therapy", "transportation", "trauma", "treatment", "trust",
+  "telehealth", "was", "wellness", "were",
+  "acceso", "adherencia", "adulto", "adultos", "ansiedad", "apoyo", "asequibilidad", "atencion", "autonomia", "barreras", "bipolar", "bienestar",
+  "clinica", "clinico", "comunicacion", "comunitaria", "comunitario", "confidencialidad", "consentimiento", "contacto", "cumplimiento", "cuidado", "datos", "dejo", "depresion", "derechos", "dijo",
+  "educacion", "empoderamiento", "empezo", "entienda", "entiende", "es", "esta", "estan", "evaluacion", "experiencia", "familia", "financiero", "llamo", "medicacion", "mental", "monitoreo", "navegacion", "necesita", "pidio", "portal",
+  "opciones", "privacidad", "proteccion", "puede", "pueden", "psiquiatrica", "psiquiatrico", "recibe", "recursos", "resultados", "retencion",
+  "quiere", "reporto", "salud", "satisfaccion", "seguridad", "seguimiento", "servicios", "solicito", "sueno", "telepsiquiatria", "terapia", "transporte", "trauma", "tratamiento",
 ]);
 const ambiguousModalLeadTokens = new Set(["may", "will"]);
 const modalContinuationTokens = new Set([
@@ -70,6 +70,7 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
   for (let boundary = 1; boundary < fields.length; boundary += 1) {
     const left = fields.slice(0, boundary).join(" ").trim();
     const right = fields.slice(boundary).join(" ").trim();
+    const rightCompact = right.replace(/\s+/g, "");
     const patientMarker = patientMarkerAtEnd.exec(left)?.[1];
     const normalizedRightLead = normalizeLowercaseToken(rightLeadAtStart.exec(right)?.[1] || "");
     const hasSplitPatientNarrative = Boolean(patientMarker)
@@ -79,10 +80,10 @@ function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
       && containsLikelyPatientIdentifier(`${patientMarker} ${right}`);
     if (
       (nameLabelAtEnd.test(left) && nameValueAtStart.test(right))
-      || (birthDateLabelAtEnd.test(left) && birthDateValueAtStart.test(right))
-      || (medicalIdLabelAtEnd.test(left) && medicalIdValueAtStart.test(right))
-      || (emailLabelAtEnd.test(left) && emailValueAtStart.test(right))
-      || (phoneLabelAtEnd.test(left) && phoneValueAtStart.test(right))
+      || (birthDateLabelAtEnd.test(left) && (birthDateValueAtStart.test(right) || birthDateValueAtStart.test(rightCompact)))
+      || (medicalIdLabelAtEnd.test(left) && (medicalIdValueAtStart.test(right) || medicalIdValueAtStart.test(rightCompact)))
+      || (emailLabelAtEnd.test(left) && emailValueAtStart.test(rightCompact))
+      || (phoneLabelAtEnd.test(left) && (phoneValueAtStart.test(right) || phoneValueAtStart.test(rightCompact)))
       || (addressLabelAtEnd.test(left) && addressValueAtStart.test(right))
       || hasSplitPatientNarrative
     ) {
@@ -138,13 +139,21 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
     String.raw`\b(?:patient|paciente|case|caso)(?:\s*[:#]\s*|\s+-\s+)${labeledNamePattern}\b`,
     "iu",
   ).test(normalized);
+  const barePatientNamePattern = /\b(?:patient|paciente)\b\s+([^,.;:]{1,100})/giu;
+  const hasBarePatientName = [...normalized.matchAll(barePatientNamePattern)]
+    .some(match => {
+      const candidate = (match[1] || "").trim();
+      const firstToken = candidate.split(/\s+/)[0] || "";
+      return !patientEditorialLeadTokens.has(normalizeLowercaseToken(firstToken))
+        && containsHighConfidencePersonName(candidate);
+    });
   const patientNarrativePattern = /\b(?:patient|paciente)\b\s+([^,.;:]{1,100})/giu;
   const namedPatientNarrativePattern = new RegExp(
     String.raw`^${nameToken}(?:\s+(?:${nameInitial}|(?:${nameConnector}\s+)?${nameToken})){0,3}\s+(\p{Ll}[\p{Ll}\p{M}'’\-]*)`,
     "u",
   );
   const lowercasePatientNarrativePattern = new RegExp(
-    String.raw`^(${lowercaseNameToken})\s+(?:(?:${nameConnector})\s+)?(${lowercaseNameToken})(?:\s|$)`,
+    String.raw`^(${lowercaseNameToken})\s+(?:(?:${nameConnector})\s+)?${lowercaseNameToken}(?:\s|$)`,
     "u",
   );
   const hasNamedPatientNarrative = [...normalized.matchAll(patientNarrativePattern)]
@@ -156,10 +165,9 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
       }
       const lowercaseMatch = lowercasePatientNarrativePattern.exec(narrative);
       const normalizedLead = normalizeLowercaseToken(lowercaseMatch?.[1] || "");
-      const normalizedSecondToken = normalizeLowercaseToken(lowercaseMatch?.[2] || "");
       if (
         ambiguousModalLeadTokens.has(normalizedLead)
-        && modalContinuationTokens.has(normalizedSecondToken)
+        && modalContinuationTokens.has(normalizeLowercaseToken(narrative.split(/\s+/)[1] || ""))
       ) {
         return false;
       }
@@ -180,6 +188,7 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
     || hasStreetAddress
     || hasExplicitNameLabel
     || hasExplicitPatientCase
+    || hasBarePatientName
     || hasNamedPatientNarrative
     || hasGenericNameLabel;
 }

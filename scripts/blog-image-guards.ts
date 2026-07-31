@@ -159,8 +159,14 @@ try {
   assert.equal(containsLikelyPatientIdentifier("paciente maría garcía necesita ayuda"), true);
   assert.equal(containsLikelyPatientIdentifier("patient will smith called yesterday"), true);
   assert.equal(containsLikelyPatientIdentifier("patient may lee called yesterday"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient madonna called yesterday"), true);
+  assert.equal(containsLikelyPatientIdentifier("paciente madonna llamó ayer"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient madonna requires help"), true);
+  assert.equal(containsLikelyPatientIdentifier("patient jane doe denies symptoms"), true);
   assert.equal(containsLikelyPatientIdentifier("Patient name Jane Doe"), true);
   assert.equal(containsLikelyPatientIdentifier("Nombre del paciente María García"), true);
+  assert.equal(containsLikelyPatientIdentifier("Patient Jane Doe"), true);
+  assert.equal(containsLikelyPatientIdentifier("Paciente María García"), true);
   assert.equal(containsLikelyPatientIdentifierInAiFields({
     topic: "Patient name:",
     targetKeyword: "Jane Doe",
@@ -174,6 +180,12 @@ try {
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient support services started in 2020" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient may benefit from therapy" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient will receive follow-up care" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient privacy in telehealth" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient confidentiality and HIPAA" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient HIPAA Privacy Rules" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Telehealth Privacy" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient housing needs" }), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "patient family needs assessment" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({
     topic: "Date",
     targetKeyword: "of birth:",
@@ -188,6 +200,11 @@ try {
     topic: "Patient",
     targetKeyword: "jane doe",
     additionalContext: "called yesterday",
+  }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "Patient email:",
+    targetKeyword: "jane.doe",
+    additionalContext: "@example.com",
   }), true);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Care Options" }), false);
   assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: "Patient Resources and Treatment Options" }), false);

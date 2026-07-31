@@ -108,6 +108,15 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       "paciente apoyo familiar empezó en 2020",
       "patient may benefit from therapy",
       "patient will receive follow-up care",
+      "patient privacy in telehealth",
+      "patient confidentiality and HIPAA",
+      "paciente privacidad y telesalud",
+      "Patient Privacy Rights",
+      "Patient HIPAA Privacy Rules",
+      "Patient Telehealth Privacy",
+      "patient chronic pain management",
+      "patient housing needs",
+      "patient family needs assessment",
     ]) {
       assert.equal(containsLikelyPatientIdentifier(editorialText), false, editorialText);
       assert.equal(containsLikelyPatientIdentifierInAiFields({ topic: editorialText }), false, editorialText);
@@ -167,11 +176,22 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       "paciente maría garcía necesita ayuda",
       "paciente maría garcía escribió ayer",
       "paciente maría garcía tuvo una crisis",
+      "patient madonna called yesterday",
+      "paciente madonna llamó ayer",
+      "patient madonna requires help",
+      "patient madonna seeks help",
+      "patient madonna prefers telehealth",
+      "patient jane doe denies symptoms",
+      "paciente madonna acudió ayer",
+      "paciente madonna prefiere telesalud",
+      "paciente maría garcía explicó sus síntomas",
     ]) {
       assert.equal(containsLikelyPatientIdentifier(narrative), true, narrative);
     }
     assert.equal(containsLikelyPatientIdentifier("Name: Madonna"), true);
     assert.equal(containsLikelyPatientIdentifier("Nombre: Pelé"), true);
+    assert.equal(containsLikelyPatientIdentifier("Patient Jane Doe"), true);
+    assert.equal(containsLikelyPatientIdentifier("Paciente María García"), true);
     assert.equal(containsLikelyPatientIdentifierInAiFields({
       topic: "Patient name:",
       targetKeyword: "Jane Doe",
@@ -195,6 +215,10 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       additionalContext: "called yesterday",
     }), true);
     assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient",
+      targetKeyword: "Jane Doe",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
       topic: "Paciente",
       targetKeyword: "maría garcía",
       additionalContext: "necesita ayuda",
@@ -203,11 +227,28 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       topic: "anxiety",
       targetKeyword: "Maria Garcia",
     }), false);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient email:",
+      targetKeyword: "jane.doe",
+      additionalContext: "@example.com",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Date of birth:",
+      targetKeyword: "01/05",
+      additionalContext: "/1980",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient ID:",
+      targetKeyword: "AB",
+      additionalContext: "-12345",
+    }), true);
     for (const editorialFields of [
       { topic: "Patient", targetKeyword: "Care Options", additionalContext: "support services" },
       { topic: "Patient Care Options", targetKeyword: "support services", additionalContext: "for Florida adults" },
       { topic: "Patient Resources", targetKeyword: "Treatment Options", additionalContext: "support guide" },
       { topic: "Patient", targetKeyword: "Support Services", additionalContext: "started in 2020" },
+      { topic: "Patient", targetKeyword: "HIPAA Privacy Rules" },
+      { topic: "Patient", targetKeyword: "Telehealth Privacy" },
     ]) {
       assert.equal(containsLikelyPatientIdentifierInAiFields(editorialFields), false, JSON.stringify(editorialFields));
     }
