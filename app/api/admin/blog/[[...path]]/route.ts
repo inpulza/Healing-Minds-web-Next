@@ -524,10 +524,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
           throw Object.assign(new Error("This topic plan was already used or is no longer available. Plan topics again."), { statusCode: 409 });
         }
       }
-      const possibleSensitiveText = [payload.topic, payload.targetKeyword, payload.additionalContext]
-        .filter(Boolean)
-        .join(" ");
-      const [{ containsLikelyPatientIdentifier }, generator, { checkBlogAiRateLimit }, planner, topic, strategy, admin] = await Promise.all([
+      const [{ containsLikelyPatientIdentifierInAiFields }, generator, { checkBlogAiRateLimit }, planner, topic, strategy, admin] = await Promise.all([
         import("../../../../../server/blog/privacy"),
         import("../../../../../server/blog/ai/generator"),
         import("../../../../../server/blog/ai/rate-limit"),
@@ -536,7 +533,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
         import("../../../../../server/blog/strategy/healing-minds"),
         import("../../../../../server/blog/admin-routes"),
       ]);
-      if (containsLikelyPatientIdentifier(possibleSensitiveText)) {
+      if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return json({
           success: false,
           message: "AI generation inputs must not include patient-identifying information",

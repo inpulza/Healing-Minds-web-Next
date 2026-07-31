@@ -11,7 +11,11 @@ import {
   sanitizeBlogContentHtml,
   sanitizeRenderedBlogContentHtml,
 } from "../server/blog/sanitize";
-import { containsLikelyPatientIdentifier } from "../server/blog/privacy";
+import {
+  containsHighConfidencePersonName,
+  containsLikelyPatientIdentifier,
+  containsLikelyPatientIdentifierInAiFields,
+} from "../server/blog/privacy";
 import { buildSafeVisualBrief } from "../server/blog/images/prompt";
 
 const originalEnabled = process.env.BLOG_IMAGE_ENABLED;
@@ -89,18 +93,16 @@ try {
   assert.equal(containsLikelyPatientIdentifier("patient name: Jane Example"), true);
   assert.equal(containsLikelyPatientIdentifier("Our patient Maria Garcia sought psychiatric care last week."), true);
   assert.equal(containsLikelyPatientIdentifier("Case: Maria Garcia, 123 Main Street, Naples, Florida."), true);
-  assert.equal(containsLikelyPatientIdentifier("Maria Garcia"), true);
-  assert.equal(containsLikelyPatientIdentifier("Draft notes\nMaria Garcia\nanxiety education"), true);
   assert.equal(containsLikelyPatientIdentifier("Name: Maria Garcia"), true);
-  assert.equal(containsLikelyPatientIdentifier("María García"), true);
-  assert.equal(containsLikelyPatientIdentifier("María García-López"), true);
-  assert.equal(containsLikelyPatientIdentifier("José O’Neill"), true);
-  assert.equal(containsLikelyPatientIdentifier("Ana-María O'Neill"), true);
-  assert.equal(containsLikelyPatientIdentifier("José Luis Pérez"), true);
-  assert.equal(containsLikelyPatientIdentifier("MARÍA GARCÍA"), true);
-  assert.equal(containsLikelyPatientIdentifier("María J. García"), true);
-  assert.equal(containsLikelyPatientIdentifier("María de la Cruz"), true);
-  assert.equal(containsLikelyPatientIdentifier("Maria Care"), true);
+  assert.equal(containsLikelyPatientIdentifier("Nombre: Maria Care"), true);
+  assert.equal(containsHighConfidencePersonName("María García"), true);
+  assert.equal(containsHighConfidencePersonName("María García-López"), true);
+  assert.equal(containsHighConfidencePersonName("José O’Neill"), true);
+  assert.equal(containsHighConfidencePersonName("Ana-María O'Neill"), true);
+  assert.equal(containsHighConfidencePersonName("José Luis Pérez"), true);
+  assert.equal(containsHighConfidencePersonName("MARÍA GARCÍA"), true);
+  assert.equal(containsHighConfidencePersonName("María J. García"), true);
+  assert.equal(containsHighConfidencePersonName("María de la Cruz"), true);
   assert.equal(containsLikelyPatientIdentifier("Paciente María García fue diagnosticada con ansiedad."), true);
   assert.equal(containsLikelyPatientIdentifier("Patient José O’Neill was prescribed medication."), true);
   assert.equal(containsLikelyPatientIdentifier("Número de paciente: AB-12345"), true);
@@ -111,6 +113,16 @@ try {
   assert.equal(containsLikelyPatientIdentifier("Healing Minds Psychiatry"), false);
   assert.equal(containsLikelyPatientIdentifier("About Us"), false);
   assert.equal(containsLikelyPatientIdentifier("Patient Resources"), false);
+  assert.equal(containsLikelyPatientIdentifier("Understanding Seasonal Affective Disorder"), false);
+  assert.equal(containsLikelyPatientIdentifier("Managing Panic Attacks"), false);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "anxiety",
+    additionalContext: "María García",
+  }), true);
+  assert.equal(containsLikelyPatientIdentifierInAiFields({
+    topic: "Managing Panic Attacks",
+    additionalContext: "educational coping strategies",
+  }), false);
 
   const privateDraft = {
     id: 42,

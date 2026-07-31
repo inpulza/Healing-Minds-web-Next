@@ -16,9 +16,10 @@
 - El servidor Express solo expone `0.0.0.0` en producción y deja de registrar cuerpos de respuesta.
 - El filtro de PII bloquea nombres aislados por línea y campos `Name/Nombre`, además de los identificadores ya cubiertos.
 - El parser de hosts acepta `localhost`, IPv4 e IPv6 loopback, pero exige que todos los valores reenviados sean locales y rechaza listas mixtas.
-- El filtro reconoce tildes, guiones y apóstrofos, `Número de paciente`, `Historia clínica` y fechas españolas con mes escrito.
+- El filtro reconoce identificadores explícitos, `Número de paciente`, `Historia clínica`, fechas españolas con mes escrito y estructuras de nombre de alta confianza con tildes, guiones, apóstrofos, iniciales, partículas o mayúsculas.
+- Los endpoints Next y Express revisan `topic`, `targetKeyword` y `additionalContext` por separado antes de usar IA; los títulos editoriales normales no se infieren como nombres por una lista exhaustiva de palabras.
 - La ruta Express deja de imprimir el objeto de contacto y un test impide reintroducir logs del body persistido.
 
 ## Límites
 
-No se accedió a secretos, datos reales de pacientes ni variables de Vercel. No se cambia la autenticación custom de Production o Preview. El filtro es deliberadamente conservador y cualquier rechazo editorial sigue requiriendo revisión humana.
+No se accedió a secretos, datos reales de pacientes ni variables de Vercel. No se cambia la autenticación custom de Production o Preview. Un nombre simple sin etiqueta ni señal lingüística distintiva no puede separarse con fiabilidad de un tema editorial; por eso el guard exige contexto explícito o una estructura de alta confianza y la prohibición humana de introducir PII sigue vigente.

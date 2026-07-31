@@ -82,7 +82,7 @@ import {
   getBlogTopicCandidateById,
   selectBlogTopicCandidate,
 } from "./topic-candidate-storage";
-import { containsLikelyPatientIdentifier } from "./privacy";
+import { containsLikelyPatientIdentifierInAiFields } from "./privacy";
 import {
   deleteBlogImageObjectsOnly,
   generateBlogImageSet,
@@ -1575,10 +1575,7 @@ export function registerAdminBlogRoutes(app: Express): void {
           ...buildPersistedTopicDraftOverrides(selectedCandidate),
         };
       }
-      const possibleSensitiveText = [payload.topic, payload.targetKeyword, payload.additionalContext]
-        .filter(Boolean)
-        .join(" ");
-      if (containsLikelyPatientIdentifier(possibleSensitiveText)) {
+      if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return res.status(400).json({
           success: false,
           message: "AI generation inputs must not include patient-identifying information",

@@ -21,7 +21,10 @@ import { generateTopicCandidateBatch, type TopicInventorySnapshot, type TopicPro
 import { judgeTopicCandidates, type TopicJudgeDecision } from "./topic-judge";
 import { persistBlogTopicCandidates, selectBlogTopicCandidate } from "../topic-candidate-storage";
 import type { BlogResearchBrief, BlogSemanticMemory } from "./types";
-import { containsLikelyPatientIdentifier } from "../privacy";
+import {
+  containsLikelyPatientIdentifier,
+  containsLikelyPatientIdentifierInAiFields,
+} from "../privacy";
 import {
   getRuntimeBlogResearchSourceIds,
   selectRuntimeBlogInternalLinks,
@@ -142,7 +145,9 @@ function classifyPost(post: BlogPostWithRelations) {
 }
 
 function getSafePostTitleForProvider(post: Pick<BlogPostWithRelations, "id" | "title" | "targetKeyword">): string {
-  return containsLikelyPatientIdentifier(`${post.title} ${post.targetKeyword || ""}`)
+  return [post.title, post.targetKeyword]
+    .filter((value): value is string => Boolean(value))
+    .some(containsLikelyPatientIdentifier)
     ? `Private post ${post.id}`
     : post.title;
 }
@@ -214,9 +219,12 @@ function deterministicStatus(input: {
       `${input.proposal.topic} ${input.proposal.targetKeyword} ${input.proposal.expertiseAngle} ${input.proposal.whyTimely}`,
       input.proposal.language,
     )
-    || containsLikelyPatientIdentifier(
-      `${input.proposal.topic} ${input.proposal.targetKeyword} ${input.proposal.expertiseAngle} ${input.proposal.whyTimely}`,
-    )
+    || [
+      input.proposal.topic,
+      input.proposal.targetKeyword,
+      input.proposal.expertiseAngle,
+      input.proposal.whyTimely,
+    ].some(containsLikelyPatientIdentifier)
   ) return "unsafe_pattern";
   const saturated = input.maximumClusterCount >= BLOG_TOPIC_THRESHOLDS.saturationMinimumPosts
     && input.clusterCount >= input.maximumClusterCount
@@ -640,9 +648,7 @@ export async function assertGuidedBlogTopicSafe(input: {
       `${input.topic} ${input.targetKeyword || ""} ${input.additionalContext || ""}`,
       input.language,
     )
-    || containsLikelyPatientIdentifier(
-      `${input.topic} ${input.targetKeyword || ""} ${input.additionalContext || ""}`,
-    )
+    || containsLikelyPatientIdentifierInAiFields(input)
     || hasCosmeticFreshness(input.topic)
   ) {
     throw Object.assign(new Error("This guided topic does not pass the medical-safety or meaningful-uniqueness gate. The requested topic was not replaced."), {

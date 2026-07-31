@@ -87,13 +87,13 @@ async function normalizeGeneratedWebp(input: Buffer): Promise<{
 export async function generateBlogImageVariant(
   input: GenerateVariantInput,
 ): Promise<BlogPostImage> {
-  const sensitiveContext = [
+  const sensitiveInputs = [
     input.post.title,
     input.post.excerpt,
     input.anchorHeading,
     getPlainTextFromHtml(input.post.content || ""),
-  ].filter(Boolean).join(" ");
-  if (containsLikelyPatientIdentifier(sensitiveContext)) {
+  ].filter((value): value is string => Boolean(value));
+  if (sensitiveInputs.some(containsLikelyPatientIdentifier)) {
     throw Object.assign(new Error("Blog image inputs must not include patient-identifying information"), {
       statusCode: 400,
       errorCode: "phi_detected",
