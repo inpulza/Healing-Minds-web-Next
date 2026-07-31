@@ -32,8 +32,9 @@
 ## Clasificación final del Code Review exacto
 
 - `3692390069` / `PRRT_kwDOToJ8Pc6VfuPD` — **válida y resuelta**. La búsqueda no estaba anclada al comienzo del fragmento posterior al marcador y producía falsos positivos en títulos editoriales. Se ancló la coincidencia, se añadieron fixtures EN y un juez independiente confirmó que nombres directos/split y narrativas adversariales siguen bloqueados, mientras las variantes editoriales permanecen permitidas.
+- `3692466757` / `PRRC_kwDOToJ8Pc7cFpJF` — **válida y resuelta**. El anclaje inmediato omitía nombres introducidos después de un verbo narrativo. Se añadieron señales separadas para nombre completo, nombre envuelto, monónimo con diacrítico y declaración explícita EN/ES; el análisis conjunto de campos preserva esos bloqueos. La pasada adversarial distinguió además personas de regiones/ciudades multiword usando contexto geográfico, sin debilitar referencias, contactos o copulas de identidad.
 
-Verificación local final: 68/68 tests, TypeScript PASS, 2 migraciones/95 statements/18 tablas/20 foreign keys PASS, image guard PASS, build 89/89 y diff-check PASS.
+Verificación del juez final: identidad directa/split EN/ES PASS; geografía/editorial EN/ES PASS; Guide/Perspectives/Resources/HIPAA/privacy PASS; Madonna/Pelé e identificadores etiquetados bloqueados; egress dinámico redactado con memoria local preservada; focused 8/8, TypeScript, image guard y diff-check PASS. Verificación integrada final: 68/68 tests, TypeScript PASS, 2 migraciones/95 statements/18 tablas/20 foreign keys PASS, image guard PASS, build 89/89 y diff-check PASS.
 
 ## Límites
 

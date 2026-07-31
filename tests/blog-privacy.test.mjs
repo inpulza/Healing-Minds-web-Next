@@ -116,6 +116,10 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       "Patient Telehealth Privacy",
       "Patient Guide to Managing Anxiety",
       "Patient Perspectives on Mental Health",
+      "Patient Guide to Jane Doe",
+      "Patient Perspectives from Maria Lopez",
+      "patient guide to Jane Doe",
+      "Patient perspectives from Maria Lopez",
       "patient chronic pain management",
       "patient housing needs",
       "patient family needs assessment",
@@ -187,8 +191,105 @@ test("patient identifier guard preserves AI field boundaries without rejecting e
       "paciente madonna acudió ayer",
       "paciente madonna prefiere telesalud",
       "paciente maría garcía explicó sus síntomas",
+      "Patient provided Jane Doe as her name",
+      "Paciente proporcionó María García como su nombre",
+      'Patient provided "Jane Doe" as her name',
+      "Patient provided (Jane Doe) as her name",
+      "Patient provided Madonna as her name",
+      "Paciente proporcionó Madonna como su nombre",
+      "Paciente proporcionó «María García» como su nombre",
+      "Paciente proporcionó «Pelé» como su nombre",
+      "Patient mentioned Pelé during intake",
+      "Patient provided “Pelé” during intake",
+      "Patient provided Madonna as my name",
+      "Patient provided Madonna as her full name",
+      "Patient provided Madonna as her legal name",
+      "Paciente proporcionó Madonna como mi nombre",
+      "Patient Reported “Jane Doe” during Intake",
+      "Patient Said “Jane Doe” during Intake",
+      "Patient Wrote “Jane Doe” during Intake",
+      "Patient SAID “JANE DOE” during Intake",
+      "Patient said Jane Doe during intake",
+      "Patient WROTE JANE DOE during intake",
+      "Paciente dijo María García durante la admisión",
+      "Patient is Jane Doe",
+      "Patient was Jane Doe during intake",
+      "Patient has Jane Doe as contact",
+      "Paciente es María García",
+      "Patient spoke to Jane Doe",
+      "Patient referred to Jane Doe",
+      "Patient sent records to Jane Doe",
+      "Paciente refirió a María García",
+      "Paciente remitió a María García",
     ]) {
       assert.equal(containsLikelyPatientIdentifier(narrative), true, narrative);
+    }
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient provided",
+      targetKeyword: "Jane Doe as her name",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient Guide to",
+      targetKeyword: "Jane Doe",
+    }), false);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "patient guide to",
+      targetKeyword: "Jane Doe",
+    }), false);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient provided",
+      targetKeyword: "Madonna",
+      additionalContext: "as her name",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient provided",
+      targetKeyword: "Pelé",
+      additionalContext: "as my name",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient Said",
+      targetKeyword: "“Jane Doe”",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient said",
+      targetKeyword: "Jane Doe",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Patient referred to",
+      targetKeyword: "Jane Doe",
+    }), true);
+    assert.equal(containsLikelyPatientIdentifierInAiFields({
+      topic: "Paciente remitió a",
+      targetKeyword: "María García",
+    }), true);
+    for (const editorialFields of [
+      { topic: "patient confidentiality in Florida" },
+      { topic: "patient access to Florida care" },
+      { topic: "patient resources for Naples adults" },
+      { topic: "patient privacy under Florida law" },
+      { topic: "patient confidentiality in", targetKeyword: "Florida" },
+      { topic: "patient navigating South Florida resources" },
+      { topic: "patient moving to New York" },
+      { topic: "patient discussed South Florida resources" },
+      { topic: "patient navigating", targetKeyword: "South Florida" },
+      { topic: "patient discussed New York resources" },
+      { topic: "patient lives in New York" },
+      { topic: "patient reviewed Los Angeles providers" },
+      { topic: "patient seeking New York services" },
+      { topic: "patient discussed", targetKeyword: "New York resources" },
+      { topic: "patient moving toward New York" },
+      { topic: "patient relocated into New York" },
+      { topic: "patient living outside New York" },
+      { topic: "patient reviewed New York coverage" },
+      { topic: "patient discussed Los Angeles clinics" },
+      { topic: "paciente vive en Nueva York" },
+      { topic: "paciente busca servicios en Nueva York" },
+      { topic: "paciente se mudó a Nueva York" },
+      { topic: "paciente revisó proveedores en Los Ángeles" },
+      { topic: "patient lives in", targetKeyword: "New York" },
+      { topic: "paciente vive en", targetKeyword: "Nueva York" },
+    ]) {
+      assert.equal(containsLikelyPatientIdentifierInAiFields(editorialFields), false, JSON.stringify(editorialFields));
     }
     assert.equal(containsLikelyPatientIdentifier("Name: Madonna"), true);
     assert.equal(containsLikelyPatientIdentifier("Nombre: Pelé"), true);

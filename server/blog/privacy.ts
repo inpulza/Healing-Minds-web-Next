@@ -39,6 +39,55 @@ const modalContinuationTokens = new Set([
   "access", "also", "be", "benefit", "experience", "feel", "find", "have", "need",
   "not", "often", "receive", "require", "see", "sometimes", "want",
 ]);
+const identityNarrativeLeadTokens = new Set([
+  "asked", "called", "contacted", "emailed", "gave", "has", "identified", "is",
+  "mentioned", "met", "named", "provided", "reported", "requested", "said", "saw",
+  "scheduled", "sent", "spoke", "told", "was", "wrote",
+  "conocio", "contacto", "conto", "dio", "dijo", "es", "escribio", "identifico",
+  "llamo", "menciono", "proporciono", "refirio", "remitio", "reporto", "solicito", "vio",
+]);
+const movementNarrativeLeadTokens = new Set([
+  "lives", "living", "moved", "moving", "navigating", "relocated", "relocating",
+  "traveling", "travelling",
+]);
+const patientNarrativeSegmentPattern = /\b(?:patient|paciente)\b\s+([^,.;:]{1,160})/giu;
+const patientEditorialHeadingPattern = new RegExp(
+  String.raw`^(?:guides?|perspectives?|overview|introduction|approaches?|gu[ií]as?|perspectivas?|introducci[oó]n|enfoques?)\s+(?:to|for|from|on|about|of|a|para|de|desde|sobre)\b`,
+  "iu",
+);
+const laterFullPatientNamePattern = new RegExp(
+  String.raw`(?:^|[^\p{L}\p{M}])["“'‘(«]*${namePattern}["”'’»)]*(?=$|[^\p{L}\p{M}])`,
+  "u",
+);
+const laterWrappedPatientNamePattern = new RegExp(
+  String.raw`(?:^|[^\p{L}\p{M}])["“'‘(«]+(?:${namePattern}|${nameToken})["”'’»)]+(?=$|[^\p{L}\p{M}])`,
+  "u",
+);
+const laterTitleCaseTokenPattern = new RegExp(
+  String.raw`(?:^|[^\p{L}\p{M}])(${titleCaseNameToken})(?=$|[^\p{L}\p{M}])`,
+  "gu",
+);
+const directionalGeographyPattern = new RegExp(
+  String.raw`^(?:[Nn]orth|[Ss]outh|[Ee]ast|[Ww]est|[Cc]entral|[Nn]ortheast|[Nn]orthwest|[Ss]outheast|[Ss]outhwest)\s+${titleCaseNameToken}\b`,
+  "u",
+);
+const prepositionalGeographyPattern = new RegExp(
+  String.raw`(?:^|\s)(?:to|in|from|across|through|within|around|near|toward|towards|into|outside(?:\s+of)?|a|en|desde|hacia|cerca\s+de|dentro\s+de|fuera\s+de)\s+${namePattern}(?=$|\s)`,
+  "u",
+);
+const geographyWithEditorialSuffixPattern = new RegExp(
+  String.raw`(?:^|\s)${namePattern}\s+(?:resources|services|providers|care|law|locations?|region|area|communities|adults|coverage|clinics|recursos|servicios|proveedores|atenci[oó]n|ley|ubicaciones?|regi[oó]n|[aá]rea|comunidades|adultos|cobertura|cl[ií]nicas)\b`,
+  "u",
+);
+const geographyWithEditorialPrefixPattern = new RegExp(
+  String.raw`(?:^|\s)(?:resources|services|providers|care|coverage|clinics|recursos|servicios|proveedores|atenci[oó]n|cobertura|cl[ií]nicas)\s+(?:in|to|from|across|through|within|around|near|toward|towards|into|outside(?:\s+of)?|a|en|desde|hacia|cerca\s+de|dentro\s+de|fuera\s+de)\s+${namePattern}(?=$|\s)`,
+  "u",
+);
+const incompleteGeographyFragmentPattern = /^(?:(?:lives?|living|moving|relocated|relocating|traveling|travelling|reviewed|discussed|se\s+mud[oó]|vive|viviendo|busca(?:ndo)?|revis[oó]|revisa)(?:\s+\p{L}+){0,4}\s+(?:in|to|toward|towards|into|outside(?:\s+of)?|a|en|desde|hacia|cerca\s+de|dentro\s+de|fuera\s+de))\s*$/iu;
+const explicitlyDeclaredPatientNamePattern = new RegExp(
+  String.raw`(?:^|\s)["“'‘(«]*${labeledNamePattern}["”'’»)]*\s+(?:as\s+(?:(?:her|his|their|my|our|your|the|the\s+patient(?:'s|’s))\s+)?(?:(?:full|legal|preferred)\s+)?name(?:\s+(?:full|legal|preferred))?|como\s+(?:(?:su|mi|nuestro|nuestra|tu|el|la)\s+)?(?:(?:completo|legal|preferido)\s+)?nombre(?:\s+(?:completo|legal|preferido))?)\b`,
+  "iu",
+);
 
 function normalizeLowercaseToken(value: string): string {
   return value
@@ -46,6 +95,51 @@ function normalizeLowercaseToken(value: string): string {
     .replace(/\p{M}/gu, "")
     .replace(/[^\p{L}]/gu, "")
     .toLocaleLowerCase();
+}
+
+function isPatientGeographicNarrative(narrative: string): boolean {
+  const [rawLead = "", ...remainderTokens] = narrative.split(/\s+/);
+  const normalizedLead = normalizeLowercaseToken(rawLead);
+  const narrativeRemainder = remainderTokens.join(" ");
+  const hasIncompleteGeography = incompleteGeographyFragmentPattern.test(narrative);
+  const hasDirectionalGeography = directionalGeographyPattern.test(narrativeRemainder);
+  const hasPrepositionalGeography = prepositionalGeographyPattern.test(narrativeRemainder);
+  const hasEditorialGeographySuffix = geographyWithEditorialSuffixPattern.test(narrativeRemainder);
+  const hasEditorialGeographyPrefix = geographyWithEditorialPrefixPattern.test(narrativeRemainder);
+  if (
+    hasIncompleteGeography
+    || hasDirectionalGeography
+    || hasEditorialGeographySuffix
+    || hasEditorialGeographyPrefix
+  ) return true;
+  if (movementNarrativeLeadTokens.has(normalizedLead) && hasPrepositionalGeography) return true;
+  const hasIdentityAction = identityNarrativeLeadTokens.has(normalizedLead)
+    || /(?:ed|ó)$/iu.test(rawLead.replace(/[^\p{L}\p{M}]/gu, ""));
+  if (hasIdentityAction) return false;
+  return hasPrepositionalGeography;
+}
+
+function containsLaterNamedPatientNarrative(value: string): boolean {
+  return [...value.matchAll(patientNarrativeSegmentPattern)]
+    .some(match => {
+      const narrative = (match[1] || "").trim();
+      if (patientEditorialHeadingPattern.test(narrative)) return false;
+      if (isPatientGeographicNarrative(narrative)) return false;
+      if (explicitlyDeclaredPatientNamePattern.test(narrative)) return true;
+      const [rawLead = "", ...remainderTokens] = narrative.split(/\s+/);
+      const narrativeRemainder = remainderTokens.join(" ");
+      const hasDiacriticMononym = [...narrativeRemainder.matchAll(laterTitleCaseTokenPattern)]
+        .some(tokenMatch => /\p{M}/u.test((tokenMatch[1] || "").normalize("NFD")));
+      const normalizedLead = normalizeLowercaseToken(rawLead);
+      const permitsUnwrappedName = !patientEditorialLeadTokens.has(normalizedLead)
+        || identityNarrativeLeadTokens.has(normalizedLead)
+        || /(?:ed|ó)$/iu.test(rawLead.replace(/[^\p{L}\p{M}]/gu, ""));
+      return laterWrappedPatientNamePattern.test(narrativeRemainder)
+        || (permitsUnwrappedName && (
+          laterFullPatientNamePattern.test(narrativeRemainder)
+          || hasDiacriticMononym
+        ));
+    });
 }
 
 function containsIdentifierAcrossAiFieldBoundaries(fields: string[]): boolean {
@@ -164,6 +258,8 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
   const hasNamedPatientNarrative = [...normalized.matchAll(patientNarrativePattern)]
     .some(match => {
       const narrative = (match[1] || "").trim();
+      if (patientEditorialHeadingPattern.test(narrative)) return false;
+      if (isPatientGeographicNarrative(narrative)) return false;
       const namedContinuation = namedPatientNarrativePattern.exec(narrative)?.[1];
       if (namedContinuation) {
         return !headingConnectorTokens.has(normalizeLowercaseToken(namedContinuation));
@@ -194,6 +290,7 @@ export function containsLikelyPatientIdentifier(value: string): boolean {
     || hasExplicitNameLabel
     || hasExplicitPatientCase
     || hasBarePatientName
+    || containsLaterNamedPatientNarrative(normalized)
     || hasNamedPatientNarrative
     || hasGenericNameLabel;
 }
@@ -207,5 +304,6 @@ export function containsLikelyPatientIdentifierInAiFields(input: {
     .filter((value): value is string => Boolean(value?.trim()));
   return fields.some(containsLikelyPatientIdentifier)
     || containsIdentifierAcrossAiFieldBoundaries(fields)
+    || containsLaterNamedPatientNarrative(fields.join(" "))
     || containsHighConfidencePersonName(input.additionalContext || "");
 }
