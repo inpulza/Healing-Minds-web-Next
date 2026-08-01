@@ -32,11 +32,7 @@ test.beforeEach(async ({ page }) => {
       },
       maxRedirects: 0,
     });
-    try {
-      await route.fulfill({ response });
-    } finally {
-      await response.dispose();
-    }
+    await route.fulfill({ response });
   });
 });
 

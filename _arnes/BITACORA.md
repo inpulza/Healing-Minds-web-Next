@@ -499,3 +499,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Confirmar el mecanismo sobre la Preview del nuevo SHA junto con el E2E completo; no considerar suficiente la comprobación estática local.
 **Archivos tocados:** gate E2E desplegado, contrato de seguridad y bitácora.
 **Evidencia:** TypeScript PASS y 14/14 contratos focalizados PASS. El handler nuevo atravesó la protección real de la Preview `0b33d70` y recibió la aplicación; las cuatro aserciones California fallaron después, como era esperable, porque ese SHA anterior todavía no contiene sus nuevos metadatos, no por autenticación.
+
+## 2026-08-01 Codex - cierre limpio del interceptor de Preview
+**Qué se hizo:** El E2E exacto de la Preview `16a544f` confirmó la aplicación y pasó cinco de ocho recorridos; los otros tres completaron sus aserciones pero fallaron durante el teardown porque `response.dispose()` corría cuando Playwright ya había cerrado página o contexto. Se retiró esa liberación manual: la respuesta pertenece al contexto y su ciclo de vida termina con él después de `route.fulfill`.
+**Decisiones:** No se atrapa ni se ignora el error. Se elimina la operación redundante que originaba la carrera y se mantiene intacta la contención de credenciales mediante `route.fetch({ maxRedirects: 0 })`.
+**Pendientes/bugs:** Publicar otro SHA y repetir Quality, Preview exacta, E2E desplegado y Code Review; el SHA `16a544f` no es candidato a merge.
+**Archivos tocados:** interceptor E2E y bitácora.
+**Evidencia:** en la Preview `dpl_S8mP836b7W3XcwtNAMphrEogwJZC`, navegación EN/ES desktop/móvil y las páginas California alcanzaron la aplicación y sus aserciones; los tres fallos mostraron únicamente `apiResponse.dispose: Target page, context or browser has been closed` durante el cierre.
