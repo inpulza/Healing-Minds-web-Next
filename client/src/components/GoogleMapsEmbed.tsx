@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 
 interface GoogleMapsEmbedProps {
@@ -16,6 +16,8 @@ interface GoogleMapsEmbedProps {
   context?: 'contact' | 'location';
 }
 
+const MAP_LOAD_FALLBACK_MS = 8000;
+
 const GoogleMapsEmbed = ({ 
   src, 
   title,
@@ -26,12 +28,25 @@ const GoogleMapsEmbed = ({
 }: GoogleMapsEmbedProps) => {
   const { language } = useLanguage();
   const [isLoading, setIsLoading] = useState(showLoading);
+  const loadedSrcRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!showLoading || loadedSrcRef.current === src) {
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    const fallback = window.setTimeout(() => setIsLoading(false), MAP_LOAD_FALLBACK_MS);
+    return () => window.clearTimeout(fallback);
+  }, [showLoading, src]);
 
   const defaultTitle = language === 'en' 
     ? 'Healing Minds Psychiatry Location - 4760 Tamiami Trl N #25, Naples, FL 34103'
     : 'Ubicación Healing Minds Psychiatry - 4760 Tamiami Trl N #25, Naples, FL 34103';
 
   const handleLoad = () => {
+    loadedSrcRef.current = src;
     setIsLoading(false);
   };
 
@@ -43,7 +58,7 @@ const GoogleMapsEmbed = ({
     >
       {/* Loading State */}
       {isLoading && showLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 animate-pulse">
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 animate-pulse" data-testid={`google-maps-loading-${context}`}>
           <div className="text-center">
             <div className="w-12 h-12 bg-green-200 rounded-full mx-auto mb-4 animate-pulse"></div>
             <p className="text-gray-500 text-sm font-body">
