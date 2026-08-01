@@ -232,8 +232,7 @@ Blob SDK reports a missing object as a generic `Error` with the exact message
 `Vercel Blob: The requested blob does not exist`, without a 404 property. The
 existing adapter therefore returned 503 even though the object was correctly
 gone. The adapter now maps that exact provider response to 404 while preserving
-503 for every other storage failure. A new Preview must confirm the public
-proxy response before merge.
+503 for every other storage failure.
 
 The behavior test covers the exact provider message plus name, code and status
 markers as 404. Generic failures, a near-match message, 401, 403, 500,
@@ -241,5 +240,13 @@ markers as 404. Generic failures, a near-match message, 401, 403, 500,
 86/86, TypeScript, all image/depth/link guards, four real Drizzle migrations,
 the 89-page Next build and diff-check passed. The independent judge returned
 GO for this corrective push.
+
+The exact corrective commit `1c9c2f98c5e67ee733b5c5e7bd7476773b982a3f`
+deployed Ready as `dpl_HngDwq2NBfjyC7XrLP9zNdA6CjVP`. Cache-busted requests
+through that new artifact returned `404`, `404` and `404` for the three removed
+image paths. Direct provider listing still found zero target Blobs, and Neon
+still reported zero posts, image rows, jobs and cleanup-queue rows for the
+temporary post. The response-normalization defect is therefore closed in the
+real protected Preview.
 
 No Production variable, public URL, domain or DNS record was changed.

@@ -436,3 +436,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar el fix de normalización y verificar en un nuevo Preview que las rutas de los tres objetos eliminados respondan 404. Repetir Quality, Vercel, CodeX exacto y juez antes del merge.
 **Archivos tocados:** adapter de Vercel Blob, guard de storage, evidencia y bitácora.
 **Evidencia:** deployment `dpl_9Jo1ovZrqAutikAhMNpt9YK9qZLP` READY ligado a `5192da0`; job 1 completed, imágenes 13/14/15, 959/800 palabras, 404 público, sitemap false, 3/2 imágenes, Draft y 0 errores. Limpieza: posts=0, images=0, jobs=0, queue=0; target Blobs=0. CodeX exacto sin problemas importantes; Quality y Vercel PASS. Fix local: conducta 3/3, suite 86/86, TypeScript, 4 migraciones Drizzle, image/depth/link guards, build 89/89 y diff-check PASS; juez independiente GO.
+
+## 2026-08-01 Codex - verificación final 404 de la limpieza Blob
+**Qué se hizo:** El commit correctivo `1c9c2f9` se desplegó en un artefacto nuevo y las tres rutas cache-busted de los objetos eliminados respondieron 404. La consulta directa al proveedor siguió sin encontrar ninguno de los tres Blobs y Neon mantuvo posts=0, images=0, jobs=0 y cleanup queue=0.
+**Decisiones:** El fix queda cerrado con evidencia del adapter local, del proveedor real, de la base compartida y del Route Handler desplegado. No se repite una generación pagada porque el código de jobs no cambió en este follow-up.
+**Pendientes/bugs:** Registrar este resultado, eliminar scripts y credenciales temporales, y exigir Quality, Vercel, CodeX exacto y GO final antes del merge.
+**Archivos tocados:** evidencia y bitácora únicamente.
+**Evidencia:** `dpl_HngDwq2NBfjyC7XrLP9zNdA6CjVP` READY; proxy 404/404/404, targets Blob=0, posts=0, images=0, jobs=0, queue=0.
