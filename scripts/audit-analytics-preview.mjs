@@ -271,6 +271,7 @@ try {
     marketing: false,
     hasAnalyticsConsent: false,
     hasMarketingConsent: false,
+    persisted: true,
   });
   const revokeCalls = await page.evaluate(() =>
     JSON.parse(sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]'),
