@@ -281,6 +281,62 @@
     "canonical": "https://www.healingmindsp.com/es/telepsiquiatria-florida",
     "title": "Telepsiquiatría Florida | Psiquiatra Online (Bilingüe) | Healing Minds"
   },
+  "/psychiatrist-california": {
+    "alternates": {
+      "en": "https://www.healingmindsp.com/psychiatrist-california",
+      "es": "https://www.healingmindsp.com/es/psiquiatra-california"
+    },
+    "lang": "en",
+    "viewport": "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes",
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "description": "A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.",
+    "keywords": "online psychiatrist California, Spanish speaking psychiatrist California, telepsychiatry California, virtual psychiatrist California",
+    "author": "Healing Minds Psychiatry",
+    "og:title": "Online Psychiatrist in Spanish | California | Healing Minds",
+    "og:description": "A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.",
+    "og:url": "https://www.healingmindsp.com/psychiatrist-california",
+    "og:type": "website",
+    "og:site_name": "Healing Minds Psychiatry",
+    "og:locale": "en_US",
+    "og:locale:alternate": "es_US",
+    "twitter:card": "summary_large_image",
+    "twitter:title": "Online Psychiatrist in Spanish | California | Healing Minds",
+    "twitter:description": "A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.",
+    "robots": "noindex, follow",
+    "theme-color": "#166534",
+    "canonical": "https://www.healingmindsp.com/psychiatrist-california",
+    "title": "Online Psychiatrist in Spanish | California | Healing Minds"
+  },
+  "/es/psiquiatra-california": {
+    "alternates": {
+      "en": "https://www.healingmindsp.com/psychiatrist-california",
+      "es": "https://www.healingmindsp.com/es/psiquiatra-california"
+    },
+    "lang": "es",
+    "viewport": "width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes",
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "description": "Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.",
+    "keywords": "psiquiatra online California, psiquiatra en español California, telepsiquiatría California, psiquiatra virtual California",
+    "author": "Healing Minds Psychiatry",
+    "og:title": "Psiquiatra Online en Español | California | Healing Minds",
+    "og:description": "Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.",
+    "og:url": "https://www.healingmindsp.com/es/psiquiatra-california",
+    "og:type": "website",
+    "og:site_name": "Healing Minds Psychiatry",
+    "og:locale": "es_US",
+    "og:locale:alternate": "en_US",
+    "twitter:card": "summary_large_image",
+    "twitter:title": "Psiquiatra Online en Español | California | Healing Minds",
+    "twitter:description": "Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.",
+    "robots": "noindex, follow",
+    "theme-color": "#166534",
+    "canonical": "https://www.healingmindsp.com/es/psiquiatra-california",
+    "title": "Psiquiatra Online en Español | California | Healing Minds"
+  },
   "/services": {
     "alternates": {
       "en": "https://www.healingmindsp.com/services",

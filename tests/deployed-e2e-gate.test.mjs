@@ -52,6 +52,11 @@ test("Preview credentials are scoped to the deployment origin", () => {
   const spec = fs.readFileSync("e2e/navigation.spec.ts", "utf8");
   const config = fs.readFileSync("playwright.config.ts", "utf8");
   assert.doesNotMatch(config, /extraHTTPHeaders/);
+  assert.match(spec, /hostname\.endsWith\("\.vercel\.app"\)/);
   assert.match(spec, /page\.route\(`\$\{deploymentOrigin\}\/\*\*`/);
+  assert.match(spec, /route\.fetch\(\{/);
+  assert.match(spec, /maxRedirects:\s*0/);
+  assert.match(spec, /route\.fulfill\(\{ response \}\)/);
+  assert.doesNotMatch(spec, /route\.continue\(/);
   assert.match(spec, /credentialLeaks/);
 });

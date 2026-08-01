@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Route metadata is small and locally available. Resolve it before sending
+  // the document so client transitions replace one complete metadata tree
+  // instead of leaving a streamed predecessor beside the destination tags.
+  htmlLimitedBots: /.*/,
   images: {
     disableStaticImages: true,
     remotePatterns: [
