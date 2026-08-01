@@ -318,3 +318,103 @@ for (const route of californiaRoutes) {
     }
   });
 }
+
+test("route scroll respects reduced motion without a smooth-scroll runtime", async ({
+  page,
+  isMobile,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => {
+    const state = window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] };
+    state.__hmpScrollBehaviors = [];
+    const nativeScrollTo = window.scrollTo.bind(window);
+    window.scrollTo = ((optionsOrX: ScrollToOptions | number, y?: number) => {
+      if (typeof optionsOrX === "object" && optionsOrX.behavior) {
+        state.__hmpScrollBehaviors?.push(optionsOrX.behavior);
+      }
+      if (typeof optionsOrX === "number") {
+        nativeScrollTo(optionsOrX, y ?? 0);
+      } else {
+        nativeScrollTo(optionsOrX);
+      }
+    }) as typeof window.scrollTo;
+  });
+
+  await page.goto("/");
+  await rejectInitialConsent(page);
+  await page.evaluate(() => {
+    (window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] })
+      .__hmpScrollBehaviors = [];
+  });
+  await navigateFromHeader(page, "/about", isMobile);
+  await expect(page).toHaveURL(/\/about\/?$/);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] })
+            .__hmpScrollBehaviors?.at(-1),
+      ),
+    )
+    .toBe("auto");
+
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.evaluate(() => {
+    (window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] })
+      .__hmpScrollBehaviors = [];
+  });
+  await navigateFromHeader(page, "/contact", isMobile);
+  await expect(page).toHaveURL(/\/contact\/?$/);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] })
+            .__hmpScrollBehaviors?.at(-1),
+      ),
+    )
+    .toBe("smooth");
+});
+
+test("sitemap XML preserves blog alternates, dates and priority", async ({ page }) => {
+  const response = await page.goto("/sitemap.xml", { waitUntil: "domcontentloaded" });
+  expect(response?.status()).toBe(200);
+  const xml = await response!.text();
+
+  const blockFor = (url: string) => {
+    const escaped = url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return xml.match(new RegExp(`<url>\\s*<loc>${escaped}</loc>[\\s\\S]*?</url>`))?.[0];
+  };
+  const blogIndex = blockFor("https://www.healingmindsp.com/blog");
+  const spanishBlogIndex = blockFor("https://www.healingmindsp.com/es/blog");
+  expect(blogIndex).toBeTruthy();
+  expect(spanishBlogIndex).toBeTruthy();
+  for (const block of [blogIndex!, spanishBlogIndex!]) {
+    expect(block).toContain(
+      'hreflang="x-default" href="https://www.healingmindsp.com/blog"',
+    );
+    expect(block).toContain("<priority>0.7</priority>");
+  }
+
+  const postBlocks = [
+    ...xml.matchAll(
+      /<url>\s*<loc>https:\/\/www\.healingmindsp\.com\/(?:es\/)?blog\/[^<]+<\/loc>[\s\S]*?<\/url>/g,
+    ),
+  ].map((match) => match[0]);
+  for (const block of postBlocks) {
+    expect(block).toMatch(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
+    expect(block).not.toMatch(/<lastmod>[^<]*T/);
+    expect(block).toContain("<priority>0.6</priority>");
+    expect(block).toContain('hreflang="x-default"');
+
+    const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
+    const english = block.match(/hreflang="en" href="([^"]+)"/)?.[1];
+    const xDefault = block.match(/hreflang="x-default" href="([^"]+)"/)?.[1];
+    expect(xDefault).toBe(english ?? loc);
+  }
+
+  const locCount = (xml.match(/<loc>/g) ?? []).length;
+  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  expect(new Set(locs).size).toBe(locCount);
+  expect(locCount - postBlocks.length).toBe(74);
+});

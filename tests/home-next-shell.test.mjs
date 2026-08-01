@@ -56,3 +56,11 @@ test("the Next root restores the public runtime shell without applying it to adm
   assert.match(trackingConfig, /TIKTOK_PIXEL_SITEWIDE_ENABLED = false/);
   assert.match(shell, /tracking config keeps the Pixel itself disabled sitewide/);
 });
+
+test("route scroll stays native and respects reduced-motion preferences", () => {
+  const scrollHook = read("client/src/hooks/useScrollToTop.ts");
+
+  assert.match(scrollHook, /matchMedia\(['"]\(prefers-reduced-motion: reduce\)['"]\)\.matches/);
+  assert.match(scrollHook, /behavior: shouldReduceMotion \? ['"]auto['"] : ['"]smooth['"]/);
+  assert.doesNotMatch(scrollHook, /lenis/i);
+});

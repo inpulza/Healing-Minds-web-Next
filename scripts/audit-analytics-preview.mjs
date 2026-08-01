@@ -239,6 +239,35 @@ async function assertTikTokDisabled(stage) {
   );
 }
 
+async function waitForPageViewCount(expected) {
+  await page.waitForFunction(
+    (count) =>
+      (window.dataLayer ?? []).filter(
+        (entry) => Array.from(entry)[0] === 'event' && Array.from(entry)[1] === 'page_view',
+      ).length === count,
+    expected,
+    { timeout: 15_000 },
+  );
+}
+
+async function currentPageViewCount() {
+  return (await dataLayerCommands()).filter(
+    (command) => command[0] === 'event' && command[1] === 'page_view',
+  ).length;
+}
+
+async function assertSettledPageViewCount(expected, stage) {
+  await waitForPageViewCount(expected);
+  for (let sample = 0; sample <= 10; sample += 1) {
+    assert.equal(
+      await currentPageViewCount(),
+      expected,
+      `${stage}: pageview count changed during the settling window`,
+    );
+    if (sample < 10) await page.waitForTimeout(50);
+  }
+}
+
 try {
   await page.goto(previewUrl, { waitUntil: 'domcontentloaded' });
   assert.equal(new URL(page.url()).origin, previewOrigin);
@@ -278,6 +307,7 @@ try {
     ),
     'Preview must configure the verified GA4 destination',
   );
+  await assertSettledPageViewCount(0, 'pre-consent');
 
   assert.equal(await page.locator('h1').count(), 1);
   assert.equal(await page.getByTestId('hero-title').evaluate((element) => element.tagName), 'H1');
@@ -289,7 +319,9 @@ try {
   // A real click also proves the banner is above the floating telehealth widget.
   await page.getByTestId('button-accept-all').click();
   await banner.waitFor({ state: 'hidden' });
-  await page.locator('script[src*="clarity.ms/tag/sxayts0dzk"]').waitFor({ timeout: 15_000 });
+  await page
+    .locator('script[src*="clarity.ms/tag/sxayts0dzk"]')
+    .waitFor({ state: 'attached', timeout: 15_000 });
   await assertTikTokDisabled('accepted state');
 
   const acceptedState = await page.evaluate(() =>
@@ -297,20 +329,12 @@ try {
   );
   assert.equal(acceptedState.consent.analytics, true);
   assert.equal(acceptedState.consent.marketing, true);
-  const acceptedPageViews = (await dataLayerCommands()).filter(
-    (command) => command[0] === 'event' && command[1] === 'page_view',
-  ).length;
-  assert.equal(acceptedPageViews, 1, 'initial acceptance must emit one pageview');
+  await assertSettledPageViewCount(1, 'initial acceptance');
+  const acceptedPageViews = 1;
 
   await (await footerLink('/about')).click();
   await page.waitForURL(/\/about$/);
-  await page.waitForFunction(
-    (expected) =>
-      (window.dataLayer ?? []).filter(
-        (entry) => Array.from(entry)[0] === 'event' && Array.from(entry)[1] === 'page_view',
-      ).length === expected,
-    acceptedPageViews + 1,
-  );
+  await assertSettledPageViewCount(acceptedPageViews + 1, 'accepted navigation');
   await assertTikTokDisabled('accepted SPA navigation');
 
   await setOptionalConsent(false, { auditClarityConsent: true });
@@ -343,28 +367,14 @@ try {
     marketingPersisted: true,
   });
 
-  const deniedPageViews = (await dataLayerCommands()).filter(
-    (command) => command[0] === 'event' && command[1] === 'page_view',
-  ).length;
+  await assertSettledPageViewCount(2, 'persisted withdrawal');
+  const deniedPageViews = 2;
   await (await footerLink('/')).click();
   await page.waitForURL(/\/$/);
-  await page.waitForTimeout(250);
-  assert.equal(
-    (await dataLayerCommands()).filter(
-      (command) => command[0] === 'event' && command[1] === 'page_view',
-    ).length,
-    deniedPageViews,
-    'denied navigation must not emit a pageview',
-  );
+  await assertSettledPageViewCount(deniedPageViews, 'denied navigation');
 
   await setOptionalConsent(true, { auditClarityConsent: true });
-  await page.waitForFunction(
-    (expected) =>
-      (window.dataLayer ?? []).filter(
-        (entry) => Array.from(entry)[0] === 'event' && Array.from(entry)[1] === 'page_view',
-      ).length === expected,
-    deniedPageViews + 1,
-  );
+  await assertSettledPageViewCount(deniedPageViews + 1, 'reacceptance');
   await assertTikTokDisabled('reaccepted state');
 
   await page.evaluate(() => {
@@ -389,12 +399,12 @@ try {
 
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByTestId('cookie-banner').waitFor({ state: 'hidden' });
-  await page.locator('script[src*="clarity.ms/tag/sxayts0dzk"]').waitFor({ timeout: 15_000 });
+  await page
+    .locator('script[src*="clarity.ms/tag/sxayts0dzk"]')
+    .waitFor({ state: 'attached', timeout: 15_000 });
   await assertTikTokDisabled('persisted accepted reload');
-  const reloadedPageViews = (await dataLayerCommands()).filter(
-    (command) => command[0] === 'event' && command[1] === 'page_view',
-  ).length;
-  assert.equal(reloadedPageViews, 1, 'persisted accepted reload must emit one pageview');
+  await assertSettledPageViewCount(1, 'persisted accepted reload');
+  const reloadedPageViews = 1;
 
   assert.ok(
     requestedUrls.some((url) => url.includes('googletagmanager.com/gtag/js?id=G-WMRK41PX2E')),

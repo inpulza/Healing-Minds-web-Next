@@ -89,12 +89,23 @@ test("analytics Preview audit validates auth scope and sitewide TikTok shutdown"
   assert.match(audit, /function isTikTokPixelUrl/);
   assert.match(audit, /function assertTikTokDisabled/);
   assert.match(audit, /function savePreferencesWithClarityConsentAudit/);
+  assert.match(audit, /async function waitForPageViewCount/);
+  assert.match(audit, /async function assertSettledPageViewCount/);
+  assert.match(audit, /assertSettledPageViewCount\(0, 'pre-consent'\)/);
+  assert.match(audit, /assertSettledPageViewCount\(1, 'initial acceptance'\)/);
+  assert.match(audit, /assertSettledPageViewCount\(2, 'persisted withdrawal'\)/);
+  assert.match(audit, /assertSettledPageViewCount\(1, 'persisted accepted reload'\)/);
   assert.match(audit, /Clarity must receive consent\(\$\{expected\}\)/);
   assert.match(audit, /clarityConsentCalls/);
   assert.match(audit, /tiktokRequests/);
   assert.match(audit, /typeof window\.ttq/);
   assert.match(audit, /_tt_enable_cookie/);
   assert.match(audit, /clarity\\\.ms\\\/tag\\\/sxayts0dzk/);
+  assert.equal(
+    audit.split(".waitFor({ state: 'attached', timeout: 15_000 })").length - 1,
+    2,
+    "Clarity script checks must wait for DOM attachment, not visual visibility",
+  );
   assert.match(audit, /status: 'disabled-sitewide'/);
   assert.doesNotMatch(audit, /freshTikTokRestore/);
   assert.doesNotMatch(audit, /grantConsentIndex/);
