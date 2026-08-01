@@ -14,3 +14,12 @@ test("Next owns sitemap, robots and llms endpoints without blocking its assets",
   assert.doesNotMatch(read("app/robots.ts"), /Disallow[^\n]*\/_next/i);
   assert.match(read("app/llms.txt/route.ts"), /text\/plain/);
 });
+
+test("admin pages stay crawlable for noindex while private APIs remain blocked", () => {
+  const robots = read("app/robots.ts");
+  const sitemap = read("app/sitemap.ts");
+
+  assert.doesNotMatch(robots, /["']\/admin(?:\/\*?|[*])?["']/);
+  assert.match(robots, /["']\/api\/admin\/["']/);
+  assert.doesNotMatch(sitemap, /\/admin(?:\/|["'`])/);
+});

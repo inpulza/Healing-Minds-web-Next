@@ -11,3 +11,11 @@ test("CI installs the Chromium runtime required by browser-backed tests", () => 
     "Playwright Chromium must be installed before tests run",
   );
 });
+
+test("CI verifies the rendered admin noindex contract after the production build", () => {
+  assert.match(workflow, /npm run seo:admin-noindex-check/);
+  assert.ok(
+    workflow.indexOf("npm run build") < workflow.indexOf("npm run seo:admin-noindex-check"),
+    "the admin noindex smoke must use the completed production build",
+  );
+});

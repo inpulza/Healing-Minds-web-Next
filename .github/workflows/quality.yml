@@ -49,3 +49,6 @@ jobs:
 
       - name: Production build
         run: npm run build
+
+      - name: Admin noindex production smoke
+        run: npm run seo:admin-noindex-check
