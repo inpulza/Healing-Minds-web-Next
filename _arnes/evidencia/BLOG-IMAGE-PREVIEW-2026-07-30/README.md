@@ -198,3 +198,48 @@ job table, `image_job_id` column, five indexes and six status labels were
 verified afterward; the new structures contained zero jobs and zero linked
 slots. The live 202/polling/replay smoke remains required before merge.
 Production and the public domain remain unchanged.
+
+## Durable live Preview result — 2026-08-01
+
+The exact commit `5192da0a3f0c8945508f454f6a1812017e071cfa` deployed
+Ready as `dpl_9Jo1ovZrqAutikAhMNpt9YK9qZLP`. GitHub tied that deployment to
+the same SHA. Quality, Vercel and Vercel Preview Comments all passed, and
+CodeX reported no major issues for `5192da0a3f`.
+
+The old completed candidates were removed first. A single new protected
+Preview request created job `1` and returned `202` in 791 ms. Replaying the
+same idempotency key returned `200`, the same job id and no new slot; a
+different key while the first job was open returned `409`. Polling reached
+`completed` in 120.646 seconds and materialized exactly three unique rows:
+
+- image `13`, `hero:hero`;
+- image `14`, `inline:inline:1`;
+- image `15`, `inline:inline:2`.
+
+All three adults-only candidates were visually reviewed before selection. The
+shared renderer displayed exactly one hero and two inline figures, a visible
+Draft badge, 959 words against the 800-word minimum and zero console errors.
+Desktop at 1440 px and mobile at 390 x 844 were checked. The draft remained a
+public 404 and absent from the sitemap throughout.
+
+Cleanup then removed the three AI rows, their exact Blob keys and temporary
+post `8`. Direct Neon verification returned zero matching posts, image rows
+and jobs, with a zero-row cleanup queue. Direct Blob listing and metadata
+checks confirmed that none of the three target objects remained.
+
+The cleanup check exposed one final response-normalization defect: the current
+Blob SDK reports a missing object as a generic `Error` with the exact message
+`Vercel Blob: The requested blob does not exist`, without a 404 property. The
+existing adapter therefore returned 503 even though the object was correctly
+gone. The adapter now maps that exact provider response to 404 while preserving
+503 for every other storage failure. A new Preview must confirm the public
+proxy response before merge.
+
+The behavior test covers the exact provider message plus name, code and status
+markers as 404. Generic failures, a near-match message, 401, 403, 500,
+`forbidden` and null remain 503. Focused tests passed 3/3; the full suite passed
+86/86, TypeScript, all image/depth/link guards, four real Drizzle migrations,
+the 89-page Next build and diff-check passed. The independent judge returned
+GO for this corrective push.
+
+No Production variable, public URL, domain or DNS record was changed.
