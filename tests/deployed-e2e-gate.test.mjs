@@ -6,6 +6,9 @@ import test from "node:test";
 const {
   E2E_BASE_URL: _ignoredBaseUrl,
   E2E_EXPECTED_SHA: _ignoredExpectedSha,
+  E2E_STORAGE_STATE: _ignoredStorageState,
+  VERCEL_AUTOMATION_BYPASS_SECRET: _ignoredBypassSecret,
+  VERCEL_OIDC_TOKEN: _ignoredOidcToken,
   ...cleanEnvironment
 } = process.env;
 
@@ -49,31 +52,57 @@ test("deployed E2E records a valid HTTPS target and exact SHA", () => {
 });
 
 test("Preview credentials are scoped to the deployment origin", () => {
-  const spec = fs.readFileSync("e2e/navigation.spec.ts", "utf8");
+  const specs = ["e2e/navigation.spec.ts", "e2e/consent.spec.ts"].map((path) =>
+    fs.readFileSync(path, "utf8"),
+  );
   const config = fs.readFileSync("playwright.config.ts", "utf8");
   assert.doesNotMatch(config, /extraHTTPHeaders/);
-  assert.match(spec, /hostname\.endsWith\("\.vercel\.app"\)/);
-  assert.match(spec, /page\.route\(`\$\{deploymentOrigin\}\/\*\*`/);
-  assert.match(spec, /route\.fetch\(\{/);
-  assert.match(spec, /maxRedirects:\s*0/);
-  assert.match(spec, /route\.fulfill\(\{ response \}\)/);
-  assert.doesNotMatch(spec, /route\.continue\(/);
-  assert.match(spec, /page\.unrouteAll\(\{ behavior: "ignoreErrors" \}\)/);
-  assert.match(spec, /Preview authentication fetch failed/);
-  assert.match(spec, /credentialLeaks/);
+  assert.match(config, /storageState:\s*storageState \|\| undefined/);
+  for (const spec of specs) {
+    assert.doesNotMatch(spec, /hostname\.endsWith\("\.vercel\.app"\)/);
+    assert.match(spec, /inpulzasolutions-6847s-projects\\\.vercel\\\.app/);
+    assert.match(spec, /page\.route\(`\$\{deploymentOrigin\}\/\*\*`/);
+    assert.match(spec, /route\.fetch\(\{/);
+    assert.match(spec, /maxRedirects:\s*0/);
+    assert.match(spec, /route\.fulfill\(\{ response \}\)/);
+    assert.doesNotMatch(spec, /route\.continue\(/);
+    assert.match(spec, /page\.unrouteAll\(\{ behavior: "ignoreErrors" \}\)/);
+    assert.match(spec, /Preview authentication fetch failed/);
+  }
+  assert.match(specs[0], /credentialLeaks/);
 });
 
 test("analytics Preview audit validates auth scope and the delayed revoke window", () => {
   const audit = fs.readFileSync("scripts/audit-analytics-preview.mjs", "utf8");
-  const hostValidation = audit.indexOf("hostname.endsWith('.vercel.app')");
+  const hostValidation = audit.indexOf('healingMindsImmutablePreviewHost.test');
   const browserLaunch = audit.indexOf("chromium.launch");
 
   assert.ok(hostValidation >= 0 && hostValidation < browserLaunch);
+  assert.doesNotMatch(audit, /hostname\.endsWith\('\.vercel\.app'\)/);
+  assert.match(audit, /OIDC credentials may only be forwarded/);
+  assert.match(audit, /cookieDomains\.some\(\(domain\) => domain !== parsedPreviewUrl\.hostname\)/);
   assert.doesNotMatch(audit, /extraHTTPHeaders/);
   assert.match(audit, /page\.route\(`\$\{previewOrigin\}\/\*\*`/);
   assert.match(audit, /maxRedirects:\s*0/);
-  assert.match(audit, /sample < 60/);
+  assert.match(audit, /sample <= 60/);
   assert.match(audit, /page\.waitForTimeout\(500\)/);
   assert.match(audit, /_tt_enable_cookie/);
+  assert.match(audit, /sessionStorage\.getItem\('__hmpTikTokConsentCalls'\)/);
+  assert.match(audit, /framenavigated/);
   assert.match(audit, /credentialLeaks/);
+});
+
+test("analytics Preview audit rejects another Vercel tenant before browser launch", () => {
+  const result = spawnSync(
+    process.execPath,
+    ["scripts/audit-analytics-preview.mjs", "https://attacker-project.vercel.app"],
+    {
+      cwd: process.cwd(),
+      env: { ...cleanEnvironment, VERCEL_OIDC_TOKEN: "non-secret-test-token" },
+      encoding: "utf8",
+    },
+  );
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /does not belong to the Healing Minds Vercel project/);
+  assert.doesNotMatch(result.stderr, /browser/i);
 });

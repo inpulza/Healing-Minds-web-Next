@@ -395,6 +395,15 @@ function checkConsentAndTagRegistry(): void {
   const appSource = readFileSync(new URL("../client/src/App.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(appSource, /VITE_GA_MEASUREMENT_ID/);
 
+  const consentContextSource = readFileSync(
+    new URL("../client/src/contexts/CookieConsentContext.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(consentContextSource, /saveConsent[\s\S]*?: boolean =>/);
+  assert.match(consentContextSource, /const analytics = persisted && consent\.analytics/);
+  assert.match(consentContextSource, /const marketing = persisted && consent\.marketing/);
+  assert.match(consentContextSource, /detail: createConsentEventDetail\(/);
+
   const nextShellSource = readFileSync(
     new URL("../app/public-shell.tsx", import.meta.url),
     "utf8",
@@ -422,12 +431,36 @@ function checkConsentAndTagRegistry(): void {
   assert.match(tiktokSource, /window\.ttq\.disableCookie\(\)/);
   assert.match(tiktokSource, /window\.ttq\.enableCookie\(\)/);
   assert.match(tiktokSource, /window\.ttq\.grantConsent\(\)/);
+  const enableCookieIndex = tiktokSource.indexOf('window.ttq.enableCookie()');
+  const grantConsentIndex = tiktokSource.indexOf('window.ttq.grantConsent()');
+  const reopenGateIndex = tiktokSource.indexOf(
+    'consentRevoked.current = false',
+    grantConsentIndex,
+  );
+  assert.ok(
+    enableCookieIndex >= 0 &&
+      enableCookieIndex < grantConsentIndex &&
+      grantConsentIndex < reopenGateIndex,
+    'TikTok must enable cookies, grant provider consent and only then reopen the local gate',
+  );
   assert.match(tiktokSource, /clearFirstPartyCookies/);
   for (const cookieName of ["ttcsid", "ttcsid_", "ttclid"]) {
     assert.match(tiktokSource, new RegExp(cookieName));
   }
   assert.match(tiktokSource, /window\.setInterval/);
   assert.match(tiktokSource, /POST_REVOKE_CLEANUP_WINDOW_MS = 6000/);
+  assert.match(tiktokSource, /reloadAfterLoadedPixelRevoke/);
+  assert.match(tiktokSource, /window\.location\.reload\(\)/);
+  assert.match(
+    tiktokSource,
+    /const shouldReload = !globalConsentRevoked && globalTikTokInitialized/,
+    'a first-visit rejection must not reload when the Pixel never loaded',
+  );
+  assert.match(
+    tiktokSource,
+    /globalConsentRevoked && !hasMarketingConsent\(\)/,
+    'a queued reload must be cancelled logically if consent is restored',
+  );
   const clearTikTokStart = tiktokSource.indexOf('function clearTikTokCookies');
   const clearTikTokEnd = tiktokSource.indexOf('function stopPostRevokeCookieCleanup');
   const clearTikTokSource = tiktokSource.slice(clearTikTokStart, clearTikTokEnd);
@@ -438,8 +471,13 @@ function checkConsentAndTagRegistry(): void {
   );
   assert.match(
     tiktokSource,
-    /globalConsentRevoked && !hasMarketingConsent\(\)/,
-    "post-revoke cleanup must stop short of deleting cookies after re-consent",
+    /if \(!globalConsentRevoked\) \{\s*stopPostRevokeCookieCleanup\(\)/,
+    "post-revoke cleanup must stop immediately after successful re-consent",
+  );
+  assert.match(
+    tiktokSource,
+    /keepTikTokCookiesClearedAfterRevoke\(persistenceSucceeded\)/,
+    "a failed rejection write must keep the current document fail-closed",
   );
   assert.match(
     tiktokSource,

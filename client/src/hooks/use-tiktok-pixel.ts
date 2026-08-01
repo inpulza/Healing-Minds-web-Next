@@ -20,6 +20,7 @@ let globalInitializationTimestamp: number | null = null;
 let globalConsentRevoked = false;
 let postRevokeCleanupInterval: number | null = null;
 let postRevokeCleanupTimeout: number | null = null;
+let postRevokeReloadTimeout: number | null = null;
 
 const POST_REVOKE_CLEANUP_INTERVAL_MS = 250;
 const POST_REVOKE_CLEANUP_WINDOW_MS = 6000;
@@ -116,9 +117,13 @@ function stopPostRevokeCookieCleanup(): void {
     window.clearTimeout(postRevokeCleanupTimeout);
     postRevokeCleanupTimeout = null;
   }
+  if (postRevokeReloadTimeout !== null) {
+    window.clearTimeout(postRevokeReloadTimeout);
+    postRevokeReloadTimeout = null;
+  }
 }
 
-function keepTikTokCookiesClearedAfterRevoke(): void {
+function keepTikTokCookiesClearedAfterRevoke(cleanupMayExpire = true): void {
   stopPostRevokeCookieCleanup();
   clearTikTokCookies();
 
@@ -126,12 +131,20 @@ function keepTikTokCookiesClearedAfterRevoke(): void {
   // revokeConsent(). Keep sweeping only during the short settling window and
   // stop immediately if the visitor grants marketing consent again.
   postRevokeCleanupInterval = window.setInterval(() => {
-    if (!globalConsentRevoked || hasMarketingConsent()) {
+    if (!globalConsentRevoked) {
       stopPostRevokeCookieCleanup();
       return;
     }
     clearTikTokCookies();
   }, POST_REVOKE_CLEANUP_INTERVAL_MS);
+
+  // Storage failures are rare, but an old persisted grant makes a reload
+  // unsafe and lets the live SDK keep running. In that exceptional path the
+  // current document stays fail-closed until it is replaced or consent is
+  // successfully granted again.
+  if (!cleanupMayExpire) {
+    return;
+  }
 
   postRevokeCleanupTimeout = window.setTimeout(() => {
     if (globalConsentRevoked && !hasMarketingConsent()) {
@@ -139,6 +152,23 @@ function keepTikTokCookiesClearedAfterRevoke(): void {
     }
     stopPostRevokeCookieCleanup();
   }, POST_REVOKE_CLEANUP_WINDOW_MS);
+}
+
+function reloadAfterLoadedPixelRevoke(): void {
+  if (postRevokeReloadTimeout !== null) {
+    window.clearTimeout(postRevokeReloadTimeout);
+  }
+
+  // The live SDK has been observed recreating ttcsid after both Consent Mode
+  // revocation and disableCookie(). Reloading the same route is the deterministic
+  // boundary: the saved rejection is read before the new document can inject
+  // TikTok again. The delayed callback lets every consent listener finish first.
+  postRevokeReloadTimeout = window.setTimeout(() => {
+    postRevokeReloadTimeout = null;
+    if (globalConsentRevoked && !hasMarketingConsent()) {
+      window.location.reload();
+    }
+  }, 50);
 }
 
 // Load TikTok Pixel script
@@ -281,7 +311,8 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
   // Handle consent revocation with cookie cleanup
   // Gate on GLOBAL flags: any hook instance must be able to revoke, even if a
   // different instance performed the initialization.
-  const revokeTikTokPixel = useCallback(() => {
+  const revokeTikTokPixel = useCallback((persistenceSucceeded = true) => {
+    const shouldReload = !globalConsentRevoked && globalTikTokInitialized;
     if (!globalConsentRevoked) {
       // Fail closed before calling provider code. If the SDK throws, every
       // app-owned page/event wrapper must still stop immediately.
@@ -311,7 +342,10 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
         console.error('Error disabling TikTok Pixel cookies:', error);
       }
     }
-    keepTikTokCookiesClearedAfterRevoke();
+    keepTikTokCookiesClearedAfterRevoke(persistenceSucceeded);
+    if (shouldReload && persistenceSucceeded) {
+      reloadAfterLoadedPixelRevoke();
+    }
   }, []);
 
   // Initial setup and consent change listener
@@ -333,11 +367,12 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
 
     // Listen for granular consent changes
     const handleConsentChange = (event: CustomEvent) => {
-      const { marketing, hasMarketingConsent } = event.detail;
+      const { marketing, hasMarketingConsent, persisted } = event.detail;
       // TikTok Pixel uses marketing consent
       const marketingGranted = marketing ?? hasMarketingConsent;
+      const persistenceSucceeded = persisted !== false;
       
-      if (marketingGranted) {
+      if (marketingGranted && persistenceSucceeded) {
         stopPostRevokeCookieCleanup();
         if (!globalTikTokInitialized) {
           // No SDK exists yet, so the persisted grant can safely open the local
@@ -375,7 +410,7 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
           }
         }
       } else {
-        revokeTikTokPixel();
+        revokeTikTokPixel(persistenceSucceeded);
       }
     };
 

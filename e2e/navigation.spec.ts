@@ -4,7 +4,12 @@ const deploymentUrl = process.env.E2E_BASE_URL
   ? new URL(process.env.E2E_BASE_URL)
   : null;
 const deploymentOrigin = deploymentUrl?.origin ?? null;
-const acceptsPreviewCredential = deploymentUrl?.hostname.endsWith(".vercel.app") ?? false;
+const healingMindsProtectedPreviewHost =
+  /^healing-minds-psychi-git-[a-z0-9-]+-inpulzasolutions-6847s-projects\.vercel\.app$/i;
+const acceptsPreviewCredential = Boolean(
+  deploymentUrl?.protocol === "https:" &&
+    healingMindsProtectedPreviewHost.test(deploymentUrl.hostname),
+);
 const previewCredential = acceptsPreviewCredential && process.env.VERCEL_AUTOMATION_BYPASS_SECRET
   ? {
       name: "x-vercel-protection-bypass",

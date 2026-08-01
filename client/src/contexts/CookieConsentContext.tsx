@@ -9,6 +9,21 @@ import {
 
 const STORAGE_KEY = 'hmp_cookie_consent';
 
+function createConsentEventDetail(consent: CookieConsent, persisted: boolean) {
+  // A grant that cannot be persisted must never open provider gates for only
+  // this document. Revocations still propagate immediately, and listeners can
+  // use persisted=false to choose a no-reload fail-closed path.
+  const analytics = persisted && consent.analytics;
+  const marketing = persisted && consent.marketing;
+  return {
+    analytics,
+    marketing,
+    hasAnalyticsConsent: analytics,
+    hasMarketingConsent: marketing,
+    persisted,
+  };
+}
+
 const CookieConsentContext = createContext<CookieConsentContextType | undefined>(undefined);
 
 interface CookieConsentProviderProps {
@@ -46,11 +61,13 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
   }, []);
 
   // Save consent to localStorage
-  const saveConsent = useCallback((newState: CookieConsentState) => {
+  const saveConsent = useCallback((newState: CookieConsentState): boolean => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      return true;
     } catch (error) {
       console.error('Error saving cookie consent preferences:', error);
+      return false;
     }
   }, []);
 
@@ -70,16 +87,11 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     
     setConsentState(newState);
     setPreferencesOpen(false);
-    saveConsent(newState);
+    const persisted = saveConsent(newState);
     
     // Trigger granular consent update event
-    window.dispatchEvent(new CustomEvent('consentChanged', { 
-      detail: { 
-        analytics: newState.consent.analytics,
-        marketing: newState.consent.marketing,
-        hasAnalyticsConsent: newState.consent.analytics,
-        hasMarketingConsent: newState.consent.marketing
-      } 
+    window.dispatchEvent(new CustomEvent('consentChanged', {
+      detail: createConsentEventDetail(newState.consent, persisted),
     }));
   }, [consentState.consent.analytics, saveConsent]);
 
@@ -101,17 +113,12 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     
     setConsentState(newState);
     setPreferencesOpen(false);
-    saveConsent(newState);
+    const persisted = saveConsent(newState);
     
     // Trigger granular consent event if any consent changed
     if (partialConsent.analytics !== undefined || partialConsent.marketing !== undefined) {
-      window.dispatchEvent(new CustomEvent('consentChanged', { 
-        detail: { 
-          analytics: newConsent.analytics,
-          marketing: newConsent.marketing,
-          hasAnalyticsConsent: newConsent.analytics,
-          hasMarketingConsent: newConsent.marketing
-        } 
+      window.dispatchEvent(new CustomEvent('consentChanged', {
+        detail: createConsentEventDetail(newConsent, persisted),
       }));
     }
   }, [consentState.consent.analytics, consentState.consent.marketing, consentState.consentDate, saveConsent]);
@@ -132,16 +139,11 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     
     setConsentState(newState);
     setPreferencesOpen(false);
-    saveConsent(newState);
+    const persisted = saveConsent(newState);
     
     // Trigger granular consent update event
-    window.dispatchEvent(new CustomEvent('consentChanged', { 
-      detail: { 
-        analytics: newState.consent.analytics,
-        marketing: newState.consent.marketing,
-        hasAnalyticsConsent: newState.consent.analytics,
-        hasMarketingConsent: newState.consent.marketing
-      } 
+    window.dispatchEvent(new CustomEvent('consentChanged', {
+      detail: createConsentEventDetail(newState.consent, persisted),
     }));
   }, [consentState.consent.analytics, saveConsent]);
 
@@ -164,16 +166,11 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     };
     
     setConsentState(newState);
-    saveConsent(newState);
+    const persisted = saveConsent(newState);
     
     // Trigger granular consent event for category changes
-    window.dispatchEvent(new CustomEvent('consentChanged', { 
-      detail: { 
-        analytics: newConsent.analytics,
-        marketing: newConsent.marketing,
-        hasAnalyticsConsent: newConsent.analytics,
-        hasMarketingConsent: newConsent.marketing
-      } 
+    window.dispatchEvent(new CustomEvent('consentChanged', {
+      detail: createConsentEventDetail(newConsent, persisted),
     }));
   }, [consentState, saveConsent]);
 
