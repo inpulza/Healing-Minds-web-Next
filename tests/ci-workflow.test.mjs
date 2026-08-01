@@ -19,3 +19,11 @@ test("CI verifies the rendered admin noindex contract after the production build
     "the admin noindex smoke must use the completed production build",
   );
 });
+
+test("CI verifies lazy-mounted page heading hierarchy after the production build", () => {
+  assert.match(workflow, /npm run seo:heading-hierarchy-check/);
+  assert.ok(
+    workflow.indexOf("npm run build") < workflow.indexOf("npm run seo:heading-hierarchy-check"),
+    "the heading hierarchy smoke must use the completed production build",
+  );
+});

@@ -81,7 +81,7 @@ const Home = () => {
           <LazyFAQ />
         </SuspenseWrapper>
         <SuspenseWrapper priority="low">
-          <LazyContact />
+          <LazyContact headingLevel="h2" />
         </SuspenseWrapper>
       </main>
       <SuspenseWrapper priority="low">
