@@ -6,6 +6,7 @@ import {
   isCurrentPageView,
   markPageViewTracked,
 } from '@/lib/pixel-page-view';
+import { clearFirstPartyCookies } from '@/lib/cookie-cleanup';
 
 function isDevelopment(): boolean {
   return process.env.NODE_ENV === 'development';
@@ -17,6 +18,11 @@ const TIKTOK_PIXEL_ID = 'D3IKI7BC77UEJB9HBO0G';
 let globalTikTokInitialized = false;
 let globalInitializationTimestamp: number | null = null;
 let globalConsentRevoked = false;
+let postRevokeCleanupInterval: number | null = null;
+let postRevokeCleanupTimeout: number | null = null;
+
+const POST_REVOKE_CLEANUP_INTERVAL_MS = 250;
+const POST_REVOKE_CLEANUP_WINDOW_MS = 6000;
 
 /**
  * Single page-view emitter, shared by the route effect and the consent
@@ -85,14 +91,55 @@ function hasMarketingConsent(): boolean {
 
 // Clear TikTok cookies for GDPR compliance
 function clearTikTokCookies(): void {
-  const cookiesToClear = ['_ttp', '_tt_enable_cookie', '_ttp_pixel'];
-  
-  cookiesToClear.forEach(cookie => {
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname}`;
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  clearFirstPartyCookies({
+    exactNames: [
+      '_ttp',
+      '_tt_enable_cookie',
+      '_ttp_pixel',
+      '_tt_sessionId',
+      '_tt_pixel_session_index',
+      '_tt_appInfo',
+      'ttcsid',
+      'ttclid',
+    ],
+    prefixes: ['ttcsid_'],
   });
   
   console.log('🧹 TikTok Pixel cookies cleared for compliance');
+}
+
+function stopPostRevokeCookieCleanup(): void {
+  if (postRevokeCleanupInterval !== null) {
+    window.clearInterval(postRevokeCleanupInterval);
+    postRevokeCleanupInterval = null;
+  }
+  if (postRevokeCleanupTimeout !== null) {
+    window.clearTimeout(postRevokeCleanupTimeout);
+    postRevokeCleanupTimeout = null;
+  }
+}
+
+function keepTikTokCookiesClearedAfterRevoke(): void {
+  stopPostRevokeCookieCleanup();
+  clearTikTokCookies();
+
+  // TikTok's already-loaded SDK can recreate ttcsid shortly after
+  // revokeConsent(). Keep sweeping only during the short settling window and
+  // stop immediately if the visitor grants marketing consent again.
+  postRevokeCleanupInterval = window.setInterval(() => {
+    if (!globalConsentRevoked || hasMarketingConsent()) {
+      stopPostRevokeCookieCleanup();
+      return;
+    }
+    clearTikTokCookies();
+  }, POST_REVOKE_CLEANUP_INTERVAL_MS);
+
+  postRevokeCleanupTimeout = window.setTimeout(() => {
+    if (globalConsentRevoked && !hasMarketingConsent()) {
+      clearTikTokCookies();
+    }
+    stopPostRevokeCookieCleanup();
+  }, POST_REVOKE_CLEANUP_WINDOW_MS);
 }
 
 // Load TikTok Pixel script
@@ -157,7 +204,7 @@ function loadTikTokPixel(): void {
   ttq.page();
 }
 
-export function useTikTokPixel() {
+export function useTikTokPixel(manageConsentLifecycle = false) {
   const initialized = useRef(false);
   const consentRevoked = useRef(false);
   const [location] = useLocation();
@@ -236,9 +283,8 @@ export function useTikTokPixel() {
   // Gate on GLOBAL flags: any hook instance must be able to revoke, even if a
   // different instance performed the initialization.
   const revokeTikTokPixel = useCallback(() => {
-    if (globalTikTokInitialized && !globalConsentRevoked) {
+    if (!globalConsentRevoked) {
       try {
-        // Revoke consent
         if (window.ttq && typeof window.ttq.revokeConsent === 'function') {
           window.ttq.revokeConsent();
         }
@@ -248,20 +294,22 @@ export function useTikTokPixel() {
         // block is guarded by globalConsentRevoked, so only the first listener
         // runs it). If consent comes back on this same route, the visit must be
         // counted again.
-        bumpConsentGeneration();
-        
-        // Clear TikTok cookies for GDPR compliance
-        clearTikTokCookies();
-        
-        console.log('🚫 TikTok Pixel consent revoked - tracking disabled and cookies cleared');
+        if (globalTikTokInitialized) {
+          bumpConsentGeneration();
+        }
       } catch (error) {
         console.error('Error revoking TikTok Pixel consent:', error);
       }
     }
+    keepTikTokCookiesClearedAfterRevoke();
   }, []);
 
   // Initial setup and consent change listener
   useEffect(() => {
+    if (!manageConsentLifecycle) {
+      return;
+    }
+
     // Check initial consent state and initialize if available
     if (process.env.NODE_ENV === 'production' && hasMarketingConsent()) {
       initTikTokPixel();
@@ -270,9 +318,7 @@ export function useTikTokPixel() {
         console.log('🎵 TikTok Pixel disabled in development mode');
       }
     } else if (process.env.NODE_ENV === 'production') {
-      if (isDevelopment()) {
-        console.log('🚫 TikTok Pixel not initialized - no marketing consent');
-      }
+      revokeTikTokPixel();
     }
 
     // Listen for granular consent changes
@@ -283,6 +329,7 @@ export function useTikTokPixel() {
       
       if (marketingGranted) {
         // Reset revoked state and initialize if not already done
+        stopPostRevokeCookieCleanup();
         consentRevoked.current = false;
         globalConsentRevoked = false;
         if (!initialized.current && !globalTikTokInitialized) {
@@ -316,17 +363,17 @@ export function useTikTokPixel() {
     return () => {
       window.removeEventListener('consentChanged', handleConsentChange as EventListener);
     };
-  }, [initTikTokPixel, revokeTikTokPixel]);
+  }, [initTikTokPixel, manageConsentLifecycle, revokeTikTokPixel]);
 
   // Track page views on route change (gate on GLOBAL flags, not per-instance refs)
   useEffect(() => {
-    if (globalTikTokInitialized && !globalConsentRevoked) {
+    if (manageConsentLifecycle && globalTikTokInitialized && !globalConsentRevoked) {
       // emitTikTokPageView owns the dedupe: once per navigation, no matter how
       // many hook instances are mounted.
       previousLocation.current = location;
       emitTikTokPageView(location);
     }
-  }, [location]);
+  }, [location, manageConsentLifecycle]);
 
   // Return TikTok Pixel API methods for custom tracking.
   // IMPORTANT: gate on GLOBAL flags, not per-instance refs. The pixel is

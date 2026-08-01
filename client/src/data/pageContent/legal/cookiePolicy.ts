@@ -6,7 +6,7 @@ export const cookiePolicyContent: BilingualPageContent = {
     sections: [
       {
         key: 'last-updated',
-        paragraphs: [`Last Updated: August 22, 2025`],
+        paragraphs: [`Last Updated: July 31, 2026`],
       },
       {
         key: 'intro',
@@ -55,6 +55,7 @@ export const cookiePolicyContent: BilingualPageContent = {
         ],
         bullets: [
           `**Google Ads:** To track conversions from our ads and to show you personalized ads on other websites (remarketing) based on your previous visit to our Site.`,
+          `**TikTok Pixel:** To measure visits and lead actions associated with TikTok campaigns and, when you allow marketing cookies, support campaign optimization and remarketing.`,
         ],
       },
       {
@@ -75,13 +76,14 @@ export const cookiePolicyContent: BilingualPageContent = {
           `**Google Analytics:** [https://tools.google.com/dlpage/gaoptout](https://tools.google.com/dlpage/gaoptout)`,
           `**Google Ads:** [https://myadcenter.google.com/](https://myadcenter.google.com/)`,
           `**Microsoft:** [https://account.microsoft.com/privacy](https://account.microsoft.com/privacy)`,
+          `**TikTok:** [https://www.tiktok.com/legal/page/global/cookie-policy/en](https://www.tiktok.com/legal/page/global/cookie-policy/en)`,
         ],
       },
       {
         key: 'third-party',
         heading: `Third-Party Cookies`,
         paragraphs: [
-          `Some of the cookies on our Site are set by third-party organizations. This is the case with cookies from Google and Microsoft. These companies manage the cookies and data they collect according to their own privacy policies. We recommend that you review them to understand how they use your information.`,
+          `Some of the cookies on our Site are set by third-party organizations. This is the case with cookies from Google, Microsoft and TikTok. These companies manage the cookies and data they collect according to their own privacy policies. We recommend that you review them to understand how they use your information. When marketing consent is withdrawn, our Site calls TikTok's consent-revocation API and clears the TikTok first-party cookies available to this domain; third-party cookies remain under TikTok's control.`,
         ],
       },
       {
@@ -109,7 +111,7 @@ export const cookiePolicyContent: BilingualPageContent = {
     sections: [
       {
         key: 'last-updated',
-        paragraphs: [`Última actualización: 22 de agosto de 2025`],
+        paragraphs: [`Última actualización: 31 de julio de 2026`],
       },
       {
         key: 'intro',
@@ -158,6 +160,7 @@ export const cookiePolicyContent: BilingualPageContent = {
         ],
         bullets: [
           `**Google Ads:** Para realizar un seguimiento de las conversiones de nuestros anuncios y para mostrarle anuncios personalizados en otros sitios web (remarketing) basados en su visita anterior a nuestro Sitio.`,
+          `**TikTok Pixel:** Para medir visitas y acciones de contacto asociadas con campañas de TikTok y, cuando permite cookies de marketing, apoyar la optimización de campañas y el remarketing.`,
         ],
       },
       {
@@ -178,13 +181,14 @@ export const cookiePolicyContent: BilingualPageContent = {
           `**Google Analytics:** [https://tools.google.com/dlpage/gaoptout](https://tools.google.com/dlpage/gaoptout)`,
           `**Google Ads:** [https://myadcenter.google.com/](https://myadcenter.google.com/)`,
           `**Microsoft:** [https://account.microsoft.com/privacy](https://account.microsoft.com/privacy)`,
+          `**TikTok:** [https://www.tiktok.com/legal/page/global/cookie-policy/es](https://www.tiktok.com/legal/page/global/cookie-policy/es)`,
         ],
       },
       {
         key: 'third-party',
         heading: `Cookies de Terceros`,
         paragraphs: [
-          `Algunas de las cookies de nuestro Sitio son establecidas por organizaciones de terceros. Este es el caso de las cookies de Google y Microsoft. Estas empresas gestionan las cookies y los datos que recopilan de acuerdo con sus propias políticas de privacidad. Le recomendamos que las revise para entender cómo utilizan su información.`,
+          `Algunas de las cookies de nuestro Sitio son establecidas por organizaciones de terceros. Este es el caso de las cookies de Google, Microsoft y TikTok. Estas empresas gestionan las cookies y los datos que recopilan de acuerdo con sus propias políticas de privacidad. Le recomendamos que las revise para entender cómo utilizan su información. Cuando retira el consentimiento de marketing, nuestro Sitio llama a la API de revocación de consentimiento de TikTok y elimina las cookies propias de TikTok disponibles para este dominio; las cookies de terceros siguen bajo el control de TikTok.`,
         ],
       },
       {

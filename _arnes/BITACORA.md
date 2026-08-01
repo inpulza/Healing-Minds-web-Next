@@ -48,6 +48,12 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Archivos tocados:** `client/src/components/Header.tsx`, `client/src/components/OptimizedImage.tsx`, `client/src/lib/navigation.tsx`, `client/src/pages/admin/AdminLogin.tsx`, `app/admin/layout.tsx`, `scripts/admin-password-hash.mjs`, `docs/ADMIN_AUTH_VERCEL.md`, `tests/admin-auth-flow.test.mjs`, `tests/editorial-next-parity.test.mjs`, tests Next existentes, `_arnes/evidencia/NEXT-STABILIZATION-2026-07-30.md`, `_arnes/BITACORA.md`, `package.json`.
 **Evidencia:** Tras sincronizar PR #1: `npm test` PASS 55/55; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys y orden de tags PASS; build Next PASS, 89/89 páginas, admin dinámico; Chromium 1440/914/390 EN↔ES PASS, 0 errores; logos visibles `complete=true`, `naturalWidth=1920`, `opacity=1`; login→dashboard→logout local PASS y Jordan confirmó credenciales reales en Production y Preview. El único conflicto manual fue el log append-only del arnés; se conservaron ambas entradas. Evidencia detallada: `_arnes/evidencia/NEXT-STABILIZATION-2026-07-30.md`.
 
+## 2026-07-31 Codex — analítica de reservas y semántica SEO
+**Qué se hizo:** Las reservas CharmHealth ahora generan la conversión GA4 consentida; los leads esperan a que GA tenga destino configurado; la home conserva un único H1 en el DOM.
+**Decisiones:** La cola de leads es acotada, no contiene PII y se elimina al revocar consentimiento. TikTok y canonical no se reescriben porque sus hallazgos históricos ya están resueltos en main.
+**Pendientes/bugs:** Validar en Preview con un contenedor GA real tras revisión del PR; no se modifica ninguna variable ni se publica.
+**Archivos tocados:** `client/src/lib/analytics.ts`, componentes CharmHealth/MobileToolbar/Footer/Hero, guard de analítica y evidencia del arnés.
+**Evidencia:** Guard automático exige cobertura en las cuatro variantes CharmHealth y en los otros puntos de reserva; detalle en `_arnes/evidencia/CODE-REVIEW-ANALYTICS-SEO-2026-07-31.md`.
 ## 2026-07-31 Codex — revisión clínica, licencia y horarios
 **Qué se hizo:** Se contrastaron los claims de licencia y certificación con los registros oficiales; se retiró de EN/ES el claim de certificación de junta no corroborado y se unificaron nueve páginas de ubicación con el horario oficial de fin de semana cerrado.
 **Decisiones:** La licencia California A 198275 permanece porque DCA la muestra vigente. La ausencia en ABPN no se presenta como prueba negativa; el claim se retira preventivamente hasta que Healing Minds aporte verificación oficial. No se autoaprueba contenido YMYL.
@@ -292,3 +298,59 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar SHA, responder/resolver el thread y exigir de nuevo Quality, Preview y Code Review exacto.
 **Archivos tocados:** `server/blog/privacy.ts`, `tests/blog-privacy.test.mjs`, evidencia, decisiones y bitácora.
 **Evidencia:** `3693800947` / `PRRT_kwDOToJ8Pc6VjZ_g`, válido. Juez independiente GO final: los 8 cortes posibles en dos campos y los 28 en tres quedan bloqueados; años partidos, prosa final con contexto fuerte, variante inversa y controles genéricos verificados. Batería integrada final: 72/72 tests, TypeScript PASS, DB PASS con 2 migraciones/95 statements/18 tablas/20 FKs, image/topic guards PASS, build 89/89 y diff-check PASS.
+
+## 2026-07-31 Codex - hardening integral de analytics y consentimiento
+**Qué se hizo:** El PR de analytics quedó sincronizado con `main` y se corrigieron la variable pública heredada de Vite, el orden de Google Consent Mode/config/eventos, la limpieza de cookies host/root, los listeners duplicados de Clarity/TikTok, el banner bloqueado por el widget y la cobertura completa de leads de cita, teléfono, email y WhatsApp. Se registraron todos los IDs públicos verificados y se añadió un guard de build Vercel.
+**Decisiones:** Un clic de CharmHealth es `generate_lead`, no una cita confirmada. Los eventos de salida se encolan detrás de `gtag('config')` sin depender de una cola en memoria. TikTok se revoca por API y solo se prometen borrar sus cookies first-party. Production recibe el ID después de validar Preview.
+**Pendientes/bugs:** Crear commit y push, esperar Preview READY, ejecutar el ciclo real de consentimiento, clasificar Code Review exacto, obtener GO del juez y después añadir el ID a Production antes del merge.
+**Archivos tocados:** analytics/cookie cleanup, hooks Clarity/TikTok, App/env, banner/política/dialog, CTAs globales y de ubicaciones, guards, prueba Chromium, registro de tags y evidencia.
+**Evidencia:** TypeScript PASS, analytics guard PASS, Chromium 2/2 PASS, suite 74/74 PASS, build Next 89/89 con `G-WMRK41PX2E`, diff-check PASS.
+
+## 2026-07-31 Codex - corrección del paquete de build Vercel
+**Qué se hizo:** El primer Preview de `802efab` falló antes de compilar porque `.vercelignore` omitía toda la carpeta `scripts/`. Se mantuvo la exclusión del tooling, pero se incluyó expresamente el único guard que `npm run build` necesita.
+**Decisiones:** El guard permanece como script versionado y ejecutable tanto localmente como en Vercel; no se duplica su lógica dentro de `package.json`.
+**Pendientes/bugs:** Publicar el ajuste y validar que el siguiente deployment exacto alcance READY y reciba `G-WMRK41PX2E`.
+**Archivos tocados:** `.vercelignore`, evidencia y bitácora.
+**Evidencia:** deployment `healing-minds-psychiatry-nextjs-41gzjru5q.vercel.app`, log `MODULE_NOT_FOUND /vercel/path0/scripts/verify-public-analytics-config.mjs`; `vercel env ls` confirma `NEXT_PUBLIC_GA_MEASUREMENT_ID` en Preview.
+
+## 2026-07-31 Codex - lifecycle Next y dedupe por clic real
+**Qué se hizo:** El juez independiente detectó que el guard observaba el `App` legacy y no el `app/public-shell.tsx` que Vercel ejecuta, por lo que Clarity/TikTok no recibían cambios de consentimiento. También demostró que ubicaciones distintas entre handler explícito y delegado duplicaban el mismo lead. Se activó el lifecycle en el shell Next, se cambió la ventana de dedupe a tipo de conversión y el test Chromium dispara ahora un clic DOM real con labels distintos.
+**Decisiones:** Cada runtime conserva un único lifecycle owner. La ventana de 500 ms deduplica solo el mismo tipo de lead; teléfono y reserva distintos siguen siendo eventos independientes.
+**Pendientes/bugs:** Repetir batería, publicar SHA, Preview real, Code Review exacto y veredicto final del juez.
+**Archivos tocados:** `app/public-shell.tsx`, analytics, guard, Chromium test, evidencia y bitácora.
+**Evidencia:** juez NO-GO provisional con dos P1 válidos sobre `a5c0c88`; correcciones locales pendientes de verificación.
+
+## 2026-07-31 Codex - acceso persistente a preferencias de cookies
+**Qué se hizo:** La auditoría complementaria comprobó que el texto prometía cambiar preferencias en cualquier momento, pero el banner desaparecía sin dejar un acceso visible. El footer público incluye ahora `Cookie Preferences / Preferencias de Cookies` y vuelve a mostrar el gestor con el consentimiento actual.
+**Decisiones:** La retirada de consentimiento no depende de borrar localStorage ni de herramientas de desarrollador; queda disponible como control de usuario en todas las páginas con footer.
+**Pendientes/bugs:** Incluir el flujo aceptar, retirar y reaceptar en la verificación del Preview exacto.
+**Archivos tocados:** footer, guard, evidencia y bitácora.
+**Evidencia:** revisión del estado `hasConsented && !showBanner` y ausencia previa de consumidores de `showPreferences`.
+
+## 2026-07-31 Codex - rechazo persistido y dimensiones GA
+**Qué se hizo:** La pasada final del juez detectó dos P2 válidos: cookies heredadas sobrevivían si la página arrancaba ya en estado rechazado, y `trackServicePageView` había dejado de enviar las dimensiones que su `custom_map` declaraba. La inicialización denegada limpia ahora GA/Ads/Clarity/TikTok sin exigir un nuevo evento, y los eventos de servicio vuelven a incluir servicio e idioma.
+**Decisiones:** Un consentimiento persistido denegado se ejecuta activamente en cada carga; no se limita a impedir scripts futuros. El mapping GA se conserva porque sus dimensiones vuelven a tener emisor y utilidad.
+**Pendientes/bugs:** Añadir prueba browser del estado rechazado heredado, repetir batería y devolver al juez.
+**Archivos tocados:** analytics, hooks Clarity/TikTok, guard, evidencia y bitácora.
+**Evidencia:** juez P2 sobre caminos iniciales sin cleanup y P2 sobre `custom_1/custom_2`, ambos clasificados válidos.
+
+## 2026-07-31 Codex - cookies TikTok oficiales, H1 visible y stacking aislado
+**Qué se hizo:** El E2E del juez encontró `ttcsid` y `ttcsid_<pixel>` persistiendo tras revocar; la referencia oficial añade también `ttclid`. Se amplió limpieza y fixtures. CodeX abrió además un P2 válido porque el H1 desktop quedaba oculto en móvil y un P1 válido porque elevar todos los Dialog rompía portales Select. El Hero mantiene un solo H1 dinámico visible y el z-index alto queda aislado al modal de cookies.
+**Decisiones:** La lista TikTok sigue la taxonomía oficial más los nombres legacy observados. El componente Dialog compartido conserva z50; expone solo una clase opcional de overlay para casos sin child portals. El título semántico se intercambia en runtime sin duplicar H1.
+**Pendientes/bugs:** Obtener GO del juez; publicar y validar Preview exacto; repetir el Code Review sobre el SHA publicado.
+**Archivos tocados:** TikTok hook/tests, Hero/test, Dialog/CookieBanner/guard, auditor Preview, evidencia y bitácora.
+**Evidencia:** E2E juez inicial: `ttcsid` y `ttcsid_D3IKI7BC77UEJB9HBO0G` persistentes; CodeX threads `3693973816`, `3693973820`, `3693973822` y `3693973825`, todos clasificados válidos. Tras corregirlos: focused Chromium 3/3 PASS, suite integrada 75/75 PASS, TypeScript PASS, build Next 89/89 con `G-WMRK41PX2E` y diff-check PASS.
+
+## 2026-07-31 Codex - limpieza TikTok durante asentamiento post-revocación
+**Qué se hizo:** El juez reprodujo que el SDK ya cargado recreaba `ttcsid` y `ttcsid_<pixel>` segundos después de la limpieza síncrona. La revocación mantiene ahora un barrido acotado de seis segundos y la auditoría real espera a que termine antes de comprobar cookies.
+**Decisiones:** El barrido se detiene inmediatamente si vuelve el consentimiento de marketing; nunca borra cookies tras una reaceptación. No se deja un monitor permanente.
+**Pendientes/bugs:** Publicar el SHA, validar Preview exacto y repetir Code Review sobre ese commit.
+**Archivos tocados:** hook TikTok, guard de analytics, auditor Preview y bitácora.
+**Evidencia:** juez inicial NO-GO porque `ttcsid*` reaparecía a los cinco segundos. Juez final GO: build 89/89; revocación + 6,5 s dejó 0 cookies first-party, incluidas `ttcsid`, `ttcsid_<pixel>` y `ttclid`; revocación + reaceptación a 500 ms conservó las cookies consentidas tras 6,5 s; consola 0 errores/0 warnings. Suite integrada 75/75, TypeScript, guard, focused Chromium 5/5 y diff-check PASS.
+
+## 2026-08-01 Codex - dominio real de cookies en Vercel Preview
+**Qué se hizo:** El Preview exacto de `4f13daf` cambió correctamente el consentimiento a denegado, pero reveló cookies con `Domain=.<hostname-preview>` que la limpieza host-only/canónica no podía expirar. La utilidad incluye ahora el hostname actual exacto y dotted; el auditor monta el footer lazy mediante un scroll sweep y comprueba evento, dominio y path reales.
+**Decisiones:** No se hardcodea ni se asciende a `vercel.app`. Solo se toca el hostname donde corre la página; en subdominios de Healing Minds se añade además el root canónico existente.
+**Pendientes/bugs:** Publicar follow-up, esperar su Preview exacto READY, repetir el ciclo real y exigir Code Review sobre el nuevo SHA.
+**Archivos tocados:** cookie cleanup, test Chromium de Preview, guard, auditor Preview, evidencia y bitácora.
+**Evidencia:** `dpl_5xsWsAKDvZuT4Tw3MwS7mSJVQWUm` READY; fallo real mostró `_ga`, `_gcl_au`, `_ttp` y `ttcsid*` domain-scoped tras 6,5 s. Corrección local: juez GO, Chromium 4/4, suite 76/76, TypeScript, guard, build 89/89 y diff-check PASS.

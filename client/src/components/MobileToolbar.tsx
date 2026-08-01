@@ -21,6 +21,7 @@ const MobileToolbar = () => {
   const whatsappNumber = 'https://wa.me/12399201019';
 
   const handleBookingClick = () => {
+    trackLeadConversion('appointment_booking', { click_location: 'mobile_toolbar' });
     trackEvent('mobile_toolbar_booking_clicked');
     setTag('toolbar_action', 'booking');
     trackTelehealthClick('mobile-toolbar');
