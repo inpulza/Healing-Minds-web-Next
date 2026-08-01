@@ -5,15 +5,29 @@ import test from "node:test";
 
 const root = process.cwd();
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "shared", "seo-manifest.json"), "utf8"));
+const nextConfig = fs.readFileSync(path.join(root, "next.config.mjs"), "utf8");
 
-test("the frozen live SEO manifest covers every sitemap URL with canonical metadata", () => {
-  assert.equal(Object.keys(manifest).length, 77);
+test("Next resolves route metadata before rendering for every user agent", () => {
+  assert.match(nextConfig, /htmlLimitedBots:\s*\/\.\*\//);
+});
+
+test("the frozen server SEO manifest covers every listed route with canonical metadata", () => {
+  assert.equal(Object.keys(manifest).length, 79);
   for (const [route, seo] of Object.entries(manifest)) {
     assert.equal(typeof seo.title, "string", `${route}: title`);
     assert.ok(seo.title.length > 0, `${route}: empty title`);
     assert.equal(typeof seo.description, "string", `${route}: description`);
     assert.match(seo.canonical, /^https:\/\/www\.healingmindsp\.com\//, `${route}: canonical`);
     assert.ok(seo.lang === "en" || seo.lang === "es", `${route}: lang`);
+  }
+});
+
+test("California landing routes keep their dedicated metadata and noindex policy", () => {
+  for (const route of ["/psychiatrist-california", "/es/psiquiatra-california"]) {
+    const seo = manifest[route];
+    assert.ok(seo, `${route}: missing metadata`);
+    assert.equal(seo.robots, "noindex, follow", `${route}: robots`);
+    assert.match(seo.canonical, new RegExp(`${route.replaceAll("/", "\\/")}$`));
   }
 });
 
