@@ -196,6 +196,7 @@ function checkPlannedLinkProvenance(): void {
     targetKeyword: "anxiety evaluation questions",
     language: "en",
     categoryId: 4,
+    categoryKey: "anxiety",
     pillar: "evaluation_care_journey",
     patientStage: "evaluation",
     contentFormat: "questions_to_ask",

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import Clarity from '@microsoft/clarity';
 import { useLanguage } from './useLanguage';
+import { clearFirstPartyCookies } from '@/lib/cookie-cleanup';
 
 function isDevelopment(): boolean {
   return process.env.NODE_ENV === 'development';
@@ -29,11 +30,8 @@ function hasAnalyticsConsent(): boolean {
 
 // Clear Microsoft Clarity cookies for FDBR compliance
 function clearClarityCookies(): void {
-  const cookiesToClear = ['_clck', '_clsk'];
-  
-  cookiesToClear.forEach(cookie => {
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname}`;
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  clearFirstPartyCookies({
+    exactNames: ['_clck', '_clsk'],
   });
   
   console.log('🧹 Microsoft Clarity cookies cleared for compliance');
@@ -53,7 +51,7 @@ function useSafeLanguage(): string {
   }
 }
 
-export function useClarity() {
+export function useClarity(manageConsentLifecycle = false) {
   const language = useSafeLanguage();
   const initialized = useRef(false);
   const consentRevoked = useRef(false);
@@ -103,14 +101,18 @@ export function useClarity() {
       consentRevoked.current = false;
       globalConsentRevoked = false;
       
-      // Set initial language tag after idle callback to prevent reflows
-      requestIdleCallback(() => {
+      const setInitialTags = () => {
         if (globalClarityInitialized && initialized.current) {
           Clarity.setTag('language', language);
           Clarity.setTag('site_type', 'psychiatry_practice');
           Clarity.setTag('practice_location', 'naples_fl');
         }
-      });
+      };
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(setInitialTags);
+      } else {
+        setTimeout(setInitialTags, 50);
+      }
       
       console.log('🔍 Microsoft Clarity initialized successfully with ID:', CLARITY_PROJECT_ID);
     } catch (error) {
@@ -124,25 +126,26 @@ export function useClarity() {
   // Gate on GLOBAL flags: any hook instance must be able to revoke, even if a
   // different instance performed the initialization.
   const revokeClarity = useCallback(() => {
-    if (globalClarityInitialized && !globalConsentRevoked) {
+    if (!globalConsentRevoked) {
       try {
-        // Disable further tracking
-        Clarity.consent(false);
+        if (globalClarityInitialized) {
+          Clarity.consent(false);
+        }
         consentRevoked.current = true;
         globalConsentRevoked = true;
-        
-        // Clear Clarity cookies for FDBR compliance
-        clearClarityCookies();
-        
-        console.log('🚫 Microsoft Clarity consent revoked - tracking disabled and cookies cleared');
       } catch (error) {
         console.error('Error revoking Microsoft Clarity consent:', error);
       }
     }
+    clearClarityCookies();
   }, []);
 
   // Initial setup and consent change listener
   useEffect(() => {
+    if (!manageConsentLifecycle) {
+      return;
+    }
+
     // Check initial consent state and initialize if available
     if (process.env.NODE_ENV === 'production' && hasAnalyticsConsent()) {
       initClarity();
@@ -151,9 +154,7 @@ export function useClarity() {
         console.log('🔍 Microsoft Clarity disabled in development mode');
       }
     } else if (process.env.NODE_ENV === 'production') {
-      if (isDevelopment()) {
-        console.log('🚫 Microsoft Clarity not initialized - no analytics consent');
-      }
+      revokeClarity();
     }
 
     // Listen for granular consent changes
@@ -193,11 +194,11 @@ export function useClarity() {
     };
     // OPTIMIZED DEPENDENCIES: Remove language from dependencies to prevent unnecessary re-runs
     // initClarity already has language in its useCallback dependencies
-  }, [initClarity, revokeClarity]);
+  }, [initClarity, manageConsentLifecycle, revokeClarity]);
 
   // Update language tag when language changes - with throttling to prevent reflows
   useEffect(() => {
-    if (globalClarityInitialized && initialized.current) {
+    if (manageConsentLifecycle && globalClarityInitialized) {
       // Use requestIdleCallback to prevent forced reflows
       if ('requestIdleCallback' in window) {
         requestIdleCallback(() => {
@@ -221,7 +222,7 @@ export function useClarity() {
         }, 50);
       }
     }
-  }, [language]); // Keep language dependency but check global state before execution
+  }, [language, manageConsentLifecycle]);
 
   // Return Clarity API methods for custom tracking.
   // IMPORTANT: gate on GLOBAL flags, not per-instance refs. Clarity is

@@ -121,10 +121,10 @@ function Router() {
   useAnalytics();
   
   // Initialize Microsoft Clarity (guards prevent multiple initializations)
-  useClarity();
+  useClarity(true);
   
   // Initialize TikTok Pixel (guards prevent multiple initializations)
-  useTikTokPixel();
+  useTikTokPixel(true);
   
   // Scroll to top on route changes
   useScrollToTop();
@@ -239,13 +239,9 @@ function App() {
   
   // Initialize analytics and handle consent changes
   useEffect(() => {
-    // Verify required environment variable is present
-    if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
-      console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
-    } else {
-      // Initialize GA with consent check (it will check internally)
-      initGA();
-    }
+    // initGA validates the public Next.js variable and starts with Consent Mode
+    // denied until the visitor has made a choice.
+    initGA();
     
     // Listen for granular consent changes
     const handleConsentChangeEvent = (event: CustomEvent) => {

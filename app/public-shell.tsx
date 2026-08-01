@@ -18,8 +18,8 @@ function PublicRuntime({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
 
   useAnalytics();
-  useClarity();
-  useTikTokPixel();
+  useClarity(true);
+  useTikTokPixel(true);
   useScrollToTop();
 
   useEffect(() => {

@@ -144,7 +144,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `What psychiatric conditions do you treat at Healing Minds?`,
         paragraphs: [
-          `Dr. Melva Reve provides expert care for anxiety disorders, depression, ADHD (in adults and teens), PTSD, bipolar disorder, and medication management. Each treatment plan is personalized to your symptoms, history, and goals.`,
+          `Dr. Melva Reve provides expert care for anxiety disorders, depression, ADHD in adults 18 and older, PTSD, bipolar disorder, and medication management. Each treatment plan is personalized to your symptoms, history, and goals.`,
         ],
       },
       {
@@ -346,7 +346,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `¿Qué condiciones psiquiátricas trata Healing Minds?`,
         paragraphs: [
-          `La Dra. Melva Reve ofrece atención experta para trastornos de ansiedad, depresión, TDAH (en adultos y adolescentes), TEPT, trastorno bipolar y manejo de medicamentos. Cada plan de tratamiento es personalizado según sus síntomas, historial y objetivos.`,
+          `La Dra. Melva Reve ofrece atención experta para trastornos de ansiedad, depresión, TDAH en adultos de 18 años en adelante, TEPT, trastorno bipolar y manejo de medicamentos. Cada plan de tratamiento es personalizado según sus síntomas, historial y objetivos.`,
         ],
       },
       {

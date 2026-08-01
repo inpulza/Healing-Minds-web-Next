@@ -3,6 +3,7 @@ import { useLocation } from '@/lib/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, CalendarCheck, Video } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
+import { trackLeadConversion } from '@/lib/analytics';
 
 /**
  * Floating telehealth widget.
@@ -225,6 +226,11 @@ const TelehealthVideoWidget = () => {
                 href={CHARM_HEALTH_URL}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackLeadConversion('appointment_booking', {
+                    click_location: 'telehealth_video_widget',
+                  })
+                }
                 data-testid="button-widget-book"
                 className="flex items-center justify-center gap-1.5 w-full rounded-full bg-green-800 hover:bg-green-900 px-3 py-2.5 text-xs font-semibold text-white transition-colors font-body"
               >
@@ -234,6 +240,11 @@ const TelehealthVideoWidget = () => {
 
               <a
                 href={PHONE_HREF}
+                onClick={() =>
+                  trackLeadConversion('phone_call', {
+                    click_location: 'telehealth_video_widget',
+                  })
+                }
                 data-testid="button-widget-call"
                 className="flex items-center justify-center gap-1.5 w-full rounded-full border border-green-800 px-3 py-2.5 text-xs font-semibold text-green-800 hover:bg-green-50 transition-colors font-body"
               >

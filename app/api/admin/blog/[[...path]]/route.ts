@@ -1,4 +1,6 @@
 import { after, NextRequest, NextResponse } from "next/server";
+import type { BlogGenerationRun } from "@shared/schema";
+import type { GuidedTopicTrustedContext } from "../../../../../server/blog/ai/topic-planner";
 import { getAdminSession, noStoreHeaders } from "../../../../../server/next-admin-auth";
 
 export const runtime = "nodejs";
@@ -527,29 +529,39 @@ export async function POST(request: NextRequest, context: RouteContext) {
     if (segments.length === 1 && segments[0] === "generate-draft") {
       const requestedPayload = validation.adminBlogGenerateDraftSchema.parse(body);
       let payload = requestedPayload;
-      let claimedPlanningRun: Awaited<ReturnType<typeof import("../../../../../server/blog/generation/storage").claimCompletedBlogPlanningRun>>;
+      let claimedPlanningRun: BlogGenerationRun | undefined;
+      let topicCandidateSelection: {
+        runId: number;
+        candidateKey: string;
+        trustedCandidate: GuidedTopicTrustedContext;
+      } | undefined;
       if (requestedPayload.topicCandidateId) {
-        const [candidates, planned, generation, strategy] = await Promise.all([
+        const [candidates, planned, strategy, generation] = await Promise.all([
           import("../../../../../server/blog/topic-candidate-storage"),
           import("../../../../../server/blog/ai/planned-topic-provenance"),
-          import("../../../../../server/blog/generation/storage"),
           import("../../../../../server/blog/strategy/healing-minds"),
+          import("../../../../../server/blog/generation/storage"),
         ]);
         const candidate = await candidates.getBlogTopicCandidateById(requestedPayload.topicCandidateId);
         if (!candidate || candidate.recommendation !== "recommended" || candidate.strategyVersion !== strategy.HEALING_MINDS_TOPIC_STRATEGY_VERSION) {
           throw Object.assign(new Error("The selected topic candidate is no longer eligible. Plan topics again."), { statusCode: 409 });
         }
-        const selected = await candidates.selectBlogTopicCandidate(candidate.runId, candidate.candidateKey);
-        payload = { ...requestedPayload, ...planned.buildPersistedTopicDraftOverrides(selected) };
-        claimedPlanningRun = await generation.claimCompletedBlogPlanningRun(selected.runId);
-        if (!claimedPlanningRun) {
-          throw Object.assign(new Error("This topic plan was already used or is no longer available. Plan topics again."), { statusCode: 409 });
+        const availablePlanningRun = await generation.getAvailableCompletedBlogPlanningRun(candidate.runId);
+        if (!availablePlanningRun) {
+          throw Object.assign(
+            new Error("This topic plan was already used or is no longer available. Plan topics again."),
+            { statusCode: 409, code: "topic_plan_already_used" },
+          );
         }
+        const persistedOverrides = planned.buildPersistedTopicDraftOverrides(candidate);
+        payload = { ...requestedPayload, ...persistedOverrides };
+        topicCandidateSelection = {
+          runId: candidate.runId,
+          candidateKey: candidate.candidateKey,
+          trustedCandidate: planned.buildPersistedTopicSafetyContext(candidate, persistedOverrides),
+        };
       }
-      const possibleSensitiveText = [payload.topic, payload.targetKeyword, payload.additionalContext]
-        .filter(Boolean)
-        .join(" ");
-      const [{ containsLikelyPatientIdentifier }, generator, { checkBlogAiRateLimit }, planner, topic, strategy, admin] = await Promise.all([
+      const [{ containsLikelyPatientIdentifierInAiFields }, generator, { checkBlogAiRateLimit }, planner, topic, strategy, admin] = await Promise.all([
         import("../../../../../server/blog/privacy"),
         import("../../../../../server/blog/ai/generator"),
         import("../../../../../server/blog/ai/rate-limit"),
@@ -558,10 +570,10 @@ export async function POST(request: NextRequest, context: RouteContext) {
         import("../../../../../server/blog/strategy/healing-minds"),
         import("../../../../../server/blog/admin-routes"),
       ]);
-      if (containsLikelyPatientIdentifier(possibleSensitiveText)) {
+      if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return json({
           success: false,
-          message: "AI generation inputs must not include patient-identifying information",
+          message: "AI generation inputs must not include patient/client/name markers, labeled contact details, or patient-identifying information. Rephrase the public topic with neutral language.",
         }, 400);
       }
       generator.assertBlogAiGenerationConfigured();
@@ -577,14 +589,26 @@ export async function POST(request: NextRequest, context: RouteContext) {
         targetKeyword: payload.targetKeyword,
         additionalContext: payload.additionalContext,
         language: payload.language,
+        trustedCandidate: topicCandidateSelection?.trustedCandidate,
       });
+      if (topicCandidateSelection) {
+        const candidates = await import("../../../../../server/blog/topic-candidate-storage");
+        const claimedSelection = await candidates.claimBlogTopicCandidateForGeneration(
+          topicCandidateSelection.runId,
+          topicCandidateSelection.candidateKey,
+        );
+        claimedPlanningRun = claimedSelection?.planningRun;
+        if (!claimedPlanningRun) {
+          throw Object.assign(new Error("This topic plan was already used or is no longer available. Plan topics again."), { statusCode: 409 });
+        }
+      }
       try {
         const result = await admin.createGeneratedBlogDraft({
           ...payload,
           topicKey: topic.buildTopicKey(`${payload.topic} ${payload.targetKeyword || ""}`, payload.language),
           expertiseAngle: payload.additionalContext || undefined,
           topicStrategyVersion: payload.topicStrategyVersion || strategy.HEALING_MINDS_TOPIC_STRATEGY_VERSION,
-        }, undefined, undefined, claimedPlanningRun?.id);
+        }, undefined, undefined, claimedPlanningRun?.id, topicCandidateSelection ? payload.expertiseAngle : undefined);
         if (claimedPlanningRun) {
           const generation = await import("../../../../../server/blog/generation/storage");
           const completed = await generation.completeBlogGenerationRun(claimedPlanningRun.id, {

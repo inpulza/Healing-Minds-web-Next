@@ -14,6 +14,7 @@ import { naplesLocationContent } from '@/data/pageContent/mainPages/naples';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
+import { trackLeadConversion } from '@/lib/analytics';
 import { 
   MapPin, 
   Phone, 
@@ -932,7 +933,10 @@ const LocationNaples = () => {
               <Button 
                 variant="outline"
                 className="border-2 border-green-800 text-green-800 hover:bg-green-800 hover:text-white px-8 py-6 rounded-full font-body font-semibold text-lg min-w-[240px]"
-                onClick={() => window.location.href = `tel:${practiceInfo.phone}`}
+                onClick={() => {
+                  trackLeadConversion('phone_call', { click_location: 'naples_final_cta' });
+                  window.location.href = `tel:${practiceInfo.phone}`;
+                }}
                 data-testid="button-call-now"
               >
                 <Phone className="w-4 h-4 mr-2" />

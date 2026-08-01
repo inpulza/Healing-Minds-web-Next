@@ -61,8 +61,8 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
       enabled: tempConsent.marketing,
       required: false,
       examples: language === 'es'
-        ? 'Google Ads, Facebook Pixel, remarketing'
-        : 'Google Ads, Facebook Pixel, remarketing'
+        ? 'Google Ads, TikTok Pixel, remarketing'
+        : 'Google Ads, TikTok Pixel, remarketing'
     }
   ];
 
@@ -140,7 +140,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
     <>
       {/* Cookie Banner */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-50 ${className}`}
+        className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-[10000] ${className}`}
         data-testid="cookie-banner"
       >
         <div className="container mx-auto p-4">
@@ -196,7 +196,11 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
 
       {/* Cookie Preferences Modal */}
       <Dialog open={showPreferences} onOpenChange={setShowPreferences}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" data-testid="cookie-preferences-modal">
+        <DialogContent
+          overlayClassName="z-[10001]"
+          className="z-[10002] max-w-4xl max-h-[90vh] overflow-y-auto"
+          data-testid="cookie-preferences-modal"
+        >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5" />

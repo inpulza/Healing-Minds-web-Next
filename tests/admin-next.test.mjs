@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 
 const root = process.cwd();
@@ -42,4 +44,51 @@ test("App Router exposes the existing admin UI outside the public shell", () => 
   assert.match(read("client/src/pages/admin/AdminLogin.tsx"), /BLOG_ADMIN_PASSWORD \(or BLOG_ADMIN_PASSWORD_HASH\)/);
   assert.match(read("app/admin/layout.tsx"), /dynamic = ["']force-dynamic["']/);
   assert.match(read("app/admin/layout.tsx"), /fetchCache = ["']force-no-store["']/);
+});
+
+test("Replit keeps an authenticated public preview without weakening local development", () => {
+  const packageJson = JSON.parse(read("package.json"));
+  const replit = read(".replit");
+  assert.equal(packageJson.scripts.dev, "next dev -H 127.0.0.1 -p 3100");
+  assert.equal(packageJson.scripts["dev:replit"], "node scripts/run-replit-dev.mjs");
+  assert.match(replit, /^run = "npm run dev:replit"/m);
+  assert.match(replit, /args = "npm run dev:replit"\s+waitForPort = 5000/m);
+
+  const refused = spawnSync(process.execPath, ["scripts/run-replit-dev.mjs"], {
+    cwd: root,
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      BLOG_ADMIN_AUTH_MODE: "off",
+      ADMIN_AUTH_MODE: "",
+    },
+  });
+  assert.notEqual(refused.status, 0);
+  assert.match(refused.stderr, /Refusing to expose the Replit preview while admin authentication is disabled/);
+
+  for (const [variable, mode, envFile] of [
+    ["BLOG_ADMIN_AUTH_MODE", "off", ".env.local"],
+    ["ADMIN_AUTH_MODE", "disabled", ".env.development.local"],
+  ]) {
+    const fixtureDir = fs.mkdtempSync(path.join(os.tmpdir(), "healing-minds-replit-preview-"));
+    try {
+      fs.writeFileSync(path.join(fixtureDir, envFile), `${variable}=${mode}\n`, "utf8");
+      const fixtureEnv = { ...process.env };
+      delete fixtureEnv.BLOG_ADMIN_AUTH_MODE;
+      delete fixtureEnv.ADMIN_AUTH_MODE;
+      const refusedFromFile = spawnSync(
+        process.execPath,
+        [path.join(root, "scripts/run-replit-dev.mjs")],
+        {
+          cwd: fixtureDir,
+          encoding: "utf8",
+          env: fixtureEnv,
+        },
+      );
+      assert.notEqual(refusedFromFile.status, 0, `${variable}=${mode} in ${envFile} must fail closed`);
+      assert.match(refusedFromFile.stderr, /Refusing to expose the Replit preview while admin authentication is disabled/);
+    } finally {
+      fs.rmSync(fixtureDir, { recursive: true, force: true });
+    }
+  }
 });

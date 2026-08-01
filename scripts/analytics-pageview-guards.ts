@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import {
   bumpConsentGeneration,
   claimPageView,
@@ -303,6 +303,206 @@ function checkRepeatedConsentCyclesKeepEmittingOnce(): void {
   }
 }
 
+function checkLeadMeasurementCoverage(): void {
+  const analyticsSource = readFileSync(
+    new URL("../client/src/lib/analytics.ts", import.meta.url),
+    "utf8",
+  );
+  assert.doesNotMatch(
+    analyticsSource,
+    /pendingLeadConversions/,
+    "outbound leads must not depend on an in-memory queue that is lost during navigation",
+  );
+  assert.ok(
+    analyticsSource.indexOf("window.gtag('config'") <
+      analyticsSource.indexOf("window.gtag('event', 'generate_lead'"),
+    "the Google destination must be queued before lead events",
+  );
+  assert.match(analyticsSource, /transport_type: 'beacon'/);
+  assert.match(
+    analyticsSource,
+    /installOutboundLeadTracking[\s\S]*href\.startsWith\('tel:'\)[\s\S]*href\.startsWith\('mailto:'\)[\s\S]*wa\.me\/[\s\S]*charmtracker\.com\/publicCal\.sas/,
+    "telephone, email, WhatsApp and CharmHealth links need an exhaustive delegated guard",
+  );
+
+  const charmSource = readFileSync(
+    new URL("../client/src/components/CharmHealthBooking.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.equal(
+    (charmSource.match(/trackLeadConversion\('appointment_booking'/g) ?? []).length,
+    4,
+    "all four CharmHealth booking variants must emit the GA lead conversion",
+  );
+
+  for (const component of ["MobileToolbar.tsx", "Footer.tsx"]) {
+    const source = readFileSync(
+      new URL(`../client/src/components/${component}`, import.meta.url),
+      "utf8",
+    );
+    assert.match(
+      source,
+      /trackLeadConversion\('appointment_booking'/,
+      `${component} booking must emit the GA lead conversion`,
+    );
+  }
+
+  const telehealthWidget = readFileSync(
+    new URL("../client/src/components/TelehealthVideoWidget.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(telehealthWidget, /trackLeadConversion\('appointment_booking'/);
+  assert.match(telehealthWidget, /trackLeadConversion\('phone_call'/);
+
+  const california = readFileSync(
+    new URL("../client/src/pages/PsiquiatraCalifornia.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.ok(
+    (california.match(/trackLeadConversion\('appointment_booking'/g) ?? []).length >= 2,
+    "both direct California booking buttons must emit a lead click",
+  );
+
+  const florida = readFileSync(
+    new URL("../client/src/pages/TelepsychiatryFlorida.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(florida, /trackLeadConversion\('appointment_booking'/);
+
+  const naples = readFileSync(
+    new URL("../client/src/pages/LocationNaples.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(naples, /trackLeadConversion\('phone_call'/);
+
+  const pagesDirectory = new URL("../client/src/pages/", import.meta.url);
+  for (const entry of readdirSync(pagesDirectory, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.tsx')) {
+      continue;
+    }
+    const source = readFileSync(new URL(entry.name, pagesDirectory), 'utf8');
+    if (/window\.(?:open|location\.href)[\s\S]{0,40}tel:/.test(source)) {
+      assert.match(
+        source,
+        /trackLeadConversion\('phone_call'/,
+        `${entry.name} launches a phone call from a button and must record the lead first`,
+      );
+    }
+  }
+}
+
+function checkConsentAndTagRegistry(): void {
+  const appSource = readFileSync(new URL("../client/src/App.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(appSource, /VITE_GA_MEASUREMENT_ID/);
+
+  const nextShellSource = readFileSync(
+    new URL("../app/public-shell.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(nextShellSource, /useClarity\(true\)/);
+  assert.match(nextShellSource, /useTikTokPixel\(true\)/);
+
+  const claritySource = readFileSync(
+    new URL("../client/src/hooks/use-clarity.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(claritySource, /useClarity\(manageConsentLifecycle = false\)/);
+  assert.match(claritySource, /clearFirstPartyCookies/);
+  assert.match(
+    claritySource,
+    /else if \(process\.env\.NODE_ENV === 'production'\) \{\s*revokeClarity\(\)/,
+  );
+
+  const tiktokSource = readFileSync(
+    new URL("../client/src/hooks/use-tiktok-pixel.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(tiktokSource, /useTikTokPixel\(manageConsentLifecycle = false\)/);
+  assert.match(tiktokSource, /window\.ttq\.revokeConsent\(\)/);
+  assert.match(tiktokSource, /clearFirstPartyCookies/);
+  for (const cookieName of ["ttcsid", "ttcsid_", "ttclid"]) {
+    assert.match(tiktokSource, new RegExp(cookieName));
+  }
+  assert.match(tiktokSource, /window\.setInterval/);
+  assert.match(tiktokSource, /POST_REVOKE_CLEANUP_WINDOW_MS = 6000/);
+  assert.match(
+    tiktokSource,
+    /globalConsentRevoked && !hasMarketingConsent\(\)/,
+    "post-revoke cleanup must stop short of deleting cookies after re-consent",
+  );
+  assert.match(
+    tiktokSource,
+    /else if \(process\.env\.NODE_ENV === 'production'\) \{\s*revokeTikTokPixel\(\)/,
+  );
+
+  const cleanupSource = readFileSync(
+    new URL("../client/src/lib/cookie-cleanup.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(cleanupSource, /PRODUCTION_COOKIE_DOMAIN = 'healingmindsp\.com'/);
+  assert.match(cleanupSource, /currentHostname/);
+  assert.match(cleanupSource, /new Set\(\[currentHostname, `\.\$\{currentHostname\}`\]\)/);
+  assert.doesNotMatch(cleanupSource, /vercel\.app/);
+
+  const analyticsSource = readFileSync(
+    new URL("../client/src/lib/analytics.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    analyticsSource,
+    /const leadKey = source/,
+    "explicit and delegated handlers can label one click differently, so dedupe must use source",
+  );
+  for (const cookieName of ["_ga", "_gcl_au", "_gcl_aw"]) {
+    assert.match(analyticsSource, new RegExp(cookieName));
+  }
+  assert.match(
+    analyticsSource,
+    /if \(!analyticsConsent\) \{\s*clearAnalyticsCookies\(\)/,
+  );
+  assert.match(analyticsSource, /custom_1: serviceName/);
+  assert.match(analyticsSource, /custom_2: language/);
+
+  const bannerSource = readFileSync(
+    new URL("../client/src/components/CookieBanner.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(bannerSource, /TikTok Pixel/);
+  assert.doesNotMatch(bannerSource, /Facebook Pixel/);
+  assert.match(bannerSource, /z-\[10000\]/);
+  assert.match(bannerSource, /overlayClassName="z-\[10001\]"/);
+  assert.match(bannerSource, /className="z-\[10002\]/);
+
+  const dialogSource = readFileSync(
+    new URL("../client/src/components/ui/dialog.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(dialogSource, /overlayClassName\?: string/);
+  assert.match(dialogSource, /fixed inset-0 z-50/);
+  assert.doesNotMatch(dialogSource, /fixed inset-0 z-\[10001\]/);
+
+  const footerSource = readFileSync(
+    new URL("../client/src/components/Footer.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(footerSource, /footer-cookie-preferences/);
+  assert.match(footerSource, /onClick=\{showPreferences\}/);
+
+  const policySource = readFileSync(
+    new URL("../client/src/data/pageContent/legal/cookiePolicy.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(policySource, /TikTok Pixel/);
+  assert.match(policySource, /third-party cookies remain under TikTok's control/);
+
+  const environmentGuard = readFileSync(
+    new URL("./verify-public-analytics-config.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.match(environmentGuard, /G-WMRK41PX2E/);
+  assert.match(environmentGuard, /G-42LWDS101X/);
+}
+
 function main(): void {
   checkInitialLoadIsNotDoubleCounted();
   checkNavigationEmitsOncePerRoute();
@@ -315,6 +515,8 @@ function main(): void {
   checkDeferredSendIsDroppedAfterRevocation();
   checkHookRecordsEntryPageOnEveryInitPath();
   checkClaimTokensAreMonotonic();
+  checkLeadMeasurementCoverage();
+  checkConsentAndTagRegistry();
 
   console.log(
     `Page-view dedupe guards passed with ${MOUNTED_INSTANCES} mounted instances: `
