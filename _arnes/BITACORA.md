@@ -506,3 +506,24 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar otro SHA y repetir Quality, Preview exacta, E2E desplegado y Code Review; el SHA `16a544f` no es candidato a merge.
 **Archivos tocados:** interceptor E2E y bitácora.
 **Evidencia:** en la Preview `dpl_S8mP836b7W3XcwtNAMphrEogwJZC`, navegación EN/ES desktop/móvil y las páginas California alcanzaron la aplicación y sus aserciones; los tres fallos mostraron únicamente `apiResponse.dispose: Target page, context or browser has been closed` durante el cierre.
+
+## 2026-08-01 Codex - drenaje de peticiones autenticadas antes del teardown
+**Qué se hizo:** El siguiente Preview pasó los ocho recorridos y todas sus aserciones, pero Playwright informó fuera de los tests que una imagen aún estaba dentro de `route.fetch` cuando terminó el worker. El E2E ejecuta ahora `page.unrouteAll({ behavior: "wait" })` después de cada test: retira el interceptor y espera las callbacks ya activas antes de que se cierre el BrowserContext. Los errores de `route.fetch` se reemplazan por un mensaje saneado que solo contiene el pathname y nunca serializa headers.
+**Decisiones:** Se mantiene la espera explícita en vez de ignorar errores de teardown. La seguridad de redirects no cambia: `maxRedirects: 0`, origen exacto y `route.fulfill` continúan siendo obligatorios.
+**Pendientes/bugs:** Publicar otro SHA y repetir todos los gates exactos; `217f7fb` tampoco es candidato a merge pese a que sus 8/8 aserciones funcionales pasaron.
+**Archivos tocados:** interceptor E2E, contrato de seguridad y bitácora.
+**Evidencia:** Quality Linux de `217f7fb` PASS completo. Preview `dpl_GUTZ94oSBP6uEdsxgSbPRMKEz6PY`: 8/8 tests y aserciones PASS, seguido de un único error fuera de test por un WebP aún en `route.fetch`; el nuevo afterEach espera precisamente esas callbacks.
+
+## 2026-08-01 Codex - cancelación acotada de assets al cerrar cada test
+**Qué se hizo:** La prueba del drenaje con `behavior: "wait"` mostró que retirar el handler podía resolver una ruta mientras una callback regresaba de `route.fetch`, produciendo `Route is already handled`. Playwright recomienda `behavior: "ignoreErrors"` para el teardown de handlers aún activos. Se adopta esa semántica únicamente en `afterEach`; durante el test, cada fetch y fulfill sigue siendo awaited y cualquier fallo funcional continúa fallando el test.
+**Decisiones:** No se deja el handler vivo ni se suprimen errores de aplicación. Solo se ignoran callbacks canceladas por el cierre de la propia página después de completar las aserciones. El catch saneado evita además serializar headers si un fetch falla antes del teardown.
+**Pendientes/bugs:** Repetir el E2E exacto sobre la misma Preview para validar el arnés antes de otro commit; después volver a ejecutar todos los gates sobre el SHA publicado.
+**Archivos tocados:** teardown E2E, contrato y bitácora.
+**Evidencia:** la pasada anterior alcanzó 8/8 aserciones funcionales; el cambio responde exactamente a los dos errores exclusivos de cierre recomendados por Playwright: callback después de BrowserContext cerrado y ruta ya manejada durante `unrouteAll(wait)`.
+
+## 2026-08-01 Codex - validación del teardown acotado
+**Qué se hizo:** El E2E local actualizado se ejecutó contra la Preview protegida e inmutable de `217f7fb`, usando su SHA exacto y el interceptor con `ignoreErrors` solo durante `afterEach`.
+**Decisiones:** La estrategia queda validada antes de publicar otro commit: no hubo errores fuera de test, el token siguió limitado al origen de Vercel y las ocho aserciones funcionales permanecieron estrictas.
+**Pendientes/bugs:** Commit, Quality, Preview final, CodeX y juez sobre el nuevo SHA; no reutilizar la evidencia de `217f7fb` como sustituto del gate final.
+**Archivos tocados:** bitácora.
+**Evidencia:** Preview `dpl_GUTZ94oSBP6uEdsxgSbPRMKEz6PY`, expected SHA `217f7fbd309847ca0abf907cb4b48c31361222ab`, E2E desplegado 8/8 PASS en 54,3 s, sin error de teardown.

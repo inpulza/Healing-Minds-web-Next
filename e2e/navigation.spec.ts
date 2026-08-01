@@ -25,15 +25,29 @@ test.beforeEach(async ({ page }) => {
   // third-party request made by the page. Fetch without following redirects:
   // Playwright otherwise forwards header overrides through the redirect chain.
   await page.route(`${deploymentOrigin}/**`, async (route) => {
-    const response = await route.fetch({
-      headers: {
-        ...(await route.request().allHeaders()),
-        [previewCredential.name]: previewCredential.value,
-      },
-      maxRedirects: 0,
-    });
+    let response;
+    try {
+      response = await route.fetch({
+        headers: {
+          ...(await route.request().allHeaders()),
+          [previewCredential.name]: previewCredential.value,
+        },
+        maxRedirects: 0,
+      });
+    } catch {
+      const pathname = new URL(route.request().url()).pathname;
+      throw new Error(`Preview authentication fetch failed for ${pathname}.`);
+    }
     await route.fulfill({ response });
   });
+});
+
+test.afterEach(async ({ page }) => {
+  // A page can finish its assertions while late images are still in flight.
+  // The browser closing can legitimately cancel those callbacks. Remove the
+  // handler and ignore only teardown-time callback errors; in-test failures
+  // still surface through the awaited route handler and the test assertions.
+  await page.unrouteAll({ behavior: "ignoreErrors" });
 });
 
 type RouteCase = {

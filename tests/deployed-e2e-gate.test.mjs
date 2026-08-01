@@ -58,5 +58,7 @@ test("Preview credentials are scoped to the deployment origin", () => {
   assert.match(spec, /maxRedirects:\s*0/);
   assert.match(spec, /route\.fulfill\(\{ response \}\)/);
   assert.doesNotMatch(spec, /route\.continue\(/);
+  assert.match(spec, /page\.unrouteAll\(\{ behavior: "ignoreErrors" \}\)/);
+  assert.match(spec, /Preview authentication fetch failed/);
   assert.match(spec, /credentialLeaks/);
 });
