@@ -91,7 +91,12 @@ export type TopicInventorySnapshot = {
     contentFormat?: string | null;
     status: string;
   }>;
+  totalPosts: number;
   clusterCounts: Record<string, number>;
+  pillarCounts: Record<string, number>;
+  patientStageCounts: Record<string, number>;
+  formatCounts: Record<string, number>;
+  searchIntentCounts: Record<string, number>;
   recentCategoryKeys: string[];
   recentPillars: string[];
   recentFormats: string[];
@@ -115,7 +120,7 @@ export async function generateTopicCandidateBatch(input: {
       "Avoid cosmetic uniqueness based only on a year, season, location, or list number.",
       "Use at most one listicle-like idea in the batch. Prefer questions people searching for care may ask and meaningful search-intent gaps.",
       "Do not use patient, paciente, client, cliente, name, nombre, or labeled contact details in topic, targetKeyword, or expertiseAngle; those administrative AI fields are fail-closed and must use neutral public-topic language.",
-      "Treat the inventory as the complete existing-topic record and diversify categories, pillars, stages, and formats.",
+      "The inventory contains complete aggregate counts plus a bounded recent safe-profile sample. Use it to diversify categories, pillars, stages, and formats; final duplicate checks run locally against every post.",
     ].join(" "),
     user: {
       language: input.language,

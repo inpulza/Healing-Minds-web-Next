@@ -1,6 +1,7 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import type { BlogGenerationRun } from "@shared/schema";
 import type { GuidedTopicTrustedContext } from "../../../../../server/blog/ai/topic-planner";
+import { decideGenerationRunCreationAction } from "../../../../../server/blog/generation/idempotency";
 import { getAdminSession, noStoreHeaders } from "../../../../../server/next-admin-auth";
 
 export const runtime = "nodejs";
@@ -408,6 +409,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
         import("../../../../../server/blog/ai/responses-client"),
         import("../../../../../server/blog/ai/rate-limit"),
       ]);
+      await generation.markStaleBlogGenerationRunsInterrupted(new Date(Date.now() - 5 * 60 * 1000));
       const existing = await generation.getBlogGenerationRunByIdempotencyKey(idempotencyKey);
       if (existing) {
         if (existing.status === "queued") after(() => admin.executePersistedAutoGenerateRun(existing.id));
@@ -439,11 +441,24 @@ export async function POST(request: NextRequest, context: RouteContext) {
         return response;
       }
       const workflow = admin.createAutoGenerateWorkflow();
-      const run = await generation.createBlogGenerationRun({
+      const creation = await generation.createBlogGenerationRunIfAbsent({
         idempotencyKey,
         input: JSON.parse(JSON.stringify(payload)),
         workflow: JSON.parse(JSON.stringify(workflow)),
       });
+      const run = creation.run;
+      const creationAction = decideGenerationRunCreationAction(creation);
+      if (creationAction !== "queue_new") {
+        if (creationAction === "resume_queued") after(() => admin.executePersistedAutoGenerateRun(run.id));
+        return json({
+          success: true,
+          data: {
+            runId: run.id,
+            status: run.status,
+            workflow: run.workflow || workflow,
+          },
+        });
+      }
       await generation.appendBlogGenerationEvent({
         runId: run.id,
         eventType: "progress",
@@ -462,6 +477,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
         import("../../../../../server/blog/ai/topic-planner"),
         import("../../../../../server/blog/generation/storage"),
       ]);
+      await generation.markStaleBlogGenerationRunsInterrupted(new Date(Date.now() - 5 * 60 * 1000));
       responses.assertBlogTopicGenerationConfigured();
       const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
       const rateLimit = checkBlogAiRateLimit(forwardedFor || "admin");
@@ -488,6 +504,12 @@ export async function POST(request: NextRequest, context: RouteContext) {
         input: JSON.parse(JSON.stringify({ mode: "topic-plan", language: payload.language })),
         workflow: JSON.parse(JSON.stringify(workflow)),
       });
+      const heartbeatTimer = setInterval(() => {
+        void generation.heartbeatBlogGenerationRun(run.id).catch(error => {
+          console.error(`Could not heartbeat topic planning run ${run.id}:`, error);
+        });
+      }, 30_000);
+      heartbeatTimer.unref();
       try {
         const plan = await planner.buildBlogTopicPlan({ language: payload.language, categories, tags, runId: run.id });
         const completed = await generation.completeBlogPlanningRun(run.id, {
@@ -495,8 +517,10 @@ export async function POST(request: NextRequest, context: RouteContext) {
           result: JSON.parse(JSON.stringify(plan)),
         });
         if (!completed) throw Object.assign(new Error("The durable topic plan could not be completed"), { statusCode: 409 });
+        clearInterval(heartbeatTimer);
         return json({ success: true, data: plan });
       } catch (error) {
+        clearInterval(heartbeatTimer);
         await generation.failBlogGenerationRun(run.id, {
           error: error instanceof Error ? error.message : "Topic planning failed",
           result: { success: false, mode: "topic-plan" },
@@ -683,6 +707,16 @@ export async function POST(request: NextRequest, context: RouteContext) {
         if (maxInline !== undefined && (!Number.isInteger(maxInline) || maxInline < 1 || maxInline > 2)) {
           return json({ success: false, message: "maxInline must be 1 or 2" }, 400);
         }
+        const { checkBlogImageRateLimit, getBlogImageRateLimitCost } = await import("../../../../../server/blog/images/rate-limit");
+        const imageRateLimit = checkBlogImageRateLimit(
+          request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "admin",
+          getBlogImageRateLimitCost(role, maxInline),
+        );
+        if (!imageRateLimit.allowed) {
+          const response = json({ success: false, message: "Blog image generation rate limit reached" }, 429);
+          if (imageRateLimit.retryAfterSec) response.headers.set("Retry-After", String(imageRateLimit.retryAfterSec));
+          return response;
+        }
         return json({ success: true, data: await imageService.generateBlogImageSet(post, { role, maxInline }) }, 201);
       }
       const imageId = Number(segments[3]);
@@ -691,6 +725,15 @@ export async function POST(request: NextRequest, context: RouteContext) {
       if (!image || image.postId !== postId) return json({ success: false, message: "Blog image variant not found" }, 404);
       if (segments[4] === "regenerate") {
         imageConfig.assertBlogImageConfigured();
+        const { checkBlogImageRateLimit } = await import("../../../../../server/blog/images/rate-limit");
+        const imageRateLimit = checkBlogImageRateLimit(
+          request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "admin",
+        );
+        if (!imageRateLimit.allowed) {
+          const response = json({ success: false, message: "Blog image generation rate limit reached" }, 429);
+          if (imageRateLimit.retryAfterSec) response.headers.set("Retry-After", String(imageRateLimit.retryAfterSec));
+          return response;
+        }
         return json({ success: true, data: await imageService.regenerateBlogImageVariant(post, imageId) }, 201);
       }
       if (segments[4] === "select") {
@@ -905,11 +948,15 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     const deletion = await storage.deleteBlogPostWithRedirect(id, redirectRequest, {
       expectedStatus: post.status,
       expectedUpdatedAt: post.updatedAt,
-      deletePhysicalImageObjects: async objectKeys => {
-        await imageService.deleteBlogImageObjectsOnly(objectKeys);
-      },
     });
     if (!deletion.deleted) return json({ success: false, message: "Blog post not found" }, 404);
+    let imageCleanupWarning: string | null = null;
+    try {
+      await imageService.deleteBlogImageObjectsOnly(deletion.imageObjectKeys);
+    } catch (error) {
+      imageCleanupWarning = "The article was deleted, but one or more unreferenced image objects still need cleanup.";
+      console.error(`Blog post ${id} committed before image cleanup failed:`, error);
+    }
     return json({
       success: true,
       data: {
@@ -918,6 +965,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
         deletedStatus: post.status,
         publicPath: storage.getBlogPostPath(post),
         redirect: deletion.redirect,
+        imageCleanupWarning,
       },
     });
   } catch (error) {

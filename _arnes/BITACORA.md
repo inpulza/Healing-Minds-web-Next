@@ -48,6 +48,12 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Archivos tocados:** `client/src/components/Header.tsx`, `client/src/components/OptimizedImage.tsx`, `client/src/lib/navigation.tsx`, `client/src/pages/admin/AdminLogin.tsx`, `app/admin/layout.tsx`, `scripts/admin-password-hash.mjs`, `docs/ADMIN_AUTH_VERCEL.md`, `tests/admin-auth-flow.test.mjs`, `tests/editorial-next-parity.test.mjs`, tests Next existentes, `_arnes/evidencia/NEXT-STABILIZATION-2026-07-30.md`, `_arnes/BITACORA.md`, `package.json`.
 **Evidencia:** Tras sincronizar PR #1: `npm test` PASS 55/55; `npm run check` PASS; `npm run db:verify` PASS con 2 migraciones, 95 statements, 18 tablas, 20 foreign keys y orden de tags PASS; build Next PASS, 89/89 páginas, admin dinámico; Chromium 1440/914/390 EN↔ES PASS, 0 errores; logos visibles `complete=true`, `naturalWidth=1920`, `opacity=1`; login→dashboard→logout local PASS y Jordan confirmó credenciales reales en Production y Preview. El único conflicto manual fue el log append-only del arnés; se conservaron ambas entradas. Evidencia detallada: `_arnes/evidencia/NEXT-STABILIZATION-2026-07-30.md`.
 
+## 2026-07-31 Codex — robustez de jobs, inventario e imágenes
+**Qué se hizo:** El planificador recorre todo el inventario; las ejecuciones concurrentes respetan un único ganador; `queued` se recupera y topic planning mantiene heartbeat; las imágenes pagadas tienen rate limit, las generaciones abandonadas se recuperan y el borrado físico ocurre después del commit.
+**Decisiones:** Se conserva revisión humana y borradores. Los fallos de limpieza física posteriores al commit se reportan como warning para no mentir sobre el estado ya confirmado de la base de datos.
+**Pendientes/bugs:** Un rate limit global multi-instancia requeriría almacenamiento distribuido y queda fuera de este PR pequeño.
+**Archivos tocados:** almacenamiento/generación del blog, rutas Next/Express de imágenes, planificador, guards y evidencia del arnés.
+**Evidencia:** Matriz y decisiones en `_arnes/evidencia/CODE-REVIEW-BLOG-ROBUSTNESS-2026-07-31.md`.
 ## 2026-07-31 Codex — analítica de reservas y semántica SEO
 **Qué se hizo:** Las reservas CharmHealth ahora generan la conversión GA4 consentida; los leads esperan a que GA tenga destino configurado; la home conserva un único H1 en el DOM.
 **Decisiones:** La cola de leads es acotada, no contiene PII y se elimina al revocar consentimiento. TikTok y canonical no se reescriben porque sus hallazgos históricos ya están resueltos en main.
@@ -354,3 +360,17 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar follow-up, esperar su Preview exacto READY, repetir el ciclo real y exigir Code Review sobre el nuevo SHA.
 **Archivos tocados:** cookie cleanup, test Chromium de Preview, guard, auditor Preview, evidencia y bitácora.
 **Evidencia:** `dpl_5xsWsAKDvZuT4Tw3MwS7mSJVQWUm` READY; fallo real mostró `_ga`, `_gcl_au`, `_ttp` y `ttcsid*` domain-scoped tras 6,5 s. Corrección local: juez GO, Chromium 4/4, suite 76/76, TypeScript, guard, build 89/89 y diff-check PASS.
+
+## 2026-08-01 Codex - integración de main en PR #5
+**Qué se hizo:** Se integró `main` ya con los PR #6, #7 y #8 en el hardening del blog. El conflicto del topic planner conserva el perfil semántico y la privacidad actuales, pero sustituye el límite de 200 posts por la paginación completa de inventario de #5. La bitácora se concilió por concatenación cronológica.
+**Decisiones:** PR #5 se cierra antes que #4 porque es hardening independiente y reduce el riesgo del feature grande. No se apila #4 dentro de #5. Los checks anteriores al merge de `main` se consideran obsoletos.
+**Pendientes/bugs:** Publicar el SHA integrado, exigir Preview READY, Code Review exacto y GO del juez antes de fusionar por squash sin borrar la rama.
+**Archivos tocados:** merge de `origin/main`, `server/blog/ai/topic-planner.ts` y bitácora.
+**Evidencia:** juez de secuencia GO para #5 primero. Árbol integrado: suite 76/76, TypeScript PASS, DB 2 migraciones/95 statements/18 tablas/20 FKs, image/topic guards PASS, build 89/89 y diff-check PASS.
+
+## 2026-08-01 Codex - cierre de concurrencia, Blob, cuota e inventario del PR #5
+**Qué se hizo:** Se corrigieron las cuatro notas P2 del Code Review exacto de `3ad4a81`: orden total del inventario, cola duradera de limpieza Blob, cuota de imagen aplicada a Auto Generate y payloads del proveedor limitados. También quedaron cerrados los hallazgos del juez sobre carreras same-key/different-key y heartbeat Express.
+**Decisiones:** Los checks de duplicidad, saturación y gaps de etapa siguen usando el inventario o los conteos completos; solo la frontera del proveedor queda limitada a agregados completos y 40 perfiles seguros priorizados. El borrado del post registra las claves dentro de la misma transacción antes del cascade; los objetos se limpian después del commit y el backlog se reintenta en ejecuciones posteriores. La cuota cuenta llamadas potencialmente pagadas, no solo clics de endpoint.
+**Pendientes/bugs:** Publicar un nuevo SHA, responder y resolver los cuatro threads, y repetir Quality, Vercel READY y CodeX exacto antes del merge.
+**Archivos tocados:** inventario/payload del planner y judge, rutas Next/Express, storage de runs, rate limit e imágenes, esquema/migración, guards/tests, evidencia, decisiones y bitácora.
+**Evidencia:** threads `3694143680`, `3694143684`, `3694143685` y `3694143688`, todos válidos. Juez independiente GO 4/4, incluido el guard de `missingStages` fuera de la muestra. Local: 81/81 tests, TypeScript PASS, DB 3 migraciones/98 statements/19 tablas/20 FKs, image/topic/link/analytics guards PASS, SEO render audit 8/8, build 89/89 y diff-check PASS.

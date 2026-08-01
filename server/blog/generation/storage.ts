@@ -16,23 +16,42 @@ import type {
 export async function createBlogGenerationRun(
   values: CreateGenerationRunInput,
 ): Promise<GenerationRun> {
-  const [created] = await db
-    .insert(blogGenerationRuns)
-    .values({
-      idempotencyKey: values.idempotencyKey,
-      input: values.input,
-      workflow: values.workflow,
-    })
-    .onConflictDoNothing({ target: blogGenerationRuns.idempotencyKey })
-    .returning();
+  return (await createBlogGenerationRunIfAbsent(values)).run;
+}
 
-  if (created) return created;
+export async function createBlogGenerationRunIfAbsent(
+  values: CreateGenerationRunInput,
+): Promise<{ run: GenerationRun; created: boolean }> {
+  let created: GenerationRun | undefined;
+  try {
+    [created] = await db
+      .insert(blogGenerationRuns)
+      .values({
+        idempotencyKey: values.idempotencyKey,
+        input: values.input,
+        workflow: values.workflow,
+      })
+      .onConflictDoNothing({ target: blogGenerationRuns.idempotencyKey })
+      .returning();
+  } catch (error) {
+    if ((error as { code?: string }).code !== "23505") throw error;
+
+    const existing = await getBlogGenerationRunByIdempotencyKey(values.idempotencyKey);
+    if (existing) return { run: existing, created: false };
+
+    throw Object.assign(
+      new Error("Another generation or planning run started at the same time. Reopen it before trying again."),
+      { statusCode: 409, code: "blog_generation_run_conflict" },
+    );
+  }
+
+  if (created) return { run: created, created: true };
 
   const existing = await getBlogGenerationRunByIdempotencyKey(values.idempotencyKey);
   if (!existing) {
     throw new Error("Blog generation run conflict could not be resolved");
   }
-  return existing;
+  return { run: existing, created: false };
 }
 
 export async function getBlogGenerationRun(runId: number): Promise<GenerationRun | undefined> {
@@ -177,6 +196,21 @@ export async function updateBlogGenerationRun(
   return updated;
 }
 
+export async function heartbeatBlogGenerationRun(
+  runId: number,
+): Promise<GenerationRun | undefined> {
+  const now = new Date();
+  const [updated] = await db
+    .update(blogGenerationRuns)
+    .set({ heartbeatAt: now, updatedAt: now })
+    .where(and(
+      eq(blogGenerationRuns.id, runId),
+      inArray(blogGenerationRuns.status, ["planning", "queued", "running"]),
+    ))
+    .returning();
+  return updated;
+}
+
 export async function completeBlogGenerationRun(
   runId: number,
   values: CompleteGenerationRunInput,
@@ -298,7 +332,7 @@ export async function markStaleBlogGenerationRunsInterrupted(
     })
     .where(
       and(
-        inArray(blogGenerationRuns.status, ["planning", "running"]),
+        inArray(blogGenerationRuns.status, ["planning", "queued", "running"]),
         or(
           lt(blogGenerationRuns.heartbeatAt, staleBefore),
           and(

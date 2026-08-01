@@ -128,7 +128,7 @@ export async function judgeTopicCandidates(input: {
     role: "judge",
     system: [
       "You are a conservative SEO cannibalization judge for a medical psychiatry blog.",
-      "Compare every candidate against the complete supplied safe existing-post inventory, not only lexical top matches. Do not add medical claims.",
+      "Compare every candidate against the bounded, locally prioritized safe existing-post evidence and its lexical top matches. Do not add medical claims.",
       "Historical titles and keywords are intentionally redacted. Use each canonical semanticProfile to compare category, reader stage, format, search intent, and intent facet without reconstructing private text.",
       "duplicate means substantially the same reader question and intent, not merely the same condition.",
       "same_cluster_distinct_intent means the condition overlaps but the patient question and useful outcome differ.",

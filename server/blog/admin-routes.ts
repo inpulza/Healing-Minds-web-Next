@@ -67,17 +67,20 @@ import {
   completeBlogGenerationRun,
   completeBlogPlanningRun,
   createBlogGenerationRun,
+  createBlogGenerationRunIfAbsent,
   failBlogGenerationRun,
   getBlogGenerationRun,
   getBlogGenerationRunByIdempotencyKey,
   getAvailableCompletedBlogPlanningRun,
   getOpenBlogGenerationRun,
+  heartbeatBlogGenerationRun,
   listBlogGenerationEvents,
   markStaleBlogGenerationRunsInterrupted,
   queuePreparedBlogGenerationRun,
   updateBlogGenerationRun,
 } from "./generation/storage";
 import type { GenerationRun, JsonObject } from "./generation/types";
+import { decideGenerationRunCreationAction } from "./generation/idempotency";
 import {
   claimBlogTopicCandidateForGeneration,
   getBlogTopicCandidateById,
@@ -89,6 +92,8 @@ import {
   type BlogImageGenerationSummary,
 } from "./images/service";
 import { ensureCuratedHeroImage } from "./images/storage";
+import { checkBlogImageRateLimit, getBlogImageRateLimitCost } from "./images/rate-limit";
+import { isBlogImageEnabled } from "./images/config";
 import { registerBlogLinkRoutes } from "./links/routes";
 import {
   isBlogLinkRuntimeEnabled,
@@ -688,6 +693,19 @@ export async function createGeneratedBlogDraft(
       detail: "Keeping the curated hero selected while generating reviewed hero and inline candidates.",
     }, reportProgress);
     try {
+      if (isBlogImageEnabled()) {
+        const imageRateLimit = checkBlogImageRateLimit(
+          "auto-generate",
+          getBlogImageRateLimitCost("all", 2),
+        );
+        if (!imageRateLimit.allowed) {
+          throw Object.assign(new Error("Blog image generation rate limit reached"), {
+            statusCode: 429,
+            code: "blog_image_rate_limit_reached",
+            retryAfterSec: imageRateLimit.retryAfterSec,
+          });
+        }
+      }
       imageSummary = await generateBlogImageSet(post, {
         role: "all",
         generationRunId,
@@ -1275,24 +1293,34 @@ export function registerAdminBlogRoutes(app: Express): void {
         throw error;
       }
       planningRunId = planningRun.id;
-      const plan = await buildBlogTopicPlan({
-        language: payload.language,
-        categories,
-        tags,
-        runId: planningRun.id,
-      });
-      const completed = await completeBlogPlanningRun(planningRun.id, {
-        workflow: toJsonObject(planningWorkflow),
-        result: toJsonObject(plan),
-      });
-      if (!completed) {
-        throw Object.assign(new Error("The durable topic plan could not be completed"), {
-          statusCode: 409,
-          code: "topic_plan_completion_conflict",
+      const heartbeatTimer = setInterval(() => {
+        void heartbeatBlogGenerationRun(planningRun.id).catch(error => {
+          console.error(`Could not heartbeat topic planning run ${planningRun.id}:`, error);
         });
-      }
+      }, 30_000);
+      heartbeatTimer.unref();
+      try {
+        const plan = await buildBlogTopicPlan({
+          language: payload.language,
+          categories,
+          tags,
+          runId: planningRun.id,
+        });
+        const completed = await completeBlogPlanningRun(planningRun.id, {
+          workflow: toJsonObject(planningWorkflow),
+          result: toJsonObject(plan),
+        });
+        if (!completed) {
+          throw Object.assign(new Error("The durable topic plan could not be completed"), {
+            statusCode: 409,
+            code: "topic_plan_completion_conflict",
+          });
+        }
 
-      res.status(200).json({ success: true, data: plan });
+        res.status(200).json({ success: true, data: plan });
+      } finally {
+        clearInterval(heartbeatTimer);
+      }
     } catch (error) {
       if (planningRunId) {
         await failBlogGenerationRun(planningRunId, {
@@ -1368,9 +1396,9 @@ export function registerAdminBlogRoutes(app: Express): void {
       // recover by idempotency key. This payload contains no free-form topic text.
       let workflow = createAutoGenerateWorkflow();
       const persistedPayload = payload;
-      let run: Awaited<ReturnType<typeof createBlogGenerationRun>>;
+      let creation: Awaited<ReturnType<typeof createBlogGenerationRunIfAbsent>>;
       try {
-        run = await createBlogGenerationRun({
+        creation = await createBlogGenerationRunIfAbsent({
           idempotencyKey,
           input: toJsonObject(persistedPayload),
           workflow: toJsonObject(workflow),
@@ -1388,6 +1416,25 @@ export function registerAdminBlogRoutes(app: Express): void {
           });
         }
         throw error;
+      }
+      const run = creation.run;
+      const creationAction = decideGenerationRunCreationAction(creation);
+      if (creationAction !== "queue_new") {
+        if (creationAction === "resume_queued") {
+          setImmediate(() => {
+            void executePersistedAutoGenerateRun(run.id).catch(error => {
+              console.error(`Unhandled queued generation run failure (${run.id}):`, error);
+            });
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          data: {
+            runId: run.id,
+            status: run.status,
+            workflow: run.workflow || workflow,
+          },
+        });
       }
       await appendBlogGenerationEvent({
         runId: run.id,
@@ -2104,13 +2151,17 @@ export function registerAdminBlogRoutes(app: Express): void {
         {
           expectedStatus: post.status,
           expectedUpdatedAt: post.updatedAt,
-          deletePhysicalImageObjects: async objectKeys => {
-            await deleteBlogImageObjectsOnly(objectKeys);
-          },
         },
       );
       if (!deletion.deleted) {
         return res.status(404).json({ success: false, message: "Blog post not found" });
+      }
+      let imageCleanupWarning: string | null = null;
+      try {
+        await deleteBlogImageObjectsOnly(deletion.imageObjectKeys);
+      } catch (error) {
+        imageCleanupWarning = "The article was deleted, but one or more unreferenced image objects still need cleanup.";
+        console.error(`Blog post ${id} committed before image cleanup failed:`, error);
       }
       res.status(200).json({
         success: true,
@@ -2120,6 +2171,7 @@ export function registerAdminBlogRoutes(app: Express): void {
           deletedStatus: post.status,
           publicPath: getBlogPostPath(post),
           redirect: deletion.redirect,
+          imageCleanupWarning,
         },
       });
     } catch (error) {
