@@ -16,6 +16,17 @@ type NormalizeOptions = {
   requiredSections?: string[];
 };
 
+export function countBlogDraftWords(contentHtml: string): number {
+  return getPlainTextFromHtml(contentHtml).split(/\s+/).filter(Boolean).length;
+}
+
+export function isRecomputedDraftShapeRiskNote(note: string): boolean {
+  return /^Generated draft is \d+ words, below the editorial brief minimum of \d+\. Expand during human review\.$/.test(note)
+    || /^Generated draft is \d+ words, below the target depth of \d+\.$/.test(note)
+    || /^Generated draft has \d+ H2 sections, below the editorial brief target of \d+\.$/.test(note)
+    || /^Generated draft may be missing or renaming expected sections: .+\.$/.test(note);
+}
+
 function isAnchor(node: unknown): node is Element {
   return Boolean(
     node
@@ -83,6 +94,26 @@ function normalizeUrlForComparison(value: string): {
   } catch {
     return null;
   }
+}
+
+export function extractBlogDraftAnchorHrefs(contentHtml: string): string[] {
+  const document = parseDocument(contentHtml, {
+    decodeEntities: true,
+    lowerCaseAttributeNames: true,
+    lowerCaseTags: true,
+  });
+  const hrefs = new Set<string>();
+  const anchors = DomUtils.findAll(isAnchor, document.children);
+  for (const anchor of anchors) {
+    const href = anchor.attribs?.href;
+    if (typeof href !== "string") continue;
+    try {
+      hrefs.add(normalizeBlogLinkHref(href).normalizedHref);
+    } catch {
+      // The normalizer rejects malformed links elsewhere; omit them here.
+    }
+  }
+  return Array.from(hrefs);
 }
 
 function extractExternalUrls(value: string): string[] {
@@ -225,7 +256,7 @@ export function normalizeAiGeneratedDraft(
   const slug = slugifyBlogValue(parsed.slug || title || fallbackTopic);
   const featuredImageAlt = truncateSeoText(parsed.featuredImageAlt || `${title} | Healing Minds Psychiatry`, 255);
   const riskNotes = [...(parsed.riskNotes || [])];
-  const wordCount = getPlainTextFromHtml(contentHtml).split(/\s+/).filter(Boolean).length;
+  const wordCount = countBlogDraftWords(contentHtml);
   if (options.minimumWordCount && wordCount < options.minimumWordCount) {
     riskNotes.push(`Generated draft is ${wordCount} words, below the editorial brief minimum of ${options.minimumWordCount}. Expand during human review.`);
   } else if (options.targetWordCount && wordCount < Math.round(options.targetWordCount * 0.85)) {

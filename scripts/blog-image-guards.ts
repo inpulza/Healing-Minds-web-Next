@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import type { BlogPostImage } from "@shared/schema";
 import { getBlogImageConfig, isBlogImageEnabled } from "../server/blog/images/config";
 import {
@@ -17,14 +18,31 @@ import {
   containsLikelyPatientIdentifierAcrossTextFields,
   containsLikelyPatientIdentifierInAiFields,
 } from "../server/blog/privacy";
-import { buildSafeVisualBrief } from "../server/blog/images/prompt";
+import {
+  BLOG_IMAGE_PROMPT_VERSION,
+  buildBlogImageAlt,
+  buildBlogImagePrompt,
+  buildSafeVisualBrief,
+} from "../server/blog/images/prompt";
 import { checkBlogImageRateLimit, getBlogImageRateLimitCost } from "../server/blog/images/rate-limit";
+import { summarizeBlogImageJobSlots } from "../server/blog/images/job-summary";
 
 const originalEnabled = process.env.BLOG_IMAGE_ENABLED;
 const originalApiKey = process.env.OPENAI_API_KEY;
 const originalModel = process.env.BLOG_IMAGE_MODEL;
+const nextAdminBlogRoute = readFileSync(
+  new URL("../app/api/admin/blog/[[...path]]/route.ts", import.meta.url),
+  "utf8",
+);
 
 try {
+  assert.match(
+    nextAdminBlogRoute,
+    /^export const maxDuration = 600;$/m,
+    "The durable image worker must retain enough execution time after the HTTP response",
+  );
+  assert.match(nextAdminBlogRoute, /Idempotency-Key/);
+  assert.match(nextAdminBlogRoute, /executePersistedBlogImageGenerationJob/);
   process.env.BLOG_IMAGE_ENABLED = "false";
   delete process.env.OPENAI_API_KEY;
   assert.equal(isBlogImageEnabled(), false);
@@ -71,10 +89,11 @@ try {
     caption: "Educational editorial image.",
     safeVisualBrief: "Safe visual brief",
     prompt: "Safe prompt",
-    promptVersion: "healing-minds-v1",
+    promptVersion: BLOG_IMAGE_PROMPT_VERSION,
     provider: "openai",
     model: "gpt-image-2",
     generationRunId: null,
+    imageJobId: null,
     startedAt: new Date(),
     completedAt: new Date(),
     durationMs: 1000,
@@ -91,6 +110,22 @@ try {
   assert.match(rendered, /<h2>Safe heading<\/h2><figure class="blog-inline-image">/);
   assert.match(rendered, new RegExp(publicUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.equal(rendered.includes("https://example.com"), false);
+
+  const failedInline: BlogPostImage = {
+    ...selectedInline,
+    id: 8,
+    generationStatus: "failed",
+    reviewStatus: "candidate",
+    objectKey: null,
+    publicUrl: null,
+    errorCode: "provider_error",
+    errorMessage: "Provider failed safely",
+  };
+  assert.equal(summarizeBlogImageJobSlots([selectedInline]).status, "completed");
+  assert.equal(summarizeBlogImageJobSlots([selectedInline, failedInline]).status, "partial_failed");
+  const failedSummary = summarizeBlogImageJobSlots([failedInline]);
+  assert.equal(failedSummary.status, "failed");
+  assert.deepEqual(failedSummary.result.failedImageIds, [8]);
 
   assert.equal(containsLikelyPatientIdentifier("patient name: Jane Example"), true);
   assert.equal(containsLikelyPatientIdentifier("Name: jane doe"), true);
@@ -483,11 +518,39 @@ try {
     tags: [],
   };
   const visualBrief = buildSafeVisualBrief(privateDraft, "hero");
-  assert.match(visualBrief, /Approved article theme: anxiety education/);
+  assert.match(visualBrief, /APPROVED THEME: anxiety education/);
   assert.equal(visualBrief.includes("Maria Garcia"), false);
   assert.equal(visualBrief.includes("123 Main Street"), false);
 
-  console.log("Blog image config, path, PHI, sanitizer, and render guards passed.");
+  const telehealthDraft = {
+    ...privateDraft,
+    id: 43,
+    title: "Preparing for a Telepsychiatry Appointment in Florida",
+    translationGroupId: "00000000-0000-4000-8000-000000000043",
+    excerpt: "A general educational guide to virtual care.",
+    content: "<h2>What patients can expect</h2><p>General educational content.</p>",
+  };
+  const telehealthHeroBrief = buildSafeVisualBrief(telehealthDraft, "hero", null, "hero");
+  const telehealthInlineBrief = buildSafeVisualBrief(
+    telehealthDraft,
+    "inline",
+    "What patients can expect",
+    "inline:1",
+  );
+  assert.match(telehealthHeroBrief, /APPROVED THEME: private telehealth access/);
+  assert.match(telehealthHeroBrief, /fictional adult/i);
+  assert.match(telehealthHeroBrief, /CAMPAIGN TREATMENT:/);
+  assert.match(telehealthHeroBrief, /medium-format feel/);
+  assert.match(telehealthHeroBrief, /Do not depict children or infants/);
+  assert.match(telehealthHeroBrief, /anatomically and spatially coherent/);
+  assert.doesNotMatch(telehealthHeroBrief, /still life|desk with a window/i);
+  assert.notEqual(telehealthHeroBrief, telehealthInlineBrief);
+  assert.match(buildBlogImagePrompt(telehealthHeroBrief), /horizontal 3:2 photograph/);
+  assert.match(buildBlogImagePrompt(telehealthHeroBrief), /five fingers when fully visible/);
+  assert.match(buildBlogImageAlt(telehealthDraft, "hero"), /editorial photograph/i);
+  assert.equal(BLOG_IMAGE_PROMPT_VERSION, "healing-minds-v3");
+
+  console.log("Blog image config, topic variety, PHI, sanitizer, and render guards passed.");
 } finally {
   if (originalEnabled === undefined) delete process.env.BLOG_IMAGE_ENABLED;
   else process.env.BLOG_IMAGE_ENABLED = originalEnabled;

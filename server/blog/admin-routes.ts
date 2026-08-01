@@ -91,7 +91,8 @@ import {
   generateBlogImageSet,
   type BlogImageGenerationSummary,
 } from "./images/service";
-import { ensureCuratedHeroImage } from "./images/storage";
+import { materializeSelectedInlineImages } from "./images/render";
+import { ensureCuratedHeroImage, getSelectedBlogPostImages } from "./images/storage";
 import { checkBlogImageRateLimit, getBlogImageRateLimitCost } from "./images/rate-limit";
 import { isBlogImageEnabled } from "./images/config";
 import { registerBlogLinkRoutes } from "./links/routes";
@@ -1753,6 +1754,26 @@ export function registerAdminBlogRoutes(app: Express): void {
         checks: validatePostForPublish(post),
         verification: buildBlogVerificationReport(post),
         linkReport,
+      });
+    } catch (error) {
+      sendDbError(res, error);
+    }
+  });
+
+  app.get("/api/admin/blog/posts/:id/preview", async (req, res) => {
+    const id = parseId(req);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid post id" });
+
+    try {
+      const post = await getBlogPostById(id);
+      if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      const images = await getSelectedBlogPostImages(post.id);
+      res.status(200).json({
+        success: true,
+        data: {
+          ...post,
+          content: materializeSelectedInlineImages(post.content || "", images),
+        },
       });
     } catch (error) {
       sendDbError(res, error);

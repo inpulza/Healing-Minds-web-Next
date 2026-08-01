@@ -1,7 +1,12 @@
 import fs from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import { PGlite } from "@electric-sql/pglite";
+import { drizzle } from "drizzle-orm/pglite";
+import { migrate } from "drizzle-orm/pglite/migrator";
+import { readMigrationFiles } from "drizzle-orm/migrator";
 
 const migrationsDirectory = new URL("../migrations/", import.meta.url);
+const migrationsFolder = fileURLToPath(migrationsDirectory);
 const migrationFiles = (await fs.readdir(migrationsDirectory))
   .filter(file => /^\d+.*\.sql$/.test(file))
   .sort();
@@ -18,10 +23,16 @@ const statements = migrations.flatMap(({ sql }) => sql
   .split("--> statement-breakpoint")
   .map(statement => statement.trim())
   .filter(Boolean));
+const drizzleMigrations = readMigrationFiles({ migrationsFolder });
+if (drizzleMigrations.length !== migrationFiles.length) {
+  throw new Error(
+    `Drizzle journal exposes ${drizzleMigrations.length} migration(s), but ${migrationFiles.length} SQL files exist`,
+  );
+}
 
 const db = new PGlite();
 try {
-  for (const statement of statements) await db.exec(statement);
+  await migrate(drizzle(db), { migrationsFolder });
 
   const tablesResult = await db.query(
     "select tablename from pg_tables where schemaname = 'public' order by tablename",
@@ -51,14 +62,135 @@ try {
   const contactResult = await db.query("select count(*)::int as total from contact_messages");
   if (Number(contactResult.rows[0]?.total) !== 1) throw new Error("Contact insert smoke test failed");
 
+  await db.exec(`insert into blog_posts (title, slug) values ('Image job migration check', 'image-job-migration-check')`);
+  await db.exec(`
+    insert into blog_image_generation_jobs (post_id, idempotency_key, operation, role)
+    values (1, 'migration-image-job-key-1', 'generate_set', 'all')
+  `);
+  const admissionState = await db.query(`
+    select status from blog_image_generation_jobs where idempotency_key = 'migration-image-job-key-1'
+  `);
+  if (admissionState.rows[0]?.status !== "admitting") {
+    throw new Error("New image jobs must remain non-runnable until admission completes");
+  }
+  const prematureClaim = await db.query(`
+    update blog_image_generation_jobs
+    set status = 'running'
+    where idempotency_key = 'migration-image-job-key-1' and status = 'queued'
+    returning id
+  `);
+  if (prematureClaim.rows.length !== 0) {
+    throw new Error("An admitting image job must not be claimable by a polling worker");
+  }
+  const idempotentReplay = await db.query(`
+    insert into blog_image_generation_jobs (post_id, idempotency_key, operation, role)
+    values (1, 'migration-image-job-key-1', 'generate_set', 'all')
+    on conflict (idempotency_key) do nothing
+    returning id
+  `);
+  if (idempotentReplay.rows.length !== 0) {
+    throw new Error("A same-key replay must not create or admit a second paid image job");
+  }
+  let duplicateKeyRejected = false;
+  try {
+    await db.exec(`
+      insert into blog_image_generation_jobs (post_id, idempotency_key, operation, role)
+      values (1, 'migration-image-job-key-1', 'generate_set', 'all')
+    `);
+  } catch {
+    duplicateKeyRejected = true;
+  }
+  if (!duplicateKeyRejected) throw new Error("Image job idempotency key must be unique");
+
+  let concurrentJobRejected = false;
+  try {
+    await db.exec(`
+      insert into blog_image_generation_jobs (post_id, idempotency_key, operation, role)
+      values (1, 'migration-image-job-key-2', 'generate_set', 'hero')
+    `);
+  } catch {
+    concurrentJobRejected = true;
+  }
+  if (!concurrentJobRejected) throw new Error("Only one open image job per post is allowed");
+
+  await db.exec(`
+    insert into blog_post_images (post_id, role, slot, source, image_job_id)
+    values (1, 'hero', 'hero', 'ai', 1)
+  `);
+  let duplicateSlotRejected = false;
+  try {
+    await db.exec(`
+      insert into blog_post_images (post_id, role, slot, source, image_job_id)
+      values (1, 'hero', 'hero', 'ai', 1)
+    `);
+  } catch {
+    duplicateSlotRejected = true;
+  }
+  if (!duplicateSlotRejected) throw new Error("A durable image job cannot create the same paid slot twice");
+  await db.exec(`
+    insert into blog_post_images (post_id, role, slot, source, image_job_id)
+    values (1, 'inline', 'inline:1', 'ai', 1)
+  `);
+
+  const admittedJob = await db.query(`
+    update blog_image_generation_jobs
+    set status = 'queued'
+    where id = 1 and status = 'admitting'
+    returning id
+  `);
+  if (admittedJob.rows.length !== 1) throw new Error("Exactly one request must admit the image job");
+  const workerClaims = await Promise.all([
+    db.query(`update blog_image_generation_jobs set status = 'running' where id = 1 and status = 'queued' returning id`),
+    db.query(`update blog_image_generation_jobs set status = 'running' where id = 1 and status = 'queued' returning id`),
+  ]);
+  if (workerClaims.reduce((total, claim) => total + claim.rows.length, 0) !== 1) {
+    throw new Error("Two workers must not claim the same durable image job");
+  }
+
+  await db.exec(`
+    update blog_post_images set generation_status = 'generating' where image_job_id = 1 and slot = 'hero';
+    update blog_image_generation_jobs set heartbeat_at = now() - interval '10 minutes' where id = 1;
+    update blog_image_generation_jobs set status = 'queued' where id = 1 and status = 'running' and heartbeat_at < now() - interval '3 minutes';
+    update blog_post_images set generation_status = 'failed', error_code = 'generation_interrupted'
+    where image_job_id = 1 and generation_status = 'generating';
+  `);
+  const recoveredSlots = await db.query(`
+    select slot, generation_status from blog_post_images where image_job_id = 1 order by slot
+  `);
+  const recoveredBySlot = new Map(recoveredSlots.rows.map(row => [String(row.slot), String(row.generation_status)]));
+  if (recoveredBySlot.get("hero") !== "failed" || recoveredBySlot.get("inline:1") !== "pending") {
+    throw new Error("Stale recovery must fail the in-flight slot and preserve only untouched pending work");
+  }
+  await db.exec(`update blog_image_generation_jobs set status = 'running' where id = 1 and status = 'queued'`);
+  const retriedChargedSlot = await db.query(`
+    update blog_post_images set generation_status = 'generating'
+    where image_job_id = 1 and slot = 'hero' and generation_status = 'pending'
+    returning id
+  `);
+  const resumedPendingSlot = await db.query(`
+    update blog_post_images set generation_status = 'generating'
+    where image_job_id = 1 and slot = 'inline:1' and generation_status = 'pending'
+    returning id
+  `);
+  if (retriedChargedSlot.rows.length !== 0 || resumedPendingSlot.rows.length !== 1) {
+    throw new Error("Recovery must resume only the pending slot without retrying the possibly charged slot");
+  }
+
   console.log(JSON.stringify({
     ok: true,
     migrations: migrationFiles,
+    drizzleMigrations: drizzleMigrations.length,
     statements: statements.length,
     tables: actualTables.length,
     foreignKeys,
     orderedBlogTags: "pass",
     contactInsert: "pass",
+    imageJobIdempotency: "pass",
+    imageJobSingleOpenPost: "pass",
+    imageJobUniqueSlot: "pass",
+    imageJobAdmissionGate: "pass",
+    imageJobSingleWorker: "pass",
+    imageJobStaleRecovery: "pass",
   }));
 } finally {
   await db.close();

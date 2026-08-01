@@ -6,6 +6,7 @@ import { getAdminSession, noStoreHeaders } from "../../../../../server/next-admi
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 600;
 
 type RouteContext = { params: Promise<{ path?: string[] }> };
 
@@ -234,6 +235,45 @@ export async function GET(request: NextRequest, context: RouteContext) {
       if (!post) return json({ success: false, message: "Blog post not found" }, 404);
       if (post.status === "draft") await images.ensureCuratedHeroImage(post);
       return json({ success: true, data: await images.listBlogPostImages(postId) });
+    }
+    if (segments.length === 4 && segments[0] === "posts" && segments[2] === "images" && segments[3] === "job") {
+      const postId = Number(segments[1]);
+      if (!Number.isInteger(postId) || postId <= 0) return json({ success: false, message: "Invalid blog post id" }, 400);
+      const [post, jobs, imageService] = await Promise.all([
+        storage.getBlogPostById(postId),
+        import("../../../../../server/blog/images/job-storage"),
+        import("../../../../../server/blog/images/service"),
+      ]);
+      if (!post) return json({ success: false, message: "Blog post not found" }, 404);
+      const latest = await jobs.getLatestBlogImageGenerationJobForPost(postId);
+      if (!latest) return json({ success: true, data: null });
+      const job = await imageService.recoverPersistedBlogImageGenerationJob(latest);
+      if (job.status === "queued") {
+        after(async () => {
+          await imageService.executePersistedBlogImageGenerationJob(job.id).catch(error => {
+            console.error(`Unhandled blog image generation job failure (${job.id}):`, error);
+          });
+        });
+      }
+      return json({ success: true, data: job });
+    }
+    if (segments.length === 3 && segments[0] === "posts" && segments[2] === "preview") {
+      const postId = Number(segments[1]);
+      if (!Number.isInteger(postId) || postId <= 0) return json({ success: false, message: "Invalid post id" }, 400);
+      const post = await storage.getBlogPostById(postId);
+      if (!post) return json({ success: false, message: "Blog post not found" }, 404);
+      const [images, renderer] = await Promise.all([
+        import("../../../../../server/blog/images/storage"),
+        import("../../../../../server/blog/images/render"),
+      ]);
+      const selectedImages = await images.getSelectedBlogPostImages(postId);
+      return json({
+        success: true,
+        data: {
+          ...post,
+          content: renderer.materializeSelectedInlineImages(post.content || "", selectedImages),
+        },
+      });
     }
     if (segments.length === 3 && segments[0] === "posts" && segments[2] === "verify") {
       const postId = Number(segments[1]);
@@ -695,29 +735,57 @@ export async function POST(request: NextRequest, context: RouteContext) {
       const post = await storage.getBlogPostById(postId);
       if (!post) return json({ success: false, message: "Blog post not found" }, 404);
       if (post.status !== "draft") return json({ success: false, message: "Blog image changes are allowed only while the post is a draft" }, 409);
-      const [imageConfig, imageService, images] = await Promise.all([
+      const [imageConfig, imageService, images, imageJobs] = await Promise.all([
         import("../../../../../server/blog/images/config"),
         import("../../../../../server/blog/images/service"),
         import("../../../../../server/blog/images/storage"),
+        import("../../../../../server/blog/images/job-storage"),
       ]);
       if (segments.length === 4 && segments[3] === "generate") {
         imageConfig.assertBlogImageConfigured();
+        const idempotencyKey = request.headers.get("Idempotency-Key")?.trim() || "";
+        if (!/^[A-Za-z0-9._:-]{8,255}$/.test(idempotencyKey)) {
+          return json({ success: false, message: "A valid Idempotency-Key header is required" }, 400);
+        }
         const role = body?.role === "hero" || body?.role === "inline" ? body.role : "all";
         const maxInline = body?.maxInline === undefined ? undefined : Number(body.maxInline);
         if (maxInline !== undefined && (!Number.isInteger(maxInline) || maxInline < 1 || maxInline > 2)) {
           return json({ success: false, message: "maxInline must be 1 or 2" }, 400);
         }
-        const { checkBlogImageRateLimit, getBlogImageRateLimitCost } = await import("../../../../../server/blog/images/rate-limit");
-        const imageRateLimit = checkBlogImageRateLimit(
-          request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "admin",
-          getBlogImageRateLimitCost(role, maxInline),
+        const creation = await imageService.createPersistedBlogImageSetJob(
+          post,
+          { role, maxInline },
+          idempotencyKey,
         );
-        if (!imageRateLimit.allowed) {
-          const response = json({ success: false, message: "Blog image generation rate limit reached" }, 429);
-          if (imageRateLimit.retryAfterSec) response.headers.set("Retry-After", String(imageRateLimit.retryAfterSec));
-          return response;
+        let job = creation.job;
+        if (creation.created) {
+          const { checkBlogImageRateLimit, getBlogImageRateLimitCost } = await import("../../../../../server/blog/images/rate-limit");
+          const imageRateLimit = checkBlogImageRateLimit(
+            request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "admin",
+            getBlogImageRateLimitCost(role, maxInline),
+          );
+          if (!imageRateLimit.allowed) {
+            await imageJobs.failBlogImageGenerationJob(
+              creation.job.id,
+              "rate_limit_reached",
+              "Blog image generation rate limit reached",
+            );
+            const response = json({ success: false, message: "Blog image generation rate limit reached" }, 429);
+            if (imageRateLimit.retryAfterSec) response.headers.set("Retry-After", String(imageRateLimit.retryAfterSec));
+            return response;
+          }
+          const admitted = await imageJobs.admitBlogImageGenerationJob(job.id);
+          if (!admitted) throw new Error("Blog image job could not be admitted after its rate-limit check");
+          job = admitted;
         }
-        return json({ success: true, data: await imageService.generateBlogImageSet(post, { role, maxInline }) }, 201);
+        if (job.status === "queued") {
+          after(async () => {
+            await imageService.executePersistedBlogImageGenerationJob(job.id).catch(error => {
+              console.error(`Unhandled blog image generation job failure (${job.id}):`, error);
+            });
+          });
+        }
+        return json({ success: true, data: job }, creation.created ? 202 : 200);
       }
       const imageId = Number(segments[3]);
       if (segments.length !== 5 || !Number.isInteger(imageId) || imageId <= 0) return json({ success: false, message: "Invalid blog image endpoint" }, 400);
@@ -725,16 +793,39 @@ export async function POST(request: NextRequest, context: RouteContext) {
       if (!image || image.postId !== postId) return json({ success: false, message: "Blog image variant not found" }, 404);
       if (segments[4] === "regenerate") {
         imageConfig.assertBlogImageConfigured();
-        const { checkBlogImageRateLimit } = await import("../../../../../server/blog/images/rate-limit");
-        const imageRateLimit = checkBlogImageRateLimit(
-          request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "admin",
-        );
-        if (!imageRateLimit.allowed) {
-          const response = json({ success: false, message: "Blog image generation rate limit reached" }, 429);
-          if (imageRateLimit.retryAfterSec) response.headers.set("Retry-After", String(imageRateLimit.retryAfterSec));
-          return response;
+        const idempotencyKey = request.headers.get("Idempotency-Key")?.trim() || "";
+        if (!/^[A-Za-z0-9._:-]{8,255}$/.test(idempotencyKey)) {
+          return json({ success: false, message: "A valid Idempotency-Key header is required" }, 400);
         }
-        return json({ success: true, data: await imageService.regenerateBlogImageVariant(post, imageId) }, 201);
+        const creation = await imageService.createPersistedBlogImageRegenerationJob(post, imageId, idempotencyKey);
+        let job = creation.job;
+        if (creation.created) {
+          const { checkBlogImageRateLimit } = await import("../../../../../server/blog/images/rate-limit");
+          const imageRateLimit = checkBlogImageRateLimit(
+            request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "admin",
+          );
+          if (!imageRateLimit.allowed) {
+            await imageJobs.failBlogImageGenerationJob(
+              creation.job.id,
+              "rate_limit_reached",
+              "Blog image generation rate limit reached",
+            );
+            const response = json({ success: false, message: "Blog image generation rate limit reached" }, 429);
+            if (imageRateLimit.retryAfterSec) response.headers.set("Retry-After", String(imageRateLimit.retryAfterSec));
+            return response;
+          }
+          const admitted = await imageJobs.admitBlogImageGenerationJob(job.id);
+          if (!admitted) throw new Error("Blog image regeneration job could not be admitted after its rate-limit check");
+          job = admitted;
+        }
+        if (job.status === "queued") {
+          after(async () => {
+            await imageService.executePersistedBlogImageGenerationJob(job.id).catch(error => {
+              console.error(`Unhandled blog image regeneration job failure (${job.id}):`, error);
+            });
+          });
+        }
+        return json({ success: true, data: job }, creation.created ? 202 : 200);
       }
       if (segments[4] === "select") {
         const selected = await images.selectBlogPostImage(postId, imageId);

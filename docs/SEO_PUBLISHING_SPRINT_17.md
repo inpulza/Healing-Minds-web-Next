@@ -159,3 +159,30 @@ Before a real smoke test:
     bucket keys.
 14. Confirm the post remains `draft`, no public listing/sitemap entry appears,
     and no Search Console or publish action runs.
+
+## July 30, 2026 Next/Vercel Hardening Addendum
+
+The live migration review exposed two usability gaps in the original Sprint 17
+delivery:
+
+- the v1 prompt forced a still life or abstract metaphor, which produced
+  repetitive desk/window scenes and excluded useful human editorial scenes;
+- the admin eye action rendered plain sanitized text without the public article
+  typography or selected inline images.
+
+The hardening changes the prompt to `healing-minds-v3`, adds deterministic
+topic-specific scene and composition families, and incorporates the approved
+Healing Minds light editorial direction: fictional diverse adults, cream/sage
+neutrals, clear backgrounds, vibrant but natural color, studio and location
+campaign treatments, controlled directional light, authentic skin/fabric
+texture, believable expressions, physical-realism constraints, and anti-cliche
+mental-health rules.
+
+The admin now loads a dedicated authenticated preview response that
+materializes selected inline variants with the same server renderer used by the
+public API. The public post and admin preview also share the same client
+sanitizer and article preparation utility, so headings, lists, links, figures,
+captions, and managed image validation do not drift.
+
+The reusable rules and clone checklist live in
+[`BLOG_VISUAL_EDITORIAL_METHOD.md`](./BLOG_VISUAL_EDITORIAL_METHOD.md).

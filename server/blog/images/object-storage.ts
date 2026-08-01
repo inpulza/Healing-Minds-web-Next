@@ -1,4 +1,5 @@
 import { del, head, put } from "@vercel/blob";
+import { getBlogImageStorageErrorStatus } from "./storage-error.mjs";
 import {
   getManagedBlogImagePublicUrl,
   isManagedBlogImageKey,
@@ -24,11 +25,10 @@ function assertManagedKey(objectKey: string): void {
 }
 
 function storageError(error: unknown): Error & { statusCode?: number } {
-  const value = error as { name?: string; status?: number; statusCode?: number };
-  const notFound = value?.name === "BlobNotFoundError" || value?.status === 404 || value?.statusCode === 404;
+  const statusCode = getBlogImageStorageErrorStatus(error);
   return Object.assign(
-    new Error(notFound ? "Blog image object was not found" : "Vercel Blob request failed"),
-    { statusCode: notFound ? 404 : 503 },
+    new Error(statusCode === 404 ? "Blog image object was not found" : "Vercel Blob request failed"),
+    { statusCode },
   );
 }
 

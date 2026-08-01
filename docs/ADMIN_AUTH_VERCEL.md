@@ -72,3 +72,14 @@ Regenerate the hash only when intentionally rotating or migrating the
 credential. Changing the password, hash or session secret invalidates the
 expected login/session and requires an explicit Vercel environment update
 followed by a deployment; neither is automated here.
+
+## Password visibility control
+
+The login form includes a show/hide button beside the password field. It only
+changes whether the characters are visible in that browser field while the
+button is active. It does not reveal the Vercel environment value, copy the
+password, store it, change it, or add it to application logs.
+
+The control has an accessible label and pressed state, works with keyboard and
+touch input, and returns the field to masked mode when the login page is
+reloaded.

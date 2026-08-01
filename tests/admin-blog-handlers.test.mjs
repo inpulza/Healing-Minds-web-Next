@@ -27,6 +27,14 @@ const imageStorage = fs.readFileSync(
   path.join(process.cwd(), "server/blog/images/storage.ts"),
   "utf8",
 );
+const imageJobStorage = fs.readFileSync(
+  path.join(process.cwd(), "server/blog/images/job-storage.ts"),
+  "utf8",
+);
+const imageAdminUi = fs.readFileSync(
+  path.join(process.cwd(), "client/src/pages/admin/BlogAdminPage.tsx"),
+  "utf8",
+);
 
 test("Next owns authenticated blog CRUD and publication transitions", () => {
   assert.match(route, /export async function GET/);
@@ -108,6 +116,26 @@ test("Blob cleanup is durable and retries every queued key", () => {
 
 test("auto-generation counts every paid image call against its quota", () => {
   assert.match(expressAdminRoutes, /checkBlogImageRateLimit\([\s\S]*?"auto-generate"[\s\S]*?getBlogImageRateLimitCost\("all", 2\)/);
+});
+
+test("manual image generation is durable, idempotent and polled outside the request", () => {
+  assert.match(route, /A valid Idempotency-Key header is required/);
+  assert.match(route, /createPersistedBlogImageSetJob/);
+  assert.match(route, /createPersistedBlogImageRegenerationJob/);
+  assert.match(route, /executePersistedBlogImageGenerationJob/);
+  assert.match(route, /creation\.created \? 202 : 200/);
+  assert.match(imageJobStorage, /onConflictDoNothing\(\{ target: blogImageGenerationJobs\.idempotencyKey \}\)/);
+  assert.match(imageJobStorage, /idx_blog_image_generation_jobs_single_open_post|blog_image_job_conflict/);
+  assert.match(imageJobStorage, /admitBlogImageGenerationJob/);
+  assert.match(imageJobStorage, /eq\(blogImageGenerationJobs\.status, ["']admitting["']\)/);
+  assert.match(imageJobStorage, /eq\(blogImageGenerationJobs\.status, ["']queued["']\)/);
+  assert.match(imageJobStorage, /Only untouched image slots will resume/);
+  assert.match(imageService, /heartbeatBlogImageGenerationJob/);
+  assert.match(imageService, /requeueBlogImageGenerationJobAfterWorkerError/);
+  assert.match(blogStorage, /eq\(blogPostImages\.generationStatus, ["']pending["']\)/);
+  assert.match(imageAdminUi, /refetchInterval/);
+  assert.match(imageAdminUi, /imageJobActive/);
+  assert.match(imageAdminUi, /this button will not launch a duplicate paid request/);
 });
 
 test("Next owns Link Intelligence library, reviews, reports and audits", () => {

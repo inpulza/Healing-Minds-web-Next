@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { prepareBlogArticleHtml } from '@/lib/blog-article';
 import { useLocation } from '@/lib/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import DOMPurify from 'dompurify';
 import {
   CheckCircle2,
   AlertTriangle,
@@ -121,6 +121,7 @@ type BlogPostImage = {
   alt: string | null;
   caption: string | null;
   model: string | null;
+  imageJobId: number | null;
   errorMessage: string | null;
   sortOrder: number;
   createdAt: string;
@@ -130,6 +131,24 @@ type BlogImageConfig = {
   enabled: boolean;
   model: string;
   storage: string;
+};
+
+type BlogImageGenerationJob = {
+  id: number;
+  postId: number;
+  status: 'admitting' | 'queued' | 'running' | 'completed' | 'partial_failed' | 'failed';
+  operation: 'generate_set' | 'regenerate_variant';
+  role: 'hero' | 'inline' | 'all';
+  result: {
+    total?: number;
+    completed?: number;
+    failed?: number;
+    pending?: number;
+    generating?: number;
+    warnings?: string[];
+    errorMessage?: string;
+    recoveryWarning?: string;
+  } | null;
 };
 
 type PublishCheck = {
@@ -468,14 +487,6 @@ function getBlogIndexPath(language: BlogLanguage): string {
   return language === 'es' ? '/es/blog' : '/blog';
 }
 
-function sanitizePreviewHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'b', 'i', 'br', 'a', 'blockquote'],
-    ALLOWED_ATTR: ['href', 'target', 'rel'],
-    ALLOW_DATA_ATTR: false,
-  });
-}
-
 function slugify(value: string): string {
   return value
     .toLowerCase()
@@ -620,6 +631,10 @@ async function fetchJson<T>(url: string): Promise<T> {
   return response.json();
 }
 
+function createBlogImageIdempotencyKey(postId: number): string {
+  return `blog-image-${postId}-${globalThis.crypto.randomUUID()}`;
+}
+
 export default function BlogAdminPage() {
   const [, navigate] = useLocation();
   const [adminView, setAdminView] = useState<'posts' | 'links'>('posts');
@@ -631,6 +646,8 @@ export default function BlogAdminPage() {
   const [autoGenerateOpen, setAutoGenerateOpen] = useState(false);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState<string | null>(null);
   const [form, setForm] = useState<FormState | null>(null);
   const [generateForm, setGenerateForm] = useState<GenerateDraftFormState | null>(null);
   const [autoGenerateForm, setAutoGenerateForm] = useState<AutoGenerateFormState | null>(null);
@@ -642,6 +659,8 @@ export default function BlogAdminPage() {
   const [autoGenerateStreaming, setAutoGenerateStreaming] = useState(false);
   const autoGenerateEventSourceRef = useRef<EventSource | null>(null);
   const autoGenerateIdempotencyKeyRef = useRef<string | null>(null);
+  const previewRequestIdRef = useRef(0);
+  const handledImageJobIdRef = useRef<number | null>(null);
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState('');
@@ -715,6 +734,20 @@ export default function BlogAdminPage() {
     enabled: authenticated && editorOpen && Boolean(form?.id),
   });
 
+  const imageJobQuery = useQuery<ApiResponse<BlogImageGenerationJob | null>>({
+    queryKey: [`/api/admin/blog/posts/${form?.id || 'none'}/images/job`],
+    enabled: authenticated && editorOpen && Boolean(form?.id),
+    staleTime: 0,
+    refetchInterval: query => {
+      const response = query.state.data as ApiResponse<BlogImageGenerationJob | null> | undefined;
+      return response?.data?.status === 'admitting'
+        || response?.data?.status === 'queued'
+        || response?.data?.status === 'running'
+        ? 1000
+        : false;
+    },
+  });
+
   const unpublishImpactQuery = useQuery<ApiResponse<UnpublishImpact>>({
     queryKey: [`/api/admin/blog/posts/${unpublishTarget?.id || 'none'}/unpublish-impact`],
     enabled: authenticated && Boolean(unpublishTarget),
@@ -725,10 +758,18 @@ export default function BlogAdminPage() {
   const tags = tagsQuery.data?.data || [];
   const posts = postsQuery.data?.data || [];
   const images = imagesQuery.data?.data || [];
+  const imageJob = imageJobQuery.data?.data || null;
+  const imageJobActive = imageJob?.status === 'admitting'
+    || imageJob?.status === 'queued'
+    || imageJob?.status === 'running';
   const imageConfig = imageConfigQuery.data?.data;
   const stats = statsQuery.data?.data;
   const runtime = runtimeQuery.data?.data?.runtime || 'unknown';
   const linkIntelligenceEnabled = linkConfigQuery.data?.data?.enabled ?? false;
+  const previewContent = useMemo(
+    () => prepareBlogArticleHtml(previewPost?.content || '').content,
+    [previewPost?.content],
+  );
 
   const availableCategories = useMemo(
     () => categories.filter(category => category.language === (form?.language || 'en')),
@@ -773,30 +814,62 @@ export default function BlogAdminPage() {
     queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
   };
 
+  useEffect(() => {
+    if (!imageJob || imageJobActive || handledImageJobIdRef.current === imageJob.id) return;
+    handledImageJobIdRef.current = imageJob.id;
+    refreshImages(imageJob.postId);
+  }, [imageJob?.id, imageJob?.postId, imageJob?.status, imageJobActive]);
+
   const generateImagesMutation = useMutation({
     mutationFn: async ({ postId, role }: { postId: number; role: 'hero' | 'inline' | 'all' }) => {
-      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/generate`, { role });
-      return response.json();
+      const response = await apiRequest(
+        'POST',
+        `/api/admin/blog/posts/${postId}/images/generate`,
+        { role },
+        { 'Idempotency-Key': createBlogImageIdempotencyKey(postId) },
+      );
+      return response.json() as Promise<ApiResponse<BlogImageGenerationJob>>;
     },
-    onSuccess: (_data, variables) => {
-      refreshImages(variables.postId);
+    onMutate: async variables => {
+      await queryClient.cancelQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
+    },
+    onSuccess: (data, variables) => {
+      handledImageJobIdRef.current = null;
+      queryClient.setQueryData(
+        [`/api/admin/blog/posts/${variables.postId}/images/job`],
+        data,
+      );
       setActionError(null);
     },
-    onError: error => {
+    onError: (error, variables) => {
+      queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
       setActionError(error instanceof Error ? error.message : 'Image generation failed');
     },
   });
 
   const regenerateImageMutation = useMutation({
     mutationFn: async ({ postId, imageId }: { postId: number; imageId: number }) => {
-      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/${imageId}/regenerate`);
-      return response.json();
+      const response = await apiRequest(
+        'POST',
+        `/api/admin/blog/posts/${postId}/images/${imageId}/regenerate`,
+        undefined,
+        { 'Idempotency-Key': createBlogImageIdempotencyKey(postId) },
+      );
+      return response.json() as Promise<ApiResponse<BlogImageGenerationJob>>;
     },
-    onSuccess: (_data, variables) => {
-      refreshImages(variables.postId);
+    onMutate: async variables => {
+      await queryClient.cancelQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
+    },
+    onSuccess: (data, variables) => {
+      handledImageJobIdRef.current = null;
+      queryClient.setQueryData(
+        [`/api/admin/blog/posts/${variables.postId}/images/job`],
+        data,
+      );
       setActionError(null);
     },
-    onError: error => {
+    onError: (error, variables) => {
+      queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
       setActionError(error instanceof Error ? error.message : 'Image regeneration failed');
     },
   });
@@ -1227,6 +1300,25 @@ export default function BlogAdminPage() {
     setEditorOpen(true);
   };
 
+  const openPostPreview = async (post: BlogPost) => {
+    const requestId = previewRequestIdRef.current + 1;
+    previewRequestIdRef.current = requestId;
+    setPreviewPost(null);
+    setPreviewError(null);
+    setPreviewLoading(true);
+    setPreviewOpen(true);
+    try {
+      const response = await fetchJson<ApiResponse<BlogPost>>(`/api/admin/blog/posts/${post.id}/preview`);
+      if (previewRequestIdRef.current !== requestId) return;
+      setPreviewPost(response.data);
+    } catch (error) {
+      if (previewRequestIdRef.current !== requestId) return;
+      setPreviewError(error instanceof Error ? error.message : 'Editorial preview could not load');
+    } finally {
+      if (previewRequestIdRef.current === requestId) setPreviewLoading(false);
+    }
+  };
+
   const openDeletePost = (post: BlogPost) => {
     setDeleteTarget(post);
     setDeleteConfirmSlug('');
@@ -1617,10 +1709,7 @@ export default function BlogAdminPage() {
                             variant="ghost"
                             size="icon"
                             title="Preview"
-                            onClick={() => {
-                              setPreviewPost(post);
-                              setPreviewOpen(true);
-                            }}
+                            onClick={() => void openPostPreview(post)}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
@@ -2447,7 +2536,7 @@ export default function BlogAdminPage() {
                           type="button"
                           size="sm"
                           variant="outline"
-                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          disabled={!imageConfig?.enabled || imageJobQuery.isLoading || generateImagesMutation.isPending || imageJobActive}
                           onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'hero' })}
                         >
                           Hero
@@ -2456,7 +2545,7 @@ export default function BlogAdminPage() {
                           type="button"
                           size="sm"
                           variant="outline"
-                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          disabled={!imageConfig?.enabled || imageJobQuery.isLoading || generateImagesMutation.isPending || imageJobActive}
                           onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'inline' })}
                         >
                           Inline
@@ -2464,11 +2553,13 @@ export default function BlogAdminPage() {
                         <Button
                           type="button"
                           size="sm"
-                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          disabled={!imageConfig?.enabled || imageJobQuery.isLoading || generateImagesMutation.isPending || imageJobActive}
                           onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'all' })}
                         >
-                          {generateImagesMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                          Generate set
+                          {generateImagesMutation.isPending || imageJobActive
+                            ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            : <Sparkles className="mr-2 h-4 w-4" />}
+                          {imageJobActive ? 'Generating safely' : 'Generate set'}
                         </Button>
                       </div>
                     )}
@@ -2484,6 +2575,21 @@ export default function BlogAdminPage() {
                     </p>
                   ) : null}
 
+                  {imageJobActive && (
+                    <p className="flex items-center gap-2 rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-800" aria-live="polite">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                      Images are continuing safely in the background. Completed {imageJob?.result?.completed || 0} of {imageJob?.result?.total || 0}; this button will not launch a duplicate paid request.
+                    </p>
+                  )}
+
+                  {imageJob && !imageJobActive && (imageJob.status === 'partial_failed' || imageJob.status === 'failed') && (
+                    <p className="rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900" role="status">
+                      {imageJob.status === 'partial_failed'
+                        ? 'Some image candidates completed and are ready for review; at least one slot failed safely.'
+                        : imageJob.result?.errorMessage || 'The image request finished without a completed candidate. No automatic duplicate request was sent.'}
+                    </p>
+                  )}
+
                   {form.id && imagesQuery.isLoading && (
                     <p className="flex items-center gap-2 text-xs text-slate-600">
                       <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading image variants...
@@ -2498,6 +2604,8 @@ export default function BlogAdminPage() {
                     <div className="grid gap-3 sm:grid-cols-2">
                       {images.map(image => {
                         const mutationBusy = generateImagesMutation.isPending
+                          || imageJobQuery.isLoading
+                          || imageJobActive
                           || regenerateImageMutation.isPending
                           || selectImageMutation.isPending
                           || deselectImageMutation.isPending
@@ -2732,11 +2840,11 @@ export default function BlogAdminPage() {
             {form?.id && (
               <>
                 {form.status !== 'published' && (
-                  <Button variant="outline" onClick={submitForReview} disabled={statusMutation.isPending}>
+                  <Button variant="outline" onClick={submitForReview} disabled={statusMutation.isPending || imageJobActive}>
                     Submit review
                   </Button>
                 )}
-                <Button variant="outline" onClick={moveCurrentToDraft} disabled={statusMutation.isPending}>
+                <Button variant="outline" onClick={moveCurrentToDraft} disabled={statusMutation.isPending || imageJobActive}>
                   Move to draft
                 </Button>
                 <Button variant="outline" onClick={() => verifyMutation.mutate(form.id!)} disabled={verifyMutation.isPending}>
@@ -2754,8 +2862,8 @@ export default function BlogAdminPage() {
             {form?.id && form.status !== 'published' && (
               <Button
                 onClick={publishCurrent}
-                disabled={statusMutation.isPending || !canPublishCurrent}
-                title={canPublishCurrent ? undefined : 'Submit review before publishing'}
+                disabled={statusMutation.isPending || imageJobActive || !canPublishCurrent}
+                title={imageJobActive ? 'Wait for image generation to finish' : canPublishCurrent ? undefined : 'Submit review before publishing'}
               >
                 Publish
               </Button>
@@ -2764,17 +2872,105 @@ export default function BlogAdminPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{previewPost?.title || 'Preview'}</DialogTitle>
-            <DialogDescription>{previewPost?.excerpt}</DialogDescription>
+      <Dialog
+        open={previewOpen}
+        onOpenChange={open => {
+          setPreviewOpen(open);
+          if (!open) {
+            previewRequestIdRef.current += 1;
+            setPreviewPost(null);
+            setPreviewError(null);
+            setPreviewLoading(false);
+          }
+        }}
+      >
+        <DialogContent className="max-h-[92vh] max-w-5xl gap-0 overflow-hidden p-0">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Editorial article preview</DialogTitle>
+            <DialogDescription>
+              Preview of the saved draft using the same article renderer and selected images as the public blog.
+            </DialogDescription>
           </DialogHeader>
-          {previewPost && (
-            <article className="prose prose-slate max-w-none">
-              <div dangerouslySetInnerHTML={{ __html: sanitizePreviewHtml(previewPost.content || '') }} />
-            </article>
-          )}
+
+          <div className="border-b border-emerald-100 bg-white px-5 py-3 pr-12">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-semibold text-emerald-950">Editorial preview</span>
+              {previewPost && (
+                <Badge className={statusClasses[previewPost.status]}>{statusLabels[previewPost.status]}</Badge>
+              )}
+              <span className="text-xs text-slate-500">Nothing is published from this window.</span>
+            </div>
+          </div>
+
+          <div className="max-h-[calc(92vh-3.25rem)] overflow-y-auto bg-white">
+            {previewLoading && (
+              <div className="flex min-h-80 items-center justify-center gap-3 text-sm text-slate-600">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Loading the complete article preview...
+              </div>
+            )}
+
+            {previewError && (
+              <div className="m-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {previewError === '401' ? 'Your admin session expired. Sign in again to preview this post.' : previewError}
+              </div>
+            )}
+
+            {previewPost && !previewLoading && (
+              <article>
+                <section className="border-b border-green-100 bg-green-50">
+                  <div className="mx-auto max-w-4xl px-5 py-10 sm:px-8 sm:py-12">
+                    <div className="mb-5 flex flex-wrap items-center gap-3 text-sm text-gray-700">
+                      <span className="font-semibold text-green-800">
+                        {previewPost.category?.name || 'Mental Health'}
+                      </span>
+                      <span>{previewPost.readingTime || 5} min read</span>
+                      <span>{previewPost.language.toUpperCase()}</span>
+                    </div>
+                    <h1 className="mb-5 font-body text-3xl font-bold leading-tight text-green-950 sm:text-5xl">
+                      {previewPost.title}
+                    </h1>
+                    {previewPost.excerpt && (
+                      <p className="text-lg leading-relaxed text-gray-700 sm:text-xl">
+                        {previewPost.excerpt}
+                      </p>
+                    )}
+                    {previewPost.author && (
+                      <p className="mt-5 text-sm font-semibold text-green-900">
+                        {previewPost.author.name}{previewPost.author.title ? `, ${previewPost.author.title}` : ''}
+                      </p>
+                    )}
+                  </div>
+                </section>
+
+                <div className="mx-auto max-w-4xl px-5 py-8 sm:px-8 sm:py-10">
+                  {previewPost.featuredImage && (
+                    <img
+                      src={previewPost.featuredImage}
+                      alt={previewPost.featuredImageAlt || previewPost.title}
+                      className="mb-10 aspect-[16/9] w-full rounded-lg object-cover"
+                    />
+                  )}
+                  <div
+                    className="blog-article"
+                    dangerouslySetInnerHTML={{ __html: previewContent }}
+                  />
+                  {previewPost.tags.length > 0 && (
+                    <div className="mt-10 flex flex-wrap gap-2 border-t border-green-100 pt-7">
+                      {previewPost.tags.map(tag => (
+                        <span
+                          key={tag.id}
+                          className="rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-800"
+                        >
+                          {tag.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </article>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </main>
