@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import type { BlogPostImage } from "@shared/schema";
 import { getBlogImageConfig, isBlogImageEnabled } from "../server/blog/images/config";
 import {
@@ -28,8 +29,17 @@ import { checkBlogImageRateLimit, getBlogImageRateLimitCost } from "../server/bl
 const originalEnabled = process.env.BLOG_IMAGE_ENABLED;
 const originalApiKey = process.env.OPENAI_API_KEY;
 const originalModel = process.env.BLOG_IMAGE_MODEL;
+const nextAdminBlogRoute = readFileSync(
+  new URL("../app/api/admin/blog/[[...path]]/route.ts", import.meta.url),
+  "utf8",
+);
 
 try {
+  assert.match(
+    nextAdminBlogRoute,
+    /^export const maxDuration = 600;$/m,
+    "The Vercel admin route must allow the three-image generation set to finish",
+  );
   process.env.BLOG_IMAGE_ENABLED = "false";
   delete process.env.OPENAI_API_KEY;
   assert.equal(isBlogImageEnabled(), false);

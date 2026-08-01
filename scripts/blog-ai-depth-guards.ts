@@ -99,7 +99,14 @@ function providerResponse(draft: BlogAiGeneratedDraft): Response {
 
 async function checkShortDraftExpansion(): Promise<void> {
   const prompts: string[] = [];
-  const responses = [providerResponse(buildDraft(500)), providerResponse(buildDraft(850))];
+  const initial = buildDraft(500);
+  initial.riskNotes = [
+    "Verify the initial medication claim during human review.",
+    "Generated draft is 500 words, below our verified clinical source threshold; clinician review is required.",
+  ];
+  const expanded = buildDraft(850);
+  expanded.riskNotes = ["Review the expanded monitoring language during human review."];
+  const responses = [providerResponse(initial), providerResponse(expanded)];
   globalThis.fetch = (async (_url, init) => {
     const request = JSON.parse(String(init?.body)) as {
       messages: Array<{ role: string; content: string }>;
@@ -120,6 +127,9 @@ async function checkShortDraftExpansion(): Promise<void> {
   assert.equal(prompts.every(prompt => !prompt.includes(privateEditorialContext)), true);
   assert.equal(prompts[0].includes(trustedPlannerAngle), true);
   assert.doesNotMatch(draft.riskNotes.join("\n"), /below the editorial brief minimum/i);
+  assert.match(draft.riskNotes.join("\n"), /Verify the initial medication claim/i);
+  assert.match(draft.riskNotes.join("\n"), /below our verified clinical source threshold/i);
+  assert.match(draft.riskNotes.join("\n"), /Review the expanded monitoring language/i);
 }
 
 async function checkSufficientDraftSkipsExpansion(): Promise<void> {
@@ -169,11 +179,27 @@ async function checkExpansionCannotDropValidatedLinks(): Promise<void> {
   assert.match(draft.riskNotes.join("\n"), /Automatic depth expansion could not be completed safely/i);
 }
 
+async function checkOverlongExpansionKeepsInitialDraft(): Promise<void> {
+  let calls = 0;
+  globalThis.fetch = (async () => {
+    calls += 1;
+    return calls === 1
+      ? providerResponse(buildDraft(500))
+      : providerResponse(buildDraft(1_500));
+  }) as typeof fetch;
+
+  const draft = await generateBlogDraftWithAi(input);
+  assert.equal(calls, 2);
+  assert.ok(countBlogDraftWords(draft.contentHtml) < 800);
+  assert.match(draft.riskNotes.join("\n"), /exceeded the editorial maximum of 1375 words/i);
+}
+
 try {
   await checkShortDraftExpansion();
   await checkSufficientDraftSkipsExpansion();
   await checkFailedExpansionKeepsSafeDraft();
   await checkExpansionCannotDropValidatedLinks();
+  await checkOverlongExpansionKeepsInitialDraft();
   console.log("PASS blog AI depth expansion guards (one retry, no real provider or secrets)");
 } finally {
   globalThis.fetch = originalFetch;

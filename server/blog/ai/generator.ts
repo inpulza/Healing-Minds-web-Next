@@ -132,6 +132,23 @@ function addUniqueRiskNote(draft: BlogAiGeneratedDraft, note: string): BlogAiGen
   };
 }
 
+function isRecomputedDraftShapeRiskNote(note: string): boolean {
+  return /^Generated draft is \d+ words, below the editorial brief minimum of \d+\. Expand during human review\.$/.test(note)
+    || /^Generated draft is \d+ words, below the target depth of \d+\.$/.test(note)
+    || /^Generated draft has \d+ H2 sections, below the editorial brief target of \d+\.$/.test(note)
+    || /^Generated draft may be missing or renaming expected sections: .+\.$/.test(note);
+}
+
+function mergeExpansionRiskNotes(
+  initialDraft: BlogAiGeneratedDraft,
+  expandedDraft: BlogAiGeneratedDraft,
+): string[] {
+  return Array.from(new Set([
+    ...initialDraft.riskNotes.filter(note => !isRecomputedDraftShapeRiskNote(note)),
+    ...expandedDraft.riskNotes,
+  ]));
+}
+
 function assertExpansionPreservesLinks(
   initialDraft: BlogAiGeneratedDraft,
   expandedDraft: BlogAiGeneratedDraft,
@@ -198,8 +215,17 @@ export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promi
       metaTitle: initialDraft.metaTitle,
       metaDescription: initialDraft.metaDescription,
       featuredImageAlt: initialDraft.featuredImageAlt,
+      riskNotes: mergeExpansionRiskNotes(initialDraft, expandedCandidate),
     };
     const expandedWordCount = countBlogDraftWords(expandedDraft.contentHtml);
+    const maximumWordCount = providerInput.editorialBrief?.maximumWordCount;
+
+    if (maximumWordCount && expandedWordCount > maximumWordCount) {
+      return addUniqueRiskNote(
+        initialDraft,
+        `Automatic depth expansion exceeded the editorial maximum of ${maximumWordCount} words. Expand during human review.`,
+      );
+    }
 
     if (expandedWordCount > initialWordCount) {
       return expandedDraft;

@@ -118,3 +118,49 @@ and word-count checks. Mocked guards cover a successful expansion, no retry for
 an already sufficient draft, and preservation of the first safe draft when the
 provider expansion fails. No real API key, provider call, database write,
 publication, Production environment change, or manual deployment is involved.
+
+## Integrated live smoke — 2026-08-01
+
+The merged feature branch at `7565d60650114d2ae2b5c6ad744eecd22f953dd6`
+received a Ready Preview. Its first custom-admin login returned 401 even though
+the current encrypted Preview values passed the same verifier locally. The
+three existing Preview-only auth variables were updated with those same values,
+without reading them into evidence or changing Production, and the exact
+artifact was redeployed as `dpl_CWhscdvCCigDvumAN2Rw27dkSoh8`. Login then
+returned 200.
+
+One real temporary post was generated in shared Neon:
+
+- post `8`, status `draft`;
+- 959 words against the 800-word SEO depth requirement: PASS;
+- public route: 404;
+- slug absent from `/sitemap.xml`;
+- medical disclaimer present;
+- no publish transition was executed.
+
+The three `healing-minds-v3` candidates completed and were reviewed before
+selection: one hero and two inline images, all adult-only, diverse, physically
+coherent and editorially appropriate. The authenticated eye preview rendered
+exactly one selected hero and exactly two inline figures, each once after its
+saved heading. The dialog remained labelled Draft, stated that nothing was
+published, and produced zero console errors.
+
+The live run also exposed a Vercel-only timeout. `POST
+/api/admin/blog/posts/8/images/generate` started at 01:34:30 UTC and lost its
+client response at the former 60-second function boundary. The underlying work
+still completed all three images; the browser retry then received 429 because
+the paid-call quota had already been consumed. The App Router route now exports
+`maxDuration=600`, covering the configured 3 x 150-second provider ceiling plus
+conversion, Blob and database work. This must be verified on a new build from
+the corrective commit, not another redeploy of the older artifact.
+
+CodeX reviewed `7565d6065` and opened two valid P2 notes. The expansion now
+preserves first-pass provider warnings while replacing only the four exact
+shape warnings recalculated by the normalizer. An expansion above the editorial
+maximum is rejected in favor of the first safe draft with a human-review note.
+Focused guards cover both cases, including a provider warning that deliberately
+shares the prefix of an internal depth warning.
+
+The temporary post and its Blob objects remain intentionally present only until
+the corrective Preview completes the 600-second generation check and the final
+shared-renderer audit. They must be deleted before merge.
