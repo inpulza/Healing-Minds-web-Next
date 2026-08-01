@@ -30,7 +30,7 @@ test('consent cleanup removes first-party provider cookies at the canonical doma
 
   try {
     await context.addCookies([
-      ...['_ga', '_ga_WMRK41PX2E', '_gcl_au', '_clck', '_ttp'].map((name) => ({
+      ...['_ga', '_ga_WMRK41PX2E', '_gcl_au', '_clck', '_ttp', 'ttcsid', 'ttclid'].map((name) => ({
         name,
         value: 'root-cookie',
         domain: '.healingmindsp.com',
@@ -38,7 +38,7 @@ test('consent cleanup removes first-party provider cookies at the canonical doma
         secure: true,
         sameSite: 'Lax',
       })),
-      ...['_gid', '_gcl_aw', '_clsk', '_tt_enable_cookie'].map((name) => ({
+      ...['_gid', '_gcl_aw', '_clsk', '_tt_enable_cookie', 'ttcsid_D3IKI7BC77UEJB9HBO0G'].map((name) => ({
         name,
         value: 'host-cookie',
         url: 'https://www.healingmindsp.com/',
@@ -70,8 +70,10 @@ test('consent cleanup removes first-party provider cookies at the canonical doma
           '_clsk',
           '_ttp',
           '_tt_enable_cookie',
+          'ttcsid',
+          'ttclid',
         ],
-        prefixes: ['_ga_', '_gcl_', '_gac_'],
+        prefixes: ['_ga_', '_gcl_', '_gac_', 'ttcsid_'],
       });
     });
 
@@ -120,12 +122,19 @@ test('Google config is queued before one deduplicated outbound lead event', asyn
 
     const commands = await page.evaluate(() => {
       window.HmpAnalytics.initGA();
-      window.HmpAnalytics.trackLeadConversion('phone_call', {
-        click_location: 'browser_guard',
+      const removeDelegatedTracking = window.HmpAnalytics.installOutboundLeadTracking();
+      const phoneLink = document.createElement('a');
+      phoneLink.href = 'tel:+12394230272';
+      phoneLink.id = 'delegated_browser_guard';
+      phoneLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.HmpAnalytics.trackLeadConversion('phone_call', {
+          click_location: 'explicit_browser_guard',
+        });
       });
-      window.HmpAnalytics.trackLeadConversion('phone_call', {
-        click_location: 'browser_guard',
-      });
+      document.body.appendChild(phoneLink);
+      phoneLink.click();
+      removeDelegatedTracking();
       return window.dataLayer.map((entry) => Array.from(entry));
     });
 
@@ -141,8 +150,62 @@ test('Google config is queued before one deduplicated outbound lead event', asyn
 
     assert.ok(configIndex >= 0, 'the real GA destination must be configured');
     assert.ok(configIndex < leadIndex, 'configuration must precede the outbound lead');
-    assert.equal(leadCommands.length, 1, 'explicit and delegated handlers must not double count');
+    assert.equal(
+      leadCommands.length,
+      1,
+      'one real click with different explicit/delegated locations must not double count',
+    );
     assert.equal(leadCommands[0][2].transport_type, 'beacon');
+  } finally {
+    await context.close();
+    await browser.close();
+  }
+});
+
+test('a persisted rejection clears inherited Google analytics and advertising cookies on load', async () => {
+  const analyticsBundle = await bundleBrowserModule(
+    fileURLToPath(new URL('../client/src/lib/analytics.ts', import.meta.url)),
+    'HmpAnalytics',
+  );
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext();
+
+  try {
+    await context.addCookies(
+      ['_ga', '_ga_WMRK41PX2E', '_gcl_au', '_gcl_aw'].map((name) => ({
+        name,
+        value: 'legacy-cookie',
+        domain: '.healingmindsp.com',
+        path: '/',
+        secure: true,
+        sameSite: 'Lax',
+      })),
+    );
+    await context.addInitScript(() => {
+      localStorage.setItem(
+        'hmp_cookie_consent',
+        JSON.stringify({
+          hasConsented: true,
+          consent: { necessary: true, analytics: false, marketing: false },
+        }),
+      );
+    });
+
+    const page = await context.newPage();
+    await page.route('https://www.healingmindsp.com/**', (route) =>
+      route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Reject test</title>' }),
+    );
+    await page.route('https://www.googletagmanager.com/**', (route) => route.abort());
+    await page.goto('https://www.healingmindsp.com/rejected-consent');
+    await page.addScriptTag({ content: analyticsBundle });
+    await page.evaluate(() => window.HmpAnalytics.initGA());
+
+    const inheritedCookies = (await context.cookies()).filter(
+      (cookie) =>
+        cookie.domain.endsWith('healingmindsp.com') &&
+        (cookie.name.startsWith('_ga') || cookie.name.startsWith('_gcl')),
+    );
+    assert.deepEqual(inheritedCookies, []);
   } finally {
     await context.close();
     await browser.close();

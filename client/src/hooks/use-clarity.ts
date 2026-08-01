@@ -126,21 +126,18 @@ export function useClarity(manageConsentLifecycle = false) {
   // Gate on GLOBAL flags: any hook instance must be able to revoke, even if a
   // different instance performed the initialization.
   const revokeClarity = useCallback(() => {
-    if (globalClarityInitialized && !globalConsentRevoked) {
+    if (!globalConsentRevoked) {
       try {
-        // Disable further tracking
-        Clarity.consent(false);
+        if (globalClarityInitialized) {
+          Clarity.consent(false);
+        }
         consentRevoked.current = true;
         globalConsentRevoked = true;
-        
-        // Clear Clarity cookies for FDBR compliance
-        clearClarityCookies();
-        
-        console.log('🚫 Microsoft Clarity consent revoked - tracking disabled and cookies cleared');
       } catch (error) {
         console.error('Error revoking Microsoft Clarity consent:', error);
       }
     }
+    clearClarityCookies();
   }, []);
 
   // Initial setup and consent change listener
@@ -157,9 +154,7 @@ export function useClarity(manageConsentLifecycle = false) {
         console.log('🔍 Microsoft Clarity disabled in development mode');
       }
     } else if (process.env.NODE_ENV === 'production') {
-      if (isDevelopment()) {
-        console.log('🚫 Microsoft Clarity not initialized - no analytics consent');
-      }
+      revokeClarity();
     }
 
     // Listen for granular consent changes

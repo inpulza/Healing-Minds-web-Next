@@ -15,6 +15,8 @@ import { assetUrl } from '@/lib/asset-url';
 const Hero = React.memo(() => {
   const { language, t } = useLanguage();
   const isMobile = useIsMobile();
+  const MobileTitleTag = isMobile ? 'h1' : 'p';
+  const DesktopTitleTag = isMobile ? 'p' : 'h1';
   const content = homeContent[language];
   const section = (key: string) => content.sections.find((x) => x.key === key)!;
 
@@ -55,9 +57,9 @@ const Hero = React.memo(() => {
             <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
               <div className="max-w-sm mx-auto">
                 {/* Mobile Title */}
-                <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid={isMobile ? 'hero-title' : undefined}>
+                <MobileTitleTag className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid={isMobile ? 'hero-title' : undefined}>
                   {renderRichText(content.title, undefined, 'font-display italic')}
-                </p>
+                </MobileTitleTag>
               </div>
             </div>
           </div>
@@ -136,9 +138,9 @@ const Hero = React.memo(() => {
                   </div>
                 </div>
                 
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight text-green-800 text-left mb-5 font-body font-bold" data-testid={!isMobile ? 'hero-title' : undefined}>
+                <DesktopTitleTag className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl leading-tight text-green-800 text-left mb-5 font-body font-bold" data-testid={!isMobile ? 'hero-title' : undefined}>
                   {renderRichText(content.title, undefined, 'font-display italic text-green-700')}
-                </h1>
+                </DesktopTitleTag>
                 
                 <div className="text-sm md:text-base leading-relaxed font-body mb-6 text-[#1e6b3b] max-w-md" data-testid="hero-description">
                   <span>{t('hero.description')}</span>

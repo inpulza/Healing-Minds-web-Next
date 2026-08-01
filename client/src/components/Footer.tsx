@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Mail, Phone, MapPin, ArrowRight, Calendar, Linkedin, Facebook, Instagram } from 'lucide-react';
 import { useState } from 'react';
 import TikTokIcon from '@/components/TikTokIcon';
+import { useCookieConsent } from '@/hooks/useCookieConsent';
 
 const Footer = () => {
   const { language } = useLanguage();
   const { trackEvent, setTag } = useClarity();
   const { trackPhoneClick, trackTelehealthClick } = useTikTokEvents();
+  const { showPreferences } = useCookieConsent();
   const [email, setEmail] = useState('');
 
   const services = [
@@ -337,6 +339,14 @@ const Footer = () => {
                 >
                   {language === 'en' ? 'Cookie Policy' : 'Política de Cookies'}
                 </Link>
+                <button
+                  type="button"
+                  onClick={showPreferences}
+                  className="hover:text-white transition-colors cursor-pointer"
+                  data-testid="footer-cookie-preferences"
+                >
+                  {language === 'en' ? 'Cookie Preferences' : 'Preferencias de Cookies'}
+                </button>
                 <button 
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="hover:text-white transition-colors cursor-pointer"

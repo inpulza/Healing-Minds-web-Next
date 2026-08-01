@@ -123,7 +123,15 @@ export function initGA(): void {
       custom_2: 'language_preference',
     },
   });
-  updateGoogleConsent(hasAnalyticsConsent(), hasMarketingConsent());
+  const analyticsConsent = hasAnalyticsConsent();
+  const marketingConsent = hasMarketingConsent();
+  updateGoogleConsent(analyticsConsent, marketingConsent);
+  if (!analyticsConsent) {
+    clearAnalyticsCookies();
+  }
+  if (!marketingConsent) {
+    clearAdvertisingCookies();
+  }
 
   window.hmp_analytics_initialized = true;
   markGaConfigured();
@@ -174,8 +182,21 @@ export function trackServicePageView(
   serviceName: string,
   language: 'en' | 'es' = 'en',
 ): void {
-  trackEvent('service_page_view', 'medical_services', serviceName);
-  trackEvent('language_selection', 'user_preference', language);
+  if (!hasAnalyticsConsent() || !ensureConfigured()) {
+    return;
+  }
+
+  window.gtag('event', 'service_page_view', {
+    event_category: 'medical_services',
+    event_label: serviceName,
+    custom_1: serviceName,
+  });
+  window.gtag('event', 'language_selection', {
+    event_category: 'user_preference',
+    event_label: language,
+    custom_1: serviceName,
+    custom_2: language,
+  });
 }
 
 export function trackContactFormEvent(
@@ -207,7 +228,10 @@ export function trackLeadConversion(
     return;
   }
 
-  const leadKey = `${source}:${String(detail.click_location ?? '')}`;
+  // Explicit React handlers and the delegated safety net see the same native
+  // click but may label its location differently. Dedupe by conversion source
+  // for this short window so the fallback cannot double count that click.
+  const leadKey = source;
   const now = Date.now();
   if (leadKey === lastLeadKey && now - lastLeadTimestamp < 500) {
     return;

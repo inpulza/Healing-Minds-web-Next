@@ -196,7 +196,11 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
 
       {/* Cookie Preferences Modal */}
       <Dialog open={showPreferences} onOpenChange={setShowPreferences}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" data-testid="cookie-preferences-modal">
+        <DialogContent
+          overlayClassName="z-[10001]"
+          className="z-[10002] max-w-4xl max-h-[90vh] overflow-y-auto"
+          data-testid="cookie-preferences-modal"
+        >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5" />

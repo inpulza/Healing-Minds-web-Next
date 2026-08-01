@@ -393,9 +393,14 @@ function checkLeadMeasurementCoverage(): void {
 
 function checkConsentAndTagRegistry(): void {
   const appSource = readFileSync(new URL("../client/src/App.tsx", import.meta.url), "utf8");
-  assert.match(appSource, /useClarity\(true\)/);
-  assert.match(appSource, /useTikTokPixel\(true\)/);
   assert.doesNotMatch(appSource, /VITE_GA_MEASUREMENT_ID/);
+
+  const nextShellSource = readFileSync(
+    new URL("../app/public-shell.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(nextShellSource, /useClarity\(true\)/);
+  assert.match(nextShellSource, /useTikTokPixel\(true\)/);
 
   const claritySource = readFileSync(
     new URL("../client/src/hooks/use-clarity.ts", import.meta.url),
@@ -403,6 +408,10 @@ function checkConsentAndTagRegistry(): void {
   );
   assert.match(claritySource, /useClarity\(manageConsentLifecycle = false\)/);
   assert.match(claritySource, /clearFirstPartyCookies/);
+  assert.match(
+    claritySource,
+    /else if \(process\.env\.NODE_ENV === 'production'\) \{\s*revokeClarity\(\)/,
+  );
 
   const tiktokSource = readFileSync(
     new URL("../client/src/hooks/use-tiktok-pixel.ts", import.meta.url),
@@ -411,6 +420,20 @@ function checkConsentAndTagRegistry(): void {
   assert.match(tiktokSource, /useTikTokPixel\(manageConsentLifecycle = false\)/);
   assert.match(tiktokSource, /window\.ttq\.revokeConsent\(\)/);
   assert.match(tiktokSource, /clearFirstPartyCookies/);
+  for (const cookieName of ["ttcsid", "ttcsid_", "ttclid"]) {
+    assert.match(tiktokSource, new RegExp(cookieName));
+  }
+  assert.match(tiktokSource, /window\.setInterval/);
+  assert.match(tiktokSource, /POST_REVOKE_CLEANUP_WINDOW_MS = 6000/);
+  assert.match(
+    tiktokSource,
+    /globalConsentRevoked && !hasMarketingConsent\(\)/,
+    "post-revoke cleanup must stop short of deleting cookies after re-consent",
+  );
+  assert.match(
+    tiktokSource,
+    /else if \(process\.env\.NODE_ENV === 'production'\) \{\s*revokeTikTokPixel\(\)/,
+  );
 
   const cleanupSource = readFileSync(
     new URL("../client/src/lib/cookie-cleanup.ts", import.meta.url),
@@ -423,9 +446,20 @@ function checkConsentAndTagRegistry(): void {
     new URL("../client/src/lib/analytics.ts", import.meta.url),
     "utf8",
   );
+  assert.match(
+    analyticsSource,
+    /const leadKey = source/,
+    "explicit and delegated handlers can label one click differently, so dedupe must use source",
+  );
   for (const cookieName of ["_ga", "_gcl_au", "_gcl_aw"]) {
     assert.match(analyticsSource, new RegExp(cookieName));
   }
+  assert.match(
+    analyticsSource,
+    /if \(!analyticsConsent\) \{\s*clearAnalyticsCookies\(\)/,
+  );
+  assert.match(analyticsSource, /custom_1: serviceName/);
+  assert.match(analyticsSource, /custom_2: language/);
 
   const bannerSource = readFileSync(
     new URL("../client/src/components/CookieBanner.tsx", import.meta.url),
@@ -434,6 +468,23 @@ function checkConsentAndTagRegistry(): void {
   assert.match(bannerSource, /TikTok Pixel/);
   assert.doesNotMatch(bannerSource, /Facebook Pixel/);
   assert.match(bannerSource, /z-\[10000\]/);
+  assert.match(bannerSource, /overlayClassName="z-\[10001\]"/);
+  assert.match(bannerSource, /className="z-\[10002\]/);
+
+  const dialogSource = readFileSync(
+    new URL("../client/src/components/ui/dialog.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(dialogSource, /overlayClassName\?: string/);
+  assert.match(dialogSource, /fixed inset-0 z-50/);
+  assert.doesNotMatch(dialogSource, /fixed inset-0 z-\[10001\]/);
+
+  const footerSource = readFileSync(
+    new URL("../client/src/components/Footer.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(footerSource, /footer-cookie-preferences/);
+  assert.match(footerSource, /onClick=\{showPreferences\}/);
 
   const policySource = readFileSync(
     new URL("../client/src/data/pageContent/legal/cookiePolicy.ts", import.meta.url),
