@@ -213,6 +213,119 @@ test("accepted visitors can reopen, cancel and withdraw consent", async ({ page,
   expect(await readStoredConsent(page)).toMatchObject({
     consent: { analytics: true, marketing: false },
   });
+
+  await page.evaluate(() => {
+    window.__hmpE2eRestoreCalls = [];
+    const queue = [];
+    const nativePush = Array.prototype.push;
+    queue.push = function recordCleanRestore(...items) {
+      for (const item of items) {
+        if (
+          Array.isArray(item) &&
+          ["enableCookie", "grantConsent", "page"].includes(item[0])
+        ) {
+          window.__hmpE2eRestoreCalls.push(item[0]);
+        }
+      }
+      return nativePush.apply(this, items);
+    };
+    window.ttq = queue;
+  });
+  const cleanPreferences = await footerPreferencesButton(page, isMobile);
+  await cleanPreferences.click();
+  await setOptionalConsent(page, { analytics: true, marketing: true });
+  await page.getByTestId("button-save-preferences").click();
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
+  const cleanRestoreCalls = await page.evaluate(() => window.__hmpE2eRestoreCalls);
+  expect(cleanRestoreCalls).toEqual(["enableCookie", "grantConsent", "page"]);
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: true, marketing: true },
+  });
+
+  // A fast reload can happen before the previous document's asynchronous
+  // TikTok SDK consumes its restoration queue. Every fresh document with a
+  // persisted grant must therefore reaffirm provider consent before page().
+  await page.addInitScript(() => {
+    window.__hmpE2eFreshRestoreCalls = [];
+    const queue = [];
+    const nativePush = Array.prototype.push;
+    queue.push = function recordFreshRestore(...items) {
+      for (const item of items) {
+        if (
+          Array.isArray(item) &&
+          ["enableCookie", "grantConsent", "page"].includes(item[0])
+        ) {
+          window.__hmpE2eFreshRestoreCalls.push(item[0]);
+        }
+      }
+      return nativePush.apply(this, items);
+    };
+    window.ttq = queue;
+  });
+  await page.reload();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
+  await expect
+    .poll(() => page.evaluate(() => window.__hmpE2eFreshRestoreCalls))
+    .toEqual(["enableCookie", "grantConsent", "page"]);
+});
+
+test("a partial TikTok restoration rolls back and remains fail-closed", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-reject-all").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+
+  await page.evaluate(() => {
+    window.__hmpE2eRestoreCalls = [];
+    window.ttq = {
+      enableCookie() {
+        window.__hmpE2eRestoreCalls.push("enableCookie");
+      },
+      grantConsent() {
+        window.__hmpE2eRestoreCalls.push("grantConsent");
+        throw new Error("Synthetic TikTok grant failure");
+      },
+      revokeConsent() {
+        window.__hmpE2eRestoreCalls.push("revokeConsent");
+      },
+      disableCookie() {
+        window.__hmpE2eRestoreCalls.push("disableCookie");
+      },
+      page() {
+        window.__hmpE2eRestoreCalls.push("page");
+      },
+    };
+  });
+
+  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
+  const preferences = await footerPreferencesButton(page, isMobile);
+  await preferences.click();
+  await setOptionalConsent(page, { analytics: false, marketing: true });
+  await page.getByTestId("button-save-preferences").click();
+
+  await expect
+    .poll(() => page.evaluate(() => window.__hmpE2eRestoreCalls))
+    .toEqual(["enableCookie", "grantConsent", "revokeConsent", "disableCookie"]);
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: false, marketing: true },
+  });
+
+  await addSyntheticTikTokIdentifier(page);
+  await page.waitForTimeout(500);
+  await expectNoSyntheticTikTokIdentifier(page);
+  await page.locator('footer a[href="/about"]').first().click();
+  await expect(page).toHaveURL(/\/about$/);
+  expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
+  expect(await page.evaluate(() => window.__hmpE2eRestoreCalls)).toEqual([
+    "enableCookie",
+    "grantConsent",
+    "revokeConsent",
+    "disableCookie",
+  ]);
 });
 
 test("a failed rejection write stays fail-closed without reloading an old grant", async ({
@@ -260,6 +373,42 @@ test("a failed rejection write stays fail-closed without reloading an old grant"
   await page.waitForTimeout(500);
   await expectNoSyntheticTikTokIdentifier(page);
 
+  const googleEventsBefore = await page.evaluate(() => ({
+    pageViews: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
+    ).length,
+    leads: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
+    ).length,
+  }));
+  await page.evaluate(() => {
+    document.addEventListener(
+      "click",
+      (event) => {
+        if (event.target instanceof Element && event.target.closest('a[href^="tel:"]')) {
+          event.preventDefault();
+        }
+      },
+      true,
+    );
+  });
+  await page
+    .getByTestId(isMobile ? "hero-call-now-mobile" : "hero-call-now")
+    .click();
+  await page.locator('footer a[href="/about"]').first().click();
+  await expect(page).toHaveURL(/\/about$/);
+  await page.waitForTimeout(250);
+  const googleEventsAfter = await page.evaluate(() => ({
+    pageViews: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
+    ).length,
+    leads: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
+    ).length,
+  }));
+  expect(googleEventsAfter).toEqual(googleEventsBefore);
+  expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
+
   // The normal sweep expires at six seconds. A failed write cannot safely
   // reload the old stored grant, so this exceptional document must continue
   // clearing identifiers after that boundary.
@@ -279,7 +428,8 @@ test("a failed rejection write stays fail-closed without reloading an old grant"
       };
     }
   });
-  await preferences.click();
+  const failedGrantPreferences = await footerPreferencesButton(page, isMobile);
+  await failedGrantPreferences.click();
   await setOptionalConsent(page, { analytics: true, marketing: true });
   await page.getByTestId("button-save-preferences").click();
   await page.waitForTimeout(500);

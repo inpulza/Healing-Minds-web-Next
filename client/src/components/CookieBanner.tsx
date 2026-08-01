@@ -17,6 +17,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
   const {
     consentState,
     preferencesOpen,
+    isHydrated,
     acceptAll,
     rejectAll,
     acceptSelected,
@@ -144,6 +145,12 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
   const tr = translations[language];
 
   const shouldShowBanner = !consentState.hasConsented || consentState.showBanner;
+
+  // Do not flash the first-visit banner while a returning visitor's stored
+  // choice is still being read, especially across browser history restores.
+  if (!isHydrated) {
+    return null;
+  }
 
   return (
     <>

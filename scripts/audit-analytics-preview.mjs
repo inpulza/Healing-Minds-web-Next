@@ -282,6 +282,34 @@ try {
     'TikTok data sharing must stop before first-party cookies are disabled',
   );
 
+  // The clean document has no TikTok SDK, but retains the provider opt-out
+  // marker. Preserve a real array queue while recording the commands our
+  // snippet adds so reacceptance proves enableCookie -> grantConsent happens
+  // before its first page event.
+  await page.evaluate(() => {
+    const recordedCalls = JSON.parse(
+      sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]',
+    );
+    const queue = [];
+    const nativePush = Array.prototype.push;
+    queue.push = function recordTikTokQueue(...items) {
+      for (const item of items) {
+        if (
+          Array.isArray(item) &&
+          ['enableCookie', 'grantConsent', 'page'].includes(item[0])
+        ) {
+          recordedCalls.push(item[0]);
+        }
+      }
+      sessionStorage.setItem(
+        '__hmpTikTokConsentCalls',
+        JSON.stringify(recordedCalls),
+      );
+      return nativePush.apply(this, items);
+    };
+    window.ttq = queue;
+  });
+
   await setOptionalConsent(true);
   await page.waitForFunction(() => {
     const state = JSON.parse(localStorage.getItem('hmp_cookie_consent') ?? 'null');
@@ -293,6 +321,17 @@ try {
       Boolean(document.querySelector('script[src*="analytics.tiktok.com"]')),
     undefined,
     { timeout: 15_000 },
+  );
+  const restoredCalls = await page.evaluate(() =>
+    JSON.parse(sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]'),
+  );
+  const enableCookieIndex = restoredCalls.lastIndexOf('enableCookie');
+  const grantConsentIndex = restoredCalls.lastIndexOf('grantConsent');
+  const restoredPageIndex = restoredCalls.lastIndexOf('page');
+  assert.ok(enableCookieIndex >= 0, 'clean reacceptance must enable TikTok cookies');
+  assert.ok(
+    enableCookieIndex < grantConsentIndex && grantConsentIndex < restoredPageIndex,
+    'clean reacceptance must queue enableCookie, grantConsent and then page',
   );
 
   // Prevent the external tel protocol while allowing React and document bubble
@@ -325,6 +364,39 @@ try {
   const pageViewTotal = acceptedPageViews.length + pageViews.length;
   assert.equal(pageViewTotal, 2, 'accept and reaccept each emit exactly once across the reload');
 
+  // Recreate the exact fast-reload boundary: the previous document may close
+  // before TikTok's asynchronous SDK consumes the grant queue. The next
+  // document must independently queue provider restoration before page().
+  await page.addInitScript(() => {
+    window.__hmpFreshTikTokConsentCalls = [];
+    const queue = [];
+    const nativePush = Array.prototype.push;
+    queue.push = function recordFreshTikTokQueue(...items) {
+      for (const item of items) {
+        if (
+          Array.isArray(item) &&
+          ['enableCookie', 'grantConsent', 'page'].includes(item[0])
+        ) {
+          window.__hmpFreshTikTokConsentCalls.push(item[0]);
+        }
+      }
+      return nativePush.apply(this, items);
+    };
+    window.ttq = queue;
+  });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(
+    () => window.__hmpFreshTikTokConsentCalls?.length >= 3,
+    undefined,
+    { timeout: 15_000 },
+  );
+  assert.deepEqual(
+    await page.evaluate(() => window.__hmpFreshTikTokConsentCalls),
+    ['enableCookie', 'grantConsent', 'page'],
+    'a fresh document must reaffirm TikTok provider consent before its first page event',
+  );
+  await page.getByTestId('cookie-banner').waitFor({ state: 'hidden' });
+
   assert.ok(requestedUrls.some((url) => url.includes('googletagmanager.com/gtag/js?id=G-WMRK41PX2E')));
   assert.ok(requestedUrls.some((url) => url.includes('clarity.ms')));
   assert.ok(requestedUrls.some((url) => url.includes('analytics.tiktok.com')));
@@ -336,6 +408,7 @@ try {
       consentCycle: 'denied -> accepted -> rejected -> accepted',
       pageViews: pageViewTotal,
       leadEventsForOneClick: leadsAfter - leadsBefore,
+      freshTikTokRestore: ['enableCookie', 'grantConsent', 'page'],
       providers: ['G-WMRK41PX2E', 'sxayts0dzk', 'D3IKI7BC77UEJB9HBO0G'],
       status: 'PASS',
     }),

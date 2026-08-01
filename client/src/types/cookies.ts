@@ -20,6 +20,7 @@ export interface CookieConsentContextType {
   // State
   consentState: CookieConsentState;
   preferencesOpen: boolean;
+  isHydrated: boolean;
   
   // Actions
   acceptAll: () => void;

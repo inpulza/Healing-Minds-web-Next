@@ -33,6 +33,7 @@ interface CookieConsentProviderProps {
 export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ children }) => {
   const [consentState, setConsentState] = useState<CookieConsentState>(DEFAULT_CONSENT_STATE);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // Load consent from localStorage on initialization
   useEffect(() => {
@@ -57,6 +58,8 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     } catch (error) {
       console.error('Error loading cookie consent preferences:', error);
       localStorage.removeItem(STORAGE_KEY);
+    } finally {
+      setIsHydrated(true);
     }
   }, []);
 
@@ -234,6 +237,7 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
   const contextValue: CookieConsentContextType = {
     consentState,
     preferencesOpen,
+    isHydrated,
     acceptAll,
     acceptSelected,
     rejectAll,

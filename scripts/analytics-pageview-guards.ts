@@ -427,12 +427,12 @@ function checkConsentAndTagRegistry(): void {
     "utf8",
   );
   assert.match(tiktokSource, /useTikTokPixel\(manageConsentLifecycle = false\)/);
-  assert.match(tiktokSource, /window\.ttq\.revokeConsent\(\)/);
-  assert.match(tiktokSource, /window\.ttq\.disableCookie\(\)/);
-  assert.match(tiktokSource, /window\.ttq\.enableCookie\(\)/);
-  assert.match(tiktokSource, /window\.ttq\.grantConsent\(\)/);
-  const enableCookieIndex = tiktokSource.indexOf('window.ttq.enableCookie()');
-  const grantConsentIndex = tiktokSource.indexOf('window.ttq.grantConsent()');
+  assert.match(tiktokSource, /ttq\.revokeConsent\(\)/);
+  assert.match(tiktokSource, /ttq\.disableCookie\(\)/);
+  assert.match(tiktokSource, /ttq\.enableCookie\(\)/);
+  assert.match(tiktokSource, /ttq\.grantConsent\(\)/);
+  const enableCookieIndex = tiktokSource.indexOf('ttq.enableCookie()');
+  const grantConsentIndex = tiktokSource.indexOf('ttq.grantConsent()');
   const reopenGateIndex = tiktokSource.indexOf(
     'consentRevoked.current = false',
     grantConsentIndex,
@@ -442,6 +442,35 @@ function checkConsentAndTagRegistry(): void {
       enableCookieIndex < grantConsentIndex &&
       grantConsentIndex < reopenGateIndex,
     'TikTok must enable cookies, grant provider consent and only then reopen the local gate',
+  );
+  const pixelLoadStart = tiktokSource.indexOf('function loadTikTokPixel');
+  const pixelLoadEnd = tiktokSource.indexOf('export function useTikTokPixel');
+  const pixelLoadSource = tiktokSource.slice(pixelLoadStart, pixelLoadEnd);
+  const loadIndex = pixelLoadSource.indexOf('ttq.load(TIKTOK_PIXEL_ID)');
+  const restoreIndex = pixelLoadSource.indexOf('restoreTikTokProviderConsent(ttq)');
+  const firstPageIndex = pixelLoadSource.indexOf('ttq.page()');
+  assert.ok(
+    loadIndex >= 0 && loadIndex < restoreIndex && restoreIndex < firstPageIndex,
+    'a clean TikTok reacceptance must queue provider restoration before its first page event',
+  );
+  assert.match(tiktokSource, /initTikTokPixel\(true\)/);
+  assert.match(
+    tiktokSource,
+    /hasMarketingConsent\(\)\) \{[\s\S]*?initTikTokPixel\(true\)/,
+    'every fresh document with a persisted marketing grant must reaffirm provider consent',
+  );
+  const rollbackStart = tiktokSource.indexOf('function rollbackTikTokProviderConsent');
+  const rollbackEnd = tiktokSource.indexOf('// Load TikTok Pixel', rollbackStart);
+  const rollbackSource = tiktokSource.slice(rollbackStart, rollbackEnd);
+  assert.ok(
+    rollbackSource.indexOf('ttq.revokeConsent()') >= 0 &&
+      rollbackSource.indexOf('ttq.revokeConsent()') < rollbackSource.indexOf('ttq.disableCookie()'),
+    'a partial TikTok restoration must revoke provider consent before disabling cookies',
+  );
+  assert.match(
+    tiktokSource,
+    /rollbackTikTokProviderConsent\(window\.ttq\);\s*keepTikTokCookiesClearedAfterRevoke\(false\)/,
+    'a provider restoration failure must roll back and keep identifier cleanup active',
   );
   assert.match(tiktokSource, /clearFirstPartyCookies/);
   for (const cookieName of ["ttcsid", "ttcsid_", "ttclid"]) {
@@ -497,6 +526,13 @@ function checkConsentAndTagRegistry(): void {
     new URL("../client/src/lib/analytics.ts", import.meta.url),
     "utf8",
   );
+  assert.match(analyticsSource, /let inMemoryAnalyticsConsent: boolean \| null = null/);
+  assert.match(analyticsSource, /inMemoryAnalyticsConsent \?\? readConsent\('analytics'\)/);
+  assert.match(
+    analyticsSource,
+    /inMemoryAnalyticsConsent = analyticsConsent;\s*inMemoryMarketingConsent = marketingConsent;\s*updateGoogleConsent/,
+    'effective in-memory consent must close Google before provider updates or later emitters',
+  );
   assert.match(
     analyticsSource,
     /const leadKey = source/,
@@ -521,6 +557,10 @@ function checkConsentAndTagRegistry(): void {
   assert.match(bannerSource, /z-\[10000\]/);
   assert.match(bannerSource, /overlayClassName="z-\[10001\]"/);
   assert.match(bannerSource, /className="z-\[10002\]/);
+  assert.match(bannerSource, /if \(!isHydrated\) \{\s*return null/);
+
+  assert.match(consentContextSource, /const \[isHydrated, setIsHydrated\] = useState\(false\)/);
+  assert.match(consentContextSource, /finally \{\s*setIsHydrated\(true\)/);
 
   const dialogSource = readFileSync(
     new URL("../client/src/components/ui/dialog.tsx", import.meta.url),

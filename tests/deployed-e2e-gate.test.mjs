@@ -89,6 +89,10 @@ test("analytics Preview audit validates auth scope and the delayed revoke window
   assert.match(audit, /_tt_enable_cookie/);
   assert.match(audit, /sessionStorage\.getItem\('__hmpTikTokConsentCalls'\)/);
   assert.match(audit, /framenavigated/);
+  assert.match(audit, /const enableCookieIndex = restoredCalls\.lastIndexOf\('enableCookie'\)/);
+  assert.match(audit, /enableCookieIndex < grantConsentIndex && grantConsentIndex < restoredPageIndex/);
+  assert.match(audit, /window\.__hmpFreshTikTokConsentCalls/);
+  assert.match(audit, /a fresh document must reaffirm TikTok provider consent before its first page event/);
   assert.match(audit, /credentialLeaks/);
 });
 

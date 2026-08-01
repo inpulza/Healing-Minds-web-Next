@@ -29,12 +29,19 @@ function readConsent(category: 'analytics' | 'marketing'): boolean {
   }
 }
 
+// Storage is the source of truth on a fresh document. Once a consent event is
+// handled, its effective values are authoritative for the rest of that
+// document. This keeps tracking closed when a withdrawal cannot overwrite an
+// older persisted grant.
+let inMemoryAnalyticsConsent: boolean | null = null;
+let inMemoryMarketingConsent: boolean | null = null;
+
 function hasAnalyticsConsent(): boolean {
-  return readConsent('analytics');
+  return inMemoryAnalyticsConsent ?? readConsent('analytics');
 }
 
 function hasMarketingConsent(): boolean {
-  return readConsent('marketing');
+  return inMemoryMarketingConsent ?? readConsent('marketing');
 }
 
 function initConsentMode(): void {
@@ -313,6 +320,9 @@ export function handleConsentChange(
   analyticsConsent: boolean,
   marketingConsent: boolean,
 ): void {
+  // Close or open the local gates before any provider call or event replay.
+  inMemoryAnalyticsConsent = analyticsConsent;
+  inMemoryMarketingConsent = marketingConsent;
   updateGoogleConsent(analyticsConsent, marketingConsent);
 
   if (analyticsConsent) {

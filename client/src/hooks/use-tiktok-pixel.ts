@@ -171,8 +171,41 @@ function reloadAfterLoadedPixelRevoke(): void {
   }, 50);
 }
 
-// Load TikTok Pixel script
-function loadTikTokPixel(): void {
+function restoreTikTokProviderConsent(ttq: any): void {
+  if (
+    !ttq ||
+    typeof ttq.enableCookie !== 'function' ||
+    typeof ttq.grantConsent !== 'function'
+  ) {
+    throw new Error('TikTok consent controls are unavailable');
+  }
+
+  ttq.enableCookie();
+  ttq.grantConsent();
+}
+
+function rollbackTikTokProviderConsent(ttq: any): void {
+  try {
+    if (ttq && typeof ttq.revokeConsent === 'function') {
+      ttq.revokeConsent();
+    }
+  } catch (error) {
+    console.error('Error rolling back TikTok consent:', error);
+  }
+
+  try {
+    if (ttq && typeof ttq.disableCookie === 'function') {
+      ttq.disableCookie();
+    }
+  } catch (error) {
+    console.error('Error disabling TikTok cookies during rollback:', error);
+  }
+}
+
+// Load TikTok Pixel script. After a clean withdrawal reload, provider consent
+// must be restored in the queue before the first page event and before the
+// app-owned gates reopen.
+function loadTikTokPixel(restoreProviderConsent = false): void {
   if (typeof window === 'undefined') return;
   
   const w = window as any;
@@ -230,6 +263,9 @@ function loadTikTokPixel(): void {
   
   // Load the pixel
   ttq.load(TIKTOK_PIXEL_ID);
+  if (restoreProviderConsent) {
+    restoreTikTokProviderConsent(ttq);
+  }
   ttq.page();
 }
 
@@ -244,7 +280,7 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
   locationRef.current = location;
 
   // Initialize TikTok Pixel when consent is available
-  const initTikTokPixel = useCallback(() => {
+  const initTikTokPixel = useCallback((restoreProviderConsent = false) => {
     if (isDevelopment()) {
       if (isDevelopment()) {
         console.log('🎵 TikTok Pixel disabled in development mode');
@@ -259,8 +295,8 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
     
     if (globalTikTokInitialized || 
         initialized.current || 
-        globalConsentRevoked || 
-        consentRevoked.current ||
+        (globalConsentRevoked && !restoreProviderConsent) ||
+        (consentRevoked.current && !restoreProviderConsent) ||
         recentInitialization) {
       if (isDevelopment()) {
         console.log('🎵 TikTok Pixel already initialized or blocked, skipping');
@@ -280,15 +316,19 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
       const alreadyLoaded = Boolean(window.ttq && typeof window.ttq.page === 'function');
 
       if (alreadyLoaded) {
+        if (restoreProviderConsent) {
+          restoreTikTokProviderConsent(window.ttq);
+        }
         if (isDevelopment()) {
           console.log('🎵 TikTok Pixel already loaded in page, skipping script injection');
         }
       } else {
-        loadTikTokPixel();
+        loadTikTokPixel(restoreProviderConsent);
       }
 
       globalTikTokInitialized = true;
       initialized.current = true;
+      stopPostRevokeCookieCleanup();
       consentRevoked.current = false;
       globalConsentRevoked = false;
       // Single exit for every init path: record the entry page, or the route
@@ -303,6 +343,13 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
       }
     } catch (error) {
       console.error('Failed to initialize TikTok Pixel:', error);
+      // Restoration is transactional. If enableCookie succeeded but a later
+      // provider call failed, undo the partial grant and keep this document
+      // sweeping identifiers until a future restoration completes.
+      consentRevoked.current = true;
+      globalConsentRevoked = true;
+      rollbackTikTokProviderConsent(window.ttq);
+      keepTikTokCookiesClearedAfterRevoke(false);
       globalTikTokInitialized = false;
       globalInitializationTimestamp = null;
     }
@@ -322,25 +369,11 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
         bumpConsentGeneration();
       }
 
-      try {
-        if (window.ttq && typeof window.ttq.revokeConsent === 'function') {
-          window.ttq.revokeConsent();
-        }
-      } catch (error) {
-        console.error('Error revoking TikTok Pixel consent:', error);
-      }
-
-      // Empirical SDK hardening: Consent Mode stops data sharing, while this
-      // cookie API prevents the already-loaded SDK from recreating first-party
+      // Empirical SDK hardening: Consent Mode stops data sharing, while the
+      // cookie API prevents the loaded SDK from recreating first-party
       // identifiers several seconds later. Preserve its _tt_enable_cookie=0
       // opt-out marker in clearTikTokCookies().
-      try {
-        if (window.ttq && typeof window.ttq.disableCookie === 'function') {
-          window.ttq.disableCookie();
-        }
-      } catch (error) {
-        console.error('Error disabling TikTok Pixel cookies:', error);
-      }
+      rollbackTikTokProviderConsent(window.ttq);
     }
     keepTikTokCookiesClearedAfterRevoke(persistenceSucceeded);
     if (shouldReload && persistenceSucceeded) {
@@ -356,7 +389,10 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
 
     // Check initial consent state and initialize if available
     if (process.env.NODE_ENV === 'production' && hasMarketingConsent()) {
-      initTikTokPixel();
+      // Reaffirm provider consent on every fresh document. A visitor can reload
+      // after persisting a grant but before the previous document's async SDK
+      // consumed its enableCookie/grantConsent queue.
+      initTikTokPixel(true);
     } else if (isDevelopment()) {
       if (isDevelopment()) {
         console.log('🎵 TikTok Pixel disabled in development mode');
@@ -373,27 +409,17 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
       const persistenceSucceeded = persisted !== false;
       
       if (marketingGranted && persistenceSucceeded) {
-        stopPostRevokeCookieCleanup();
         if (!globalTikTokInitialized) {
-          // No SDK exists yet, so the persisted grant can safely open the local
-          // gate before first initialization.
-          consentRevoked.current = false;
-          globalConsentRevoked = false;
-          initTikTokPixel();
+          // A clean withdrawal reload leaves the provider opt-out marker but no
+          // SDK. Queue enableCookie -> grantConsent before the first page call;
+          // initTikTokPixel opens the local gates only after that succeeds.
+          initTikTokPixel(true);
         } else {
           // For an already-loaded SDK, remain fail-closed until both provider
           // controls have been restored successfully.
           try {
-            if (
-              !window.ttq ||
-              typeof window.ttq.enableCookie !== 'function' ||
-              typeof window.ttq.grantConsent !== 'function'
-            ) {
-              throw new Error('TikTok consent controls are unavailable');
-            }
-
-            window.ttq.enableCookie();
-            window.ttq.grantConsent();
+            restoreTikTokProviderConsent(window.ttq);
+            stopPostRevokeCookieCleanup();
             consentRevoked.current = false;
             globalConsentRevoked = false;
             console.log('🎵 TikTok Pixel consent restored - marketing tracking enabled');
@@ -407,6 +433,8 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
             console.error('Error restoring TikTok Pixel consent:', error);
             consentRevoked.current = true;
             globalConsentRevoked = true;
+            rollbackTikTokProviderConsent(window.ttq);
+            keepTikTokCookiesClearedAfterRevoke(false);
           }
         }
       } else {
