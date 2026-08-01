@@ -2,6 +2,7 @@ import { and, count, desc, eq, ilike, inArray, isNull, lt, ne, or, type SQL } fr
 import {
   blogAuthors,
   blogCategories,
+  blogImageCleanupQueue,
   blogGenerationRuns,
   blogLinks,
   blogLinkSources,
@@ -335,7 +336,7 @@ export async function getAdminBlogPosts(options: GetAdminBlogPostsOptions = {}):
     .leftJoin(blogAuthors, eq(blogPosts.authorId, blogAuthors.id))
     .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
     .where(conditions.length > 0 ? and(...conditions) : undefined)
-    .orderBy(desc(blogPosts.updatedAt), desc(blogPosts.createdAt))
+    .orderBy(desc(blogPosts.updatedAt), desc(blogPosts.createdAt), desc(blogPosts.id))
     .limit(limit)
     .offset(offset);
 
@@ -937,6 +938,13 @@ export async function deleteBlogPostWithRedirect(
       .where(eq(blogPostImages.postId, id))
       .for("update");
     const objectKeys = planBlogPostImageObjectDeletion(images);
+
+    if (objectKeys.length > 0) {
+      await tx
+        .insert(blogImageCleanupQueue)
+        .values(objectKeys.map(objectKey => ({ objectKey })))
+        .onConflictDoNothing({ target: blogImageCleanupQueue.objectKey });
+    }
 
     if (isBlogLinkEnabled()) {
       await tx

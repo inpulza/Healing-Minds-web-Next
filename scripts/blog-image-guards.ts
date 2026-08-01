@@ -18,7 +18,7 @@ import {
   containsLikelyPatientIdentifierInAiFields,
 } from "../server/blog/privacy";
 import { buildSafeVisualBrief } from "../server/blog/images/prompt";
-import { checkBlogImageRateLimit } from "../server/blog/images/rate-limit";
+import { checkBlogImageRateLimit, getBlogImageRateLimitCost } from "../server/blog/images/rate-limit";
 
 const originalEnabled = process.env.BLOG_IMAGE_ENABLED;
 const originalApiKey = process.env.OPENAI_API_KEY;
@@ -436,6 +436,16 @@ try {
   assert.equal(checkBlogImageRateLimit(rateLimitKey).allowed, true);
   assert.equal(checkBlogImageRateLimit(rateLimitKey).allowed, true);
   assert.equal(checkBlogImageRateLimit(rateLimitKey).allowed, false);
+  process.env.BLOG_IMAGE_HOURLY_LIMIT = "4";
+  const paidCallKey = `paid-call-guard-${Date.now()}`;
+  assert.equal(checkBlogImageRateLimit(
+    paidCallKey,
+    getBlogImageRateLimitCost("all", 2),
+  ).allowed, true);
+  assert.equal(checkBlogImageRateLimit(
+    paidCallKey,
+    getBlogImageRateLimitCost("inline", 2),
+  ).allowed, false);
   if (previousImageLimit === undefined) delete process.env.BLOG_IMAGE_HOURLY_LIMIT;
   else process.env.BLOG_IMAGE_HOURLY_LIMIT = previousImageLimit;
 

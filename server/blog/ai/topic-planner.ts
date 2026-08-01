@@ -39,6 +39,12 @@ import {
   selectRuntimeBlogResearchSources,
 } from "../links/runtime";
 import { snapshotPlannedLinkIds } from "./planned-topic-provenance";
+import { loadCompleteTopicInventory } from "./topic-inventory";
+import {
+  getMissingProviderDimensions,
+  selectBoundedProviderItems,
+  takeBoundedProviderInventory,
+} from "./topic-provider-payload";
 
 type TopicPlannerInput = {
   language: BlogLanguage;
@@ -47,21 +53,8 @@ type TopicPlannerInput = {
   runId?: number;
 };
 
-const TOPIC_INVENTORY_PAGE_SIZE = 200;
-
 async function loadTopicInventoryPosts(language: BlogLanguage): Promise<BlogPostWithRelations[]> {
-  const posts: BlogPostWithRelations[] = [];
-  for (let offset = 0; ; offset += TOPIC_INVENTORY_PAGE_SIZE) {
-    const page = await getAdminBlogPosts({
-      status: "all",
-      language,
-      limit: TOPIC_INVENTORY_PAGE_SIZE,
-      offset,
-    });
-    posts.push(...page);
-    if (page.length < TOPIC_INVENTORY_PAGE_SIZE) break;
-  }
-  return posts.filter(post => post.status !== "rejected");
+  return loadCompleteTopicInventory(language, getAdminBlogPosts);
 }
 
 type TopicMatch = {
@@ -297,24 +290,40 @@ export function buildGuidedTopicSemanticProfile(input: {
 
 function buildInventory(posts: BlogPostWithRelations[]): TopicInventorySnapshot {
   const classified = posts.map(classifyPost);
+  const profiles = posts.map(buildSafePostSemanticProfile);
   const clusterCounts: Record<string, number> = {};
-  for (const post of classified) {
+  const pillarCounts: Record<string, number> = {};
+  const patientStageCounts: Record<string, number> = {};
+  const formatCounts: Record<string, number> = {};
+  const searchIntentCounts: Record<string, number> = {};
+  for (const [index, post] of classified.entries()) {
+    const profile = profiles[index];
     clusterCounts[post.categoryKey] = (clusterCounts[post.categoryKey] || 0) + 1;
+    pillarCounts[profile.pillar] = (pillarCounts[profile.pillar] || 0) + 1;
+    patientStageCounts[profile.patientStage] = (patientStageCounts[profile.patientStage] || 0) + 1;
+    formatCounts[profile.contentFormat] = (formatCounts[profile.contentFormat] || 0) + 1;
+    searchIntentCounts[profile.searchIntent] = (searchIntentCounts[profile.searchIntent] || 0) + 1;
   }
+  const safePosts = posts.map((post, index) => {
+    const profile = profiles[index];
+    return {
+      ...classified[index],
+      title: getSafePostTitleForProvider(post),
+      targetKeyword: null,
+      topicKey: null,
+      pillar: profile.pillar,
+      patientStage: profile.patientStage,
+      contentFormat: profile.contentFormat,
+    };
+  });
   return {
-    posts: posts.map((post, index) => {
-      const profile = buildSafePostSemanticProfile(post);
-      return {
-        ...classified[index],
-        title: getSafePostTitleForProvider(post),
-        targetKeyword: null,
-        topicKey: null,
-        pillar: profile.pillar,
-        patientStage: profile.patientStage,
-        contentFormat: profile.contentFormat,
-      };
-    }),
+    posts: takeBoundedProviderInventory(safePosts),
+    totalPosts: posts.length,
     clusterCounts,
+    pillarCounts,
+    patientStageCounts,
+    formatCounts,
+    searchIntentCounts,
     recentCategoryKeys: classified.slice(0, 5).map(post => post.categoryKey),
     recentPillars: classified.slice(0, 5).map(post => post.pillar).filter((value): value is string => Boolean(value)),
     recentFormats: classified.slice(0, 5).map(post => post.contentFormat).filter((value): value is string => Boolean(value)),
@@ -475,17 +484,38 @@ async function evaluateBatch(input: {
   let judgeUnavailable = false;
   if (eligible.length > 0) {
     try {
+      const candidateProfiles = eligible.map(item => buildSafeProposalSemanticProfile(item.proposal));
+      const semanticPriorityPostIds = input.posts
+        .filter(post => {
+          const postProfile = safeProfilesByPostId.get(post.id);
+          return postProfile && candidateProfiles.some(candidateProfile => (
+            postProfile.categoryKey === candidateProfile.categoryKey
+            && (
+              postProfile.intentFacet === candidateProfile.intentFacet
+              || postProfile.searchIntent === candidateProfile.searchIntent
+              || postProfile.patientStage === candidateProfile.patientStage
+            )
+          ));
+        })
+        .map(post => post.id);
+      const priorityPostIds = [
+        ...eligible.flatMap(item => item.matches.map(match => match.postId)),
+        ...semanticPriorityPostIds,
+      ];
+      const providerExistingPosts = selectBoundedProviderItems(
+        input.posts.map(post => ({
+          postId: post.id,
+          title: getSafePostTitleForProvider(post),
+          targetKeyword: null,
+          categoryKey: classifyPost(post).categoryKey,
+          semanticProfile: safeProfilesByPostId.get(post.id) as SafeExistingTopicProfile,
+        })),
+        priorityPostIds,
+        post => post.postId,
+      );
       const judged = await judgeTopicCandidates({
         language: input.language,
-        existingPosts: input.posts.map(post => {
-          return {
-            postId: post.id,
-            title: getSafePostTitleForProvider(post),
-            targetKeyword: null,
-            categoryKey: classifyPost(post).categoryKey,
-            semanticProfile: safeProfilesByPostId.get(post.id) as SafeExistingTopicProfile,
-          };
-        }),
+        existingPosts: providerExistingPosts,
         candidates: eligible.map(item => ({
           candidateKey: item.proposal.candidateKey,
           topic: item.proposal.topic,
@@ -561,9 +591,10 @@ async function evaluateBatch(input: {
       categoryName: category.name,
     });
     const internalLinks = internalLinkSelection.hrefs;
-    const missingStages = BLOG_PATIENT_STAGES.filter(stage => (
-      !input.inventory.posts.some(post => post.patientStage === stage)
-    ));
+    const missingStages = getMissingProviderDimensions(
+      BLOG_PATIENT_STAGES,
+      input.inventory.patientStageCounts,
+    );
     const scoreBreakdown = scoreTopicCandidate({
       overlapScore,
       clusterCount: input.inventory.clusterCounts[item.proposal.categoryKey] || 0,
@@ -860,17 +891,33 @@ export async function assertGuidedBlogTopicSafe(input: {
     });
   }
   try {
+    const providerExistingPosts = selectBoundedProviderItems(
+      posts.map(post => ({
+        postId: post.id,
+        title: getSafePostTitleForProvider(post),
+        targetKeyword: null,
+        categoryKey: classifyPost(post).categoryKey,
+        semanticProfile: safeProfilesByPostId.get(post.id) as SafeExistingTopicProfile,
+      })),
+      [
+        ...matches.map(match => match.postId),
+        ...posts
+          .filter(post => {
+            const postProfile = safeProfilesByPostId.get(post.id);
+            return postProfile?.categoryKey === guidedSemanticProfile.categoryKey
+              && (
+                postProfile.intentFacet === guidedSemanticProfile.intentFacet
+                || postProfile.searchIntent === guidedSemanticProfile.searchIntent
+                || postProfile.patientStage === guidedSemanticProfile.patientStage
+              );
+          })
+          .map(post => post.id),
+      ],
+      post => post.postId,
+    );
     const judged = await judgeTopicCandidates({
       language: input.language,
-      existingPosts: posts.map(post => {
-        return {
-          postId: post.id,
-          title: getSafePostTitleForProvider(post),
-          targetKeyword: null,
-          categoryKey: classifyPost(post).categoryKey,
-          semanticProfile: safeProfilesByPostId.get(post.id) as SafeExistingTopicProfile,
-        };
-      }),
+      existingPosts: providerExistingPosts,
       candidates: [{
         candidateKey: "guided-topic",
         topic: input.topic,

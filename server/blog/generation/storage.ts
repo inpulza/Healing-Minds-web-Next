@@ -22,15 +22,28 @@ export async function createBlogGenerationRun(
 export async function createBlogGenerationRunIfAbsent(
   values: CreateGenerationRunInput,
 ): Promise<{ run: GenerationRun; created: boolean }> {
-  const [created] = await db
-    .insert(blogGenerationRuns)
-    .values({
-      idempotencyKey: values.idempotencyKey,
-      input: values.input,
-      workflow: values.workflow,
-    })
-    .onConflictDoNothing({ target: blogGenerationRuns.idempotencyKey })
-    .returning();
+  let created: GenerationRun | undefined;
+  try {
+    [created] = await db
+      .insert(blogGenerationRuns)
+      .values({
+        idempotencyKey: values.idempotencyKey,
+        input: values.input,
+        workflow: values.workflow,
+      })
+      .onConflictDoNothing({ target: blogGenerationRuns.idempotencyKey })
+      .returning();
+  } catch (error) {
+    if ((error as { code?: string }).code !== "23505") throw error;
+
+    const existing = await getBlogGenerationRunByIdempotencyKey(values.idempotencyKey);
+    if (existing) return { run: existing, created: false };
+
+    throw Object.assign(
+      new Error("Another generation or planning run started at the same time. Reopen it before trying again."),
+      { statusCode: 409, code: "blog_generation_run_conflict" },
+    );
+  }
 
   if (created) return { run: created, created: true };
 

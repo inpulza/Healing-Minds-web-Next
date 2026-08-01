@@ -19,3 +19,16 @@
 ## Nota operativa
 
 El rate limit en memoria es defensa de aplicación por instancia, coherente con el limitador de texto existente. Un límite global distribuido requeriría un sprint de infraestructura explícito.
+
+## Revisión exacta posterior a la integración de `main`
+
+El review de CodeX sobre `3ad4a81d31f0e0f129153915a1967ae601e9f310` abrió cuatro P2 y los cuatro se clasifican como **válidos**:
+
+1. `3694143680`: el inventario paginado necesitaba un orden total. `getAdminBlogPosts` ordena ahora por `updatedAt`, `createdAt` e `id`, todos descendentes.
+2. `3694143684`: un fallo temprano de Blob detenía el resto de eliminaciones y perdía las claves después del commit. La transacción guarda primero todas las claves en `blog_image_cleanup_queue`; después se intenta cada objeto independientemente. Los éxitos eliminan su entrada y los fallos conservan clave, contador y error. Cada ejecución incluye también el backlog anterior.
+3. `3694143685`: Auto Generate no consumía el límite de imágenes. La cuota admite coste y cobra las tres llamadas potencialmente pagadas del flujo automático; generate manual cobra hero/inline/all según el máximo solicitado.
+4. `3694143688`: planner y judge recibían un registro por cada post sin cota. Los checks locales siguen recorriendo el inventario completo, pero el proveedor recibe agregados completos y como máximo 40 perfiles seguros. Para el judge se priorizan matches léxicos y perfiles semánticos relevantes aunque estén al final del inventario. Los bonuses de etapa ausente consultan `patientStageCounts` completo, no la muestra, para no alterar el ranking.
+
+Hallazgos adicionales del juez, también **válidos y corregidos**: colisión concurrente different-key convertida a 409 estable, heartbeat Express durante todo topic planning, desempate inmutable en paginación y paridad same-key Next/Express mediante una decisión compartida antes de eventos o queue.
+
+Evidencia local posterior al patch: 81/81 tests, TypeScript PASS, migraciones PASS con 3 archivos/98 statements/19 tablas/20 FKs, image/topic/link/analytics guards PASS, SEO render audit PASS en 8 URLs, build Next 89/89 y `git diff --check` PASS. Juez independiente GO 4/4 después de detectar y verificar la corrección del falso bonus `missingStages`; sin hallazgos accionables nuevos.

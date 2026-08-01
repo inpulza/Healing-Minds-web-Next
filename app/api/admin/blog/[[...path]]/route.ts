@@ -1,6 +1,7 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import type { BlogGenerationRun } from "@shared/schema";
 import type { GuidedTopicTrustedContext } from "../../../../../server/blog/ai/topic-planner";
+import { decideGenerationRunCreationAction } from "../../../../../server/blog/generation/idempotency";
 import { getAdminSession, noStoreHeaders } from "../../../../../server/next-admin-auth";
 
 export const runtime = "nodejs";
@@ -446,8 +447,9 @@ export async function POST(request: NextRequest, context: RouteContext) {
         workflow: JSON.parse(JSON.stringify(workflow)),
       });
       const run = creation.run;
-      if (!creation.created) {
-        if (run.status === "queued") after(() => admin.executePersistedAutoGenerateRun(run.id));
+      const creationAction = decideGenerationRunCreationAction(creation);
+      if (creationAction !== "queue_new") {
+        if (creationAction === "resume_queued") after(() => admin.executePersistedAutoGenerateRun(run.id));
         return json({
           success: true,
           data: {
@@ -700,19 +702,20 @@ export async function POST(request: NextRequest, context: RouteContext) {
       ]);
       if (segments.length === 4 && segments[3] === "generate") {
         imageConfig.assertBlogImageConfigured();
-        const { checkBlogImageRateLimit } = await import("../../../../../server/blog/images/rate-limit");
+        const role = body?.role === "hero" || body?.role === "inline" ? body.role : "all";
+        const maxInline = body?.maxInline === undefined ? undefined : Number(body.maxInline);
+        if (maxInline !== undefined && (!Number.isInteger(maxInline) || maxInline < 1 || maxInline > 2)) {
+          return json({ success: false, message: "maxInline must be 1 or 2" }, 400);
+        }
+        const { checkBlogImageRateLimit, getBlogImageRateLimitCost } = await import("../../../../../server/blog/images/rate-limit");
         const imageRateLimit = checkBlogImageRateLimit(
           request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "admin",
+          getBlogImageRateLimitCost(role, maxInline),
         );
         if (!imageRateLimit.allowed) {
           const response = json({ success: false, message: "Blog image generation rate limit reached" }, 429);
           if (imageRateLimit.retryAfterSec) response.headers.set("Retry-After", String(imageRateLimit.retryAfterSec));
           return response;
-        }
-        const role = body?.role === "hero" || body?.role === "inline" ? body.role : "all";
-        const maxInline = body?.maxInline === undefined ? undefined : Number(body.maxInline);
-        if (maxInline !== undefined && (!Number.isInteger(maxInline) || maxInline < 1 || maxInline > 2)) {
-          return json({ success: false, message: "maxInline must be 1 or 2" }, 400);
         }
         return json({ success: true, data: await imageService.generateBlogImageSet(post, { role, maxInline }) }, 201);
       }

@@ -367,3 +367,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar el SHA integrado, exigir Preview READY, Code Review exacto y GO del juez antes de fusionar por squash sin borrar la rama.
 **Archivos tocados:** merge de `origin/main`, `server/blog/ai/topic-planner.ts` y bitácora.
 **Evidencia:** juez de secuencia GO para #5 primero. Árbol integrado: suite 76/76, TypeScript PASS, DB 2 migraciones/95 statements/18 tablas/20 FKs, image/topic guards PASS, build 89/89 y diff-check PASS.
+
+## 2026-08-01 Codex - cierre de concurrencia, Blob, cuota e inventario del PR #5
+**Qué se hizo:** Se corrigieron las cuatro notas P2 del Code Review exacto de `3ad4a81`: orden total del inventario, cola duradera de limpieza Blob, cuota de imagen aplicada a Auto Generate y payloads del proveedor limitados. También quedaron cerrados los hallazgos del juez sobre carreras same-key/different-key y heartbeat Express.
+**Decisiones:** Los checks de duplicidad, saturación y gaps de etapa siguen usando el inventario o los conteos completos; solo la frontera del proveedor queda limitada a agregados completos y 40 perfiles seguros priorizados. El borrado del post registra las claves dentro de la misma transacción antes del cascade; los objetos se limpian después del commit y el backlog se reintenta en ejecuciones posteriores. La cuota cuenta llamadas potencialmente pagadas, no solo clics de endpoint.
+**Pendientes/bugs:** Publicar un nuevo SHA, responder y resolver los cuatro threads, y repetir Quality, Vercel READY y CodeX exacto antes del merge.
+**Archivos tocados:** inventario/payload del planner y judge, rutas Next/Express, storage de runs, rate limit e imágenes, esquema/migración, guards/tests, evidencia, decisiones y bitácora.
+**Evidencia:** threads `3694143680`, `3694143684`, `3694143685` y `3694143688`, todos válidos. Juez independiente GO 4/4, incluido el guard de `missingStages` fuera de la muestra. Local: 81/81 tests, TypeScript PASS, DB 3 migraciones/98 statements/19 tablas/20 FKs, image/topic/link/analytics guards PASS, SEO render audit 8/8, build 89/89 y diff-check PASS.

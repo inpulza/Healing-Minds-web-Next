@@ -22,7 +22,17 @@ function prune(hits: number[], now: number): number[] {
   return hits.filter(hit => hit > cutoff);
 }
 
-export function checkBlogImageRateLimit(key: string): BlogImageRateLimitResult {
+export function getBlogImageRateLimitCost(
+  role: "hero" | "inline" | "all",
+  maxInline = 2,
+): number {
+  const inlineCost = Math.max(1, Math.min(2, Math.floor(maxInline)));
+  if (role === "hero") return 1;
+  if (role === "inline") return inlineCost;
+  return 1 + inlineCost;
+}
+
+export function checkBlogImageRateLimit(key: string, cost = 1): BlogImageRateLimitResult {
   const now = Date.now();
   if (now - lastSweep >= SWEEP_INTERVAL_MS) {
     lastSweep = now;
@@ -35,15 +45,16 @@ export function checkBlogImageRateLimit(key: string): BlogImageRateLimitResult {
 
   const hits = prune(hitsByKey.get(key)?.hits || [], now);
   const limit = getLimit();
-  if (hits.length >= limit) {
+  const normalizedCost = Math.max(1, Math.floor(cost));
+  if (hits.length + normalizedCost > limit) {
     hitsByKey.set(key, { hits });
     return {
       allowed: false,
-      retryAfterSec: Math.max(1, Math.ceil((hits[0] + WINDOW_MS - now) / 1000)),
+      retryAfterSec: Math.max(1, Math.ceil(((hits[0] || now) + WINDOW_MS - now) / 1000)),
     };
   }
 
-  hits.push(now);
+  hits.push(...Array.from({ length: normalizedCost }, () => now));
   hitsByKey.set(key, { hits });
   return { allowed: true };
 }

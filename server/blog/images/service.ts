@@ -15,11 +15,14 @@ import {
 import { generateImageWithOpenAi } from "./provider";
 import {
   claimBlogPostImageForDeletion,
+  completeBlogImageCleanup,
   createDraftBlogPostImage,
   ensureCuratedHeroImage,
   finalizeBlogPostImageDeletion,
   getBlogPostImage,
+  listQueuedBlogImageCleanupKeys,
   markStaleGeneratingBlogImagesFailed,
+  markBlogImageCleanupFailed,
   updateBlogPostImage,
 } from "./storage";
 import {
@@ -285,11 +288,29 @@ export async function deleteBlogImageVariant(postId: number, imageId: number): P
 }
 
 export async function deleteBlogImageObjectsOnly(objectKeys: string[]): Promise<number> {
-  const uniqueObjectKeys = Array.from(new Set(objectKeys.filter(Boolean)));
+  const queuedObjectKeys = await listQueuedBlogImageCleanupKeys();
+  const uniqueObjectKeys = Array.from(new Set([...queuedObjectKeys, ...objectKeys].filter(Boolean)));
   let deletedCount = 0;
+  const failures: string[] = [];
   for (const objectKey of uniqueObjectKeys) {
-    await deleteBlogImageObject(objectKey);
-    deletedCount += 1;
+    try {
+      await deleteBlogImageObject(objectKey);
+      await completeBlogImageCleanup(objectKey);
+      deletedCount += 1;
+    } catch (error) {
+      failures.push(objectKey);
+      await markBlogImageCleanupFailed(objectKey, error).catch(queueError => {
+        console.error(`Could not update durable cleanup state for ${objectKey}:`, queueError);
+      });
+    }
+  }
+  if (failures.length > 0) {
+    throw Object.assign(new Error(`${failures.length} blog image object cleanup operation(s) remain queued`), {
+      statusCode: 503,
+      code: "blog_image_cleanup_incomplete",
+      failedObjectKeys: failures,
+      deletedCount,
+    });
   }
   return deletedCount;
 }
