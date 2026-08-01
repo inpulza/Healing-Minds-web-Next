@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import {
   BLOG_CONTENT_FORMATS,
   BLOG_CONTENT_PILLARS,
@@ -26,6 +27,15 @@ import {
   legacyBlogTopicCandidates,
   toLegacyBlogTopicCandidateInsert,
 } from "../server/blog/topic-candidate-legacy-schema";
+import { loadCompleteTopicInventory } from "../server/blog/ai/topic-inventory";
+import { decideGenerationRunCreationAction } from "../server/blog/generation/idempotency";
+import {
+  TOPIC_PROVIDER_INVENTORY_POST_LIMIT,
+  TOPIC_PROVIDER_JUDGE_POST_LIMIT,
+  getMissingProviderDimensions,
+  selectBoundedProviderItems,
+  takeBoundedProviderInventory,
+} from "../server/blog/ai/topic-provider-payload";
 
 function checkStrategyRegistry(): void {
   const en = getHealingMindsCategories("en");
@@ -196,6 +206,7 @@ function checkPlannedLinkProvenance(): void {
     targetKeyword: "anxiety evaluation questions",
     language: "en",
     categoryId: 4,
+    categoryKey: "anxiety",
     pillar: "evaluation_care_journey",
     patientStage: "evaluation",
     contentFormat: "questions_to_ask",
@@ -271,11 +282,79 @@ function checkLegacyTopicCandidateInsertSql(): void {
   );
 }
 
+async function checkCompleteStableTopicInventory(): Promise<void> {
+  const rows = Array.from({ length: 405 }, (_, index) => ({
+    id: index + 1,
+    status: index === 249 || index === 402 ? "rejected" : "draft",
+  }));
+  const offsets: number[] = [];
+  const inventory = await loadCompleteTopicInventory("en", async ({ limit, offset }) => {
+    offsets.push(offset);
+    return rows.slice(offset, offset + limit);
+  });
+
+  assert.deepEqual(offsets, [0, 200, 400]);
+  assert.equal(inventory.length, 403);
+  assert.equal(inventory.some(post => post.id === 250), false);
+  assert.equal(inventory.some(post => post.id === 403), false);
+
+  const storageSource = fs.readFileSync("server/blog/storage.ts", "utf8");
+  assert.match(
+    storageSource,
+    /orderBy\(desc\(blogPosts\.updatedAt\), desc\(blogPosts\.createdAt\), desc\(blogPosts\.id\)\)/,
+    "offset pagination requires an immutable tie-breaker",
+  );
+}
+
+function checkGenerationRunIdempotencyDecisions(): void {
+  assert.equal(
+    decideGenerationRunCreationAction({ created: true, run: { status: "planning" } }),
+    "queue_new",
+  );
+  assert.equal(
+    decideGenerationRunCreationAction({ created: false, run: { status: "queued" } }),
+    "resume_queued",
+  );
+  for (const status of ["planning", "running", "completed", "failed", "interrupted"]) {
+    assert.equal(
+      decideGenerationRunCreationAction({ created: false, run: { status } }),
+      "reopen_existing",
+      `same-key loser in ${status} must not append events or queue again`,
+    );
+  }
+}
+
+function checkBoundedProviderPayloads(): void {
+  const rows = Array.from({ length: 405 }, (_, index) => ({ id: index + 1 }));
+  const inventory = takeBoundedProviderInventory(rows);
+  assert.equal(inventory.length, TOPIC_PROVIDER_INVENTORY_POST_LIMIT);
+  assert.deepEqual(inventory.map(row => row.id), Array.from({ length: 40 }, (_, index) => index + 1));
+
+  const judged = selectBoundedProviderItems(rows, [405, 300, 405], row => row.id);
+  assert.equal(judged.length, TOPIC_PROVIDER_JUDGE_POST_LIMIT);
+  assert.deepEqual(judged.slice(0, 2).map(row => row.id), [405, 300]);
+  assert.equal(new Set(judged.map(row => row.id)).size, judged.length);
+
+  const fullStageCounts = {
+    recognition: 404,
+    ongoing_care: 1,
+  };
+  const missingStages = getMissingProviderDimensions(BLOG_PATIENT_STAGES, fullStageCounts);
+  assert.equal(
+    missingStages.includes("ongoing_care"),
+    false,
+    "a stage present only after the bounded provider sample must not receive a false missing-stage bonus",
+  );
+}
+
 checkStrategyRegistry();
 checkDeterministicOverlap();
 checkScoringPenalties();
 checkConfigGuardWithoutSecrets();
 checkPlannedLinkProvenance();
 checkLegacyTopicCandidateInsertSql();
+await checkCompleteStableTopicInventory();
+checkGenerationRunIdempotencyDecisions();
+checkBoundedProviderPayloads();
 
-console.log("Blog topic guards passed: registry, bilingual normalization, overlap, scoring, config, planned link provenance, and Sprint 18 insert compatibility.");
+console.log("Blog topic guards passed: registry, bilingual normalization, overlap, scoring, config, complete stable inventory, bounded provider payloads, planned link provenance, and Sprint 18 insert compatibility.");

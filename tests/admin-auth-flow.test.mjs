@@ -23,6 +23,7 @@ test("custom Next admin completes login, protected API, session and logout witho
     const runtime = await import("./app/api/admin/runtime/route.ts");
     const blog = await import("./app/api/admin/blog/[[...path]]/route.ts");
     const auth = await import("./server/next-admin-auth.ts");
+    const expressAuth = await import("./server/admin-auth.ts");
 
     const noStore = response => assert.match(response.headers.get("cache-control") || "", /no-store/);
     const request = new NextRequest("https://example.invalid/api/admin/login", {
@@ -95,6 +96,269 @@ test("custom Next admin completes login, protected API, session and logout witho
     assert.equal(failClosed.status, 503);
     noStore(failClosed);
 
+    process.env.NODE_ENV = "development";
+    process.env.BLOG_ADMIN_AUTH_MODE = "off";
+    const localRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100" },
+    });
+    const localhostRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "127.0.0.1",
+      },
+    });
+    const ipv6Request = new NextRequest("http://[::1]:3100/api/admin/session", {
+      headers: {
+        host: "[::1]:3100",
+        "x-forwarded-host": "[::1]:3100",
+        "x-forwarded-for": "::1",
+      },
+    });
+    const tunneledRemoteClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "198.51.100.20",
+      },
+    });
+    const mixedForwardedClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "127.0.0.1, 198.51.100.20",
+      },
+    });
+    const prependedRemoteClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "198.51.100.20, 127.0.0.1",
+      },
+    });
+    const contradictoryClientHeadersRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "127.0.0.1",
+        "x-real-ip": "198.51.100.20",
+      },
+    });
+    const emptyForwardedClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: { host: "localhost:3100", "x-forwarded-for": "" },
+    });
+    const malformedForwardedClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: { host: "localhost:3100", "x-forwarded-for": "not-an-ip" },
+    });
+    const mappedLoopbackClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "::ffff:127.0.0.1, ::1",
+        "x-real-ip": "127.0.0.1",
+      },
+    });
+    const remoteRealIpRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-real-ip": "198.51.100.20",
+      },
+    });
+    const missingForwardedClientRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: { host: "localhost:3100", "x-forwarded-host": "localhost:3100" },
+    });
+    const standardForwardedRequest = new NextRequest("http://localhost:3100/api/admin/session", {
+      headers: {
+        host: "localhost:3100",
+        forwarded: "for=127.0.0.1;host=localhost:3100",
+      },
+    });
+    const spoofedForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": "preview.example" },
+    });
+    const appendedForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": "localhost:3100, preview.example" },
+    });
+    const prependedForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": "preview.example, localhost:3100" },
+    });
+    const hostWithPathRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "localhost:3100/path" },
+    });
+    const hostWithUserInfoRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "attacker@localhost:3100" },
+    });
+    const multipleHostAuthoritiesRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "localhost:3100, 127.0.0.1:3100" },
+    });
+    const trailingEmptyForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": "localhost:3100," },
+    });
+    const leadingEmptyForwardedHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session", {
+      headers: { host: "127.0.0.1:3100", "x-forwarded-host": ",localhost:3100" },
+    });
+    const missingHostRequest = new NextRequest("http://127.0.0.1:3100/api/admin/session");
+    const remoteRequest = new NextRequest("https://preview.example/api/admin/session", {
+      headers: { host: "preview.example", "x-forwarded-host": "preview.example" },
+    });
+    assert.equal(auth.getAdminSession(localRequest)?.username, "development");
+    assert.equal(auth.getAdminSession(localhostRequest)?.username, "development");
+    assert.equal(auth.getAdminSession(ipv6Request)?.username, "development");
+    assert.equal(auth.getAdminSession(tunneledRemoteClientRequest), null);
+    assert.equal(auth.getAdminSession(mixedForwardedClientRequest), null);
+    assert.equal(auth.getAdminSession(prependedRemoteClientRequest), null);
+    assert.equal(auth.getAdminSession(contradictoryClientHeadersRequest), null);
+    assert.equal(auth.getAdminSession(emptyForwardedClientRequest), null);
+    assert.equal(auth.getAdminSession(malformedForwardedClientRequest), null);
+    assert.equal(auth.getAdminSession(mappedLoopbackClientRequest)?.username, "development");
+    assert.equal(auth.getAdminSession(remoteRealIpRequest), null);
+    assert.equal(auth.getAdminSession(missingForwardedClientRequest), null);
+    assert.equal(auth.getAdminSession(standardForwardedRequest), null);
+    assert.equal(auth.getAdminSession(spoofedForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(appendedForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(prependedForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(hostWithPathRequest), null);
+    assert.equal(auth.getAdminSession(hostWithUserInfoRequest), null);
+    assert.equal(auth.getAdminSession(multipleHostAuthoritiesRequest), null);
+    assert.equal(auth.getAdminSession(trailingEmptyForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(leadingEmptyForwardedHostRequest), null);
+    assert.equal(auth.getAdminSession(missingHostRequest), null);
+    assert.equal(auth.getAdminSession(remoteRequest), null);
+    const localOffLogin = await login.POST(new NextRequest("http://127.0.0.1:3100/api/admin/login", {
+      method: "POST",
+      headers: { "content-type": "application/json", host: "127.0.0.1:3100" },
+      body: JSON.stringify({ username: "ignored", password: "ignored" }),
+    }));
+    assert.equal(localOffLogin.status, 200);
+    const tunneledOffLogin = await login.POST(new NextRequest("http://localhost:3100/api/admin/login", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        host: "localhost:3100",
+        "x-forwarded-host": "localhost:3100",
+        "x-forwarded-for": "198.51.100.20",
+      },
+      body: JSON.stringify({ username: "ignored", password: "ignored" }),
+    }));
+    assert.equal(tunneledOffLogin.status, 403);
+    const remoteOffLogin = await login.POST(new NextRequest("https://preview.example/api/admin/login", {
+      method: "POST",
+      headers: { "content-type": "application/json", host: "preview.example", "x-forwarded-host": "preview.example" },
+      body: JSON.stringify({ username: "ignored", password: "ignored" }),
+    }));
+    assert.equal(remoteOffLogin.status, 403);
+    noStore(remoteOffLogin);
+
+    const expressRequest = (host, forwardedHost, remoteAddress = "127.0.0.1", clientIp = remoteAddress, extraHeaders = {}) => ({
+      headers: {
+        ...(host ? { host } : {}),
+        ...(forwardedHost ? { "x-forwarded-host": forwardedHost } : {}),
+        ...(forwardedHost || clientIp !== remoteAddress ? { "x-forwarded-for": clientIp } : {}),
+        ...extraHeaders,
+      },
+      socket: { remoteAddress },
+      ip: clientIp,
+      body: {},
+    });
+    const expressResponse = () => ({
+      statusCode: 200,
+      body: null,
+      headers: {},
+      status(code) { this.statusCode = code; return this; },
+      json(body) { this.body = body; return this; },
+      set(name, value) { this.headers[name.toLowerCase()] = value; return this; },
+      cookie() { return this; },
+    });
+    const runExpressGuard = request => {
+      const response = expressResponse();
+      let nextCalled = false;
+      expressAuth.requireAdmin(request, response, () => { nextCalled = true; });
+      return { response, nextCalled };
+    };
+    assert.equal(runExpressGuard(expressRequest("127.0.0.1:5000")).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000")).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("[::1]:5000", "[::1]:5000", "::1")).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("127.0.0.1:5000", undefined, "::ffff:127.0.0.1")).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("preview.example", "preview.example")).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("127.0.0.1:5000", "preview.example")).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "198.51.100.20")).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "127.0.0.1", "198.51.100.20")).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "127.0.0.1", "127.0.0.1", {
+      "x-real-ip": "198.51.100.20",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-real-ip": "198.51.100.20",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "198.51.100.20",
+      "x-real-ip": "127.0.0.1",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "127.0.0.1", "127.0.0.1", {
+      forwarded: "for=198.51.100.20;host=localhost:5000",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      forwarded: "for=127.0.0.1;host=localhost:5000",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "127.0.0.1, 198.51.100.20",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "198.51.100.20, 127.0.0.1",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-for": "not-an-ip",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-real-ip": "",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-proto": "http",
+    })).response.statusCode, 403);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", undefined, "127.0.0.1", "127.0.0.1", {
+      "x-forwarded-proto": "http",
+      "x-real-ip": "::1",
+    })).nextCalled, true);
+    assert.equal(runExpressGuard(expressRequest("localhost:5000", "localhost:5000", "::1", "::1", {
+      "x-forwarded-for": "::ffff:127.0.0.1, ::1",
+      "x-real-ip": "127.0.0.1",
+    })).nextCalled, true);
+
+    const expressHandlers = new Map();
+    expressAuth.registerAdminAuthRoutes({
+      get(path, handler) { expressHandlers.set("GET " + path, handler); },
+      post(path, handler) { expressHandlers.set("POST " + path, handler); },
+    });
+    const localExpressSession = expressResponse();
+    expressHandlers.get("GET /api/admin/session")(
+      expressRequest("127.0.0.1:5000"),
+      localExpressSession,
+    );
+    assert.equal(localExpressSession.body.authenticated, true);
+    assert.equal(localExpressSession.body.admin.username, "development");
+    const tunneledExpressSession = expressResponse();
+    expressHandlers.get("GET /api/admin/session")(
+      expressRequest("preview.example", "preview.example"),
+      tunneledExpressSession,
+    );
+    assert.equal(tunneledExpressSession.body.authenticated, false);
+    assert.equal(tunneledExpressSession.body.admin, null);
+    const tunneledExpressLogin = expressResponse();
+    expressHandlers.get("POST /api/admin/login")(
+      expressRequest("preview.example", "preview.example"),
+      tunneledExpressLogin,
+    );
+    assert.equal(tunneledExpressLogin.statusCode, 403);
+    const localExpressLogin = expressResponse();
+    expressHandlers.get("POST /api/admin/login")(
+      expressRequest("127.0.0.1:5000"),
+      localExpressLogin,
+    );
+    assert.equal(localExpressLogin.statusCode, 200);
+
     console.log(JSON.stringify({
       login: "pass",
       session: "pass",
@@ -103,6 +367,8 @@ test("custom Next admin completes login, protected API, session and logout witho
       noStore: "pass",
       rawSensitivePassword: "pass",
       productionFailClosed: "pass",
+      developmentLoopbackOnly: "pass",
+      legacyExpressLoopbackOnly: "pass",
     }));
   `;
 
@@ -121,6 +387,8 @@ test("custom Next admin completes login, protected API, session and logout witho
     noStore: "pass",
     rawSensitivePassword: "pass",
     productionFailClosed: "pass",
+    developmentLoopbackOnly: "pass",
+    legacyExpressLoopbackOnly: "pass",
   });
 });
 

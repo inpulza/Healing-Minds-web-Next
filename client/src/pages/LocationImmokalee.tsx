@@ -13,6 +13,7 @@ import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
+import { trackLeadConversion } from '@/lib/analytics';
 import { 
   MapPin, 
   Phone, 
@@ -438,8 +439,8 @@ const LocationImmokalee = () => {
                   id: 'adhd',
                   title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
                   description: language === 'en'
-                    ? 'Specialized evaluation and treatment for adults and teens to improve focus and daily functioning.'
-                    : 'Evaluación especializada y tratamiento para adultos y adolescentes para mejorar el enfoque y funcionamiento diario.',
+                    ? 'Specialized evaluation and treatment for adults 18 and older to improve focus and daily functioning.'
+                    : 'Evaluación especializada y tratamiento para adultos de 18 años en adelante para mejorar el enfoque y funcionamiento diario.',
                   icon: Smile,
                   link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
                 },
@@ -1131,8 +1132,8 @@ const LocationImmokalee = () => {
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
                       {language === 'en' 
-                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: By appointment\nSunday: Closed'
-                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Con cita\nDomingo: Cerrado'}
+                        ? 'Monday - Friday: 8:00 AM - 5:00 PM\nSaturday: Closed\nSunday: Closed'
+                        : 'Lunes - Viernes: 8:00 AM - 5:00 PM\nSábado: Cerrado\nDomingo: Cerrado'}
                     </p>
                   </div>
                 </div>
@@ -1140,7 +1141,10 @@ const LocationImmokalee = () => {
                 <Button 
                   variant="outline"
                   className="border-green-800 text-green-800 hover:bg-green-50"
-                  onClick={() => window.open(`tel:${practiceInfo.phone}`, '_self')}
+                  onClick={() => {
+                    trackLeadConversion('phone_call', { click_location: 'immokalee_final_cta' });
+                    window.open(`tel:${practiceInfo.phone}`, '_self');
+                  }}
                   data-testid="button-call-now"
                 >
                   <Phone className="w-5 h-5 mr-2" />

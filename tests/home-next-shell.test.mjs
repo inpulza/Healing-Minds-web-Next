@@ -6,13 +6,14 @@ import test from "node:test";
 const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
-test("the responsive hero exposes one test target on the visible h1 in either layout", () => {
+test("the responsive hero keeps one semantic h1 and one visible test target per layout", () => {
   const hero = read("client/src/components/Hero.tsx");
   assert.match(hero, /const isMobile = useIsMobile\(\)/);
-  assert.match(hero, /<h1[^>]*data-testid=\{isMobile \? ['"]hero-title['"] : undefined\}/s);
-  assert.match(hero, /<h1[^>]*data-testid=\{!isMobile \? ['"]hero-title['"] : undefined\}/s);
+  assert.match(hero, /const MobileTitleTag = isMobile \? ['"]h1['"] : ['"]p['"]/);
+  assert.match(hero, /const DesktopTitleTag = isMobile \? ['"]p['"] : ['"]h1['"]/);
+  assert.match(hero, /<MobileTitleTag[^>]*data-testid=\{isMobile \? ['"]hero-title['"] : undefined\}/s);
+  assert.match(hero, /<DesktopTitleTag[^>]*data-testid=\{!isMobile \? ['"]hero-title['"] : undefined\}/s);
   assert.doesNotMatch(hero, /hero-title-mobile/);
-  assert.equal((hero.match(/<h1\b/g) ?? []).length, 2);
 });
 
 test("the Next root restores the public runtime shell without applying it to admin", () => {

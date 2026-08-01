@@ -3,6 +3,7 @@ import type { BlogLanguage } from "../storage";
 export type BlogAiGenerateInput = {
   topic: string;
   additionalContext?: string;
+  providerEditorialContext?: string;
   targetKeyword?: string;
   language: BlogLanguage;
   categoryName?: string;

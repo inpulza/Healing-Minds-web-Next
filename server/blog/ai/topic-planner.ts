@@ -3,7 +3,10 @@ import { buildBlogEditorialBrief } from "./editorial-brief";
 import { getAdminBlogPosts, type BlogLanguage, type BlogPostWithRelations } from "../storage";
 import { selectBlogTagIds } from "../taxonomy";
 import {
+  BLOG_CONTENT_FORMATS,
+  BLOG_CONTENT_PILLARS,
   BLOG_PATIENT_STAGES,
+  BLOG_SEARCH_INTENTS,
   BLOG_TOPIC_THRESHOLDS,
   HEALING_MINDS_TOPIC_PROMPT_VERSION,
   HEALING_MINDS_TOPIC_STRATEGY_VERSION,
@@ -18,16 +21,30 @@ import {
 import { buildTopicKey, hasCosmeticFreshness, hasRiskyListicleLanguage, hasUnsafeYmylTopic, normalizeTopicText, topicJaccardSimilarity } from "./topic-normalization";
 import { scoreTopicCandidate, type TopicScoreBreakdown } from "./topic-scoring";
 import { generateTopicCandidateBatch, type TopicInventorySnapshot, type TopicProposal } from "./topic-provider";
-import { judgeTopicCandidates, type TopicJudgeDecision } from "./topic-judge";
+import {
+  judgeTopicCandidates,
+  type SafeExistingTopicProfile,
+  type SafeIntentFacet,
+  type TopicJudgeDecision,
+} from "./topic-judge";
 import { persistBlogTopicCandidates, selectBlogTopicCandidate } from "../topic-candidate-storage";
 import type { BlogResearchBrief, BlogSemanticMemory } from "./types";
-import { containsLikelyPatientIdentifier } from "../privacy";
+import {
+  containsLikelyPatientIdentifier,
+  containsLikelyPatientIdentifierInAiFields,
+} from "../privacy";
 import {
   getRuntimeBlogResearchSourceIds,
   selectRuntimeBlogInternalLinks,
   selectRuntimeBlogResearchSources,
 } from "../links/runtime";
 import { snapshotPlannedLinkIds } from "./planned-topic-provenance";
+import { loadCompleteTopicInventory } from "./topic-inventory";
+import {
+  getMissingProviderDimensions,
+  selectBoundedProviderItems,
+  takeBoundedProviderInventory,
+} from "./topic-provider-payload";
 
 type TopicPlannerInput = {
   language: BlogLanguage;
@@ -35,6 +52,10 @@ type TopicPlannerInput = {
   tags: BlogTag[];
   runId?: number;
 };
+
+async function loadTopicInventoryPosts(language: BlogLanguage): Promise<BlogPostWithRelations[]> {
+  return loadCompleteTopicInventory(language, getAdminBlogPosts);
+}
 
 type TopicMatch = {
   postId: number;
@@ -141,30 +162,168 @@ function classifyPost(post: BlogPostWithRelations) {
   };
 }
 
-function getSafePostTitleForProvider(post: Pick<BlogPostWithRelations, "id" | "title" | "targetKeyword">): string {
-  return containsLikelyPatientIdentifier(`${post.title} ${post.targetKeyword || ""}`)
-    ? `Private post ${post.id}`
-    : post.title;
+function getSafePostTitleForProvider(post: Pick<BlogPostWithRelations, "id">): string {
+  return `Private post ${post.id}`;
+}
+
+function canonicalValue<T extends string>(
+  value: string | null | undefined,
+  allowed: readonly T[],
+  fallback: T,
+): T {
+  return value && allowed.includes(value as T) ? value as T : fallback;
+}
+
+function inferSafeIntentFacet(value: string): SafeIntentFacet {
+  const normalized = normalizeTopicText(value);
+  if (/\b(?:panic|panico|sudden anxiety|ansiedad repentina|acute anxiety|ansiedad aguda|coping|cope|afrontar|sobrellevar)\b/.test(normalized)) return "acute_symptom_coping";
+  if (/\b(?:symptoms?|signs?|recogniz|sintomas?|senales?|reconoc)\b/.test(normalized)) return "symptom_recognition";
+  if (/\b(?:evaluat|diagnos|assessment|appointment|what to expect|evaluacion|diagnost|valoracion|cita|que esperar)\b/.test(normalized)) return "evaluation_process";
+  if (/\b(?:medicat|medicine|dose|side effect|prescri|medicamento|medicacion|dosis|efecto secundario)\b/.test(normalized)) return "medication_safety";
+  if (/\b(?:family|caregiver|partner|parent|familia|cuidador|pareja|padres?)\b/.test(normalized)) return "family_support";
+  if (/\b(?:privacy|confidential|hipaa|privacidad|confidencial)\b/.test(normalized)) return "privacy_confidentiality";
+  if (/\b(?:telepsychiat|virtual|online|access|insurance|coverage|florida|naples|telepsiquiatr|en linea|acceso|seguro|cobertura)\b/.test(normalized)) return "access_logistics";
+  if (/\b(?:follow up|monitor|maintenance|ongoing|seguimiento|monitoreo|mantenimiento|continuo)\b/.test(normalized)) return "follow_up_monitoring";
+  if (/\b(?:treatment|therapy|options?|compare|versus|tratamiento|terapia|opciones?|compar)\b/.test(normalized)) return "treatment_options";
+  if (/\b(?:daily|work|sleep|routine|function|manag|diario|trabajo|sueno|rutina|funcion|manejar)\b/.test(normalized)) return "daily_function";
+  return "general_education";
+}
+
+function inferredPillar(facet: SafeIntentFacet): BlogContentPillar {
+  if (facet === "medication_safety") return "medication_safety";
+  if (facet === "access_logistics") return "access_telepsychiatry";
+  if (facet === "family_support") return "family_support";
+  if (facet === "daily_function" || facet === "acute_symptom_coping") return "daily_function";
+  if (facet === "evaluation_process" || facet === "follow_up_monitoring") return "evaluation_care_journey";
+  return "condition_education";
+}
+
+function inferredPatientStage(facet: SafeIntentFacet): BlogPatientStage {
+  if (facet === "symptom_recognition" || facet === "general_education") return "recognition";
+  if (facet === "evaluation_process" || facet === "access_logistics") return "evaluation";
+  if (facet === "treatment_options" || facet === "medication_safety") return "treatment_consideration";
+  return "ongoing_care";
+}
+
+function inferredContentFormat(value: string, facet: SafeIntentFacet): BlogContentFormat {
+  const normalized = normalizeTopicText(value);
+  if (/\b(?:questions?|preguntas?)\b/.test(normalized)) return "questions_to_ask";
+  if (/\b(?:compare|comparison|versus| vs |compar|diferencia)\b/.test(` ${normalized} `)) return "comparison";
+  if (/\b(?:checklist|lista de verificacion)\b/.test(normalized)) return "checklist";
+  if (facet === "access_logistics") return "local_guide";
+  if (facet === "follow_up_monitoring" || facet === "acute_symptom_coping") return "follow_up_guide";
+  if (facet === "evaluation_process") return "what_to_expect";
+  return "explainer";
+}
+
+function inferredSearchIntent(facet: SafeIntentFacet): BlogSearchIntent {
+  if (facet === "access_logistics") return "local_service";
+  if (facet === "evaluation_process" || facet === "follow_up_monitoring") return "care_navigation";
+  if (facet === "treatment_options" || facet === "medication_safety") return "treatment_consideration";
+  return "informational";
+}
+
+export function buildSafePostSemanticProfile(
+  post: BlogPostWithRelations,
+): SafeExistingTopicProfile {
+  const classified = classifyPost(post);
+  const localSignals = [
+    post.title,
+    post.targetKeyword,
+    post.expertiseAngle,
+    post.category?.name,
+    ...post.tags.flatMap(tag => [tag.name, tag.slug]),
+  ].filter((value): value is string => Boolean(value)).join(" ");
+  const intentFacet = inferSafeIntentFacet(localSignals);
+  return {
+    categoryKey: classified.categoryKey,
+    pillar: canonicalValue(post.contentPillar, BLOG_CONTENT_PILLARS, inferredPillar(intentFacet)),
+    patientStage: canonicalValue(post.patientStage, BLOG_PATIENT_STAGES, inferredPatientStage(intentFacet)),
+    contentFormat: canonicalValue(post.contentFormat, BLOG_CONTENT_FORMATS, inferredContentFormat(localSignals, intentFacet)),
+    searchIntent: canonicalValue(post.searchIntent, BLOG_SEARCH_INTENTS, inferredSearchIntent(intentFacet)),
+    intentFacet,
+  };
+}
+
+function buildSafeProposalSemanticProfile(proposal: TopicProposal): SafeExistingTopicProfile {
+  return {
+    categoryKey: proposal.categoryKey,
+    pillar: proposal.pillar,
+    patientStage: proposal.patientStage,
+    contentFormat: proposal.contentFormat,
+    searchIntent: proposal.searchIntent,
+    intentFacet: inferSafeIntentFacet(`${proposal.topic} ${proposal.targetKeyword} ${proposal.expertiseAngle}`),
+  };
+}
+
+export type GuidedTopicTrustedContext = Omit<SafeExistingTopicProfile, "intentFacet"> & {
+  expertiseAngle: string;
+};
+
+export function buildGuidedTopicSemanticProfile(input: {
+  topic: string;
+  targetKeyword?: string;
+  trustedCandidate?: GuidedTopicTrustedContext;
+}): SafeExistingTopicProfile {
+  const trustedAngle = input.trustedCandidate?.expertiseAngle || "";
+  const semanticSignals = `${input.topic} ${input.targetKeyword || ""} ${trustedAngle}`.trim();
+  const intentFacet = inferSafeIntentFacet(semanticSignals);
+  if (input.trustedCandidate) {
+    return {
+      categoryKey: input.trustedCandidate.categoryKey,
+      pillar: input.trustedCandidate.pillar,
+      patientStage: input.trustedCandidate.patientStage,
+      contentFormat: input.trustedCandidate.contentFormat,
+      searchIntent: input.trustedCandidate.searchIntent,
+      intentFacet,
+    };
+  }
+  return {
+    categoryKey: inferHealingMindsCategoryKey(semanticSignals),
+    pillar: inferredPillar(intentFacet),
+    patientStage: inferredPatientStage(intentFacet),
+    contentFormat: inferredContentFormat(semanticSignals, intentFacet),
+    searchIntent: inferredSearchIntent(intentFacet),
+    intentFacet,
+  };
 }
 
 function buildInventory(posts: BlogPostWithRelations[]): TopicInventorySnapshot {
   const classified = posts.map(classifyPost);
+  const profiles = posts.map(buildSafePostSemanticProfile);
   const clusterCounts: Record<string, number> = {};
-  for (const post of classified) {
+  const pillarCounts: Record<string, number> = {};
+  const patientStageCounts: Record<string, number> = {};
+  const formatCounts: Record<string, number> = {};
+  const searchIntentCounts: Record<string, number> = {};
+  for (const [index, post] of classified.entries()) {
+    const profile = profiles[index];
     clusterCounts[post.categoryKey] = (clusterCounts[post.categoryKey] || 0) + 1;
+    pillarCounts[profile.pillar] = (pillarCounts[profile.pillar] || 0) + 1;
+    patientStageCounts[profile.patientStage] = (patientStageCounts[profile.patientStage] || 0) + 1;
+    formatCounts[profile.contentFormat] = (formatCounts[profile.contentFormat] || 0) + 1;
+    searchIntentCounts[profile.searchIntent] = (searchIntentCounts[profile.searchIntent] || 0) + 1;
   }
+  const safePosts = posts.map((post, index) => {
+    const profile = profiles[index];
+    return {
+      ...classified[index],
+      title: getSafePostTitleForProvider(post),
+      targetKeyword: null,
+      topicKey: null,
+      pillar: profile.pillar,
+      patientStage: profile.patientStage,
+      contentFormat: profile.contentFormat,
+    };
+  });
   return {
-    posts: posts.map((post, index) => {
-      const item = classified[index];
-      const sensitive = getSafePostTitleForProvider(post) !== post.title;
-      return sensitive ? {
-        ...item,
-        title: `Private post ${post.id}`,
-        targetKeyword: null,
-        topicKey: null,
-      } : item;
-    }),
+    posts: takeBoundedProviderInventory(safePosts),
+    totalPosts: posts.length,
     clusterCounts,
+    pillarCounts,
+    patientStageCounts,
+    formatCounts,
+    searchIntentCounts,
     recentCategoryKeys: classified.slice(0, 5).map(post => post.categoryKey),
     recentPillars: classified.slice(0, 5).map(post => post.pillar).filter((value): value is string => Boolean(value)),
     recentFormats: classified.slice(0, 5).map(post => post.contentFormat).filter((value): value is string => Boolean(value)),
@@ -214,15 +373,26 @@ function deterministicStatus(input: {
       `${input.proposal.topic} ${input.proposal.targetKeyword} ${input.proposal.expertiseAngle} ${input.proposal.whyTimely}`,
       input.proposal.language,
     )
-    || containsLikelyPatientIdentifier(
-      `${input.proposal.topic} ${input.proposal.targetKeyword} ${input.proposal.expertiseAngle} ${input.proposal.whyTimely}`,
-    )
+    || containsUnsafePlannedTopicAiInput(input.proposal)
+    || containsLikelyPatientIdentifier(input.proposal.whyTimely)
   ) return "unsafe_pattern";
   const saturated = input.maximumClusterCount >= BLOG_TOPIC_THRESHOLDS.saturationMinimumPosts
     && input.clusterCount >= input.maximumClusterCount
     && input.proposal.createOrUpdate === "create_new";
   if (saturated) return "saturated";
   return "eligible";
+}
+
+export function containsUnsafePlannedTopicAiInput(input: {
+  topic: string;
+  targetKeyword: string;
+  expertiseAngle: string;
+}): boolean {
+  return containsLikelyPatientIdentifierInAiFields({
+    topic: input.topic,
+    targetKeyword: input.targetKeyword,
+    additionalContext: input.expertiseAngle,
+  });
 }
 
 function semanticMemoryFromMatches(
@@ -306,31 +476,57 @@ async function evaluateBatch(input: {
   });
 
   const eligible = preliminary.filter(item => item.deterministicStatus === "eligible");
+  const safeProfilesByPostId = new Map(
+    input.posts.map(post => [post.id, buildSafePostSemanticProfile(post)]),
+  );
   let decisions = new Map<string, TopicJudgeDecision>();
   let judgeModel: string | undefined;
   let judgeUnavailable = false;
   if (eligible.length > 0) {
     try {
+      const candidateProfiles = eligible.map(item => buildSafeProposalSemanticProfile(item.proposal));
+      const semanticPriorityPostIds = input.posts
+        .filter(post => {
+          const postProfile = safeProfilesByPostId.get(post.id);
+          return postProfile && candidateProfiles.some(candidateProfile => (
+            postProfile.categoryKey === candidateProfile.categoryKey
+            && (
+              postProfile.intentFacet === candidateProfile.intentFacet
+              || postProfile.searchIntent === candidateProfile.searchIntent
+              || postProfile.patientStage === candidateProfile.patientStage
+            )
+          ));
+        })
+        .map(post => post.id);
+      const priorityPostIds = [
+        ...eligible.flatMap(item => item.matches.map(match => match.postId)),
+        ...semanticPriorityPostIds,
+      ];
+      const providerExistingPosts = selectBoundedProviderItems(
+        input.posts.map(post => ({
+          postId: post.id,
+          title: getSafePostTitleForProvider(post),
+          targetKeyword: null,
+          categoryKey: classifyPost(post).categoryKey,
+          semanticProfile: safeProfilesByPostId.get(post.id) as SafeExistingTopicProfile,
+        })),
+        priorityPostIds,
+        post => post.postId,
+      );
       const judged = await judgeTopicCandidates({
         language: input.language,
-        existingPosts: input.posts.map(post => {
-          const title = getSafePostTitleForProvider(post);
-          return {
-            postId: post.id,
-            title,
-            targetKeyword: title === post.title ? post.targetKeyword : null,
-            categoryKey: classifyPost(post).categoryKey,
-          };
-        }),
+        existingPosts: providerExistingPosts,
         candidates: eligible.map(item => ({
           candidateKey: item.proposal.candidateKey,
           topic: item.proposal.topic,
           targetKeyword: item.proposal.targetKeyword,
           expertiseAngle: item.proposal.expertiseAngle,
+          semanticProfile: buildSafeProposalSemanticProfile(item.proposal),
           topMatches: item.matches.map(match => ({
             postId: match.postId,
             title: match.title,
             scoreBasisPoints: Math.round(match.score * 10_000),
+            semanticProfile: safeProfilesByPostId.get(match.postId) as SafeExistingTopicProfile,
           })),
         })),
       });
@@ -395,9 +591,10 @@ async function evaluateBatch(input: {
       categoryName: category.name,
     });
     const internalLinks = internalLinkSelection.hrefs;
-    const missingStages = BLOG_PATIENT_STAGES.filter(stage => (
-      !input.inventory.posts.some(post => post.patientStage === stage)
-    ));
+    const missingStages = getMissingProviderDimensions(
+      BLOG_PATIENT_STAGES,
+      input.inventory.patientStageCounts,
+    );
     const scoreBreakdown = scoreTopicCandidate({
       overlapScore,
       clusterCount: input.inventory.clusterCounts[item.proposal.categoryKey] || 0,
@@ -542,12 +739,7 @@ export async function buildBlogTopicPlan(input: TopicPlannerInput): Promise<Blog
       code: "topic_taxonomy_incomplete",
     });
   }
-  const posts = (await getAdminBlogPosts({
-    status: "all",
-    language: input.language,
-    limit: 200,
-    offset: 0,
-  })).filter(post => post.status !== "rejected");
+  const posts = await loadTopicInventoryPosts(input.language);
   const inventory = buildInventory(posts);
   const sourceIds = await getRuntimeBlogResearchSourceIds();
   const allowedSourceIds = new Set(sourceIds);
@@ -634,15 +826,14 @@ export async function assertGuidedBlogTopicSafe(input: {
   targetKeyword?: string;
   additionalContext?: string;
   language: BlogLanguage;
+  trustedCandidate?: GuidedTopicTrustedContext;
 }): Promise<void> {
   if (
     hasUnsafeYmylTopic(
       `${input.topic} ${input.targetKeyword || ""} ${input.additionalContext || ""}`,
       input.language,
     )
-    || containsLikelyPatientIdentifier(
-      `${input.topic} ${input.targetKeyword || ""} ${input.additionalContext || ""}`,
-    )
+    || containsLikelyPatientIdentifierInAiFields(input)
     || hasCosmeticFreshness(input.topic)
   ) {
     throw Object.assign(new Error("This guided topic does not pass the medical-safety or meaningful-uniqueness gate. The requested topic was not replaced."), {
@@ -650,13 +841,9 @@ export async function assertGuidedBlogTopicSafe(input: {
       code: "guided_topic_unsafe",
     });
   }
-  const posts = (await getAdminBlogPosts({
-    status: "all",
-    language: input.language,
-    limit: 200,
-    offset: 0,
-  })).filter(post => post.status !== "rejected");
-  const requestedCategoryKey = inferHealingMindsCategoryKey(`${input.topic} ${input.targetKeyword || ""}`);
+  const posts = await loadTopicInventoryPosts(input.language);
+  const guidedSemanticProfile = buildGuidedTopicSemanticProfile(input);
+  const requestedCategoryKey = guidedSemanticProfile.categoryKey;
   const clusterCounts = posts.reduce<Record<string, number>>((counts, post) => {
     const key = classifyPost(post).categoryKey;
     counts[key] = (counts[key] || 0) + 1;
@@ -672,7 +859,11 @@ export async function assertGuidedBlogTopicSafe(input: {
       code: "guided_topic_cluster_saturated",
     });
   }
-  const candidateText = `${input.topic} ${input.targetKeyword || ""}`;
+  const trustedExpertiseAngle = input.trustedCandidate?.expertiseAngle || "";
+  const candidateText = `${input.topic} ${input.targetKeyword || ""} ${trustedExpertiseAngle}`.trim();
+  const safeProfilesByPostId = new Map(
+    posts.map(post => [post.id, buildSafePostSemanticProfile(post)]),
+  );
   const matches = posts
     .map(post => {
       const overlap = topicJaccardSimilarity(
@@ -700,26 +891,44 @@ export async function assertGuidedBlogTopicSafe(input: {
     });
   }
   try {
+    const providerExistingPosts = selectBoundedProviderItems(
+      posts.map(post => ({
+        postId: post.id,
+        title: getSafePostTitleForProvider(post),
+        targetKeyword: null,
+        categoryKey: classifyPost(post).categoryKey,
+        semanticProfile: safeProfilesByPostId.get(post.id) as SafeExistingTopicProfile,
+      })),
+      [
+        ...matches.map(match => match.postId),
+        ...posts
+          .filter(post => {
+            const postProfile = safeProfilesByPostId.get(post.id);
+            return postProfile?.categoryKey === guidedSemanticProfile.categoryKey
+              && (
+                postProfile.intentFacet === guidedSemanticProfile.intentFacet
+                || postProfile.searchIntent === guidedSemanticProfile.searchIntent
+                || postProfile.patientStage === guidedSemanticProfile.patientStage
+              );
+          })
+          .map(post => post.id),
+      ],
+      post => post.postId,
+    );
     const judged = await judgeTopicCandidates({
       language: input.language,
-      existingPosts: posts.map(post => {
-        const title = getSafePostTitleForProvider(post);
-        return {
-          postId: post.id,
-          title,
-          targetKeyword: title === post.title ? post.targetKeyword : null,
-          categoryKey: classifyPost(post).categoryKey,
-        };
-      }),
+      existingPosts: providerExistingPosts,
       candidates: [{
         candidateKey: "guided-topic",
         topic: input.topic,
         targetKeyword: input.targetKeyword || input.topic,
-        expertiseAngle: "Use the exact user-selected topic; judge intent overlap only.",
+        expertiseAngle: trustedExpertiseAngle || "Use the exact user-selected topic; judge intent overlap only.",
+        semanticProfile: guidedSemanticProfile,
         topMatches: matches.map(match => ({
           postId: match.postId,
           title: match.title,
           scoreBasisPoints: Math.round(match.score * 10_000),
+          semanticProfile: safeProfilesByPostId.get(match.postId) as SafeExistingTopicProfile,
         })),
       }],
     });

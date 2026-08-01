@@ -52,6 +52,16 @@ function getProviderErrorMessage(status: number): string {
   return "Blog AI provider request failed";
 }
 
+export function buildProviderSafeBlogInput(input: BlogAiGenerateInput): BlogAiGenerateInput {
+  const providerInput = {
+    ...input,
+    additionalContext: input.providerEditorialContext,
+  };
+  delete providerInput.providerEditorialContext;
+  if (!providerInput.additionalContext) delete providerInput.additionalContext;
+  return providerInput;
+}
+
 async function requestBlogDraftJson(
   config: BlogAiConfig,
   prompt: string,
@@ -137,26 +147,30 @@ function assertExpansionPreservesLinks(
 
 export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promise<BlogAiGeneratedDraft> {
   const config = getBlogAiConfig();
+  // Human free-form context is useful for local source/tag/brief selection, but
+  // is never sent verbatim. Both the initial prompt and the optional expansion
+  // use only the separately-provenanced planner angle.
+  const providerInput = buildProviderSafeBlogInput(input);
   const normalizationOptions = {
-    allowedExternalSourceUrls: extractAllowedSourceUrls(input.researchSources || []),
-    allowedInternalLinks: input.internalLinks || [],
-    minimumWordCount: input.editorialBrief?.minimumWordCount,
-    targetWordCount: input.editorialBrief?.targetWordCount,
-    minimumH2Count: Math.min(5, input.editorialBrief?.requiredSections.length || 5),
-    requiredSections: input.editorialBrief?.requiredSections,
+    allowedExternalSourceUrls: extractAllowedSourceUrls(providerInput.researchSources || []),
+    allowedInternalLinks: providerInput.internalLinks || [],
+    minimumWordCount: providerInput.editorialBrief?.minimumWordCount,
+    targetWordCount: providerInput.editorialBrief?.targetWordCount,
+    minimumH2Count: Math.min(5, providerInput.editorialBrief?.requiredSections.length || 5),
+    requiredSections: providerInput.editorialBrief?.requiredSections,
   };
   const initialContent = await requestBlogDraftJson(
     config,
-    buildHealingMindsBlogPrompt(input),
+    buildHealingMindsBlogPrompt(providerInput),
     0.35,
   );
   const initialDraft = parseGeneratedDraftJson(
     initialContent,
-    input.language,
-    input.topic,
+    providerInput.language,
+    providerInput.topic,
     normalizationOptions,
   );
-  const minimumWordCount = input.editorialBrief?.minimumWordCount;
+  const minimumWordCount = providerInput.editorialBrief?.minimumWordCount;
   const initialWordCount = countBlogDraftWords(initialDraft.contentHtml);
 
   if (!minimumWordCount || initialWordCount >= minimumWordCount) {
@@ -166,13 +180,13 @@ export async function generateBlogDraftWithAi(input: BlogAiGenerateInput): Promi
   try {
     const expandedContent = await requestBlogDraftJson(
       config,
-      buildHealingMindsBlogExpansionPrompt(input, initialDraft, initialWordCount),
+      buildHealingMindsBlogExpansionPrompt(providerInput, initialDraft, initialWordCount),
       0.2,
     );
     const expandedCandidate = parseGeneratedDraftJson(
       expandedContent,
-      input.language,
-      input.topic,
+      providerInput.language,
+      providerInput.topic,
       normalizationOptions,
     );
     assertExpansionPreservesLinks(initialDraft, expandedCandidate);

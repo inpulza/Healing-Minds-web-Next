@@ -2160,7 +2160,7 @@ export default function BlogAdminPage() {
                   placeholder="Angle, local focus, or points to include. Do not include patient-identifying information."
                   onChange={event => updateGeneratePlanningInput({ additionalContext: event.target.value })}
                 />
-                <p className="text-xs text-slate-500">Do not paste patient names, emails, phone numbers, dates of birth, or private clinical details.</p>
+                <p className="text-xs text-slate-500">Do not paste patient names, emails, phone numbers, dates of birth, or private clinical details. This free text is used locally for safe source and outline selection and is never sent verbatim to the AI provider.</p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">

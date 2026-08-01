@@ -16,6 +16,7 @@ import floridaMap from '../assets/florida-map.webp';
 import useEmblaCarousel from 'embla-carousel-react';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import DoctorSection from '@/components/DoctorSection';
+import { trackLeadConversion } from '@/lib/analytics';
 import accessFromHomeImg from '@assets/generated_images/Access_from_anywhere_Florida_325859e3.webp';
 import convenientSchedulingImg from '@assets/generated_images/Convenient_time_saving_66f1475e.webp';
 import securePrivateImg from '@assets/generated_images/Private_secure_platform_a7ed7a02.webp';
@@ -538,6 +539,7 @@ const TelepsychiatryFlorida = () => {
             </p>
             <Button
               onClick={() => {
+                trackLeadConversion('appointment_booking', { click_location: 'florida_final_cta' });
                 trackTelehealthClick('cta-section');
                 window.open("https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2", '_blank', 'noopener,noreferrer');
               }}

@@ -19,6 +19,7 @@ import {
   downloadBlogImage,
   isManagedBlogImageKey,
 } from "./object-storage";
+import { checkBlogImageRateLimit, getBlogImageRateLimitCost } from "./rate-limit";
 
 const generateSchema = z.object({
   role: z.enum(["hero", "inline", "all"]).default("all"),
@@ -89,6 +90,14 @@ export function registerBlogImageRoutes(app: Express): void {
       assertBlogImageConfigured();
       const payload = generateSchema.parse(req.body || {});
       const post = await getDraftPost(postId);
+      const rateLimit = checkBlogImageRateLimit(
+        req.ip || "admin",
+        getBlogImageRateLimitCost(payload.role, payload.maxInline),
+      );
+      if (!rateLimit.allowed) {
+        if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
+        return res.status(429).json({ success: false, message: "Blog image generation rate limit reached" });
+      }
       const result = await generateBlogImageSet(post, payload);
       res.status(201).json({ success: true, data: result });
     } catch (error) {
@@ -103,6 +112,11 @@ export function registerBlogImageRoutes(app: Express): void {
     try {
       assertBlogImageConfigured();
       const post = await getDraftPost(postId);
+      const rateLimit = checkBlogImageRateLimit(req.ip || "admin");
+      if (!rateLimit.allowed) {
+        if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
+        return res.status(429).json({ success: false, message: "Blog image generation rate limit reached" });
+      }
       const image = await regenerateBlogImageVariant(post, imageId);
       res.status(201).json({ success: true, data: image });
     } catch (error) {

@@ -2,7 +2,7 @@ import crypto from "crypto";
 import sharp from "sharp";
 import type { BlogPostImage, BlogPostImageRole } from "@shared/schema";
 import type { BlogPostWithRelations } from "../storage";
-import { containsLikelyPatientIdentifier } from "../privacy";
+import { containsLikelyPatientIdentifierAcrossTextFields } from "../privacy";
 import { getPlainTextFromHtml } from "../sanitize";
 import { getBlogImageConfig, isBlogImageEnabled } from "./config";
 import {
@@ -15,10 +15,14 @@ import {
 import { generateImageWithOpenAi } from "./provider";
 import {
   claimBlogPostImageForDeletion,
+  completeBlogImageCleanup,
   createDraftBlogPostImage,
   ensureCuratedHeroImage,
   finalizeBlogPostImageDeletion,
   getBlogPostImage,
+  listQueuedBlogImageCleanupKeys,
+  markStaleGeneratingBlogImagesFailed,
+  markBlogImageCleanupFailed,
   updateBlogPostImage,
 } from "./storage";
 import {
@@ -87,13 +91,13 @@ async function normalizeGeneratedWebp(input: Buffer): Promise<{
 export async function generateBlogImageVariant(
   input: GenerateVariantInput,
 ): Promise<BlogPostImage> {
-  const sensitiveContext = [
+  const sensitiveInputs = [
     input.post.title,
     input.post.excerpt,
     input.anchorHeading,
     getPlainTextFromHtml(input.post.content || ""),
-  ].filter(Boolean).join(" ");
-  if (containsLikelyPatientIdentifier(sensitiveContext)) {
+  ].filter((value): value is string => Boolean(value));
+  if (containsLikelyPatientIdentifierAcrossTextFields(sensitiveInputs)) {
     throw Object.assign(new Error("Blog image inputs must not include patient-identifying information"), {
       statusCode: 400,
       errorCode: "phi_detected",
@@ -194,6 +198,7 @@ export async function generateBlogImageSet(
     maxInline?: number;
   } = {},
 ): Promise<BlogImageGenerationSummary> {
+  await markStaleGeneratingBlogImagesFailed(post.id);
   await ensureCuratedHeroImage(post);
   if (!isBlogImageEnabled()) {
     return {
@@ -257,6 +262,7 @@ export async function regenerateBlogImageVariant(
   post: BlogPostWithRelations,
   imageId: number,
 ): Promise<BlogPostImage> {
+  await markStaleGeneratingBlogImagesFailed(post.id);
   const source = await getBlogPostImage(imageId);
   if (!source || source.postId !== post.id) {
     throw Object.assign(new Error("Blog image variant not found"), { statusCode: 404 });
@@ -287,11 +293,29 @@ export async function deleteBlogImageVariant(postId: number, imageId: number): P
 }
 
 export async function deleteBlogImageObjectsOnly(objectKeys: string[]): Promise<number> {
-  const uniqueObjectKeys = Array.from(new Set(objectKeys.filter(Boolean)));
+  const queuedObjectKeys = await listQueuedBlogImageCleanupKeys();
+  const uniqueObjectKeys = Array.from(new Set([...queuedObjectKeys, ...objectKeys].filter(Boolean)));
   let deletedCount = 0;
+  const failures: string[] = [];
   for (const objectKey of uniqueObjectKeys) {
-    await deleteBlogImageObject(objectKey);
-    deletedCount += 1;
+    try {
+      await deleteBlogImageObject(objectKey);
+      await completeBlogImageCleanup(objectKey);
+      deletedCount += 1;
+    } catch (error) {
+      failures.push(objectKey);
+      await markBlogImageCleanupFailed(objectKey, error).catch(queueError => {
+        console.error(`Could not update durable cleanup state for ${objectKey}:`, queueError);
+      });
+    }
+  }
+  if (failures.length > 0) {
+    throw Object.assign(new Error(`${failures.length} blog image object cleanup operation(s) remain queued`), {
+      statusCode: 503,
+      code: "blog_image_cleanup_incomplete",
+      failedObjectKeys: failures,
+      deletedCount,
+    });
   }
   return deletedCount;
 }

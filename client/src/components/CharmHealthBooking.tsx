@@ -5,6 +5,7 @@ import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { trackLeadConversion } from '@/lib/analytics';
 import { Calendar, Clock, VideoIcon, Smartphone, Monitor, CheckCircle } from 'lucide-react';
 import telehealthHeroBg from '../assets/telehealth-hero-bg.webp?v=2';
 
@@ -86,6 +87,7 @@ const CharmHealthBooking = ({
         </Badge>
         <Button
           onClick={() => {
+            trackLeadConversion('appointment_booking', { click_location: 'charm_health_compact' });
             trackTelehealthClick('charm-health-compact');
             window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
           }}
@@ -137,6 +139,7 @@ const CharmHealthBooking = ({
             
             <Button
               onClick={() => {
+                trackLeadConversion('appointment_booking', { click_location: 'charm_health_prominent_mobile' });
                 trackTelehealthClick('charm-health-prominent');
                 window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
               }}
@@ -190,6 +193,7 @@ const CharmHealthBooking = ({
               
               <Button
                 onClick={() => {
+                  trackLeadConversion('appointment_booking', { click_location: 'charm_health_prominent_desktop' });
                   trackTelehealthClick('charm-health-prominent');
                   window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
                 }}
@@ -236,6 +240,7 @@ const CharmHealthBooking = ({
           
           <Button
             onClick={() => {
+              trackLeadConversion('appointment_booking', { click_location: 'charm_health_default' });
               trackTelehealthClick('charm-health-default');
               window.open(charmHealthUrl, '_blank', 'noopener,noreferrer');
             }}

@@ -10,9 +10,14 @@ const originalApiKey = process.env.OPENAI_API_KEY;
 process.env.BLOG_AI_ENABLED = "true";
 process.env.OPENAI_API_KEY = "fixture-key-not-a-real-secret";
 
+const privateEditorialContext = "private notes about Jane Doe and Maria Garcia";
+const trustedPlannerAngle = "Differentiate everyday coping from the point when evaluation may help.";
+
 const input: BlogAiGenerateInput = {
   topic: "Understanding anxiety symptoms and everyday worry",
   targetKeyword: "anxiety symptoms",
+  additionalContext: privateEditorialContext,
+  providerEditorialContext: trustedPlannerAngle,
   language: "en",
   categoryName: "Anxiety",
   tagNames: ["Anxiety treatment"],
@@ -112,6 +117,8 @@ async function checkShortDraftExpansion(): Promise<void> {
   assert.match(prompts[1], /current article body has \d+ words/i);
   assert.match(prompts[1], /do not introduce new sources, URLs, studies, statistics/i);
   assert.match(prompts[1], /https:\/\/www\.nimh\.nih\.gov\/health\/topics\/anxiety-disorders/);
+  assert.equal(prompts.every(prompt => !prompt.includes(privateEditorialContext)), true);
+  assert.equal(prompts[0].includes(trustedPlannerAngle), true);
   assert.doesNotMatch(draft.riskNotes.join("\n"), /below the editorial brief minimum/i);
 }
 

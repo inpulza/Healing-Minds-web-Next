@@ -1,5 +1,6 @@
-import { and, asc, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray, lt, sql } from "drizzle-orm";
 import {
+  blogImageCleanupQueue,
   blogPostImages,
   blogPosts,
   type BlogPostImage,
@@ -8,6 +9,33 @@ import {
 import { isManagedBlogImagePublicUrl } from "@shared/blog-images";
 import { db } from "../../db";
 import type { BlogPostWithRelations } from "../storage";
+
+export async function completeBlogImageCleanup(objectKey: string): Promise<void> {
+  await db
+    .delete(blogImageCleanupQueue)
+    .where(eq(blogImageCleanupQueue.objectKey, objectKey));
+}
+
+export async function listQueuedBlogImageCleanupKeys(limit = 100): Promise<string[]> {
+  const rows = await db
+    .select({ objectKey: blogImageCleanupQueue.objectKey })
+    .from(blogImageCleanupQueue)
+    .orderBy(asc(blogImageCleanupQueue.updatedAt), asc(blogImageCleanupQueue.id))
+    .limit(Math.max(1, Math.min(500, Math.floor(limit))));
+  return rows.map(row => row.objectKey);
+}
+
+export async function markBlogImageCleanupFailed(objectKey: string, error: unknown): Promise<void> {
+  const message = error instanceof Error ? error.message : "Blog image object cleanup failed";
+  await db
+    .update(blogImageCleanupQueue)
+    .set({
+      attempts: sql`${blogImageCleanupQueue.attempts} + 1`,
+      lastError: message.slice(0, 1000),
+      updatedAt: new Date(),
+    })
+    .where(eq(blogImageCleanupQueue.objectKey, objectKey));
+}
 
 export async function listBlogPostImages(postId: number): Promise<BlogPostImage[]> {
   return db
@@ -45,6 +73,27 @@ export async function getSelectedBlogPostImages(postId: number): Promise<BlogPos
       eq(blogPostImages.generationStatus, "completed"),
     ))
     .orderBy(asc(blogPostImages.sortOrder), asc(blogPostImages.createdAt));
+}
+
+export async function markStaleGeneratingBlogImagesFailed(
+  postId: number,
+  staleBefore = new Date(Date.now() - 15 * 60 * 1000),
+): Promise<BlogPostImage[]> {
+  return db
+    .update(blogPostImages)
+    .set({
+      generationStatus: "failed",
+      completedAt: new Date(),
+      errorCode: "generation_interrupted",
+      errorMessage: "Image generation was interrupted before completion. Retry from the draft.",
+      updatedAt: new Date(),
+    })
+    .where(and(
+      eq(blogPostImages.postId, postId),
+      eq(blogPostImages.generationStatus, "generating"),
+      lt(blogPostImages.updatedAt, staleBefore),
+    ))
+    .returning();
 }
 
 export async function createBlogPostImage(values: InsertBlogPostImage): Promise<BlogPostImage> {

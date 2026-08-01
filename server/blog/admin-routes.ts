@@ -48,9 +48,9 @@ import { estimateReadingTime, sanitizeBlogContentHtml } from "./sanitize";
 import { assertBlogAiGenerationConfigured, generateBlogDraftWithAi } from "./ai/generator";
 import { checkBlogAiRateLimit } from "./ai/rate-limit";
 import { buildBlogEditorialBrief } from "./ai/editorial-brief";
-import { buildBlogSemanticMemory } from "./ai/memory";
-import { buildPersistedTopicDraftOverrides } from "./ai/planned-topic-provenance";
-import { assertGuidedBlogTopicSafe, buildBlogTopicPlan, type BlogTopicPlanCandidate } from "./ai/topic-planner";
+import { buildBlogSemanticMemory, redactBlogSemanticMemoryForProvider } from "./ai/memory";
+import { buildPersistedTopicDraftOverrides, buildPersistedTopicSafetyContext } from "./ai/planned-topic-provenance";
+import { assertGuidedBlogTopicSafe, buildBlogTopicPlan, type BlogTopicPlanCandidate, type GuidedTopicTrustedContext } from "./ai/topic-planner";
 import { assertBlogTopicGenerationConfigured } from "./ai/responses-client";
 import { buildTopicKey } from "./ai/topic-normalization";
 import { HEALING_MINDS_TOPIC_STRATEGY_VERSION } from "./strategy/healing-minds";
@@ -63,26 +63,29 @@ import { runSeoPublishingCheck } from "../seo/publishing";
 import { getClientIp } from "../utils/client-ip";
 import {
   appendBlogGenerationEvent,
-  claimCompletedBlogPlanningRun,
   claimBlogGenerationRun,
   completeBlogGenerationRun,
   completeBlogPlanningRun,
   createBlogGenerationRun,
+  createBlogGenerationRunIfAbsent,
   failBlogGenerationRun,
   getBlogGenerationRun,
   getBlogGenerationRunByIdempotencyKey,
+  getAvailableCompletedBlogPlanningRun,
   getOpenBlogGenerationRun,
+  heartbeatBlogGenerationRun,
   listBlogGenerationEvents,
   markStaleBlogGenerationRunsInterrupted,
   queuePreparedBlogGenerationRun,
   updateBlogGenerationRun,
 } from "./generation/storage";
-import type { JsonObject } from "./generation/types";
+import type { GenerationRun, JsonObject } from "./generation/types";
+import { decideGenerationRunCreationAction } from "./generation/idempotency";
 import {
+  claimBlogTopicCandidateForGeneration,
   getBlogTopicCandidateById,
-  selectBlogTopicCandidate,
 } from "./topic-candidate-storage";
-import { containsLikelyPatientIdentifier } from "./privacy";
+import { containsLikelyPatientIdentifierInAiFields } from "./privacy";
 import {
   deleteBlogImageObjectsOnly,
   generateBlogImageSet,
@@ -90,6 +93,8 @@ import {
 } from "./images/service";
 import { materializeSelectedInlineImages } from "./images/render";
 import { ensureCuratedHeroImage, getSelectedBlogPostImages } from "./images/storage";
+import { checkBlogImageRateLimit, getBlogImageRateLimitCost } from "./images/rate-limit";
+import { isBlogImageEnabled } from "./images/config";
 import { registerBlogLinkRoutes } from "./links/routes";
 import {
   isBlogLinkRuntimeEnabled,
@@ -409,6 +414,7 @@ export async function createGeneratedBlogDraft(
   workflow?: BlogGenerationWorkflow,
   reportProgress?: BlogGenerationProgressReporter,
   generationRunId?: number,
+  providerEditorialContext?: string,
 ) {
   await updateWorkflowStep(workflow, {
     id: "editorial-context",
@@ -513,6 +519,7 @@ export async function createGeneratedBlogDraft(
     categoryName: category.name,
     tagNames: selectedTags.map(tag => tag.name),
   });
+  const providerSemanticMemory = redactBlogSemanticMemoryForProvider(semanticMemory);
   await updateWorkflowStep(workflow, {
     id: "semantic-memory",
     label: "Semantic memory",
@@ -555,13 +562,14 @@ export async function createGeneratedBlogDraft(
   const generated = await generateBlogDraftWithAi({
     topic: payload.topic,
     additionalContext: payload.additionalContext,
+    providerEditorialContext,
     targetKeyword: payload.targetKeyword,
     language: payload.language,
     categoryName: category.name,
     tagNames: selectedTags.map(tag => tag.name),
     internalLinks: selectedInternalLinks,
     researchSources: research.sources,
-    semanticMemory,
+    semanticMemory: providerSemanticMemory,
     editorialBrief,
   });
   await updateWorkflowStep(workflow, {
@@ -686,6 +694,19 @@ export async function createGeneratedBlogDraft(
       detail: "Keeping the curated hero selected while generating reviewed hero and inline candidates.",
     }, reportProgress);
     try {
+      if (isBlogImageEnabled()) {
+        const imageRateLimit = checkBlogImageRateLimit(
+          "auto-generate",
+          getBlogImageRateLimitCost("all", 2),
+        );
+        if (!imageRateLimit.allowed) {
+          throw Object.assign(new Error("Blog image generation rate limit reached"), {
+            statusCode: 429,
+            code: "blog_image_rate_limit_reached",
+            retryAfterSec: imageRateLimit.retryAfterSec,
+          });
+        }
+      }
       imageSummary = await generateBlogImageSet(post, {
         role: "all",
         generationRunId,
@@ -926,7 +947,7 @@ async function executeAutoGenerateWorkflow(
       searchIntent: selectedCandidate.searchIntent,
       expertiseAngle: selectedCandidate.angle,
       topicStrategyVersion: selectedCandidate.strategyVersion,
-    }, workflow, reportProgress, generationRunId);
+    }, workflow, reportProgress, generationRunId, selectedCandidate.angle);
   } catch (error) {
     const workflowError = error as Error & { workflow?: BlogGenerationWorkflow };
     workflowError.workflow = workflow;
@@ -1273,24 +1294,34 @@ export function registerAdminBlogRoutes(app: Express): void {
         throw error;
       }
       planningRunId = planningRun.id;
-      const plan = await buildBlogTopicPlan({
-        language: payload.language,
-        categories,
-        tags,
-        runId: planningRun.id,
-      });
-      const completed = await completeBlogPlanningRun(planningRun.id, {
-        workflow: toJsonObject(planningWorkflow),
-        result: toJsonObject(plan),
-      });
-      if (!completed) {
-        throw Object.assign(new Error("The durable topic plan could not be completed"), {
-          statusCode: 409,
-          code: "topic_plan_completion_conflict",
+      const heartbeatTimer = setInterval(() => {
+        void heartbeatBlogGenerationRun(planningRun.id).catch(error => {
+          console.error(`Could not heartbeat topic planning run ${planningRun.id}:`, error);
         });
-      }
+      }, 30_000);
+      heartbeatTimer.unref();
+      try {
+        const plan = await buildBlogTopicPlan({
+          language: payload.language,
+          categories,
+          tags,
+          runId: planningRun.id,
+        });
+        const completed = await completeBlogPlanningRun(planningRun.id, {
+          workflow: toJsonObject(planningWorkflow),
+          result: toJsonObject(plan),
+        });
+        if (!completed) {
+          throw Object.assign(new Error("The durable topic plan could not be completed"), {
+            statusCode: 409,
+            code: "topic_plan_completion_conflict",
+          });
+        }
 
-      res.status(200).json({ success: true, data: plan });
+        res.status(200).json({ success: true, data: plan });
+      } finally {
+        clearInterval(heartbeatTimer);
+      }
     } catch (error) {
       if (planningRunId) {
         await failBlogGenerationRun(planningRunId, {
@@ -1366,9 +1397,9 @@ export function registerAdminBlogRoutes(app: Express): void {
       // recover by idempotency key. This payload contains no free-form topic text.
       let workflow = createAutoGenerateWorkflow();
       const persistedPayload = payload;
-      let run: Awaited<ReturnType<typeof createBlogGenerationRun>>;
+      let creation: Awaited<ReturnType<typeof createBlogGenerationRunIfAbsent>>;
       try {
-        run = await createBlogGenerationRun({
+        creation = await createBlogGenerationRunIfAbsent({
           idempotencyKey,
           input: toJsonObject(persistedPayload),
           workflow: toJsonObject(workflow),
@@ -1386,6 +1417,25 @@ export function registerAdminBlogRoutes(app: Express): void {
           });
         }
         throw error;
+      }
+      const run = creation.run;
+      const creationAction = decideGenerationRunCreationAction(creation);
+      if (creationAction !== "queue_new") {
+        if (creationAction === "resume_queued") {
+          setImmediate(() => {
+            void executePersistedAutoGenerateRun(run.id).catch(error => {
+              console.error(`Unhandled queued generation run failure (${run.id}):`, error);
+            });
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          data: {
+            runId: run.id,
+            status: run.status,
+            workflow: run.workflow || workflow,
+          },
+        });
       }
       await appendBlogGenerationEvent({
         runId: run.id,
@@ -1544,11 +1594,15 @@ export function registerAdminBlogRoutes(app: Express): void {
   });
 
   app.post("/api/admin/blog/generate-draft", async (req, res) => {
-    let claimedPlanningRun: Awaited<ReturnType<typeof claimCompletedBlogPlanningRun>>;
+    let claimedPlanningRun: GenerationRun | undefined;
     try {
       const requestedPayload = adminBlogGenerateDraftSchema.parse(req.body);
       let payload: AdminBlogGenerateDraftPayload = requestedPayload;
-      let planningRunId: number | undefined;
+      let topicCandidateSelection: {
+        runId: number;
+        candidateKey: string;
+        trustedCandidate: GuidedTopicTrustedContext;
+      } | undefined;
       if (requestedPayload.topicCandidateId) {
         const candidate = await getBlogTopicCandidateById(requestedPayload.topicCandidateId);
         if (!candidate) {
@@ -1566,23 +1620,28 @@ export function registerAdminBlogRoutes(app: Express): void {
             code: "topic_candidate_not_selectable",
           });
         }
-        const selectedCandidate = await selectBlogTopicCandidate(
-          candidate.runId,
-          candidate.candidateKey,
-        );
-        planningRunId = selectedCandidate.runId;
+        const availablePlanningRun = await getAvailableCompletedBlogPlanningRun(candidate.runId);
+        if (!availablePlanningRun) {
+          throw Object.assign(
+            new Error("This topic plan was already used or is no longer available. Plan topics again."),
+            { statusCode: 409, code: "topic_plan_already_used" },
+          );
+        }
+        const persistedOverrides = buildPersistedTopicDraftOverrides(candidate);
         payload = {
           ...requestedPayload,
-          ...buildPersistedTopicDraftOverrides(selectedCandidate),
+          ...persistedOverrides,
+        };
+        topicCandidateSelection = {
+          runId: candidate.runId,
+          candidateKey: candidate.candidateKey,
+          trustedCandidate: buildPersistedTopicSafetyContext(candidate, persistedOverrides),
         };
       }
-      const possibleSensitiveText = [payload.topic, payload.targetKeyword, payload.additionalContext]
-        .filter(Boolean)
-        .join(" ");
-      if (containsLikelyPatientIdentifier(possibleSensitiveText)) {
+      if (containsLikelyPatientIdentifierInAiFields(payload)) {
         return res.status(400).json({
           success: false,
-          message: "AI generation inputs must not include patient-identifying information",
+          message: "AI generation inputs must not include patient/client/name markers, labeled contact details, or patient-identifying information. Rephrase the public topic with neutral language.",
         });
       }
 
@@ -1602,10 +1661,15 @@ export function registerAdminBlogRoutes(app: Express): void {
         targetKeyword: payload.targetKeyword,
         additionalContext: payload.additionalContext,
         language: payload.language,
+        trustedCandidate: topicCandidateSelection?.trustedCandidate,
       });
-      if (planningRunId) {
+      if (topicCandidateSelection) {
         try {
-          claimedPlanningRun = await claimCompletedBlogPlanningRun(planningRunId);
+          const claimedSelection = await claimBlogTopicCandidateForGeneration(
+            topicCandidateSelection.runId,
+            topicCandidateSelection.candidateKey,
+          );
+          claimedPlanningRun = claimedSelection?.planningRun;
         } catch (error) {
           if ((error as { code?: string }).code === "23505") {
             throw Object.assign(
@@ -1630,7 +1694,7 @@ export function registerAdminBlogRoutes(app: Express): void {
         ),
         expertiseAngle: payload.additionalContext || undefined,
         topicStrategyVersion: payload.topicStrategyVersion || HEALING_MINDS_TOPIC_STRATEGY_VERSION,
-      }, undefined, undefined, claimedPlanningRun?.id);
+      }, undefined, undefined, claimedPlanningRun?.id, topicCandidateSelection ? payload.expertiseAngle : undefined);
       if (claimedPlanningRun) {
         const completed = await completeBlogGenerationRun(claimedPlanningRun.id, {
           postId: result.data.id,
@@ -2108,13 +2172,17 @@ export function registerAdminBlogRoutes(app: Express): void {
         {
           expectedStatus: post.status,
           expectedUpdatedAt: post.updatedAt,
-          deletePhysicalImageObjects: async objectKeys => {
-            await deleteBlogImageObjectsOnly(objectKeys);
-          },
         },
       );
       if (!deletion.deleted) {
         return res.status(404).json({ success: false, message: "Blog post not found" });
+      }
+      let imageCleanupWarning: string | null = null;
+      try {
+        await deleteBlogImageObjectsOnly(deletion.imageObjectKeys);
+      } catch (error) {
+        imageCleanupWarning = "The article was deleted, but one or more unreferenced image objects still need cleanup.";
+        console.error(`Blog post ${id} committed before image cleanup failed:`, error);
       }
       res.status(200).json({
         success: true,
@@ -2124,6 +2192,7 @@ export function registerAdminBlogRoutes(app: Express): void {
           deletedStatus: post.status,
           publicPath: getBlogPostPath(post),
           redirect: deletion.redirect,
+          imageCleanupWarning,
         },
       });
     } catch (error) {

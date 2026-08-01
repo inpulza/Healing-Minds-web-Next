@@ -1,7 +1,8 @@
-import { and, count, desc, eq, ilike, inArray, isNull, ne, or, type SQL } from "drizzle-orm";
+import { and, count, desc, eq, ilike, inArray, isNull, lt, ne, or, type SQL } from "drizzle-orm";
 import {
   blogAuthors,
   blogCategories,
+  blogImageCleanupQueue,
   blogGenerationRuns,
   blogLinks,
   blogLinkSources,
@@ -97,7 +98,6 @@ export type BlogPostStatusTransitionResult = {
 export type BlogPostDeleteOptions = {
   expectedStatus: BlogPostStatus;
   expectedUpdatedAt: Date;
-  deletePhysicalImageObjects?: (objectKeys: string[]) => Promise<void>;
 };
 
 export type BlogInternalLinkImpact = {
@@ -336,7 +336,7 @@ export async function getAdminBlogPosts(options: GetAdminBlogPostsOptions = {}):
     .leftJoin(blogAuthors, eq(blogPosts.authorId, blogAuthors.id))
     .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
     .where(conditions.length > 0 ? and(...conditions) : undefined)
-    .orderBy(desc(blogPosts.updatedAt), desc(blogPosts.createdAt))
+    .orderBy(desc(blogPosts.updatedAt), desc(blogPosts.createdAt), desc(blogPosts.id))
     .limit(limit)
     .offset(offset);
 
@@ -651,6 +651,22 @@ export async function updateBlogPostStatusWithImageGuard(
       }
     }
 
+    const imageStaleBefore = new Date(Date.now() - 15 * 60 * 1000);
+    await tx
+      .update(blogPostImages)
+      .set({
+        generationStatus: "failed",
+        completedAt: new Date(),
+        errorCode: "generation_interrupted",
+        errorMessage: "Image generation was interrupted before completion. Retry from the draft.",
+        updatedAt: new Date(),
+      })
+      .where(and(
+        eq(blogPostImages.postId, id),
+        eq(blogPostImages.generationStatus, "generating"),
+        lt(blogPostImages.updatedAt, imageStaleBefore),
+      ));
+
     const [blockingImage] = await tx
       .select({ id: blogPostImages.id })
       .from(blogPostImages)
@@ -847,7 +863,7 @@ export async function deleteBlogPostWithRedirect(
   id: number,
   redirectValues?: BlogRedirectInput,
   options?: BlogPostDeleteOptions,
-): Promise<{ deleted: boolean; redirect: BlogRedirect | null }> {
+): Promise<{ deleted: boolean; redirect: BlogRedirect | null; imageObjectKeys: string[] }> {
   return db.transaction(async tx => {
     const [lockedPost] = await tx
       .select({
@@ -860,7 +876,7 @@ export async function deleteBlogPostWithRedirect(
       .limit(1)
       .for("update");
     if (!lockedPost) {
-      return { deleted: false, redirect: null };
+      return { deleted: false, redirect: null, imageObjectKeys: [] };
     }
     if (!options) {
       throw Object.assign(
@@ -895,6 +911,22 @@ export async function deleteBlogPostWithRedirect(
       await assertNoActiveRedirectAtTarget(tx, normalizedRedirect.targetPath);
     }
 
+    const imageStaleBefore = new Date(Date.now() - 15 * 60 * 1000);
+    await tx
+      .update(blogPostImages)
+      .set({
+        generationStatus: "failed",
+        completedAt: new Date(),
+        errorCode: "generation_interrupted",
+        errorMessage: "Image generation was interrupted before completion. Retry from the draft.",
+        updatedAt: new Date(),
+      })
+      .where(and(
+        eq(blogPostImages.postId, id),
+        eq(blogPostImages.generationStatus, "generating"),
+        lt(blogPostImages.updatedAt, imageStaleBefore),
+      ));
+
     const images = await tx
       .select({
         source: blogPostImages.source,
@@ -906,16 +938,13 @@ export async function deleteBlogPostWithRedirect(
       .where(eq(blogPostImages.postId, id))
       .for("update");
     const objectKeys = planBlogPostImageObjectDeletion(images);
-    if (objectKeys.length > 0 && !options.deletePhysicalImageObjects) {
-      throw Object.assign(
-        new Error("Physical image cleanup is required before deleting this article"),
-        {
-          statusCode: 409,
-          code: "blog_post_delete_image_cleanup_required",
-        },
-      );
+
+    if (objectKeys.length > 0) {
+      await tx
+        .insert(blogImageCleanupQueue)
+        .values(objectKeys.map(objectKey => ({ objectKey })))
+        .onConflictDoNothing({ target: blogImageCleanupQueue.objectKey });
     }
-    await options.deletePhysicalImageObjects?.(objectKeys);
 
     if (isBlogLinkEnabled()) {
       await tx
@@ -944,7 +973,7 @@ export async function deleteBlogPostWithRedirect(
     }
 
     if (!normalizedRedirect) {
-      return { deleted: true, redirect: null };
+      return { deleted: true, redirect: null, imageObjectKeys: objectKeys };
     }
 
     const [redirect] = await tx
@@ -967,7 +996,7 @@ export async function deleteBlogPostWithRedirect(
       })
       .returning();
 
-    return { deleted: true, redirect };
+    return { deleted: true, redirect, imageObjectKeys: objectKeys };
   });
 }
 

@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useLocation } from '@/lib/navigation';
-import { trackPageView } from '@/lib/analytics';
+import { installOutboundLeadTracking, trackPageView } from '@/lib/analytics';
 
 // Hook to track page views automatically
 export function useAnalytics(): void {
   const [location] = useLocation();
+
+  useEffect(() => installOutboundLeadTracking(), []);
 
   useEffect(() => {
     // Defer page tracking to avoid blocking critical rendering

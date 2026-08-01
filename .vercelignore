@@ -6,7 +6,8 @@ _arnes/
 arnes/
 docs/
 tests/
-scripts/
+scripts/*
+!scripts/verify-public-analytics-config.mjs
 migrations/
 
 # Editor/agent instructions and legacy provider configuration.

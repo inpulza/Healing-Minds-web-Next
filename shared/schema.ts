@@ -370,6 +370,22 @@ export const blogPostImages = pgTable(
   ],
 );
 
+export const blogImageCleanupQueue = pgTable(
+  "blog_image_cleanup_queue",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    objectKey: varchar("object_key", { length: 500 }).notNull(),
+    attempts: integer("attempts").notNull().default(0),
+    lastError: text("last_error"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_blog_image_cleanup_queue_object_key").on(table.objectKey),
+    index("idx_blog_image_cleanup_queue_updated_at").on(table.updatedAt),
+  ],
+);
+
 export const blogRedirects = pgTable(
   "blog_redirects",
   {
@@ -673,6 +689,7 @@ export type BlogPostImageGenerationStatus = (typeof blogPostImageGenerationStatu
 export type BlogPostImageReviewStatus = (typeof blogPostImageReviewStatusEnum.enumValues)[number];
 export type InsertBlogPostImage = typeof blogPostImages.$inferInsert;
 export type BlogPostImage = typeof blogPostImages.$inferSelect;
+export type BlogImageCleanupQueueItem = typeof blogImageCleanupQueue.$inferSelect;
 export type InsertBlogRedirect = z.infer<typeof insertBlogRedirectSchema>;
 export type BlogRedirect = typeof blogRedirects.$inferSelect;
 export type BlogLinkKind = (typeof blogLinkKindEnum.enumValues)[number];

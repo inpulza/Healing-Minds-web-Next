@@ -32,8 +32,8 @@ const Services = () => {
       id: 'adhd',
       title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
       description: language === 'en'
-        ? 'Specialized evaluation and treatment for adults and teens with ADHD. Improve focus, organization, and daily functioning with expert psychiatric care.'
-        : 'Evaluación especializada y tratamiento para adultos y adolescentes con TDAH. Mejore el enfoque, organización y funcionamiento diario con atención psiquiátrica experta.',
+        ? 'Specialized evaluation and treatment for adults 18 and older with ADHD. Improve focus, organization, and daily functioning with expert psychiatric care.'
+        : 'Evaluación especializada y tratamiento para adultos de 18 años en adelante con TDAH. Mejore el enfoque, organización y funcionamiento diario con atención psiquiátrica experta.',
       icon: Smile,
       featured: false,
       link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
