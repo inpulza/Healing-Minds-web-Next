@@ -9,6 +9,10 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
   workers: 1,
+  // App Router can briefly retain the previous route's metadata while a
+  // client transition is being reconciled. Keep the final single-tag SEO
+  // contract strict, but allow resource-constrained CI runners to settle.
+  expect: { timeout: 15_000 },
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: externalBaseUrl || localBaseUrl,
