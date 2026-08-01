@@ -22,7 +22,7 @@ const previewCredential = acceptsPreviewCredential && process.env.VERCEL_AUTOMAT
       }
     : null;
 
-test.beforeEach(async ({ page }) => {
+async function stubAnalyticsProviders(page: Page) {
   // Consent E2E must exercise our lifecycle without sending synthetic visits to
   // the clinic's live analytics accounts. TikTok's loader only needs a
   // successful script response for this test; the dedicated Preview audit
@@ -39,7 +39,9 @@ test.beforeEach(async ({ page }) => {
   await page.route("https://*.clarity.ms/**", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/javascript", body: "" });
   });
+}
 
+async function authenticateProtectedPreview(page: Page) {
   if (!deploymentOrigin || !previewCredential) return;
 
   await page.route(`${deploymentOrigin}/**`, async (route) => {
@@ -58,6 +60,11 @@ test.beforeEach(async ({ page }) => {
     }
     await route.fulfill({ response });
   });
+}
+
+test.beforeEach(async ({ page }) => {
+  await stubAnalyticsProviders(page);
+  await authenticateProtectedPreview(page);
 });
 
 test.afterEach(async ({ page }) => {
@@ -354,6 +361,30 @@ test("a partial TikTok restoration rolls back and remains fail-closed", async ({
     "revokeConsent",
     "disableCookie",
   ]);
+
+  // Retry in the same document after the provider recovers. Because the
+  // failed attempt never counted this route, restoration must emit page()
+  // before marking it as tracked.
+  await page.evaluate(() => {
+    window.ttq.grantConsent = () => {
+      window.__hmpE2eRestoreCalls.push("grantConsent");
+    };
+  });
+  const retryPreferences = await footerPreferencesButton(page, isMobile);
+  await retryPreferences.click();
+  await setOptionalConsent(page, { analytics: false, marketing: true });
+  await page.getByTestId("button-save-preferences").click();
+  await expect
+    .poll(() => page.evaluate(() => window.__hmpE2eRestoreCalls))
+    .toEqual([
+      "enableCookie",
+      "grantConsent",
+      "revokeConsent",
+      "disableCookie",
+      "enableCookie",
+      "grantConsent",
+      "page",
+    ]);
 });
 
 test("Google provider errors cannot skip revocation cookie cleanup", async ({
@@ -392,6 +423,110 @@ test("Google provider errors cannot skip revocation cookie cleanup", async ({
         .map((cookie) => cookie.name),
     )
     .toEqual([]);
+});
+
+test("a withdrawal in another tab closes Google events in the first tab", async ({
+  page,
+  context,
+  isMobile,
+}) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-manage-preferences").click();
+  await setOptionalConsent(page, { analytics: true, marketing: false });
+  await page.getByTestId("button-save-preferences").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+
+  const eventsBefore = await page.evaluate(() => ({
+    pageViews: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
+    ).length,
+    leads: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
+    ).length,
+  }));
+  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
+  await page.evaluate(() => {
+    document.addEventListener(
+      "click",
+      (event) => {
+        if (event.target instanceof Element && event.target.closest('a[href^="tel:"]')) {
+          event.preventDefault();
+        }
+      },
+      true,
+    );
+  });
+
+  const otherTab = await context.newPage();
+  try {
+    await stubAnalyticsProviders(otherTab);
+    await authenticateProtectedPreview(otherTab);
+    await otherTab.goto("/");
+    await expectDeployedSha(otherTab);
+    await expect(otherTab.getByTestId("cookie-banner")).toBeHidden();
+    const otherPreferences = await footerPreferencesButton(otherTab, isMobile);
+    await otherPreferences.click();
+    await setOptionalConsent(otherTab, { analytics: false, marketing: false });
+    await otherTab.getByTestId("button-save-preferences").click();
+
+    await page.waitForFunction(() => {
+      const consentUpdates = (window.dataLayer ?? [])
+        .map((entry) => Array.from(entry))
+        .filter((entry) => entry[0] === "consent" && entry[1] === "update");
+      return consentUpdates.at(-1)?.[2]?.analytics_storage === "denied";
+    });
+
+    // Reproduce an older grant arriving after the newer withdrawal is already
+    // persisted. The listener must prefer the current shared value and keep
+    // every provider denied.
+    await page.evaluate(() => {
+      const currentState = JSON.parse(
+        localStorage.getItem("hmp_cookie_consent") ?? "null",
+      );
+      const staleGrant = {
+        ...currentState,
+        consent: { necessary: true, analytics: true, marketing: true },
+        lastUpdated: new Date(Date.now() - 60_000).toISOString(),
+      };
+      window.dispatchEvent(new StorageEvent("storage", {
+        key: "hmp_cookie_consent",
+        newValue: JSON.stringify(staleGrant),
+        url: window.location.href,
+      }));
+    });
+    await page.waitForFunction(() => {
+      const consentUpdates = (window.dataLayer ?? [])
+        .map((entry) => Array.from(entry))
+        .filter((entry) => entry[0] === "consent" && entry[1] === "update");
+      const latest = consentUpdates.at(-1)?.[2];
+      return latest?.analytics_storage === "denied" && latest?.ad_storage === "denied";
+    });
+
+    await page
+      .getByTestId(isMobile ? "hero-call-now-mobile" : "hero-call-now")
+      .click();
+    await page
+      .getByTestId(
+        isMobile ? "hero-book-consultation-mobile" : "hero-book-consultation",
+      )
+      .click();
+    await expect(page).toHaveURL(/\/services$/);
+    await page.waitForTimeout(250);
+    const eventsAfter = await page.evaluate(() => ({
+      pageViews: (window.dataLayer ?? []).filter(
+        (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
+      ).length,
+      leads: (window.dataLayer ?? []).filter(
+        (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
+      ).length,
+    }));
+    expect(eventsAfter).toEqual(eventsBefore);
+    expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
+  } finally {
+    await otherTab.unrouteAll({ behavior: "ignoreErrors" });
+    await otherTab.close();
+  }
 });
 
 test("a failed rejection write stays fail-closed without reloading an old grant", async ({

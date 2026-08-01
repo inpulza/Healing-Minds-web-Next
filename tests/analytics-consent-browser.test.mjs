@@ -22,10 +22,12 @@ async function bundleBrowserModule(entryPoint, globalName) {
 
 async function waitForCookiesToDisappear(context, page, predicate) {
   let remaining = [];
-  for (let attempt = 0; attempt < 20; attempt += 1) {
+  for (let attempt = 0; attempt <= 20; attempt += 1) {
     remaining = (await context.cookies()).filter(predicate);
     if (remaining.length === 0) return remaining;
-    await page.waitForTimeout(25);
+    if (attempt < 20) {
+      await page.waitForTimeout(25);
+    }
   }
   return remaining;
 }

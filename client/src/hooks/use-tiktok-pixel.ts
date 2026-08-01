@@ -306,6 +306,9 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
 
     // Set initialization timestamp to prevent rapid re-initialization
     globalInitializationTimestamp = currentTimestamp;
+    const recoveringProviderConsent = restoreProviderConsent && (
+      globalConsentRevoked || consentRevoked.current
+    );
 
     try {
       // Two ways to end up with a live pixel, and both of them already counted
@@ -318,6 +321,11 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
       if (alreadyLoaded) {
         if (restoreProviderConsent) {
           restoreTikTokProviderConsent(window.ttq);
+          if (recoveringProviderConsent) {
+            // A prior restoration failure never emitted the current visit.
+            // Recover it before the shared tail marks this route as tracked.
+            window.ttq.page();
+          }
         }
         if (isDevelopment()) {
           console.log('🎵 TikTok Pixel already loaded in page, skipping script injection');

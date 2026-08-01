@@ -20,6 +20,19 @@ function removeStoredConsentSafely(): void {
   }
 }
 
+function parseStoredConsent(value: string): CookieConsentState | null {
+  const parsed = JSON.parse(value) as CookieConsentState;
+  if (!parsed || typeof parsed !== 'object' || !parsed.consent) {
+    return null;
+  }
+
+  return {
+    ...parsed,
+    consentDate: parsed.consentDate ? new Date(parsed.consentDate) : undefined,
+    lastUpdated: parsed.lastUpdated ? new Date(parsed.lastUpdated) : undefined,
+  };
+}
+
 function createConsentEventDetail(consent: CookieConsent, persisted: boolean) {
   // A grant that cannot be persisted must never open provider gates for only
   // this document. Revocations still propagate immediately, and listeners can
@@ -51,15 +64,11 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        const parsed = JSON.parse(stored) as CookieConsentState;
+        const parsed = parseStoredConsent(stored);
         
         // Validate the stored data structure
-        if (parsed && typeof parsed === 'object' && parsed.consent) {
-          setConsentState({
-            ...parsed,
-            consentDate: parsed.consentDate ? new Date(parsed.consentDate) : undefined,
-            lastUpdated: parsed.lastUpdated ? new Date(parsed.lastUpdated) : undefined,
-          });
+        if (parsed) {
+          setConsentState(parsed);
         } else {
           // Invalid stored data, reset to default
           console.warn('Invalid cookie consent data found, resetting to defaults');
@@ -72,6 +81,53 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     } finally {
       setIsHydrated(true);
     }
+  }, []);
+
+  // Keep every open tab on the same effective decision. Storage events fire in
+  // the other documents only, so rebroadcast the persisted state through the
+  // same consentChanged contract used by Google, Clarity and TikTok.
+  useEffect(() => {
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== STORAGE_KEY) {
+        return;
+      }
+
+      // A remote grant event can already be queued when this tab writes a
+      // newer withdrawal. Re-read the shared value and prefer it over a stale
+      // event payload before reopening any provider.
+      let persistedValue = event.newValue;
+      try {
+        const currentValue = localStorage.getItem(STORAGE_KEY);
+        if (currentValue !== event.newValue) {
+          persistedValue = currentValue;
+        }
+      } catch (error) {
+        console.error('Error confirming cross-tab cookie consent state:', error);
+      }
+
+      let nextState: CookieConsentState = DEFAULT_CONSENT_STATE;
+      try {
+        if (persistedValue) {
+          const parsed = parseStoredConsent(persistedValue);
+          if (parsed) {
+            nextState = parsed;
+          } else {
+            console.warn('Invalid cross-tab cookie consent data, reverting to denied');
+          }
+        }
+      } catch (error) {
+        console.error('Error synchronizing cookie consent preferences:', error);
+      }
+
+      setConsentState(nextState);
+      setPreferencesOpen(false);
+      window.dispatchEvent(new CustomEvent('consentChanged', {
+        detail: createConsentEventDetail(nextState.consent, true),
+      }));
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   // Save consent to localStorage

@@ -472,6 +472,18 @@ function checkConsentAndTagRegistry(): void {
     /rollbackTikTokProviderConsent\(window\.ttq\);\s*keepTikTokCookiesClearedAfterRevoke\(false\)/,
     'a provider restoration failure must roll back and keep identifier cleanup active',
   );
+  const recoveryIndex = tiktokSource.indexOf('if (recoveringProviderConsent)');
+  const recoveryPageIndex = tiktokSource.indexOf('window.ttq.page()', recoveryIndex);
+  const recoveryMarkIndex = tiktokSource.indexOf(
+    'markPageViewTracked(locationRef.current)',
+    recoveryPageIndex,
+  );
+  assert.ok(
+    recoveryIndex >= 0 &&
+      recoveryIndex < recoveryPageIndex &&
+      recoveryPageIndex < recoveryMarkIndex,
+    'a recovered TikTok restoration must emit the missed page before marking the route tracked',
+  );
   assert.match(tiktokSource, /clearFirstPartyCookies/);
   for (const cookieName of ["ttcsid", "ttcsid_", "ttclid"]) {
     assert.match(tiktokSource, new RegExp(cookieName));
@@ -578,6 +590,17 @@ function checkConsentAndTagRegistry(): void {
     consentContextSource,
     /catch \(error\) \{[\s\S]*?removeStoredConsentSafely\(\);[\s\S]*?finally \{/,
     'privacy-restricted storage must still reach the hydrated default state',
+  );
+  assert.match(consentContextSource, /window\.addEventListener\('storage', handleStorage\)/);
+  assert.match(
+    consentContextSource,
+    /const currentValue = localStorage\.getItem\(STORAGE_KEY\);[\s\S]*?if \(currentValue !== event\.newValue\) \{\s*persistedValue = currentValue/,
+    'a queued cross-tab event must not override a newer value already persisted by this tab',
+  );
+  assert.match(
+    consentContextSource,
+    /setConsentState\(nextState\);[\s\S]*?detail: createConsentEventDetail\(nextState\.consent, true\)/,
+    'cross-tab storage changes must update the UI and rebroadcast the effective provider decision',
   );
 
   const dialogSource = readFileSync(
