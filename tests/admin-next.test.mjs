@@ -46,6 +46,9 @@ test("App Router exposes the existing admin UI outside the public shell", () => 
   assert.match(read("client/src/pages/admin/AdminLogin.tsx"), /aria-label=\{showPassword \? 'Hide password' : 'Show password'\}/);
   assert.match(read("app/admin/layout.tsx"), /dynamic = ["']force-dynamic["']/);
   assert.match(read("app/admin/layout.tsx"), /fetchCache = ["']force-no-store["']/);
+  assert.match(read("app/admin/layout.tsx"), /robots:\s*\{/);
+  assert.match(read("app/admin/layout.tsx"), /index:\s*false/);
+  assert.match(read("app/admin/layout.tsx"), /follow:\s*false/);
 });
 
 test("Replit keeps an authenticated public preview without weakening local development", () => {

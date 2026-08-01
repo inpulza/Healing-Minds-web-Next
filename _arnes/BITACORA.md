@@ -443,3 +443,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Registrar este resultado, eliminar scripts y credenciales temporales, y exigir Quality, Vercel, CodeX exacto y GO final antes del merge.
 **Archivos tocados:** evidencia y bitácora únicamente.
 **Evidencia:** `dpl_HngDwq2NBfjyC7XrLP9zNdA6CjVP` READY; proxy 404/404/404, targets Blob=0, posts=0, images=0, jobs=0, queue=0.
+
+## 2026-08-01 Codex - noindex explícito para el área privada
+**Qué se hizo:** La auditoría integrada de Producción detectó que `/admin/login` estaba excluido de `robots.txt`, pero su HTML no declaraba `noindex`. El layout completo de `/admin/*` publica ahora `noindex, nofollow, nocache` sin alterar la autenticación ni el shell público.
+**Decisiones:** Se aplica la directiva en el layout padre para cubrir login, editor y futuras rutas administrativas. El juez detectó que bloquear `/admin/` en `robots.txt` impedía a Google leer `noindex`; se retiró ese bloqueo, se mantuvo `/api/admin/` como `Disallow` y la autenticación continúa siendo la barrera de seguridad real.
+**Pendientes/bugs:** Publicar el PR pequeño, exigir Quality, Vercel READY, Code Review sobre el SHA exacto y juez final; después repetir la auditoría integrada de Producción.
+**Archivos tocados:** layout admin, robots, smoke de build, workflow Quality, contratos de prueba y bitácora.
+**Evidencia:** antes del cambio, Producción no tenía header ni meta robots en `/admin/login`; después del cambio, el build local renderiza `<meta name="robots" content="noindex, nofollow, nocache"/>` para login y editor, permite rastrear `/admin/`, bloquea `/api/admin/` y mantiene admin fuera del sitemap. Suite 88/88, TypeScript, DB 4/110/20/23, build 89/89, smoke de Producción local y diff-check PASS.
