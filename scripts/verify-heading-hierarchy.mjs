@@ -31,9 +31,8 @@ server.stderr.on("data", (chunk) => { stderr += chunk; });
 let browser;
 try {
   browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 
-  const openWhenReady = async (pathname) => {
+  const openWhenReady = async (page, pathname) => {
     let lastError;
     for (let attempt = 0; attempt < 60; attempt += 1) {
       if (server.exitCode !== null) throw new Error(`Next exited before verification: ${stderr}`);
@@ -51,39 +50,47 @@ try {
     throw new Error(`Next did not become ready: ${lastError?.message || stderr}`);
   };
 
-  const visibleH1s = () => page.locator("h1").evaluateAll((elements) => elements
+  const visibleH1s = (page) => page.locator("h1").evaluateAll((elements) => elements
     .filter((element) => Boolean(element.offsetWidth || element.offsetHeight || element.getClientRects().length))
     .map((element) => ({ text: element.textContent?.trim(), testId: element.getAttribute("data-testid") })));
 
   for (const pathname of ["/", "/es"]) {
-    const response = await openWhenReady(pathname);
-    assert.equal(response.status(), 200);
-    const contactTitle = page.getByTestId("contact-title");
-    for (let attempt = 0; attempt < 12 && (await contactTitle.count()) === 0; attempt += 1) {
-      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-      await page.waitForTimeout(400);
-    }
-    await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
-    assert.equal(await contactTitle.evaluate((element) => element.tagName), "H2");
     for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
-      await page.setViewportSize(viewport);
-      await page.getByTestId("hero-title").waitFor({ state: "visible" });
-      const headings = await visibleH1s();
-      assert.equal(await page.locator("h1").count(), 1, `${pathname} ${viewport.width}px has extra H1 elements`);
-      assert.deepEqual(headings.map((heading) => heading.testId), ["hero-title"], `${pathname} ${viewport.width}px: ${JSON.stringify(headings)}`);
+      const page = await browser.newPage({ viewport });
+      try {
+        const response = await openWhenReady(page, pathname);
+        assert.equal(response.status(), 200);
+        const contactTitle = page.getByTestId("contact-title");
+        for (let attempt = 0; attempt < 12 && (await contactTitle.count()) === 0; attempt += 1) {
+          await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+          await page.waitForTimeout(400);
+        }
+        await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
+        assert.equal(await contactTitle.evaluate((element) => element.tagName), "H2");
+        await page.getByTestId("hero-title").waitFor({ state: "visible" });
+        const headings = await visibleH1s(page);
+        assert.equal(await page.locator("h1").count(), 1, `${pathname} ${viewport.width}px has extra H1 elements`);
+        assert.deepEqual(headings.map((heading) => heading.testId), ["hero-title"], `${pathname} ${viewport.width}px: ${JSON.stringify(headings)}`);
+      } finally {
+        await page.close();
+      }
     }
-    await page.setViewportSize({ width: 1440, height: 1000 });
   }
 
   for (const pathname of ["/contact", "/es/contacto"]) {
-    const response = await openWhenReady(pathname);
-    assert.equal(response.status(), 200);
-    const contactTitle = page.getByTestId("contact-title");
-    await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
-    assert.equal(await contactTitle.evaluate((element) => element.tagName), "H1");
-    const headings = await visibleH1s();
-    assert.equal(await page.locator("h1").count(), 1, `${pathname} has extra H1 elements`);
-    assert.deepEqual(headings.map((heading) => heading.testId), ["contact-title"], `${pathname}: ${JSON.stringify(headings)}`);
+    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    try {
+      const response = await openWhenReady(page, pathname);
+      assert.equal(response.status(), 200);
+      const contactTitle = page.getByTestId("contact-title");
+      await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
+      assert.equal(await contactTitle.evaluate((element) => element.tagName), "H1");
+      const headings = await visibleH1s(page);
+      assert.equal(await page.locator("h1").count(), 1, `${pathname} has extra H1 elements`);
+      assert.deepEqual(headings.map((heading) => heading.testId), ["contact-title"], `${pathname}: ${JSON.stringify(headings)}`);
+    } finally {
+      await page.close();
+    }
   }
 
   console.log("Heading hierarchy production smoke passed for EN/ES home and contact pages.");
