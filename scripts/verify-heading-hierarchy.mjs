@@ -93,7 +93,62 @@ try {
     }
   }
 
-  console.log("Heading hierarchy production smoke passed for EN/ES home and contact pages.");
+  const mapPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  try {
+    for (const [pathname, loadingText] of [["/", "Loading map..."], ["/es", "Cargando mapa..."]]) {
+      const response = await openWhenReady(mapPage, pathname);
+      assert.equal(response.status(), 200);
+      const contactTitle = mapPage.getByTestId("contact-title");
+      for (let attempt = 0; attempt < 12 && (await contactTitle.count()) === 0; attempt += 1) {
+        await mapPage.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+        await mapPage.waitForTimeout(400);
+      }
+      await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
+      await mapPage.getByText(loadingText).waitFor({ state: "hidden", timeout: 12_000 });
+    }
+  } finally {
+    await mapPage.close();
+  }
+
+  const fallbackPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  let releaseHeldMap;
+  let markHeldMapStarted;
+  const heldMapStarted = new Promise((resolve) => { markHeldMapStarted = resolve; });
+  await fallbackPage.route(/^https:\/\/www\.google\.com\/maps\/embed\?/, async (route) => {
+    markHeldMapStarted();
+    await new Promise((release) => { releaseHeldMap = release; });
+    await route.abort();
+  });
+  try {
+    const response = await openWhenReady(fallbackPage, "/");
+    assert.equal(response.status(), 200);
+    const contactTitle = fallbackPage.getByTestId("contact-title");
+    for (let attempt = 0; attempt < 12 && (await contactTitle.count()) === 0; attempt += 1) {
+      await fallbackPage.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      await fallbackPage.waitForTimeout(400);
+    }
+    await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
+    const loadingOverlay = fallbackPage.getByTestId("google-maps-loading-contact");
+    await loadingOverlay.waitFor({ state: "visible", timeout: 5_000 });
+    await Promise.race([
+      heldMapStarted,
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Google Maps request was not held")), 5_000)),
+    ]);
+    await loadingOverlay.waitFor({ state: "hidden", timeout: 12_000 });
+    const iframe = fallbackPage.getByTestId("iframe-google-maps-contact");
+    assert.equal(await iframe.count(), 1);
+    await fallbackPage.waitForFunction(
+      () => getComputedStyle(document.querySelector('[data-testid="iframe-google-maps-contact"]')).opacity === "1",
+      undefined,
+      { timeout: 2_000 },
+    );
+  } finally {
+    releaseHeldMap?.();
+    await fallbackPage.unrouteAll({ behavior: "wait" });
+    await fallbackPage.close();
+  }
+
+  console.log("Heading hierarchy and map loading smokes passed for EN/ES home and contact pages.");
 } finally {
   await browser?.close();
   server.kill();
