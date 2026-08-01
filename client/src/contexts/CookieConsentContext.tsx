@@ -9,6 +9,17 @@ import {
 
 const STORAGE_KEY = 'hmp_cookie_consent';
 
+function removeStoredConsentSafely(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    // Privacy-restricted browsers may reject every Storage operation. The UI
+    // must still hydrate with the default denied state instead of throwing out
+    // of the effect that owns the banner.
+    console.error('Error clearing cookie consent preferences:', error);
+  }
+}
+
 function createConsentEventDetail(consent: CookieConsent, persisted: boolean) {
   // A grant that cannot be persisted must never open provider gates for only
   // this document. Revocations still propagate immediately, and listeners can
@@ -52,12 +63,12 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
         } else {
           // Invalid stored data, reset to default
           console.warn('Invalid cookie consent data found, resetting to defaults');
-          localStorage.removeItem(STORAGE_KEY);
+          removeStoredConsentSafely();
         }
       }
     } catch (error) {
       console.error('Error loading cookie consent preferences:', error);
-      localStorage.removeItem(STORAGE_KEY);
+      removeStoredConsentSafely();
     } finally {
       setIsHydrated(true);
     }
@@ -197,7 +208,7 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
 
   // Reset all consent (for testing/debugging)
   const resetConsent = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
+    removeStoredConsentSafely();
     setConsentState(DEFAULT_CONSENT_STATE);
     setPreferencesOpen(false);
     

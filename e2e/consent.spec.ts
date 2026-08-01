@@ -156,6 +156,34 @@ test("first-visit cookie controls close, persist and remain explicit", async ({ 
   await expect(banner).toBeHidden();
 });
 
+test("privacy-restricted storage still hydrates usable cookie controls", async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.addInitScript(() => {
+    const originalGetItem = Storage.prototype.getItem;
+    const originalRemoveItem = Storage.prototype.removeItem;
+    Storage.prototype.getItem = function blockConsentRead(key) {
+      if (this === window.localStorage && key === "hmp_cookie_consent") {
+        throw new DOMException("Synthetic storage restriction", "SecurityError");
+      }
+      return originalGetItem.call(this, key);
+    };
+    Storage.prototype.removeItem = function blockConsentRemoval(key) {
+      if (this === window.localStorage && key === "hmp_cookie_consent") {
+        throw new DOMException("Synthetic storage restriction", "SecurityError");
+      }
+      return originalRemoveItem.call(this, key);
+    };
+  });
+
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await expect(page.getByTestId("cookie-banner")).toBeVisible();
+  await page.getByTestId("button-reject-all").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  expect(pageErrors).toEqual([]);
+});
+
 test("accepted visitors can reopen, cancel and withdraw consent", async ({ page, isMobile }) => {
   await page.goto("/");
   await expectDeployedSha(page);
@@ -326,6 +354,44 @@ test("a partial TikTok restoration rolls back and remains fail-closed", async ({
     "revokeConsent",
     "disableCookie",
   ]);
+});
+
+test("Google provider errors cannot skip revocation cookie cleanup", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-manage-preferences").click();
+  await setOptionalConsent(page, { analytics: true, marketing: false });
+  await page.getByTestId("button-save-preferences").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+
+  const origin = new URL(page.url()).origin;
+  await page.context().addCookies([
+    { name: "_ga", value: "synthetic-ga", url: origin },
+    { name: "_ga_SYNTHETIC", value: "synthetic-ga-stream", url: origin },
+    { name: "_gcl_au", value: "synthetic-ads", url: origin },
+  ]);
+  await page.evaluate(() => {
+    window.gtag = () => {
+      throw new Error("Synthetic Google provider failure");
+    };
+  });
+
+  const preferences = await footerPreferencesButton(page, isMobile);
+  await preferences.click();
+  await setOptionalConsent(page, { analytics: false, marketing: false });
+  await page.getByTestId("button-save-preferences").click();
+  await expect(page.getByTestId("cookie-preferences-modal")).toBeHidden();
+
+  await expect
+    .poll(async () =>
+      (await page.context().cookies())
+        .filter((cookie) => cookie.name.startsWith("_ga") || cookie.name.startsWith("_gcl"))
+        .map((cookie) => cookie.name),
+    )
+    .toEqual([]);
 });
 
 test("a failed rejection write stays fail-closed without reloading an old grant", async ({

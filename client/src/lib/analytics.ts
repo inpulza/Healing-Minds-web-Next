@@ -323,17 +323,38 @@ export function handleConsentChange(
   // Close or open the local gates before any provider call or event replay.
   inMemoryAnalyticsConsent = analyticsConsent;
   inMemoryMarketingConsent = marketingConsent;
-  updateGoogleConsent(analyticsConsent, marketingConsent);
 
-  if (analyticsConsent) {
-    initGA();
-    trackPageView(window.location.pathname, document.title);
-  } else {
+  try {
+    updateGoogleConsent(analyticsConsent, marketingConsent);
+  } catch (error) {
+    console.error('Failed to update Google consent:', error);
+  }
+
+  // Provider failures must never skip local identifier cleanup. Keep each
+  // category isolated so an unavailable cookie API cannot block the other.
+  if (!analyticsConsent) {
     lastTrackedPath = null;
-    clearAnalyticsCookies();
+    try {
+      clearAnalyticsCookies();
+    } catch (error) {
+      console.error('Failed to clear analytics cookies:', error);
+    }
   }
 
   if (!marketingConsent) {
-    clearAdvertisingCookies();
+    try {
+      clearAdvertisingCookies();
+    } catch (error) {
+      console.error('Failed to clear advertising cookies:', error);
+    }
+  }
+
+  if (analyticsConsent) {
+    try {
+      initGA();
+      trackPageView(window.location.pathname, document.title);
+    } catch (error) {
+      console.error('Failed to start Google analytics after consent:', error);
+    }
   }
 }

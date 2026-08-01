@@ -528,10 +528,22 @@ function checkConsentAndTagRegistry(): void {
   );
   assert.match(analyticsSource, /let inMemoryAnalyticsConsent: boolean \| null = null/);
   assert.match(analyticsSource, /inMemoryAnalyticsConsent \?\? readConsent\('analytics'\)/);
-  assert.match(
-    analyticsSource,
-    /inMemoryAnalyticsConsent = analyticsConsent;\s*inMemoryMarketingConsent = marketingConsent;\s*updateGoogleConsent/,
+  const consentHandlerStart = analyticsSource.indexOf('export function handleConsentChange');
+  const consentHandlerSource = analyticsSource.slice(consentHandlerStart);
+  const inMemoryGateIndex = consentHandlerSource.indexOf(
+    'inMemoryAnalyticsConsent = analyticsConsent',
+  );
+  const googleProviderUpdateIndex = consentHandlerSource.indexOf(
+    'updateGoogleConsent(analyticsConsent, marketingConsent)',
+  );
+  assert.ok(
+    inMemoryGateIndex >= 0 && inMemoryGateIndex < googleProviderUpdateIndex,
     'effective in-memory consent must close Google before provider updates or later emitters',
+  );
+  assert.match(
+    consentHandlerSource,
+    /try \{\s*clearAnalyticsCookies\(\);[\s\S]*?try \{\s*clearAdvertisingCookies\(\);/,
+    'provider exceptions must not skip local analytics or advertising cookie cleanup',
   );
   assert.match(
     analyticsSource,
@@ -561,6 +573,12 @@ function checkConsentAndTagRegistry(): void {
 
   assert.match(consentContextSource, /const \[isHydrated, setIsHydrated\] = useState\(false\)/);
   assert.match(consentContextSource, /finally \{\s*setIsHydrated\(true\)/);
+  assert.match(consentContextSource, /function removeStoredConsentSafely\(\): void/);
+  assert.match(
+    consentContextSource,
+    /catch \(error\) \{[\s\S]*?removeStoredConsentSafely\(\);[\s\S]*?finally \{/,
+    'privacy-restricted storage must still reach the hydrated default state',
+  );
 
   const dialogSource = readFileSync(
     new URL("../client/src/components/ui/dialog.tsx", import.meta.url),
