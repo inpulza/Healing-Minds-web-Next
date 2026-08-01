@@ -20,6 +20,13 @@ export function countBlogDraftWords(contentHtml: string): number {
   return getPlainTextFromHtml(contentHtml).split(/\s+/).filter(Boolean).length;
 }
 
+export function isRecomputedDraftShapeRiskNote(note: string): boolean {
+  return /^Generated draft is \d+ words, below the editorial brief minimum of \d+\. Expand during human review\.$/.test(note)
+    || /^Generated draft is \d+ words, below the target depth of \d+\.$/.test(note)
+    || /^Generated draft has \d+ H2 sections, below the editorial brief target of \d+\.$/.test(note)
+    || /^Generated draft may be missing or renaming expected sections: .+\.$/.test(note);
+}
+
 function isAnchor(node: unknown): node is Element {
   return Boolean(
     node

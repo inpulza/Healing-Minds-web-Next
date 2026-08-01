@@ -6,6 +6,7 @@ import { extractAllowedSourceUrls } from "./research";
 import {
   countBlogDraftWords,
   extractBlogDraftAnchorHrefs,
+  isRecomputedDraftShapeRiskNote,
   parseGeneratedDraftJson,
 } from "./validation";
 import type { BlogAiConfig, BlogAiGenerateInput, BlogAiGeneratedDraft } from "./types";
@@ -130,13 +131,6 @@ function addUniqueRiskNote(draft: BlogAiGeneratedDraft, note: string): BlogAiGen
     ...draft,
     riskNotes: [...draft.riskNotes, note],
   };
-}
-
-function isRecomputedDraftShapeRiskNote(note: string): boolean {
-  return /^Generated draft is \d+ words, below the editorial brief minimum of \d+\. Expand during human review\.$/.test(note)
-    || /^Generated draft is \d+ words, below the target depth of \d+\.$/.test(note)
-    || /^Generated draft has \d+ H2 sections, below the editorial brief target of \d+\.$/.test(note)
-    || /^Generated draft may be missing or renaming expected sections: .+\.$/.test(note);
 }
 
 function mergeExpansionRiskNotes(

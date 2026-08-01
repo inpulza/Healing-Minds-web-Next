@@ -103,6 +103,8 @@ async function checkShortDraftExpansion(): Promise<void> {
   initial.riskNotes = [
     "Verify the initial medication claim during human review.",
     "Generated draft is 500 words, below our verified clinical source threshold; clinician review is required.",
+    "Generated draft has 2 H2 sections, below the editorial brief target of 5.",
+    "Generated draft may be missing or renaming expected sections: Sources.",
   ];
   const expanded = buildDraft(850);
   expanded.riskNotes = ["Review the expanded monitoring language during human review."];
@@ -124,6 +126,9 @@ async function checkShortDraftExpansion(): Promise<void> {
   assert.match(prompts[1], /current article body has \d+ words/i);
   assert.match(prompts[1], /do not introduce new sources, URLs, studies, statistics/i);
   assert.match(prompts[1], /https:\/\/www\.nimh\.nih\.gov\/health\/topics\/anxiety-disorders/);
+  assert.doesNotMatch(prompts[1], /Generated draft has 2 H2 sections/);
+  assert.doesNotMatch(prompts[1], /Generated draft may be missing or renaming expected sections: Sources/);
+  assert.match(prompts[1], /below our verified clinical source threshold/);
   assert.equal(prompts.every(prompt => !prompt.includes(privateEditorialContext)), true);
   assert.equal(prompts[0].includes(trustedPlannerAngle), true);
   assert.doesNotMatch(draft.riskNotes.join("\n"), /below the editorial brief minimum/i);

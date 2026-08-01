@@ -3,10 +3,17 @@ import { z, ZodError } from "zod";
 import { getBlogPostById } from "../storage";
 import { assertBlogImageConfigured, isBlogImageEnabled } from "./config";
 import {
+  createPersistedBlogImageRegenerationJob,
+  createPersistedBlogImageSetJob,
   deleteBlogImageVariant,
-  generateBlogImageSet,
-  regenerateBlogImageVariant,
+  executePersistedBlogImageGenerationJob,
+  recoverPersistedBlogImageGenerationJob,
 } from "./service";
+import {
+  admitBlogImageGenerationJob,
+  failBlogImageGenerationJob,
+  getLatestBlogImageGenerationJobForPost,
+} from "./job-storage";
 import {
   ensureCuratedHeroImage,
   deselectInlineBlogPostImage,
@@ -58,6 +65,14 @@ async function getDraftPost(postId: number) {
   return post;
 }
 
+function scheduleImageJob(jobId: number): void {
+  setImmediate(() => {
+    void executePersistedBlogImageGenerationJob(jobId).catch(error => {
+      console.error(`Unhandled blog image generation job failure (${jobId}):`, error);
+    });
+  });
+}
+
 export function registerBlogImageRoutes(app: Express): void {
   app.get("/api/admin/blog/images/config", (_req, res) => {
     res.status(200).json({
@@ -83,6 +98,22 @@ export function registerBlogImageRoutes(app: Express): void {
     }
   });
 
+  app.get("/api/admin/blog/posts/:postId/images/job", async (req, res) => {
+    const postId = parsePositiveId(req.params.postId);
+    if (!postId) return res.status(400).json({ success: false, message: "Invalid blog post id" });
+    try {
+      const post = await getBlogPostById(postId);
+      if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      const latest = await getLatestBlogImageGenerationJobForPost(postId);
+      if (!latest) return res.status(200).json({ success: true, data: null });
+      const job = await recoverPersistedBlogImageGenerationJob(latest);
+      if (job.status === "queued") scheduleImageJob(job.id);
+      return res.status(200).json({ success: true, data: job });
+    } catch (error) {
+      sendImageError(res, error);
+    }
+  });
+
   app.post("/api/admin/blog/posts/:postId/images/generate", async (req, res) => {
     const postId = parsePositiveId(req.params.postId);
     if (!postId) return res.status(400).json({ success: false, message: "Invalid blog post id" });
@@ -90,16 +121,32 @@ export function registerBlogImageRoutes(app: Express): void {
       assertBlogImageConfigured();
       const payload = generateSchema.parse(req.body || {});
       const post = await getDraftPost(postId);
-      const rateLimit = checkBlogImageRateLimit(
-        req.ip || "admin",
-        getBlogImageRateLimitCost(payload.role, payload.maxInline),
-      );
-      if (!rateLimit.allowed) {
-        if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
-        return res.status(429).json({ success: false, message: "Blog image generation rate limit reached" });
+      const idempotencyKey = req.header("Idempotency-Key")?.trim() || "";
+      if (!/^[A-Za-z0-9._:-]{8,255}$/.test(idempotencyKey)) {
+        return res.status(400).json({ success: false, message: "A valid Idempotency-Key header is required" });
       }
-      const result = await generateBlogImageSet(post, payload);
-      res.status(201).json({ success: true, data: result });
+      const creation = await createPersistedBlogImageSetJob(post, payload, idempotencyKey);
+      let job = creation.job;
+      if (creation.created) {
+        const rateLimit = checkBlogImageRateLimit(
+          req.ip || "admin",
+          getBlogImageRateLimitCost(payload.role, payload.maxInline),
+        );
+        if (!rateLimit.allowed) {
+          await failBlogImageGenerationJob(
+            creation.job.id,
+            "rate_limit_reached",
+            "Blog image generation rate limit reached",
+          );
+          if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
+          return res.status(429).json({ success: false, message: "Blog image generation rate limit reached" });
+        }
+        const admitted = await admitBlogImageGenerationJob(job.id);
+        if (!admitted) throw new Error("Blog image job could not be admitted after its rate-limit check");
+        job = admitted;
+      }
+      if (job.status === "queued") scheduleImageJob(job.id);
+      res.status(creation.created ? 202 : 200).json({ success: true, data: job });
     } catch (error) {
       sendImageError(res, error);
     }
@@ -112,13 +159,29 @@ export function registerBlogImageRoutes(app: Express): void {
     try {
       assertBlogImageConfigured();
       const post = await getDraftPost(postId);
-      const rateLimit = checkBlogImageRateLimit(req.ip || "admin");
-      if (!rateLimit.allowed) {
-        if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
-        return res.status(429).json({ success: false, message: "Blog image generation rate limit reached" });
+      const idempotencyKey = req.header("Idempotency-Key")?.trim() || "";
+      if (!/^[A-Za-z0-9._:-]{8,255}$/.test(idempotencyKey)) {
+        return res.status(400).json({ success: false, message: "A valid Idempotency-Key header is required" });
       }
-      const image = await regenerateBlogImageVariant(post, imageId);
-      res.status(201).json({ success: true, data: image });
+      const creation = await createPersistedBlogImageRegenerationJob(post, imageId, idempotencyKey);
+      let job = creation.job;
+      if (creation.created) {
+        const rateLimit = checkBlogImageRateLimit(req.ip || "admin");
+        if (!rateLimit.allowed) {
+          await failBlogImageGenerationJob(
+            creation.job.id,
+            "rate_limit_reached",
+            "Blog image generation rate limit reached",
+          );
+          if (rateLimit.retryAfterSec) res.set("Retry-After", String(rateLimit.retryAfterSec));
+          return res.status(429).json({ success: false, message: "Blog image generation rate limit reached" });
+        }
+        const admitted = await admitBlogImageGenerationJob(job.id);
+        if (!admitted) throw new Error("Blog image regeneration job could not be admitted after its rate-limit check");
+        job = admitted;
+      }
+      if (job.status === "queued") scheduleImageJob(job.id);
+      res.status(creation.created ? 202 : 200).json({ success: true, data: job });
     } catch (error) {
       sendImageError(res, error);
     }

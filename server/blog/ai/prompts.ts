@@ -1,6 +1,7 @@
 import type { BlogAiGenerateInput, BlogAiGeneratedDraft } from "./types";
 import { formatResearchSourcesForPrompt } from "./research";
 import { formatEditorialBriefForPrompt } from "./editorial-brief";
+import { isRecomputedDraftShapeRiskNote } from "./validation";
 
 function formatList(items: string[]): string {
   return items.length > 0 ? items.map(item => `- ${item}`).join("\n") : "- None provided";
@@ -118,9 +119,7 @@ export function buildHealingMindsBlogExpansionPrompt(
   const maximumWordCount = brief?.maximumWordCount || Math.round(targetWordCount * 1.25);
   const draftForExpansion = {
     ...draft,
-    riskNotes: draft.riskNotes.filter(note => (
-      !/^Generated draft is \d+ words, below (?:the editorial brief minimum|the target depth)/i.test(note)
-    )),
+    riskNotes: draft.riskNotes.filter(note => !isRecomputedDraftShapeRiskNote(note)),
   };
 
   return `Expand this existing Healing Minds Psychiatry draft in ${input.language === "es" ? "Spanish" : "English"}.

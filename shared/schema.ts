@@ -78,6 +78,20 @@ export const blogPostImageGenerationStatusEnum = pgEnum("blog_post_image_generat
   "failed",
 ]);
 
+export const blogImageGenerationJobStatusEnum = pgEnum("blog_image_generation_job_status", [
+  "admitting",
+  "queued",
+  "running",
+  "completed",
+  "partial_failed",
+  "failed",
+]);
+
+export const blogImageGenerationOperationEnum = pgEnum("blog_image_generation_operation", [
+  "generate_set",
+  "regenerate_variant",
+]);
+
 export const blogPostImageReviewStatusEnum = pgEnum("blog_post_image_review_status", [
   "candidate",
   "selected",
@@ -323,6 +337,38 @@ export const blogTopicCandidates = pgTable(
   ],
 );
 
+export const blogImageGenerationJobs = pgTable(
+  "blog_image_generation_jobs",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    postId: integer("post_id").references(() => blogPosts.id, { onDelete: "cascade" }).notNull(),
+    idempotencyKey: varchar("idempotency_key", { length: 255 }).notNull(),
+    status: blogImageGenerationJobStatusEnum("status").notNull().default("admitting"),
+    operation: blogImageGenerationOperationEnum("operation").notNull(),
+    role: varchar("role", { length: 20 }).notNull(),
+    maxInline: integer("max_inline").notNull().default(2),
+    sourceImageId: integer("source_image_id").references(
+      (): AnyPgColumn => blogPostImages.id,
+      { onDelete: "set null" },
+    ),
+    result: jsonb("result").$type<Record<string, unknown>>(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    heartbeatAt: timestamp("heartbeat_at"),
+  },
+  (table) => [
+    check("blog_image_generation_jobs_role_check", sql`${table.role} in ('hero', 'inline', 'all')`),
+    check("blog_image_generation_jobs_max_inline_check", sql`${table.maxInline} between 1 and 2`),
+    uniqueIndex("idx_blog_image_generation_jobs_idempotency_key").on(table.idempotencyKey),
+    uniqueIndex("idx_blog_image_generation_jobs_single_open_post")
+      .on(table.postId)
+      .where(sql`${table.status} in ('admitting', 'queued', 'running')`),
+    index("idx_blog_image_generation_jobs_status_heartbeat").on(table.status, table.heartbeatAt),
+  ],
+);
+
 export const blogPostImages = pgTable(
   "blog_post_images",
   {
@@ -349,6 +395,7 @@ export const blogPostImages = pgTable(
     provider: varchar("provider", { length: 100 }),
     model: varchar("model", { length: 100 }),
     generationRunId: integer("generation_run_id").references(() => blogGenerationRuns.id, { onDelete: "set null" }),
+    imageJobId: integer("image_job_id").references(() => blogImageGenerationJobs.id, { onDelete: "set null" }),
     startedAt: timestamp("started_at"),
     completedAt: timestamp("completed_at"),
     durationMs: integer("duration_ms"),
@@ -361,6 +408,10 @@ export const blogPostImages = pgTable(
   (table) => [
     index("idx_blog_post_images_post_slot").on(table.postId, table.slot),
     index("idx_blog_post_images_generation_run").on(table.generationRunId),
+    index("idx_blog_post_images_image_job").on(table.imageJobId),
+    uniqueIndex("idx_blog_post_images_image_job_slot")
+      .on(table.imageJobId, table.slot)
+      .where(sql`${table.imageJobId} is not null`),
     uniqueIndex("idx_blog_post_images_object_key")
       .on(table.objectKey)
       .where(sql`${table.objectKey} is not null`),
@@ -681,6 +732,10 @@ export type InsertBlogPostTag = z.infer<typeof insertBlogPostTagSchema>;
 export type BlogPostTag = typeof blogPostTags.$inferSelect;
 export type BlogGenerationRun = typeof blogGenerationRuns.$inferSelect;
 export type BlogGenerationEvent = typeof blogGenerationEvents.$inferSelect;
+export type BlogImageGenerationJobStatus = (typeof blogImageGenerationJobStatusEnum.enumValues)[number];
+export type BlogImageGenerationOperation = (typeof blogImageGenerationOperationEnum.enumValues)[number];
+export type InsertBlogImageGenerationJob = typeof blogImageGenerationJobs.$inferInsert;
+export type BlogImageGenerationJob = typeof blogImageGenerationJobs.$inferSelect;
 export type InsertBlogTopicCandidate = typeof blogTopicCandidates.$inferInsert;
 export type BlogTopicCandidate = typeof blogTopicCandidates.$inferSelect;
 export type BlogPostImageRole = (typeof blogPostImageRoleEnum.enumValues)[number];

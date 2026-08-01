@@ -164,3 +164,37 @@ shares the prefix of an internal depth warning.
 The temporary post and its Blob objects remain intentionally present only until
 the corrective Preview completes the 600-second generation check and the final
 shared-renderer audit. They must be deleted before merge.
+
+## Durable image-job correction
+
+The exact Git deployment from `86e48eb100f6c55c50b3eeaacdc5e1340ae5e9af`
+was Ready as `dpl_4Zh7tLC8mvGLx6BTnbqoTzz2tU4a`, and its function manifest
+contained `maxDuration: 600` with Vercel Fluid enabled. A second real protected
+Preview run still lost the browser response at exactly 60 seconds; its worker
+continued and completed image rows 10, 11 and 12. This disproved the synchronous
+HTTP design even though the Vercel function itself no longer timed out.
+
+The manual generate-set and regenerate endpoints now use a dedicated durable
+job table and immediately return an admitted job. Admission is deliberately
+non-runnable until rate-limit approval transitions it from `admitting` to
+`queued`. Polling can schedule only queued work. Job and slot uniqueness prevent
+same-key replays, different-key overlaps and duplicate paid slots. Heartbeats
+allow stale recovery; a possibly charged in-flight slot is failed rather than
+automatically retried, while untouched pending slots continue.
+
+Local verification after this correction:
+
+- TypeScript: PASS.
+- Test suite: 85/85 PASS.
+- Next build: 89/89 PASS.
+- Blog image and depth guards: PASS.
+- Drizzle migration reader and PGlite migrator: 4/4 migrations PASS.
+- Behavioral database checks: admission gate, same-key replay, different-key
+  conflict, single worker, unique slot and stale pending-only recovery PASS.
+- Drizzle snapshot drift check: `No schema changes, nothing to migrate`.
+
+The shared Neon migration applied all 12 statements in one transaction. The
+job table, `image_job_id` column, five indexes and six status labels were
+verified afterward; the new structures contained zero jobs and zero linked
+slots. The live 202/polling/replay smoke remains required before merge.
+Production and the public domain remain unchanged.

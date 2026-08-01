@@ -25,6 +25,7 @@ import {
   buildSafeVisualBrief,
 } from "../server/blog/images/prompt";
 import { checkBlogImageRateLimit, getBlogImageRateLimitCost } from "../server/blog/images/rate-limit";
+import { summarizeBlogImageJobSlots } from "../server/blog/images/job-summary";
 
 const originalEnabled = process.env.BLOG_IMAGE_ENABLED;
 const originalApiKey = process.env.OPENAI_API_KEY;
@@ -38,8 +39,10 @@ try {
   assert.match(
     nextAdminBlogRoute,
     /^export const maxDuration = 600;$/m,
-    "The Vercel admin route must allow the three-image generation set to finish",
+    "The durable image worker must retain enough execution time after the HTTP response",
   );
+  assert.match(nextAdminBlogRoute, /Idempotency-Key/);
+  assert.match(nextAdminBlogRoute, /executePersistedBlogImageGenerationJob/);
   process.env.BLOG_IMAGE_ENABLED = "false";
   delete process.env.OPENAI_API_KEY;
   assert.equal(isBlogImageEnabled(), false);
@@ -90,6 +93,7 @@ try {
     provider: "openai",
     model: "gpt-image-2",
     generationRunId: null,
+    imageJobId: null,
     startedAt: new Date(),
     completedAt: new Date(),
     durationMs: 1000,
@@ -106,6 +110,22 @@ try {
   assert.match(rendered, /<h2>Safe heading<\/h2><figure class="blog-inline-image">/);
   assert.match(rendered, new RegExp(publicUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.equal(rendered.includes("https://example.com"), false);
+
+  const failedInline: BlogPostImage = {
+    ...selectedInline,
+    id: 8,
+    generationStatus: "failed",
+    reviewStatus: "candidate",
+    objectKey: null,
+    publicUrl: null,
+    errorCode: "provider_error",
+    errorMessage: "Provider failed safely",
+  };
+  assert.equal(summarizeBlogImageJobSlots([selectedInline]).status, "completed");
+  assert.equal(summarizeBlogImageJobSlots([selectedInline, failedInline]).status, "partial_failed");
+  const failedSummary = summarizeBlogImageJobSlots([failedInline]);
+  assert.equal(failedSummary.status, "failed");
+  assert.deepEqual(failedSummary.result.failedImageIds, [8]);
 
   assert.equal(containsLikelyPatientIdentifier("patient name: Jane Example"), true);
   assert.equal(containsLikelyPatientIdentifier("Name: jane doe"), true);

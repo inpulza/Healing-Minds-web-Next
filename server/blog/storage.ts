@@ -673,6 +673,7 @@ export async function updateBlogPostStatusWithImageGuard(
       .where(and(
         eq(blogPostImages.postId, id),
         or(
+          eq(blogPostImages.generationStatus, "pending"),
           eq(blogPostImages.generationStatus, "generating"),
           eq(blogPostImages.errorCode, "deletion_pending"),
         ),

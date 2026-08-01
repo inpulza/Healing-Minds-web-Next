@@ -132,7 +132,8 @@ export function planBlogPostImageObjectDeletion(
   }>,
 ): string[] {
   if (images.some(image => (
-    image.generationStatus === "generating"
+    image.generationStatus === "pending"
+    || image.generationStatus === "generating"
     || image.errorCode === "deletion_pending"
   ))) {
     throw Object.assign(

@@ -121,6 +121,7 @@ type BlogPostImage = {
   alt: string | null;
   caption: string | null;
   model: string | null;
+  imageJobId: number | null;
   errorMessage: string | null;
   sortOrder: number;
   createdAt: string;
@@ -130,6 +131,24 @@ type BlogImageConfig = {
   enabled: boolean;
   model: string;
   storage: string;
+};
+
+type BlogImageGenerationJob = {
+  id: number;
+  postId: number;
+  status: 'admitting' | 'queued' | 'running' | 'completed' | 'partial_failed' | 'failed';
+  operation: 'generate_set' | 'regenerate_variant';
+  role: 'hero' | 'inline' | 'all';
+  result: {
+    total?: number;
+    completed?: number;
+    failed?: number;
+    pending?: number;
+    generating?: number;
+    warnings?: string[];
+    errorMessage?: string;
+    recoveryWarning?: string;
+  } | null;
 };
 
 type PublishCheck = {
@@ -612,6 +631,10 @@ async function fetchJson<T>(url: string): Promise<T> {
   return response.json();
 }
 
+function createBlogImageIdempotencyKey(postId: number): string {
+  return `blog-image-${postId}-${globalThis.crypto.randomUUID()}`;
+}
+
 export default function BlogAdminPage() {
   const [, navigate] = useLocation();
   const [adminView, setAdminView] = useState<'posts' | 'links'>('posts');
@@ -637,6 +660,7 @@ export default function BlogAdminPage() {
   const autoGenerateEventSourceRef = useRef<EventSource | null>(null);
   const autoGenerateIdempotencyKeyRef = useRef<string | null>(null);
   const previewRequestIdRef = useRef(0);
+  const handledImageJobIdRef = useRef<number | null>(null);
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState('');
@@ -710,6 +734,20 @@ export default function BlogAdminPage() {
     enabled: authenticated && editorOpen && Boolean(form?.id),
   });
 
+  const imageJobQuery = useQuery<ApiResponse<BlogImageGenerationJob | null>>({
+    queryKey: [`/api/admin/blog/posts/${form?.id || 'none'}/images/job`],
+    enabled: authenticated && editorOpen && Boolean(form?.id),
+    staleTime: 0,
+    refetchInterval: query => {
+      const response = query.state.data as ApiResponse<BlogImageGenerationJob | null> | undefined;
+      return response?.data?.status === 'admitting'
+        || response?.data?.status === 'queued'
+        || response?.data?.status === 'running'
+        ? 1000
+        : false;
+    },
+  });
+
   const unpublishImpactQuery = useQuery<ApiResponse<UnpublishImpact>>({
     queryKey: [`/api/admin/blog/posts/${unpublishTarget?.id || 'none'}/unpublish-impact`],
     enabled: authenticated && Boolean(unpublishTarget),
@@ -720,6 +758,10 @@ export default function BlogAdminPage() {
   const tags = tagsQuery.data?.data || [];
   const posts = postsQuery.data?.data || [];
   const images = imagesQuery.data?.data || [];
+  const imageJob = imageJobQuery.data?.data || null;
+  const imageJobActive = imageJob?.status === 'admitting'
+    || imageJob?.status === 'queued'
+    || imageJob?.status === 'running';
   const imageConfig = imageConfigQuery.data?.data;
   const stats = statsQuery.data?.data;
   const runtime = runtimeQuery.data?.data?.runtime || 'unknown';
@@ -772,30 +814,62 @@ export default function BlogAdminPage() {
     queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
   };
 
+  useEffect(() => {
+    if (!imageJob || imageJobActive || handledImageJobIdRef.current === imageJob.id) return;
+    handledImageJobIdRef.current = imageJob.id;
+    refreshImages(imageJob.postId);
+  }, [imageJob?.id, imageJob?.postId, imageJob?.status, imageJobActive]);
+
   const generateImagesMutation = useMutation({
     mutationFn: async ({ postId, role }: { postId: number; role: 'hero' | 'inline' | 'all' }) => {
-      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/generate`, { role });
-      return response.json();
+      const response = await apiRequest(
+        'POST',
+        `/api/admin/blog/posts/${postId}/images/generate`,
+        { role },
+        { 'Idempotency-Key': createBlogImageIdempotencyKey(postId) },
+      );
+      return response.json() as Promise<ApiResponse<BlogImageGenerationJob>>;
     },
-    onSuccess: (_data, variables) => {
-      refreshImages(variables.postId);
+    onMutate: async variables => {
+      await queryClient.cancelQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
+    },
+    onSuccess: (data, variables) => {
+      handledImageJobIdRef.current = null;
+      queryClient.setQueryData(
+        [`/api/admin/blog/posts/${variables.postId}/images/job`],
+        data,
+      );
       setActionError(null);
     },
-    onError: error => {
+    onError: (error, variables) => {
+      queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
       setActionError(error instanceof Error ? error.message : 'Image generation failed');
     },
   });
 
   const regenerateImageMutation = useMutation({
     mutationFn: async ({ postId, imageId }: { postId: number; imageId: number }) => {
-      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/${imageId}/regenerate`);
-      return response.json();
+      const response = await apiRequest(
+        'POST',
+        `/api/admin/blog/posts/${postId}/images/${imageId}/regenerate`,
+        undefined,
+        { 'Idempotency-Key': createBlogImageIdempotencyKey(postId) },
+      );
+      return response.json() as Promise<ApiResponse<BlogImageGenerationJob>>;
     },
-    onSuccess: (_data, variables) => {
-      refreshImages(variables.postId);
+    onMutate: async variables => {
+      await queryClient.cancelQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
+    },
+    onSuccess: (data, variables) => {
+      handledImageJobIdRef.current = null;
+      queryClient.setQueryData(
+        [`/api/admin/blog/posts/${variables.postId}/images/job`],
+        data,
+      );
       setActionError(null);
     },
-    onError: error => {
+    onError: (error, variables) => {
+      queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
       setActionError(error instanceof Error ? error.message : 'Image regeneration failed');
     },
   });
@@ -2462,7 +2536,7 @@ export default function BlogAdminPage() {
                           type="button"
                           size="sm"
                           variant="outline"
-                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          disabled={!imageConfig?.enabled || imageJobQuery.isLoading || generateImagesMutation.isPending || imageJobActive}
                           onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'hero' })}
                         >
                           Hero
@@ -2471,7 +2545,7 @@ export default function BlogAdminPage() {
                           type="button"
                           size="sm"
                           variant="outline"
-                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          disabled={!imageConfig?.enabled || imageJobQuery.isLoading || generateImagesMutation.isPending || imageJobActive}
                           onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'inline' })}
                         >
                           Inline
@@ -2479,11 +2553,13 @@ export default function BlogAdminPage() {
                         <Button
                           type="button"
                           size="sm"
-                          disabled={!imageConfig?.enabled || generateImagesMutation.isPending}
+                          disabled={!imageConfig?.enabled || imageJobQuery.isLoading || generateImagesMutation.isPending || imageJobActive}
                           onClick={() => generateImagesMutation.mutate({ postId: form.id!, role: 'all' })}
                         >
-                          {generateImagesMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                          Generate set
+                          {generateImagesMutation.isPending || imageJobActive
+                            ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            : <Sparkles className="mr-2 h-4 w-4" />}
+                          {imageJobActive ? 'Generating safely' : 'Generate set'}
                         </Button>
                       </div>
                     )}
@@ -2499,6 +2575,21 @@ export default function BlogAdminPage() {
                     </p>
                   ) : null}
 
+                  {imageJobActive && (
+                    <p className="flex items-center gap-2 rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-800" aria-live="polite">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                      Images are continuing safely in the background. Completed {imageJob?.result?.completed || 0} of {imageJob?.result?.total || 0}; this button will not launch a duplicate paid request.
+                    </p>
+                  )}
+
+                  {imageJob && !imageJobActive && (imageJob.status === 'partial_failed' || imageJob.status === 'failed') && (
+                    <p className="rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900" role="status">
+                      {imageJob.status === 'partial_failed'
+                        ? 'Some image candidates completed and are ready for review; at least one slot failed safely.'
+                        : imageJob.result?.errorMessage || 'The image request finished without a completed candidate. No automatic duplicate request was sent.'}
+                    </p>
+                  )}
+
                   {form.id && imagesQuery.isLoading && (
                     <p className="flex items-center gap-2 text-xs text-slate-600">
                       <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading image variants...
@@ -2513,6 +2604,8 @@ export default function BlogAdminPage() {
                     <div className="grid gap-3 sm:grid-cols-2">
                       {images.map(image => {
                         const mutationBusy = generateImagesMutation.isPending
+                          || imageJobQuery.isLoading
+                          || imageJobActive
                           || regenerateImageMutation.isPending
                           || selectImageMutation.isPending
                           || deselectImageMutation.isPending
@@ -2747,11 +2840,11 @@ export default function BlogAdminPage() {
             {form?.id && (
               <>
                 {form.status !== 'published' && (
-                  <Button variant="outline" onClick={submitForReview} disabled={statusMutation.isPending}>
+                  <Button variant="outline" onClick={submitForReview} disabled={statusMutation.isPending || imageJobActive}>
                     Submit review
                   </Button>
                 )}
-                <Button variant="outline" onClick={moveCurrentToDraft} disabled={statusMutation.isPending}>
+                <Button variant="outline" onClick={moveCurrentToDraft} disabled={statusMutation.isPending || imageJobActive}>
                   Move to draft
                 </Button>
                 <Button variant="outline" onClick={() => verifyMutation.mutate(form.id!)} disabled={verifyMutation.isPending}>
@@ -2769,8 +2862,8 @@ export default function BlogAdminPage() {
             {form?.id && form.status !== 'published' && (
               <Button
                 onClick={publishCurrent}
-                disabled={statusMutation.isPending || !canPublishCurrent}
-                title={canPublishCurrent ? undefined : 'Submit review before publishing'}
+                disabled={statusMutation.isPending || imageJobActive || !canPublishCurrent}
+                title={imageJobActive ? 'Wait for image generation to finish' : canPublishCurrent ? undefined : 'Submit review before publishing'}
               >
                 Publish
               </Button>

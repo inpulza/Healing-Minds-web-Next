@@ -15,6 +15,7 @@ const adminUi = [
 ].join("\n");
 const schema = read("shared/schema.ts");
 const migration = read("migrations/0000_initial_schema.sql");
+const imageJobMigration = read("migrations/0003_durable_blog_image_jobs.sql");
 
 function assertFiles(files) {
   for (const file of files) assert.equal(exists(file), true, `missing ${file}`);
@@ -29,11 +30,19 @@ test("Sprint 17 reviewed image engine retains schema, migration, API and UI pari
     "server/blog/images/routes.ts",
     "server/blog/images/service.ts",
     "server/blog/images/storage.ts",
+    "server/blog/images/job-storage.ts",
+    "server/blog/images/job-summary.ts",
     "server/blog/images/provider.ts",
     "shared/blog-images.ts",
   ]);
   assertTokens(schema, ["blogPostImages", "blog_post_images"], "Sprint 17 schema");
   assertTokens(migration, ['CREATE TABLE "blog_post_images"', "idx_blog_post_images_single_selected_slot"], "Sprint 17 migration");
+  assertTokens(imageJobMigration, [
+    'CREATE TABLE "blog_image_generation_jobs"',
+    "idx_blog_image_generation_jobs_idempotency_key",
+    "idx_blog_image_generation_jobs_single_open_post",
+    "idx_blog_post_images_image_job_slot",
+  ], "Sprint 17 durable image job migration");
   assertTokens(adminRoute, [
     'segments\\[0\\] === "images"',
     'segments\\[2\\] === "images"',

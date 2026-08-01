@@ -1175,6 +1175,20 @@ function checkLifecycleAtomicityGuards(): void {
       {
         source: "ai",
         objectKey: null,
+        generationStatus: "pending",
+        errorCode: null,
+      },
+    ]),
+    (error: unknown) => (
+      (error as { statusCode?: number; code?: string }).statusCode === 409
+      && (error as { code?: string }).code === "blog_post_delete_image_busy"
+    ),
+  );
+  assert.throws(
+    () => planBlogPostImageObjectDeletion([
+      {
+        source: "ai",
+        objectKey: null,
         generationStatus: "generating",
         errorCode: null,
       },
