@@ -7,6 +7,7 @@ import {
   markPageViewTracked,
 } from '@/lib/pixel-page-view';
 import { clearFirstPartyCookies } from '@/lib/cookie-cleanup';
+import { TIKTOK_PIXEL_SITEWIDE_ENABLED } from '@/lib/tracking-config';
 
 function isDevelopment(): boolean {
   return process.env.NODE_ENV === 'development';
@@ -37,6 +38,10 @@ const POST_REVOKE_CLEANUP_WINDOW_MS = 6000;
  * state would emit one ttq.page() per mounted instance and inflate metrics.
  */
 function emitTikTokPageView(location: string): void {
+  if (!TIKTOK_PIXEL_SITEWIDE_ENABLED) {
+    return;
+  }
+
   const claim = claimPageView(location);
   if (!claim) {
     return;
@@ -111,6 +116,13 @@ function clearTikTokCookies(): void {
   });
   
   console.log('🧹 TikTok Pixel cookies cleared for compliance');
+}
+
+function clearDisabledTikTokState(): void {
+  clearTikTokCookies();
+  // The opt-out marker is useful while the integration can be restored in the
+  // same document. With the Pixel disabled sitewide it is legacy state too.
+  clearFirstPartyCookies({ exactNames: ['_tt_enable_cookie'] });
 }
 
 function stopPostRevokeCookieCleanup(): void {
@@ -212,7 +224,7 @@ function rollbackTikTokProviderConsent(ttq: any): void {
 // must be restored in the queue before the first page event and before the
 // app-owned gates reopen.
 function loadTikTokPixel(restoreProviderConsent = false): void {
-  if (typeof window === 'undefined') return;
+  if (!TIKTOK_PIXEL_SITEWIDE_ENABLED || typeof window === 'undefined') return;
   
   const w = window as any;
   const d = document;
@@ -288,6 +300,10 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
 
   // Initialize TikTok Pixel when consent is available
   const initTikTokPixel = useCallback((restoreProviderConsent = false) => {
+    if (!TIKTOK_PIXEL_SITEWIDE_ENABLED) {
+      return;
+    }
+
     if (isDevelopment()) {
       if (isDevelopment()) {
         console.log('🎵 TikTok Pixel disabled in development mode');
@@ -407,6 +423,21 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
       return;
     }
 
+    if (!TIKTOK_PIXEL_SITEWIDE_ENABLED) {
+      // Keep the lifecycle manager mounted while the Pixel is disabled so an
+      // old first-party identifier or an externally injected provider cannot
+      // survive the cutover. No TikTok script is loaded in this branch.
+      globalTikTokInitialized = false;
+      globalTikTokSdkLoaded = false;
+      globalInitializationTimestamp = null;
+      globalConsentRevoked = true;
+      rollbackTikTokProviderConsent(window.ttq);
+      stopPostRevokeCookieCleanup();
+      cancelPostRevokeReload();
+      clearDisabledTikTokState();
+      return;
+    }
+
     // Check initial consent state and initialize if available
     if (process.env.NODE_ENV === 'production' && hasMarketingConsent()) {
       // Reaffirm provider consent on every fresh document. A visitor can reload
@@ -488,7 +519,12 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
   // instance; a per-instance ref would silently drop their events.
   return {
     track: (eventName: string, properties?: Record<string, any>) => {
-      if (globalTikTokInitialized && !globalConsentRevoked && window.ttq) {
+      if (
+        TIKTOK_PIXEL_SITEWIDE_ENABLED &&
+        globalTikTokInitialized &&
+        !globalConsentRevoked &&
+        window.ttq
+      ) {
         try {
           window.ttq.track(eventName, properties);
         } catch (error) {
@@ -500,7 +536,12 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
     },
     
     identify: (userData: Record<string, any>) => {
-      if (globalTikTokInitialized && !globalConsentRevoked && window.ttq) {
+      if (
+        TIKTOK_PIXEL_SITEWIDE_ENABLED &&
+        globalTikTokInitialized &&
+        !globalConsentRevoked &&
+        window.ttq
+      ) {
         try {
           window.ttq.identify(userData);
         } catch (error) {
@@ -512,7 +553,12 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
     },
     
     page: () => {
-      if (globalTikTokInitialized && !globalConsentRevoked && window.ttq) {
+      if (
+        TIKTOK_PIXEL_SITEWIDE_ENABLED &&
+        globalTikTokInitialized &&
+        !globalConsentRevoked &&
+        window.ttq
+      ) {
         try {
           window.ttq.page();
         } catch (error) {

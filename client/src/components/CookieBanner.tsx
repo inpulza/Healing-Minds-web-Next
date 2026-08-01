@@ -72,8 +72,8 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
       enabled: tempConsent.marketing,
       required: false,
       examples: language === 'es'
-        ? 'Google Ads, TikTok Pixel, remarketing'
-        : 'Google Ads, TikTok Pixel, remarketing'
+        ? 'Google Ads, medición de conversiones, remarketing'
+        : 'Google Ads, conversion measurement, remarketing'
     }
   ];
 

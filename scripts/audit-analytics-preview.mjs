@@ -50,23 +50,55 @@ if (storageStatePath) {
   }
 }
 
+const tiktokCookiePattern =
+  /^(?:_ttp|_tt_enable_cookie|_ttp_pixel|_tt_sessionId|_tt_pixel_session_index|_tt_appInfo|ttcsid(?:_|$)|ttclid$)/;
+const tiktokNetworkPattern =
+  /^https:\/\/[^/]*(?:tiktok\.com|tiktokcdn(?:-us)?\.com|byteoversea\.com|ibytedtos\.com|muscdn\.com)\//i;
+
+function isTikTokPixelUrl(rawUrl) {
+  return tiktokNetworkPattern.test(rawUrl);
+}
+
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({
   viewport: { width: 1440, height: 1000 },
   storageState,
 });
 
+// Simulate identifiers left by the previously active Pixel. The disabled
+// lifecycle must remove every one without loading TikTok.
+await context.addCookies(
+  [
+    '_ttp',
+    '_tt_enable_cookie',
+    '_ttp_pixel',
+    '_tt_sessionId',
+    '_tt_pixel_session_index',
+    '_tt_appInfo',
+    'ttcsid',
+    'ttcsid_D3IKI7BC77UEJB9HBO0G',
+    'ttclid',
+  ].map((name) => ({ name, value: 'legacy-preview-audit', url: previewOrigin })),
+);
+
 const page = await context.newPage();
 const requestedUrls = [];
+const tiktokRequests = [];
 const credentialLeaks = [];
-page.on('request', (request) => requestedUrls.push(request.url()));
 page.on('request', (request) => {
+  requestedUrls.push(request.url());
+  if (isTikTokPixelUrl(request.url())) tiktokRequests.push(request.url());
   if (new URL(request.url()).origin === previewOrigin) return;
   const headers = request.headers();
-  if (headers['x-vercel-trusted-oidc-idp-token']) {
-    credentialLeaks.push(request.url());
-  }
+  if (headers['x-vercel-trusted-oidc-idp-token']) credentialLeaks.push(request.url());
 });
+
+// A regression must be observable but must not send a synthetic clinical-site
+// visit to TikTok while this audit is proving that the Pixel is disabled.
+await page.route(tiktokNetworkPattern, async (route) => {
+  await route.abort();
+});
+
 if (oidcToken) {
   await page.route(`${previewOrigin}/**`, async (route) => {
     let response;
@@ -85,9 +117,13 @@ if (oidcToken) {
     await route.fulfill({ response });
   });
 }
+
 await page.addInitScript(() => {
   window.__hmpConsentEvents = JSON.parse(
     sessionStorage.getItem('__hmpConsentEvents') ?? '[]',
+  );
+  window.__hmpClarityConsentCalls = JSON.parse(
+    sessionStorage.getItem('__hmpClarityConsentCalls') ?? '[]',
   );
   window.addEventListener('consentChanged', (event) => {
     window.__hmpConsentEvents.push(event.detail);
@@ -101,104 +137,106 @@ function dataLayerCommands() {
   );
 }
 
-async function savePreferencesWithTikTokWithdrawalAudit() {
-  // Capture the provider controls and dispatch the React click in one browser
-  // task. TikTok's async SDK cannot replace the proxied provider view in
-  // between, which makes this proof deterministic without assuming that the
-  // mere presence of events.js means the provider has finished loading.
-  return page.evaluate(() => {
-    window.__hmpTikTokConsentCalls = [];
-    sessionStorage.setItem('__hmpTikTokConsentCalls', '[]');
-    const provider = window.ttq;
-    const controls = new Set(['revokeConsent', 'disableCookie']);
-    if (!provider) {
-      throw new Error('TikTok provider is unavailable before withdrawal');
+async function footerPreferencesButton() {
+  const button = page.getByTestId('footer-cookie-preferences');
+  for (let attempt = 0; attempt < 12 && (await button.count()) === 0; attempt += 1) {
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(400);
+  }
+  await button.waitFor({ state: 'visible', timeout: 10_000 });
+  return button;
+}
+
+async function footerLink(href) {
+  const link = page.locator(`footer a[href="${href}"]`).first();
+  for (let attempt = 0; attempt < 12 && (await link.count()) === 0; attempt += 1) {
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(400);
+  }
+  await link.waitFor({ state: 'visible', timeout: 10_000 });
+  return link;
+}
+
+async function savePreferencesWithClarityConsentAudit(expected) {
+  const calls = await page.evaluate(() => {
+    const provider = window.clarity;
+    if (typeof provider !== 'function') {
+      throw new Error('Clarity provider is unavailable before the consent change');
     }
-    for (const method of controls) {
-      if (typeof provider[method] !== 'function') {
-        throw new Error(`TikTok ${method} control is unavailable before withdrawal`);
+    const recorded = window.__hmpClarityConsentCalls ?? [];
+    window.__hmpClarityConsentCalls = recorded;
+    const instrumented = (...args) => {
+      if (args[0] === 'consent') {
+        recorded.push(Boolean(args[1]));
+        sessionStorage.setItem('__hmpClarityConsentCalls', JSON.stringify(recorded));
       }
+      return Reflect.apply(provider, window, args);
+    };
+    window.clarity = instrumented;
+    if (window.clarity !== instrumented) {
+      throw new Error('Clarity provider could not be instrumented');
     }
-
-    // The live SDK exposes consent methods as protected properties, so direct
-    // assignment can silently leave its originals in place. Proxy reads made
-    // by our hook instead and delegate each call back to the untouched SDK.
-    const instrumentedProvider = new Proxy({}, {
-      get(_target, property) {
-        const value = provider[property];
-        if (!controls.has(property) || typeof value !== 'function') {
-          return value;
-        }
-        return (...args) => {
-          window.__hmpTikTokConsentCalls.push(property);
-          sessionStorage.setItem(
-            '__hmpTikTokConsentCalls',
-            JSON.stringify(window.__hmpTikTokConsentCalls),
-          );
-          return Reflect.apply(value, provider, args);
-        };
-      },
-    });
-    window.ttq = instrumentedProvider;
-    if (window.ttq !== instrumentedProvider) {
-      throw new Error('TikTok provider could not be instrumented');
-    }
-
     const saveButton = document.querySelector('[data-testid="button-save-preferences"]');
     if (!(saveButton instanceof HTMLButtonElement)) {
       throw new Error('Cookie preference save button is unavailable');
     }
     saveButton.click();
-    return JSON.parse(sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]');
+    if (window.clarity === instrumented) window.clarity = provider;
+    return recorded;
   });
+  assert.equal(calls.at(-1), expected, `Clarity must receive consent(${expected})`);
 }
 
-async function setOptionalConsent(enabled, { auditTikTokWithdrawal = false } = {}) {
-  const preferencesButton = page.getByTestId('footer-cookie-preferences');
-  // Home lazy-mounts its footer only when the low-priority boundary approaches
-  // the viewport. Sweep to the current document end until that boundary has
-  // mounted; a locator cannot scroll to an element that is not in the DOM yet.
-  for (let attempt = 0; attempt < 12 && (await preferencesButton.count()) === 0; attempt += 1) {
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    await page.waitForTimeout(400);
-  }
-  await preferencesButton.waitFor({ state: 'visible', timeout: 10_000 });
+async function setOptionalConsent(enabled, { auditClarityConsent = false } = {}) {
+  const preferencesButton = await footerPreferencesButton();
   await preferencesButton.click();
   await page.getByTestId('cookie-preferences-modal').waitFor({ state: 'visible' });
-
   for (const category of ['analytics', 'marketing']) {
     const toggle = page.getByTestId(`switch-${category}`);
     const isEnabled = (await toggle.getAttribute('data-state')) === 'checked';
-    if (isEnabled !== enabled) {
-      await toggle.click();
-    }
+    if (isEnabled !== enabled) await toggle.click();
   }
-  const reloadPromise = enabled
-    ? null
-    : page
-        .waitForEvent('framenavigated', (frame) => frame === page.mainFrame())
-        .catch((error) => {
-          if (page.isClosed()) return null;
-          throw error;
-        });
-  let immediateCalls = null;
-  if (auditTikTokWithdrawal) {
-    immediateCalls = await savePreferencesWithTikTokWithdrawalAudit();
+  if (auditClarityConsent) {
+    await savePreferencesWithClarityConsentAudit(enabled);
   } else {
     await page.getByTestId('button-save-preferences').click();
   }
-  if (reloadPromise) {
-    await reloadPromise;
-    await page.waitForLoadState('domcontentloaded');
-  }
-  if (auditTikTokWithdrawal) {
-    assert.deepEqual(
-      immediateCalls,
-      ['revokeConsent', 'disableCookie'],
-      'TikTok withdrawal must synchronously revoke data sharing before disabling cookies',
-    );
-  }
+  await page.getByTestId('cookie-preferences-modal').waitFor({ state: 'hidden' });
   await page.getByTestId('cookie-banner').waitFor({ state: 'hidden' });
+}
+
+async function currentProviderIdentifiers() {
+  const firstPartyDomainCookie = (cookie) =>
+    parsedPreviewUrl.hostname.endsWith(cookie.domain.replace(/^\./, ''));
+  return (await context.cookies())
+    .filter(firstPartyDomainCookie)
+    .filter((cookie) =>
+      /^(?:_ga|_gid|_gat|_gcl|_gac|_cl|_ttp|_tt_enable_cookie|_tt_sessionId|_tt_pixel_session_index|_tt_appInfo|ttcsid(?:_|$)|ttclid$)/.test(
+        cookie.name,
+      ),
+    )
+    .map(({ name, domain }) => ({ name, domain }));
+}
+
+async function assertTikTokDisabled(stage) {
+  assert.deepEqual(tiktokRequests, [], `${stage}: TikTok Pixel made a network request`);
+  assert.equal(
+    await page.locator('script[src*="analytics.tiktok.com"], script[src*="/i18n/pixel/"]').count(),
+    0,
+    `${stage}: TikTok Pixel injected a script`,
+  );
+  assert.equal(
+    await page.evaluate(() => typeof window.ttq),
+    'undefined',
+    `${stage}: TikTok Pixel created window.ttq`,
+  );
+  assert.deepEqual(
+    (await context.cookies())
+      .filter((cookie) => tiktokCookiePattern.test(cookie.name))
+      .map(({ name, domain }) => ({ name, domain })),
+    [],
+    `${stage}: TikTok Pixel left first-party state`,
+  );
 }
 
 try {
@@ -209,23 +247,20 @@ try {
   const banner = page.getByTestId('cookie-banner');
   await banner.waitFor({ state: 'visible' });
   await page.waitForFunction(
-    () =>
-      (window.dataLayer ?? []).some(
-        (entry) => Array.from(entry)[0] === 'config',
-      ),
+    () => (window.dataLayer ?? []).some((entry) => Array.from(entry)[0] === 'config'),
     undefined,
     { timeout: 10_000 },
   );
+  for (let attempt = 0; attempt < 20 && (await currentProviderIdentifiers()).length > 0; attempt += 1) {
+    await page.waitForTimeout(250);
+  }
+
   assert.equal(
     await page.locator('script[src*="clarity.ms"]').count(),
     0,
     'Clarity must not load before analytics consent',
   );
-  assert.equal(
-    await page.locator('script[src*="analytics.tiktok.com"]').count(),
-    0,
-    'TikTok must not load before marketing consent',
-  );
+  await assertTikTokDisabled('initial denied state');
 
   const initialCommands = await dataLayerCommands();
   assert.ok(
@@ -249,20 +284,13 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByTestId('hero-title').waitFor({ state: 'visible' });
   assert.equal(await page.locator('h1').count(), 1);
-  assert.equal(await page.getByTestId('hero-title').evaluate((element) => element.tagName), 'H1');
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.getByTestId('hero-title').waitFor({ state: 'visible' });
 
-  // A real click proves the banner is above the floating telehealth widget.
+  // A real click also proves the banner is above the floating telehealth widget.
   await page.getByTestId('button-accept-all').click();
   await banner.waitFor({ state: 'hidden' });
-  await page.waitForFunction(
-    () =>
-      Boolean(document.querySelector('script[src*="clarity.ms"]')) &&
-      Boolean(document.querySelector('script[src*="analytics.tiktok.com"]')),
-    undefined,
-    { timeout: 15_000 },
-  );
+  await page.locator('script[src*="clarity.ms/tag/sxayts0dzk"]').waitFor({ timeout: 15_000 });
+  await assertTikTokDisabled('accepted state');
 
   const acceptedState = await page.evaluate(() =>
     JSON.parse(localStorage.getItem('hmp_cookie_consent') ?? 'null'),
@@ -271,50 +299,37 @@ try {
   assert.equal(acceptedState.consent.marketing, true);
   const acceptedPageViews = (await dataLayerCommands()).filter(
     (command) => command[0] === 'event' && command[1] === 'page_view',
-  );
-  assert.equal(acceptedPageViews.length, 1, 'initial acceptance must emit one pageview');
+  ).length;
+  assert.equal(acceptedPageViews, 1, 'initial acceptance must emit one pageview');
 
-  await setOptionalConsent(false, { auditTikTokWithdrawal: true });
+  await (await footerLink('/about')).click();
+  await page.waitForURL(/\/about$/);
+  await page.waitForFunction(
+    (expected) =>
+      (window.dataLayer ?? []).filter(
+        (entry) => Array.from(entry)[0] === 'event' && Array.from(entry)[1] === 'page_view',
+      ).length === expected,
+    acceptedPageViews + 1,
+  );
+  await assertTikTokDisabled('accepted SPA navigation');
+
+  await setOptionalConsent(false, { auditClarityConsent: true });
   const rejectedState = await page.evaluate(() =>
     JSON.parse(localStorage.getItem('hmp_cookie_consent') ?? 'null'),
   );
   assert.equal(rejectedState.consent.analytics, false);
   assert.equal(rejectedState.consent.marketing, false);
-  assert.equal(
-    await page.locator('script[src*="analytics.tiktok.com"]').count(),
-    0,
-    'the clean document must not reload TikTok after persisted rejection',
-  );
 
-  const firstPartyDomainCookie = (cookie) =>
-    parsedPreviewUrl.hostname.endsWith(cookie.domain.replace(/^\./, ''));
-  const providerIdentifier = (cookie) =>
-    /^(?:_ga|_gid|_gat|_gcl|_gac|_cl|_ttp$|_ttp_pixel$|_tt_sessionId$|_tt_pixel_session_index$|_tt_appInfo$|ttcsid(?:_|$)|ttclid$)/.test(
-      cookie.name,
-    );
-
-  // Sample the whole delayed-recreation window, rather than checking only the
-  // final instant. A regression at seven or twelve seconds must be observable.
+  // Sample the delayed recreation window. Loaded GA/Clarity code must not
+  // recreate identifiers after a persisted withdrawal.
   for (let sample = 0; sample <= 60; sample += 1) {
-    const elapsedMs = sample * 500;
-    const currentCookies = (await context.cookies()).filter(firstPartyDomainCookie);
-    const identifiers = currentCookies
-      .filter(providerIdentifier)
-      .map(({ name, domain }) => ({ name, domain }));
     assert.deepEqual(
-      identifiers,
+      await currentProviderIdentifiers(),
       [],
-      `provider identifiers reappeared ${elapsedMs}ms after revocation`,
+      `provider identifiers reappeared ${sample * 500}ms after revocation`,
     );
-
-    const optOutMarker = currentCookies.find((cookie) => cookie.name === '_tt_enable_cookie');
-    if (optOutMarker) {
-      assert.equal(optOutMarker.value, '0', `TikTok opt-out marker changed after ${elapsedMs}ms`);
-    }
-
-    if (sample < 60) {
-      await page.waitForTimeout(500);
-    }
+    await assertTikTokDisabled(`withdrawal sample ${sample}`);
+    if (sample < 60) await page.waitForTimeout(500);
   }
 
   const consentEvents = await page.evaluate(() => window.__hmpConsentEvents);
@@ -327,69 +342,31 @@ try {
     analyticsPersisted: true,
     marketingPersisted: true,
   });
-  const revokeCalls = await page.evaluate(() =>
-    JSON.parse(sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]'),
-  );
-  assert.deepEqual(
-    revokeCalls,
-    ['revokeConsent', 'disableCookie'],
-    'TikTok must revoke data sharing before disabling first-party cookies',
+
+  const deniedPageViews = (await dataLayerCommands()).filter(
+    (command) => command[0] === 'event' && command[1] === 'page_view',
+  ).length;
+  await (await footerLink('/')).click();
+  await page.waitForURL(/\/$/);
+  await page.waitForTimeout(250);
+  assert.equal(
+    (await dataLayerCommands()).filter(
+      (command) => command[0] === 'event' && command[1] === 'page_view',
+    ).length,
+    deniedPageViews,
+    'denied navigation must not emit a pageview',
   );
 
-  // The clean document has no TikTok SDK, but retains the provider opt-out
-  // marker. Preserve a real array queue while recording the commands our
-  // snippet adds so reacceptance proves enableCookie -> grantConsent happens
-  // before its first page event.
-  await page.evaluate(() => {
-    const recordedCalls = JSON.parse(
-      sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]',
-    );
-    const queue = [];
-    const nativePush = Array.prototype.push;
-    queue.push = function recordTikTokQueue(...items) {
-      for (const item of items) {
-        if (
-          Array.isArray(item) &&
-          ['enableCookie', 'grantConsent', 'page'].includes(item[0])
-        ) {
-          recordedCalls.push(item[0]);
-        }
-      }
-      sessionStorage.setItem(
-        '__hmpTikTokConsentCalls',
-        JSON.stringify(recordedCalls),
-      );
-      return nativePush.apply(this, items);
-    };
-    window.ttq = queue;
-  });
-
-  await setOptionalConsent(true);
-  await page.waitForFunction(() => {
-    const state = JSON.parse(localStorage.getItem('hmp_cookie_consent') ?? 'null');
-    return state?.consent?.analytics && state?.consent?.marketing;
-  });
+  await setOptionalConsent(true, { auditClarityConsent: true });
   await page.waitForFunction(
-    () =>
-      Boolean(document.querySelector('script[src*="clarity.ms"]')) &&
-      Boolean(document.querySelector('script[src*="analytics.tiktok.com"]')),
-    undefined,
-    { timeout: 15_000 },
+    (expected) =>
+      (window.dataLayer ?? []).filter(
+        (entry) => Array.from(entry)[0] === 'event' && Array.from(entry)[1] === 'page_view',
+      ).length === expected,
+    deniedPageViews + 1,
   );
-  const restoredCalls = await page.evaluate(() =>
-    JSON.parse(sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]'),
-  );
-  const enableCookieIndex = restoredCalls.lastIndexOf('enableCookie');
-  const grantConsentIndex = restoredCalls.lastIndexOf('grantConsent');
-  const restoredPageIndex = restoredCalls.lastIndexOf('page');
-  assert.ok(enableCookieIndex >= 0, 'clean reacceptance must enable TikTok cookies');
-  assert.ok(
-    enableCookieIndex < grantConsentIndex && grantConsentIndex < restoredPageIndex,
-    'clean reacceptance must queue enableCookie, grantConsent and then page',
-  );
+  await assertTikTokDisabled('reaccepted state');
 
-  // Prevent the external tel protocol while allowing React and document bubble
-  // handlers to process the same native click.
   await page.evaluate(() => {
     document.addEventListener(
       'click',
@@ -410,60 +387,35 @@ try {
   ).length;
   assert.equal(leadsAfter - leadsBefore, 1, 'one explicit + delegated click must be one lead');
 
-  const finalCommands = await dataLayerCommands();
-  const pageViews = finalCommands.filter(
-    (command) => command[0] === 'event' && command[1] === 'page_view',
-  );
-  assert.equal(pageViews.length, 1, 'reacceptance in the clean document must emit one pageview');
-  const pageViewTotal = acceptedPageViews.length + pageViews.length;
-  assert.equal(pageViewTotal, 2, 'accept and reaccept each emit exactly once across the reload');
-
-  // Recreate the exact fast-reload boundary: the previous document may close
-  // before TikTok's asynchronous SDK consumes the grant queue. The next
-  // document must independently queue provider restoration before page().
-  await page.addInitScript(() => {
-    window.__hmpFreshTikTokConsentCalls = [];
-    const queue = [];
-    const nativePush = Array.prototype.push;
-    queue.push = function recordFreshTikTokQueue(...items) {
-      for (const item of items) {
-        if (
-          Array.isArray(item) &&
-          ['enableCookie', 'grantConsent', 'page'].includes(item[0])
-        ) {
-          window.__hmpFreshTikTokConsentCalls.push(item[0]);
-        }
-      }
-      return nativePush.apply(this, items);
-    };
-    window.ttq = queue;
-  });
   await page.reload({ waitUntil: 'domcontentloaded' });
-  await page.waitForFunction(
-    () => window.__hmpFreshTikTokConsentCalls?.length >= 3,
-    undefined,
-    { timeout: 15_000 },
-  );
-  assert.deepEqual(
-    await page.evaluate(() => window.__hmpFreshTikTokConsentCalls),
-    ['enableCookie', 'grantConsent', 'page'],
-    'a fresh document must reaffirm TikTok provider consent before its first page event',
-  );
   await page.getByTestId('cookie-banner').waitFor({ state: 'hidden' });
+  await page.locator('script[src*="clarity.ms/tag/sxayts0dzk"]').waitFor({ timeout: 15_000 });
+  await assertTikTokDisabled('persisted accepted reload');
+  const reloadedPageViews = (await dataLayerCommands()).filter(
+    (command) => command[0] === 'event' && command[1] === 'page_view',
+  ).length;
+  assert.equal(reloadedPageViews, 1, 'persisted accepted reload must emit one pageview');
 
-  assert.ok(requestedUrls.some((url) => url.includes('googletagmanager.com/gtag/js?id=G-WMRK41PX2E')));
-  assert.ok(requestedUrls.some((url) => url.includes('clarity.ms')));
-  assert.ok(requestedUrls.some((url) => url.includes('analytics.tiktok.com')));
+  assert.ok(
+    requestedUrls.some((url) => url.includes('googletagmanager.com/gtag/js?id=G-WMRK41PX2E')),
+  );
+  assert.ok(
+    requestedUrls.some((url) => /clarity\.ms\/tag\/sxayts0dzk/i.test(url)),
+    'the exact Clarity project must load',
+  );
+  assert.deepEqual(tiktokRequests, [], 'TikTok Pixel must remain disabled sitewide');
   assert.deepEqual(credentialLeaks, [], 'Preview credentials must never reach third parties');
 
   console.log(
     JSON.stringify({
       previewUrl,
       consentCycle: 'denied -> accepted -> rejected -> accepted',
-      pageViews: pageViewTotal,
+      pageViewsBeforeReload: deniedPageViews + 1,
+      pageViewsAfterReload: reloadedPageViews,
       leadEventsForOneClick: leadsAfter - leadsBefore,
-      freshTikTokRestore: ['enableCookie', 'grantConsent', 'page'],
-      providers: ['G-WMRK41PX2E', 'sxayts0dzk', 'D3IKI7BC77UEJB9HBO0G'],
+      providers: ['G-WMRK41PX2E', 'sxayts0dzk'],
+      clarityConsentCalls: await page.evaluate(() => window.__hmpClarityConsentCalls),
+      tiktokPixel: { id: 'D3IKI7BC77UEJB9HBO0G', status: 'disabled-sitewide', requests: 0 },
       status: 'PASS',
     }),
   );

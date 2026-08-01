@@ -411,12 +411,25 @@ function checkConsentAndTagRegistry(): void {
   assert.match(nextShellSource, /useClarity\(true\)/);
   assert.match(nextShellSource, /useTikTokPixel\(true\)/);
 
+  const trackingConfigSource = readFileSync(
+    new URL("../client/src/lib/tracking-config.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(trackingConfigSource, /TIKTOK_PIXEL_SITEWIDE_ENABLED = false/);
+  assert.doesNotMatch(
+    trackingConfigSource,
+    /process\.env/,
+    'TikTok Pixel cannot be silently re-enabled by a deployment variable',
+  );
+
   const claritySource = readFileSync(
     new URL("../client/src/hooks/use-clarity.ts", import.meta.url),
     "utf8",
   );
   assert.match(claritySource, /useClarity\(manageConsentLifecycle = false\)/);
   assert.match(claritySource, /clearFirstPartyCookies/);
+  assert.match(claritySource, /Clarity\.consent\(false\)/);
+  assert.match(claritySource, /Clarity\.consent\(true\)/);
   assert.match(
     claritySource,
     /else if \(process\.env\.NODE_ENV === 'production'\) \{\s*revokeClarity\(\)/,
@@ -436,6 +449,21 @@ function checkConsentAndTagRegistry(): void {
   const reopenGateIndex = tiktokSource.indexOf(
     'consentRevoked.current = false',
     grantConsentIndex,
+  );
+  assert.match(tiktokSource, /import \{ TIKTOK_PIXEL_SITEWIDE_ENABLED \}/);
+  assert.match(
+    tiktokSource,
+    /if \(!TIKTOK_PIXEL_SITEWIDE_ENABLED \|\| typeof window === 'undefined'\) return/,
+  );
+  assert.match(
+    tiktokSource,
+    /if \(!TIKTOK_PIXEL_SITEWIDE_ENABLED\) \{\s*return;\s*\}/,
+    'the initializer must fail closed before touching the provider',
+  );
+  assert.match(
+    tiktokSource,
+    /if \(!TIKTOK_PIXEL_SITEWIDE_ENABLED\) \{[\s\S]*?rollbackTikTokProviderConsent\(window\.ttq\);[\s\S]*?clearDisabledTikTokState\(\);[\s\S]*?return;/,
+    'the lifecycle manager must revoke and clear legacy state while disabled',
   );
   assert.ok(
     enableCookieIndex >= 0 &&
@@ -530,12 +558,22 @@ function checkConsentAndTagRegistry(): void {
     'a queued reload must be cancelled logically if consent is restored',
   );
   const clearTikTokStart = tiktokSource.indexOf('function clearTikTokCookies');
-  const clearTikTokEnd = tiktokSource.indexOf('function stopPostRevokeCookieCleanup');
+  const clearTikTokEnd = tiktokSource.indexOf('function clearDisabledTikTokState');
   const clearTikTokSource = tiktokSource.slice(clearTikTokStart, clearTikTokEnd);
   assert.doesNotMatch(
     clearTikTokSource,
     /_tt_enable_cookie/,
     'the TikTok opt-out marker must survive identifier cleanup',
+  );
+  const clearDisabledTikTokStart = clearTikTokEnd;
+  const clearDisabledTikTokEnd = tiktokSource.indexOf(
+    'function stopPostRevokeCookieCleanup',
+    clearDisabledTikTokStart,
+  );
+  assert.match(
+    tiktokSource.slice(clearDisabledTikTokStart, clearDisabledTikTokEnd),
+    /_tt_enable_cookie/,
+    'sitewide shutdown must remove the legacy TikTok opt-out marker too',
   );
   assert.match(
     tiktokSource,
@@ -608,7 +646,8 @@ function checkConsentAndTagRegistry(): void {
     new URL("../client/src/components/CookieBanner.tsx", import.meta.url),
     "utf8",
   );
-  assert.match(bannerSource, /TikTok Pixel/);
+  assert.doesNotMatch(bannerSource, /TikTok Pixel/);
+  assert.match(bannerSource, /Google Ads, conversion measurement, remarketing/);
   assert.doesNotMatch(bannerSource, /Facebook Pixel/);
   assert.match(bannerSource, /z-\[10000\]/);
   assert.match(bannerSource, /overlayClassName="z-\[10001\]"/);
@@ -688,8 +727,16 @@ function checkConsentAndTagRegistry(): void {
     new URL("../client/src/data/pageContent/legal/cookiePolicy.ts", import.meta.url),
     "utf8",
   );
-  assert.match(policySource, /TikTok Pixel/);
-  assert.match(policySource, /third-party cookies remain under TikTok's control/);
+  assert.match(policySource, /TikTok Pixel is currently disabled across this Site/);
+  assert.match(policySource, /TikTok Pixel está actualmente desactivado en todo este Sitio/);
+  assert.doesNotMatch(policySource, /third-party cookies remain under TikTok's control/);
+
+  const privacyPolicySource = readFileSync(
+    new URL("../client/src/data/pageContent/legal/privacyPolicy.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(privacyPolicySource, /web hosting \(Vercel\)/);
+  assert.match(privacyPolicySource, /domain registration and DNS management \(Hostinger\)/);
 
   const environmentGuard = readFileSync(
     new URL("./verify-public-analytics-config.mjs", import.meta.url),

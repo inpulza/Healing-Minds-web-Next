@@ -6,7 +6,7 @@ export const privacyPolicyContent: BilingualPageContent = {
     sections: [
       {
         key: 'last-updated',
-        paragraphs: [`Last Updated: August 22, 2025`],
+        paragraphs: [`Last Updated: August 1, 2026`],
       },
       {
         key: 'intro',
@@ -70,7 +70,7 @@ export const privacyPolicyContent: BilingualPageContent = {
         heading: `4. How We Share Your Information`,
         paragraphs: [`We do not sell your personal information. We may share your information only in the following circumstances:`],
         bullets: [
-          `**Service Providers:** We share information with third-party companies that provide services to us, such as web hosting (Hostinger), data analytics (Google, Microsoft) and advertising platforms (Google). These providers only have access to information necessary to perform their functions and are required to protect it.`,
+          `**Service Providers:** We share information with third-party companies that provide services to us, such as web hosting (Vercel), domain registration and DNS management (Hostinger), data analytics (Google, Microsoft) and advertising platforms (Google). These providers only have access to information necessary to perform their functions and are required to protect it.`,
           `**Legal Purposes:** We may disclose your information if required by law or in response to a valid legal request, such as a court order or subpoena.`,
           `**Business Transfers:** In the event of a merger, acquisition or asset sale, your personal information may be transferred to the acquiring entity.`,
         ],
@@ -139,7 +139,7 @@ export const privacyPolicyContent: BilingualPageContent = {
     sections: [
       {
         key: 'last-updated',
-        paragraphs: [`Última actualización: 22 de agosto de 2025`],
+        paragraphs: [`Última actualización: 1 de agosto de 2026`],
       },
       {
         key: 'intro',
@@ -203,7 +203,7 @@ export const privacyPolicyContent: BilingualPageContent = {
         heading: `4. Cómo Compartimos su Información`,
         paragraphs: [`No vendemos su información personal. Podemos compartir su información únicamente en las siguientes circunstancias:`],
         bullets: [
-          `**Proveedores de Servicios:** Compartimos información con empresas de terceros que nos prestan servicios, como el alojamiento web (Hostinger), análisis de datos (Google, Microsoft) y plataformas de publicidad (Google). Estos proveedores solo tienen acceso a la información necesaria para realizar sus funciones y están obligados a protegerla.`,
+          `**Proveedores de Servicios:** Compartimos información con empresas de terceros que nos prestan servicios, como el alojamiento web (Vercel), el registro de dominio y la gestión de DNS (Hostinger), análisis de datos (Google, Microsoft) y plataformas de publicidad (Google). Estos proveedores solo tienen acceso a la información necesaria para realizar sus funciones y están obligados a protegerla.`,
           `**Fines Legales:** Podemos divulgar su información si así lo exige la ley o en respuesta a una solicitud legal válida, como una orden judicial o una citación.`,
           `**Transferencias Comerciales:** En caso de una fusión, adquisición o venta de activos, su información personal puede ser transferida a la entidad adquirente.`,
         ],

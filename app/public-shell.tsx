@@ -19,6 +19,8 @@ function PublicRuntime({ children }: { children: ReactNode }) {
 
   useAnalytics();
   useClarity(true);
+  // This lifecycle manager also clears legacy TikTok identifiers. The central
+  // tracking config keeps the Pixel itself disabled sitewide.
   useTikTokPixel(true);
   useScrollToTop();
 

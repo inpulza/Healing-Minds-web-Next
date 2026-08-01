@@ -22,11 +22,30 @@ const previewCredential = acceptsPreviewCredential && process.env.VERCEL_AUTOMAT
       }
     : null;
 
+const tiktokAttempts = new WeakMap<Page, string[]>();
+const tiktokCookiePattern =
+  /^(?:_ttp|_tt_enable_cookie|_ttp_pixel|_tt_sessionId|_tt_pixel_session_index|_tt_appInfo|ttcsid(?:_|$)|ttclid$)/;
+const tiktokNetworkPattern =
+  /^https:\/\/[^/]*(?:tiktok\.com|tiktokcdn(?:-us)?\.com|byteoversea\.com|ibytedtos\.com|muscdn\.com)\//i;
+
+function isTikTokPixelUrl(rawUrl: string): boolean {
+  return tiktokNetworkPattern.test(rawUrl);
+}
+
 test.beforeEach(async ({ page }) => {
+  const attempts: string[] = [];
+  tiktokAttempts.set(page, attempts);
+  page.on("request", (request) => {
+    if (isTikTokPixelUrl(request.url())) attempts.push(request.url());
+  });
+  await page.route(tiktokNetworkPattern, async (route) => {
+    await route.abort();
+  });
+
   if (!deploymentOrigin || !previewCredential) return;
 
   // Scope Preview authentication to the deployment origin. A global header
-  // would leak the credential to analytics, Clarity, TikTok and every other
+  // would leak the credential to analytics, Clarity and every other
   // third-party request made by the page. Fetch without following redirects:
   // Playwright otherwise forwards header overrides through the redirect chain.
   await page.route(`${deploymentOrigin}/**`, async (route) => {
@@ -48,6 +67,17 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.afterEach(async ({ page }) => {
+  expect(tiktokAttempts.get(page) ?? [], "TikTok Pixel network attempts").toEqual([]);
+  await expect(
+    page.locator('script[src*="analytics.tiktok.com"], script[src*="/i18n/pixel/"]'),
+  ).toHaveCount(0);
+  expect(await page.evaluate(() => typeof window.ttq)).toBe("undefined");
+  expect(
+    (await page.context().cookies())
+      .filter((cookie) => tiktokCookiePattern.test(cookie.name))
+      .map(({ name, domain }) => ({ name, domain })),
+  ).toEqual([]);
+
   // A page can finish its assertions while late images are still in flight.
   // The browser closing can legitimately cancel those callbacks. Remove the
   // handler and ignore only teardown-time callback errors; in-test failures

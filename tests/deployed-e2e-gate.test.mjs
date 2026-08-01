@@ -72,7 +72,7 @@ test("Preview credentials are scoped to the deployment origin", () => {
   assert.match(specs[0], /credentialLeaks/);
 });
 
-test("analytics Preview audit validates auth scope and the delayed revoke window", () => {
+test("analytics Preview audit validates auth scope and sitewide TikTok shutdown", () => {
   const audit = fs.readFileSync("scripts/audit-analytics-preview.mjs", "utf8");
   const hostValidation = audit.indexOf('healingMindsImmutablePreviewHost.test');
   const browserLaunch = audit.indexOf("chromium.launch");
@@ -86,24 +86,18 @@ test("analytics Preview audit validates auth scope and the delayed revoke window
   assert.match(audit, /maxRedirects:\s*0/);
   assert.match(audit, /sample <= 60/);
   assert.match(audit, /page\.waitForTimeout\(500\)/);
+  assert.match(audit, /function isTikTokPixelUrl/);
+  assert.match(audit, /function assertTikTokDisabled/);
+  assert.match(audit, /function savePreferencesWithClarityConsentAudit/);
+  assert.match(audit, /Clarity must receive consent\(\$\{expected\}\)/);
+  assert.match(audit, /clarityConsentCalls/);
+  assert.match(audit, /tiktokRequests/);
+  assert.match(audit, /typeof window\.ttq/);
   assert.match(audit, /_tt_enable_cookie/);
-  assert.match(audit, /sessionStorage\.getItem\('__hmpTikTokConsentCalls'\)/);
-  const withdrawalProxy = audit.indexOf('const instrumentedProvider = new Proxy({}, {');
-  const atomicSaveClick = audit.indexOf('saveButton.click()', withdrawalProxy);
-  assert.ok(
-    withdrawalProxy >= 0 && withdrawalProxy < atomicSaveClick,
-    'TikTok withdrawal controls must be proxied and clicked in one browser task',
-  );
-  assert.match(audit, /window\.ttq = instrumentedProvider/);
-  assert.match(audit, /if \(window\.ttq !== instrumentedProvider\)/);
-  assert.match(audit, /Reflect\.apply\(value, provider, args\)/);
-  assert.match(audit, /setOptionalConsent\(false, \{ auditTikTokWithdrawal: true \}\)/);
-  assert.match(audit, /\['revokeConsent', 'disableCookie'\]/);
-  assert.match(audit, /framenavigated/);
-  assert.match(audit, /const enableCookieIndex = restoredCalls\.lastIndexOf\('enableCookie'\)/);
-  assert.match(audit, /enableCookieIndex < grantConsentIndex && grantConsentIndex < restoredPageIndex/);
-  assert.match(audit, /window\.__hmpFreshTikTokConsentCalls/);
-  assert.match(audit, /a fresh document must reaffirm TikTok provider consent before its first page event/);
+  assert.match(audit, /clarity\\\.ms\\\/tag\\\/sxayts0dzk/);
+  assert.match(audit, /status: 'disabled-sitewide'/);
+  assert.doesNotMatch(audit, /freshTikTokRestore/);
+  assert.doesNotMatch(audit, /grantConsentIndex/);
   assert.match(audit, /credentialLeaks/);
 });
 

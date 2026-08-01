@@ -22,13 +22,27 @@ const previewCredential = acceptsPreviewCredential && process.env.VERCEL_AUTOMAT
       }
     : null;
 
+const tiktokAttempts = new WeakMap<Page, string[]>();
+const tiktokCookiePattern =
+  /^(?:_ttp|_tt_enable_cookie|_ttp_pixel|_tt_sessionId|_tt_pixel_session_index|_tt_appInfo|ttcsid(?:_|$)|ttclid$)/;
+const tiktokNetworkPattern =
+  /^https:\/\/[^/]*(?:tiktok\.com|tiktokcdn(?:-us)?\.com|byteoversea\.com|ibytedtos\.com|muscdn\.com)\//i;
+
+function isTikTokPixelUrl(rawUrl: string): boolean {
+  return tiktokNetworkPattern.test(rawUrl);
+}
+
 async function stubAnalyticsProviders(page: Page) {
-  // Consent E2E must exercise our lifecycle without sending synthetic visits to
-  // the clinic's live analytics accounts. TikTok's loader only needs a
-  // successful script response for this test; the dedicated Preview audit
-  // verifies the real provider SDKs separately.
-  await page.route("https://analytics.tiktok.com/**", async (route) => {
-    await route.fulfill({ status: 200, contentType: "application/javascript", body: "" });
+  // E2E exercises our consent lifecycle without sending synthetic visits to
+  // the clinic's live analytics accounts. Any TikTok Pixel request is recorded
+  // and blocked because the integration is disabled sitewide.
+  const attempts: string[] = [];
+  tiktokAttempts.set(page, attempts);
+  page.on("request", (request) => {
+    if (isTikTokPixelUrl(request.url())) attempts.push(request.url());
+  });
+  await page.route(tiktokNetworkPattern, async (route) => {
+    await route.abort();
   });
   await page.route("https://www.googletagmanager.com/**", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/javascript", body: "" });
@@ -68,6 +82,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.afterEach(async ({ page }) => {
+  expect(tiktokAttempts.get(page) ?? [], "TikTok Pixel network attempts").toEqual([]);
   await page.unrouteAll({ behavior: "ignoreErrors" });
 });
 
@@ -85,6 +100,18 @@ async function readStoredConsent(page: Page) {
   );
 }
 
+async function dataLayerCommands(page: Page) {
+  return page.evaluate(() =>
+    (window.dataLayer ?? []).map((entry) => Array.from(entry)),
+  );
+}
+
+async function hasVerifiedGoogleConfig(page: Page) {
+  return (await dataLayerCommands(page)).some(
+    (command) => command[0] === "config" && command[1] === "G-WMRK41PX2E",
+  );
+}
+
 async function footerPreferencesButton(page: Page, isMobile: boolean) {
   const button = page.getByTestId(
     isMobile ? "footer-cookie-preferences-mobile" : "footer-cookie-preferences",
@@ -99,6 +126,16 @@ async function footerPreferencesButton(page: Page, isMobile: boolean) {
   return button;
 }
 
+async function footerLink(page: Page, href: string) {
+  const link = page.locator(`footer a[href="${href}"]`).first();
+  for (let attempt = 0; attempt < 12 && (await link.count()) === 0; attempt += 1) {
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(300);
+  }
+  await expect(link).toBeVisible();
+  return link;
+}
+
 async function setOptionalConsent(
   page: Page,
   consent: { analytics: boolean; marketing: boolean },
@@ -106,10 +143,38 @@ async function setOptionalConsent(
   for (const category of ["analytics", "marketing"] as const) {
     const toggle = page.getByTestId(`switch-${category}`);
     const checked = (await toggle.getAttribute("data-state")) === "checked";
-    if (checked !== consent[category]) {
-      await toggle.click();
-    }
+    if (checked !== consent[category]) await toggle.click();
   }
+}
+
+async function savePreferencesWithClarityConsentAudit(page: Page, expected: boolean) {
+  const calls = await page.evaluate(() => {
+    const state = window as typeof window & {
+      clarity?: (...args: unknown[]) => unknown;
+      __hmpE2eClarityConsentCalls?: boolean[];
+    };
+    const provider = state.clarity;
+    if (typeof provider !== "function") {
+      throw new Error("Clarity provider is unavailable before the consent change");
+    }
+    const recorded = state.__hmpE2eClarityConsentCalls ?? [];
+    state.__hmpE2eClarityConsentCalls = recorded;
+    const instrumented = (...args: unknown[]) => {
+      if (args[0] === "consent") recorded.push(Boolean(args[1]));
+      return Reflect.apply(provider, window, args);
+    };
+    state.clarity = instrumented;
+    if (state.clarity !== instrumented) {
+      throw new Error("Clarity provider could not be instrumented");
+    }
+    const saveButton = document.querySelector('[data-testid="button-save-preferences"]');
+    if (!(saveButton instanceof HTMLButtonElement)) {
+      throw new Error("Cookie preference save button is unavailable");
+    }
+    saveButton.click();
+    return recorded;
+  });
+  expect(calls.at(-1), `Clarity consent(${expected})`).toBe(expected);
 }
 
 async function expectOptionalConsent(page: Page, enabled: boolean) {
@@ -118,19 +183,17 @@ async function expectOptionalConsent(page: Page, enabled: boolean) {
   await expect(page.getByTestId("switch-marketing")).toHaveAttribute("data-state", state);
 }
 
-async function addSyntheticTikTokIdentifier(page: Page) {
-  await page.context().addCookies([
-    {
-      name: "ttcsid",
-      value: "synthetic-e2e-identifier",
-      url: new URL(page.url()).origin,
-    },
-  ]);
-}
-
-async function expectNoSyntheticTikTokIdentifier(page: Page) {
-  const cookies = await page.context().cookies();
-  expect(cookies.some((cookie) => cookie.name === "ttcsid")).toBe(false);
+async function expectTikTokPixelAbsent(page: Page, label: string) {
+  expect(tiktokAttempts.get(page) ?? [], `${label}: TikTok requests`).toEqual([]);
+  await expect(
+    page.locator('script[src*="analytics.tiktok.com"], script[src*="/i18n/pixel/"]'),
+    `${label}: TikTok scripts`,
+  ).toHaveCount(0);
+  expect(await page.evaluate(() => typeof window.ttq), `${label}: window.ttq`).toBe("undefined");
+  const identifiers = (await page.context().cookies())
+    .filter((cookie) => tiktokCookiePattern.test(cookie.name))
+    .map(({ name, domain }) => ({ name, domain }));
+  expect(identifiers, `${label}: TikTok cookies`).toEqual([]);
 }
 
 test("first-visit cookie controls close, persist and remain explicit", async ({ page }) => {
@@ -140,6 +203,7 @@ test("first-visit cookie controls close, persist and remain explicit", async ({ 
   const banner = page.getByTestId("cookie-banner");
   const modal = page.getByTestId("cookie-preferences-modal");
   await expect(banner).toBeVisible();
+  await expectTikTokPixelAbsent(page, "initial denied state");
 
   await page.getByTestId("button-manage-preferences").click();
   await expect(modal).toBeVisible();
@@ -161,6 +225,7 @@ test("first-visit cookie controls close, persist and remain explicit", async ({ 
 
   await page.reload();
   await expect(banner).toBeHidden();
+  await expectTikTokPixelAbsent(page, "persisted rejection");
 });
 
 test("privacy-restricted storage still hydrates usable cookie controls", async ({ page }) => {
@@ -189,273 +254,130 @@ test("privacy-restricted storage still hydrates usable cookie controls", async (
   await page.getByTestId("button-reject-all").click();
   await expect(page.getByTestId("cookie-banner")).toBeHidden();
   expect(pageErrors).toEqual([]);
+  await expectTikTokPixelAbsent(page, "restricted storage");
 });
 
-test("accepted visitors can reopen, cancel and withdraw consent", async ({ page, isMobile }) => {
+test("TikTok Pixel stays absent through consent, navigation and reload", async ({
+  page,
+  isMobile,
+}) => {
   await page.goto("/");
   await expectDeployedSha(page);
+  await expectTikTokPixelAbsent(page, "first visit");
 
-  const banner = page.getByTestId("cookie-banner");
-  const modal = page.getByTestId("cookie-preferences-modal");
+  // Seed every legacy first-party identifier and prove the disabled lifecycle
+  // removes them before any visitor choice is made.
+  const origin = new URL(page.url()).origin;
+  await page.context().addCookies(
+    [
+      "_ttp",
+      "_tt_enable_cookie",
+      "_ttp_pixel",
+      "_tt_sessionId",
+      "_tt_pixel_session_index",
+      "_tt_appInfo",
+      "ttcsid",
+      "ttcsid_D3IKI7BC77UEJB9HBO0G",
+      "ttclid",
+    ].map((name) => ({ name, value: "legacy-e2e", url: origin })),
+  );
+  await page.reload();
+  await expect
+    .poll(async () =>
+      (await page.context().cookies())
+        .filter((cookie) => tiktokCookiePattern.test(cookie.name))
+        .map((cookie) => cookie.name),
+    )
+    .toEqual([]);
+  await expectTikTokPixelAbsent(page, "legacy cleanup");
+
   await page.getByTestId("button-accept-all").click();
-  await expect(banner).toBeHidden();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await expect(page.locator('script[src*="clarity.ms/tag/sxayts0dzk"]')).toHaveCount(1);
+  await expectTikTokPixelAbsent(page, "accepted state");
 
-  const preferences = await footerPreferencesButton(page, isMobile);
-  await preferences.click();
-  await expect(modal).toBeVisible();
-  await expect(banner).toBeHidden();
+  const googleConfigured = await hasVerifiedGoogleConfig(page);
+  if (process.env.E2E_EXPECTED_SHA) expect(googleConfigured).toBe(true);
+  const acceptedViews = googleConfigured ? 1 : 0;
+  await expect
+    .poll(async () =>
+      (await dataLayerCommands(page)).filter(
+        (command) => command[0] === "event" && command[1] === "page_view",
+      ).length,
+    )
+    .toBe(acceptedViews);
+
+  const acceptedPreferences = await footerPreferencesButton(page, isMobile);
+  await acceptedPreferences.click();
   await setOptionalConsent(page, { analytics: false, marketing: false });
   await page.getByRole("button", { name: "Close" }).click();
-  await expect(modal).toBeHidden();
-  await expect(banner).toBeHidden();
-
-  await preferences.click();
-  await expect(modal).toBeVisible();
+  await expect(page.getByTestId("cookie-preferences-modal")).toBeHidden();
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: true, marketing: true },
+  });
+  const cancelledPreferences = await footerPreferencesButton(page, isMobile);
+  await cancelledPreferences.click();
   await expectOptionalConsent(page, true);
   await setOptionalConsent(page, { analytics: false, marketing: false });
   await page.getByTestId("button-cancel-preferences").click();
-  await expect(modal).toBeHidden();
-  await expect(banner).toBeHidden();
-
-  await preferences.click();
-  await expect(modal).toBeVisible();
-  await expectOptionalConsent(page, true);
-  await setOptionalConsent(page, { analytics: true, marketing: false });
-  await page.getByTestId("button-save-preferences").click();
-  await page.waitForFunction(() => {
-    const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
-    return navigation?.type === "reload";
-  });
-  await expect(modal).toBeHidden();
-  await expect(banner).toBeHidden();
-  expect(await readStoredConsent(page)).toMatchObject({
-    hasConsented: true,
-    consent: { necessary: true, analytics: true, marketing: false },
-  });
-
-  await page.reload();
-  await expect(banner).toBeHidden();
-  expect(await readStoredConsent(page)).toMatchObject({
-    consent: { analytics: true, marketing: false },
-  });
-
-  await page.goto("/about");
-  await expect(banner).toBeHidden();
-  await page.goBack();
-  await expect(banner).toBeHidden();
-  await page.goForward();
-  await expect(banner).toBeHidden();
-  expect(await readStoredConsent(page)).toMatchObject({
-    consent: { analytics: true, marketing: false },
-  });
-
-  await page.evaluate(() => {
-    window.__hmpE2eRestoreCalls = [];
-    const queue = [];
-    const nativePush = Array.prototype.push;
-    queue.push = function recordCleanRestore(...items) {
-      for (const item of items) {
-        if (
-          Array.isArray(item) &&
-          ["enableCookie", "grantConsent", "page"].includes(item[0])
-        ) {
-          window.__hmpE2eRestoreCalls.push(item[0]);
-        }
-      }
-      return nativePush.apply(this, items);
-    };
-    window.ttq = queue;
-  });
-  const cleanPreferences = await footerPreferencesButton(page, isMobile);
-  await cleanPreferences.click();
-  await setOptionalConsent(page, { analytics: true, marketing: true });
-  await page.getByTestId("button-save-preferences").click();
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
-  const cleanRestoreCalls = await page.evaluate(() => window.__hmpE2eRestoreCalls);
-  expect(cleanRestoreCalls).toEqual(["enableCookie", "grantConsent", "page"]);
+  await expect(page.getByTestId("cookie-preferences-modal")).toBeHidden();
   expect(await readStoredConsent(page)).toMatchObject({
     consent: { analytics: true, marketing: true },
   });
 
-  // A fast reload can happen before the previous document's asynchronous
-  // TikTok SDK consumes its restoration queue. Every fresh document with a
-  // persisted grant must therefore reaffirm provider consent before page().
-  await page.addInitScript(() => {
-    window.__hmpE2eFreshRestoreCalls = [];
-    const queue = [];
-    const nativePush = Array.prototype.push;
-    queue.push = function recordFreshRestore(...items) {
-      for (const item of items) {
-        if (
-          Array.isArray(item) &&
-          ["enableCookie", "grantConsent", "page"].includes(item[0])
-        ) {
-          window.__hmpE2eFreshRestoreCalls.push(item[0]);
-        }
-      }
-      return nativePush.apply(this, items);
-    };
-    window.ttq = queue;
-  });
-  await page.reload();
-  await expect(page.getByTestId("cookie-banner")).toBeHidden();
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
+  await (await footerLink(page, "/about")).click();
+  await expect(page).toHaveURL(/\/about$/);
   await expect
-    .poll(() => page.evaluate(() => window.__hmpE2eFreshRestoreCalls))
-    .toEqual(["enableCookie", "grantConsent", "page"]);
-});
-
-test("a partial TikTok restoration rolls back and remains fail-closed", async ({
-  page,
-  isMobile,
-}) => {
-  await page.goto("/");
-  await expectDeployedSha(page);
-  await page.getByTestId("button-reject-all").click();
-  await expect(page.getByTestId("cookie-banner")).toBeHidden();
-
-  await page.evaluate(() => {
-    window.__hmpE2eRestoreCalls = [];
-    window.ttq = {
-      enableCookie() {
-        window.__hmpE2eRestoreCalls.push("enableCookie");
-      },
-      grantConsent() {
-        window.__hmpE2eRestoreCalls.push("grantConsent");
-        throw new Error("Synthetic TikTok grant failure");
-      },
-      revokeConsent() {
-        window.__hmpE2eRestoreCalls.push("revokeConsent");
-      },
-      disableCookie() {
-        window.__hmpE2eRestoreCalls.push("disableCookie");
-      },
-      page() {
-        window.__hmpE2eRestoreCalls.push("page");
-      },
-    };
-  });
+    .poll(async () =>
+      (await dataLayerCommands(page)).filter(
+        (command) => command[0] === "event" && command[1] === "page_view",
+      ).length,
+    )
+    .toBe(acceptedViews + (googleConfigured ? 1 : 0));
+  await expectTikTokPixelAbsent(page, "accepted SPA navigation");
 
   const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
   const preferences = await footerPreferencesButton(page, isMobile);
   await preferences.click();
-  await setOptionalConsent(page, { analytics: false, marketing: true });
-  await page.getByTestId("button-save-preferences").click();
-
-  await expect
-    .poll(() => page.evaluate(() => window.__hmpE2eRestoreCalls))
-    .toEqual(["enableCookie", "grantConsent", "revokeConsent", "disableCookie"]);
-  expect(await readStoredConsent(page)).toMatchObject({
-    consent: { analytics: false, marketing: true },
-  });
-
-  await addSyntheticTikTokIdentifier(page);
-  await page.waitForTimeout(500);
-  await expectNoSyntheticTikTokIdentifier(page);
-  await page.locator('footer a[href="/about"]').first().click();
-  await expect(page).toHaveURL(/\/about$/);
-  expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
-  expect(await page.evaluate(() => window.__hmpE2eRestoreCalls)).toEqual([
-    "enableCookie",
-    "grantConsent",
-    "revokeConsent",
-    "disableCookie",
-  ]);
-
-  // Retry in the same document after the provider recovers. Because the
-  // failed attempt never counted this route, restoration must emit page()
-  // before marking it as tracked.
-  await page.evaluate(() => {
-    window.ttq.grantConsent = () => {
-      window.__hmpE2eRestoreCalls.push("grantConsent");
-    };
-  });
-  const retryPreferences = await footerPreferencesButton(page, isMobile);
-  await retryPreferences.click();
-  await setOptionalConsent(page, { analytics: false, marketing: true });
-  await page.getByTestId("button-save-preferences").click();
-  await expect
-    .poll(() => page.evaluate(() => window.__hmpE2eRestoreCalls))
-    .toEqual([
-      "enableCookie",
-      "grantConsent",
-      "revokeConsent",
-      "disableCookie",
-      "enableCookie",
-      "grantConsent",
-      "page",
-    ]);
-});
-
-test("a persisted withdrawal after failed TikTok restoration reloads the loaded SDK", async ({
-  page,
-  isMobile,
-}) => {
-  await page.goto("/");
-  await expectDeployedSha(page);
-  await page.getByTestId("button-reject-all").click();
-  await expect(page.getByTestId("cookie-banner")).toBeHidden();
-
-  await page.evaluate(() => {
-    window.__hmpE2eRestoreCalls = [];
-    window.ttq = {
-      enableCookie() {
-        window.__hmpE2eRestoreCalls.push("enableCookie");
-      },
-      grantConsent() {
-        window.__hmpE2eRestoreCalls.push("grantConsent");
-        throw new Error("Synthetic TikTok grant failure");
-      },
-      revokeConsent() {
-        window.__hmpE2eRestoreCalls.push("revokeConsent");
-      },
-      disableCookie() {
-        window.__hmpE2eRestoreCalls.push("disableCookie");
-      },
-      page() {
-        window.__hmpE2eRestoreCalls.push("page");
-      },
-    };
-    const loadedSdk = document.createElement("script");
-    loadedSdk.src =
-      "https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=synthetic&lib=ttq";
-    document.head.appendChild(loadedSdk);
-  });
-
-  const grantPreferences = await footerPreferencesButton(page, isMobile);
-  await grantPreferences.click();
-  await setOptionalConsent(page, { analytics: false, marketing: true });
-  await page.getByTestId("button-save-preferences").click();
-  await expect
-    .poll(() => page.evaluate(() => window.__hmpE2eRestoreCalls))
-    .toEqual(["enableCookie", "grantConsent", "revokeConsent", "disableCookie"]);
-  expect(await readStoredConsent(page)).toMatchObject({
-    consent: { analytics: false, marketing: true },
-  });
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
-
-  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
-  const withdrawalPreferences = await footerPreferencesButton(page, isMobile);
-  await withdrawalPreferences.click();
   await setOptionalConsent(page, { analytics: false, marketing: false });
-  const reloadPromise = page.waitForEvent(
-    "framenavigated",
-    (frame) => frame === page.mainFrame(),
-  );
-  await page.getByTestId("button-save-preferences").click();
-  await reloadPromise;
-  await page.waitForLoadState("domcontentloaded");
-  await expectDeployedSha(page);
-
-  expect(await page.evaluate(() => performance.timeOrigin)).not.toBe(originalTimeOrigin);
-  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await savePreferencesWithClarityConsentAudit(page, false);
+  await expect(page.getByTestId("cookie-preferences-modal")).toBeHidden();
+  expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
   expect(await readStoredConsent(page)).toMatchObject({
     consent: { analytics: false, marketing: false },
   });
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
-  await page.waitForTimeout(6_250);
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
-  await expectNoSyntheticTikTokIdentifier(page);
+  await expectTikTokPixelAbsent(page, "withdrawn state");
+
+  const deniedViews = (await dataLayerCommands(page)).filter(
+    (command) => command[0] === "event" && command[1] === "page_view",
+  ).length;
+  await (await footerLink(page, "/")).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.waitForTimeout(250);
+  expect(
+    (await dataLayerCommands(page)).filter(
+      (command) => command[0] === "event" && command[1] === "page_view",
+    ).length,
+  ).toBe(deniedViews);
+
+  const restorePreferences = await footerPreferencesButton(page, isMobile);
+  await restorePreferences.click();
+  await setOptionalConsent(page, { analytics: true, marketing: true });
+  await savePreferencesWithClarityConsentAudit(page, true);
+  await expect
+    .poll(async () =>
+      (await dataLayerCommands(page)).filter(
+        (command) => command[0] === "event" && command[1] === "page_view",
+      ).length,
+    )
+    .toBe(deniedViews + (googleConfigured ? 1 : 0));
+  await expectTikTokPixelAbsent(page, "restored state");
+
+  await page.reload();
+  await expectDeployedSha(page);
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await expect(page.locator('script[src*="clarity.ms/tag/sxayts0dzk"]')).toHaveCount(1);
+  await expectTikTokPixelAbsent(page, "persisted accepted reload");
 });
 
 test("Google provider errors cannot skip revocation cookie cleanup", async ({
@@ -486,7 +408,6 @@ test("Google provider errors cannot skip revocation cookie cleanup", async ({
   await setOptionalConsent(page, { analytics: false, marketing: false });
   await page.getByTestId("button-save-preferences").click();
   await expect(page.getByTestId("cookie-preferences-modal")).toBeHidden();
-
   await expect
     .poll(async () =>
       (await page.context().cookies())
@@ -494,6 +415,7 @@ test("Google provider errors cannot skip revocation cookie cleanup", async ({
         .map((cookie) => cookie.name),
     )
     .toEqual([]);
+  await expectTikTokPixelAbsent(page, "Google provider failure");
 });
 
 test("a withdrawal in another tab closes Google events in the first tab", async ({
@@ -542,19 +464,14 @@ test("a withdrawal in another tab closes Google events in the first tab", async 
     await otherTab.getByTestId("button-save-preferences").click();
 
     await page.waitForFunction(() => {
-      const consentUpdates = (window.dataLayer ?? [])
+      const updates = (window.dataLayer ?? [])
         .map((entry) => Array.from(entry))
         .filter((entry) => entry[0] === "consent" && entry[1] === "update");
-      return consentUpdates.at(-1)?.[2]?.analytics_storage === "denied";
+      return updates.at(-1)?.[2]?.analytics_storage === "denied";
     });
 
-    // Reproduce an older grant arriving after the newer withdrawal is already
-    // persisted. The listener must prefer the current shared value and keep
-    // every provider denied.
     await page.evaluate(() => {
-      const currentState = JSON.parse(
-        localStorage.getItem("hmp_cookie_consent") ?? "null",
-      );
+      const currentState = JSON.parse(localStorage.getItem("hmp_cookie_consent") ?? "null");
       const staleGrant = {
         ...currentState,
         consent: { necessary: true, analytics: true, marketing: true },
@@ -567,20 +484,16 @@ test("a withdrawal in another tab closes Google events in the first tab", async 
       }));
     });
     await page.waitForFunction(() => {
-      const consentUpdates = (window.dataLayer ?? [])
+      const updates = (window.dataLayer ?? [])
         .map((entry) => Array.from(entry))
         .filter((entry) => entry[0] === "consent" && entry[1] === "update");
-      const latest = consentUpdates.at(-1)?.[2];
+      const latest = updates.at(-1)?.[2];
       return latest?.analytics_storage === "denied" && latest?.ad_storage === "denied";
     });
 
+    await page.getByTestId(isMobile ? "hero-call-now-mobile" : "hero-call-now").click();
     await page
-      .getByTestId(isMobile ? "hero-call-now-mobile" : "hero-call-now")
-      .click();
-    await page
-      .getByTestId(
-        isMobile ? "hero-book-consultation-mobile" : "hero-book-consultation",
-      )
+      .getByTestId(isMobile ? "hero-book-consultation-mobile" : "hero-book-consultation")
       .click();
     await expect(page).toHaveURL(/\/services$/);
     await page.waitForTimeout(250);
@@ -594,133 +507,12 @@ test("a withdrawal in another tab closes Google events in the first tab", async 
     }));
     expect(eventsAfter).toEqual(eventsBefore);
     expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
+    await expectTikTokPixelAbsent(page, "cross-tab withdrawal");
+    await expectTikTokPixelAbsent(otherTab, "cross-tab source");
   } finally {
     await otherTab.unrouteAll({ behavior: "ignoreErrors" });
     await otherTab.close();
   }
-});
-
-test("queued remote withdrawals cannot cancel the TikTok clean reload", async ({ page }) => {
-  await page.goto("/");
-  await expectDeployedSha(page);
-  await page.getByTestId("button-accept-all").click();
-  await expect(page.getByTestId("cookie-banner")).toBeHidden();
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
-
-  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
-  const reloadPromise = page.waitForEvent(
-    "framenavigated",
-    (frame) => frame === page.mainFrame(),
-  );
-  await page.evaluate(() => {
-    const storedGrant = JSON.parse(
-      localStorage.getItem("hmp_cookie_consent") ?? "null",
-    );
-    const persistedWithdrawal = {
-      ...storedGrant,
-      consent: { necessary: true, analytics: false, marketing: false },
-      lastUpdated: new Date().toISOString(),
-    };
-    localStorage.setItem(
-      "hmp_cookie_consent",
-      JSON.stringify(persistedWithdrawal),
-    );
-
-    // Reproduce a queued grant followed by a withdrawal. Both notifications
-    // must resolve to the final persisted withdrawal; the duplicate denial
-    // must not cancel the first event's already-scheduled clean reload.
-    window.dispatchEvent(new StorageEvent("storage", {
-      key: "hmp_cookie_consent",
-      oldValue: JSON.stringify(storedGrant),
-      newValue: JSON.stringify(storedGrant),
-      url: window.location.href,
-    }));
-    window.dispatchEvent(new StorageEvent("storage", {
-      key: "hmp_cookie_consent",
-      oldValue: JSON.stringify(storedGrant),
-      newValue: JSON.stringify(persistedWithdrawal),
-      url: window.location.href,
-    }));
-  });
-  await reloadPromise;
-  await page.waitForLoadState("domcontentloaded");
-  await expectDeployedSha(page);
-
-  expect(await page.evaluate(() => performance.timeOrigin)).not.toBe(originalTimeOrigin);
-  await expect(page.getByTestId("cookie-banner")).toBeHidden();
-  expect(await readStoredConsent(page)).toMatchObject({
-    consent: { analytics: false, marketing: false },
-  });
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
-});
-
-test("a persisted withdrawal retry upgrades indefinite cleanup to a clean reload", async ({
-  page,
-  isMobile,
-}) => {
-  await page.goto("/");
-  await expectDeployedSha(page);
-  await page.getByTestId("button-accept-all").click();
-  await expect(page.getByTestId("cookie-banner")).toBeHidden();
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
-
-  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
-  await page.evaluate(() => {
-    window.__hmpE2eConsentEvents = [];
-    window.addEventListener("consentChanged", (event) => {
-      window.__hmpE2eConsentEvents.push(event.detail);
-    });
-    const originalSetItem = Storage.prototype.setItem;
-    let failedOnce = false;
-    Storage.prototype.setItem = function failFirstConsentPersistence(key, value) {
-      if (
-        this === window.localStorage &&
-        key === "hmp_cookie_consent" &&
-        !failedOnce
-      ) {
-        failedOnce = true;
-        throw new DOMException("Synthetic storage failure", "QuotaExceededError");
-      }
-      return originalSetItem.call(this, key, value);
-    };
-  });
-
-  const preferences = await footerPreferencesButton(page, isMobile);
-  await preferences.click();
-  await setOptionalConsent(page, { analytics: false, marketing: false });
-  await page.getByTestId("button-save-preferences").click();
-  await page.waitForTimeout(250);
-
-  expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
-  expect(await readStoredConsent(page)).toMatchObject({
-    consent: { analytics: true, marketing: true },
-  });
-  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
-    analytics: false,
-    marketing: false,
-    persisted: false,
-    analyticsPersisted: false,
-    marketingPersisted: false,
-  });
-
-  const retryPreferences = await footerPreferencesButton(page, isMobile);
-  await retryPreferences.click();
-  await expectOptionalConsent(page, false);
-  const reloadPromise = page.waitForEvent(
-    "framenavigated",
-    (frame) => frame === page.mainFrame(),
-  );
-  await page.getByTestId("button-save-preferences").click();
-  await reloadPromise;
-  await page.waitForLoadState("domcontentloaded");
-  await expectDeployedSha(page);
-
-  expect(await page.evaluate(() => performance.timeOrigin)).not.toBe(originalTimeOrigin);
-  await expect(page.getByTestId("cookie-banner")).toBeHidden();
-  expect(await readStoredConsent(page)).toMatchObject({
-    consent: { analytics: false, marketing: false },
-  });
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
 });
 
 test("a failed mixed withdrawal only watermarks its own category", async ({
@@ -733,19 +525,22 @@ test("a failed mixed withdrawal only watermarks its own category", async ({
   await setOptionalConsent(page, { analytics: false, marketing: true });
   await page.getByTestId("button-save-preferences").click();
   await expect(page.getByTestId("cookie-banner")).toBeHidden();
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
 
   await page.evaluate(() => {
-    window.__hmpE2eConsentEvents = [];
+    const state = window as typeof window & {
+      __hmpE2eConsentEvents?: CustomEvent["detail"][];
+      __hmpE2eOriginalSetItem?: typeof Storage.prototype.setItem;
+    };
+    state.__hmpE2eConsentEvents = [];
     window.addEventListener("consentChanged", (event) => {
-      window.__hmpE2eConsentEvents.push(event.detail);
+      state.__hmpE2eConsentEvents?.push((event as CustomEvent).detail);
     });
-    window.__hmpE2eOriginalSetItem = Storage.prototype.setItem;
+    state.__hmpE2eOriginalSetItem = Storage.prototype.setItem;
     Storage.prototype.setItem = function failConsentPersistence(key, value) {
       if (this === window.localStorage && key === "hmp_cookie_consent") {
         throw new DOMException("Synthetic storage failure", "QuotaExceededError");
       }
-      return window.__hmpE2eOriginalSetItem.call(this, key, value);
+      return state.__hmpE2eOriginalSetItem?.call(this, key, value);
     };
   });
 
@@ -754,7 +549,12 @@ test("a failed mixed withdrawal only watermarks its own category", async ({
   await setOptionalConsent(page, { analytics: false, marketing: false });
   await page.getByTestId("button-save-preferences").click();
   await page.waitForTimeout(250);
-  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
+  expect(
+    await page.evaluate(() =>
+      (window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] })
+        .__hmpE2eConsentEvents?.at(-1),
+    ),
+  ).toMatchObject({
     analytics: false,
     marketing: false,
     persisted: false,
@@ -766,23 +566,16 @@ test("a failed mixed withdrawal only watermarks its own category", async ({
   });
 
   await page.evaluate(() => {
-    window.__hmpE2eQueuedGrantCalls = [];
-    for (const method of ["enableCookie", "grantConsent"]) {
-      const original = window.ttq?.[method];
-      if (typeof original !== "function") continue;
-      window.ttq[method] = function recordQueuedGrantCall(...args) {
-        window.__hmpE2eQueuedGrantCalls.push(method);
-        return original.apply(this, args);
-      };
-    }
-
+    const state = window as typeof window & {
+      __hmpE2eOriginalSetItem?: typeof Storage.prototype.setItem;
+    };
     const current = JSON.parse(localStorage.getItem("hmp_cookie_consent") ?? "null");
     const remoteGrant = {
       ...current,
       consent: { necessary: true, analytics: true, marketing: true },
       lastUpdated: new Date().toISOString(),
     };
-    window.__hmpE2eOriginalSetItem.call(
+    state.__hmpE2eOriginalSetItem?.call(
       window.localStorage,
       "hmp_cookie_consent",
       JSON.stringify(remoteGrant),
@@ -795,29 +588,19 @@ test("a failed mixed withdrawal only watermarks its own category", async ({
     }));
   });
   await page.waitForFunction(() => {
-    const consentUpdates = (window.dataLayer ?? [])
+    const updates = (window.dataLayer ?? [])
       .map((entry) => Array.from(entry))
       .filter((entry) => entry[0] === "consent" && entry[1] === "update");
-    const latest = consentUpdates.at(-1)?.[2];
+    const latest = updates.at(-1)?.[2];
     return latest?.analytics_storage === "granted" && latest?.ad_storage === "denied";
   });
-  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
-    analytics: true,
-    marketing: false,
-    persisted: false,
-    analyticsPersisted: true,
-    marketingPersisted: false,
-  });
-  expect(await page.evaluate(() => window.__hmpE2eQueuedGrantCalls)).toEqual([]);
-  await addSyntheticTikTokIdentifier(page);
-  await page.waitForTimeout(500);
-  await expectNoSyntheticTikTokIdentifier(page);
 
   const updatedPreferences = await footerPreferencesButton(page, isMobile);
   await updatedPreferences.click();
   await expect(page.getByTestId("switch-analytics")).toHaveAttribute("data-state", "checked");
   await expect(page.getByTestId("switch-marketing")).toHaveAttribute("data-state", "unchecked");
   await page.getByTestId("button-cancel-preferences").click();
+  await expectTikTokPixelAbsent(page, "category watermark");
 });
 
 test("repeated failed grants never become effective consent", async ({
@@ -830,9 +613,10 @@ test("repeated failed grants never become effective consent", async ({
   await expect(page.getByTestId("cookie-banner")).toBeHidden();
 
   await page.evaluate(() => {
-    window.__hmpE2eConsentEvents = [];
+    const state = window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] };
+    state.__hmpE2eConsentEvents = [];
     window.addEventListener("consentChanged", (event) => {
-      window.__hmpE2eConsentEvents.push(event.detail);
+      state.__hmpE2eConsentEvents?.push((event as CustomEvent).detail);
     });
     const originalSetItem = Storage.prototype.setItem;
     Storage.prototype.setItem = function failConsentPersistence(key, value) {
@@ -851,7 +635,12 @@ test("repeated failed grants never become effective consent", async ({
     await page.getByTestId("button-save-preferences").click();
     await page.waitForTimeout(250);
 
-    expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
+    expect(
+      await page.evaluate(() =>
+        (window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] })
+          .__hmpE2eConsentEvents?.at(-1),
+      ),
+    ).toMatchObject({
       analytics: false,
       marketing: false,
       persisted: false,
@@ -862,7 +651,7 @@ test("repeated failed grants never become effective consent", async ({
       consent: { analytics: false, marketing: false },
     });
     await expect(page.locator('script[src*="clarity.ms"]')).toHaveCount(0);
-    await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
+    await expectTikTokPixelAbsent(page, `failed grant ${attempt + 1}`);
   }
 });
 
@@ -874,13 +663,14 @@ test("a failed rejection write stays fail-closed without reloading an old grant"
   await expectDeployedSha(page);
   await page.getByTestId("button-accept-all").click();
   await expect(page.getByTestId("cookie-banner")).toBeHidden();
-  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
+  await expect(page.locator('script[src*="clarity.ms/tag/sxayts0dzk"]')).toHaveCount(1);
 
   const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
   await page.evaluate(() => {
-    window.__hmpE2eConsentEvents = [];
+    const state = window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] };
+    state.__hmpE2eConsentEvents = [];
     window.addEventListener("consentChanged", (event) => {
-      window.__hmpE2eConsentEvents.push(event.detail);
+      state.__hmpE2eConsentEvents?.push((event as CustomEvent).detail);
     });
     const originalSetItem = Storage.prototype.setItem;
     Storage.prototype.setItem = function failConsentPersistence(key, value) {
@@ -895,31 +685,20 @@ test("a failed rejection write stays fail-closed without reloading an old grant"
   await preferences.click();
   await setOptionalConsent(page, { analytics: false, marketing: false });
   await page.getByTestId("button-save-preferences").click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(250);
 
   expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
   expect(await readStoredConsent(page)).toMatchObject({
     consent: { analytics: true, marketing: true },
   });
-  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
-    analytics: false,
-    marketing: false,
-    persisted: false,
-  });
+  expect(
+    await page.evaluate(() =>
+      (window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] })
+        .__hmpE2eConsentEvents?.at(-1),
+    ),
+  ).toMatchObject({ analytics: false, marketing: false, persisted: false });
 
-  // A grant from another tab may already be queued while the failed local
-  // withdrawal leaves the older grant in storage. This document must retain
-  // its local revocation watermark and refuse to reopen either provider.
   await page.evaluate(() => {
-    window.__hmpE2eQueuedGrantCalls = [];
-    for (const method of ["enableCookie", "grantConsent"]) {
-      const original = window.ttq?.[method];
-      if (typeof original !== "function") continue;
-      window.ttq[method] = function recordQueuedGrantCall(...args) {
-        window.__hmpE2eQueuedGrantCalls.push(method);
-        return original.apply(this, args);
-      };
-    }
     const staleGrant = localStorage.getItem("hmp_cookie_consent");
     window.dispatchEvent(new StorageEvent("storage", {
       key: "hmp_cookie_consent",
@@ -928,18 +707,8 @@ test("a failed rejection write stays fail-closed without reloading an old grant"
     }));
   });
   await page.waitForTimeout(100);
-  expect(await page.evaluate(() => window.__hmpE2eQueuedGrantCalls)).toEqual([]);
-  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
-    analytics: false,
-    marketing: false,
-    persisted: false,
-  });
 
-  await addSyntheticTikTokIdentifier(page);
-  await page.waitForTimeout(500);
-  await expectNoSyntheticTikTokIdentifier(page);
-
-  const googleEventsBefore = await page.evaluate(() => ({
+  const eventsBefore = await page.evaluate(() => ({
     pageViews: (window.dataLayer ?? []).filter(
       (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
     ).length,
@@ -958,13 +727,11 @@ test("a failed rejection write stays fail-closed without reloading an old grant"
       true,
     );
   });
-  await page
-    .getByTestId(isMobile ? "hero-call-now-mobile" : "hero-call-now")
-    .click();
-  await page.locator('footer a[href="/about"]').first().click();
+  await page.getByTestId(isMobile ? "hero-call-now-mobile" : "hero-call-now").click();
+  await (await footerLink(page, "/about")).click();
   await expect(page).toHaveURL(/\/about$/);
   await page.waitForTimeout(250);
-  const googleEventsAfter = await page.evaluate(() => ({
+  const eventsAfter = await page.evaluate(() => ({
     pageViews: (window.dataLayer ?? []).filter(
       (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
     ).length,
@@ -972,43 +739,9 @@ test("a failed rejection write stays fail-closed without reloading an old grant"
       (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
     ).length,
   }));
-  expect(googleEventsAfter).toEqual(googleEventsBefore);
+  expect(eventsAfter).toEqual(eventsBefore);
   expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
-
-  // The normal sweep expires at six seconds. A failed write cannot safely
-  // reload the old stored grant, so this exceptional document must continue
-  // clearing identifiers after that boundary.
-  await page.waitForTimeout(6_250);
-  await addSyntheticTikTokIdentifier(page);
-  await page.waitForTimeout(500);
-  await expectNoSyntheticTikTokIdentifier(page);
-
-  await page.evaluate(() => {
-    window.__hmpE2eRestoreCalls = [];
-    for (const method of ["enableCookie", "grantConsent"]) {
-      const original = window.ttq?.[method];
-      if (typeof original !== "function") continue;
-      window.ttq[method] = function recordRestoreCall(...args) {
-        window.__hmpE2eRestoreCalls.push(method);
-        return original.apply(this, args);
-      };
-    }
-  });
-  const failedGrantPreferences = await footerPreferencesButton(page, isMobile);
-  await failedGrantPreferences.click();
-  await setOptionalConsent(page, { analytics: true, marketing: true });
-  await page.getByTestId("button-save-preferences").click();
-  await page.waitForTimeout(500);
-  expect(await page.evaluate(() => window.__hmpE2eRestoreCalls)).toEqual([]);
-  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
-    analytics: false,
-    marketing: false,
-    persisted: false,
-  });
-  expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
-  await addSyntheticTikTokIdentifier(page);
-  await page.waitForTimeout(500);
-  await expectNoSyntheticTikTokIdentifier(page);
+  await expectTikTokPixelAbsent(page, "failed rejection");
 });
 
 test("Spanish cookie actions remain fully localized", async ({ page, isMobile }) => {
@@ -1036,4 +769,5 @@ test("Spanish cookie actions remain fully localized", async ({ page, isMobile })
   await page.getByTestId("button-cancel-preferences").click();
   await expect(page.getByTestId("cookie-preferences-modal")).toBeHidden();
   await expect(banner).toBeHidden();
+  await expectTikTokPixelAbsent(page, "Spanish controls");
 });

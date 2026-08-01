@@ -35,6 +35,7 @@ test("home demotes the embedded contact heading while contact pages keep their p
 test("the Next root restores the public runtime shell without applying it to admin", () => {
   const providers = read("app/providers.tsx");
   const shell = read("app/public-shell.tsx");
+  const trackingConfig = read("client/src/lib/tracking-config.ts");
 
   assert.match(providers, /PublicShell/);
   assert.match(shell, /pathname\.startsWith\(["']\/admin["']\)/);
@@ -52,4 +53,6 @@ test("the Next root restores the public runtime shell without applying it to adm
   ]) {
     assert.match(shell, new RegExp(runtime), `missing ${runtime} from the public shell`);
   }
+  assert.match(trackingConfig, /TIKTOK_PIXEL_SITEWIDE_ENABLED = false/);
+  assert.match(shell, /tracking config keeps the Pixel itself disabled sitewide/);
 });
