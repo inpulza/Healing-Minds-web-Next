@@ -46,11 +46,11 @@
 
 - TypeScript: PASS.
 - Guard de pageviews, conversiones, tags y cobertura de CTAs: PASS.
-- Chromium real 3/3: limpieza host/root PASS, rechazo persistido limpia cookies
+- Chromium real 4/4: limpieza host/root y domain-scoped de Preview PASS, rechazo persistido limpia cookies
   heredadas, y Google `config` precede a un solo `generate_lead` aunque el
   handler explícito y el delegado usen ubicaciones distintas. La cookie TikTok
   third-party permanece correctamente fuera del control del sitio.
-- Suite integrada: 75/75 PASS.
+- Suite integrada: 76/76 PASS.
 - Build Next con `G-WMRK41PX2E`: 89/89 rutas PASS.
 
 ## Pendiente antes de merge
@@ -67,6 +67,20 @@
 El juez independiente dio GO local final: build 89/89, revocación + 6,5 s con
 cero cookies first-party de proveedores y carrera revocar/reaceptar a 500 ms
 sin borrado tardío de cookies consentidas; consola 0 errores y 0 warnings.
+
+## Incidencia del Preview exacto `4f13daf`
+
+El deployment READY `dpl_5xsWsAKDvZuT4Tw3MwS7mSJVQWUm` demostró que Google y
+TikTok crean cookies con `Domain=.<hostname-preview>`. El evento de rechazo sí
+llegaba y el estado persistido quedaba denegado, pero la limpieza solo expiraba
+host-only y el root canónico de producción. `getCookieDomains()` incluye ahora
+el hostname actual exacto y su forma dotted; no asciende a `vercel.app` ni a
+ningún padre. En `*.healingmindsp.com` conserva además el root canónico.
+
+El auditor barre el lazy footer hasta montarlo, registra el último evento de
+consentimiento y examina dominio/path reales desde el contexto del navegador.
+El juez dio GO a la corrección: Chromium 4/4, TypeScript, guard y diff-check
+PASS. La suite integrada quedó 76/76 y el build 89/89.
 
 ## Incidencia de primer Preview
 

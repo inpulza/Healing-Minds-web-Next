@@ -94,6 +94,52 @@ test('consent cleanup removes first-party provider cookies at the canonical doma
   }
 });
 
+test('consent cleanup removes provider domain cookies on a preview host', async () => {
+  const cleanupBundle = await bundleBrowserModule(
+    fileURLToPath(new URL('../client/src/lib/cookie-cleanup.ts', import.meta.url)),
+    'CookieCleanup',
+  );
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext();
+  const previewHost = 'healing-minds-psychiatry-nextjs-test.vercel.app';
+
+  try {
+    await context.addCookies(
+      ['_ga', '_ga_WMRK41PX2E', '_gcl_au', '_ttp', 'ttcsid', 'ttcsid_D3IKI7BC77UEJB9HBO0G'].map(
+        (name) => ({
+          name,
+          value: 'preview-domain-cookie',
+          domain: `.${previewHost}`,
+          path: '/',
+          secure: true,
+          sameSite: 'Lax',
+        }),
+      ),
+    );
+
+    const page = await context.newPage();
+    await page.route(`https://${previewHost}/**`, (route) =>
+      route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Preview cookie test</title>' }),
+    );
+    await page.goto(`https://${previewHost}/cookie-test`);
+    await page.addScriptTag({ content: cleanupBundle });
+    await page.evaluate(() => {
+      window.CookieCleanup.clearFirstPartyCookies({
+        exactNames: ['_ga', '_gcl_au', '_ttp', 'ttcsid'],
+        prefixes: ['_ga_', 'ttcsid_'],
+      });
+    });
+
+    const remainingPreviewCookies = (await context.cookies()).filter(
+      (cookie) => cookie.domain.replace(/^\./, '') === previewHost,
+    );
+    assert.deepEqual(remainingPreviewCookies, []);
+  } finally {
+    await context.close();
+    await browser.close();
+  }
+});
+
 test('Google config is queued before one deduplicated outbound lead event', async () => {
   const analyticsBundle = await bundleBrowserModule(
     fileURLToPath(new URL('../client/src/lib/analytics.ts', import.meta.url)),

@@ -347,3 +347,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar el SHA, validar Preview exacto y repetir Code Review sobre ese commit.
 **Archivos tocados:** hook TikTok, guard de analytics, auditor Preview y bitácora.
 **Evidencia:** juez inicial NO-GO porque `ttcsid*` reaparecía a los cinco segundos. Juez final GO: build 89/89; revocación + 6,5 s dejó 0 cookies first-party, incluidas `ttcsid`, `ttcsid_<pixel>` y `ttclid`; revocación + reaceptación a 500 ms conservó las cookies consentidas tras 6,5 s; consola 0 errores/0 warnings. Suite integrada 75/75, TypeScript, guard, focused Chromium 5/5 y diff-check PASS.
+
+## 2026-08-01 Codex - dominio real de cookies en Vercel Preview
+**Qué se hizo:** El Preview exacto de `4f13daf` cambió correctamente el consentimiento a denegado, pero reveló cookies con `Domain=.<hostname-preview>` que la limpieza host-only/canónica no podía expirar. La utilidad incluye ahora el hostname actual exacto y dotted; el auditor monta el footer lazy mediante un scroll sweep y comprueba evento, dominio y path reales.
+**Decisiones:** No se hardcodea ni se asciende a `vercel.app`. Solo se toca el hostname donde corre la página; en subdominios de Healing Minds se añade además el root canónico existente.
+**Pendientes/bugs:** Publicar follow-up, esperar su Preview exacto READY, repetir el ciclo real y exigir Code Review sobre el nuevo SHA.
+**Archivos tocados:** cookie cleanup, test Chromium de Preview, guard, auditor Preview, evidencia y bitácora.
+**Evidencia:** `dpl_5xsWsAKDvZuT4Tw3MwS7mSJVQWUm` READY; fallo real mostró `_ga`, `_gcl_au`, `_ttp` y `ttcsid*` domain-scoped tras 6,5 s. Corrección local: juez GO, Chromium 4/4, suite 76/76, TypeScript, guard, build 89/89 y diff-check PASS.

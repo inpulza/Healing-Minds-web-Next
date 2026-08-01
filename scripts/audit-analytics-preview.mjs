@@ -22,6 +22,12 @@ const context = await browser.newContext({
 const page = await context.newPage();
 const requestedUrls = [];
 page.on('request', (request) => requestedUrls.push(request.url()));
+await page.addInitScript(() => {
+  window.__hmpConsentEvents = [];
+  window.addEventListener('consentChanged', (event) => {
+    window.__hmpConsentEvents.push(event.detail);
+  });
+});
 
 function dataLayerCommands() {
   return page.evaluate(() =>
@@ -30,8 +36,16 @@ function dataLayerCommands() {
 }
 
 async function setOptionalConsent(enabled) {
-  await page.getByTestId('footer-cookie-preferences').scrollIntoViewIfNeeded();
-  await page.getByTestId('footer-cookie-preferences').click();
+  const preferencesButton = page.getByTestId('footer-cookie-preferences');
+  // Home lazy-mounts its footer only when the low-priority boundary approaches
+  // the viewport. Sweep to the current document end until that boundary has
+  // mounted; a locator cannot scroll to an element that is not in the DOM yet.
+  for (let attempt = 0; attempt < 12 && (await preferencesButton.count()) === 0; attempt += 1) {
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(400);
+  }
+  await preferencesButton.waitFor({ state: 'visible', timeout: 10_000 });
+  await preferencesButton.click();
   await page.getByTestId('button-manage-preferences').click();
   await page.getByTestId('cookie-preferences-modal').waitFor({ state: 'visible' });
 
@@ -126,12 +140,18 @@ try {
   // Wait beyond the bounded post-revoke sweep before asserting final state.
   await page.waitForTimeout(6500);
 
-  const firstPartyProviderCookies = await page.evaluate(() =>
-    document.cookie
-      .split(';')
-      .map((cookie) => cookie.trim().split('=')[0])
-      .filter((name) => /^(?:_ga|_gid|_gat|_gcl|_gac|_cl|_ttp|_tt_|ttcsid|ttclid)/.test(name)),
+  const firstPartyProviderCookies = (await context.cookies()).filter(
+    (cookie) =>
+      new URL(previewUrl).hostname.endsWith(cookie.domain.replace(/^\./, '')) &&
+      /^(?:_ga|_gid|_gat|_gcl|_gac|_cl|_ttp|_tt_|ttcsid|ttclid)/.test(cookie.name),
   );
+  const consentEvents = await page.evaluate(() => window.__hmpConsentEvents);
+  assert.deepEqual(consentEvents.at(-1), {
+    analytics: false,
+    marketing: false,
+    hasAnalyticsConsent: false,
+    hasMarketingConsent: false,
+  });
   assert.deepEqual(
     firstPartyProviderCookies,
     [],

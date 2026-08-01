@@ -13,16 +13,19 @@ function getVisibleCookieNames(): string[] {
 }
 
 function getCookieDomains(hostname: string): string[] {
-  const normalizedHostname = hostname.toLowerCase().replace(/^www\./, '');
+  const currentHostname = hostname.toLowerCase().replace(/\.$/, '');
+  const normalizedHostname = currentHostname.replace(/^www\./, '');
+  const domains = new Set([currentHostname, `.${currentHostname}`]);
 
   if (
     normalizedHostname === PRODUCTION_COOKIE_DOMAIN ||
     normalizedHostname.endsWith(`.${PRODUCTION_COOKIE_DOMAIN}`)
   ) {
-    return [PRODUCTION_COOKIE_DOMAIN, `.${PRODUCTION_COOKIE_DOMAIN}`];
+    domains.add(PRODUCTION_COOKIE_DOMAIN);
+    domains.add(`.${PRODUCTION_COOKIE_DOMAIN}`);
   }
 
-  return [];
+  return Array.from(domains);
 }
 
 function expireCookie(name: string, domain?: string): void {
@@ -31,9 +34,11 @@ function expireCookie(name: string, domain?: string): void {
 }
 
 /**
- * Removes first-party cookies visible to the site at both host and canonical
- * Healing Minds domain scope. Third-party cookies remain under the provider's
- * control and must be disabled through that provider's consent API.
+ * Removes first-party cookies visible to the site at host-only, current-domain
+ * and canonical Healing Minds domain scope. Providers use current-domain
+ * cookies on preview hosts, while production also needs the canonical root.
+ * Third-party cookies remain under the provider's control and must be disabled
+ * through that provider's consent API.
  */
 export function clearFirstPartyCookies({
   exactNames = [],

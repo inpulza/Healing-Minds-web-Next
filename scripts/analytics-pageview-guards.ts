@@ -440,6 +440,8 @@ function checkConsentAndTagRegistry(): void {
     "utf8",
   );
   assert.match(cleanupSource, /PRODUCTION_COOKIE_DOMAIN = 'healingmindsp\.com'/);
+  assert.match(cleanupSource, /currentHostname/);
+  assert.match(cleanupSource, /new Set\(\[currentHostname, `\.\$\{currentHostname\}`\]\)/);
   assert.doesNotMatch(cleanupSource, /vercel\.app/);
 
   const analyticsSource = readFileSync(
