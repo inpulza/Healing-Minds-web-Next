@@ -52,3 +52,6 @@ jobs:
 
       - name: Admin noindex production smoke
         run: npm run seo:admin-noindex-check
+
+      - name: Heading hierarchy production smoke
+        run: npm run seo:heading-hierarchy-check

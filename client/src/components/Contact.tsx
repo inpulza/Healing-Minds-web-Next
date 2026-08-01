@@ -41,11 +41,16 @@ interface FormData {
   message: string;
 }
 
-const Contact = () => {
+interface ContactProps {
+  headingLevel?: 'h1' | 'h2';
+}
+
+const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
   const { language, t } = useLanguage();
   const { toast } = useToast();
   const { trackEvent, setTag } = useClarity();
   const { trackContactFormSubmission, trackPhoneClick } = useTikTokEvents();
+  const ContactHeading = headingLevel;
   const content = contactContent[language];
   const section = (key: string) => content.sections.find((x) => x.key === key)!;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -227,9 +232,9 @@ const Contact = () => {
     <section id="contact" className="pt-12 pb-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
+          <ContactHeading className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="contact-title">
             {renderRichText(content.title, undefined, 'font-display italic text-green-700')}
-          </h1>
+          </ContactHeading>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="contact-description">
             {t('contact.description')}
           </p>

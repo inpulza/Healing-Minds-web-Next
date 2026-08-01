@@ -450,3 +450,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar el PR pequeño, exigir Quality, Vercel READY, Code Review sobre el SHA exacto y juez final; después repetir la auditoría integrada de Producción.
 **Archivos tocados:** layout admin, robots, smoke de build, workflow Quality, contratos de prueba y bitácora.
 **Evidencia:** antes del cambio, Producción no tenía header ni meta robots en `/admin/login`; después del cambio, el build local renderiza `<meta name="robots" content="noindex, nofollow, nocache"/>` para login y editor, permite rastrear `/admin/`, bloquea `/api/admin/` y mantiene admin fuera del sitemap. Suite 88/88, TypeScript, DB 4/110/20/23, build 89/89, smoke de Producción local y diff-check PASS.
+
+## 2026-08-01 Codex - jerarquía H1 tras montar el contacto lazy
+**Qué se hizo:** La auditoría asentada de Producción reveló que la home tenía dos H1 visibles después de montar el contacto lazy: el hero y “Get in touch”. El componente Contact conserva H1 cuando es la página principal de contacto, pero acepta H2 cuando se inserta como sección dentro de las homes EN/ES.
+**Decisiones:** El nivel del encabezado se decide explícitamente desde el contexto que usa el componente; el valor por defecto sigue siendo H1 para no degradar las páginas `/contact` y `/es/contacto`. Quality monta el contacto lazy en un navegador real y comprueba las cuatro rutas después del build.
+**Pendientes/bugs:** Exigir juez, Quality, Vercel READY y CodeX sobre el SHA exacto; repetir la auditoría integrada asentada sobre la nueva Producción.
+**Archivos tocados:** componente Contact, homes EN/ES, smoke de jerarquía, workflow Quality, contratos de prueba y bitácora.
+**Evidencia:** antes del cambio, home asentada: `hero-title` H1 + `contact-title` H1. Después: homes EN/ES tienen un único H1 `hero-title` y `contact-title` H2; páginas Contact EN/ES conservan un único H1 `contact-title`. Suite 90/90, TypeScript, DB 4/110/20/23, build 89/89, smokes admin y headings, diff-check PASS.

@@ -80,7 +80,7 @@ const HomeEspanol = () => {
           <LazyForPatients />
         </SuspenseWrapper>
         <SuspenseWrapper priority="medium">
-          <LazyContact />
+          <LazyContact headingLevel="h2" />
         </SuspenseWrapper>
       </main>
       <SuspenseWrapper priority="low">
