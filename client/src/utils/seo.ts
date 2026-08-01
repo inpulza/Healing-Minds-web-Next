@@ -101,6 +101,13 @@ function createLinkTag(rel: string, href: string) {
 }
 
 export const updateSEO = (data: SEOData) => {
+  // Next App Router owns every route's metadata through metadataForPath() and
+  // generateMetadata(). Removing or recreating those nodes here disconnects
+  // React's managed head tree and aborts client navigation with removeChild.
+  // The explicit layout marker keeps this legacy helper available only to the
+  // standalone Vite runtime while making Next the single metadata authority.
+  if (document.documentElement.dataset.metadataOwner === 'next') return;
+
   // CRITICAL: Remove ALL existing SEO meta tags before adding new ones to prevent duplicates
   // This is essential for SPA navigation where multiple route changes could accumulate tags
   

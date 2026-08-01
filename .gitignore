@@ -35,3 +35,6 @@ attached_assets/healing-minds-rendered_*.json
 _arnes/evidencia/visual/*
 !_arnes/evidencia/visual/PRIORITY-AUDIT.md
 _arnes/verify/
+playwright-report/
+test-results/
+artifacts/

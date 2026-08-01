@@ -26,6 +26,13 @@ export const metadata: Metadata = {
   title: "Expert Psychiatric Care in Naples, FL | Healing Minds Psychiatry",
   description:
     "Compassionate psychiatric care for anxiety, depression, ADHD, PTSD and medication management in Naples, Florida.",
+  other: {
+    "healing-build-sha":
+      process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ||
+      process.env.VERCEL_GIT_COMMIT_SHA ||
+      process.env.GITHUB_SHA ||
+      "local",
+  },
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -33,7 +40,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const language = pathname === "/es" || pathname.startsWith("/es/") ? "es" : "en";
 
   return (
-    <html lang={language} className={`${instrumentSans.variable} ${playfairDisplay.variable}`}>
+    <html
+      lang={language}
+      data-metadata-owner="next"
+      className={`${instrumentSans.variable} ${playfairDisplay.variable}`}
+    >
       <body>
         <Providers>{children}</Providers>
       </body>

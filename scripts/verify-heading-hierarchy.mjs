@@ -130,6 +130,7 @@ try {
     await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
     const loadingOverlay = fallbackPage.getByTestId("google-maps-loading-contact");
     await loadingOverlay.waitFor({ state: "visible", timeout: 5_000 });
+    await fallbackPage.getByTestId("google-maps-contact").scrollIntoViewIfNeeded();
     await Promise.race([
       heldMapStarted,
       new Promise((_, reject) => setTimeout(() => reject(new Error("Google Maps request was not held")), 5_000)),

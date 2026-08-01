@@ -12,6 +12,14 @@ test("CI installs the Chromium runtime required by browser-backed tests", () => 
   );
 });
 
+test("CI runs browser end-to-end journeys against the production build", () => {
+  assert.match(workflow, /npm run test:e2e/);
+  assert.ok(
+    workflow.indexOf("npm run build") < workflow.indexOf("npm run test:e2e"),
+    "browser E2E must use the completed production build",
+  );
+});
+
 test("CI verifies the rendered admin noindex contract after the production build", () => {
   assert.match(workflow, /npm run seo:admin-noindex-check/);
   assert.ok(

@@ -50,6 +50,9 @@ jobs:
       - name: Production build
         run: npm run build
 
+      - name: Browser end-to-end tests
+        run: npm run test:e2e
+
       - name: Admin noindex production smoke
         run: npm run seo:admin-noindex-check
 
