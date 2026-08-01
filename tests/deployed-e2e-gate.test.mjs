@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
 import test from "node:test";
 
 const {
@@ -45,4 +46,12 @@ test("deployed E2E records a valid HTTPS target and exact SHA", () => {
   });
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, new RegExp(`target=https://preview\\.example\\.test expectedSha=${sha}`));
+});
+
+test("Preview credentials are scoped to the deployment origin", () => {
+  const spec = fs.readFileSync("e2e/navigation.spec.ts", "utf8");
+  const config = fs.readFileSync("playwright.config.ts", "utf8");
+  assert.doesNotMatch(config, /extraHTTPHeaders/);
+  assert.match(spec, /page\.route\(`\$\{deploymentOrigin\}\/\*\*`/);
+  assert.match(spec, /credentialLeaks/);
 });
