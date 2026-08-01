@@ -70,11 +70,14 @@ async function footerPreferencesButton(page: Page, isMobile: boolean) {
   return button;
 }
 
-async function setOptionalConsent(page: Page, enabled: boolean) {
-  for (const category of ["analytics", "marketing"]) {
+async function setOptionalConsent(
+  page: Page,
+  consent: { analytics: boolean; marketing: boolean },
+) {
+  for (const category of ["analytics", "marketing"] as const) {
     const toggle = page.getByTestId(`switch-${category}`);
     const checked = (await toggle.getAttribute("data-state")) === "checked";
-    if (checked !== enabled) {
+    if (checked !== consent[category]) {
       await toggle.click();
     }
   }
@@ -129,7 +132,7 @@ test("accepted visitors can reopen, cancel and withdraw consent", async ({ page,
   await preferences.click();
   await expect(modal).toBeVisible();
   await expect(banner).toBeHidden();
-  await setOptionalConsent(page, false);
+  await setOptionalConsent(page, { analytics: false, marketing: false });
   await page.getByRole("button", { name: "Close" }).click();
   await expect(modal).toBeHidden();
   await expect(banner).toBeHidden();
@@ -137,7 +140,7 @@ test("accepted visitors can reopen, cancel and withdraw consent", async ({ page,
   await preferences.click();
   await expect(modal).toBeVisible();
   await expectOptionalConsent(page, true);
-  await setOptionalConsent(page, false);
+  await setOptionalConsent(page, { analytics: false, marketing: false });
   await page.getByTestId("button-cancel-preferences").click();
   await expect(modal).toBeHidden();
   await expect(banner).toBeHidden();
@@ -145,15 +148,55 @@ test("accepted visitors can reopen, cancel and withdraw consent", async ({ page,
   await preferences.click();
   await expect(modal).toBeVisible();
   await expectOptionalConsent(page, true);
-  await setOptionalConsent(page, false);
+  await setOptionalConsent(page, { analytics: true, marketing: false });
   await page.getByTestId("button-save-preferences").click();
   await expect(modal).toBeHidden();
   await expect(banner).toBeHidden();
   expect(await readStoredConsent(page)).toMatchObject({
     hasConsented: true,
-    consent: { necessary: true, analytics: false, marketing: false },
+    consent: { necessary: true, analytics: true, marketing: false },
   });
 
   await page.reload();
+  await expect(banner).toBeHidden();
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: true, marketing: false },
+  });
+
+  await page.goto("/about");
+  await expect(banner).toBeHidden();
+  await page.goBack();
+  await expect(banner).toBeHidden();
+  await page.goForward();
+  await expect(banner).toBeHidden();
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: true, marketing: false },
+  });
+});
+
+test("Spanish cookie actions remain fully localized", async ({ page, isMobile }) => {
+  await page.goto("/es");
+  await expectDeployedSha(page);
+
+  const banner = page.getByTestId("cookie-banner");
+  await expect(banner).toBeVisible();
+  await expect(page.getByTestId("button-manage-preferences")).toContainText(
+    "Gestionar Preferencias",
+  );
+  await page.getByTestId("button-manage-preferences").click();
+  await expect(page.getByTestId("button-cancel-preferences")).toHaveText("Cancelar");
+  await page.getByTestId("button-cancel-preferences").click();
+  await expect(banner).toBeVisible();
+  await expect(page.getByTestId("button-reject-all")).toHaveText("Rechazar Todo");
+  await page.getByTestId("button-reject-all").click();
+  await expect(banner).toBeHidden();
+
+  const preferences = await footerPreferencesButton(page, isMobile);
+  await preferences.click();
+  await expect(page.getByTestId("cookie-preferences-modal")).toBeVisible();
+  await expect(banner).toBeHidden();
+  await expect(page.getByTestId("button-cancel-preferences")).toHaveText("Cancelar");
+  await page.getByTestId("button-cancel-preferences").click();
+  await expect(page.getByTestId("cookie-preferences-modal")).toBeHidden();
   await expect(banner).toBeHidden();
 });

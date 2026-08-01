@@ -108,6 +108,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
       cookiePreferences: 'Cookie Preferences',
       preferencesDescription: 'Choose which cookies you want to allow. You can change these settings at any time.',
       savePreferences: 'Save Preferences',
+      cancel: 'Cancel',
       category: 'Category',
       status: 'Status',
       required: 'Required',
@@ -127,6 +128,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
       cookiePreferences: 'Preferencias de Cookies',
       preferencesDescription: 'Elija qué cookies desea permitir. Puede cambiar estas configuraciones en cualquier momento.',
       savePreferences: 'Guardar Preferencias',
+      cancel: 'Cancelar',
       category: 'Categoría',
       status: 'Estado',
       required: 'Requerido',
@@ -289,7 +291,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
                 onClick={closePreferences}
                 data-testid="button-cancel-preferences"
               >
-                Cancel
+                {tr.cancel}
               </Button>
               <Button 
                 onClick={handleSavePreferences}
