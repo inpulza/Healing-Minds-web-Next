@@ -88,6 +88,17 @@ test("analytics Preview audit validates auth scope and the delayed revoke window
   assert.match(audit, /page\.waitForTimeout\(500\)/);
   assert.match(audit, /_tt_enable_cookie/);
   assert.match(audit, /sessionStorage\.getItem\('__hmpTikTokConsentCalls'\)/);
+  const withdrawalProxy = audit.indexOf('const instrumentedProvider = new Proxy({}, {');
+  const atomicSaveClick = audit.indexOf('saveButton.click()', withdrawalProxy);
+  assert.ok(
+    withdrawalProxy >= 0 && withdrawalProxy < atomicSaveClick,
+    'TikTok withdrawal controls must be proxied and clicked in one browser task',
+  );
+  assert.match(audit, /window\.ttq = instrumentedProvider/);
+  assert.match(audit, /if \(window\.ttq !== instrumentedProvider\)/);
+  assert.match(audit, /Reflect\.apply\(value, provider, args\)/);
+  assert.match(audit, /setOptionalConsent\(false, \{ auditTikTokWithdrawal: true \}\)/);
+  assert.match(audit, /\['revokeConsent', 'disableCookie'\]/);
   assert.match(audit, /framenavigated/);
   assert.match(audit, /const enableCookieIndex = restoredCalls\.lastIndexOf\('enableCookie'\)/);
   assert.match(audit, /enableCookieIndex < grantConsentIndex && grantConsentIndex < restoredPageIndex/);

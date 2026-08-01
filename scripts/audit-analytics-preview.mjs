@@ -101,7 +101,59 @@ function dataLayerCommands() {
   );
 }
 
-async function setOptionalConsent(enabled) {
+async function savePreferencesWithTikTokWithdrawalAudit() {
+  // Capture the provider controls and dispatch the React click in one browser
+  // task. TikTok's async SDK cannot replace the proxied provider view in
+  // between, which makes this proof deterministic without assuming that the
+  // mere presence of events.js means the provider has finished loading.
+  return page.evaluate(() => {
+    window.__hmpTikTokConsentCalls = [];
+    sessionStorage.setItem('__hmpTikTokConsentCalls', '[]');
+    const provider = window.ttq;
+    const controls = new Set(['revokeConsent', 'disableCookie']);
+    if (!provider) {
+      throw new Error('TikTok provider is unavailable before withdrawal');
+    }
+    for (const method of controls) {
+      if (typeof provider[method] !== 'function') {
+        throw new Error(`TikTok ${method} control is unavailable before withdrawal`);
+      }
+    }
+
+    // The live SDK exposes consent methods as protected properties, so direct
+    // assignment can silently leave its originals in place. Proxy reads made
+    // by our hook instead and delegate each call back to the untouched SDK.
+    const instrumentedProvider = new Proxy({}, {
+      get(_target, property) {
+        const value = provider[property];
+        if (!controls.has(property) || typeof value !== 'function') {
+          return value;
+        }
+        return (...args) => {
+          window.__hmpTikTokConsentCalls.push(property);
+          sessionStorage.setItem(
+            '__hmpTikTokConsentCalls',
+            JSON.stringify(window.__hmpTikTokConsentCalls),
+          );
+          return Reflect.apply(value, provider, args);
+        };
+      },
+    });
+    window.ttq = instrumentedProvider;
+    if (window.ttq !== instrumentedProvider) {
+      throw new Error('TikTok provider could not be instrumented');
+    }
+
+    const saveButton = document.querySelector('[data-testid="button-save-preferences"]');
+    if (!(saveButton instanceof HTMLButtonElement)) {
+      throw new Error('Cookie preference save button is unavailable');
+    }
+    saveButton.click();
+    return JSON.parse(sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]');
+  });
+}
+
+async function setOptionalConsent(enabled, { auditTikTokWithdrawal = false } = {}) {
   const preferencesButton = page.getByTestId('footer-cookie-preferences');
   // Home lazy-mounts its footer only when the low-priority boundary approaches
   // the viewport. Sweep to the current document end until that boundary has
@@ -123,11 +175,28 @@ async function setOptionalConsent(enabled) {
   }
   const reloadPromise = enabled
     ? null
-    : page.waitForEvent('framenavigated', (frame) => frame === page.mainFrame());
-  await page.getByTestId('button-save-preferences').click();
+    : page
+        .waitForEvent('framenavigated', (frame) => frame === page.mainFrame())
+        .catch((error) => {
+          if (page.isClosed()) return null;
+          throw error;
+        });
+  let immediateCalls = null;
+  if (auditTikTokWithdrawal) {
+    immediateCalls = await savePreferencesWithTikTokWithdrawalAudit();
+  } else {
+    await page.getByTestId('button-save-preferences').click();
+  }
   if (reloadPromise) {
     await reloadPromise;
     await page.waitForLoadState('domcontentloaded');
+  }
+  if (auditTikTokWithdrawal) {
+    assert.deepEqual(
+      immediateCalls,
+      ['revokeConsent', 'disableCookie'],
+      'TikTok withdrawal must synchronously revoke data sharing before disabling cookies',
+    );
   }
   await page.getByTestId('cookie-banner').waitFor({ state: 'hidden' });
 }
@@ -195,23 +264,6 @@ try {
     { timeout: 15_000 },
   );
 
-  await page.evaluate(() => {
-    window.__hmpTikTokConsentCalls = [];
-    sessionStorage.setItem('__hmpTikTokConsentCalls', '[]');
-    for (const method of ['revokeConsent', 'disableCookie', 'enableCookie', 'grantConsent']) {
-      const original = window.ttq?.[method];
-      if (typeof original !== 'function') continue;
-      window.ttq[method] = function instrumentedTikTokConsent(...args) {
-        window.__hmpTikTokConsentCalls.push(method);
-        sessionStorage.setItem(
-          '__hmpTikTokConsentCalls',
-          JSON.stringify(window.__hmpTikTokConsentCalls),
-        );
-        return original.apply(this, args);
-      };
-    }
-  });
-
   const acceptedState = await page.evaluate(() =>
     JSON.parse(localStorage.getItem('hmp_cookie_consent') ?? 'null'),
   );
@@ -222,7 +274,7 @@ try {
   );
   assert.equal(acceptedPageViews.length, 1, 'initial acceptance must emit one pageview');
 
-  await setOptionalConsent(false);
+  await setOptionalConsent(false, { auditTikTokWithdrawal: true });
   const rejectedState = await page.evaluate(() =>
     JSON.parse(localStorage.getItem('hmp_cookie_consent') ?? 'null'),
   );
@@ -272,14 +324,16 @@ try {
     hasAnalyticsConsent: false,
     hasMarketingConsent: false,
     persisted: true,
+    analyticsPersisted: true,
+    marketingPersisted: true,
   });
   const revokeCalls = await page.evaluate(() =>
     JSON.parse(sessionStorage.getItem('__hmpTikTokConsentCalls') ?? '[]'),
   );
-  assert.ok(revokeCalls.indexOf('revokeConsent') >= 0, 'TikTok revokeConsent must run');
-  assert.ok(
-    revokeCalls.indexOf('revokeConsent') < revokeCalls.indexOf('disableCookie'),
-    'TikTok data sharing must stop before first-party cookies are disabled',
+  assert.deepEqual(
+    revokeCalls,
+    ['revokeConsent', 'disableCookie'],
+    'TikTok must revoke data sharing before disabling first-party cookies',
   );
 
   // The clean document has no TikTok SDK, but retains the provider opt-out

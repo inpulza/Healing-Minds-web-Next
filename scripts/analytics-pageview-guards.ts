@@ -399,9 +399,9 @@ function checkConsentAndTagRegistry(): void {
     new URL("../client/src/contexts/CookieConsentContext.tsx", import.meta.url),
     "utf8",
   );
-  assert.match(consentContextSource, /saveConsent[\s\S]*?: boolean =>/);
-  assert.match(consentContextSource, /const analytics = persisted && consent\.analytics/);
-  assert.match(consentContextSource, /const marketing = persisted && consent\.marketing/);
+  assert.match(consentContextSource, /const saveConsent = useCallback/);
+  assert.match(consentContextSource, /const analytics = effective\.analytics/);
+  assert.match(consentContextSource, /const marketing = effective\.marketing/);
   assert.match(consentContextSource, /detail: createConsentEventDetail\(/);
 
   const nextShellSource = readFileSync(
@@ -492,10 +492,37 @@ function checkConsentAndTagRegistry(): void {
   assert.match(tiktokSource, /POST_REVOKE_CLEANUP_WINDOW_MS = 6000/);
   assert.match(tiktokSource, /reloadAfterLoadedPixelRevoke/);
   assert.match(tiktokSource, /window\.location\.reload\(\)/);
+  const stopCleanupStart = tiktokSource.indexOf('function stopPostRevokeCookieCleanup');
+  const stopCleanupEnd = tiktokSource.indexOf(
+    'function cancelPostRevokeReload',
+    stopCleanupStart,
+  );
+  assert.doesNotMatch(
+    tiktokSource.slice(stopCleanupStart, stopCleanupEnd),
+    /postRevokeReloadTimeout/,
+    'a duplicate withdrawal cleanup must not cancel an already-scheduled clean reload',
+  );
+  assert.match(tiktokSource, /function cancelPostRevokeReload\(\)/);
   assert.match(
     tiktokSource,
-    /const shouldReload = !globalConsentRevoked && globalTikTokInitialized/,
-    'a first-visit rejection must not reload when the Pixel never loaded',
+    /restoreTikTokProviderConsent\(window\.ttq\);\s*stopPostRevokeCookieCleanup\(\);\s*cancelPostRevokeReload\(\)/,
+    'successful provider restoration must explicitly cancel any pending withdrawal reload',
+  );
+  assert.match(
+    tiktokSource,
+    /const shouldReload =\s*persistenceSucceeded &&\s*globalTikTokSdkLoaded &&\s*postRevokeReloadTimeout === null/,
+    'only a persisted withdrawal with a loaded Pixel and no pending reload may schedule the clean reload',
+  );
+  assert.match(tiktokSource, /let globalTikTokSdkLoaded = false/);
+  assert.match(
+    tiktokSource,
+    /ttq\.load\(TIKTOK_PIXEL_ID\);\s*globalTikTokSdkLoaded = true/,
+    'injecting the provider must record SDK presence independently from consent readiness',
+  );
+  assert.match(
+    tiktokSource,
+    /if \(alreadyLoaded\) \{\s*globalTikTokSdkLoaded = true;\s*if \(restoreProviderConsent\)/,
+    'an existing provider must stay marked as loaded even when consent restoration throws',
   );
   assert.match(
     tiktokSource,
@@ -519,6 +546,11 @@ function checkConsentAndTagRegistry(): void {
     tiktokSource,
     /keepTikTokCookiesClearedAfterRevoke\(persistenceSucceeded\)/,
     "a failed rejection write must keep the current document fail-closed",
+  );
+  assert.match(
+    tiktokSource,
+    /const persistenceSucceeded = marketingPersisted \?\? persisted !== false/,
+    'TikTok cleanup expiry must use marketing-specific persistence',
   );
   assert.match(
     tiktokSource,
@@ -585,7 +617,7 @@ function checkConsentAndTagRegistry(): void {
 
   assert.match(consentContextSource, /const \[isHydrated, setIsHydrated\] = useState\(false\)/);
   assert.match(consentContextSource, /finally \{\s*setIsHydrated\(true\)/);
-  assert.match(consentContextSource, /function removeStoredConsentSafely\(\): void/);
+  assert.match(consentContextSource, /function removeStoredConsentSafely\(\): boolean/);
   assert.match(
     consentContextSource,
     /catch \(error\) \{[\s\S]*?removeStoredConsentSafely\(\);[\s\S]*?finally \{/,
@@ -599,9 +631,43 @@ function checkConsentAndTagRegistry(): void {
   );
   assert.match(
     consentContextSource,
-    /setConsentState\(nextState\);[\s\S]*?detail: createConsentEventDetail\(nextState\.consent, true\)/,
+    /setConsentState\(nextState\);[\s\S]*?detail: createConsentEventDetail\([\s\S]*?nextState\.consent,[\s\S]*?!hasFailedLocalRevocation,[\s\S]*?analytics: !failedLocalRevocations\.analytics,[\s\S]*?marketing: !failedLocalRevocations\.marketing/,
     'cross-tab storage changes must update the UI and rebroadcast the effective provider decision',
   );
+  assert.match(consentContextSource, /failedLocalRevocationsRef/);
+  assert.match(
+    consentContextSource,
+    /failedLocalRevocations\.analytics[\s\S]*?analytics: failedLocalRevocations\.analytics[\s\S]*?marketing: failedLocalRevocations\.marketing/,
+    'queued remote grants must preserve categories from a failed local withdrawal',
+  );
+  assert.match(
+    consentContextSource,
+    /localStorage\.setItem\(STORAGE_KEY, JSON\.stringify\(newState\)\);\s*failedLocalRevocationsRef\.current = \{ analytics: false, marketing: false \}/,
+    'only a successfully persisted local choice may clear the local withdrawal watermark',
+  );
+  assert.match(
+    consentContextSource,
+    /previousEffectiveConsent\.analytics && !newState\.consent\.analytics/,
+    'an unchanged denied category must not be misclassified as a failed local withdrawal',
+  );
+  assert.match(consentContextSource, /const effectiveConsentRef = useRef<CookieConsent>/);
+  assert.match(
+    consentContextSource,
+    /const previousEffectiveConsent = effectiveConsentRef\.current;[\s\S]*?effectiveConsentRef\.current = effectiveConsent/,
+    'repeated failed grants must be evaluated against the last effective decision, not draft UI state',
+  );
+  assert.match(
+    consentContextSource,
+    /previousEffectiveConsent\.marketing === newState\.consent\.marketing/,
+    'a repeated unpersisted marketing grant must remain marked as unpersisted',
+  );
+  assert.match(
+    consentContextSource,
+    /setConsentState\(\{ \.\.\.newState, consent: saveResult\.effectiveConsent \}\)/,
+    'the preferences UI must reflect the effective decision after a failed write',
+  );
+  assert.match(consentContextSource, /analyticsPersisted: categoryPersistence\.analytics/);
+  assert.match(consentContextSource, /marketingPersisted: categoryPersistence\.marketing/);
 
   const dialogSource = readFileSync(
     new URL("../client/src/components/ui/dialog.tsx", import.meta.url),

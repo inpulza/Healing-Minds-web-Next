@@ -387,6 +387,77 @@ test("a partial TikTok restoration rolls back and remains fail-closed", async ({
     ]);
 });
 
+test("a persisted withdrawal after failed TikTok restoration reloads the loaded SDK", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-reject-all").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+
+  await page.evaluate(() => {
+    window.__hmpE2eRestoreCalls = [];
+    window.ttq = {
+      enableCookie() {
+        window.__hmpE2eRestoreCalls.push("enableCookie");
+      },
+      grantConsent() {
+        window.__hmpE2eRestoreCalls.push("grantConsent");
+        throw new Error("Synthetic TikTok grant failure");
+      },
+      revokeConsent() {
+        window.__hmpE2eRestoreCalls.push("revokeConsent");
+      },
+      disableCookie() {
+        window.__hmpE2eRestoreCalls.push("disableCookie");
+      },
+      page() {
+        window.__hmpE2eRestoreCalls.push("page");
+      },
+    };
+    const loadedSdk = document.createElement("script");
+    loadedSdk.src =
+      "https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=synthetic&lib=ttq";
+    document.head.appendChild(loadedSdk);
+  });
+
+  const grantPreferences = await footerPreferencesButton(page, isMobile);
+  await grantPreferences.click();
+  await setOptionalConsent(page, { analytics: false, marketing: true });
+  await page.getByTestId("button-save-preferences").click();
+  await expect
+    .poll(() => page.evaluate(() => window.__hmpE2eRestoreCalls))
+    .toEqual(["enableCookie", "grantConsent", "revokeConsent", "disableCookie"]);
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: false, marketing: true },
+  });
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
+
+  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
+  const withdrawalPreferences = await footerPreferencesButton(page, isMobile);
+  await withdrawalPreferences.click();
+  await setOptionalConsent(page, { analytics: false, marketing: false });
+  const reloadPromise = page.waitForEvent(
+    "framenavigated",
+    (frame) => frame === page.mainFrame(),
+  );
+  await page.getByTestId("button-save-preferences").click();
+  await reloadPromise;
+  await page.waitForLoadState("domcontentloaded");
+  await expectDeployedSha(page);
+
+  expect(await page.evaluate(() => performance.timeOrigin)).not.toBe(originalTimeOrigin);
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: false, marketing: false },
+  });
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
+  await page.waitForTimeout(6_250);
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
+  await expectNoSyntheticTikTokIdentifier(page);
+});
+
 test("Google provider errors cannot skip revocation cookie cleanup", async ({
   page,
   isMobile,
@@ -529,6 +600,272 @@ test("a withdrawal in another tab closes Google events in the first tab", async 
   }
 });
 
+test("queued remote withdrawals cannot cancel the TikTok clean reload", async ({ page }) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-accept-all").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
+
+  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
+  const reloadPromise = page.waitForEvent(
+    "framenavigated",
+    (frame) => frame === page.mainFrame(),
+  );
+  await page.evaluate(() => {
+    const storedGrant = JSON.parse(
+      localStorage.getItem("hmp_cookie_consent") ?? "null",
+    );
+    const persistedWithdrawal = {
+      ...storedGrant,
+      consent: { necessary: true, analytics: false, marketing: false },
+      lastUpdated: new Date().toISOString(),
+    };
+    localStorage.setItem(
+      "hmp_cookie_consent",
+      JSON.stringify(persistedWithdrawal),
+    );
+
+    // Reproduce a queued grant followed by a withdrawal. Both notifications
+    // must resolve to the final persisted withdrawal; the duplicate denial
+    // must not cancel the first event's already-scheduled clean reload.
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: "hmp_cookie_consent",
+      oldValue: JSON.stringify(storedGrant),
+      newValue: JSON.stringify(storedGrant),
+      url: window.location.href,
+    }));
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: "hmp_cookie_consent",
+      oldValue: JSON.stringify(storedGrant),
+      newValue: JSON.stringify(persistedWithdrawal),
+      url: window.location.href,
+    }));
+  });
+  await reloadPromise;
+  await page.waitForLoadState("domcontentloaded");
+  await expectDeployedSha(page);
+
+  expect(await page.evaluate(() => performance.timeOrigin)).not.toBe(originalTimeOrigin);
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: false, marketing: false },
+  });
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
+});
+
+test("a persisted withdrawal retry upgrades indefinite cleanup to a clean reload", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-accept-all").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
+
+  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
+  await page.evaluate(() => {
+    window.__hmpE2eConsentEvents = [];
+    window.addEventListener("consentChanged", (event) => {
+      window.__hmpE2eConsentEvents.push(event.detail);
+    });
+    const originalSetItem = Storage.prototype.setItem;
+    let failedOnce = false;
+    Storage.prototype.setItem = function failFirstConsentPersistence(key, value) {
+      if (
+        this === window.localStorage &&
+        key === "hmp_cookie_consent" &&
+        !failedOnce
+      ) {
+        failedOnce = true;
+        throw new DOMException("Synthetic storage failure", "QuotaExceededError");
+      }
+      return originalSetItem.call(this, key, value);
+    };
+  });
+
+  const preferences = await footerPreferencesButton(page, isMobile);
+  await preferences.click();
+  await setOptionalConsent(page, { analytics: false, marketing: false });
+  await page.getByTestId("button-save-preferences").click();
+  await page.waitForTimeout(250);
+
+  expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: true, marketing: true },
+  });
+  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
+    analytics: false,
+    marketing: false,
+    persisted: false,
+    analyticsPersisted: false,
+    marketingPersisted: false,
+  });
+
+  const retryPreferences = await footerPreferencesButton(page, isMobile);
+  await retryPreferences.click();
+  await expectOptionalConsent(page, false);
+  const reloadPromise = page.waitForEvent(
+    "framenavigated",
+    (frame) => frame === page.mainFrame(),
+  );
+  await page.getByTestId("button-save-preferences").click();
+  await reloadPromise;
+  await page.waitForLoadState("domcontentloaded");
+  await expectDeployedSha(page);
+
+  expect(await page.evaluate(() => performance.timeOrigin)).not.toBe(originalTimeOrigin);
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: false, marketing: false },
+  });
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
+});
+
+test("a failed mixed withdrawal only watermarks its own category", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-manage-preferences").click();
+  await setOptionalConsent(page, { analytics: false, marketing: true });
+  await page.getByTestId("button-save-preferences").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(1);
+
+  await page.evaluate(() => {
+    window.__hmpE2eConsentEvents = [];
+    window.addEventListener("consentChanged", (event) => {
+      window.__hmpE2eConsentEvents.push(event.detail);
+    });
+    window.__hmpE2eOriginalSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function failConsentPersistence(key, value) {
+      if (this === window.localStorage && key === "hmp_cookie_consent") {
+        throw new DOMException("Synthetic storage failure", "QuotaExceededError");
+      }
+      return window.__hmpE2eOriginalSetItem.call(this, key, value);
+    };
+  });
+
+  const preferences = await footerPreferencesButton(page, isMobile);
+  await preferences.click();
+  await setOptionalConsent(page, { analytics: false, marketing: false });
+  await page.getByTestId("button-save-preferences").click();
+  await page.waitForTimeout(250);
+  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
+    analytics: false,
+    marketing: false,
+    persisted: false,
+    analyticsPersisted: true,
+    marketingPersisted: false,
+  });
+  expect(await readStoredConsent(page)).toMatchObject({
+    consent: { analytics: false, marketing: true },
+  });
+
+  await page.evaluate(() => {
+    window.__hmpE2eQueuedGrantCalls = [];
+    for (const method of ["enableCookie", "grantConsent"]) {
+      const original = window.ttq?.[method];
+      if (typeof original !== "function") continue;
+      window.ttq[method] = function recordQueuedGrantCall(...args) {
+        window.__hmpE2eQueuedGrantCalls.push(method);
+        return original.apply(this, args);
+      };
+    }
+
+    const current = JSON.parse(localStorage.getItem("hmp_cookie_consent") ?? "null");
+    const remoteGrant = {
+      ...current,
+      consent: { necessary: true, analytics: true, marketing: true },
+      lastUpdated: new Date().toISOString(),
+    };
+    window.__hmpE2eOriginalSetItem.call(
+      window.localStorage,
+      "hmp_cookie_consent",
+      JSON.stringify(remoteGrant),
+    );
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: "hmp_cookie_consent",
+      oldValue: JSON.stringify(current),
+      newValue: JSON.stringify(remoteGrant),
+      url: window.location.href,
+    }));
+  });
+  await page.waitForFunction(() => {
+    const consentUpdates = (window.dataLayer ?? [])
+      .map((entry) => Array.from(entry))
+      .filter((entry) => entry[0] === "consent" && entry[1] === "update");
+    const latest = consentUpdates.at(-1)?.[2];
+    return latest?.analytics_storage === "granted" && latest?.ad_storage === "denied";
+  });
+  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
+    analytics: true,
+    marketing: false,
+    persisted: false,
+    analyticsPersisted: true,
+    marketingPersisted: false,
+  });
+  expect(await page.evaluate(() => window.__hmpE2eQueuedGrantCalls)).toEqual([]);
+  await addSyntheticTikTokIdentifier(page);
+  await page.waitForTimeout(500);
+  await expectNoSyntheticTikTokIdentifier(page);
+
+  const updatedPreferences = await footerPreferencesButton(page, isMobile);
+  await updatedPreferences.click();
+  await expect(page.getByTestId("switch-analytics")).toHaveAttribute("data-state", "checked");
+  await expect(page.getByTestId("switch-marketing")).toHaveAttribute("data-state", "unchecked");
+  await page.getByTestId("button-cancel-preferences").click();
+});
+
+test("repeated failed grants never become effective consent", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-reject-all").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+
+  await page.evaluate(() => {
+    window.__hmpE2eConsentEvents = [];
+    window.addEventListener("consentChanged", (event) => {
+      window.__hmpE2eConsentEvents.push(event.detail);
+    });
+    const originalSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function failConsentPersistence(key, value) {
+      if (this === window.localStorage && key === "hmp_cookie_consent") {
+        throw new DOMException("Synthetic storage failure", "QuotaExceededError");
+      }
+      return originalSetItem.call(this, key, value);
+    };
+  });
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const preferences = await footerPreferencesButton(page, isMobile);
+    await preferences.click();
+    await expectOptionalConsent(page, false);
+    await setOptionalConsent(page, { analytics: true, marketing: true });
+    await page.getByTestId("button-save-preferences").click();
+    await page.waitForTimeout(250);
+
+    expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
+      analytics: false,
+      marketing: false,
+      persisted: false,
+      analyticsPersisted: false,
+      marketingPersisted: false,
+    });
+    expect(await readStoredConsent(page)).toMatchObject({
+      consent: { analytics: false, marketing: false },
+    });
+    await expect(page.locator('script[src*="clarity.ms"]')).toHaveCount(0);
+    await expect(page.locator('script[src*="analytics.tiktok.com"]')).toHaveCount(0);
+  }
+});
+
 test("a failed rejection write stays fail-closed without reloading an old grant", async ({
   page,
   isMobile,
@@ -564,6 +901,34 @@ test("a failed rejection write stays fail-closed without reloading an old grant"
   expect(await readStoredConsent(page)).toMatchObject({
     consent: { analytics: true, marketing: true },
   });
+  expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
+    analytics: false,
+    marketing: false,
+    persisted: false,
+  });
+
+  // A grant from another tab may already be queued while the failed local
+  // withdrawal leaves the older grant in storage. This document must retain
+  // its local revocation watermark and refuse to reopen either provider.
+  await page.evaluate(() => {
+    window.__hmpE2eQueuedGrantCalls = [];
+    for (const method of ["enableCookie", "grantConsent"]) {
+      const original = window.ttq?.[method];
+      if (typeof original !== "function") continue;
+      window.ttq[method] = function recordQueuedGrantCall(...args) {
+        window.__hmpE2eQueuedGrantCalls.push(method);
+        return original.apply(this, args);
+      };
+    }
+    const staleGrant = localStorage.getItem("hmp_cookie_consent");
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: "hmp_cookie_consent",
+      newValue: staleGrant,
+      url: window.location.href,
+    }));
+  });
+  await page.waitForTimeout(100);
+  expect(await page.evaluate(() => window.__hmpE2eQueuedGrantCalls)).toEqual([]);
   expect(await page.evaluate(() => window.__hmpE2eConsentEvents.at(-1))).toMatchObject({
     analytics: false,
     marketing: false,
