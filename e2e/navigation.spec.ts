@@ -417,4 +417,42 @@ test("sitemap XML preserves blog alternates, dates and priority", async ({ page 
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
   expect(new Set(locs).size).toBe(locCount);
   expect(locCount - postBlocks.length).toBe(74);
+
+  const publishedPosts = await page.evaluate(async () => {
+    const posts: Array<{ slug: string; language: string }> = [];
+    for (const language of ["en", "es"] as const) {
+      for (let pageIndex = 0; pageIndex < 10; pageIndex += 1) {
+        const response = await fetch(
+          `/api/blog/posts?language=${language}&limit=100&offset=${pageIndex * 100}`,
+        );
+        const body = (await response.json()) as {
+          success?: boolean;
+          data?: Array<{ slug: string; language: string }>;
+        };
+        if (!response.ok || body.success !== true || !Array.isArray(body.data)) {
+          throw new Error(`Published blog API failed for ${language} page ${pageIndex + 1}`);
+        }
+        posts.push(...body.data);
+        if (body.data.length < 100) break;
+        if (pageIndex === 9) {
+          throw new Error(`Published blog API exceeded the audited ${language} pagination bound`);
+        }
+      }
+    }
+    return posts;
+  });
+  expect(publishedPosts.length).toBeGreaterThan(0);
+  const publishedPaths = publishedPosts.map((post) =>
+    post.language === "es"
+      ? `/es/blog/${encodeURIComponent(post.slug)}`
+      : `/blog/${encodeURIComponent(post.slug)}`,
+  );
+  const sitemapPostPaths = postBlocks.map((block) => {
+    const absolute = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
+    if (!absolute) throw new Error("Sitemap blog entry has no loc");
+    return new URL(absolute).pathname;
+  });
+  expect([...new Set(sitemapPostPaths)].sort()).toEqual(
+    [...new Set(publishedPaths)].sort(),
+  );
 });

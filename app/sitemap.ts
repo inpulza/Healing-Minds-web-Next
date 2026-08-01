@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getSitemapEntries } from "@shared/routeManifest";
+import blogSnapshot from "@shared/blog-snapshot.json";
 import { buildBlogSitemapEntries } from "../server/blog/sitemap-entries.mjs";
 
 const ORIGIN = "https://www.healingmindsp.com";
@@ -57,15 +58,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   );
 
+  type SitemapPost = Parameters<typeof buildBlogSitemapEntries>[1][number];
+  let publishedPosts: SitemapPost[] = Object.values(blogSnapshot);
+
   if (process.env.DATABASE_URL) {
     try {
       const { getBlogPosts } = await import("../server/blog/storage");
-      const posts = await getBlogPosts({ status: "published", limit: 1000, offset: 0 });
-      routes.push(...buildBlogSitemapEntries(ORIGIN, posts));
+      publishedPosts = await getBlogPosts({ status: "published", limit: 1000, offset: 0 });
     } catch (error) {
-      console.error("Dynamic blog sitemap entries unavailable", error);
+      // Throwing during ISR preserves the last successfully generated sitemap
+      // and lets Next retry, instead of caching a degraded snapshot for 24h.
+      console.error("Dynamic blog sitemap entries unavailable; preserving last valid sitemap", error);
+      throw error;
     }
   }
+  routes.push(...buildBlogSitemapEntries(ORIGIN, publishedPosts));
 
   return routes;
 }

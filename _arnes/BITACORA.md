@@ -576,3 +576,24 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar este follow-up, repetir Quality y CodeX sobre su SHA exacto, validar la nueva Preview, fusionar por GitHub, auditar producción y solo entonces retirar apex/www de Replit.
 **Archivos tocados:** sitemap Next, auditor Preview, scroll nativo, contratos unitarios, decisiones y bitácora.
 **Evidencia:** 77/77 URLs vivas responden 200 con canonical y hreflang correctos; missing y extras estáticos vacíos. El auditor real estricto pasó `denied -> accepted -> rejected -> accepted`, pageviews 0/1/2/3 y 1 tras reload, un lead, Clarity `[false,true]` y cero requests TikTok. Build 89/89 expone `/sitemap.xml` con revalidate 1d; Playwright local 30/30 PASS en desktop y mobile, incluidos XML serializado y reduced motion reales.
+
+## 2026-08-02 Codex - sitemap fail-closed frente a publicaciones conocidas
+**Qué se hizo:** La revisión CodeX del SHA `1da26e05` detectó que el E2E aceptaba cero posts si la consulta de sitemap fallaba. El sitemap usa ahora el snapshot publicado como fallback cuando no existe `DATABASE_URL` o Neon falla. El E2E pagina la API pública en inglés y español y exige igualdad exacta entre cada slug publicado y cada `<loc>` de artículo.
+**Decisiones:** Las 74 rutas fijas no sustituyen las publicaciones conocidas. API y sitemap deben degradar al mismo snapshot, y una diferencia de conteo o URL falla el navegador en cerrado.
+**Pendientes/bugs:** Commit/push del follow-up, repetir Quality, CodeX y Preview exacta; resolver el hilo P1 solo después de esa evidencia.
+**Archivos tocados:** sitemap Next, E2E de sitemap, contrato SEO, decisiones y bitácora.
+**Evidencia:** TypeScript PASS, 11/11 contratos focalizados, build 89/89 con sitemap revalidate 1d y Playwright local 30/30 PASS. El build local sin base de datos produjo las tres publicaciones del snapshot y el E2E las cruzó con la API pública en desktop y mobile.
+
+## 2026-08-02 Codex - preservación del último sitemap ISR válido
+**Qué se hizo:** Un juez detectó que convertir un fallo de Neon en una respuesta snapshot podía reemplazar el ISR bueno durante 24 horas. El fallback queda limitado a entornos sin base configurada. Con `DATABASE_URL`, cualquier error se registra y relanza para que Next conserve el último sitemap generado y reintente la revalidación.
+**Decisiones:** Una indisponibilidad transitoria no debe publicar ni cachear una versión degradada. El snapshot sigue garantizando 77 URLs en builds deliberadamente sin base; producción con Neon falla en cerrado y conserva el último ISR.
+**Pendientes/bugs:** Repetir gates focalizados y jueces; después commit/push, Quality, CodeX y Preview exacta.
+**Archivos tocados:** sitemap, contrato SEO, decisiones y bitácora.
+**Evidencia:** Pendiente de la validación posterior a esta entrada.
+
+## 2026-08-02 Codex - validación del fail-closed ISR del sitemap
+**Qué se hizo:** Se verificó la estrategia final: snapshot únicamente sin base configurada; error relanzado con Neon configurado; comparación API-sitemap intacta.
+**Decisiones:** El follow-up queda candidato a publicar solo después de una nueva pasada de jueces sin P0-P2.
+**Pendientes/bugs:** Commit/push, Quality, CodeX y Preview exacta; después clasificar y resolver el hilo vigente.
+**Archivos tocados:** bitácora.
+**Evidencia:** TypeScript PASS, 11/11 contratos focalizados, build 89/89 con sitemap ISR 1d y E2E XML 2/2 PASS en desktop y mobile. La batería completa inmediatamente anterior de este mismo follow-up pasó 105/105 unitarios y 30/30 E2E.

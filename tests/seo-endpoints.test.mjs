@@ -29,5 +29,8 @@ test("blog sitemap preserves the historical hreflang contract", () => {
 
   assert.match(sitemap, /"x-default": `\$\{ORIGIN\}\/blog`/);
   assert.match(sitemap, /export const revalidate = 86400/);
-  assert.match(sitemap, /buildBlogSitemapEntries\(ORIGIN, posts\)/);
+  assert.match(sitemap, /Object\.values\(blogSnapshot\)/);
+  assert.match(sitemap, /preserving last valid sitemap/);
+  assert.match(sitemap, /catch \(error\)[\s\S]*throw error/);
+  assert.match(sitemap, /buildBlogSitemapEntries\(ORIGIN, publishedPosts\)/);
 });
