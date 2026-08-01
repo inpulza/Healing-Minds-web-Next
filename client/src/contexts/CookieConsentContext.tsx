@@ -17,6 +17,7 @@ interface CookieConsentProviderProps {
 
 export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ children }) => {
   const [consentState, setConsentState] = useState<CookieConsentState>(DEFAULT_CONSENT_STATE);
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
 
   // Load consent from localStorage on initialization
   useEffect(() => {
@@ -68,6 +69,7 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     };
     
     setConsentState(newState);
+    setPreferencesOpen(false);
     saveConsent(newState);
     
     // Trigger granular consent update event
@@ -98,6 +100,7 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     };
     
     setConsentState(newState);
+    setPreferencesOpen(false);
     saveConsent(newState);
     
     // Trigger granular consent event if any consent changed
@@ -128,6 +131,7 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     };
     
     setConsentState(newState);
+    setPreferencesOpen(false);
     saveConsent(newState);
     
     // Trigger granular consent update event
@@ -173,12 +177,14 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
     }));
   }, [consentState, saveConsent]);
 
-  // Show preferences modal
+  // Open preferences directly. This is separate from the first-visit banner so
+  // footer users can review or withdraw consent without reopening two layers.
   const showPreferences = useCallback(() => {
-    setConsentState(prev => ({
-      ...prev,
-      showBanner: true,
-    }));
+    setPreferencesOpen(true);
+  }, []);
+
+  const closePreferences = useCallback(() => {
+    setPreferencesOpen(false);
   }, []);
 
   // Hide banner
@@ -193,6 +199,7 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
   const resetConsent = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
     setConsentState(DEFAULT_CONSENT_STATE);
+    setPreferencesOpen(false);
     
     // Trigger granular consent reset event
     window.dispatchEvent(new CustomEvent('consentChanged', { 
@@ -229,11 +236,13 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
 
   const contextValue: CookieConsentContextType = {
     consentState,
+    preferencesOpen,
     acceptAll,
     acceptSelected,
     rejectAll,
     updateConsent,
     showPreferences,
+    closePreferences,
     hideBanner,
     resetConsent,
     hasConsent,

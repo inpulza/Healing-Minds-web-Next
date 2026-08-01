@@ -4,24 +4,58 @@ import { chromium } from 'playwright';
 const previewUrl = process.argv[2];
 const oidcToken = process.env.VERCEL_OIDC_TOKEN;
 
-if (!previewUrl || !previewUrl.startsWith('https://')) {
+let parsedPreviewUrl;
+try {
+  parsedPreviewUrl = new URL(previewUrl);
+} catch {
+  parsedPreviewUrl = null;
+}
+
+if (
+  !parsedPreviewUrl ||
+  parsedPreviewUrl.protocol !== 'https:' ||
+  !parsedPreviewUrl.hostname.endsWith('.vercel.app')
+) {
   throw new Error('Usage: node --env-file=.env.local scripts/audit-analytics-preview.mjs <preview-url>');
 }
 if (!oidcToken) {
   throw new Error('VERCEL_OIDC_TOKEN is required; run vercel link for the real project first.');
 }
 
+const previewOrigin = parsedPreviewUrl.origin;
+
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({
   viewport: { width: 1440, height: 1000 },
-  extraHTTPHeaders: {
-    'x-vercel-trusted-oidc-idp-token': oidcToken,
-  },
 });
 
 const page = await context.newPage();
 const requestedUrls = [];
+const credentialLeaks = [];
 page.on('request', (request) => requestedUrls.push(request.url()));
+page.on('request', (request) => {
+  if (new URL(request.url()).origin === previewOrigin) return;
+  const headers = request.headers();
+  if (headers['x-vercel-trusted-oidc-idp-token']) {
+    credentialLeaks.push(request.url());
+  }
+});
+await page.route(`${previewOrigin}/**`, async (route) => {
+  let response;
+  try {
+    response = await route.fetch({
+      headers: {
+        ...(await route.request().allHeaders()),
+        'x-vercel-trusted-oidc-idp-token': oidcToken,
+      },
+      maxRedirects: 0,
+    });
+  } catch {
+    const pathname = new URL(route.request().url()).pathname;
+    throw new Error(`Preview authentication fetch failed for ${pathname}.`);
+  }
+  await route.fulfill({ response });
+});
 await page.addInitScript(() => {
   window.__hmpConsentEvents = [];
   window.addEventListener('consentChanged', (event) => {
@@ -46,7 +80,6 @@ async function setOptionalConsent(enabled) {
   }
   await preferencesButton.waitFor({ state: 'visible', timeout: 10_000 });
   await preferencesButton.click();
-  await page.getByTestId('button-manage-preferences').click();
   await page.getByTestId('cookie-preferences-modal').waitFor({ state: 'visible' });
 
   for (const category of ['analytics', 'marketing']) {
@@ -62,7 +95,7 @@ async function setOptionalConsent(enabled) {
 
 try {
   await page.goto(previewUrl, { waitUntil: 'domcontentloaded' });
-  assert.equal(new URL(page.url()).hostname.endsWith('vercel.app'), true);
+  assert.equal(new URL(page.url()).hostname.endsWith('.vercel.app'), true);
   assert.notEqual(new URL(page.url()).hostname, 'vercel.com', 'preview auth was not bypassed');
 
   const banner = page.getByTestId('cookie-banner');
@@ -123,6 +156,18 @@ try {
     { timeout: 15_000 },
   );
 
+  await page.evaluate(() => {
+    window.__hmpTikTokConsentCalls = [];
+    for (const method of ['revokeConsent', 'disableCookie', 'enableCookie', 'grantConsent']) {
+      const original = window.ttq?.[method];
+      if (typeof original !== 'function') continue;
+      window.ttq[method] = function instrumentedTikTokConsent(...args) {
+        window.__hmpTikTokConsentCalls.push(method);
+        return original.apply(this, args);
+      };
+    }
+  });
+
   const acceptedState = await page.evaluate(() =>
     JSON.parse(localStorage.getItem('hmp_cookie_consent') ?? 'null'),
   );
@@ -136,15 +181,37 @@ try {
   assert.equal(rejectedState.consent.analytics, false);
   assert.equal(rejectedState.consent.marketing, false);
 
-  // The already-loaded TikTok SDK can recreate ttcsid briefly after revoke.
-  // Wait beyond the bounded post-revoke sweep before asserting final state.
-  await page.waitForTimeout(6500);
+  const firstPartyDomainCookie = (cookie) =>
+    parsedPreviewUrl.hostname.endsWith(cookie.domain.replace(/^\./, ''));
+  const providerIdentifier = (cookie) =>
+    /^(?:_ga|_gid|_gat|_gcl|_gac|_cl|_ttp$|_ttp_pixel$|_tt_sessionId$|_tt_pixel_session_index$|_tt_appInfo$|ttcsid(?:_|$)|ttclid$)/.test(
+      cookie.name,
+    );
 
-  const firstPartyProviderCookies = (await context.cookies()).filter(
-    (cookie) =>
-      new URL(previewUrl).hostname.endsWith(cookie.domain.replace(/^\./, '')) &&
-      /^(?:_ga|_gid|_gat|_gcl|_gac|_cl|_ttp|_tt_|ttcsid|ttclid)/.test(cookie.name),
-  );
+  // Sample the whole delayed-recreation window, rather than checking only the
+  // final instant. A regression at seven or twelve seconds must be observable.
+  for (let sample = 0; sample < 60; sample += 1) {
+    const elapsedMs = sample * 500;
+    const currentCookies = (await context.cookies()).filter(firstPartyDomainCookie);
+    const identifiers = currentCookies
+      .filter(providerIdentifier)
+      .map(({ name, domain }) => ({ name, domain }));
+    assert.deepEqual(
+      identifiers,
+      [],
+      `provider identifiers reappeared ${elapsedMs}ms after revocation`,
+    );
+
+    const optOutMarker = currentCookies.find((cookie) => cookie.name === '_tt_enable_cookie');
+    if (optOutMarker) {
+      assert.equal(optOutMarker.value, '0', `TikTok opt-out marker changed after ${elapsedMs}ms`);
+    }
+
+    if (sample < 59) {
+      await page.waitForTimeout(500);
+    }
+  }
+
   const consentEvents = await page.evaluate(() => window.__hmpConsentEvents);
   assert.deepEqual(consentEvents.at(-1), {
     analytics: false,
@@ -152,10 +219,11 @@ try {
     hasAnalyticsConsent: false,
     hasMarketingConsent: false,
   });
-  assert.deepEqual(
-    firstPartyProviderCookies,
-    [],
-    'revocation must clear visible first-party provider cookies',
+  const revokeCalls = await page.evaluate(() => window.__hmpTikTokConsentCalls);
+  assert.ok(revokeCalls.indexOf('revokeConsent') >= 0, 'TikTok revokeConsent must run');
+  assert.ok(
+    revokeCalls.indexOf('revokeConsent') < revokeCalls.indexOf('disableCookie'),
+    'TikTok data sharing must stop before first-party cookies are disabled',
   );
 
   await setOptionalConsent(true);
@@ -163,6 +231,12 @@ try {
     const state = JSON.parse(localStorage.getItem('hmp_cookie_consent') ?? 'null');
     return state?.consent?.analytics && state?.consent?.marketing;
   });
+  const restoredCalls = await page.evaluate(() => window.__hmpTikTokConsentCalls);
+  assert.ok(restoredCalls.indexOf('enableCookie') >= 0, 'TikTok enableCookie must run on reaccept');
+  assert.ok(
+    restoredCalls.indexOf('enableCookie') < restoredCalls.indexOf('grantConsent'),
+    'TikTok cookies must be enabled before consent is granted again',
+  );
 
   // Prevent the external tel protocol while allowing React and document bubble
   // handlers to process the same native click.
@@ -195,6 +269,7 @@ try {
   assert.ok(requestedUrls.some((url) => url.includes('googletagmanager.com/gtag/js?id=G-WMRK41PX2E')));
   assert.ok(requestedUrls.some((url) => url.includes('clarity.ms')));
   assert.ok(requestedUrls.some((url) => url.includes('analytics.tiktok.com')));
+  assert.deepEqual(credentialLeaks, [], 'Preview credentials must never reach third parties');
 
   console.log(
     JSON.stringify({
@@ -207,6 +282,7 @@ try {
     }),
   );
 } finally {
+  await page.unrouteAll({ behavior: 'ignoreErrors' });
   await context.close();
   await browser.close();
 }

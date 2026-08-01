@@ -215,6 +215,15 @@ export type LeadSource =
 
 let lastLeadKey: string | null = null;
 let lastLeadTimestamp = 0;
+const CLINIC_PHONE_DIGITS = '12394230272';
+
+function isClinicPhoneHref(href: string): boolean {
+  if (!href.startsWith('tel:')) {
+    return false;
+  }
+
+  return href.slice(4).replace(/\D/g, '') === CLINIC_PHONE_DIGITS;
+}
 
 /**
  * Records a lead action. Appointment clicks are intentionally treated as lead
@@ -267,7 +276,7 @@ export function installOutboundLeadTracking(): () => void {
       link.getAttribute('aria-label') ||
       'outbound_link';
 
-    if (href.startsWith('tel:')) {
+    if (href.startsWith('tel:') && isClinicPhoneHref(href)) {
       trackLeadConversion('phone_call', { click_location: clickLocation });
     } else if (href.startsWith('mailto:')) {
       trackLeadConversion('email', { click_location: clickLocation });

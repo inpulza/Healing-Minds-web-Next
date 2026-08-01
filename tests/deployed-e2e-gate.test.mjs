@@ -62,3 +62,18 @@ test("Preview credentials are scoped to the deployment origin", () => {
   assert.match(spec, /Preview authentication fetch failed/);
   assert.match(spec, /credentialLeaks/);
 });
+
+test("analytics Preview audit validates auth scope and the delayed revoke window", () => {
+  const audit = fs.readFileSync("scripts/audit-analytics-preview.mjs", "utf8");
+  const hostValidation = audit.indexOf("hostname.endsWith('.vercel.app')");
+  const browserLaunch = audit.indexOf("chromium.launch");
+
+  assert.ok(hostValidation >= 0 && hostValidation < browserLaunch);
+  assert.doesNotMatch(audit, /extraHTTPHeaders/);
+  assert.match(audit, /page\.route\(`\$\{previewOrigin\}\/\*\*`/);
+  assert.match(audit, /maxRedirects:\s*0/);
+  assert.match(audit, /sample < 60/);
+  assert.match(audit, /page\.waitForTimeout\(500\)/);
+  assert.match(audit, /_tt_enable_cookie/);
+  assert.match(audit, /credentialLeaks/);
+});

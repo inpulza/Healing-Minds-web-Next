@@ -180,6 +180,14 @@ test('Google config is queued before one deduplicated outbound lead event', asyn
       });
       document.body.appendChild(phoneLink);
       phoneLink.click();
+
+      const hotlineLink = document.createElement('a');
+      hotlineLink.href = 'tel:+18009853059';
+      hotlineLink.id = 'federal_hotline';
+      hotlineLink.addEventListener('click', (event) => event.preventDefault());
+      document.body.appendChild(hotlineLink);
+      hotlineLink.click();
+
       removeDelegatedTracking();
       return window.dataLayer.map((entry) => Array.from(entry));
     });
@@ -200,6 +208,11 @@ test('Google config is queued before one deduplicated outbound lead event', asyn
       leadCommands.length,
       1,
       'one real click with different explicit/delegated locations must not double count',
+    );
+    assert.notEqual(
+      leadCommands[0][2].click_location,
+      'federal_hotline',
+      'a federal assistance line must not be reported as a clinic lead',
     );
     assert.equal(leadCommands[0][2].transport_type, 'beacon');
   } finally {

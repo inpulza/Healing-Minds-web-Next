@@ -419,12 +419,23 @@ function checkConsentAndTagRegistry(): void {
   );
   assert.match(tiktokSource, /useTikTokPixel\(manageConsentLifecycle = false\)/);
   assert.match(tiktokSource, /window\.ttq\.revokeConsent\(\)/);
+  assert.match(tiktokSource, /window\.ttq\.disableCookie\(\)/);
+  assert.match(tiktokSource, /window\.ttq\.enableCookie\(\)/);
+  assert.match(tiktokSource, /window\.ttq\.grantConsent\(\)/);
   assert.match(tiktokSource, /clearFirstPartyCookies/);
   for (const cookieName of ["ttcsid", "ttcsid_", "ttclid"]) {
     assert.match(tiktokSource, new RegExp(cookieName));
   }
   assert.match(tiktokSource, /window\.setInterval/);
   assert.match(tiktokSource, /POST_REVOKE_CLEANUP_WINDOW_MS = 6000/);
+  const clearTikTokStart = tiktokSource.indexOf('function clearTikTokCookies');
+  const clearTikTokEnd = tiktokSource.indexOf('function stopPostRevokeCookieCleanup');
+  const clearTikTokSource = tiktokSource.slice(clearTikTokStart, clearTikTokEnd);
+  assert.doesNotMatch(
+    clearTikTokSource,
+    /_tt_enable_cookie/,
+    'the TikTok opt-out marker must survive identifier cleanup',
+  );
   assert.match(
     tiktokSource,
     /globalConsentRevoked && !hasMarketingConsent\(\)/,

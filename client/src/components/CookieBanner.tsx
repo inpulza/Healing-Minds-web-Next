@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Settings, Shield, BarChart, Target, Info } from 'lucide-react';
+import { Settings, Shield, BarChart, Target, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -14,15 +14,25 @@ interface CookieBannerProps {
 }
 
 const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
-  const { consentState, acceptAll, rejectAll, acceptSelected, hideBanner } = useCookieConsent();
-  const { language, t } = useLanguage();
-  const [showPreferences, setShowPreferences] = useState(false);
+  const {
+    consentState,
+    preferencesOpen,
+    acceptAll,
+    rejectAll,
+    acceptSelected,
+    showPreferences,
+    closePreferences,
+  } = useCookieConsent();
+  const { language } = useLanguage();
   const [tempConsent, setTempConsent] = useState<CookieConsent>(consentState.consent);
 
-  // Update temp consent when consent state changes
+  // Every opening starts from the persisted choice. Closing a draft with X or
+  // Cancel must not make those unsaved switches reappear on the next opening.
   useEffect(() => {
-    setTempConsent(consentState.consent);
-  }, [consentState.consent]);
+    if (preferencesOpen) {
+      setTempConsent(consentState.consent);
+    }
+  }, [consentState.consent, preferencesOpen]);
 
   const cookieCategories = [
     {
@@ -77,7 +87,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
 
   const handleSavePreferences = () => {
     acceptSelected(tempConsent);
-    setShowPreferences(false);
+    closePreferences();
   };
 
   const handleAcceptAll = () => {
@@ -131,71 +141,73 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
 
   const tr = translations[language];
 
-  // Don't show banner if user has already consented or explicitly hidden it
-  if (consentState.hasConsented && !consentState.showBanner) {
-    return null;
-  }
+  const shouldShowBanner = !consentState.hasConsented || consentState.showBanner;
 
   return (
     <>
       {/* Cookie Banner */}
-      <div 
-        className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-[10000] ${className}`}
-        data-testid="cookie-banner"
-      >
-        <div className="container mx-auto p-4">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-            <div className="flex-1">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 mt-1">
-                  <Info className="h-5 w-5 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1" data-testid="banner-title">
-                    {tr.bannerTitle}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300" data-testid="banner-description">
-                    {tr.bannerDescription}
-                  </p>
+      {shouldShowBanner ? (
+        <div
+          className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-[10000] ${className}`}
+          data-testid="cookie-banner"
+        >
+          <div className="container mx-auto p-4">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 mt-1">
+                    <Info className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1" data-testid="banner-title">
+                      {tr.bannerTitle}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300" data-testid="banner-description">
+                      {tr.bannerDescription}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-2 min-w-fit">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowPreferences(true)}
-                data-testid="button-manage-preferences"
-                className="whitespace-nowrap"
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                {tr.managePreferences}
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={handleRejectAll}
-                data-testid="button-reject-all"
-                className="whitespace-nowrap"
-              >
-                {tr.rejectAll}
-              </Button>
-              <Button 
-                size="sm"
-                onClick={handleAcceptAll}
-                data-testid="button-accept-all"
-                className="bg-green-700 hover:bg-green-800 whitespace-nowrap"
-              >
-                {tr.acceptAll}
-              </Button>
+
+              <div className="flex flex-col sm:flex-row gap-2 min-w-fit">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={showPreferences}
+                  data-testid="button-manage-preferences"
+                  className="whitespace-nowrap"
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  {tr.managePreferences}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRejectAll}
+                  data-testid="button-reject-all"
+                  className="whitespace-nowrap"
+                >
+                  {tr.rejectAll}
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleAcceptAll}
+                  data-testid="button-accept-all"
+                  className="bg-green-700 hover:bg-green-800 whitespace-nowrap"
+                >
+                  {tr.acceptAll}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : null}
 
       {/* Cookie Preferences Modal */}
-      <Dialog open={showPreferences} onOpenChange={setShowPreferences}>
+      <Dialog
+        open={preferencesOpen}
+        onOpenChange={(open) => (open ? showPreferences() : closePreferences())}
+      >
         <DialogContent
           overlayClassName="z-[10001]"
           className="z-[10002] max-w-4xl max-h-[90vh] overflow-y-auto"
@@ -274,7 +286,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
             <div className="flex gap-2">
               <Button 
                 variant="outline" 
-                onClick={() => setShowPreferences(false)}
+                onClick={closePreferences}
                 data-testid="button-cancel-preferences"
               >
                 Cancel

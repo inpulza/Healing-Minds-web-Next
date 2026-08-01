@@ -94,7 +94,6 @@ function clearTikTokCookies(): void {
   clearFirstPartyCookies({
     exactNames: [
       '_ttp',
-      '_tt_enable_cookie',
       '_ttp_pixel',
       '_tt_sessionId',
       '_tt_pixel_session_index',
@@ -284,21 +283,32 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
   // different instance performed the initialization.
   const revokeTikTokPixel = useCallback(() => {
     if (!globalConsentRevoked) {
+      // Fail closed before calling provider code. If the SDK throws, every
+      // app-owned page/event wrapper must still stop immediately.
+      consentRevoked.current = true;
+      globalConsentRevoked = true;
+      if (globalTikTokInitialized) {
+        bumpConsentGeneration();
+      }
+
       try {
         if (window.ttq && typeof window.ttq.revokeConsent === 'function') {
           window.ttq.revokeConsent();
         }
-        consentRevoked.current = true;
-        globalConsentRevoked = true;
-        // Invalidate the page-view dedupe key exactly once per revocation (this
-        // block is guarded by globalConsentRevoked, so only the first listener
-        // runs it). If consent comes back on this same route, the visit must be
-        // counted again.
-        if (globalTikTokInitialized) {
-          bumpConsentGeneration();
-        }
       } catch (error) {
         console.error('Error revoking TikTok Pixel consent:', error);
+      }
+
+      // Empirical SDK hardening: Consent Mode stops data sharing, while this
+      // cookie API prevents the already-loaded SDK from recreating first-party
+      // identifiers several seconds later. Preserve its _tt_enable_cookie=0
+      // opt-out marker in clearTikTokCookies().
+      try {
+        if (window.ttq && typeof window.ttq.disableCookie === 'function') {
+          window.ttq.disableCookie();
+        }
+      } catch (error) {
+        console.error('Error disabling TikTok Pixel cookies:', error);
       }
     }
     keepTikTokCookiesClearedAfterRevoke();
@@ -328,27 +338,40 @@ export function useTikTokPixel(manageConsentLifecycle = false) {
       const marketingGranted = marketing ?? hasMarketingConsent;
       
       if (marketingGranted) {
-        // Reset revoked state and initialize if not already done
         stopPostRevokeCookieCleanup();
-        consentRevoked.current = false;
-        globalConsentRevoked = false;
-        if (!initialized.current && !globalTikTokInitialized) {
+        if (!globalTikTokInitialized) {
+          // No SDK exists yet, so the persisted grant can safely open the local
+          // gate before first initialization.
+          consentRevoked.current = false;
+          globalConsentRevoked = false;
           initTikTokPixel();
         } else {
-          // Re-enable tracking if it was previously revoked
+          // For an already-loaded SDK, remain fail-closed until both provider
+          // controls have been restored successfully.
           try {
-            if (globalTikTokInitialized && window.ttq && typeof window.ttq.grantConsent === 'function') {
-              window.ttq.grantConsent();
-              console.log('🎵 TikTok Pixel consent restored - marketing tracking enabled');
-              // The route effect only reacts to location changes, so restoring
-              // consent without navigating would never emit a view for the page
-              // the visitor is actually on. The revocation already invalidated
-              // the dedupe key, so the first listener to run emits and every
-              // other mounted instance is a no-op.
-              emitTikTokPageView(locationRef.current);
+            if (
+              !window.ttq ||
+              typeof window.ttq.enableCookie !== 'function' ||
+              typeof window.ttq.grantConsent !== 'function'
+            ) {
+              throw new Error('TikTok consent controls are unavailable');
             }
+
+            window.ttq.enableCookie();
+            window.ttq.grantConsent();
+            consentRevoked.current = false;
+            globalConsentRevoked = false;
+            console.log('🎵 TikTok Pixel consent restored - marketing tracking enabled');
+            // The route effect only reacts to location changes, so restoring
+            // consent without navigating would never emit a view for the page
+            // the visitor is actually on. The revocation already invalidated
+            // the dedupe key, so the first listener to run emits and every
+            // other mounted instance is a no-op.
+            emitTikTokPageView(locationRef.current);
           } catch (error) {
             console.error('Error restoring TikTok Pixel consent:', error);
+            consentRevoked.current = true;
+            globalConsentRevoked = true;
           }
         }
       } else {
