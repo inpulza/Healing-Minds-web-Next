@@ -64,3 +64,14 @@ test("route scroll stays native and respects reduced-motion preferences", () => 
   assert.match(scrollHook, /behavior: shouldReduceMotion \? ['"]auto['"] : ['"]smooth['"]/);
   assert.doesNotMatch(scrollHook, /lenis/i);
 });
+
+test("the telehealth widget keeps its interactions without shipping an animation runtime", () => {
+  const widget = read("client/src/components/TelehealthVideoWidget.tsx");
+
+  assert.doesNotMatch(widget, /framer-motion|AnimatePresence|<motion\./);
+  assert.match(widget, /animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4/);
+  assert.match(widget, /transition-transform hover:scale-105 active:scale-95/);
+  assert.match(widget, /if \(event\.key === ['"]Escape['"]\) collapse\(\)/);
+  assert.match(widget, /trackLeadConversion\(['"]appointment_booking['"]/);
+  assert.match(widget, /trackLeadConversion\(['"]phone_call['"]/);
+});

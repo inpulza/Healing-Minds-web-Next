@@ -52,6 +52,7 @@ const InsuranceLogos = () => {
   const firstRow = insuranceLogos.slice(0, 5);   // First 5 logos
   const secondRow = insuranceLogos.slice(5, 10); // Next 5 logos
   const thirdRow = insuranceLogos.slice(10);     // Last 5 logos
+  const currentLogo = insuranceLogos[currentLogoIndex] ?? insuranceLogos[0];
 
   // Auto-rotate logos for mobile slider
   useEffect(() => {
@@ -79,30 +80,24 @@ const InsuranceLogos = () => {
         <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
           
           {/* Mobile Layout - Auto Slider */}
-          <div className="block md:hidden">
+          <div className="block md:hidden" data-testid="mobile-insurance-carousel">
             <div className="h-48 flex items-center justify-center">
               <div className="relative w-full flex items-center justify-center">
-                {insuranceLogos.map((logo, index) => (
-                  <div 
-                    key={index}
-                    className={`absolute flex items-center justify-center inset-0 transition-opacity duration-500 ${
-                      index === currentLogoIndex 
-                        ? 'opacity-100' 
-                        : 'opacity-0'
-                    }`}
-                    data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    <OptimizedImage
-                      src={logo.src}
-                      alt={logo.alt}
-                      className="h-36 w-auto object-contain filter grayscale"
-                      width={144}
-                      height={144}
-                      priority={index < 3}
-                      sizes="144px"
-                    />
-                  </div>
-                ))}
+                <div
+                  key={currentLogo.name}
+                  className="absolute flex items-center justify-center inset-0 animate-in fade-in duration-500"
+                  data-testid={`insurance-logo-${currentLogo.name.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <OptimizedImage
+                    src={currentLogo.src}
+                    alt={currentLogo.alt}
+                    className="h-36 w-auto object-contain filter grayscale"
+                    width={256}
+                    height={144}
+                    priority={false}
+                    sizes="256px"
+                  />
+                </div>
               </div>
             </div>
             
@@ -138,7 +133,7 @@ const InsuranceLogos = () => {
                     className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
                     width={144}
                     height={112}
-                    priority={index < 2}
+                    priority={false}
                     sizes="(max-width: 1024px) 144px, 208px"
                     style={{
                       aspectRatio: '13/9',

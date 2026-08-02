@@ -1,21 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import Image, { type ImageProps } from 'next/image';
+import { useEffect, useRef, useState, type CSSProperties, type FC } from 'react';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 type StaticImageLike = string | { src: string };
 
-interface OptimizedImageProps {
+interface OptimizedImageProps extends Omit<
+  ImageProps,
+  'src' | 'alt' | 'width' | 'height' | 'priority' | 'loading' | 'onLoad' | 'onError'
+> {
   src: StaticImageLike;
   alt: string;
-  className?: string;
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
   priority?: boolean;
-  sizes?: string;
-  style?: React.CSSProperties;
-  [key: string]: any;
 }
 
-const OptimizedImage: React.FC<OptimizedImageProps> = ({
+const OptimizedImage: FC<OptimizedImageProps> = ({
   src,
   alt,
   className = '',
@@ -58,7 +58,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     setHasError(true);
   };
 
-  const imageStyle: React.CSSProperties = {
+  const imageStyle: CSSProperties = {
     ...style,
     transition: 'opacity 0.3s ease-in-out',
     opacity: isLoaded ? 1 : 0,
@@ -80,7 +80,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   return (
     <div ref={ref} style={style}>
       {shouldLoad ? (
-        <img
+        <Image
           ref={imageRef}
           src={resolvedSrc}
           alt={alt}
@@ -88,13 +88,12 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           width={width}
           height={height}
           loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : undefined}
           decoding="async"
           onLoad={handleLoad}
           onError={handleError}
           style={imageStyle}
           sizes={sizes}
-          {...(priority && { fetchpriority: 'high' })}
-          {...(width && height && { intrinsicsize: `${width}x${height}` })}
           {...props}
         />
       ) : (

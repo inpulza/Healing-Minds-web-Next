@@ -1,101 +1,62 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
 import { useEffect } from "react";
-import About from "@/pages/About";
-import AccessibilityStatement from "@/pages/AccessibilityStatement";
-import AcercaEspanol from "@/pages/AcercaEspanol";
-import BillingPolicy from "@/pages/BillingPolicy";
-import BlogIndex from "@/pages/BlogIndex";
-import BlogPost from "@/pages/BlogPost";
-import CancellationPolicy from "@/pages/CancellationPolicy";
-import CommunicationsPolicy from "@/pages/CommunicationsPolicy";
-import Contact from "@/pages/Contact";
-import ContactoEspanol from "@/pages/ContactoEspanol";
-import CookiePolicy from "@/pages/CookiePolicy";
-import EmergencyPolicy from "@/pages/EmergencyPolicy";
-import ForPatients from "@/pages/ForPatients";
-import HipaaNotice from "@/pages/HipaaNotice";
-import Home from "@/pages/Home";
-import HomeEspanol from "@/pages/HomeEspanol";
-import LocationAveMaria from "@/pages/LocationAveMaria";
-import LocationBonitaSprings from "@/pages/LocationBonitaSprings";
-import LocationEstero from "@/pages/LocationEstero";
-import LocationFortMyers from "@/pages/LocationFortMyers";
-import LocationGoldenGate from "@/pages/LocationGoldenGate";
-import LocationImmokalee from "@/pages/LocationImmokalee";
-import LocationLelyResorts from "@/pages/LocationLelyResorts";
-import LocationMarcoIsland from "@/pages/LocationMarcoIsland";
-import LocationNaples from "@/pages/LocationNaples";
-import LocationVanderbiltBeach from "@/pages/LocationVanderbiltBeach";
-import MedicalDisclaimer from "@/pages/MedicalDisclaimer";
-import NondiscriminationNotice from "@/pages/NondiscriminationNotice";
-import NoSurprisesAct from "@/pages/NoSurprisesAct";
-import ParaPacientesEspanol from "@/pages/ParaPacientesEspanol";
-import PatientRights from "@/pages/PatientRights";
-import PrivacyPolicy from "@/pages/PrivacyPolicy";
-import PsiquiatraCalifornia from "@/pages/PsiquiatraCalifornia";
-import Services from "@/pages/Services";
-import ServiciosEspanol from "@/pages/ServiciosEspanol";
-import TelehealthConsent from "@/pages/TelehealthConsent";
-import TelepsychiatryFlorida from "@/pages/TelepsychiatryFlorida";
-import TermsOfService from "@/pages/TermsOfService";
-import AdhdTreatment from "@/pages/services/AdhdTreatment";
-import AnxietyTreatment from "@/pages/services/AnxietyTreatment";
-import BipolarTreatment from "@/pages/services/BipolarTreatment";
-import DepressionTreatment from "@/pages/services/DepressionTreatment";
-import MedicationManagement from "@/pages/services/MedicationManagement";
-import PtsdTreatment from "@/pages/services/PtsdTreatment";
 import { useLanguage } from "@/hooks/useLanguage";
 
 type Locale = "en" | "es";
 type RoutedPageProps = { language?: Locale };
 
+const loadPage = (
+  loader: () => Promise<{ default: ComponentType<RoutedPageProps> }>,
+) => dynamic<RoutedPageProps>(loader);
+
 const pageComponents: Record<string, ComponentType<RoutedPageProps>> = {
-  About,
-  AccessibilityStatement,
-  AcercaEspanol,
-  AdhdTreatment,
-  AnxietyTreatment,
-  BillingPolicy,
-  BipolarTreatment,
-  BlogIndex,
-  BlogPost,
-  CancellationPolicy,
-  CommunicationsPolicy,
-  Contact,
-  ContactoEspanol,
-  CookiePolicy,
-  DepressionTreatment,
-  EmergencyPolicy,
-  ForPatients,
-  HipaaNotice,
-  Home,
-  HomeEspanol,
-  LocationAveMaria,
-  LocationBonitaSprings,
-  LocationEstero,
-  LocationFortMyers,
-  LocationGoldenGate,
-  LocationImmokalee,
-  LocationLelyResorts,
-  LocationMarcoIsland,
-  LocationNaples,
-  LocationVanderbiltBeach,
-  MedicalDisclaimer,
-  MedicationManagement,
-  NondiscriminationNotice,
-  NoSurprisesAct,
-  ParaPacientesEspanol,
-  PatientRights,
-  PrivacyPolicy,
-  PsiquiatraCalifornia,
-  PtsdTreatment,
-  Services,
-  ServiciosEspanol,
-  TelehealthConsent,
-  TelepsychiatryFlorida,
-  TermsOfService,
+  About: loadPage(() => import("@/pages/About")),
+  AccessibilityStatement: loadPage(() => import("@/pages/AccessibilityStatement")),
+  AcercaEspanol: loadPage(() => import("@/pages/AcercaEspanol")),
+  AdhdTreatment: loadPage(() => import("@/pages/services/AdhdTreatment")),
+  AnxietyTreatment: loadPage(() => import("@/pages/services/AnxietyTreatment")),
+  BillingPolicy: loadPage(() => import("@/pages/BillingPolicy")),
+  BipolarTreatment: loadPage(() => import("@/pages/services/BipolarTreatment")),
+  BlogIndex: loadPage(() => import("@/pages/BlogIndex")),
+  BlogPost: loadPage(() => import("@/pages/BlogPost")),
+  CancellationPolicy: loadPage(() => import("@/pages/CancellationPolicy")),
+  CommunicationsPolicy: loadPage(() => import("@/pages/CommunicationsPolicy")),
+  Contact: loadPage(() => import("@/pages/Contact")),
+  ContactoEspanol: loadPage(() => import("@/pages/ContactoEspanol")),
+  CookiePolicy: loadPage(() => import("@/pages/CookiePolicy")),
+  DepressionTreatment: loadPage(() => import("@/pages/services/DepressionTreatment")),
+  EmergencyPolicy: loadPage(() => import("@/pages/EmergencyPolicy")),
+  ForPatients: loadPage(() => import("@/pages/ForPatients")),
+  HipaaNotice: loadPage(() => import("@/pages/HipaaNotice")),
+  Home: loadPage(() => import("@/pages/Home")),
+  HomeEspanol: loadPage(() => import("@/pages/HomeEspanol")),
+  LocationAveMaria: loadPage(() => import("@/pages/LocationAveMaria")),
+  LocationBonitaSprings: loadPage(() => import("@/pages/LocationBonitaSprings")),
+  LocationEstero: loadPage(() => import("@/pages/LocationEstero")),
+  LocationFortMyers: loadPage(() => import("@/pages/LocationFortMyers")),
+  LocationGoldenGate: loadPage(() => import("@/pages/LocationGoldenGate")),
+  LocationImmokalee: loadPage(() => import("@/pages/LocationImmokalee")),
+  LocationLelyResorts: loadPage(() => import("@/pages/LocationLelyResorts")),
+  LocationMarcoIsland: loadPage(() => import("@/pages/LocationMarcoIsland")),
+  LocationNaples: loadPage(() => import("@/pages/LocationNaples")),
+  LocationVanderbiltBeach: loadPage(() => import("@/pages/LocationVanderbiltBeach")),
+  MedicalDisclaimer: loadPage(() => import("@/pages/MedicalDisclaimer")),
+  MedicationManagement: loadPage(() => import("@/pages/services/MedicationManagement")),
+  NondiscriminationNotice: loadPage(() => import("@/pages/NondiscriminationNotice")),
+  NoSurprisesAct: loadPage(() => import("@/pages/NoSurprisesAct")),
+  ParaPacientesEspanol: loadPage(() => import("@/pages/ParaPacientesEspanol")),
+  PatientRights: loadPage(() => import("@/pages/PatientRights")),
+  PrivacyPolicy: loadPage(() => import("@/pages/PrivacyPolicy")),
+  PsiquiatraCalifornia: loadPage(() => import("@/pages/PsiquiatraCalifornia")),
+  PtsdTreatment: loadPage(() => import("@/pages/services/PtsdTreatment")),
+  Services: loadPage(() => import("@/pages/Services")),
+  ServiciosEspanol: loadPage(() => import("@/pages/ServiciosEspanol")),
+  TelehealthConsent: loadPage(() => import("@/pages/TelehealthConsent")),
+  TelepsychiatryFlorida: loadPage(() => import("@/pages/TelepsychiatryFlorida")),
+  TermsOfService: loadPage(() => import("@/pages/TermsOfService")),
 };
 
 export default function PublicPage({ page, locale }: { page: string; locale: Locale }) {

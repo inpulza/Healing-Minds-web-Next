@@ -5,10 +5,14 @@ import test from "node:test";
 
 const source = fs.readFileSync(path.join(process.cwd(), "client", "src", "components", "OptimizedImage.tsx"), "utf8");
 
-test("the shared image component resolves Next static image modules to browser URLs", () => {
+test("the shared image component sends local assets through the Next responsive optimizer", () => {
+  assert.match(source, /import Image, \{ type ImageProps \} from ['"]next\/image['"]/);
   assert.match(source, /StaticImageLike/);
   assert.match(source, /typeof src === ['"]string['"]/);
+  assert.match(source, /<Image/);
   assert.match(source, /src=\{resolvedSrc\}/);
+  assert.match(source, /fetchPriority=\{priority \? ['"]high['"] : undefined\}/);
+  assert.doesNotMatch(source, /fetchpriority/);
 });
 
 test("the shared image component reveals assets that completed before hydration", () => {

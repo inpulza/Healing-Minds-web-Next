@@ -166,10 +166,39 @@ const californiaRoutes = [
 
 async function rejectInitialConsent(page: Page) {
   const reject = page.getByTestId("button-reject-all");
-  if (await reject.isVisible().catch(() => false)) {
-    await reject.click();
-    await expect(reject).toBeHidden();
-  }
+  const becameVisible = await reject
+    .waitFor({ state: "visible", timeout: 5_000 })
+    .then(() => true)
+    .catch(() => false);
+  if (!becameVisible) return;
+
+  await reject.click();
+  await expect(reject).toBeHidden();
+}
+
+function collectUnexpectedRuntimeErrors(page: Page): string[] {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.stack || error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  return errors;
+}
+
+async function firstPartyJavaScriptBytes(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const origin = window.location.origin;
+    return performance
+      .getEntriesByType("resource")
+      .filter(
+        (entry) =>
+          entry.initiatorType === "script" && new URL(entry.name).origin === origin,
+      )
+      .reduce(
+        (total, entry) => total + (entry.decodedBodySize || entry.transferSize || 0),
+        0,
+      );
+  });
 }
 
 async function navigateFromHeader(page: Page, targetPath: string, isMobile: boolean) {
@@ -374,6 +403,95 @@ test("route scroll respects reduced motion without a smooth-scroll runtime", asy
       ),
     )
     .toBe("smooth");
+});
+
+test("mobile home mounts only the visible responsive insurance logo", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile carousel contract");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  await page.goto("/");
+  await rejectInitialConsent(page);
+
+  const carousel = page.getByTestId("mobile-insurance-carousel");
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel).toBeVisible();
+  await expect(carousel.locator("img")).toHaveCount(1);
+  await expect
+    .poll(() => carousel.locator("img").evaluate((image) => image.naturalWidth))
+    .toBeGreaterThan(0);
+  await expect(carousel.locator("img")).toHaveAttribute("src", /\/_next\/image\?/);
+
+  const visibleLogo = carousel.locator('[data-testid^="insurance-logo-"]');
+  const firstLogoTestId = await visibleLogo.getAttribute("data-testid");
+  await expect
+    .poll(() => visibleLogo.getAttribute("data-testid"), { timeout: 5_000 })
+    .not.toBe(firstLogoTestId);
+  await expect(carousel.locator("img")).toHaveCount(1);
+  await expect
+    .poll(() => carousel.locator("img").evaluate((image) => image.naturalWidth))
+    .toBeGreaterThan(0);
+  await expect(carousel.locator("img")).toHaveAttribute("src", /\/_next\/image\?/);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("telehealth widget opens, exposes both actions and restores its trigger", async ({ page }) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+  await page.goto("/");
+  await rejectInitialConsent(page);
+
+  const trigger = page.getByTestId("button-open-telehealth-widget");
+  await expect(trigger).toBeVisible({ timeout: 5_000 });
+  await trigger.click();
+
+  const card = page.getByTestId("telehealth-widget-card");
+  await expect(card).toBeVisible();
+  await expect(page.getByTestId("button-widget-book")).toHaveAttribute("target", "_blank");
+  await expect(page.getByTestId("button-widget-call")).toHaveAttribute("href", "tel:+12394230272");
+
+  await page.getByTestId("button-close-telehealth-widget").click();
+  await expect(card).toBeHidden();
+  await expect(trigger).toBeVisible();
+  await expect(trigger).toBeFocused();
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("mobile home stays within its hydrated first-visit JavaScript budget", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile runtime budget");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  await page.goto("/");
+  await rejectInitialConsent(page);
+  await expect(page.getByTestId("button-open-telehealth-widget")).toBeVisible({ timeout: 5_000 });
+  await page.waitForTimeout(1_500);
+
+  const hydratedJavaScriptBytes = await firstPartyJavaScriptBytes(page);
+
+  expect(hydratedJavaScriptBytes).toBeLessThanOrEqual(1024 * 1024);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("mobile heavy catch-all route stays within its hydrated JavaScript budget", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile runtime budget");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  await page.goto("/locations/psychiatrist-fort-myers");
+  await rejectInitialConsent(page);
+  await expect(page.getByTestId("hero-title-mobile")).toBeVisible();
+  await expect(page.getByTestId("button-open-telehealth-widget")).toBeVisible({ timeout: 5_000 });
+  await page.waitForTimeout(1_500);
+
+  const hydratedJavaScriptBytes = await firstPartyJavaScriptBytes(page);
+  expect(hydratedJavaScriptBytes).toBeLessThanOrEqual(1280 * 1024);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 
 test("sitemap XML preserves blog alternates, dates and priority", async ({ page }) => {

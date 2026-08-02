@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from '@/lib/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, CalendarCheck, Video } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { trackLeadConversion } from '@/lib/analytics';
@@ -159,20 +158,16 @@ const TelehealthVideoWidget = () => {
       data-testid="telehealth-video-widget"
       data-expanded={isExpanded}
     >
-      {/* Zero-size anchor: both states are absolutely pinned to this corner, so the card can fade in
-          while the avatar fades out. Using AnimatePresence mode="wait" here would make the card wait
-          for the avatar's exit to finish, which both delays the hover response and leaves the widget
-          showing nothing if the exit animation never runs (e.g. a backgrounded tab). */}
+      {/* Zero-size anchor: both states are absolutely pinned to this corner. CSS entry animations
+          keep this small conversion control independent from a full animation runtime. */}
       <div className="relative w-0 h-0">
-      <AnimatePresence>
         {isExpanded ? (
-          <motion.div
-            key="card"
-            initial={{ opacity: 0, scale: 0.9, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 16 }}
-            transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
-            className="absolute bottom-0 right-0 w-[232px] rounded-3xl overflow-hidden bg-white shadow-2xl border border-gray-200"
+          <div
+            className={`absolute bottom-0 right-0 w-[232px] rounded-3xl overflow-hidden bg-white shadow-2xl border border-gray-200 ${
+              reduceMotion
+                ? ''
+                : 'animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300'
+            }`}
             role="dialog"
             aria-label={copy.open}
             data-testid="telehealth-widget-card"
@@ -252,24 +247,21 @@ const TelehealthVideoWidget = () => {
                 {copy.call}
               </a>
             </div>
-          </motion.div>
+          </div>
         ) : (
-          <motion.button
-            key="avatar"
+          <button
             ref={triggerRef}
             type="button"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.94 }}
             onClick={expand}
             onPointerEnter={expandFromHover}
             aria-label={copy.open}
             aria-expanded={false}
             data-testid="button-open-telehealth-widget"
-            className="absolute bottom-0 right-0 block w-16 h-16 lg:w-[72px] lg:h-[72px] rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+            className={`absolute bottom-0 right-0 block w-16 h-16 lg:w-[72px] lg:h-[72px] rounded-full focus:outline-none focus-visible:ring-4 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
+              reduceMotion
+                ? ''
+                : 'animate-in fade-in-0 zoom-in-90 duration-300 transition-transform hover:scale-105 active:scale-95'
+            }`}
           >
             {/* The circular crop lives on this inner span, not on the button: `overflow-hidden` on the
                 button would also clip the availability dot, burying it inside the circle instead of
@@ -301,9 +293,8 @@ const TelehealthVideoWidget = () => {
               className="absolute bottom-[1.5px] right-[1.5px] lg:bottom-[2.5px] lg:right-[2.5px] w-4 h-4 rounded-full bg-green-500 border-[3px] border-white shadow-[0_1px_4px_rgba(0,0,0,0.4)]"
               aria-hidden="true"
             />
-          </motion.button>
+          </button>
         )}
-      </AnimatePresence>
       </div>
     </div>
   );
