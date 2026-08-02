@@ -256,10 +256,10 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
                   src={logo.src}
                   alt={logo.alt}
                   className="h-12 sm:h-14 md:h-16 w-auto object-contain filter grayscale opacity-70"
-                  width={80}
+                  width={114}
                   height={64}
                   priority={false}
-                  sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
+                  sizes="(max-width: 639px) 86px, (max-width: 767px) 100px, 114px"
                 />
               </div>
             ))}

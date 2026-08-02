@@ -153,7 +153,7 @@ const LocationBonitaSprings = () => {
                   width={800}
                   height={1000}
                   priority={true}
-                  sizes="100vw"
+                  sizes="(max-width: 1024px) 100vw, 1800px"
                 />
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">

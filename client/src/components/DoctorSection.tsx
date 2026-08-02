@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Link } from '@/lib/navigation';
 import { useLanguage } from '@/hooks/useLanguage';
 import { getCorrespondingURL } from '@/utils/urlMapping';
@@ -59,14 +60,14 @@ const DoctorSection = () => {
             {/* Doctor Image */}
             <div className="relative order-1 lg:order-2">
               <div className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden">
-                <img
+                <Image
                   src={assetUrl(doctorImage)}
                   alt="Dr. Melva Reve, MD - Engaged in consultation with a patient, demonstrating compassionate psychiatric care approach"
                   className="w-full h-full object-cover"
                   width={800}
                   height={800}
-                  loading="lazy"
                   decoding="async"
+                  sizes="(max-width: 767px) calc(100vw - 80px), (max-width: 1279px) 45vw, 560px"
                   data-testid="doctor-section-image"
                 />
               </div>

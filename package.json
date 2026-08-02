@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -H 127.0.0.1 -p 3100",
     "dev:replit": "node scripts/run-replit-dev.mjs",
-    "build": "node scripts/verify-public-analytics-config.mjs && next build",
+    "build": "node scripts/verify-public-analytics-config.mjs && next build && node scripts/verify-public-route-bundle-budget.mjs",
     "start": "next start -H 0.0.0.0 -p 3100",
     "check": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
@@ -82,7 +82,6 @@
     "embla-carousel-react": "^8.6.0",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
-    "framer-motion": "^11.13.1",
     "htmlparser2": "^10.1.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.453.0",

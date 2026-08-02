@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const deploymentUrl = process.env.E2E_BASE_URL
   ? new URL(process.env.E2E_BASE_URL)
@@ -166,10 +166,39 @@ const californiaRoutes = [
 
 async function rejectInitialConsent(page: Page) {
   const reject = page.getByTestId("button-reject-all");
-  if (await reject.isVisible().catch(() => false)) {
-    await reject.click();
-    await expect(reject).toBeHidden();
-  }
+  const becameVisible = await reject
+    .waitFor({ state: "visible", timeout: 5_000 })
+    .then(() => true)
+    .catch(() => false);
+  if (!becameVisible) return;
+
+  await reject.click();
+  await expect(reject).toBeHidden();
+}
+
+function collectUnexpectedRuntimeErrors(page: Page): string[] {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.stack || error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  return errors;
+}
+
+async function firstPartyJavaScriptBytes(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const origin = window.location.origin;
+    return performance
+      .getEntriesByType("resource")
+      .filter(
+        (entry) =>
+          entry.initiatorType === "script" && new URL(entry.name).origin === origin,
+      )
+      .reduce(
+        (total, entry) => total + (entry.decodedBodySize || entry.transferSize || 0),
+        0,
+      );
+  });
 }
 
 async function navigateFromHeader(page: Page, targetPath: string, isMobile: boolean) {
@@ -295,6 +324,66 @@ for (const route of routes) {
   });
 }
 
+test("cold route chunks keep the current page visible until navigation can commit", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "one browser contract is sufficient for App Router transitions");
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.stack || error.message));
+  const loadedChunkPaths = new Set<string>();
+
+  page.on("response", (response) => {
+    const pathname = new URL(response.url()).pathname;
+    if (pathname.startsWith("/_next/static/chunks/") && pathname.endsWith(".js")) {
+      loadedChunkPaths.add(pathname);
+    }
+  });
+  await page.route("**/*", async (route) => {
+    const headers = route.request().headers();
+    if (headers["next-router-prefetch"] || headers.purpose === "prefetch") {
+      await route.abort();
+      return;
+    }
+    await route.fallback();
+  });
+
+  await page.goto("/");
+  await expect(page.getByTestId("hero-title")).toBeVisible();
+  await rejectInitialConsent(page);
+
+  let releaseChunks!: () => void;
+  const chunkGate = new Promise<void>((resolve) => {
+    releaseChunks = resolve;
+  });
+  let delayedChunkRequests = 0;
+  await page.route("**/_next/static/chunks/**", async (route) => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (!loadedChunkPaths.has(pathname) && pathname.endsWith(".js")) {
+      delayedChunkRequests += 1;
+      await chunkGate;
+    }
+    await route.fallback();
+  });
+
+  const navigation = navigateFromHeader(page, "/about", false);
+  try {
+    await expect.poll(() => delayedChunkRequests, { timeout: 5_000 }).toBeGreaterThan(0);
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByTestId("hero-title")).toBeVisible();
+    await expect(page.getByTestId("about-hero-title")).toHaveCount(0);
+    await expect(page.locator("header")).toHaveCount(1);
+    await expect(page.locator("main")).toHaveCount(1);
+  } finally {
+    releaseChunks();
+  }
+
+  await navigation;
+  await expect(page).toHaveURL(/\/about\/?$/);
+  await expect(page.getByTestId("about-hero-title")).toBeVisible();
+  expect(pageErrors, pageErrors.join("\n\n")).toEqual([]);
+});
+
 for (const route of californiaRoutes) {
   test(`serves dedicated noindex metadata for ${route.path}`, async ({ page }) => {
     await page.goto(route.path);
@@ -374,6 +463,269 @@ test("route scroll respects reduced motion without a smooth-scroll runtime", asy
       ),
     )
     .toBe("smooth");
+});
+
+test("mobile home buffers one responsive logo without blanking the active slide", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile carousel contract");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  let releaseSecondLogo!: () => void;
+  const secondLogoGate = new Promise<void>((resolve) => {
+    releaseSecondLogo = resolve;
+  });
+  let delayedSecondLogo = false;
+  await page.route("**/_next/image?**", async (route) => {
+    const decodedUrl = decodeURIComponent(route.request().url());
+    if (decodedUrl.includes("8_1755868276798")) {
+      delayedSecondLogo = true;
+      await secondLogoGate;
+      await route.fulfill({
+        status: 200,
+        contentType: "image/webp",
+        body: "invalid-image",
+      });
+      return;
+    }
+    await route.fallback();
+  });
+
+  await page.goto("/");
+  await rejectInitialConsent(page);
+
+  const carousel = page.getByTestId("mobile-insurance-carousel");
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel).toBeVisible();
+  await expect
+    .poll(() =>
+      carousel.locator('[data-active="true"] img').evaluate((image) =>
+        image.complete && image.naturalWidth > 0 && Number(getComputedStyle(image).opacity) > 0.99,
+      ),
+    )
+    .toBe(true);
+  await expect(carousel.locator('[data-active="true"] img')).toHaveAttribute(
+    "src",
+    /\/_next\/image\?/,
+  );
+
+  const activeLogo = carousel.locator('[data-active="true"]');
+  const firstLogoTestId = await activeLogo.getAttribute("data-testid");
+  try {
+    await expect.poll(() => delayedSecondLogo).toBe(true);
+    await expect(carousel.locator("img")).toHaveCount(2);
+    await page.waitForTimeout(2_250);
+    await expect(activeLogo).toHaveAttribute("data-testid", firstLogoTestId!);
+    await expect
+      .poll(() =>
+        activeLogo.locator("img").evaluate((image) =>
+          image.complete && image.naturalWidth > 0 && Number(getComputedStyle(image).opacity) > 0.99,
+        ),
+      )
+      .toBe(true);
+  } finally {
+    releaseSecondLogo();
+  }
+
+  await expect
+    .poll(() => activeLogo.getAttribute("data-testid"), { timeout: 5_000 })
+    .toBe("insurance-logo-medicare");
+  await expect
+    .poll(() => carousel.locator("img").count())
+    .toBeLessThanOrEqual(3);
+  await expect
+    .poll(() => activeLogo.locator("img").evaluate((image) => image.naturalWidth))
+    .toBeGreaterThan(0);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("location hero requests one optimized source for the active viewport", async ({
+  page,
+  isMobile,
+}) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+  await page.setViewportSize(
+    isMobile ? { width: 390, height: 844 } : { width: 2048, height: 1200 },
+  );
+
+  const heroRequests: string[] = [];
+  page.on("request", (request) => {
+    const decodedUrl = decodeURIComponent(request.url());
+    if (decodedUrl.includes("dr-melva-location-hero")) {
+      heroRequests.push(request.url());
+    }
+  });
+
+  await page.goto("/locations/psychiatrist-fort-myers");
+  await rejectInitialConsent(page);
+
+  const visibleHero = page.locator(
+    'img[alt="Dr. Melva Reve serving Fort Myers"]:visible',
+  );
+  await expect(visibleHero).toHaveCount(1);
+  await expect
+    .poll(() =>
+      visibleHero.evaluate(
+        (image) => image.complete && image.naturalWidth > 0,
+      ),
+    )
+    .toBe(true);
+  await page.waitForTimeout(1_500);
+
+  const distinctRequests = [...new Set(heroRequests)];
+  expect(heroRequests).toHaveLength(1);
+  expect(distinctRequests).toHaveLength(1);
+  expect(new URL(distinctRequests[0]).pathname).toBe("/_next/image");
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("mobile location hero is present before hydration chunks finish", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile SSR hero contract");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  let releaseChunks!: () => void;
+  const chunkGate = new Promise<void>((resolve) => {
+    releaseChunks = resolve;
+  });
+  let heldChunks = 0;
+  await page.route(/\/_next\/static\/.*\.js(?:\?|$)/, async (route) => {
+    heldChunks += 1;
+    await chunkGate;
+    await route.fallback();
+  });
+
+  const navigation = page.goto("/locations/psychiatrist-fort-myers");
+  const mobileHeroSection = page
+    .locator("main section")
+    .first()
+    .locator("div.md\\:hidden")
+    .first();
+  const mobileHero = mobileHeroSection.locator(
+    'img[alt="Dr. Melva Reve serving Fort Myers"]',
+  );
+
+  try {
+    await expect.poll(() => heldChunks).toBeGreaterThan(0);
+    await expect(mobileHero).toHaveCount(1);
+    await expect(mobileHero).toHaveAttribute(
+      "sizes",
+      "(max-width: 1024px) 100vw, 1800px",
+    );
+    await expect
+      .poll(() =>
+        mobileHero.evaluate(
+          (image) => Number(getComputedStyle(image).opacity),
+        ),
+      )
+      .toBe(1);
+    await expect(mobileHeroSection.locator('[role="status"]')).toHaveCount(0);
+  } finally {
+    releaseChunks();
+  }
+
+  await navigation;
+  await rejectInitialConsent(page);
+  await expect
+    .poll(() => mobileHero.evaluate((image) => image.complete && image.naturalWidth > 0))
+    .toBe(true);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("mobile insurance srcsets cover the rendered width at the device DPR", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile responsive image contract");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  const expectEnoughPixels = async (image: Locator, sizes: string) => {
+    await expect(image).toHaveAttribute("sizes", sizes);
+    await expect.poll(() => image.evaluate((element) => element.naturalWidth)).toBeGreaterThan(0);
+    const measurement = await image.evaluate((element) => ({
+      candidateWidth: Number(new URL(element.currentSrc).searchParams.get("w")),
+      requiredWidth: Math.ceil(element.getBoundingClientRect().width * window.devicePixelRatio),
+    }));
+    expect(measurement.candidateWidth).toBeGreaterThanOrEqual(measurement.requiredWidth);
+  };
+
+  await page.goto("/contact");
+  await rejectInitialConsent(page);
+  const contactLogo = page.getByTestId("contact-insurance-logo-aetna").locator("img");
+  await contactLogo.scrollIntoViewIfNeeded();
+  await expectEnoughPixels(
+    contactLogo,
+    "(max-width: 639px) 86px, (max-width: 767px) 100px, 114px",
+  );
+
+  await page.goto("/locations/psychiatrist-fort-myers");
+  await rejectInitialConsent(page);
+  const locationCarousel = page.getByTestId("mobile-location-insurance-carousel");
+  await locationCarousel.scrollIntoViewIfNeeded();
+  const locationLogo = locationCarousel.locator('[data-active="true"] img');
+  await expectEnoughPixels(locationLogo, "256px");
+
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("telehealth widget opens, exposes both actions and restores its trigger", async ({ page }) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+  await page.goto("/");
+  await rejectInitialConsent(page);
+
+  const trigger = page.getByTestId("button-open-telehealth-widget");
+  await expect(trigger).toBeVisible({ timeout: 5_000 });
+  await trigger.click();
+
+  const card = page.getByTestId("telehealth-widget-card");
+  await expect(card).toBeVisible();
+  await expect(page.getByTestId("button-widget-book")).toHaveAttribute("target", "_blank");
+  await expect(page.getByTestId("button-widget-call")).toHaveAttribute("href", "tel:+12394230272");
+
+  await page.getByTestId("button-close-telehealth-widget").click();
+  await expect(card).toBeHidden();
+  await expect(trigger).toBeVisible();
+  await expect(trigger).toBeFocused();
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("mobile home stays within its hydrated first-visit JavaScript budget", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile runtime budget");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  await page.goto("/");
+  await rejectInitialConsent(page);
+  await expect(page.getByTestId("button-open-telehealth-widget")).toBeVisible({ timeout: 5_000 });
+  await page.waitForTimeout(1_500);
+
+  const hydratedJavaScriptBytes = await firstPartyJavaScriptBytes(page);
+
+  expect(hydratedJavaScriptBytes).toBeLessThanOrEqual(1024 * 1024);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("mobile heavy catch-all route stays within its hydrated JavaScript budget", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile runtime budget");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  await page.goto("/locations/psychiatrist-fort-myers");
+  await rejectInitialConsent(page);
+  await expect(page.getByTestId("hero-title-mobile")).toBeVisible();
+  await expect(page.getByTestId("button-open-telehealth-widget")).toBeVisible({ timeout: 5_000 });
+  await page.waitForTimeout(1_500);
+
+  const hydratedJavaScriptBytes = await firstPartyJavaScriptBytes(page);
+  expect(hydratedJavaScriptBytes).toBeLessThanOrEqual(1280 * 1024);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 
 test("sitemap XML preserves blog alternates, dates and priority", async ({ page }) => {

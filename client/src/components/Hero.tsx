@@ -40,17 +40,17 @@ const Hero = React.memo(() => {
           {/* Photo Container */}
           <div className="relative rounded-2xl overflow-hidden h-[400px] sm:h-[450px] mb-6">
             {/* Mobile Background Image */}
-            <img 
+            <img
               src={assetUrl(mobileHeroImage)}
               alt="Dr. Melva Reve, MD - Psychiatrist providing compassionate mental health care in Naples, FL"
               className="absolute inset-0 w-full h-full object-cover"
               style={{ objectPosition: '95% top' }}
               width={768}
               height={450}
+              fetchPriority="high"
               loading="eager"
-              decoding="sync"
+              decoding="async"
               sizes="(max-width: 767px) 100vw, 768px"
-              {...({'fetchpriority': 'high'} as any)}
             />
             
             {/* Mobile Content Overlay - Bottom of photo */}
@@ -99,16 +99,16 @@ const Hero = React.memo(() => {
         <div className="hidden md:block">
           <div className="relative rounded-3xl overflow-hidden aspect-[18/9] flex items-start hero-container border border-blue-200">
             {/* Background Image */}
-            <img 
+            <img
               src={assetUrl(heroImage)}
               alt="Dr. Melva Reve, MD - Psychiatrist providing compassionate mental health care in her modern Naples office"
               className="absolute inset-0 w-full h-full object-cover object-top hero-image"
               width={1200}
               height={800}
+              fetchPriority="high"
               loading="eager"
-              decoding="sync"
+              decoding="async"
               sizes="(min-width: 1200px) 1200px, 100vw"
-              {...({'fetchpriority': 'high'} as any)}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>
 

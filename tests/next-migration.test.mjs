@@ -24,9 +24,9 @@ test("the root route renders owned React content instead of a frozen HTML snapsh
   assert.doesNotMatch(page, /readFile|page\.html|dangerouslySetInnerHTML/);
 });
 
-test("the Next production path preserves Framer Motion without invoking Replit tooling", () => {
+test("the Next production path avoids unused animation and Replit runtimes", () => {
   const pkg = JSON.parse(read("package.json"));
-  assert.equal(typeof pkg.dependencies?.["framer-motion"], "string");
+  assert.equal(pkg.dependencies?.["framer-motion"], undefined);
   assert.doesNotMatch(pkg.scripts?.dev ?? "", /vite|replit/i);
   assert.doesNotMatch(pkg.scripts?.build ?? "", /vite|replit/i);
   assert.doesNotMatch(pkg.scripts?.start ?? "", /vite|replit/i);
