@@ -632,3 +632,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Commit/push, Quality, Code Review, Preview inmutable y Lighthouse remoto exacto antes del merge.
 **Archivos tocados:** E2E y bitácora.
 **Evidencia:** 39/39 E2E aplicables PASS en desktop/mobile y 3 skips deliberados de contratos exclusivos de móvil. Review independiente final sin hallazgos bloqueantes ni accionables; los cuatro P2 quedaron válidos, resueltos y verificados.
+
+## 2026-08-02 Codex - inclusión del presupuesto posbuild en Vercel
+**Qué se hizo:** El primer Preview del PR completó el build de Next y las 89 páginas, pero Vercel excluyó `verify-public-route-bundle-budget.mjs` por la regla general `scripts/*`. Se añadió una excepción explícita en `.vercelignore` para que el mismo presupuesto que pasa localmente también se ejecute en el constructor remoto.
+**Decisiones:** El guard de rendimiento no se desactiva ni se salta en Vercel; se corrige el paquete de entrada para mantener el gate real en Preview y producción.
+**Pendientes/bugs:** Repetir build local, push, Quality, Code Review, Preview exacta y E2E/Lighthouse remoto antes del merge.
+**Archivos tocados:** `.vercelignore` y bitácora.
+**Evidencia:** Logs del deployment `dpl_BovYoeXMsNmk4yF9c6BcaNvGcJfK`: compilación y 89/89 páginas completadas; único fallo `MODULE_NOT_FOUND` del verificador excluido.

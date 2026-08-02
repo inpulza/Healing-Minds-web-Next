@@ -8,6 +8,7 @@ docs/
 tests/
 scripts/*
 !scripts/verify-public-analytics-config.mjs
+!scripts/verify-public-route-bundle-budget.mjs
 migrations/
 
 # Editor/agent instructions and legacy provider configuration.
