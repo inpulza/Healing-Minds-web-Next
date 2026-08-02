@@ -9,6 +9,7 @@ import { useTikTokVideos } from '@/hooks/useTikTokVideos';
 import doctorProfileImage from '@assets/doctor-profile-hq.webp';
 import { aboutContent } from '@/data/pageContent/mainPages/about';
 import { renderRichText } from '@/components/RichText';
+import { socialProfiles } from '@shared/social-profiles';
 
 const About = () => {
   const { language } = useLanguage();
@@ -176,7 +177,7 @@ const About = () => {
                   {section('videoCta').paragraphs![0]}
                 </p>
                 <a
-                  href="https://www.tiktok.com/@dra.melvavidal"
+                  href={socialProfiles.tiktok.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 sm:gap-3 bg-black text-white px-4 sm:px-8 py-3 sm:py-4 rounded-full font-medium sm:font-semibold text-sm sm:text-lg hover:bg-gray-800 transition-colors duration-300"
@@ -186,7 +187,7 @@ const About = () => {
                     <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-1.183-.11 6.44 6.44 0 0 0-6.444 6.444 6.44 6.44 0 0 0 6.444 6.444 6.44 6.44 0 0 0 6.444-6.444V8.862a8.23 8.23 0 0 0 4.789 1.515v-3.446a4.792 4.792 0 0 1-.817-.245z"/>
                   </svg>
                   <span>
-                    {section('videoCta').paragraphs![1]}
+                    {section('videoCta').paragraphs![1]} {socialProfiles.tiktok.handle}
                   </span>
                 </a>
               </div>
@@ -280,7 +281,7 @@ const About = () => {
                   {/* Social Media Icons */}
                   <div className="flex gap-3 mt-8 pt-6 border-t border-green-200">
                     <a 
-                      href="https://linkedin.com/in/dr-melva-reve" 
+                      href={socialProfiles.linkedin.url}
                       className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
                       data-testid="linkedin-link"
                       aria-label={language === 'en' ? 'Visit Dr. Melva Reve LinkedIn profile' : 'Visitar perfil de LinkedIn de la Dra. Melva Reve'}
@@ -290,7 +291,7 @@ const About = () => {
                       <Linkedin className="w-5 h-5 text-blue-600" />
                     </a>
                     <a 
-                      href="https://facebook.com/healingmindspsychiatry" 
+                      href={socialProfiles.facebook.url}
                       className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors duration-300"
                       data-testid="facebook-link"
                       aria-label={language === 'en' ? 'Visit Healing Minds Psychiatry Facebook page' : 'Visitar página de Facebook de Healing Minds Psychiatry'}
@@ -300,7 +301,7 @@ const About = () => {
                       <Facebook className="w-5 h-5 text-blue-700" />
                     </a>
                     <a 
-                      href="https://instagram.com/healingmindspsychiatry" 
+                      href={socialProfiles.instagram.url}
                       className="w-10 h-10 bg-pink-50 hover:bg-pink-100 rounded-lg flex items-center justify-center transition-colors duration-300"
                       data-testid="instagram-link"
                       aria-label={language === 'en' ? 'Visit Healing Minds Psychiatry Instagram page' : 'Visitar página de Instagram de Healing Minds Psychiatry'}

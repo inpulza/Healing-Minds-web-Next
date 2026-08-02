@@ -17,6 +17,10 @@ import { accessibilityStatementContent } from '@/data/pageContent/legal/accessib
 import { nondiscriminationNoticeContent } from '@/data/pageContent/legal/nondiscriminationNotice';
 import { communicationsPolicyContent } from '@/data/pageContent/legal/communicationsPolicy';
 import { medicalDisclaimerContent } from '@/data/pageContent/legal/medicalDisclaimer';
+import {
+  organizationSocialProfileUrls,
+  physicianSocialProfileUrls,
+} from '@shared/social-profiles';
 import { anxietyTreatmentContent } from '@/data/pageContent/services/anxietyTreatment';
 import { depressionTreatmentContent } from '@/data/pageContent/services/depressionTreatment';
 import { adhdTreatmentContent } from '@/data/pageContent/services/adhdTreatment';
@@ -168,8 +172,8 @@ function getPhysicianAuthorSchema(baseUrl: string, author?: BlogPostWithRelation
     "sameAs": [
       "https://www.healthgrades.com/physician/dr-melva-reve-urgelles-1dgbqeci76",
       "https://weprevent.org/listing/dr-melva-reve-urgelles-md-vc998mp/",
-      "https://providers.sharecare.com/doctor/dr-melva-reve-urgelles-1dgbqeci76",
-      "https://npidb.org/doctors/allopathic_osteopathic_physicians/psychiatry_2084p0800x/1982233631.aspx"
+      "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
+      ...physicianSocialProfileUrls
     ],
     "knowsLanguage": ["English", "Spanish"],
     "worksFor": {
@@ -2620,11 +2624,8 @@ function getMedicalBusinessSchema(baseUrl: string) {
     "isAcceptingNewPatients": true,
     "sameAs": [
       "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
-      "https://www.instagram.com/hmpsychiatry/",
-      "https://www.facebook.com/profile.php?id=61578845287836",
-      "https://www.youtube.com/@healingmindsp",
       "https://www.yelp.com/biz/healing-minds-psychiatry-naples",
-      "https://www.tiktok.com/@dra.melvavidal"
+      ...organizationSocialProfileUrls
     ],
     "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
     "founder": {
@@ -2659,8 +2660,8 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "sameAs": [
         "https://www.healthgrades.com/physician/dr-melva-reve-urgelles-1dgbqeci76",
         "https://weprevent.org/listing/dr-melva-reve-urgelles-md-vc998mp/",
-        "https://providers.sharecare.com/doctor/dr-melva-reve-urgelles-1dgbqeci76",
-        "https://npidb.org/doctors/allopathic_osteopathic_physicians/psychiatry_2084p0800x/1982233631.aspx"
+        "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
+        ...physicianSocialProfileUrls
       ],
       "knowsLanguage": [
         {

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { socialProfiles } from '@shared/social-profiles';
 
 interface TikTokVideo {
   id: string;
@@ -44,10 +45,11 @@ export function useTikTokVideos() {
           reactionCount: video.reactionCount || 0
         };
       }) || [];
+      const uniqueVideos = [...new Map(allVideos.map(video => [video.id, video])).values()];
 
       // Filter and order videos by our target list
       const orderedVideos = targetVideoIds.map((targetId, index) => {
-        const foundVideo = allVideos.find(video => video.id === targetId);
+        const foundVideo = uniqueVideos.find(video => video.id === targetId);
         
         if (foundVideo) {
           return { ...foundVideo, displayIndex: index };
@@ -58,7 +60,7 @@ export function useTikTokVideos() {
           title: 'Video de la Dra. Reve',
           description: 'Contenido educativo sobre salud mental...',
           thumbnail: '',
-          url: `https://www.tiktok.com/@dra.melvavidal/video/${targetId}`,
+          url: `${socialProfiles.tiktok.url}/video/${targetId}`,
           commentCount: 0,
           reactionCount: 0,
           displayIndex: index
@@ -67,7 +69,7 @@ export function useTikTokVideos() {
 
       // If we found fewer than expected, also include some available videos
       const foundVideosCount = orderedVideos.filter(v => !v.id.startsWith('fallback-')).length;
-      if (foundVideosCount < 4 && allVideos.length > 0) {
+      if (foundVideosCount < 4 && uniqueVideos.length > 0) {
         // Get all real video IDs that are already used
         const usedVideoIds = new Set(orderedVideos
           .filter(v => !v.id.startsWith('fallback-'))
@@ -75,7 +77,7 @@ export function useTikTokVideos() {
         );
         
         // Find available videos that haven't been used yet
-        const availableVideos = allVideos.filter(video => !usedVideoIds.has(video.id));
+        const availableVideos = uniqueVideos.filter(video => !usedVideoIds.has(video.id));
         
         // Replace fallback videos with unique real ones
         const fallbackIndices = orderedVideos

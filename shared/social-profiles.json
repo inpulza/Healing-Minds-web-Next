@@ -1,0 +1,27 @@
+{
+  "linkedin": {
+    "label": "LinkedIn",
+    "handle": "Melva Reve",
+    "url": "https://www.linkedin.com/in/melva-reve-2549a9120"
+  },
+  "facebook": {
+    "label": "Facebook",
+    "handle": "Healing Minds Psychiatry",
+    "url": "https://www.facebook.com/profile.php?id=61578845287836"
+  },
+  "instagram": {
+    "label": "Instagram",
+    "handle": "@melvareve_md",
+    "url": "https://www.instagram.com/melvareve_md/"
+  },
+  "tiktok": {
+    "label": "TikTok",
+    "handle": "@melvareve_md",
+    "url": "https://www.tiktok.com/@melvareve_md"
+  },
+  "youtube": {
+    "label": "YouTube",
+    "handle": "@healingmindsp",
+    "url": "https://www.youtube.com/@healingmindsp"
+  }
+}

@@ -39,13 +39,18 @@ export async function generateMetadata({
       siteName: "Healing Minds Psychiatry",
       images: post.featuredImage
         ? [{ url: post.featuredImage, alt: post.featuredImageAlt || post.title }]
-        : undefined,
+        : [
+            {
+              url: "https://www.healingmindsp.com/og-image.png",
+              alt: "Healing Minds Psychiatry - Compassionate psychiatric care in Naples, Florida",
+            },
+          ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: post.featuredImage ? [post.featuredImage] : undefined,
+      images: [post.featuredImage || "https://www.healingmindsp.com/og-image.png"],
     },
   };
 }

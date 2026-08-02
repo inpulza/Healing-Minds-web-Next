@@ -1,4 +1,10 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import {
+  expect,
+  test,
+  type BrowserContext,
+  type Locator,
+  type Page,
+} from "@playwright/test";
 
 const deploymentUrl = process.env.E2E_BASE_URL
   ? new URL(process.env.E2E_BASE_URL)
@@ -29,6 +35,10 @@ const tiktokNetworkPattern =
   /^https:\/\/[^/]*(?:tiktok\.com|tiktokcdn(?:-us)?\.com|byteoversea\.com|ibytedtos\.com|muscdn\.com)\//i;
 
 function isTikTokPixelUrl(rawUrl: string): boolean {
+  const url = new URL(rawUrl);
+  if (url.hostname === "www.tiktok.com" && url.pathname.replace(/\/$/, "") === "/@melvareve_md") {
+    return false;
+  }
   return tiktokNetworkPattern.test(rawUrl);
 }
 
@@ -39,7 +49,11 @@ test.beforeEach(async ({ page }) => {
     if (isTikTokPixelUrl(request.url())) attempts.push(request.url());
   });
   await page.route(tiktokNetworkPattern, async (route) => {
-    await route.abort();
+    if (isTikTokPixelUrl(route.request().url())) {
+      await route.abort();
+      return;
+    }
+    await route.fallback();
   });
 
   if (!deploymentOrigin || !previewCredential) return;
@@ -190,6 +204,35 @@ function collectUnexpectedRuntimeErrors(page: Page): string[] {
   return errors;
 }
 
+async function expectSettledOutboundClick(
+  page: Page,
+  context: BrowserContext,
+  testId: string,
+  expectedUrl: string,
+) {
+  const normalize = (value: string) => value.replace(/\/$/, "");
+  const routeMatcher = (url: URL) => normalize(url.toString()) === normalize(expectedUrl);
+  await context.route(routeMatcher, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "text/html",
+      body: "<!doctype html><title>Verified social profile</title><main>Verified outbound profile</main>",
+    });
+  });
+
+  try {
+    const popupPromise = page.waitForEvent("popup");
+    await page.getByTestId(testId).click();
+    const popup = await popupPromise;
+    await popup.waitForLoadState("domcontentloaded");
+    expect(normalize(popup.url())).toBe(normalize(expectedUrl));
+    await expect(popup.locator("main")).toHaveText("Verified outbound profile");
+    await popup.close();
+  } finally {
+    await context.unroute(routeMatcher);
+  }
+}
+
 async function firstPartyJavaScriptBytes(page: Page): Promise<number> {
   return page.evaluate(() => {
     const origin = window.location.origin;
@@ -231,6 +274,8 @@ async function expectUniqueMetadata(
   const openGraphTitle = page.locator('meta[property="og:title"]');
   const openGraphUrl = page.locator('meta[property="og:url"]');
   const twitterTitle = page.locator('meta[name="twitter:title"]');
+  const openGraphImage = page.locator('meta[property="og:image"]');
+  const twitterImage = page.locator('meta[name="twitter:image"]');
   await expect(page).toHaveTitle(expectedTitle);
   await expect(description).toHaveCount(1);
   await expect(description).toHaveAttribute("content", expectedDescription);
@@ -242,7 +287,107 @@ async function expectUniqueMetadata(
   await expect(openGraphUrl).toHaveAttribute("content", expectedCanonical);
   await expect(twitterTitle).toHaveCount(1);
   await expect(twitterTitle).toHaveAttribute("content", expectedTitle);
+  await expect(openGraphImage).toHaveCount(1);
+  await expect(openGraphImage).toHaveAttribute("content", /^https:\/\//);
+  await expect(twitterImage).toHaveCount(1);
+  await expect(twitterImage).toHaveAttribute("content", /^https:\/\//);
 }
+
+test("verified social profiles stay consistent in UI, outbound clicks and SSR identity", async ({
+  page,
+  context,
+}) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+  const profiles = {
+    linkedin: "https://www.linkedin.com/in/melva-reve-2549a9120",
+    facebook: "https://www.facebook.com/profile.php?id=61578845287836",
+    instagram: "https://www.instagram.com/melvareve_md/",
+    tiktok: "https://www.tiktok.com/@melvareve_md",
+    youtube: "https://www.youtube.com/@healingmindsp",
+  } as const;
+
+  const response = await page.goto("/");
+  expect(response?.status()).toBe(200);
+  const responseHtml = await response!.text();
+  expect(responseHtml).toContain('id="social-identity-structured-data"');
+  await rejectInitialConsent(page);
+
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    "content",
+    "https://www.healingmindsp.com/og-image.png",
+  );
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+    "content",
+    "https://www.healingmindsp.com/og-image.png",
+  );
+
+  const structuredData = page.locator("#social-identity-structured-data");
+  await expect(structuredData).toHaveCount(1);
+  const graph = JSON.parse((await structuredData.textContent()) || "{}") as {
+    "@graph"?: Array<{ "@id"?: string; sameAs?: string[] }>;
+  };
+  const organization = graph["@graph"]?.find((node) => node["@id"]?.endsWith("#organization"));
+  const physician = graph["@graph"]?.find((node) => node["@id"]?.endsWith("#physician"));
+  expect(organization?.sameAs).toEqual([
+    profiles.facebook,
+    profiles.instagram,
+    profiles.tiktok,
+    profiles.youtube,
+  ]);
+  expect(physician?.sameAs).toEqual([
+    "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
+    profiles.linkedin,
+  ]);
+
+  await page.goto("/about");
+  await rejectInitialConsent(page);
+  await expect(page.locator("#social-identity-structured-data")).toHaveCount(0);
+
+  await expect(page.getByTestId("linkedin-link")).toHaveAttribute("href", profiles.linkedin);
+  await expect(page.getByTestId("facebook-link")).toHaveAttribute("href", profiles.facebook);
+  await expect(page.getByTestId("instagram-link")).toHaveAttribute("href", profiles.instagram);
+  await expect(page.getByTestId("tiktok-follow-button")).toHaveAttribute("href", profiles.tiktok);
+  await expect(page.getByTestId("tiktok-follow-button")).toContainText("@melvareve_md");
+  for (const [network, url] of Object.entries(profiles)) {
+    await expect(page.getByTestId(`footer-social-${network}`)).toHaveAttribute("href", url);
+  }
+
+  const apiVideoIds = await page.evaluate(async () => {
+    const response = await fetch("/api/tiktok");
+    const body = (await response.json()) as {
+      data?: { data?: Array<{ root?: { element?: { id?: string } } }> };
+    };
+    return body.data?.data?.map((item) => item.root?.element?.id).filter(Boolean) ?? [];
+  });
+  expect(apiVideoIds.length).toBeGreaterThan(0);
+  expect(apiVideoIds).toHaveLength(new Set(apiVideoIds).size);
+  const aboutVideoLinks = page.locator('[data-testid^="video-link-"]');
+  await expect(aboutVideoLinks).toHaveCount(4);
+  const aboutVideoHrefs = await aboutVideoLinks.evaluateAll((links) =>
+    links.map((link) => link.getAttribute("href") || ""),
+  );
+  expect(aboutVideoHrefs).toHaveLength(new Set(aboutVideoHrefs).size);
+  expect(aboutVideoHrefs.every((href) => href.includes("tiktok.com/@melvareve_md/video/"))).toBe(true);
+
+  await expectSettledOutboundClick(page, context, "linkedin-link", profiles.linkedin);
+  await expectSettledOutboundClick(page, context, "facebook-link", profiles.facebook);
+  await expectSettledOutboundClick(page, context, "instagram-link", profiles.instagram);
+  await expectSettledOutboundClick(page, context, "tiktok-follow-button", profiles.tiktok);
+  await expectSettledOutboundClick(page, context, "footer-social-youtube", profiles.youtube);
+
+  await page.goto("/locations/psychiatrist-naples");
+  await rejectInitialConsent(page);
+  const compactTikTok = page.getByTestId("compact-tiktok-follow-button");
+  await expect(compactTikTok).toHaveAttribute("href", profiles.tiktok);
+  await expect(compactTikTok).toContainText("@melvareve_md");
+  const compactVideoLinks = page.locator('[data-testid^="compact-video-link-"]');
+  await expect(compactVideoLinks).toHaveCount(4);
+  const compactVideoHrefs = await compactVideoLinks.evaluateAll((links) =>
+    links.map((link) => link.getAttribute("href") || ""),
+  );
+  expect(compactVideoHrefs).toHaveLength(new Set(compactVideoHrefs).size);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
 
 for (const route of routes) {
   test(`one click replaces the rendered page for ${route.targetPath}`, async ({ page, isMobile }) => {
