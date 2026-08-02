@@ -164,6 +164,11 @@ const californiaRoutes = [
   },
 ] as const;
 
+const spanishSocialRoutes = [
+  "/es/servicios/tratamiento-adhd",
+  "/es/ubicaciones/psiquiatra-naples",
+] as const;
+
 async function rejectInitialConsent(page: Page) {
   const reject = page.getByTestId("button-reject-all");
   const becameVisible = await reject
@@ -224,6 +229,7 @@ async function expectUniqueMetadata(
   const description = page.locator('meta[name="description"]');
   const canonical = page.locator('link[rel="canonical"]');
   const openGraphTitle = page.locator('meta[property="og:title"]');
+  const openGraphUrl = page.locator('meta[property="og:url"]');
   const twitterTitle = page.locator('meta[name="twitter:title"]');
   await expect(page).toHaveTitle(expectedTitle);
   await expect(description).toHaveCount(1);
@@ -232,6 +238,8 @@ async function expectUniqueMetadata(
   await expect(canonical).toHaveAttribute("href", expectedCanonical);
   await expect(openGraphTitle).toHaveCount(1);
   await expect(openGraphTitle).toHaveAttribute("content", expectedTitle);
+  await expect(openGraphUrl).toHaveCount(1);
+  await expect(openGraphUrl).toHaveAttribute("content", expectedCanonical);
   await expect(twitterTitle).toHaveCount(1);
   await expect(twitterTitle).toHaveAttribute("content", expectedTitle);
 }
@@ -407,6 +415,43 @@ for (const route of californiaRoutes) {
     }
   });
 }
+
+test("Spanish social metadata is self-referencing and responses are hardened", async ({ page }) => {
+  for (const path of spanishSocialRoutes) {
+    const response = await page.goto(path);
+    expect(response?.status(), `${path}: status`).toBe(200);
+
+    const expectedUrl = `https://www.healingmindsp.com${path}`;
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", expectedUrl);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", expectedUrl);
+
+    const headers = response?.headers() ?? {};
+    expect(headers["content-security-policy"]).toContain("frame-ancestors 'self'");
+    expect(headers["x-frame-options"]).toBe("SAMEORIGIN");
+    expect(headers["x-content-type-options"]).toBe("nosniff");
+    expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+    expect(headers["permissions-policy"]).toBe("camera=(), microphone=(), geolocation=()");
+  }
+});
+
+test("Spanish Open Graph URL follows an in-app click to an affected route", async ({ page }) => {
+  const path = "/es/servicios/tratamiento-adhd";
+  const expectedUrl = `https://www.healingmindsp.com${path}`;
+
+  await page.goto("/es");
+  await rejectInitialConsent(page);
+  const link = page.locator(`main a[href="${path}"]`).first();
+  await expect(link).toBeVisible();
+  await link.click();
+
+  await expect(page).toHaveURL(new RegExp(`${path.replaceAll("/", "\\/")}/?$`));
+  await expectUniqueMetadata(
+    page,
+    "Tratamiento TDAH Adultos en Naples, FL | Healing Minds Psychiatry",
+    "Tratamiento especializado de TDAH para adultos en Naples, FL. Dra. Melva Reve ofrece evaluación integral, manejo de medicamentos y estrategias personalizadas. Psiquiatra bilingüe experta.",
+    expectedUrl,
+  );
+});
 
 test("route scroll respects reduced motion without a smooth-scroll runtime", async ({
   page,

@@ -60,7 +60,10 @@ export function metadataForPath(pathname: string): Metadata {
     openGraph: {
       title: seo["og:title"] || seo.title,
       description: seo["og:description"] || seo.description,
-      url: pathname === "/" ? undefined : seo["og:url"] || seo.canonical,
+      // Open Graph must identify the same language-specific document as the
+      // canonical. The frozen legacy manifest used to contain a handful of
+      // Spanish entries whose og:url still pointed at their English pair.
+      url: pathname === "/" ? undefined : seo.canonical || seo["og:url"],
       siteName: seo["og:site_name"],
       locale: seo["og:locale"],
       alternateLocale: seo["og:locale:alternate"]
