@@ -1,6 +1,6 @@
 import { useLanguage } from '@/hooks/useLanguage';
-import { useState, useEffect } from 'react';
 import OptimizedImage from './OptimizedImage';
+import MobileInsuranceCarousel from './MobileInsuranceCarousel';
 import { homeContent } from '@/data/pageContent/mainPages/home';
 import { renderRichText } from '@/components/RichText';
 
@@ -26,7 +26,6 @@ const InsuranceLogos = () => {
   const { language } = useLanguage();
   const content = homeContent[language];
   const section = (key: string) => content.sections.find((x) => x.key === key)!;
-  const [currentLogoIndex, setCurrentLogoIndex] = useState(0);
   
   // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
 
@@ -52,16 +51,6 @@ const InsuranceLogos = () => {
   const firstRow = insuranceLogos.slice(0, 5);   // First 5 logos
   const secondRow = insuranceLogos.slice(5, 10); // Next 5 logos
   const thirdRow = insuranceLogos.slice(10);     // Last 5 logos
-  const currentLogo = insuranceLogos[currentLogoIndex] ?? insuranceLogos[0];
-
-  // Auto-rotate logos for mobile slider
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentLogoIndex((prev) => (prev + 1) % insuranceLogos.length);
-    }, 2000); // Change every 2 seconds
-
-    return () => clearInterval(interval);
-  }, [insuranceLogos.length]);
 
   return (
     <section className="py-8 sm:py-12 lg:py-16 bg-white">
@@ -80,41 +69,10 @@ const InsuranceLogos = () => {
         <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
           
           {/* Mobile Layout - Auto Slider */}
-          <div className="block md:hidden" data-testid="mobile-insurance-carousel">
-            <div className="h-48 flex items-center justify-center">
-              <div className="relative w-full flex items-center justify-center">
-                <div
-                  key={currentLogo.name}
-                  className="absolute flex items-center justify-center inset-0 animate-in fade-in duration-500"
-                  data-testid={`insurance-logo-${currentLogo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <OptimizedImage
-                    src={currentLogo.src}
-                    alt={currentLogo.alt}
-                    className="h-36 w-auto object-contain filter grayscale"
-                    width={256}
-                    height={144}
-                    priority={false}
-                    sizes="256px"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            {/* Progress dots */}
-            <div className="flex justify-center mt-6">
-              <div className="flex gap-2">
-                {insuranceLogos.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === currentLogoIndex ? 'bg-green-600' : 'bg-gray-300'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          <MobileInsuranceCarousel
+            logos={insuranceLogos}
+            testId="mobile-insurance-carousel"
+          />
 
           {/* Desktop Layout - Three Rows Brick Style */}
           <div className="hidden md:flex flex-col items-center gap-4 lg:gap-6">

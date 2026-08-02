@@ -13,6 +13,7 @@ interface OptimizedImageProps extends Omit<
   width: number;
   height: number;
   priority?: boolean;
+  onReady?: () => void;
 }
 
 const OptimizedImage: FC<OptimizedImageProps> = ({
@@ -22,6 +23,7 @@ const OptimizedImage: FC<OptimizedImageProps> = ({
   width,
   height,
   priority = false,
+  onReady,
   sizes,
   style,
   ...props
@@ -46,12 +48,16 @@ const OptimizedImage: FC<OptimizedImageProps> = ({
 
     // Static assets can finish before React hydration attaches onLoad. Reconcile
     // the browser's real image state so a successful 200 never stays at opacity 0.
-    if (image.naturalWidth > 0) setIsLoaded(true);
+    if (image.naturalWidth > 0) {
+      setIsLoaded(true);
+      onReady?.();
+    }
     else setHasError(true);
-  }, [resolvedSrc, shouldLoad]);
+  }, [onReady, resolvedSrc, shouldLoad]);
   
   const handleLoad = () => {
     setIsLoaded(true);
+    onReady?.();
   };
 
   const handleError = () => {

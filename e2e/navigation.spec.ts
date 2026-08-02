@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const deploymentUrl = process.env.E2E_BASE_URL
   ? new URL(process.env.E2E_BASE_URL)
@@ -324,6 +324,66 @@ for (const route of routes) {
   });
 }
 
+test("cold route chunks keep the current page visible until navigation can commit", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "one browser contract is sufficient for App Router transitions");
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.stack || error.message));
+  const loadedChunkPaths = new Set<string>();
+
+  page.on("response", (response) => {
+    const pathname = new URL(response.url()).pathname;
+    if (pathname.startsWith("/_next/static/chunks/") && pathname.endsWith(".js")) {
+      loadedChunkPaths.add(pathname);
+    }
+  });
+  await page.route("**/*", async (route) => {
+    const headers = route.request().headers();
+    if (headers["next-router-prefetch"] || headers.purpose === "prefetch") {
+      await route.abort();
+      return;
+    }
+    await route.fallback();
+  });
+
+  await page.goto("/");
+  await expect(page.getByTestId("hero-title")).toBeVisible();
+  await rejectInitialConsent(page);
+
+  let releaseChunks!: () => void;
+  const chunkGate = new Promise<void>((resolve) => {
+    releaseChunks = resolve;
+  });
+  let delayedChunkRequests = 0;
+  await page.route("**/_next/static/chunks/**", async (route) => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (!loadedChunkPaths.has(pathname) && pathname.endsWith(".js")) {
+      delayedChunkRequests += 1;
+      await chunkGate;
+    }
+    await route.fallback();
+  });
+
+  const navigation = navigateFromHeader(page, "/about", false);
+  try {
+    await expect.poll(() => delayedChunkRequests, { timeout: 5_000 }).toBeGreaterThan(0);
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByTestId("hero-title")).toBeVisible();
+    await expect(page.getByTestId("about-hero-title")).toHaveCount(0);
+    await expect(page.locator("header")).toHaveCount(1);
+    await expect(page.locator("main")).toHaveCount(1);
+  } finally {
+    releaseChunks();
+  }
+
+  await navigation;
+  await expect(page).toHaveURL(/\/about\/?$/);
+  await expect(page.getByTestId("about-hero-title")).toBeVisible();
+  expect(pageErrors, pageErrors.join("\n\n")).toEqual([]);
+});
+
 for (const route of californiaRoutes) {
   test(`serves dedicated noindex metadata for ${route.path}`, async ({ page }) => {
     await page.goto(route.path);
@@ -405,12 +465,26 @@ test("route scroll respects reduced motion without a smooth-scroll runtime", asy
     .toBe("smooth");
 });
 
-test("mobile home mounts only the visible responsive insurance logo", async ({
+test("mobile home buffers one responsive logo without blanking the active slide", async ({
   page,
   isMobile,
 }) => {
   test.skip(!isMobile, "mobile carousel contract");
   const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  let releaseSecondLogo!: () => void;
+  const secondLogoGate = new Promise<void>((resolve) => {
+    releaseSecondLogo = resolve;
+  });
+  let delayedSecondLogo = false;
+  await page.route("**/_next/image?**", async (route) => {
+    const decodedUrl = decodeURIComponent(route.request().url());
+    if (decodedUrl.includes("8_1755868276798")) {
+      delayedSecondLogo = true;
+      await secondLogoGate;
+    }
+    await route.fallback();
+  });
 
   await page.goto("/");
   await rejectInitialConsent(page);
@@ -418,22 +492,81 @@ test("mobile home mounts only the visible responsive insurance logo", async ({
   const carousel = page.getByTestId("mobile-insurance-carousel");
   await carousel.scrollIntoViewIfNeeded();
   await expect(carousel).toBeVisible();
-  await expect(carousel.locator("img")).toHaveCount(1);
   await expect
-    .poll(() => carousel.locator("img").evaluate((image) => image.naturalWidth))
-    .toBeGreaterThan(0);
-  await expect(carousel.locator("img")).toHaveAttribute("src", /\/_next\/image\?/);
+    .poll(() =>
+      carousel.locator('[data-active="true"] img').evaluate((image) =>
+        image.complete && image.naturalWidth > 0 && Number(getComputedStyle(image).opacity) > 0.99,
+      ),
+    )
+    .toBe(true);
+  await expect(carousel.locator('[data-active="true"] img')).toHaveAttribute(
+    "src",
+    /\/_next\/image\?/,
+  );
 
-  const visibleLogo = carousel.locator('[data-testid^="insurance-logo-"]');
-  const firstLogoTestId = await visibleLogo.getAttribute("data-testid");
+  const activeLogo = carousel.locator('[data-active="true"]');
+  const firstLogoTestId = await activeLogo.getAttribute("data-testid");
+  try {
+    await expect.poll(() => delayedSecondLogo).toBe(true);
+    await expect(carousel.locator("img")).toHaveCount(2);
+    await page.waitForTimeout(2_250);
+    await expect(activeLogo).toHaveAttribute("data-testid", firstLogoTestId!);
+    await expect
+      .poll(() =>
+        activeLogo.locator("img").evaluate((image) =>
+          image.complete && image.naturalWidth > 0 && Number(getComputedStyle(image).opacity) > 0.99,
+        ),
+      )
+      .toBe(true);
+  } finally {
+    releaseSecondLogo();
+  }
+
   await expect
-    .poll(() => visibleLogo.getAttribute("data-testid"), { timeout: 5_000 })
+    .poll(() => activeLogo.getAttribute("data-testid"), { timeout: 5_000 })
     .not.toBe(firstLogoTestId);
-  await expect(carousel.locator("img")).toHaveCount(1);
   await expect
-    .poll(() => carousel.locator("img").evaluate((image) => image.naturalWidth))
+    .poll(() => carousel.locator("img").count())
+    .toBeLessThanOrEqual(3);
+  await expect
+    .poll(() => activeLogo.locator("img").evaluate((image) => image.naturalWidth))
     .toBeGreaterThan(0);
-  await expect(carousel.locator("img")).toHaveAttribute("src", /\/_next\/image\?/);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("mobile insurance srcsets cover the rendered width at the device DPR", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile responsive image contract");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  const expectEnoughPixels = async (image: Locator, sizes: string) => {
+    await expect(image).toHaveAttribute("sizes", sizes);
+    await expect.poll(() => image.evaluate((element) => element.naturalWidth)).toBeGreaterThan(0);
+    const measurement = await image.evaluate((element) => ({
+      candidateWidth: Number(new URL(element.currentSrc).searchParams.get("w")),
+      requiredWidth: Math.ceil(element.getBoundingClientRect().width * window.devicePixelRatio),
+    }));
+    expect(measurement.candidateWidth).toBeGreaterThanOrEqual(measurement.requiredWidth);
+  };
+
+  await page.goto("/contact");
+  await rejectInitialConsent(page);
+  const contactLogo = page.getByTestId("contact-insurance-logo-aetna").locator("img");
+  await contactLogo.scrollIntoViewIfNeeded();
+  await expectEnoughPixels(
+    contactLogo,
+    "(max-width: 639px) 86px, (max-width: 767px) 100px, 114px",
+  );
+
+  await page.goto("/locations/psychiatrist-fort-myers");
+  await rejectInitialConsent(page);
+  const locationCarousel = page.getByTestId("mobile-location-insurance-carousel");
+  await locationCarousel.scrollIntoViewIfNeeded();
+  const locationLogo = locationCarousel.locator('[data-active="true"] img');
+  await expectEnoughPixels(locationLogo, "256px");
+
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 

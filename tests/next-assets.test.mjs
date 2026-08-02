@@ -4,6 +4,18 @@ import path from "node:path";
 import test from "node:test";
 
 const source = fs.readFileSync(path.join(process.cwd(), "client", "src", "components", "OptimizedImage.tsx"), "utf8");
+const mobileInsuranceCarousel = fs.readFileSync(
+  path.join(process.cwd(), "client", "src", "components", "MobileInsuranceCarousel.tsx"),
+  "utf8",
+);
+const contact = fs.readFileSync(
+  path.join(process.cwd(), "client", "src", "components", "Contact.tsx"),
+  "utf8",
+);
+const locationInsuranceLogos = fs.readFileSync(
+  path.join(process.cwd(), "client", "src", "components", "LocationInsuranceLogos.tsx"),
+  "utf8",
+);
 
 test("the shared image component sends local assets through the Next responsive optimizer", () => {
   assert.match(source, /import Image, \{ type ImageProps \} from ['"]next\/image['"]/);
@@ -20,6 +32,25 @@ test("the shared image component reveals assets that completed before hydration"
   assert.match(source, /image\?\.complete/);
   assert.match(source, /image\.naturalWidth > 0/);
   assert.match(source, /setIsLoaded\(true\)/);
+});
+
+test("mobile insurance rotation waits for its buffered responsive image", () => {
+  assert.match(source, /onReady\?: \(\) => void/);
+  assert.match(mobileInsuranceCarousel, /loadedIndexesRef\.current\.has\(candidateIndex\)/);
+  assert.match(mobileInsuranceCarousel, /setPreviousIndex\(outgoingIndex\)/);
+  assert.match(mobileInsuranceCarousel, /width=\{256\}/);
+  assert.match(mobileInsuranceCarousel, /height=\{144\}/);
+  assert.match(mobileInsuranceCarousel, /sizes="256px"/);
+  assert.match(locationInsuranceLogos, /<MobileInsuranceCarousel/);
+  assert.doesNotMatch(locationInsuranceLogos, /sizes="160px"/);
+});
+
+test("contact insurance sizes describe rendered width instead of height", () => {
+  assert.match(contact, /width=\{114\}[\s\S]*height=\{64\}/);
+  assert.match(
+    contact,
+    /sizes="\(max-width: 639px\) 86px, \(max-width: 767px\) 100px, 114px"/,
+  );
 });
 
 test("direct img elements resolve imported static assets instead of serializing objects", () => {
