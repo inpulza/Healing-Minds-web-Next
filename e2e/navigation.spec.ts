@@ -482,6 +482,12 @@ test("mobile home buffers one responsive logo without blanking the active slide"
     if (decodedUrl.includes("8_1755868276798")) {
       delayedSecondLogo = true;
       await secondLogoGate;
+      await route.fulfill({
+        status: 200,
+        contentType: "image/webp",
+        body: "invalid-image",
+      });
+      return;
     }
     await route.fallback();
   });
@@ -524,13 +530,108 @@ test("mobile home buffers one responsive logo without blanking the active slide"
 
   await expect
     .poll(() => activeLogo.getAttribute("data-testid"), { timeout: 5_000 })
-    .not.toBe(firstLogoTestId);
+    .toBe("insurance-logo-medicare");
   await expect
     .poll(() => carousel.locator("img").count())
     .toBeLessThanOrEqual(3);
   await expect
     .poll(() => activeLogo.locator("img").evaluate((image) => image.naturalWidth))
     .toBeGreaterThan(0);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("location hero requests one optimized source for the active viewport", async ({
+  page,
+  isMobile,
+}) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+  await page.setViewportSize(
+    isMobile ? { width: 390, height: 844 } : { width: 2048, height: 1200 },
+  );
+
+  const heroRequests: string[] = [];
+  page.on("request", (request) => {
+    const decodedUrl = decodeURIComponent(request.url());
+    if (decodedUrl.includes("dr-melva-location-hero")) {
+      heroRequests.push(request.url());
+    }
+  });
+
+  await page.goto("/locations/psychiatrist-fort-myers");
+  await rejectInitialConsent(page);
+
+  const visibleHero = page.locator(
+    'img[alt="Dr. Melva Reve serving Fort Myers"]:visible',
+  );
+  await expect(visibleHero).toHaveCount(1);
+  await expect
+    .poll(() =>
+      visibleHero.evaluate(
+        (image) => image.complete && image.naturalWidth > 0,
+      ),
+    )
+    .toBe(true);
+  await page.waitForTimeout(1_500);
+
+  const distinctRequests = [...new Set(heroRequests)];
+  expect(heroRequests).toHaveLength(1);
+  expect(distinctRequests).toHaveLength(1);
+  expect(new URL(distinctRequests[0]).pathname).toBe("/_next/image");
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("mobile location hero is present before hydration chunks finish", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile SSR hero contract");
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  let releaseChunks!: () => void;
+  const chunkGate = new Promise<void>((resolve) => {
+    releaseChunks = resolve;
+  });
+  let heldChunks = 0;
+  await page.route(/\/_next\/static\/.*\.js(?:\?|$)/, async (route) => {
+    heldChunks += 1;
+    await chunkGate;
+    await route.fallback();
+  });
+
+  const navigation = page.goto("/locations/psychiatrist-fort-myers");
+  const mobileHeroSection = page
+    .locator("main section")
+    .first()
+    .locator("div.md\\:hidden")
+    .first();
+  const mobileHero = mobileHeroSection.locator(
+    'img[alt="Dr. Melva Reve serving Fort Myers"]',
+  );
+
+  try {
+    await expect.poll(() => heldChunks).toBeGreaterThan(0);
+    await expect(mobileHero).toHaveCount(1);
+    await expect(mobileHero).toHaveAttribute(
+      "sizes",
+      "(max-width: 1024px) 100vw, 1800px",
+    );
+    await expect
+      .poll(() =>
+        mobileHero.evaluate(
+          (image) => Number(getComputedStyle(image).opacity),
+        ),
+      )
+      .toBe(1);
+    await expect(mobileHeroSection.locator('[role="status"]')).toHaveCount(0);
+  } finally {
+    releaseChunks();
+  }
+
+  await navigation;
+  await rejectInitialConsent(page);
+  await expect
+    .poll(() => mobileHero.evaluate((image) => image.complete && image.naturalWidth > 0))
+    .toBe(true);
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 

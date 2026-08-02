@@ -32,17 +32,59 @@ test("the shared image component reveals assets that completed before hydration"
   assert.match(source, /image\?\.complete/);
   assert.match(source, /image\.naturalWidth > 0/);
   assert.match(source, /setIsLoaded\(true\)/);
+  assert.match(source, /opacity: priority \|\| isLoaded \? 1 : 0/);
 });
 
 test("mobile insurance rotation waits for its buffered responsive image", () => {
   assert.match(source, /onReady\?: \(\) => void/);
+  assert.match(source, /onFailure\?: \(\) => void/);
   assert.match(mobileInsuranceCarousel, /loadedIndexesRef\.current\.has\(candidateIndex\)/);
+  assert.match(mobileInsuranceCarousel, /findNextCandidate/);
+  assert.match(mobileInsuranceCarousel, /failedIndexes/);
+  assert.match(mobileInsuranceCarousel, /onFailure=/);
   assert.match(mobileInsuranceCarousel, /setPreviousIndex\(outgoingIndex\)/);
   assert.match(mobileInsuranceCarousel, /width=\{256\}/);
   assert.match(mobileInsuranceCarousel, /height=\{144\}/);
   assert.match(mobileInsuranceCarousel, /sizes="256px"/);
   assert.match(locationInsuranceLogos, /<MobileInsuranceCarousel/);
   assert.doesNotMatch(locationInsuranceLogos, /sizes="160px"/);
+});
+
+test("location heroes issue one priority request per viewport", () => {
+  const locationPages = [
+    "LocationAveMaria.tsx",
+    "LocationBonitaSprings.tsx",
+    "LocationEstero.tsx",
+    "LocationFortMyers.tsx",
+    "LocationGoldenGate.tsx",
+    "LocationImmokalee.tsx",
+    "LocationLelyResorts.tsx",
+    "LocationMarcoIsland.tsx",
+    "LocationNaples.tsx",
+    "LocationVanderbiltBeach.tsx",
+  ];
+
+  for (const page of locationPages) {
+    const content = fs.readFileSync(
+      path.join(process.cwd(), "client", "src", "pages", page),
+      "utf8",
+    );
+    const heroImages = [
+      ...content.matchAll(
+        /<OptimizedImage\s+src=\{assetUrl\(heroLocationImage\)\}[\s\S]*?\/>/g,
+      ),
+    ].map((match) => match[0]);
+
+    assert.equal(heroImages.length, 2, `${page} should render two responsive hero elements`);
+    assert.match(
+      heroImages[0],
+      /priority=\{true\}[\s\S]*sizes="\(max-width: 1024px\) 100vw, 1800px"/,
+    );
+    assert.match(
+      heroImages[1],
+      /priority=\{true\}[\s\S]*sizes="\(max-width: 1024px\) 100vw, 1800px"/,
+    );
+  }
 });
 
 test("contact insurance sizes describe rendered width instead of height", () => {

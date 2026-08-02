@@ -16,14 +16,31 @@ type MobileInsuranceCarouselProps = {
 const logoTestId = (name: string) =>
   `insurance-logo-${name.toLowerCase().replace(/\s+/g, '-')}`;
 
+const findNextCandidate = (
+  activeIndex: number,
+  logoCount: number,
+  failedIndexes: ReadonlySet<number>,
+) => {
+  for (let offset = 1; offset < logoCount; offset += 1) {
+    const index = (activeIndex + offset) % logoCount;
+    if (!failedIndexes.has(index)) return index;
+  }
+
+  return null;
+};
+
 export default function MobileInsuranceCarousel({
   logos,
   testId,
 }: MobileInsuranceCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [previousIndex, setPreviousIndex] = useState<number | null>(null);
+  const [failedIndexes, setFailedIndexes] = useState<ReadonlySet<number>>(
+    () => new Set(),
+  );
   const activeIndexRef = useRef(0);
   const loadedIndexesRef = useRef(new Set<number>());
+  const failedIndexesRef = useRef(new Set<number>());
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -31,11 +48,19 @@ export default function MobileInsuranceCarousel({
       if (logos.length < 2) return;
 
       const outgoingIndex = activeIndexRef.current;
-      const candidateIndex = (outgoingIndex + 1) % logos.length;
+      const candidateIndex = findNextCandidate(
+        outgoingIndex,
+        logos.length,
+        failedIndexesRef.current,
+      );
 
       // A slow or failed request must never replace the logo that is already
-      // visible. The hidden candidate is promoted only after it is ready.
-      if (!loadedIndexesRef.current.has(candidateIndex)) return;
+      // visible. Failed candidates are skipped, and a hidden candidate is
+      // promoted only after it is ready.
+      if (
+        candidateIndex === null ||
+        !loadedIndexesRef.current.has(candidateIndex)
+      ) return;
 
       activeIndexRef.current = candidateIndex;
       setPreviousIndex(outgoingIndex);
@@ -56,7 +81,11 @@ export default function MobileInsuranceCarousel({
 
   if (logos.length === 0) return null;
 
-  const nextIndex = (activeIndex + 1) % logos.length;
+  const nextIndex = findNextCandidate(
+    activeIndex,
+    logos.length,
+    failedIndexes,
+  );
   const renderedIndexes = [previousIndex, activeIndex, nextIndex].filter(
     (index, position, indexes): index is number =>
       index !== null && indexes.indexOf(index) === position,
@@ -89,6 +118,12 @@ export default function MobileInsuranceCarousel({
                   priority={false}
                   sizes="256px"
                   onReady={() => loadedIndexesRef.current.add(index)}
+                  onFailure={() => {
+                    loadedIndexesRef.current.delete(index);
+                    if (failedIndexesRef.current.has(index)) return;
+                    failedIndexesRef.current.add(index);
+                    setFailedIndexes(new Set(failedIndexesRef.current));
+                  }}
                 />
               </div>
             );

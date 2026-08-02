@@ -14,6 +14,7 @@ interface OptimizedImageProps extends Omit<
   height: number;
   priority?: boolean;
   onReady?: () => void;
+  onFailure?: () => void;
 }
 
 const OptimizedImage: FC<OptimizedImageProps> = ({
@@ -24,6 +25,7 @@ const OptimizedImage: FC<OptimizedImageProps> = ({
   height,
   priority = false,
   onReady,
+  onFailure,
   sizes,
   style,
   ...props
@@ -51,9 +53,11 @@ const OptimizedImage: FC<OptimizedImageProps> = ({
     if (image.naturalWidth > 0) {
       setIsLoaded(true);
       onReady?.();
+    } else {
+      setHasError(true);
+      onFailure?.();
     }
-    else setHasError(true);
-  }, [onReady, resolvedSrc, shouldLoad]);
+  }, [onFailure, onReady, resolvedSrc, shouldLoad]);
   
   const handleLoad = () => {
     setIsLoaded(true);
@@ -62,12 +66,13 @@ const OptimizedImage: FC<OptimizedImageProps> = ({
 
   const handleError = () => {
     setHasError(true);
+    onFailure?.();
   };
 
   const imageStyle: CSSProperties = {
     ...style,
-    transition: 'opacity 0.3s ease-in-out',
-    opacity: isLoaded ? 1 : 0,
+    transition: priority ? 'none' : 'opacity 0.3s ease-in-out',
+    opacity: priority || isLoaded ? 1 : 0,
     willChange: priority ? 'auto' : 'opacity',
   };
 
