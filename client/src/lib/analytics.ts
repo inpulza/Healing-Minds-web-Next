@@ -29,12 +29,19 @@ function readConsent(category: 'analytics' | 'marketing'): boolean {
   }
 }
 
+// Storage is the source of truth on a fresh document. Once a consent event is
+// handled, its effective values are authoritative for the rest of that
+// document. This keeps tracking closed when a withdrawal cannot overwrite an
+// older persisted grant.
+let inMemoryAnalyticsConsent: boolean | null = null;
+let inMemoryMarketingConsent: boolean | null = null;
+
 function hasAnalyticsConsent(): boolean {
-  return readConsent('analytics');
+  return inMemoryAnalyticsConsent ?? readConsent('analytics');
 }
 
 function hasMarketingConsent(): boolean {
-  return readConsent('marketing');
+  return inMemoryMarketingConsent ?? readConsent('marketing');
 }
 
 function initConsentMode(): void {
@@ -215,6 +222,15 @@ export type LeadSource =
 
 let lastLeadKey: string | null = null;
 let lastLeadTimestamp = 0;
+const CLINIC_PHONE_DIGITS = '12394230272';
+
+function isClinicPhoneHref(href: string): boolean {
+  if (!href.startsWith('tel:')) {
+    return false;
+  }
+
+  return href.slice(4).replace(/\D/g, '') === CLINIC_PHONE_DIGITS;
+}
 
 /**
  * Records a lead action. Appointment clicks are intentionally treated as lead
@@ -267,7 +283,7 @@ export function installOutboundLeadTracking(): () => void {
       link.getAttribute('aria-label') ||
       'outbound_link';
 
-    if (href.startsWith('tel:')) {
+    if (href.startsWith('tel:') && isClinicPhoneHref(href)) {
       trackLeadConversion('phone_call', { click_location: clickLocation });
     } else if (href.startsWith('mailto:')) {
       trackLeadConversion('email', { click_location: clickLocation });
@@ -304,17 +320,41 @@ export function handleConsentChange(
   analyticsConsent: boolean,
   marketingConsent: boolean,
 ): void {
-  updateGoogleConsent(analyticsConsent, marketingConsent);
+  // Close or open the local gates before any provider call or event replay.
+  inMemoryAnalyticsConsent = analyticsConsent;
+  inMemoryMarketingConsent = marketingConsent;
 
-  if (analyticsConsent) {
-    initGA();
-    trackPageView(window.location.pathname, document.title);
-  } else {
+  try {
+    updateGoogleConsent(analyticsConsent, marketingConsent);
+  } catch (error) {
+    console.error('Failed to update Google consent:', error);
+  }
+
+  // Provider failures must never skip local identifier cleanup. Keep each
+  // category isolated so an unavailable cookie API cannot block the other.
+  if (!analyticsConsent) {
     lastTrackedPath = null;
-    clearAnalyticsCookies();
+    try {
+      clearAnalyticsCookies();
+    } catch (error) {
+      console.error('Failed to clear analytics cookies:', error);
+    }
   }
 
   if (!marketingConsent) {
-    clearAdvertisingCookies();
+    try {
+      clearAdvertisingCookies();
+    } catch (error) {
+      console.error('Failed to clear advertising cookies:', error);
+    }
+  }
+
+  if (analyticsConsent) {
+    try {
+      initGA();
+      trackPageView(window.location.pathname, document.title);
+    } catch (error) {
+      console.error('Failed to start Google analytics after consent:', error);
+    }
   }
 }

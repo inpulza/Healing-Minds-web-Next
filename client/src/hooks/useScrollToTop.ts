@@ -8,10 +8,11 @@ export const useScrollToTop = () => {
   const [location] = useLocation();
 
   useEffect(() => {
+    const shouldReduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: shouldReduceMotion ? 'auto' : 'smooth'
     });
   }, [location]);
 };

@@ -2,6 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 const externalBaseUrl = process.env.E2E_BASE_URL?.replace(/\/$/, "");
 const localBaseUrl = "http://127.0.0.1:3100";
+const storageState = process.env.E2E_STORAGE_STATE?.trim();
 
 export default defineConfig({
   testDir: "./e2e",
@@ -12,6 +13,7 @@ export default defineConfig({
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: externalBaseUrl || localBaseUrl,
+    storageState: storageState || undefined,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     video: "retain-on-failure",

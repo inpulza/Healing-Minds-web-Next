@@ -4,7 +4,12 @@ const deploymentUrl = process.env.E2E_BASE_URL
   ? new URL(process.env.E2E_BASE_URL)
   : null;
 const deploymentOrigin = deploymentUrl?.origin ?? null;
-const acceptsPreviewCredential = deploymentUrl?.hostname.endsWith(".vercel.app") ?? false;
+const healingMindsProtectedPreviewHost =
+  /^healing-minds-psychi-git-[a-z0-9-]+-inpulzasolutions-6847s-projects\.vercel\.app$/i;
+const acceptsPreviewCredential = Boolean(
+  deploymentUrl?.protocol === "https:" &&
+    healingMindsProtectedPreviewHost.test(deploymentUrl.hostname),
+);
 const previewCredential = acceptsPreviewCredential && process.env.VERCEL_AUTOMATION_BYPASS_SECRET
   ? {
       name: "x-vercel-protection-bypass",
@@ -17,11 +22,30 @@ const previewCredential = acceptsPreviewCredential && process.env.VERCEL_AUTOMAT
       }
     : null;
 
+const tiktokAttempts = new WeakMap<Page, string[]>();
+const tiktokCookiePattern =
+  /^(?:_ttp|_tt_enable_cookie|_ttp_pixel|_tt_sessionId|_tt_pixel_session_index|_tt_appInfo|ttcsid(?:_|$)|ttclid$)/;
+const tiktokNetworkPattern =
+  /^https:\/\/[^/]*(?:tiktok\.com|tiktokcdn(?:-us)?\.com|byteoversea\.com|ibytedtos\.com|muscdn\.com)\//i;
+
+function isTikTokPixelUrl(rawUrl: string): boolean {
+  return tiktokNetworkPattern.test(rawUrl);
+}
+
 test.beforeEach(async ({ page }) => {
+  const attempts: string[] = [];
+  tiktokAttempts.set(page, attempts);
+  page.on("request", (request) => {
+    if (isTikTokPixelUrl(request.url())) attempts.push(request.url());
+  });
+  await page.route(tiktokNetworkPattern, async (route) => {
+    await route.abort();
+  });
+
   if (!deploymentOrigin || !previewCredential) return;
 
   // Scope Preview authentication to the deployment origin. A global header
-  // would leak the credential to analytics, Clarity, TikTok and every other
+  // would leak the credential to analytics, Clarity and every other
   // third-party request made by the page. Fetch without following redirects:
   // Playwright otherwise forwards header overrides through the redirect chain.
   await page.route(`${deploymentOrigin}/**`, async (route) => {
@@ -43,6 +67,17 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.afterEach(async ({ page }) => {
+  expect(tiktokAttempts.get(page) ?? [], "TikTok Pixel network attempts").toEqual([]);
+  await expect(
+    page.locator('script[src*="analytics.tiktok.com"], script[src*="/i18n/pixel/"]'),
+  ).toHaveCount(0);
+  expect(await page.evaluate(() => typeof window.ttq)).toBe("undefined");
+  expect(
+    (await page.context().cookies())
+      .filter((cookie) => tiktokCookiePattern.test(cookie.name))
+      .map(({ name, domain }) => ({ name, domain })),
+  ).toEqual([]);
+
   // A page can finish its assertions while late images are still in flight.
   // The browser closing can legitimately cancel those callbacks. Remove the
   // handler and ignore only teardown-time callback errors; in-test failures
@@ -283,3 +318,141 @@ for (const route of californiaRoutes) {
     }
   });
 }
+
+test("route scroll respects reduced motion without a smooth-scroll runtime", async ({
+  page,
+  isMobile,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => {
+    const state = window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] };
+    state.__hmpScrollBehaviors = [];
+    const nativeScrollTo = window.scrollTo.bind(window);
+    window.scrollTo = ((optionsOrX: ScrollToOptions | number, y?: number) => {
+      if (typeof optionsOrX === "object" && optionsOrX.behavior) {
+        state.__hmpScrollBehaviors?.push(optionsOrX.behavior);
+      }
+      if (typeof optionsOrX === "number") {
+        nativeScrollTo(optionsOrX, y ?? 0);
+      } else {
+        nativeScrollTo(optionsOrX);
+      }
+    }) as typeof window.scrollTo;
+  });
+
+  await page.goto("/");
+  await rejectInitialConsent(page);
+  await page.evaluate(() => {
+    (window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] })
+      .__hmpScrollBehaviors = [];
+  });
+  await navigateFromHeader(page, "/about", isMobile);
+  await expect(page).toHaveURL(/\/about\/?$/);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] })
+            .__hmpScrollBehaviors?.at(-1),
+      ),
+    )
+    .toBe("auto");
+
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.evaluate(() => {
+    (window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] })
+      .__hmpScrollBehaviors = [];
+  });
+  await navigateFromHeader(page, "/contact", isMobile);
+  await expect(page).toHaveURL(/\/contact\/?$/);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (window as typeof window & { __hmpScrollBehaviors?: ScrollBehavior[] })
+            .__hmpScrollBehaviors?.at(-1),
+      ),
+    )
+    .toBe("smooth");
+});
+
+test("sitemap XML preserves blog alternates, dates and priority", async ({ page }) => {
+  const response = await page.goto("/sitemap.xml", { waitUntil: "domcontentloaded" });
+  expect(response?.status()).toBe(200);
+  const xml = await response!.text();
+
+  const blockFor = (url: string) => {
+    const escaped = url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return xml.match(new RegExp(`<url>\\s*<loc>${escaped}</loc>[\\s\\S]*?</url>`))?.[0];
+  };
+  const blogIndex = blockFor("https://www.healingmindsp.com/blog");
+  const spanishBlogIndex = blockFor("https://www.healingmindsp.com/es/blog");
+  expect(blogIndex).toBeTruthy();
+  expect(spanishBlogIndex).toBeTruthy();
+  for (const block of [blogIndex!, spanishBlogIndex!]) {
+    expect(block).toContain(
+      'hreflang="x-default" href="https://www.healingmindsp.com/blog"',
+    );
+    expect(block).toContain("<priority>0.7</priority>");
+  }
+
+  const postBlocks = [
+    ...xml.matchAll(
+      /<url>\s*<loc>https:\/\/www\.healingmindsp\.com\/(?:es\/)?blog\/[^<]+<\/loc>[\s\S]*?<\/url>/g,
+    ),
+  ].map((match) => match[0]);
+  for (const block of postBlocks) {
+    expect(block).toMatch(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
+    expect(block).not.toMatch(/<lastmod>[^<]*T/);
+    expect(block).toContain("<priority>0.6</priority>");
+    expect(block).toContain('hreflang="x-default"');
+
+    const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
+    const english = block.match(/hreflang="en" href="([^"]+)"/)?.[1];
+    const xDefault = block.match(/hreflang="x-default" href="([^"]+)"/)?.[1];
+    expect(xDefault).toBe(english ?? loc);
+  }
+
+  const locCount = (xml.match(/<loc>/g) ?? []).length;
+  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  expect(new Set(locs).size).toBe(locCount);
+  expect(locCount - postBlocks.length).toBe(74);
+
+  const publishedPosts = await page.evaluate(async () => {
+    const posts: Array<{ slug: string; language: string }> = [];
+    for (const language of ["en", "es"] as const) {
+      for (let pageIndex = 0; pageIndex < 10; pageIndex += 1) {
+        const response = await fetch(
+          `/api/blog/posts?language=${language}&limit=100&offset=${pageIndex * 100}`,
+        );
+        const body = (await response.json()) as {
+          success?: boolean;
+          data?: Array<{ slug: string; language: string }>;
+        };
+        if (!response.ok || body.success !== true || !Array.isArray(body.data)) {
+          throw new Error(`Published blog API failed for ${language} page ${pageIndex + 1}`);
+        }
+        posts.push(...body.data);
+        if (body.data.length < 100) break;
+        if (pageIndex === 9) {
+          throw new Error(`Published blog API exceeded the audited ${language} pagination bound`);
+        }
+      }
+    }
+    return posts;
+  });
+  expect(publishedPosts.length).toBeGreaterThan(0);
+  const publishedPaths = publishedPosts.map((post) =>
+    post.language === "es"
+      ? `/es/blog/${encodeURIComponent(post.slug)}`
+      : `/blog/${encodeURIComponent(post.slug)}`,
+  );
+  const sitemapPostPaths = postBlocks.map((block) => {
+    const absolute = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
+    if (!absolute) throw new Error("Sitemap blog entry has no loc");
+    return new URL(absolute).pathname;
+  });
+  expect([...new Set(sitemapPostPaths)].sort()).toEqual(
+    [...new Set(publishedPaths)].sort(),
+  );
+});

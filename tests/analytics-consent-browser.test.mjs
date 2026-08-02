@@ -20,6 +20,18 @@ async function bundleBrowserModule(entryPoint, globalName) {
   return result.outputFiles[0].text;
 }
 
+async function waitForCookiesToDisappear(context, page, predicate) {
+  let remaining = [];
+  for (let attempt = 0; attempt <= 20; attempt += 1) {
+    remaining = (await context.cookies()).filter(predicate);
+    if (remaining.length === 0) return remaining;
+    if (attempt < 20) {
+      await page.waitForTimeout(25);
+    }
+  }
+  return remaining;
+}
+
 test('consent cleanup removes first-party provider cookies at the canonical domain', async () => {
   const cleanupBundle = await bundleBrowserModule(
     fileURLToPath(new URL('../client/src/lib/cookie-cleanup.ts', import.meta.url)),
@@ -77,11 +89,13 @@ test('consent cleanup removes first-party provider cookies at the canonical doma
       });
     });
 
-    const remainingCookies = await context.cookies();
-    const remainingFirstParty = remainingCookies.filter((cookie) =>
-      cookie.domain.endsWith('healingmindsp.com'),
+    const remainingFirstParty = await waitForCookiesToDisappear(
+      context,
+      page,
+      (cookie) => cookie.domain.endsWith('healingmindsp.com'),
     );
     assert.deepEqual(remainingFirstParty, []);
+    const remainingCookies = await context.cookies();
     assert.ok(
       remainingCookies.some(
         (cookie) => cookie.name === '_ttp' && cookie.domain.endsWith('tiktok.com'),
@@ -130,7 +144,9 @@ test('consent cleanup removes provider domain cookies on a preview host', async 
       });
     });
 
-    const remainingPreviewCookies = (await context.cookies()).filter(
+    const remainingPreviewCookies = await waitForCookiesToDisappear(
+      context,
+      page,
       (cookie) => cookie.domain.replace(/^\./, '') === previewHost,
     );
     assert.deepEqual(remainingPreviewCookies, []);
@@ -180,6 +196,14 @@ test('Google config is queued before one deduplicated outbound lead event', asyn
       });
       document.body.appendChild(phoneLink);
       phoneLink.click();
+
+      const hotlineLink = document.createElement('a');
+      hotlineLink.href = 'tel:+18009853059';
+      hotlineLink.id = 'federal_hotline';
+      hotlineLink.addEventListener('click', (event) => event.preventDefault());
+      document.body.appendChild(hotlineLink);
+      hotlineLink.click();
+
       removeDelegatedTracking();
       return window.dataLayer.map((entry) => Array.from(entry));
     });
@@ -200,6 +224,11 @@ test('Google config is queued before one deduplicated outbound lead event', asyn
       leadCommands.length,
       1,
       'one real click with different explicit/delegated locations must not double count',
+    );
+    assert.notEqual(
+      leadCommands[0][2].click_location,
+      'federal_hotline',
+      'a federal assistance line must not be reported as a clinic lead',
     );
     assert.equal(leadCommands[0][2].transport_type, 'beacon');
   } finally {

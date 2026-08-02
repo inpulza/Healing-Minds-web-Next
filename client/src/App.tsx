@@ -123,7 +123,8 @@ function Router() {
   // Initialize Microsoft Clarity (guards prevent multiple initializations)
   useClarity(true);
   
-  // Initialize TikTok Pixel (guards prevent multiple initializations)
+  // Manage legacy TikTok cleanup; the central tracking config disables the
+  // Pixel itself across the site.
   useTikTokPixel(true);
   
   // Scroll to top on route changes

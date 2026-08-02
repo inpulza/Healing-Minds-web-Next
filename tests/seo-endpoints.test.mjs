@@ -23,3 +23,14 @@ test("admin pages stay crawlable for noindex while private APIs remain blocked",
   assert.match(robots, /["']\/api\/admin\/["']/);
   assert.doesNotMatch(sitemap, /\/admin(?:\/|["'`])/);
 });
+
+test("blog sitemap preserves the historical hreflang contract", () => {
+  const sitemap = read("app/sitemap.ts");
+
+  assert.match(sitemap, /"x-default": `\$\{ORIGIN\}\/blog`/);
+  assert.match(sitemap, /export const revalidate = 86400/);
+  assert.match(sitemap, /Object\.values\(blogSnapshot\)/);
+  assert.match(sitemap, /preserving last valid sitemap/);
+  assert.match(sitemap, /catch \(error\)[\s\S]*throw error/);
+  assert.match(sitemap, /buildBlogSitemapEntries\(ORIGIN, publishedPosts\)/);
+});

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { 
   CookieConsentContextType, 
   CookieConsentState, 
@@ -9,6 +9,58 @@ import {
 
 const STORAGE_KEY = 'hmp_cookie_consent';
 
+function removeStoredConsentSafely(): boolean {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    return true;
+  } catch (error) {
+    // Privacy-restricted browsers may reject every Storage operation. The UI
+    // must still hydrate with the default denied state instead of throwing out
+    // of the effect that owns the banner.
+    console.error('Error clearing cookie consent preferences:', error);
+    return false;
+  }
+}
+
+function parseStoredConsent(value: string): CookieConsentState | null {
+  const parsed = JSON.parse(value) as CookieConsentState;
+  if (!parsed || typeof parsed !== 'object' || !parsed.consent) {
+    return null;
+  }
+
+  return {
+    ...parsed,
+    consentDate: parsed.consentDate ? new Date(parsed.consentDate) : undefined,
+    lastUpdated: parsed.lastUpdated ? new Date(parsed.lastUpdated) : undefined,
+  };
+}
+
+function createConsentEventDetail(
+  consent: CookieConsent,
+  persisted: boolean,
+  effectiveConsent?: CookieConsent,
+  categoryPersistence = { analytics: persisted, marketing: persisted },
+) {
+  // A newly requested grant that cannot be persisted must not open a provider,
+  // but an already-persisted category that stayed granted need not be closed.
+  // Callers can therefore supply the category-specific effective decision while
+  // persisted=false still selects the no-expiry cleanup path for withdrawals.
+  const effective = effectiveConsent ?? (persisted
+    ? consent
+    : { necessary: true, analytics: false, marketing: false });
+  const analytics = effective.analytics;
+  const marketing = effective.marketing;
+  return {
+    analytics,
+    marketing,
+    hasAnalyticsConsent: analytics,
+    hasMarketingConsent: marketing,
+    persisted,
+    analyticsPersisted: categoryPersistence.analytics,
+    marketingPersisted: categoryPersistence.marketing,
+  };
+}
+
 const CookieConsentContext = createContext<CookieConsentContextType | undefined>(undefined);
 
 interface CookieConsentProviderProps {
@@ -17,39 +69,175 @@ interface CookieConsentProviderProps {
 
 export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ children }) => {
   const [consentState, setConsentState] = useState<CookieConsentState>(DEFAULT_CONSENT_STATE);
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+  // If a local withdrawal cannot be persisted, the old grant remains in
+  // shared storage. Keep those categories denied in this document until a
+  // later local choice saves successfully (or the document is replaced).
+  const failedLocalRevocationsRef = useRef({ analytics: false, marketing: false });
+  const effectiveConsentRef = useRef<CookieConsent>({ ...DEFAULT_CONSENT_STATE.consent });
 
   // Load consent from localStorage on initialization
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        const parsed = JSON.parse(stored) as CookieConsentState;
+        const parsed = parseStoredConsent(stored);
         
         // Validate the stored data structure
-        if (parsed && typeof parsed === 'object' && parsed.consent) {
-          setConsentState({
-            ...parsed,
-            consentDate: parsed.consentDate ? new Date(parsed.consentDate) : undefined,
-            lastUpdated: parsed.lastUpdated ? new Date(parsed.lastUpdated) : undefined,
-          });
+        if (parsed) {
+          effectiveConsentRef.current = parsed.consent;
+          setConsentState(parsed);
         } else {
           // Invalid stored data, reset to default
           console.warn('Invalid cookie consent data found, resetting to defaults');
-          localStorage.removeItem(STORAGE_KEY);
+          removeStoredConsentSafely();
         }
       }
     } catch (error) {
       console.error('Error loading cookie consent preferences:', error);
-      localStorage.removeItem(STORAGE_KEY);
+      removeStoredConsentSafely();
+    } finally {
+      setIsHydrated(true);
     }
+  }, []);
+
+  // Keep every open tab on the same effective decision. Storage events fire in
+  // the other documents only, so rebroadcast the persisted state through the
+  // same consentChanged contract used by Google, Clarity and TikTok.
+  useEffect(() => {
+    const handleStorage = (event: StorageEvent) => {
+      // localStorage.clear() emits key=null, so it must trigger the same
+      // re-read as a direct removal of the consent key. Ignore clears from
+      // sessionStorage, whose StorageEvents reach this listener as well.
+      if (event.key !== STORAGE_KEY && event.key !== null) {
+        return;
+      }
+      if (event.storageArea) {
+        try {
+          if (event.storageArea !== window.localStorage) {
+            return;
+          }
+        } catch (error) {
+          // If the browser blocks access to Storage while dispatching the
+          // event, continue fail-closed instead of keeping an in-memory grant.
+          console.error('Error confirming cross-tab storage area:', error);
+        }
+      }
+
+      // StorageEvent.newValue is only a notification payload and may already
+      // be stale. Re-open providers exclusively from the value confirmed in
+      // shared storage; a blocked read remains denied and non-persisted.
+      let persistedValue: string | null = null;
+      let storageReadSucceeded = false;
+      try {
+        persistedValue = localStorage.getItem(STORAGE_KEY);
+        storageReadSucceeded = true;
+      } catch (error) {
+        console.error('Error confirming cross-tab cookie consent state:', error);
+      }
+
+      let nextState: CookieConsentState = DEFAULT_CONSENT_STATE;
+      let storageDecisionConfirmed = storageReadSucceeded && persistedValue === null;
+      try {
+        if (persistedValue) {
+          const parsed = parseStoredConsent(persistedValue);
+          if (parsed) {
+            nextState = parsed;
+            storageDecisionConfirmed = true;
+          } else {
+            console.warn('Invalid cross-tab cookie consent data, reverting to denied');
+          }
+        }
+      } catch (error) {
+        console.error('Error synchronizing cookie consent preferences:', error);
+      }
+
+      const failedLocalRevocations = failedLocalRevocationsRef.current;
+      const hasFailedLocalRevocation =
+        failedLocalRevocations.analytics || failedLocalRevocations.marketing;
+      const remoteDecisionPersisted =
+        storageDecisionConfirmed && !hasFailedLocalRevocation;
+      if (hasFailedLocalRevocation) {
+        nextState = {
+          ...nextState,
+          consent: {
+            ...nextState.consent,
+            analytics: failedLocalRevocations.analytics
+              ? false
+              : nextState.consent.analytics,
+            marketing: failedLocalRevocations.marketing
+              ? false
+              : nextState.consent.marketing,
+          },
+        };
+      }
+
+      effectiveConsentRef.current = nextState.consent;
+      setConsentState(nextState);
+      setPreferencesOpen(false);
+      window.dispatchEvent(new CustomEvent('consentChanged', {
+        // An unreadable/invalid remote decision or any locally-watermarked
+        // denial is not durably represented. Keep provider cleanup on the
+        // no-expiry path until a later local choice is saved successfully.
+        detail: createConsentEventDetail(
+          nextState.consent,
+          remoteDecisionPersisted,
+          nextState.consent,
+          {
+            analytics:
+              storageDecisionConfirmed && !failedLocalRevocations.analytics,
+            marketing:
+              storageDecisionConfirmed && !failedLocalRevocations.marketing,
+          },
+        ),
+      }));
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   // Save consent to localStorage
   const saveConsent = useCallback((newState: CookieConsentState) => {
+    const previousEffectiveConsent = effectiveConsentRef.current;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      failedLocalRevocationsRef.current = { analytics: false, marketing: false };
+      effectiveConsentRef.current = newState.consent;
+      return {
+        persisted: true,
+        effectiveConsent: newState.consent,
+        categoryPersistence: { analytics: true, marketing: true },
+      };
     } catch (error) {
+      failedLocalRevocationsRef.current = {
+        analytics:
+          failedLocalRevocationsRef.current.analytics ||
+          (previousEffectiveConsent.analytics && !newState.consent.analytics),
+        marketing:
+          failedLocalRevocationsRef.current.marketing ||
+          (previousEffectiveConsent.marketing && !newState.consent.marketing),
+      };
+      const effectiveConsent = {
+        necessary: true,
+        analytics: previousEffectiveConsent.analytics && newState.consent.analytics,
+        marketing: previousEffectiveConsent.marketing && newState.consent.marketing,
+      };
+      effectiveConsentRef.current = effectiveConsent;
       console.error('Error saving cookie consent preferences:', error);
+      return {
+        persisted: false,
+        effectiveConsent,
+        categoryPersistence: {
+          analytics:
+            previousEffectiveConsent.analytics === newState.consent.analytics &&
+            !failedLocalRevocationsRef.current.analytics,
+          marketing:
+            previousEffectiveConsent.marketing === newState.consent.marketing &&
+            !failedLocalRevocationsRef.current.marketing,
+        },
+      };
     }
   }, []);
 
@@ -67,19 +255,20 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
       lastUpdated: new Date(),
     };
     
-    setConsentState(newState);
-    saveConsent(newState);
+    setPreferencesOpen(false);
+    const saveResult = saveConsent(newState);
+    setConsentState({ ...newState, consent: saveResult.effectiveConsent });
     
     // Trigger granular consent update event
-    window.dispatchEvent(new CustomEvent('consentChanged', { 
-      detail: { 
-        analytics: newState.consent.analytics,
-        marketing: newState.consent.marketing,
-        hasAnalyticsConsent: newState.consent.analytics,
-        hasMarketingConsent: newState.consent.marketing
-      } 
+    window.dispatchEvent(new CustomEvent('consentChanged', {
+      detail: createConsentEventDetail(
+        newState.consent,
+        saveResult.persisted,
+        saveResult.effectiveConsent,
+        saveResult.categoryPersistence,
+      ),
     }));
-  }, [consentState.consent.analytics, saveConsent]);
+  }, [saveConsent]);
 
   // Accept selected cookies
   const acceptSelected = useCallback((partialConsent: Partial<CookieConsent>) => {
@@ -97,18 +286,19 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
       lastUpdated: new Date(),
     };
     
-    setConsentState(newState);
-    saveConsent(newState);
+    setPreferencesOpen(false);
+    const saveResult = saveConsent(newState);
+    setConsentState({ ...newState, consent: saveResult.effectiveConsent });
     
     // Trigger granular consent event if any consent changed
     if (partialConsent.analytics !== undefined || partialConsent.marketing !== undefined) {
-      window.dispatchEvent(new CustomEvent('consentChanged', { 
-        detail: { 
-          analytics: newConsent.analytics,
-          marketing: newConsent.marketing,
-          hasAnalyticsConsent: newConsent.analytics,
-          hasMarketingConsent: newConsent.marketing
-        } 
+      window.dispatchEvent(new CustomEvent('consentChanged', {
+        detail: createConsentEventDetail(
+          newConsent,
+          saveResult.persisted,
+          saveResult.effectiveConsent,
+          saveResult.categoryPersistence,
+        ),
       }));
     }
   }, [consentState.consent.analytics, consentState.consent.marketing, consentState.consentDate, saveConsent]);
@@ -127,19 +317,20 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
       lastUpdated: new Date(),
     };
     
-    setConsentState(newState);
-    saveConsent(newState);
+    setPreferencesOpen(false);
+    const saveResult = saveConsent(newState);
+    setConsentState({ ...newState, consent: saveResult.effectiveConsent });
     
     // Trigger granular consent update event
-    window.dispatchEvent(new CustomEvent('consentChanged', { 
-      detail: { 
-        analytics: newState.consent.analytics,
-        marketing: newState.consent.marketing,
-        hasAnalyticsConsent: newState.consent.analytics,
-        hasMarketingConsent: newState.consent.marketing
-      } 
+    window.dispatchEvent(new CustomEvent('consentChanged', {
+      detail: createConsentEventDetail(
+        newState.consent,
+        saveResult.persisted,
+        saveResult.effectiveConsent,
+        saveResult.categoryPersistence,
+      ),
     }));
-  }, [consentState.consent.analytics, saveConsent]);
+  }, [saveConsent]);
 
   // Update specific cookie category
   const updateConsent = useCallback((category: CookieCategory, value: boolean) => {
@@ -159,26 +350,28 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
       lastUpdated: new Date(),
     };
     
-    setConsentState(newState);
-    saveConsent(newState);
+    const saveResult = saveConsent(newState);
+    setConsentState({ ...newState, consent: saveResult.effectiveConsent });
     
     // Trigger granular consent event for category changes
-    window.dispatchEvent(new CustomEvent('consentChanged', { 
-      detail: { 
-        analytics: newConsent.analytics,
-        marketing: newConsent.marketing,
-        hasAnalyticsConsent: newConsent.analytics,
-        hasMarketingConsent: newConsent.marketing
-      } 
+    window.dispatchEvent(new CustomEvent('consentChanged', {
+      detail: createConsentEventDetail(
+        newConsent,
+        saveResult.persisted,
+        saveResult.effectiveConsent,
+        saveResult.categoryPersistence,
+      ),
     }));
   }, [consentState, saveConsent]);
 
-  // Show preferences modal
+  // Open preferences directly. This is separate from the first-visit banner so
+  // footer users can review or withdraw consent without reopening two layers.
   const showPreferences = useCallback(() => {
-    setConsentState(prev => ({
-      ...prev,
-      showBanner: true,
-    }));
+    setPreferencesOpen(true);
+  }, []);
+
+  const closePreferences = useCallback(() => {
+    setPreferencesOpen(false);
   }, []);
 
   // Hide banner
@@ -191,17 +384,31 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
 
   // Reset all consent (for testing/debugging)
   const resetConsent = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
+    const previousEffectiveConsent = effectiveConsentRef.current;
+    const persisted = removeStoredConsentSafely();
+    failedLocalRevocationsRef.current = persisted
+      ? { analytics: false, marketing: false }
+      : {
+          analytics:
+            failedLocalRevocationsRef.current.analytics || previousEffectiveConsent.analytics,
+          marketing:
+            failedLocalRevocationsRef.current.marketing || previousEffectiveConsent.marketing,
+        };
+    effectiveConsentRef.current = { ...DEFAULT_CONSENT_STATE.consent };
     setConsentState(DEFAULT_CONSENT_STATE);
+    setPreferencesOpen(false);
     
     // Trigger granular consent reset event
     window.dispatchEvent(new CustomEvent('consentChanged', { 
-      detail: { 
-        analytics: false,
-        marketing: false,
-        hasAnalyticsConsent: false,
-        hasMarketingConsent: false
-      } 
+      detail: createConsentEventDetail(
+        DEFAULT_CONSENT_STATE.consent,
+        persisted,
+        DEFAULT_CONSENT_STATE.consent,
+        {
+          analytics: !failedLocalRevocationsRef.current.analytics,
+          marketing: !failedLocalRevocationsRef.current.marketing,
+        },
+      ),
     }));
   }, []);
 
@@ -229,11 +436,14 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
 
   const contextValue: CookieConsentContextType = {
     consentState,
+    preferencesOpen,
+    isHydrated,
     acceptAll,
     acceptSelected,
     rejectAll,
     updateConsent,
     showPreferences,
+    closePreferences,
     hideBanner,
     resetConsent,
     hasConsent,

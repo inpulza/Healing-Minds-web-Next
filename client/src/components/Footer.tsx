@@ -265,6 +265,17 @@ const Footer = () => {
                         </Link>
                       </li>
                     ))}
+                    <li>
+                      <button
+                        type="button"
+                        onClick={showPreferences}
+                        className="text-green-200 hover:text-white transition-colors duration-200 text-base flex items-center group"
+                        data-testid="footer-cookie-preferences-mobile"
+                      >
+                        <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        {language === 'en' ? 'Cookie Preferences' : 'Preferencias de Cookies'}
+                      </button>
+                    </li>
                   </ul>
                 </div>
               </div>

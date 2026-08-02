@@ -395,6 +395,15 @@ function checkConsentAndTagRegistry(): void {
   const appSource = readFileSync(new URL("../client/src/App.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(appSource, /VITE_GA_MEASUREMENT_ID/);
 
+  const consentContextSource = readFileSync(
+    new URL("../client/src/contexts/CookieConsentContext.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(consentContextSource, /const saveConsent = useCallback/);
+  assert.match(consentContextSource, /const analytics = effective\.analytics/);
+  assert.match(consentContextSource, /const marketing = effective\.marketing/);
+  assert.match(consentContextSource, /detail: createConsentEventDetail\(/);
+
   const nextShellSource = readFileSync(
     new URL("../app/public-shell.tsx", import.meta.url),
     "utf8",
@@ -402,12 +411,25 @@ function checkConsentAndTagRegistry(): void {
   assert.match(nextShellSource, /useClarity\(true\)/);
   assert.match(nextShellSource, /useTikTokPixel\(true\)/);
 
+  const trackingConfigSource = readFileSync(
+    new URL("../client/src/lib/tracking-config.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(trackingConfigSource, /TIKTOK_PIXEL_SITEWIDE_ENABLED = false/);
+  assert.doesNotMatch(
+    trackingConfigSource,
+    /process\.env/,
+    'TikTok Pixel cannot be silently re-enabled by a deployment variable',
+  );
+
   const claritySource = readFileSync(
     new URL("../client/src/hooks/use-clarity.ts", import.meta.url),
     "utf8",
   );
   assert.match(claritySource, /useClarity\(manageConsentLifecycle = false\)/);
   assert.match(claritySource, /clearFirstPartyCookies/);
+  assert.match(claritySource, /Clarity\.consent\(false\)/);
+  assert.match(claritySource, /Clarity\.consent\(true\)/);
   assert.match(
     claritySource,
     /else if \(process\.env\.NODE_ENV === 'production'\) \{\s*revokeClarity\(\)/,
@@ -418,17 +440,155 @@ function checkConsentAndTagRegistry(): void {
     "utf8",
   );
   assert.match(tiktokSource, /useTikTokPixel\(manageConsentLifecycle = false\)/);
-  assert.match(tiktokSource, /window\.ttq\.revokeConsent\(\)/);
+  assert.match(tiktokSource, /ttq\.revokeConsent\(\)/);
+  assert.match(tiktokSource, /ttq\.disableCookie\(\)/);
+  assert.match(tiktokSource, /ttq\.enableCookie\(\)/);
+  assert.match(tiktokSource, /ttq\.grantConsent\(\)/);
+  const enableCookieIndex = tiktokSource.indexOf('ttq.enableCookie()');
+  const grantConsentIndex = tiktokSource.indexOf('ttq.grantConsent()');
+  const reopenGateIndex = tiktokSource.indexOf(
+    'consentRevoked.current = false',
+    grantConsentIndex,
+  );
+  assert.match(tiktokSource, /import \{ TIKTOK_PIXEL_SITEWIDE_ENABLED \}/);
+  assert.match(
+    tiktokSource,
+    /if \(!TIKTOK_PIXEL_SITEWIDE_ENABLED \|\| typeof window === 'undefined'\) return/,
+  );
+  assert.match(
+    tiktokSource,
+    /if \(!TIKTOK_PIXEL_SITEWIDE_ENABLED\) \{\s*return;\s*\}/,
+    'the initializer must fail closed before touching the provider',
+  );
+  assert.match(
+    tiktokSource,
+    /if \(!TIKTOK_PIXEL_SITEWIDE_ENABLED\) \{[\s\S]*?rollbackTikTokProviderConsent\(window\.ttq\);[\s\S]*?clearDisabledTikTokState\(\);[\s\S]*?return;/,
+    'the lifecycle manager must revoke and clear legacy state while disabled',
+  );
+  assert.ok(
+    enableCookieIndex >= 0 &&
+      enableCookieIndex < grantConsentIndex &&
+      grantConsentIndex < reopenGateIndex,
+    'TikTok must enable cookies, grant provider consent and only then reopen the local gate',
+  );
+  const pixelLoadStart = tiktokSource.indexOf('function loadTikTokPixel');
+  const pixelLoadEnd = tiktokSource.indexOf('export function useTikTokPixel');
+  const pixelLoadSource = tiktokSource.slice(pixelLoadStart, pixelLoadEnd);
+  const loadIndex = pixelLoadSource.indexOf('ttq.load(TIKTOK_PIXEL_ID)');
+  const restoreIndex = pixelLoadSource.indexOf('restoreTikTokProviderConsent(ttq)');
+  const firstPageIndex = pixelLoadSource.indexOf('ttq.page()');
+  assert.ok(
+    loadIndex >= 0 && loadIndex < restoreIndex && restoreIndex < firstPageIndex,
+    'a clean TikTok reacceptance must queue provider restoration before its first page event',
+  );
+  assert.match(tiktokSource, /initTikTokPixel\(true\)/);
+  assert.match(
+    tiktokSource,
+    /hasMarketingConsent\(\)\) \{[\s\S]*?initTikTokPixel\(true\)/,
+    'every fresh document with a persisted marketing grant must reaffirm provider consent',
+  );
+  const rollbackStart = tiktokSource.indexOf('function rollbackTikTokProviderConsent');
+  const rollbackEnd = tiktokSource.indexOf('// Load TikTok Pixel', rollbackStart);
+  const rollbackSource = tiktokSource.slice(rollbackStart, rollbackEnd);
+  assert.ok(
+    rollbackSource.indexOf('ttq.revokeConsent()') >= 0 &&
+      rollbackSource.indexOf('ttq.revokeConsent()') < rollbackSource.indexOf('ttq.disableCookie()'),
+    'a partial TikTok restoration must revoke provider consent before disabling cookies',
+  );
+  assert.match(
+    tiktokSource,
+    /rollbackTikTokProviderConsent\(window\.ttq\);\s*keepTikTokCookiesClearedAfterRevoke\(false\)/,
+    'a provider restoration failure must roll back and keep identifier cleanup active',
+  );
+  const recoveryIndex = tiktokSource.indexOf('if (recoveringProviderConsent)');
+  const recoveryPageIndex = tiktokSource.indexOf('window.ttq.page()', recoveryIndex);
+  const recoveryMarkIndex = tiktokSource.indexOf(
+    'markPageViewTracked(locationRef.current)',
+    recoveryPageIndex,
+  );
+  assert.ok(
+    recoveryIndex >= 0 &&
+      recoveryIndex < recoveryPageIndex &&
+      recoveryPageIndex < recoveryMarkIndex,
+    'a recovered TikTok restoration must emit the missed page before marking the route tracked',
+  );
   assert.match(tiktokSource, /clearFirstPartyCookies/);
   for (const cookieName of ["ttcsid", "ttcsid_", "ttclid"]) {
     assert.match(tiktokSource, new RegExp(cookieName));
   }
   assert.match(tiktokSource, /window\.setInterval/);
   assert.match(tiktokSource, /POST_REVOKE_CLEANUP_WINDOW_MS = 6000/);
+  assert.match(tiktokSource, /reloadAfterLoadedPixelRevoke/);
+  assert.match(tiktokSource, /window\.location\.reload\(\)/);
+  const stopCleanupStart = tiktokSource.indexOf('function stopPostRevokeCookieCleanup');
+  const stopCleanupEnd = tiktokSource.indexOf(
+    'function cancelPostRevokeReload',
+    stopCleanupStart,
+  );
+  assert.doesNotMatch(
+    tiktokSource.slice(stopCleanupStart, stopCleanupEnd),
+    /postRevokeReloadTimeout/,
+    'a duplicate withdrawal cleanup must not cancel an already-scheduled clean reload',
+  );
+  assert.match(tiktokSource, /function cancelPostRevokeReload\(\)/);
+  assert.match(
+    tiktokSource,
+    /restoreTikTokProviderConsent\(window\.ttq\);\s*stopPostRevokeCookieCleanup\(\);\s*cancelPostRevokeReload\(\)/,
+    'successful provider restoration must explicitly cancel any pending withdrawal reload',
+  );
+  assert.match(
+    tiktokSource,
+    /const shouldReload =\s*persistenceSucceeded &&\s*globalTikTokSdkLoaded &&\s*postRevokeReloadTimeout === null/,
+    'only a persisted withdrawal with a loaded Pixel and no pending reload may schedule the clean reload',
+  );
+  assert.match(tiktokSource, /let globalTikTokSdkLoaded = false/);
+  assert.match(
+    tiktokSource,
+    /ttq\.load\(TIKTOK_PIXEL_ID\);\s*globalTikTokSdkLoaded = true/,
+    'injecting the provider must record SDK presence independently from consent readiness',
+  );
+  assert.match(
+    tiktokSource,
+    /if \(alreadyLoaded\) \{\s*globalTikTokSdkLoaded = true;\s*if \(restoreProviderConsent\)/,
+    'an existing provider must stay marked as loaded even when consent restoration throws',
+  );
   assert.match(
     tiktokSource,
     /globalConsentRevoked && !hasMarketingConsent\(\)/,
-    "post-revoke cleanup must stop short of deleting cookies after re-consent",
+    'a queued reload must be cancelled logically if consent is restored',
+  );
+  const clearTikTokStart = tiktokSource.indexOf('function clearTikTokCookies');
+  const clearTikTokEnd = tiktokSource.indexOf('function clearDisabledTikTokState');
+  const clearTikTokSource = tiktokSource.slice(clearTikTokStart, clearTikTokEnd);
+  assert.doesNotMatch(
+    clearTikTokSource,
+    /_tt_enable_cookie/,
+    'the TikTok opt-out marker must survive identifier cleanup',
+  );
+  const clearDisabledTikTokStart = clearTikTokEnd;
+  const clearDisabledTikTokEnd = tiktokSource.indexOf(
+    'function stopPostRevokeCookieCleanup',
+    clearDisabledTikTokStart,
+  );
+  assert.match(
+    tiktokSource.slice(clearDisabledTikTokStart, clearDisabledTikTokEnd),
+    /_tt_enable_cookie/,
+    'sitewide shutdown must remove the legacy TikTok opt-out marker too',
+  );
+  assert.match(
+    tiktokSource,
+    /if \(!globalConsentRevoked\) \{\s*stopPostRevokeCookieCleanup\(\)/,
+    "post-revoke cleanup must stop immediately after successful re-consent",
+  );
+  assert.match(
+    tiktokSource,
+    /keepTikTokCookiesClearedAfterRevoke\(persistenceSucceeded\)/,
+    "a failed rejection write must keep the current document fail-closed",
+  );
+  assert.match(
+    tiktokSource,
+    /const persistenceSucceeded = marketingPersisted \?\? persisted !== false/,
+    'TikTok cleanup expiry must use marketing-specific persistence',
   );
   assert.match(
     tiktokSource,
@@ -447,6 +607,25 @@ function checkConsentAndTagRegistry(): void {
   const analyticsSource = readFileSync(
     new URL("../client/src/lib/analytics.ts", import.meta.url),
     "utf8",
+  );
+  assert.match(analyticsSource, /let inMemoryAnalyticsConsent: boolean \| null = null/);
+  assert.match(analyticsSource, /inMemoryAnalyticsConsent \?\? readConsent\('analytics'\)/);
+  const consentHandlerStart = analyticsSource.indexOf('export function handleConsentChange');
+  const consentHandlerSource = analyticsSource.slice(consentHandlerStart);
+  const inMemoryGateIndex = consentHandlerSource.indexOf(
+    'inMemoryAnalyticsConsent = analyticsConsent',
+  );
+  const googleProviderUpdateIndex = consentHandlerSource.indexOf(
+    'updateGoogleConsent(analyticsConsent, marketingConsent)',
+  );
+  assert.ok(
+    inMemoryGateIndex >= 0 && inMemoryGateIndex < googleProviderUpdateIndex,
+    'effective in-memory consent must close Google before provider updates or later emitters',
+  );
+  assert.match(
+    consentHandlerSource,
+    /try \{\s*clearAnalyticsCookies\(\);[\s\S]*?try \{\s*clearAdvertisingCookies\(\);/,
+    'provider exceptions must not skip local analytics or advertising cookie cleanup',
   );
   assert.match(
     analyticsSource,
@@ -467,11 +646,87 @@ function checkConsentAndTagRegistry(): void {
     new URL("../client/src/components/CookieBanner.tsx", import.meta.url),
     "utf8",
   );
-  assert.match(bannerSource, /TikTok Pixel/);
+  assert.doesNotMatch(bannerSource, /TikTok Pixel/);
+  assert.match(bannerSource, /Google Ads, conversion measurement, remarketing/);
   assert.doesNotMatch(bannerSource, /Facebook Pixel/);
   assert.match(bannerSource, /z-\[10000\]/);
   assert.match(bannerSource, /overlayClassName="z-\[10001\]"/);
   assert.match(bannerSource, /className="z-\[10002\]/);
+  assert.match(bannerSource, /if \(!isHydrated\) \{\s*return null/);
+
+  assert.match(consentContextSource, /const \[isHydrated, setIsHydrated\] = useState\(false\)/);
+  assert.match(consentContextSource, /finally \{\s*setIsHydrated\(true\)/);
+  assert.match(consentContextSource, /function removeStoredConsentSafely\(\): boolean/);
+  assert.match(
+    consentContextSource,
+    /catch \(error\) \{[\s\S]*?removeStoredConsentSafely\(\);[\s\S]*?finally \{/,
+    'privacy-restricted storage must still reach the hydrated default state',
+  );
+  assert.match(consentContextSource, /window\.addEventListener\('storage', handleStorage\)/);
+  assert.match(
+    consentContextSource,
+    /event\.key !== STORAGE_KEY && event\.key !== null/,
+    'localStorage.clear must trigger a consent re-read instead of leaving providers granted',
+  );
+  assert.match(
+    consentContextSource,
+    /event\.storageArea !== window\.localStorage/,
+    'sessionStorage.clear must not revoke the persisted localStorage decision',
+  );
+  assert.match(
+    consentContextSource,
+    /let persistedValue: string \| null = null;[\s\S]*?let storageReadSucceeded = false;[\s\S]*?persistedValue = localStorage\.getItem\(STORAGE_KEY\);[\s\S]*?storageReadSucceeded = true/,
+    'providers must reopen only from the current value confirmed in shared storage',
+  );
+  assert.doesNotMatch(
+    consentContextSource,
+    /persistedValue\s*=\s*event\.newValue/,
+    'an unconfirmed StorageEvent payload must never reopen providers',
+  );
+  assert.match(
+    consentContextSource,
+    /const remoteDecisionPersisted =\s*storageDecisionConfirmed && !hasFailedLocalRevocation/,
+    'failed or invalid cross-tab reads must keep provider cleanup on the non-persisted path',
+  );
+  assert.match(
+    consentContextSource,
+    /setConsentState\(nextState\);[\s\S]*?detail: createConsentEventDetail\([\s\S]*?nextState\.consent,[\s\S]*?remoteDecisionPersisted,[\s\S]*?analytics:[\s\S]*?storageDecisionConfirmed && !failedLocalRevocations\.analytics,[\s\S]*?marketing:[\s\S]*?storageDecisionConfirmed && !failedLocalRevocations\.marketing/,
+    'cross-tab storage changes must update the UI and rebroadcast the effective provider decision',
+  );
+  assert.match(consentContextSource, /failedLocalRevocationsRef/);
+  assert.match(
+    consentContextSource,
+    /failedLocalRevocations\.analytics[\s\S]*?analytics: failedLocalRevocations\.analytics[\s\S]*?marketing: failedLocalRevocations\.marketing/,
+    'queued remote grants must preserve categories from a failed local withdrawal',
+  );
+  assert.match(
+    consentContextSource,
+    /localStorage\.setItem\(STORAGE_KEY, JSON\.stringify\(newState\)\);\s*failedLocalRevocationsRef\.current = \{ analytics: false, marketing: false \}/,
+    'only a successfully persisted local choice may clear the local withdrawal watermark',
+  );
+  assert.match(
+    consentContextSource,
+    /previousEffectiveConsent\.analytics && !newState\.consent\.analytics/,
+    'an unchanged denied category must not be misclassified as a failed local withdrawal',
+  );
+  assert.match(consentContextSource, /const effectiveConsentRef = useRef<CookieConsent>/);
+  assert.match(
+    consentContextSource,
+    /const previousEffectiveConsent = effectiveConsentRef\.current;[\s\S]*?effectiveConsentRef\.current = effectiveConsent/,
+    'repeated failed grants must be evaluated against the last effective decision, not draft UI state',
+  );
+  assert.match(
+    consentContextSource,
+    /previousEffectiveConsent\.marketing === newState\.consent\.marketing/,
+    'a repeated unpersisted marketing grant must remain marked as unpersisted',
+  );
+  assert.match(
+    consentContextSource,
+    /setConsentState\(\{ \.\.\.newState, consent: saveResult\.effectiveConsent \}\)/,
+    'the preferences UI must reflect the effective decision after a failed write',
+  );
+  assert.match(consentContextSource, /analyticsPersisted: categoryPersistence\.analytics/);
+  assert.match(consentContextSource, /marketingPersisted: categoryPersistence\.marketing/);
 
   const dialogSource = readFileSync(
     new URL("../client/src/components/ui/dialog.tsx", import.meta.url),
@@ -492,8 +747,16 @@ function checkConsentAndTagRegistry(): void {
     new URL("../client/src/data/pageContent/legal/cookiePolicy.ts", import.meta.url),
     "utf8",
   );
-  assert.match(policySource, /TikTok Pixel/);
-  assert.match(policySource, /third-party cookies remain under TikTok's control/);
+  assert.match(policySource, /TikTok Pixel is currently disabled across this Site/);
+  assert.match(policySource, /TikTok Pixel está actualmente desactivado en todo este Sitio/);
+  assert.doesNotMatch(policySource, /third-party cookies remain under TikTok's control/);
+
+  const privacyPolicySource = readFileSync(
+    new URL("../client/src/data/pageContent/legal/privacyPolicy.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(privacyPolicySource, /web hosting \(Vercel\)/);
+  assert.match(privacyPolicySource, /domain registration and DNS management \(Hostinger\)/);
 
   const environmentGuard = readFileSync(
     new URL("./verify-public-analytics-config.mjs", import.meta.url),

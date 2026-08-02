@@ -54,18 +54,41 @@ try {
     .filter((element) => Boolean(element.offsetWidth || element.offsetHeight || element.getClientRects().length))
     .map((element) => ({ text: element.textContent?.trim(), testId: element.getAttribute("data-testid") })));
 
+  const revealLazyContact = async (page, label) => {
+    const contactTitle = page.getByTestId("contact-title");
+
+    // Every section above Contact mounts through IntersectionObserver and can
+    // increase scrollHeight after an earlier jump reached the old bottom. Keep
+    // moving to the current bottom for the whole bounded window; a passive
+    // wait cannot reveal a boundary that never entered the viewport.
+    for (let attempt = 0; attempt < 60 && (await contactTitle.count()) === 0; attempt += 1) {
+      await page.evaluate(() => window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "instant",
+      }));
+      await page.waitForTimeout(250);
+    }
+
+    assert.equal(
+      await contactTitle.count(),
+      1,
+      `${label}: lazy Contact did not mount after the bounded scroll sweep`,
+    );
+    await contactTitle.scrollIntoViewIfNeeded();
+    await contactTitle.waitFor({ state: "visible", timeout: 2_000 });
+    return contactTitle;
+  };
+
   for (const pathname of ["/", "/es"]) {
     for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
       const page = await browser.newPage({ viewport });
       try {
         const response = await openWhenReady(page, pathname);
         assert.equal(response.status(), 200);
-        const contactTitle = page.getByTestId("contact-title");
-        for (let attempt = 0; attempt < 12 && (await contactTitle.count()) === 0; attempt += 1) {
-          await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-          await page.waitForTimeout(400);
-        }
-        await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
+        const contactTitle = await revealLazyContact(
+          page,
+          `${pathname} ${viewport.width}px`,
+        );
         assert.equal(await contactTitle.evaluate((element) => element.tagName), "H2");
         await page.getByTestId("hero-title").waitFor({ state: "visible" });
         const headings = await visibleH1s(page);
@@ -93,21 +116,16 @@ try {
     }
   }
 
-  const mapPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-  try {
-    for (const [pathname, loadingText] of [["/", "Loading map..."], ["/es", "Cargando mapa..."]]) {
+  for (const [pathname, loadingText] of [["/", "Loading map..."], ["/es", "Cargando mapa..."]]) {
+    const mapPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    try {
       const response = await openWhenReady(mapPage, pathname);
       assert.equal(response.status(), 200);
-      const contactTitle = mapPage.getByTestId("contact-title");
-      for (let attempt = 0; attempt < 12 && (await contactTitle.count()) === 0; attempt += 1) {
-        await mapPage.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-        await mapPage.waitForTimeout(400);
-      }
-      await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
+      await revealLazyContact(mapPage, `${pathname} map smoke`);
       await mapPage.getByText(loadingText).waitFor({ state: "hidden", timeout: 12_000 });
+    } finally {
+      await mapPage.close();
     }
-  } finally {
-    await mapPage.close();
   }
 
   const fallbackPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
@@ -122,12 +140,7 @@ try {
   try {
     const response = await openWhenReady(fallbackPage, "/");
     assert.equal(response.status(), 200);
-    const contactTitle = fallbackPage.getByTestId("contact-title");
-    for (let attempt = 0; attempt < 12 && (await contactTitle.count()) === 0; attempt += 1) {
-      await fallbackPage.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-      await fallbackPage.waitForTimeout(400);
-    }
-    await contactTitle.waitFor({ state: "visible", timeout: 10_000 });
+    await revealLazyContact(fallbackPage, "/ held-map smoke");
     const loadingOverlay = fallbackPage.getByTestId("google-maps-loading-contact");
     await loadingOverlay.waitFor({ state: "visible", timeout: 5_000 });
     await fallbackPage.getByTestId("google-maps-contact").scrollIntoViewIfNeeded();

@@ -63,15 +63,15 @@ Preferred communication style: Simple, everyday language.
 ## System Architecture
 
 ### Frontend Architecture
-- **Framework**: React 18.3.1 with TypeScript, using Vite for building.
-- **Routing**: Wouter for client-side routing, supporting main pages, individual service pages (6 specialized, bilingual), location pages, legal pages, and animated navigation.
+- **Framework**: Next.js 16.2.12 App Router with React 18.3.1 and TypeScript. Vite remains only in the legacy Replit-compatible build.
+- **Routing**: Next App Router owns production through the central public-route allowlist and server metadata. Wouter remains isolated to the legacy runtime used for rollback compatibility.
 - **Styling**: Tailwind CSS with shadcn/ui for consistent UI components.
 - **State Management**: React Context for language switching and React Query for server state.
 - **Component Structure**: Page-based components with reusable UI components.
 - **Navigation**: Enhanced Header component with animated dropdowns and responsive design.
 
 ### Backend Architecture
-- **Server**: Express.js with TypeScript for API endpoints.
+- **Server**: Next Route Handlers own production APIs on Vercel. The TypeScript Express server remains a legacy Replit-compatible fallback.
 - **Database Layer**: Drizzle ORM for PostgreSQL with type-safe schema definitions.
 - **Storage Interface**: Abstract storage interface with in-memory implementation for development.
 - **API Design**: RESTful endpoints for contact form submissions and message retrieval.
@@ -90,7 +90,7 @@ Preferred communication style: Simple, everyday language.
 
 ### SEO and Analytics
 - **SEO Utilities**: Dynamic meta tag updates, server-side HTML injection for canonical tags, comprehensive MedicalClinic, LocalBusiness, FAQPage, BreadcrumbList, and Physician schema JSON-LD with real verified data, and language-specific meta tags (hreflang). Optimized robots.txt to prevent URL parameter spam.
-- **Analytics**: Google Analytics, Microsoft Clarity, and TikTok Pixel (ID D3IKI7BC77UEJB9HBO0G) integration for comprehensive behavioral tracking, including custom event tracking for phone calls, form submissions, service page views, and language changes. All analytics services follow consistent pattern with development mode detection and GDPR-compliant consent integration.
+- **Analytics**: Google Analytics and Microsoft Clarity provide consent-based behavioral tracking, including custom event tracking for phone calls, form submissions, service page views, and language changes. TikTok Pixel (ID D3IKI7BC77UEJB9HBO0G) is retained only as dormant implementation code and is disabled sitewide by the central tracking config.
 - **Multilingual SEO**: Language-specific meta tags and canonical URLs with bidirectional language switching.
 - **Local SEO**: NAP consistency, geo-specific titles, Google Business Profile integration, and comprehensive Physician schema for Dr. Melva Reve including NPI and verified medical directory profiles.
 
@@ -126,7 +126,7 @@ Preferred communication style: Simple, everyday language.
 ### Analytics and Monitoring
 - **Google Analytics**: Website analytics with consent-based initialization.
 - **Microsoft Clarity**: Behavioral analytics with session recordings, heatmaps, custom event tracking, and contextual tagging.
-- **TikTok Pixel**: Marketing conversion tracking with ID D3IKI7BC77UEJB9HBO0G, automatic page view tracking, and consent-based initialization (marketing consent required).
+- **TikTok Pixel**: Disabled sitewide. The dormant ID D3IKI7BC77UEJB9HBO0G cannot initialize, track, identify, or emit page views while `TIKTOK_PIXEL_SITEWIDE_ENABLED` is `false`; the lifecycle revokes and disables any pre-existing provider instance and clears legacy first-party state.
 
 ### Third-Party Integrations
 - **CharmHealthBooking**: For patient appointment booking.

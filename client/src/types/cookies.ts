@@ -19,6 +19,8 @@ export interface CookieConsentState {
 export interface CookieConsentContextType {
   // State
   consentState: CookieConsentState;
+  preferencesOpen: boolean;
+  isHydrated: boolean;
   
   // Actions
   acceptAll: () => void;
@@ -26,6 +28,7 @@ export interface CookieConsentContextType {
   rejectAll: () => void;
   updateConsent: (category: CookieCategory, value: boolean) => void;
   showPreferences: () => void;
+  closePreferences: () => void;
   hideBanner: () => void;
   resetConsent: () => void;
   

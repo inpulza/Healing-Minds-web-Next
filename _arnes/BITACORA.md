@@ -527,3 +527,94 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Commit, Quality, Preview final, CodeX y juez sobre el nuevo SHA; no reutilizar la evidencia de `217f7fb` como sustituto del gate final.
 **Archivos tocados:** bitácora.
 **Evidencia:** Preview `dpl_GUTZ94oSBP6uEdsxgSbPRMKEz6PY`, expected SHA `217f7fbd309847ca0abf907cb4b48c31361222ab`, E2E desplegado 8/8 PASS en 54,3 s, sin error de teardown.
+
+## 2026-08-01 Codex - consentimiento reabrible y revocación estable de tags
+**Qué se hizo:** Las preferencias de cookies usan ahora un estado de modal independiente de la franja inicial. Aceptar y rechazar cierran la interfaz; desde el pie, escritorio y móvil abren directamente el panel; X y Cancel/Cancelar descartan borradores; Guardar persiste la selección. El tracking delegado de teléfono solo considera lead el número oficial de la clínica. El auditor de Preview limita OIDC a un host `*.vercel.app` validado antes de usar el token. TikTok bloquea primero los eventos propios, revoca data sharing, desactiva cookies y conserva el marker de exclusión mientras elimina identificadores.
+**Decisiones:** El marker `_tt_enable_cookie=0` no se trata como identificador publicitario ni se borra, porque el SDK lo usa para recordar el opt-out. La Preview real demostró que el SDK aun así recrea `ttcsid` a los nueve segundos; no se amplía indefinidamente el polling. Si el Pixel ya estaba cargado, la app guarda y revoca primero y después refresca una vez la misma ruta. El documento nuevo lee marketing=false antes de poder inyectar TikTok. Al reaceptar sin Pixel cargado, se inicializa de nuevo con consentimiento explícito; el camino defensivo para una restauración sin reload conserva el orden `enableCookie` y después `grantConsent`.
+**Pendientes/bugs:** Publicar el nuevo SHA, repetir el auditor de 30 s y el E2E completo sobre su Preview exacta, clasificar Code Review y obtener juez GO. Queda una decisión separada antes del cierre total: TikTok prohíbe transmitir datos de salud y el código heredado todavía emite rutas/eventos de condiciones y tratamientos; también hay que decidir si se retira definitivamente el build Vite legado de Replit.
+**Archivos tocados:** contexto y panel de consentimiento, footer, hook TikTok, analytics, política de cookies, auditor de Preview, guards, E2E y pruebas browser.
+**Evidencia:** TypeScript PASS, suite 102/102 PASS, build Next 89/89 PASS, guards de pageview PASS, pruebas browser 4/4 PASS, contrato focalizado del auditor 7/7 PASS y E2E local ampliado 16/16 PASS en escritorio y móvil. La matriz cubre consentimiento mixto A1/M0, persistencia en back/forward, borradores descartados, fallo sintético de almacenamiento, rechazo de tenants Vercel ajenos y localización completa de Cancelar; el caso español también reabre el modal directamente desde el footer.
+
+## 2026-08-01 Codex - cierre fail-closed y reaceptación durable de proveedores
+**Qué se hizo:** Las notas CodeX posteriores detectaron dos bordes válidos. Google conserva ahora en memoria la decisión efectiva del documento, de modo que una retirada sigue cerrando pageviews y leads aunque falle la escritura y quede un grant antiguo en localStorage. TikTok reafirma `enableCookie` y `grantConsent` en cada documento con marketing permitido, antes de `page`; si la restauración falla después de habilitar cookies, revoca, deshabilita, mantiene cerradas las compuertas y continúa limpiando identificadores. El banner espera a leer la preferencia local antes de mostrarse, eliminando el flash intermitente observado en historial.
+**Decisiones:** La restauración del proveedor se trata como una operación transaccional: la limpieza solo se detiene tras completar ambos controles. Un permiso persistido se reafirma en cada documento porque una recarga rápida puede ocurrir antes de que el SDK asíncrono consuma la cola anterior. Los tests de navegador no usan retries para ocultar inestabilidad.
+**Pendientes/bugs:** Publicar este árbol en un SHA nuevo, exigir Quality y Code Review exactos, ejecutar 18/18 E2E y el auditor real de 30 segundos contra la Preview inmutable, y clasificar/resolver los cuatro hilos vigentes. No fusionar hasta decidir el riesgo contractual separado del TikTok Pixel sitewide en páginas clínicas.
+**Archivos tocados:** analytics, hook TikTok, contexto/tipos/banner de consentimiento, E2E, auditor de Preview, guards y contrato del gate desplegado.
+**Evidencia:** TypeScript PASS, suite 102/102 PASS, build 89/89 PASS, guard de analytics PASS, matriz de consentimiento repetida 30/30 sin retries y E2E completo 18/18 PASS. La cobertura nueva fuerza un fallo de `grantConsent` después de `enableCookie`, exige rollback `revokeConsent -> disableCookie`, verifica limpieza continua, bloquea navegación/eventos Google tras un write fallido y comprueba `enableCookie -> grantConsent -> page` tanto en reaceptación como después de una recarga inmediata.
+
+## 2026-08-01 Codex - excepciones de proveedor y almacenamiento restringido
+**Qué se hizo:** Las operaciones de Google y su limpieza local quedaron aisladas para que una excepción de `gtag` no cancele la retirada de cookies. El contexto de consentimiento también captura navegadores que bloquean simultáneamente `getItem` y `removeItem`, hidrata el estado denegado y mantiene utilizable la interfaz.
+**Decisiones:** Los fallos del proveedor nunca tienen prioridad sobre el cierre local. El estado visual se hidrata en `finally`, incluso cuando Storage no está disponible.
+**Pendientes/bugs:** Publicar el SHA de seguimiento, repetir Quality, E2E y Code Review exactos, y conservar separada la decisión contractual sobre TikTok en páginas clínicas.
+**Archivos tocados:** analytics, contexto de consentimiento, E2E, pruebas browser y guards.
+**Evidencia:** TypeScript PASS, suite 102/102 PASS, build 89/89 PASS, guards PASS, casos de excepción 4/4 y E2E limpio 22/22 tras cerrar procesos paralelos que compartían `.next` y `test-results`.
+
+## 2026-08-01 Codex - sincronización cross-tab y recuperación de TikTok
+**Qué se hizo:** Una retirada en otra pestaña actualiza la UI y todos los proveedores de la primera. El listener contrasta eventos obsoletos con el valor vigente antes de aplicarlos. Si una restauración TikTok falla, una recuperación posterior emite la ruta pendiente antes de marcarla como cubierta. El polling de cookies realiza veinte esperas y una lectura final real.
+**Decisiones:** El estado persistido vigente prevalece sobre el payload de un evento Storage en cola. La recuperación de proveedor no marca una página hasta que `page()` se haya emitido correctamente.
+**Pendientes/bugs:** Publicar y validar el SHA exacto, revisar todas las notas CodeX y no fusionar sin la decisión contractual del Pixel sitewide.
+**Archivos tocados:** contexto de consentimiento, hook TikTok, E2E, pruebas browser, guards y bitácora.
+**Evidencia:** Tres jueces GO sin P0-P2, TypeScript PASS, 102/102 tests, build 89/89, guards PASS y Preview inmutable `4b7e291` con 24/24 E2E en escritorio y móvil.
+
+## 2026-08-01 Codex - auditor atómico y bordes finales de CodeX
+**Qué se hizo:** El auditor dejó de intentar sobrescribir métodos protegidos del SDK de TikTok. Usa una vista Proxy temporal, delega cada control al proveedor intacto y dispara Guardar en la misma tarea del navegador. La última revisión CodeX añadió dos cierres: las retiradas remotas duplicadas ya no cancelan la recarga protectora, y una retirada local que no pudo guardarse mantiene un watermark por categoría frente a grants antiguos en cola. Se añadieron regresiones E2E para ambos recorridos.
+**Decisiones:** La recarga protectora y el barrido de cookies tienen cancelaciones separadas; solo una restauración exitosa cancela la recarga. Un watermark local fallido se limpia únicamente cuando otra elección local se persiste correctamente o al reemplazar el documento. La bitácora se restaura como append-only y todo trabajo posterior se añade en entradas nuevas.
+**Pendientes/bugs:** Publicar un SHA nuevo, exigir Quality y Code Review exactos, ejecutar la matriz E2E ampliada y el auditor real contra su Preview inmutable, y clasificar/resolver todos los hilos. No fusionar hasta decidir el riesgo separado del TikTok Pixel sitewide en páginas clínicas.
+**Archivos tocados:** auditor y contrato de Preview, contexto de consentimiento, hook TikTok, E2E, guards y bitácora.
+**Evidencia:** El auditor corregido pasó contra `4b7e291` el ciclo `denied -> accepted -> rejected -> accepted`, dos pageviews exactos, un lead por click, `revokeConsent -> disableCookie`, treinta segundos sin identificadores y restauración `enableCookie -> grantConsent -> page` con GA4 `G-WMRK41PX2E`, Clarity `sxayts0dzk` y TikTok `D3IKI7BC77UEJB9HBO0G`. Antes de los dos últimos fixes CodeX, TypeScript y la suite 102/102 también pasaron.
+
+## 2026-08-01 Codex - apagado sitewide de TikTok y gates invertidos
+**Qué se hizo:** Se añadió un kill switch literal que impide inicializar, identificar, trackear o emitir páginas a TikTok en Next y en el runtime legado. El lifecycle limpia todos los identificadores first-party heredados y revoca cualquier instancia preexistente. Banner, políticas EN/ES y documentación reflejan GA4 y Clarity activos por consentimiento, TikTok desactivado y Vercel como hosting con Hostinger como registrador/DNS. Los E2E y el auditor ahora fallan ante cualquier request, script, `window.ttq` o cookie de la familia TikTok.
+**Decisiones:** El Pixel no puede reactivarse por variable de Vercel; requiere cambio de código revisado. La categoría Marketing permanece porque controla Google Ads Consent Mode. Replit conservará temporalmente su URL nativa y base de datos como rollback, pero los custom domains se retirarán solo después del merge, auditoría real de producción y paridad completa de URLs.
+**Pendientes/bugs:** Commit/push del HEAD final, Quality y Code Review exactos, Preview inmutable, auditor real, merge por GitHub, validación de producción, paridad sitemap/URLs y retirada segura de apex/www en Replit.
+**Archivos tocados:** tracking config, hook TikTok, shells, banner y políticas, documentación, E2E, auditor Preview, guards, tests estáticos, decisiones y bitácora.
+**Evidencia:** Tres jueces revisaron el diff; los P1/P2 del primer pase quedaron resueltos. TypeScript PASS, guards PASS, tests estáticos 10/10 PASS, suite unitaria 102/102 PASS, build 89/89 PASS y Playwright local 26/26 PASS en desktop y mobile. La evidencia exacta de Preview y producción queda pendiente del nuevo SHA.
+
+## 2026-08-02 Codex - paridad final de sitemap y auditor desplegado estable
+**Qué se hizo:** La comparación byte a byte confirmó que el manifiesto de rutas histórico y el de Next son idénticos. El sitemap conserva 74 URLs base y tres posts publicados; se restauraron para el blog los alternates XML históricos, `x-default`, prioridad 0.6, fecha publicada `YYYY-MM-DD` y refresco de base de datos cada 24 horas. El auditor de Preview espera que el script no visual de Clarity esté adjunto al DOM, exige cero pageviews antes del consentimiento y estabiliza cada conteo exacto. El scroll de ruta continúa nativo y respeta movimiento reducido.
+**Decisiones:** No se instala Lenis: no corrige navegación ni consentimiento y añadiría un bucle de animación e interceptores innecesarios. Los fallos de acceso que devuelvan `Login - Vercel` se clasifican como protección de Preview, no como regresión del producto; el gate exacto usa storage state limitado al hostname inmutable.
+**Pendientes/bugs:** Publicar este follow-up, repetir Quality y CodeX sobre su SHA exacto, validar la nueva Preview, fusionar por GitHub, auditar producción y solo entonces retirar apex/www de Replit.
+**Archivos tocados:** sitemap Next, auditor Preview, scroll nativo, contratos unitarios, decisiones y bitácora.
+**Evidencia:** 77/77 URLs vivas responden 200 con canonical y hreflang correctos; missing y extras estáticos vacíos. El auditor real estricto pasó `denied -> accepted -> rejected -> accepted`, pageviews 0/1/2/3 y 1 tras reload, un lead, Clarity `[false,true]` y cero requests TikTok. Build 89/89 expone `/sitemap.xml` con revalidate 1d; Playwright local 30/30 PASS en desktop y mobile, incluidos XML serializado y reduced motion reales.
+
+## 2026-08-02 Codex - sitemap fail-closed frente a publicaciones conocidas
+**Qué se hizo:** La revisión CodeX del SHA `1da26e05` detectó que el E2E aceptaba cero posts si la consulta de sitemap fallaba. El sitemap usa ahora el snapshot publicado como fallback cuando no existe `DATABASE_URL` o Neon falla. El E2E pagina la API pública en inglés y español y exige igualdad exacta entre cada slug publicado y cada `<loc>` de artículo.
+**Decisiones:** Las 74 rutas fijas no sustituyen las publicaciones conocidas. API y sitemap deben degradar al mismo snapshot, y una diferencia de conteo o URL falla el navegador en cerrado.
+**Pendientes/bugs:** Commit/push del follow-up, repetir Quality, CodeX y Preview exacta; resolver el hilo P1 solo después de esa evidencia.
+**Archivos tocados:** sitemap Next, E2E de sitemap, contrato SEO, decisiones y bitácora.
+**Evidencia:** TypeScript PASS, 11/11 contratos focalizados, build 89/89 con sitemap revalidate 1d y Playwright local 30/30 PASS. El build local sin base de datos produjo las tres publicaciones del snapshot y el E2E las cruzó con la API pública en desktop y mobile.
+
+## 2026-08-02 Codex - preservación del último sitemap ISR válido
+**Qué se hizo:** Un juez detectó que convertir un fallo de Neon en una respuesta snapshot podía reemplazar el ISR bueno durante 24 horas. El fallback queda limitado a entornos sin base configurada. Con `DATABASE_URL`, cualquier error se registra y relanza para que Next conserve el último sitemap generado y reintente la revalidación.
+**Decisiones:** Una indisponibilidad transitoria no debe publicar ni cachear una versión degradada. El snapshot sigue garantizando 77 URLs en builds deliberadamente sin base; producción con Neon falla en cerrado y conserva el último ISR.
+**Pendientes/bugs:** Repetir gates focalizados y jueces; después commit/push, Quality, CodeX y Preview exacta.
+**Archivos tocados:** sitemap, contrato SEO, decisiones y bitácora.
+**Evidencia:** Pendiente de la validación posterior a esta entrada.
+
+## 2026-08-02 Codex - validación del fail-closed ISR del sitemap
+**Qué se hizo:** Se verificó la estrategia final: snapshot únicamente sin base configurada; error relanzado con Neon configurado; comparación API-sitemap intacta.
+**Decisiones:** El follow-up queda candidato a publicar solo después de una nueva pasada de jueces sin P0-P2.
+**Pendientes/bugs:** Commit/push, Quality, CodeX y Preview exacta; después clasificar y resolver el hilo vigente.
+**Archivos tocados:** bitácora.
+**Evidencia:** TypeScript PASS, 11/11 contratos focalizados, build 89/89 con sitemap ISR 1d y E2E XML 2/2 PASS en desktop y mobile. La batería completa inmediatamente anterior de este mismo follow-up pasó 105/105 unitarios y 30/30 E2E.
+
+## 2026-08-02 Codex - retirada cross-tab mediante localStorage.clear
+**Qué se hizo:** CodeX detectó que un clear remoto emite `StorageEvent.key=null` y el listener solo atendía la clave concreta. El contexto acepta ahora ambos casos, descarta clears de sessionStorage y relee siempre la decisión actual antes de abrir o cerrar proveedores. Se añadió un E2E real de dos pestañas que parte de grant completo, preserva un grant vigente ante un evento null sintético y luego exige retirada al ejecutar `localStorage.clear()` en la otra pestaña.
+**Decisiones:** `key=null` significa que la clave pudo cambiar, no una denegación ciega. Una decisión más nueva ya persistida prevalece; si la clave desapareció, el estado vuelve a denied sin recargar el documento.
+**Pendientes/bugs:** Ejecutar guards, TypeScript, unitarios, build y E2E desktop/mobile; obtener tres jueces GO, publicar el SHA, repetir Quality, CodeX, Preview exacta y resolver ambos hilos antes del merge.
+**Archivos tocados:** contexto de consentimiento, guard de analítica, E2E, decisiones y bitácora.
+**Evidencia:** Pendiente de la validación posterior a esta entrada.
+
+## 2026-08-02 Codex - grants cross-tab solo desde Storage confirmado
+**Qué se hizo:** El primer endurecimiento de `key=null` todavía conservaba `event.newValue` si la relectura fallaba. El listener parte ahora de denied, ignora el payload como autoridad y solo reabre categorías después de leer y validar la clave actual. Lecturas bloqueadas y valores inválidos emiten persistencia falsa. Los E2E añaden un grant no confirmado que debe cerrar Google y Clarity, y prueban que un watermark local sobrevive a clear más un grant remoto posterior.
+**Decisiones:** Un evento informa de un posible cambio, pero no demuestra una elección vigente. Los watermarks de una retirada local fallida solo se limpian mediante una elección local guardada con éxito o al reemplazar el documento.
+**Pendientes/bugs:** Repetir la matriz local y tres jueces; después publicar y volver a ejecutar los gates remotos exactos antes del merge.
+**Archivos tocados:** contexto, E2E, guard de analítica, decisiones y bitácora.
+**Evidencia:** Pendiente.
+
+## 2026-08-02 Codex - validación local de clear y grants cross-tab
+**Qué se hizo:** Se corrigió la instrumentación del E2E para esperar a Clarity después del primer grant y se cerró el banner con una elección denied antes de probar navegación en móvil. La suite focalizada y la matriz completa recorrieron el clear remoto, sessionStorage ignorado, grant obsoleto, lectura bloqueada y watermark persistente.
+**Decisiones:** Un fallo del test por overlay móvil no se confunde con una regresión del producto; el recorrido debe conservar las mismas aserciones de tracking con el banner cerrado de forma explícita.
+**Pendientes/bugs:** Obtener tres jueces GO, commit/push, Quality, CodeX y Preview exacta; clasificar y resolver los hilos solo con evidencia remota.
+**Archivos tocados:** E2E y bitácora.
+**Evidencia:** TypeScript PASS, guardas de pageview PASS, 105/105 unitarios, build 89/89, 6/6 E2E focalizados y 34/34 E2E completos en desktop y mobile. `git diff --check` limpio.
