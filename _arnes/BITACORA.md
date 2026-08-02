@@ -597,3 +597,24 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Commit/push, Quality, CodeX y Preview exacta; después clasificar y resolver el hilo vigente.
 **Archivos tocados:** bitácora.
 **Evidencia:** TypeScript PASS, 11/11 contratos focalizados, build 89/89 con sitemap ISR 1d y E2E XML 2/2 PASS en desktop y mobile. La batería completa inmediatamente anterior de este mismo follow-up pasó 105/105 unitarios y 30/30 E2E.
+
+## 2026-08-02 Codex - retirada cross-tab mediante localStorage.clear
+**Qué se hizo:** CodeX detectó que un clear remoto emite `StorageEvent.key=null` y el listener solo atendía la clave concreta. El contexto acepta ahora ambos casos, descarta clears de sessionStorage y relee siempre la decisión actual antes de abrir o cerrar proveedores. Se añadió un E2E real de dos pestañas que parte de grant completo, preserva un grant vigente ante un evento null sintético y luego exige retirada al ejecutar `localStorage.clear()` en la otra pestaña.
+**Decisiones:** `key=null` significa que la clave pudo cambiar, no una denegación ciega. Una decisión más nueva ya persistida prevalece; si la clave desapareció, el estado vuelve a denied sin recargar el documento.
+**Pendientes/bugs:** Ejecutar guards, TypeScript, unitarios, build y E2E desktop/mobile; obtener tres jueces GO, publicar el SHA, repetir Quality, CodeX, Preview exacta y resolver ambos hilos antes del merge.
+**Archivos tocados:** contexto de consentimiento, guard de analítica, E2E, decisiones y bitácora.
+**Evidencia:** Pendiente de la validación posterior a esta entrada.
+
+## 2026-08-02 Codex - grants cross-tab solo desde Storage confirmado
+**Qué se hizo:** El primer endurecimiento de `key=null` todavía conservaba `event.newValue` si la relectura fallaba. El listener parte ahora de denied, ignora el payload como autoridad y solo reabre categorías después de leer y validar la clave actual. Lecturas bloqueadas y valores inválidos emiten persistencia falsa. Los E2E añaden un grant no confirmado que debe cerrar Google y Clarity, y prueban que un watermark local sobrevive a clear más un grant remoto posterior.
+**Decisiones:** Un evento informa de un posible cambio, pero no demuestra una elección vigente. Los watermarks de una retirada local fallida solo se limpian mediante una elección local guardada con éxito o al reemplazar el documento.
+**Pendientes/bugs:** Repetir la matriz local y tres jueces; después publicar y volver a ejecutar los gates remotos exactos antes del merge.
+**Archivos tocados:** contexto, E2E, guard de analítica, decisiones y bitácora.
+**Evidencia:** Pendiente.
+
+## 2026-08-02 Codex - validación local de clear y grants cross-tab
+**Qué se hizo:** Se corrigió la instrumentación del E2E para esperar a Clarity después del primer grant y se cerró el banner con una elección denied antes de probar navegación en móvil. La suite focalizada y la matriz completa recorrieron el clear remoto, sessionStorage ignorado, grant obsoleto, lectura bloqueada y watermark persistente.
+**Decisiones:** Un fallo del test por overlay móvil no se confunde con una regresión del producto; el recorrido debe conservar las mismas aserciones de tracking con el banner cerrado de forma explícita.
+**Pendientes/bugs:** Obtener tres jueces GO, commit/push, Quality, CodeX y Preview exacta; clasificar y resolver los hilos solo con evidencia remota.
+**Archivos tocados:** E2E y bitácora.
+**Evidencia:** TypeScript PASS, guardas de pageview PASS, 105/105 unitarios, build 89/89, 6/6 E2E focalizados y 34/34 E2E completos en desktop y mobile. `git diff --check` limpio.

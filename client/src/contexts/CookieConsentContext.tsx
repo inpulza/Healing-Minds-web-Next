@@ -107,29 +107,44 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
   // same consentChanged contract used by Google, Clarity and TikTok.
   useEffect(() => {
     const handleStorage = (event: StorageEvent) => {
-      if (event.key !== STORAGE_KEY) {
+      // localStorage.clear() emits key=null, so it must trigger the same
+      // re-read as a direct removal of the consent key. Ignore clears from
+      // sessionStorage, whose StorageEvents reach this listener as well.
+      if (event.key !== STORAGE_KEY && event.key !== null) {
         return;
       }
-
-      // A remote grant event can already be queued when this tab writes a
-      // newer withdrawal. Re-read the shared value and prefer it over a stale
-      // event payload before reopening any provider.
-      let persistedValue = event.newValue;
-      try {
-        const currentValue = localStorage.getItem(STORAGE_KEY);
-        if (currentValue !== event.newValue) {
-          persistedValue = currentValue;
+      if (event.storageArea) {
+        try {
+          if (event.storageArea !== window.localStorage) {
+            return;
+          }
+        } catch (error) {
+          // If the browser blocks access to Storage while dispatching the
+          // event, continue fail-closed instead of keeping an in-memory grant.
+          console.error('Error confirming cross-tab storage area:', error);
         }
+      }
+
+      // StorageEvent.newValue is only a notification payload and may already
+      // be stale. Re-open providers exclusively from the value confirmed in
+      // shared storage; a blocked read remains denied and non-persisted.
+      let persistedValue: string | null = null;
+      let storageReadSucceeded = false;
+      try {
+        persistedValue = localStorage.getItem(STORAGE_KEY);
+        storageReadSucceeded = true;
       } catch (error) {
         console.error('Error confirming cross-tab cookie consent state:', error);
       }
 
       let nextState: CookieConsentState = DEFAULT_CONSENT_STATE;
+      let storageDecisionConfirmed = storageReadSucceeded && persistedValue === null;
       try {
         if (persistedValue) {
           const parsed = parseStoredConsent(persistedValue);
           if (parsed) {
             nextState = parsed;
+            storageDecisionConfirmed = true;
           } else {
             console.warn('Invalid cross-tab cookie consent data, reverting to denied');
           }
@@ -141,6 +156,8 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
       const failedLocalRevocations = failedLocalRevocationsRef.current;
       const hasFailedLocalRevocation =
         failedLocalRevocations.analytics || failedLocalRevocations.marketing;
+      const remoteDecisionPersisted =
+        storageDecisionConfirmed && !hasFailedLocalRevocation;
       if (hasFailedLocalRevocation) {
         nextState = {
           ...nextState,
@@ -160,16 +177,18 @@ export const CookieConsentProvider: React.FC<CookieConsentProviderProps> = ({ ch
       setConsentState(nextState);
       setPreferencesOpen(false);
       window.dispatchEvent(new CustomEvent('consentChanged', {
-        // The remote value exists, but any locally-watermarked denial is not
-        // represented by it. Keep provider cleanup on the no-expiry path until
-        // a later local choice is saved successfully.
+        // An unreadable/invalid remote decision or any locally-watermarked
+        // denial is not durably represented. Keep provider cleanup on the
+        // no-expiry path until a later local choice is saved successfully.
         detail: createConsentEventDetail(
           nextState.consent,
-          !hasFailedLocalRevocation,
+          remoteDecisionPersisted,
           nextState.consent,
           {
-            analytics: !failedLocalRevocations.analytics,
-            marketing: !failedLocalRevocations.marketing,
+            analytics:
+              storageDecisionConfirmed && !failedLocalRevocations.analytics,
+            marketing:
+              storageDecisionConfirmed && !failedLocalRevocations.marketing,
           },
         ),
       }));

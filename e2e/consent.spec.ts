@@ -177,6 +177,27 @@ async function savePreferencesWithClarityConsentAudit(page: Page, expected: bool
   expect(calls.at(-1), `Clarity consent(${expected})`).toBe(expected);
 }
 
+async function instrumentClarityConsentCalls(page: Page) {
+  await expect(page.locator('script[src*="clarity.ms/tag/sxayts0dzk"]')).toHaveCount(1);
+  await page.waitForFunction(() => typeof window.clarity === "function");
+  await page.evaluate(() => {
+    const state = window as typeof window & {
+      clarity?: (...args: unknown[]) => unknown;
+      __hmpE2eClarityConsentCalls?: boolean[];
+    };
+    const provider = state.clarity;
+    if (typeof provider !== "function") {
+      throw new Error("Clarity provider is unavailable after analytics consent");
+    }
+    const recorded: boolean[] = [];
+    state.__hmpE2eClarityConsentCalls = recorded;
+    state.clarity = (...args: unknown[]) => {
+      if (args[0] === "consent") recorded.push(Boolean(args[1]));
+      return Reflect.apply(provider, window, args);
+    };
+  });
+}
+
 async function expectOptionalConsent(page: Page, enabled: boolean) {
   const state = enabled ? "checked" : "unchecked";
   await expect(page.getByTestId("switch-analytics")).toHaveAttribute("data-state", state);
@@ -515,6 +536,242 @@ test("a withdrawal in another tab closes Google events in the first tab", async 
   }
 });
 
+test("localStorage.clear in another tab closes providers and tracking", async ({
+  page,
+  context,
+  isMobile,
+}) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-manage-preferences").click();
+  await setOptionalConsent(page, { analytics: true, marketing: true });
+  await page.getByTestId("button-save-preferences").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await instrumentClarityConsentCalls(page);
+
+  await page.evaluate(() => {
+    const state = window as typeof window & {
+      __hmpE2eConsentEvents?: CustomEvent["detail"][];
+    };
+    state.__hmpE2eConsentEvents = [];
+    window.addEventListener("consentChanged", (event) => {
+      state.__hmpE2eConsentEvents?.push((event as CustomEvent).detail);
+    });
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: null,
+      newValue: null,
+      storageArea: window.sessionStorage,
+      url: window.location.href,
+    }));
+  });
+  await page.waitForTimeout(100);
+  expect(
+    await page.evaluate(() =>
+      (window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] })
+        .__hmpE2eConsentEvents?.length,
+    ),
+    "sessionStorage.clear must not change local cookie consent",
+  ).toBe(0);
+
+  // key=null means the storage area may have been cleared. Re-read the
+  // current key so a newer persisted grant is not mistaken for a withdrawal.
+  await page.evaluate(() => {
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: null,
+      newValue: null,
+      url: window.location.href,
+    }));
+  });
+  await page.waitForFunction(() => {
+    const updates = (window.dataLayer ?? [])
+      .map((entry) => Array.from(entry))
+      .filter((entry) => entry[0] === "consent" && entry[1] === "update");
+    const latest = updates.at(-1)?.[2];
+    return latest?.analytics_storage === "granted" && latest?.ad_storage === "granted";
+  });
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  const consentEventsBeforeClear = await page.evaluate(() =>
+    (window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] })
+      .__hmpE2eConsentEvents?.length ?? 0,
+  );
+
+  const eventsBefore = await page.evaluate(() => ({
+    pageViews: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
+    ).length,
+    leads: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
+    ).length,
+  }));
+  const originalTimeOrigin = await page.evaluate(() => performance.timeOrigin);
+  await page.evaluate(() => {
+    document.addEventListener(
+      "click",
+      (event) => {
+        if (event.target instanceof Element && event.target.closest('a[href^="tel:"]')) {
+          event.preventDefault();
+        }
+      },
+      true,
+    );
+  });
+
+  const otherTab = await context.newPage();
+  try {
+    await stubAnalyticsProviders(otherTab);
+    await authenticateProtectedPreview(otherTab);
+    await otherTab.goto("/");
+    await expectDeployedSha(otherTab);
+    await expect(otherTab.getByTestId("cookie-banner")).toBeHidden();
+    await otherTab.evaluate(() => localStorage.clear());
+
+    await page.waitForFunction(() => {
+      const updates = (window.dataLayer ?? [])
+        .map((entry) => Array.from(entry))
+        .filter((entry) => entry[0] === "consent" && entry[1] === "update");
+      const latest = updates.at(-1)?.[2];
+      return latest?.analytics_storage === "denied" && latest?.ad_storage === "denied";
+    });
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          (window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] })
+            .__hmpE2eConsentEvents?.length ?? 0,
+        ),
+      )
+      .toBe(consentEventsBeforeClear + 1);
+    await expect(page.getByTestId("cookie-banner")).toBeVisible();
+    expect(await readStoredConsent(page)).toBeNull();
+    await page.getByTestId("button-manage-preferences").click();
+    await expectOptionalConsent(page, false);
+    await page.getByTestId("button-cancel-preferences").click();
+    expect(
+      await page.evaluate(() =>
+        (window as typeof window & { __hmpE2eClarityConsentCalls?: boolean[] })
+          .__hmpE2eClarityConsentCalls?.at(-1),
+      ),
+      "Clarity must receive consent(false) after a cross-tab clear",
+    ).toBe(false);
+    await page.getByTestId("button-reject-all").click();
+    await expect(page.getByTestId("cookie-banner")).toBeHidden();
+
+    await page.getByTestId(isMobile ? "hero-call-now-mobile" : "hero-call-now").click();
+    await page
+      .getByTestId(isMobile ? "hero-book-consultation-mobile" : "hero-book-consultation")
+      .click();
+    await expect(page).toHaveURL(/\/services$/);
+    await page.waitForTimeout(250);
+    const eventsAfter = await page.evaluate(() => ({
+      pageViews: (window.dataLayer ?? []).filter(
+        (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
+      ).length,
+      leads: (window.dataLayer ?? []).filter(
+        (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
+      ).length,
+    }));
+    expect(eventsAfter).toEqual(eventsBefore);
+    expect(await page.evaluate(() => performance.timeOrigin)).toBe(originalTimeOrigin);
+    await expectTikTokPixelAbsent(page, "cross-tab clear");
+  } finally {
+    await otherTab.unrouteAll({ behavior: "ignoreErrors" });
+    await otherTab.close();
+  }
+});
+
+test("an unconfirmed cross-tab grant stays fail-closed", async ({ page, isMobile }) => {
+  await page.goto("/");
+  await expectDeployedSha(page);
+  await page.getByTestId("button-manage-preferences").click();
+  await setOptionalConsent(page, { analytics: true, marketing: true });
+  await page.getByTestId("button-save-preferences").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+  await instrumentClarityConsentCalls(page);
+
+  const eventsBefore = await page.evaluate(() => ({
+    pageViews: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
+    ).length,
+    leads: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
+    ).length,
+  }));
+  await page.evaluate(() => {
+    const state = window as typeof window & {
+      __hmpE2eConsentEvents?: CustomEvent["detail"][];
+    };
+    state.__hmpE2eConsentEvents = [];
+    window.addEventListener("consentChanged", (event) => {
+      state.__hmpE2eConsentEvents?.push((event as CustomEvent).detail);
+    });
+    const originalGetItem = Storage.prototype.getItem;
+    Storage.prototype.getItem = function failConsentConfirmation(key) {
+      if (this === window.localStorage && key === "hmp_cookie_consent") {
+        throw new DOMException("Synthetic storage read failure", "SecurityError");
+      }
+      return originalGetItem.call(this, key);
+    };
+    const unconfirmedGrant = {
+      hasConsented: true,
+      showBanner: false,
+      consent: { necessary: true, analytics: true, marketing: true },
+      consentDate: new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+    };
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: "hmp_cookie_consent",
+      newValue: JSON.stringify(unconfirmedGrant),
+      url: window.location.href,
+    }));
+  });
+
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        (window as typeof window & { __hmpE2eConsentEvents?: CustomEvent["detail"][] })
+          .__hmpE2eConsentEvents?.at(-1),
+      ),
+    )
+    .toMatchObject({
+      analytics: false,
+      marketing: false,
+      persisted: false,
+      analyticsPersisted: false,
+      marketingPersisted: false,
+    });
+  await page.waitForFunction(() => {
+    const updates = (window.dataLayer ?? [])
+      .map((entry) => Array.from(entry))
+      .filter((entry) => entry[0] === "consent" && entry[1] === "update");
+    const latest = updates.at(-1)?.[2];
+    return latest?.analytics_storage === "denied" && latest?.ad_storage === "denied";
+  });
+  await expect(page.getByTestId("cookie-banner")).toBeVisible();
+  expect(
+    await page.evaluate(() =>
+      (window as typeof window & { __hmpE2eClarityConsentCalls?: boolean[] })
+        .__hmpE2eClarityConsentCalls?.at(-1),
+    ),
+    "Clarity must reject an unconfirmed cross-tab grant",
+  ).toBe(false);
+  await page.getByTestId("button-reject-all").click();
+  await expect(page.getByTestId("cookie-banner")).toBeHidden();
+
+  await page.getByTestId(isMobile ? "hero-book-consultation-mobile" : "hero-book-consultation")
+    .click();
+  await expect(page).toHaveURL(/\/services$/);
+  await page.waitForTimeout(250);
+  const eventsAfter = await page.evaluate(() => ({
+    pageViews: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "page_view",
+    ).length,
+    leads: (window.dataLayer ?? []).filter(
+      (entry) => Array.from(entry)[0] === "event" && Array.from(entry)[1] === "generate_lead",
+    ).length,
+  }));
+  expect(eventsAfter).toEqual(eventsBefore);
+  await expectTikTokPixelAbsent(page, "unconfirmed cross-tab grant");
+});
+
 test("a failed mixed withdrawal only watermarks its own category", async ({
   page,
   isMobile,
@@ -584,6 +841,53 @@ test("a failed mixed withdrawal only watermarks its own category", async ({
       key: "hmp_cookie_consent",
       oldValue: JSON.stringify(current),
       newValue: JSON.stringify(remoteGrant),
+      url: window.location.href,
+    }));
+  });
+  await page.waitForFunction(() => {
+    const updates = (window.dataLayer ?? [])
+      .map((entry) => Array.from(entry))
+      .filter((entry) => entry[0] === "consent" && entry[1] === "update");
+    const latest = updates.at(-1)?.[2];
+    return latest?.analytics_storage === "granted" && latest?.ad_storage === "denied";
+  });
+
+  await page.evaluate(() => {
+    const state = window as typeof window & {
+      __hmpE2eRemoteGrant?: string | null;
+    };
+    state.__hmpE2eRemoteGrant = localStorage.getItem("hmp_cookie_consent");
+    localStorage.clear();
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: null,
+      newValue: null,
+      url: window.location.href,
+    }));
+  });
+  await page.waitForFunction(() => {
+    const updates = (window.dataLayer ?? [])
+      .map((entry) => Array.from(entry))
+      .filter((entry) => entry[0] === "consent" && entry[1] === "update");
+    const latest = updates.at(-1)?.[2];
+    return latest?.analytics_storage === "denied" && latest?.ad_storage === "denied";
+  });
+
+  await page.evaluate(() => {
+    const state = window as typeof window & {
+      __hmpE2eOriginalSetItem?: typeof Storage.prototype.setItem;
+      __hmpE2eRemoteGrant?: string | null;
+    };
+    if (!state.__hmpE2eRemoteGrant) {
+      throw new Error("Remote grant fixture was not preserved across clear");
+    }
+    state.__hmpE2eOriginalSetItem?.call(
+      window.localStorage,
+      "hmp_cookie_consent",
+      state.__hmpE2eRemoteGrant,
+    );
+    window.dispatchEvent(new StorageEvent("storage", {
+      key: "hmp_cookie_consent",
+      newValue: state.__hmpE2eRemoteGrant,
       url: window.location.href,
     }));
   });

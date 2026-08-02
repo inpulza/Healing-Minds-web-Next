@@ -665,12 +665,32 @@ function checkConsentAndTagRegistry(): void {
   assert.match(consentContextSource, /window\.addEventListener\('storage', handleStorage\)/);
   assert.match(
     consentContextSource,
-    /const currentValue = localStorage\.getItem\(STORAGE_KEY\);[\s\S]*?if \(currentValue !== event\.newValue\) \{\s*persistedValue = currentValue/,
-    'a queued cross-tab event must not override a newer value already persisted by this tab',
+    /event\.key !== STORAGE_KEY && event\.key !== null/,
+    'localStorage.clear must trigger a consent re-read instead of leaving providers granted',
   );
   assert.match(
     consentContextSource,
-    /setConsentState\(nextState\);[\s\S]*?detail: createConsentEventDetail\([\s\S]*?nextState\.consent,[\s\S]*?!hasFailedLocalRevocation,[\s\S]*?analytics: !failedLocalRevocations\.analytics,[\s\S]*?marketing: !failedLocalRevocations\.marketing/,
+    /event\.storageArea !== window\.localStorage/,
+    'sessionStorage.clear must not revoke the persisted localStorage decision',
+  );
+  assert.match(
+    consentContextSource,
+    /let persistedValue: string \| null = null;[\s\S]*?let storageReadSucceeded = false;[\s\S]*?persistedValue = localStorage\.getItem\(STORAGE_KEY\);[\s\S]*?storageReadSucceeded = true/,
+    'providers must reopen only from the current value confirmed in shared storage',
+  );
+  assert.doesNotMatch(
+    consentContextSource,
+    /persistedValue\s*=\s*event\.newValue/,
+    'an unconfirmed StorageEvent payload must never reopen providers',
+  );
+  assert.match(
+    consentContextSource,
+    /const remoteDecisionPersisted =\s*storageDecisionConfirmed && !hasFailedLocalRevocation/,
+    'failed or invalid cross-tab reads must keep provider cleanup on the non-persisted path',
+  );
+  assert.match(
+    consentContextSource,
+    /setConsentState\(nextState\);[\s\S]*?detail: createConsentEventDetail\([\s\S]*?nextState\.consent,[\s\S]*?remoteDecisionPersisted,[\s\S]*?analytics:[\s\S]*?storageDecisionConfirmed && !failedLocalRevocations\.analytics,[\s\S]*?marketing:[\s\S]*?storageDecisionConfirmed && !failedLocalRevocations\.marketing/,
     'cross-tab storage changes must update the UI and rebroadcast the effective provider decision',
   );
   assert.match(consentContextSource, /failedLocalRevocationsRef/);
