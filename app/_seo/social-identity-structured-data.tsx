@@ -8,6 +8,15 @@ const siteUrl = "https://www.healingmindsp.com";
 const officialNpiProfileUrl =
   "https://npiregistry.cms.hhs.gov/provider-view/1982233631";
 
+const practiceAddress = {
+  "@type": "PostalAddress",
+  streetAddress: "4760 Tamiami Trl N # 25",
+  addressLocality: "Naples",
+  addressRegion: "FL",
+  postalCode: "34103",
+  addressCountry: "US",
+} as const;
+
 export const socialIdentityGraph = {
   "@context": "https://schema.org",
   "@graph": [
@@ -21,14 +30,7 @@ export const socialIdentityGraph = {
       logo: `${siteUrl}/favicon-512.png`,
       telephone: "+1-239-423-0272",
       email: "info@healingmindsp.com",
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: "4760 Tamiami Trl N # 25",
-        addressLocality: "Naples",
-        addressRegion: "FL",
-        postalCode: "34103",
-        addressCountry: "US",
-      },
+      address: practiceAddress,
       founder: { "@id": `${siteUrl}/#physician` },
       sameAs: [...organizationSocialProfileUrls],
     },
@@ -41,6 +43,7 @@ export const socialIdentityGraph = {
       image: `${siteUrl}/doctor-profile-v2.webp`,
       medicalSpecialty: "https://schema.org/Psychiatric",
       knowsLanguage: ["English", "Spanish"],
+      address: practiceAddress,
       usNPI: "1982233631",
       identifier: {
         "@type": "PropertyValue",

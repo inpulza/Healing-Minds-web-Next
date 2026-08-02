@@ -325,7 +325,18 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
   const structuredData = page.locator("#social-identity-structured-data");
   await expect(structuredData).toHaveCount(1);
   const graph = JSON.parse((await structuredData.textContent()) || "{}") as {
-    "@graph"?: Array<{ "@id"?: string; sameAs?: string[] }>;
+    "@graph"?: Array<{
+      "@id"?: string;
+      sameAs?: string[];
+      address?: {
+        "@type"?: string;
+        streetAddress?: string;
+        addressLocality?: string;
+        addressRegion?: string;
+        postalCode?: string;
+        addressCountry?: string;
+      };
+    }>;
   };
   const organization = graph["@graph"]?.find((node) => node["@id"]?.endsWith("#organization"));
   const physician = graph["@graph"]?.find((node) => node["@id"]?.endsWith("#physician"));
@@ -339,6 +350,14 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
     "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
     profiles.linkedin,
   ]);
+  expect(physician?.address).toEqual({
+    "@type": "PostalAddress",
+    streetAddress: "4760 Tamiami Trl N # 25",
+    addressLocality: "Naples",
+    addressRegion: "FL",
+    postalCode: "34103",
+    addressCountry: "US",
+  });
 
   await page.evaluate(() => {
     (window as typeof window & { __identityNavigationSentinel?: string })

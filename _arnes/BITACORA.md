@@ -695,3 +695,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Publicar el SHA final, repetir Quality y CodeX, ejecutar la matriz completa contra la Preview inmutable y fusionar solo sin notas válidas.
 **Archivos tocados:** página de artículo, loader público, provider/query client, Footer, contratos y E2E.
 **Evidencia:** Dos matrices locales completas consecutivas cerraron con 52 PASS y 6 skips deliberados antes de los remates P3; sobre el diff final: `git diff --check`, TypeScript, 116/116 unitarios, build 89/89 y 4/4 E2E focalizados PASS. Tres revisiones independientes: cero P0-P3; la matriz completa exacta queda delegada al CI/Preview del SHA publicado.
+
+## 2026-08-02 Codex - dirección propia en el nodo Physician
+**Qué se hizo:** El segundo CodeX Review del PR detectó que Google ya había marcado como crítico el `address` ausente en `/#physician`. Organization y Physician reutilizan ahora la misma dirección verificada de Naples, y el E2E inspecciona el objeto postal completo dentro del JSON-LD SSR.
+**Decisiones:** El hilo `PRRT_kwDOToJ8Pc6V04nv` fue **válido y resuelto**. `worksFor` no sustituye el campo requerido en un nodo Physician autónomo; se reutiliza el dato existente sin inventar ni duplicar valores divergentes.
+**Pendientes/bugs:** Repetir validación local, publicar el tercer SHA, exigir Quality, Preview, E2E desplegado y CodeX exactos antes del merge.
+**Archivos tocados:** JSON-LD social, guard unitario, E2E y bitácora.
+**Evidencia:** `git diff --check`, TypeScript y 116/116 unitarios PASS; build 89/89 y presupuestos PASS. E2E social con dirección postal exacta: 2/2 PASS en Desktop Chrome y Pixel 7.

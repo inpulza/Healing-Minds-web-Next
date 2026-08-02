@@ -79,6 +79,11 @@ test("active UI and schema sources cannot reintroduce stale social profiles", ()
   assert.match(source, /favicon-512\.png/);
   assert.match(source, /https:\/\/schema\.org\/Psychiatric/);
   assert.match(source, /npiregistry\.cms\.hhs\.gov\/provider-view\/1982233631/);
+  assert.equal(
+    (source.match(/address: practiceAddress/g) || []).length,
+    2,
+    "organization and physician must each expose the verified practice address",
+  );
 });
 
 test("organization identity is owned by the home route segment", () => {
