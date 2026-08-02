@@ -43,7 +43,7 @@ export const aboutContent: BilingualPageContent = {
         heading: 'Have a Question for Dr. Reve?',
         paragraphs: [
           'Follow me on TikTok for daily mental health tips and feel free to ask your questions directly!',
-          'Follow @dra.melvavidal',
+          'Follow on TikTok',
         ],
       },
       {
@@ -194,7 +194,7 @@ export const aboutContent: BilingualPageContent = {
         heading: '¿Tienes una Pregunta para la Dra. Reve?',
         paragraphs: [
           '¡Sígueme en TikTok para consejos diarios de salud mental y no dudes en hacer tus preguntas directamente!',
-          'Seguir @dra.melvavidal',
+          'Seguir en TikTok',
         ],
       },
       {

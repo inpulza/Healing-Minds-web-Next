@@ -28,6 +28,13 @@ type FrozenSeo = {
   "twitter:image:alt"?: string;
 };
 
+const defaultSocialImage = {
+  url: "https://www.healingmindsp.com/og-image.png",
+  width: 1200,
+  height: 630,
+  alt: "Healing Minds Psychiatry - Compassionate psychiatric care in Naples, Florida",
+} as const;
+
 export function getFrozenSeo(pathname: string): FrozenSeo | undefined {
   return (manifest as Record<string, FrozenSeo>)[pathname];
 }
@@ -43,7 +50,7 @@ export function metadataForPath(pathname: string): Metadata {
         height: Number(seo["og:image:height"] || 630),
         alt: seo["og:image:alt"],
       }
-    : undefined;
+    : defaultSocialImage;
 
   const usesLiteralRootLinks = pathname === "/" || pathname === "/es";
 
@@ -70,15 +77,17 @@ export function metadataForPath(pathname: string): Metadata {
         ? [seo["og:locale:alternate"]]
         : undefined,
       type: seo["og:type"] === "article" ? "article" : "website",
-      images: image ? [image] : undefined,
+      images: [image],
     },
     twitter: {
       card: "summary_large_image",
       title: seo["twitter:title"] || seo.title,
       description: seo["twitter:description"] || seo.description,
-      images: seo["twitter:image"]
-        ? [{ url: seo["twitter:image"], alt: seo["twitter:image:alt"] }]
-        : undefined,
+      images: [
+        seo["twitter:image"]
+          ? { url: seo["twitter:image"], alt: seo["twitter:image:alt"] }
+          : { url: defaultSocialImage.url, alt: defaultSocialImage.alt },
+      ],
     },
   };
 }

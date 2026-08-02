@@ -19,19 +19,20 @@ export async function generateMetadata({
   const { slug } = await params;
   const pathname = `/${slug.join("/")}`;
   const frozen = metadataForPath(pathname);
-  if (frozen.title) return frozen;
   const blogPath = matchBlogPath(pathname);
   if (!blogPath) return frozen;
   const post = await loadPublicBlogPost(blogPath);
-  if (!post) return {};
+  if (!post) return frozen;
   const canonical = `https://www.healingmindsp.com${pathname}`;
   const title = post.metaTitle || post.title;
   const description = post.metaDescription || post.excerpt || undefined;
   return {
+    ...frozen,
     title,
     description,
-    alternates: { canonical },
+    alternates: { ...(frozen.alternates || {}), canonical },
     openGraph: {
+      ...(frozen.openGraph || {}),
       type: "article",
       title,
       description,
@@ -39,13 +40,21 @@ export async function generateMetadata({
       siteName: "Healing Minds Psychiatry",
       images: post.featuredImage
         ? [{ url: post.featuredImage, alt: post.featuredImageAlt || post.title }]
-        : undefined,
+        : [
+            {
+              url: "https://www.healingmindsp.com/og-image.png",
+              alt: "Healing Minds Psychiatry - Compassionate psychiatric care in Naples, Florida",
+            },
+          ],
     },
     twitter: {
+      ...(frozen.twitter || {}),
       card: "summary_large_image",
       title,
       description,
-      images: post.featuredImage ? [post.featuredImage] : undefined,
+      images: post.featuredImage
+        ? [{ url: post.featuredImage, alt: post.featuredImageAlt || post.title }]
+        : ["https://www.healingmindsp.com/og-image.png"],
     },
   };
 }

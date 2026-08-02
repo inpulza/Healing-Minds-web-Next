@@ -34,10 +34,16 @@ test("home demotes the embedded contact heading while contact pages keep their p
 
 test("the Next root restores the public runtime shell without applying it to admin", () => {
   const providers = read("app/providers.tsx");
+  const queryClient = read("client/src/lib/queryClient.ts");
   const shell = read("app/public-shell.tsx");
   const trackingConfig = read("client/src/lib/tracking-config.ts");
 
   assert.match(providers, /PublicShell/);
+  assert.match(queryClient, /export function createQueryClient/);
+  assert.match(providers, /typeof window === ["']undefined["']/);
+  assert.match(providers, /createQueryClient\(\)/);
+  assert.match(providers, /browserQueryClient/);
+  assert.match(providers, /client=\{nextQueryClient\}/);
   assert.match(shell, /pathname\.startsWith\(["']\/admin["']\)/);
   for (const runtime of [
     "MobileToolbar",
@@ -55,6 +61,8 @@ test("the Next root restores the public runtime shell without applying it to adm
   }
   assert.match(trackingConfig, /TIKTOK_PIXEL_SITEWIDE_ENABLED = false/);
   assert.match(shell, /tracking config keeps the Pixel itself disabled sitewide/);
+  assert.match(read("client/src/components/Footer.tsx"), /suppressHydrationWarning/);
+  assert.match(read("client/src/components/Footer.tsx"), /getUTCFullYear\(\)/);
 });
 
 test("route scroll stays native and respects reduced-motion preferences", () => {

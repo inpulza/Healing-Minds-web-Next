@@ -24,8 +24,12 @@ function serializable<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
 
-export const loadPublicBlogPost = cache(async (match: BlogPathMatch): Promise<BlogPostDetail | null> => {
-  if (!process.env.DATABASE_URL) return frozenPost(match.pathname);
+const loadPublicBlogPostByKey = cache(async (
+  slug: string,
+  language: BlogPathMatch["language"],
+  pathname: string,
+): Promise<BlogPostDetail | null> => {
+  if (!process.env.DATABASE_URL) return frozenPost(pathname);
 
   try {
     const [{ getBlogPostBySlug }, { sanitizeBlogContentHtml }, imageStorage, imageRender] = await Promise.all([
@@ -34,8 +38,8 @@ export const loadPublicBlogPost = cache(async (match: BlogPathMatch): Promise<Bl
       import("../../server/blog/images/storage"),
       import("../../server/blog/images/render"),
     ]);
-    const post = await getBlogPostBySlug(match.slug, match.language);
-    if (!post) return frozenPost(match.pathname);
+    const post = await getBlogPostBySlug(slug, language);
+    if (!post) return frozenPost(pathname);
     const images = await imageStorage.getSelectedBlogPostImages(post.id);
     return serializable({
       ...post,
@@ -46,9 +50,16 @@ export const loadPublicBlogPost = cache(async (match: BlogPathMatch): Promise<Bl
     }) as BlogPostDetail;
   } catch (error) {
     console.error("Dynamic blog page database lookup failed; using the frozen public snapshot", error);
-    return frozenPost(match.pathname);
+    return frozenPost(pathname);
   }
 });
+
+export function loadPublicBlogPost(match: BlogPathMatch): Promise<BlogPostDetail | null> {
+  // React cache compares arguments by identity. Primitive keys let metadata and
+  // the page share one request-local DB/image read even though each call builds
+  // its own BlogPathMatch object.
+  return loadPublicBlogPostByKey(match.slug, match.language, match.pathname);
+}
 
 export const loadPublicBlogRedirect = cache(async (pathname: string): Promise<string | null> => {
   if (!process.env.DATABASE_URL) return null;

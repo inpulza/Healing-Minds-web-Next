@@ -4,10 +4,19 @@ import { useTikTokEvents } from '@/hooks/useTikTokEvents';
 import { trackLeadConversion } from '@/lib/analytics';
 import { Link } from '@/lib/navigation';
 import { Button } from '@/components/ui/button';
-import { Mail, Phone, MapPin, ArrowRight, Calendar, Linkedin, Facebook, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, ArrowRight, Calendar, Linkedin, Facebook, Instagram, Youtube } from 'lucide-react';
 import { useState } from 'react';
 import TikTokIcon from '@/components/TikTokIcon';
 import { useCookieConsent } from '@/hooks/useCookieConsent';
+import { socialProfiles } from '@shared/social-profiles';
+
+const socialLinks = [
+  { ...socialProfiles.linkedin, icon: Linkedin },
+  { ...socialProfiles.facebook, icon: Facebook },
+  { ...socialProfiles.instagram, icon: Instagram },
+  { ...socialProfiles.tiktok, icon: TikTokIcon },
+  { ...socialProfiles.youtube, icon: Youtube },
+];
 
 const Footer = () => {
   const { language } = useLanguage();
@@ -67,13 +76,6 @@ const Footer = () => {
 
   const charmHealthUrl = "https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=e54bdf77b791eb90cd5ef77f1bfb3dd742f7d5dfc96511bf80477815162a23b66ee57013c1a537e6a04718346ddb0ed8d95fcbc3b76e32a2";
 
-  const socialLinks = [
-    { href: 'https://www.linkedin.com/in/melva-reve-2549a9120', icon: Linkedin, label: 'LinkedIn' },
-    { href: 'https://www.facebook.com/profile.php?id=61578845287836', icon: Facebook, label: 'Facebook' },
-    { href: 'https://www.instagram.com/hmpsychiatry', icon: Instagram, label: 'Instagram' },
-    { href: 'https://www.tiktok.com/@dra.melvavidal', icon: TikTokIcon, label: 'TikTok' }
-  ];
-
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Newsletter signup logic would go here
@@ -128,12 +130,12 @@ const Footer = () => {
                 {language === 'en' ? <>Follow <span className="font-display italic text-green-200">Us</span></> : <><span className="font-display italic text-green-200">Síguenos</span></>}
               </h2>
               <div className="flex gap-4" data-testid="footer-social-links">
-                {socialLinks.map((social, index) => {
+                {socialLinks.map((social) => {
                   const IconComponent = social.icon;
                   return (
                     <a
-                      key={index}
-                      href={social.href}
+                      key={social.label}
+                      href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 bg-green-800/50 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-200 group"
@@ -367,7 +369,8 @@ const Footer = () => {
                 </button>
               </div>
               <div className="text-sm text-green-300" data-testid="footer-copyright">
-                © {new Date().getFullYear()} Healing Minds Psychiatry. 
+                © <span suppressHydrationWarning>{new Date().getUTCFullYear()}</span>{' '}
+                Healing Minds Psychiatry.
                 {language === 'en' ? ' All rights reserved.' : ' Todos los derechos reservados.'}
               </div>
               <div className="text-xs text-green-300 mt-2 flex items-center justify-end gap-1" data-testid="footer-credits">

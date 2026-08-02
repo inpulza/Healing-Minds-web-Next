@@ -30,6 +30,10 @@ test("server and legacy client metadata keep Open Graph on the current language 
   assert.match(metadata, /url:\s*pathname === "\/" \? undefined : seo\.canonical \|\| seo\["og:url"\]/);
   assert.match(clientSeo, /productionOrigin\(\).*normalizeRoutePath\(window\.location\.pathname\)/s);
   assert.doesNotMatch(clientSeo, /const ogUrl = data\.canonical/);
+  assert.match(metadata, /https:\/\/www\.healingmindsp\.com\/og-image\.png/);
+  assert.match(metadata, /images:\s*\[image\]/);
+  assert.match(metadata, /width:\s*1200/);
+  assert.match(metadata, /height:\s*630/);
 });
 
 test("California landing routes keep their dedicated metadata and noindex policy", () => {

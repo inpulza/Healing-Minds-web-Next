@@ -1,6 +1,7 @@
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTikTokVideos } from '@/hooks/useTikTokVideos';
 import { Play } from 'lucide-react';
+import { socialProfiles } from '@shared/social-profiles';
 
 const CompactVideoCarousel = () => {
   const { language } = useLanguage();
@@ -66,7 +67,7 @@ const CompactVideoCarousel = () => {
           }
         </p>
         <a
-          href="https://www.tiktok.com/@dra.melvavidal"
+          href={socialProfiles.tiktok.url}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 bg-black text-white px-6 py-3 rounded-full font-medium text-sm hover:bg-gray-800 transition-colors duration-300"
@@ -76,7 +77,9 @@ const CompactVideoCarousel = () => {
             <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-1.183-.11 6.44 6.44 0 0 0-6.444 6.444 6.44 6.44 0 0 0 6.444 6.444 6.44 6.44 0 0 0 6.444-6.444V8.862a8.23 8.23 0 0 0 4.789 1.515v-3.446a4.792 4.792 0 0 1-.817-.245z"/>
           </svg>
           <span>
-            {language === 'en' ? 'Follow @dra.melvavidal' : 'Seguir @dra.melvavidal'}
+            {language === 'en'
+              ? `Follow ${socialProfiles.tiktok.handle}`
+              : `Seguir ${socialProfiles.tiktok.handle}`}
           </span>
         </a>
       </div>
