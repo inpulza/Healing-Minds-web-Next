@@ -18,8 +18,18 @@ test("the frozen server SEO manifest covers every listed route with canonical me
     assert.ok(seo.title.length > 0, `${route}: empty title`);
     assert.equal(typeof seo.description, "string", `${route}: description`);
     assert.match(seo.canonical, /^https:\/\/www\.healingmindsp\.com\//, `${route}: canonical`);
+    assert.equal(seo["og:url"], seo.canonical, `${route}: og:url must match canonical`);
     assert.ok(seo.lang === "en" || seo.lang === "es", `${route}: lang`);
   }
+});
+
+test("server and legacy client metadata keep Open Graph on the current language route", () => {
+  const metadata = fs.readFileSync(path.join(root, "app", "_seo", "metadata.ts"), "utf8");
+  const clientSeo = fs.readFileSync(path.join(root, "client", "src", "utils", "seo.ts"), "utf8");
+
+  assert.match(metadata, /url:\s*pathname === "\/" \? undefined : seo\.canonical \|\| seo\["og:url"\]/);
+  assert.match(clientSeo, /productionOrigin\(\).*normalizeRoutePath\(window\.location\.pathname\)/s);
+  assert.doesNotMatch(clientSeo, /const ogUrl = data\.canonical/);
 });
 
 test("California landing routes keep their dedicated metadata and noindex policy", () => {

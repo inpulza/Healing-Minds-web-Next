@@ -178,14 +178,10 @@ export const updateSEO = (data: SEOData) => {
   createMetaTag('og:title', data.title, 'property');
   createMetaTag('og:description', data.description, 'property');
   
-  // Use canonical URL for og:url if available, otherwise current URL
-  const ogUrl = data.canonical 
-    ? (data.canonical.startsWith('http') 
-        ? data.canonical 
-        : `${window.location.origin.includes('healingmindsp.com') 
-            ? window.location.origin.replace('://healingmindsp.com', '://www.healingmindsp.com')
-            : window.location.origin}${data.canonical}`)
-    : window.location.href;
+  // og:url is always self-referencing. Several legacy bilingual callers pass
+  // their English canonical even while rendering the Spanish route; trusting
+  // that value made social shares identify the wrong language document.
+  const ogUrl = `${productionOrigin()}${normalizeRoutePath(window.location.pathname)}`;
   createMetaTag('og:url', ogUrl, 'property');
   
   if (data.ogImage) {
