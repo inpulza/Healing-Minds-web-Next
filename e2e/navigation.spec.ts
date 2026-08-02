@@ -296,6 +296,7 @@ async function expectUniqueMetadata(
 test("verified social profiles stay consistent in UI, outbound clicks and SSR identity", async ({
   page,
   context,
+  isMobile,
 }) => {
   const runtimeErrors = collectUnexpectedRuntimeErrors(page);
   const profiles = {
@@ -339,8 +340,54 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
     profiles.linkedin,
   ]);
 
+  await page.evaluate(() => {
+    (window as typeof window & { __identityNavigationSentinel?: string })
+      .__identityNavigationSentinel = "home-document";
+  });
+  await navigateFromHeader(page, "/about", isMobile);
+  await expect(page).toHaveURL(/\/about\/?$/);
+  await expect(page.locator("#social-identity-structured-data")).toHaveCount(0);
+  expect(
+    await page.evaluate(
+      () =>
+        (window as typeof window & { __identityNavigationSentinel?: string })
+          .__identityNavigationSentinel,
+    ),
+  ).toBe("home-document");
+
+  await page.getByTestId("logo-link").click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByTestId("hero-title")).toBeVisible();
+  await expect(page.locator("#social-identity-structured-data")).toHaveCount(1);
+  expect(
+    await page.evaluate(
+      () =>
+        (window as typeof window & { __identityNavigationSentinel?: string })
+          .__identityNavigationSentinel,
+    ),
+  ).toBe("home-document");
+
+  // Also cover a cold non-home entry: the root layout starts without the
+  // identity graph, then the home page segment must add it through Next Link.
   await page.goto("/about");
-  await rejectInitialConsent(page);
+  await expect(page.locator("#social-identity-structured-data")).toHaveCount(0);
+  await page.evaluate(() => {
+    (window as typeof window & { __identityNavigationSentinel?: string })
+      .__identityNavigationSentinel = "about-document";
+  });
+  await page.getByTestId("logo-link").click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator("#social-identity-structured-data")).toHaveCount(1);
+  expect(
+    await page.evaluate(
+      () =>
+        (window as typeof window & { __identityNavigationSentinel?: string })
+          .__identityNavigationSentinel,
+    ),
+  ).toBe("about-document");
+
+  await navigateFromHeader(page, "/about", isMobile);
+  await expect(page).toHaveURL(/\/about\/?$/);
   await expect(page.locator("#social-identity-structured-data")).toHaveCount(0);
 
   await expect(page.getByTestId("linkedin-link")).toHaveAttribute("href", profiles.linkedin);
@@ -386,6 +433,23 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
     links.map((link) => link.getAttribute("href") || ""),
   );
   expect(compactVideoHrefs).toHaveLength(new Set(compactVideoHrefs).size);
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("frozen blog routes share their exact published hero image", async ({ page }) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+  const route = "/blog/understanding-anxiety-treatment-naples";
+  const image =
+    "https://www.healingmindsp.com/images/blog/approved/anxiety-treatment.webp";
+  const response = await page.goto(route);
+  expect(response?.status()).toBe(200);
+  await rejectInitialConsent(page);
+
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
+  await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", image);
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveCount(1);
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute("content", image);
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 

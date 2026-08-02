@@ -33,6 +33,7 @@ const expectedProfiles = {
 
 const runtimeFiles = [
   "app/layout.tsx",
+  "app/page.tsx",
   "app/_seo/social-identity-structured-data.tsx",
   "client/src/components/About.tsx",
   "client/src/components/CompactVideoCarousel.tsx",
@@ -78,4 +79,12 @@ test("active UI and schema sources cannot reintroduce stale social profiles", ()
   assert.match(source, /favicon-512\.png/);
   assert.match(source, /https:\/\/schema\.org\/Psychiatric/);
   assert.match(source, /npiregistry\.cms\.hhs\.gov\/provider-view\/1982233631/);
+});
+
+test("organization identity is owned by the home route segment", () => {
+  const layout = fs.readFileSync(path.join(process.cwd(), "app", "layout.tsx"), "utf8");
+  const home = fs.readFileSync(path.join(process.cwd(), "app", "page.tsx"), "utf8");
+
+  assert.doesNotMatch(layout, /SocialIdentityStructuredData/);
+  assert.match(home, /<SocialIdentityStructuredData\s*\/>/);
 });

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { assetUrl } from '@/lib/asset-url';
 import { prepareBlogArticleHtml } from '@/lib/blog-article';
 import { Link, useRoute } from '@/lib/navigation';
@@ -76,6 +76,7 @@ function formatDate(date: string | null, language: BlogLanguage): string {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'UTC',
   }).format(new Date(date));
 }
 
@@ -131,9 +132,13 @@ const BlogPost = ({ initialPost }: BlogPostProps) => {
   });
 
   const post = data?.data;
+  const [canPrepareArticle, setCanPrepareArticle] = useState(false);
+  useEffect(() => setCanPrepareArticle(true), []);
   const { content: processedContent, headings } = useMemo(
-    () => prepareBlogArticleHtml(post?.content || ''),
-    [post?.content],
+    () => canPrepareArticle
+      ? prepareBlogArticleHtml(post?.content || '')
+      : { content: post?.content || '', headings: [] },
+    [canPrepareArticle, post?.content],
   );
   const showToc = headings.length >= 3;
 

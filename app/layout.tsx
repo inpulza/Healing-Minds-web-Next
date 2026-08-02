@@ -4,7 +4,6 @@ import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import "@/index.css";
 import Providers from "./providers";
-import SocialIdentityStructuredData from "./_seo/social-identity-structured-data";
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -39,7 +38,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const pathname = (await headers()).get("x-healing-pathname") || "/";
   const language = pathname === "/es" || pathname.startsWith("/es/") ? "es" : "en";
-  const includesOrganizationIdentity = pathname === "/";
 
   return (
     <html
@@ -47,9 +45,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       data-metadata-owner="next"
       className={`${instrumentSans.variable} ${playfairDisplay.variable}`}
     >
-      <head>
-        {includesOrganizationIdentity && <SocialIdentityStructuredData />}
-      </head>
       <body>
         <Providers>{children}</Providers>
       </body>

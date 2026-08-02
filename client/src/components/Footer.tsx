@@ -369,7 +369,8 @@ const Footer = () => {
                 </button>
               </div>
               <div className="text-sm text-green-300" data-testid="footer-copyright">
-                © {new Date().getFullYear()} Healing Minds Psychiatry. 
+                © <span suppressHydrationWarning>{new Date().getUTCFullYear()}</span>{' '}
+                Healing Minds Psychiatry.
                 {language === 'en' ? ' All rights reserved.' : ' Todos los derechos reservados.'}
               </div>
               <div className="text-xs text-green-300 mt-2 flex items-center justify-end gap-1" data-testid="footer-credits">
