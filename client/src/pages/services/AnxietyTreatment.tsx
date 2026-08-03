@@ -132,6 +132,18 @@ const AnxietyTreatment = () => {
                     {s('symptoms-intro').paragraphs![0]}
                   </p>
 
+                  <p className="text-base text-gray-600 mb-6 font-body leading-relaxed">
+                    {language === 'en' ? 'Learn more about what care may involve in our ' : 'Conozca mejor lo que puede incluir la atención en nuestra '}
+                    <Link
+                      href={language === 'en' ? '/blog/understanding-anxiety-treatment-naples' : '/es/blog/tratamiento-ansiedad-naples'}
+                      className="font-semibold text-green-700 hover:text-green-800 underline underline-offset-4"
+                      data-testid="link-anxiety-guide"
+                    >
+                      {language === 'en' ? 'anxiety treatment guide' : 'guía sobre el tratamiento de la ansiedad'}
+                    </Link>
+                    .
+                  </p>
+
                   <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                     <Button className="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-4 sm:px-6 sm:px-8 py-4 sm:py-6 sm:py-7">
                       <span>{s('symptoms-cta').paragraphs![0]}</span>

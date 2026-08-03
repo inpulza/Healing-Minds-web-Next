@@ -760,24 +760,24 @@ const LocationNaples = () => {
                 </a>
               </div>
 
-              {/* United Way of Collier County */}
+              {/* United Way of Collier and the Keys */}
               <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
                   <Users className="w-6 h-6 text-green-800" />
                 </div>
                 
                 <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
-                  United Way of Collier County
+                  United Way of Collier and the Keys
                 </h3>
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'For over 50 years, United Way has strengthened our Naples community by funding programs that address critical needs. They support mental health initiatives, education, and family stability programs that create lasting change for over 75,000 residents annually.'
-                    : 'Por más de 50 años, United Way ha fortalecido nuestra comunidad de Naples financiando programas que abordan necesidades críticas. Apoyan iniciativas de salud mental, educación y programas de estabilidad familiar que crean cambios duraderos para más de 75,000 residentes anualmente.'}
+                    ? 'United Way of Collier and the Keys brings people and resources together to address local needs, support healthy communities, improve financial security, and connect residents with help through 2-1-1.'
+                    : 'United Way of Collier and the Keys reúne personas y recursos para atender necesidades locales, apoyar comunidades saludables, mejorar la seguridad financiera y conectar a los residentes con ayuda a través del 2-1-1.'}
                 </p>
 
                 <a
-                  href="https://www.unitedwayofc.org/"
+                  href="https://uwcollierkeys.org/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-auto"

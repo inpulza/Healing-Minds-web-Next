@@ -764,7 +764,7 @@ const LocationFortMyers = () => {
                 </p>
 
                 <a
-                  href="https://www.harrychapinfoodbank.org/"
+                  href="https://harrychapinfoodbank.org/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-auto"

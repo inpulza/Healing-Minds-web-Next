@@ -14,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const entry of getSitemapEntries()) {
     const languages = {
-      en: `${ORIGIN}${entry.en === "/" ? "" : entry.en}`,
+      en: `${ORIGIN}${entry.en}`,
       es: `${ORIGIN}${entry.es}`,
     };
     routes.push({

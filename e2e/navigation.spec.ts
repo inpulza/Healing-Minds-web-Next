@@ -204,6 +204,17 @@ function collectUnexpectedRuntimeErrors(page: Page): string[] {
   return errors;
 }
 
+async function expectReactHydrated(locator: Locator) {
+  await expect.poll(
+    () => locator.evaluate((element) =>
+      Object.keys(element).some(
+        (key) => key.startsWith("__reactProps$") || key.startsWith("__reactFiber$"),
+      ),
+    ).catch(() => false),
+    { message: "expected React event handlers to be attached", timeout: 10_000 },
+  ).toBe(true);
+}
+
 async function expectSettledOutboundClick(
   page: Page,
   context: BrowserContext,
@@ -390,6 +401,7 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
   // identity graph, then the home page segment must add it through Next Link.
   await page.goto("/about");
   await expect(page.locator("#social-identity-structured-data")).toHaveCount(0);
+  await expectReactHydrated(page.getByTestId("logo-link"));
   await page.evaluate(() => {
     (window as typeof window & { __identityNavigationSentinel?: string })
       .__identityNavigationSentinel = "about-document";
@@ -1005,6 +1017,8 @@ test("sitemap XML preserves blog alternates, dates and priority", async ({ page 
   const response = await page.goto("/sitemap.xml", { waitUntil: "domcontentloaded" });
   expect(response?.status()).toBe(200);
   const xml = await response!.text();
+  expect(xml).toContain("<loc>https://www.healingmindsp.com/</loc>");
+  expect(xml).not.toContain("<loc>https://www.healingmindsp.com</loc>");
 
   const blockFor = (url: string) => {
     const escaped = url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -1012,8 +1026,11 @@ test("sitemap XML preserves blog alternates, dates and priority", async ({ page 
   };
   const blogIndex = blockFor("https://www.healingmindsp.com/blog");
   const spanishBlogIndex = blockFor("https://www.healingmindsp.com/es/blog");
+  const home = blockFor("https://www.healingmindsp.com/");
   expect(blogIndex).toBeTruthy();
   expect(spanishBlogIndex).toBeTruthy();
+  expect(home).toBeTruthy();
+  expect(home).toContain('hreflang="en" href="https://www.healingmindsp.com/"');
   for (const block of [blogIndex!, spanishBlogIndex!]) {
     expect(block).toContain(
       'hreflang="x-default" href="https://www.healingmindsp.com/blog"',
@@ -1082,6 +1099,96 @@ test("sitemap XML preserves blog alternates, dates and priority", async ({ page 
   );
 });
 
+test("verified community resource links settle on their current destinations", async ({
+  page,
+  context,
+}) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+  const resources = [
+    {
+      path: "/locations/psychiatrist-naples",
+      testId: "link-united-way",
+      url: "https://uwcollierkeys.org/",
+    },
+    {
+      path: "/locations/psychiatrist-immokalee",
+      testId: "link-coffo",
+      url: "https://www.coffo.org/",
+    },
+    {
+      path: "/locations/psychiatrist-fort-myers",
+      testId: "link-harry-chapin-food-bank",
+      url: "https://harrychapinfoodbank.org/",
+    },
+    {
+      path: "/locations/psychiatrist-estero",
+      testId: "link-engage-estero",
+      url: "https://esterotoday.com/",
+    },
+  ] as const;
+
+  for (const resource of resources) {
+    const response = await page.goto(resource.path);
+    expect(response?.status()).toBe(200);
+    await rejectInitialConsent(page);
+    await expect(page.getByTestId(resource.testId)).toHaveAttribute("href", resource.url);
+    await expectSettledOutboundClick(page, context, resource.testId, resource.url);
+  }
+
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("contextual service links settle on the intended articles in one client navigation", async ({
+  page,
+}) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+  const articles = [
+    {
+      path: "/services/anxiety-treatment",
+      testId: "link-anxiety-guide",
+      href: "/blog/understanding-anxiety-treatment-naples",
+      heading: "Understanding Anxiety Treatment in Naples: What Patients Can Expect",
+    },
+    {
+      path: "/es/servicios/tratamiento-ansiedad",
+      testId: "link-anxiety-guide",
+      href: "/es/blog/tratamiento-ansiedad-naples",
+      heading: "Tratamiento de Ansiedad en Naples: Que Pueden Esperar los Pacientes",
+    },
+    {
+      path: "/services/bipolar-treatment",
+      testId: "link-bipolar-follow-up-guide",
+      href: "/blog/bipolar-medication-follow-up-questions",
+      heading: "Essential Questions for Your Bipolar Medication Follow-Up",
+    },
+  ] as const;
+
+  for (const article of articles) {
+    const response = await page.goto(article.path);
+    expect(response?.status()).toBe(200);
+    await rejectInitialConsent(page);
+    const link = page.getByTestId(article.testId);
+    await expect(link).toHaveAttribute("href", article.href);
+    await expectReactHydrated(link);
+
+    const marker = `${article.testId}-client-navigation`;
+    await page.evaluate((value) => {
+      (window as unknown as Record<string, string>).__contextualNavigationMarker = value;
+    }, marker);
+    await link.click();
+
+    await expect(page).toHaveURL(article.href);
+    await expect(page.locator("h1")).toHaveText(article.heading);
+    expect(
+      await page.evaluate(
+        () => (window as unknown as Record<string, string>).__contextualNavigationMarker,
+      ),
+    ).toBe(marker);
+  }
+
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
 test.describe("server-rendered SEO without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
@@ -1118,6 +1225,128 @@ test.describe("server-rendered SEO without JavaScript", () => {
     expect(await page.locator('a[href="/es/servicios"]').count()).toBeGreaterThan(0);
     expect(await page.locator('a[href="/es/blog"]').count()).toBeGreaterThan(0);
     expect(await page.locator('a[href="/es/contacto"]').count()).toBeGreaterThan(0);
+    expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+  });
+
+  test("service pages expose contextual article links before JavaScript", async ({ page }) => {
+    const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+    const links = [
+      {
+        path: "/services/anxiety-treatment",
+        testId: "link-anxiety-guide",
+        href: "/blog/understanding-anxiety-treatment-naples",
+      },
+      {
+        path: "/es/servicios/tratamiento-ansiedad",
+        testId: "link-anxiety-guide",
+        href: "/es/blog/tratamiento-ansiedad-naples",
+      },
+      {
+        path: "/services/bipolar-treatment",
+        testId: "link-bipolar-follow-up-guide",
+        href: "/blog/bipolar-medication-follow-up-questions",
+      },
+    ] as const;
+
+    for (const link of links) {
+      const response = await page.goto(link.path, { waitUntil: "domcontentloaded" });
+      expect(response?.status()).toBe(200);
+      await expect(page.getByTestId(link.testId)).toHaveAttribute("href", link.href);
+    }
+
+    expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+  });
+
+  test("community and AHCA links are current in the initial HTML", async ({ page }) => {
+    const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+    const currentLinks = [
+      ["/locations/psychiatrist-naples", "https://uwcollierkeys.org/"],
+      ["/es/ubicaciones/psiquiatra-naples", "https://uwcollierkeys.org/"],
+      ["/locations/psychiatrist-immokalee", "https://www.coffo.org/"],
+      ["/es/ubicaciones/psiquiatra-immokalee", "https://www.coffo.org/"],
+      ["/locations/psychiatrist-fort-myers", "https://harrychapinfoodbank.org/"],
+      ["/es/ubicaciones/psiquiatra-fort-myers", "https://harrychapinfoodbank.org/"],
+      ["/locations/psychiatrist-estero", "https://esterotoday.com/"],
+      ["/es/ubicaciones/psiquiatra-estero", "https://esterotoday.com/"],
+      ["/patient-rights", "https://ahca.myflorida.com/"],
+      ["/patient-rights", "https://apps.ahca.myflorida.com/hcfc/"],
+      ["/es/derechos-paciente", "https://ahca.myflorida.com/"],
+      ["/es/derechos-paciente", "https://apps.ahca.myflorida.com/hcfc/"],
+    ] as const;
+
+    for (const [path, href] of currentLinks) {
+      const response = await page.goto(path, { waitUntil: "domcontentloaded" });
+      expect(response?.status()).toBe(200);
+      const link = page.locator(`a[href="${href}"]`);
+      await expect(link).toHaveCount(1);
+      await expect(link).toHaveAttribute("target", "_blank");
+      await expect(link).toHaveAttribute("rel", /noopener/);
+      await expect(link).toHaveAttribute("rel", /noreferrer/);
+    }
+
+    for (const path of [
+      "/locations/psychiatrist-golden-gate",
+      "/es/ubicaciones/psiquiatra-golden-gate",
+    ]) {
+      const goldenGate = await page.goto(path, { waitUntil: "domcontentloaded" });
+      expect(goldenGate?.status()).toBe(200);
+      await expect(page.getByText("Golden Gate Estates Area Civic Association", { exact: true })).toHaveCount(path.startsWith("/es/") ? 0 : 1);
+      await expect(page.locator('a[href="https://ggeaca.org/"]')).toHaveCount(0);
+      await expect(page.getByTestId("link-civic-association")).toHaveCount(0);
+    }
+    expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+  });
+
+  test("privacy choices use descriptive anchor text before JavaScript", async ({ page }) => {
+    const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+    const pages = [
+      {
+        path: "/cookie-policy",
+        labels: [
+          "Google Analytics opt-out add-on",
+          "Google My Ad Center",
+          "Microsoft privacy dashboard",
+        ],
+      },
+      {
+        path: "/es/politica-cookies",
+        labels: [
+          "Complemento de inhabilitación de Google Analytics",
+          "Mi Centro de Anuncios de Google",
+          "Panel de privacidad de Microsoft",
+        ],
+      },
+      {
+        path: "/privacy-policy",
+        labels: [
+          "Google Analytics opt-out add-on",
+          "Google My Ad Center",
+          "Microsoft privacy dashboard",
+        ],
+      },
+      {
+        path: "/es/politica-privacidad",
+        labels: [
+          "complemento de inhabilitación de Google Analytics",
+          "Mi Centro de Anuncios de Google",
+          "panel de privacidad de Microsoft",
+        ],
+      },
+    ] as const;
+
+    for (const legalPage of pages) {
+      const response = await page.goto(legalPage.path, { waitUntil: "domcontentloaded" });
+      expect(response?.status()).toBe(200);
+      for (const label of legalPage.labels) {
+        const link = page.getByRole("link", { name: label, exact: true });
+        await expect(link).toHaveCount(1);
+        await expect(link).toHaveAttribute("target", "_blank");
+        await expect(link).toHaveAttribute("rel", /noopener/);
+        await expect(link).toHaveAttribute("rel", /noreferrer/);
+      }
+      await expect(page.locator("a").filter({ hasText: /^https?:\/\// })).toHaveCount(0);
+    }
+
     expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
   });
 

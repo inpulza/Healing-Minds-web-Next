@@ -783,7 +783,7 @@ const LocationEstero = () => {
                 </a>
               </div>
 
-              {/* Engage Estero */}
+              {/* Estero Today by Engage Estero */}
               <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
                   <Users className="w-6 h-6 text-green-800" />
@@ -795,12 +795,12 @@ const LocationEstero = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'All-volunteer, nonpartisan civic advocacy organization focused on community engagement and quality of life issues. Through active communications and resident education, they foster civic participation essential for community mental wellness and democratic engagement.'
-                    : 'Organización de defensa cívica completamente voluntaria y no partidaria enfocada en la participación comunitaria y temas de calidad de vida. A través de comunicaciones activas y educación de residentes, fomentan la participación cívica esencial para el bienestar mental comunitario y la participación democrática.'}
+                    ? 'Volunteer-led, nonpartisan civic organization focused on community engagement and quality-of-life issues. Through public communications and resident education, it encourages informed civic participation and community well-being.'
+                    : 'Organización cívica no partidista, liderada por voluntarios y enfocada en la participación comunitaria y la calidad de vida. A través de la comunicación pública y la educación de los residentes, fomenta una participación cívica informada y el bienestar comunitario.'}
                 </p>
 
                 <a
-                  href="https://engageestero.org/"
+                  href="https://esterotoday.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-auto"
