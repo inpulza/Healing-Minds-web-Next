@@ -91,7 +91,7 @@ const Footer = () => {
           <div className="md:col-span-3 lg:col-span-5">
             {/* Brand */}
             <div className="mb-8">
-              <Link href="/" className="inline-block" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Return to homepage' : 'Healing Minds Psychiatry - Volver al inicio'}>
+              <Link href={language === 'en' ? '/' : '/es'} className="inline-block" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Return to homepage' : 'Healing Minds Psychiatry - Volver al inicio'}>
                 <div className="text-2xl font-body font-bold text-white">
                   Healing Minds <span className="text-green-200">Psychiatry</span>
                 </div>

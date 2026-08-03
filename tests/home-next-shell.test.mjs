@@ -34,6 +34,8 @@ test("home demotes the embedded contact heading while contact pages keep their p
 
 test("the Next root restores the public runtime shell without applying it to admin", () => {
   const providers = read("app/providers.tsx");
+  const layout = read("app/layout.tsx");
+  const languageContext = read("client/src/contexts/LanguageContext.tsx");
   const queryClient = read("client/src/lib/queryClient.ts");
   const shell = read("app/public-shell.tsx");
   const trackingConfig = read("client/src/lib/tracking-config.ts");
@@ -44,6 +46,9 @@ test("the Next root restores the public runtime shell without applying it to adm
   assert.match(providers, /createQueryClient\(\)/);
   assert.match(providers, /browserQueryClient/);
   assert.match(providers, /client=\{nextQueryClient\}/);
+  assert.match(layout, /<Providers initialLanguage=\{language\}>/);
+  assert.match(providers, /<LanguageProvider initialLanguage=\{initialLanguage\}>/);
+  assert.match(languageContext, /useState<Language>\(initialLanguage\)/);
   assert.match(shell, /pathname\.startsWith\(["']\/admin["']\)/);
   for (const runtime of [
     "MobileToolbar",

@@ -36,3 +36,23 @@ test("dynamic blog pages receive server-loaded content and metadata", () => {
   assert.match(read("client/src/pages/BlogPost.tsx"), /canPrepareArticle/);
   assert.match(read("client/src/pages/BlogPost.tsx"), /timeZone: 'UTC'/);
 });
+
+test("blog indexes receive a server-loaded list before hydration", () => {
+  const page = read("app/[...slug]/page.tsx");
+  const loader = read("app/_routing/load-public-blog-index.ts");
+  const wrapper = read("app/_routing/dynamic-blog-index.tsx");
+  const index = read("client/src/pages/BlogIndex.tsx");
+
+  assert.match(page, /route\.page === ["']BlogIndex["']/);
+  assert.match(page, /loadPublicBlogIndex\(route\.locale\)/);
+  assert.match(page, /<DynamicBlogIndex/);
+  assert.match(loader, /unstable_cache/);
+  assert.match(loader, /getBlogPosts/);
+  assert.match(loader, /blogSnapshot/);
+  assert.match(wrapper, /<BlogIndex language=\{language\} initialPosts=\{initialPosts\}/);
+  assert.match(index, /initialPosts === undefined/);
+  assert.match(index, /\{ success: true, data: initialPosts \}/);
+  assert.match(index, /timeZone:\s*["']UTC["']/);
+  assert.match(index, /localeCompare\(b\.name, language === ["']es["'] \? ["']es-US["'] : ["']en-US["']\)/);
+  assert.match(index, /\[language, posts\]/);
+});

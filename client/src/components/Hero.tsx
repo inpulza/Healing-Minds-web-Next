@@ -71,7 +71,7 @@ const Hero = React.memo(() => {
 
           {/* Mobile Action Buttons - Below description */}
           <div className="flex flex-col gap-3 px-4">
-            <Link href="/services">
+            <Link href={language === 'en' ? '/services' : '/es/servicios'}>
               <Button
                 className="whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 w-full group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 bg-white text-green-800 hover:bg-gray-100 px-6 py-4 shadow-lg border border-green-800 pt-[24px] pb-[24px]"
                 data-testid="hero-book-consultation-mobile"
@@ -147,7 +147,7 @@ const Hero = React.memo(() => {
                 </div>
                 
                 <div className="ml-0 flex flex-row items-center gap-4">
-                  <Link href="/services">
+                  <Link href={language === 'en' ? '/services' : '/es/servicios'}>
                     <Button
                       className="whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 group inline-flex items-center justify-center gap-2 rounded-full text-base font-semibold transition-all duration-300 text-white hover:bg-green-900 px-6 md:px-8 py-5 md:py-6 shadow-lg bg-[#15803d]"
                       data-testid="hero-book-consultation"

@@ -287,7 +287,7 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ className = '' }) => {
               asChild
               className="text-blue-600 hover:text-blue-700"
             >
-              <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
+              <a href={language === 'en' ? '/privacy-policy' : '/es/politica-privacidad'} target="_blank" rel="noopener noreferrer">
                 {tr.privacyPolicy}
               </a>
             </Button>
