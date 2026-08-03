@@ -60,8 +60,8 @@ export const patientRightsContent: BilingualPageContent = {
           'Phone: 1-888-419-3456 (24/7 automated system)',
           'TTY (Florida Relay): 1-800-955-8771',
           'Mailing Address: 2727 Mahan Drive, Mail Stop #3, Tallahassee, FL 32308',
-          'Website: [ahca.myflorida.com](https://www.ahca.myflorida.com)',
-          'Online Complaint Form: [File a Complaint](https://apps.ahca.myflorida.com/smcforms/)',
+          'Website: [Florida Agency for Health Care Administration](https://ahca.myflorida.com/)',
+          'Online Complaint Form: [File a Health Care Facility Complaint](https://apps.ahca.myflorida.com/hcfc/)',
         ],
       },
       {
@@ -132,8 +132,8 @@ export const patientRightsContent: BilingualPageContent = {
           'Teléfono: 1-888-419-3456 (Sistema automatizado 24/7)',
           'TTY (Servicio de Relay de Florida): 1-800-955-8771',
           'Dirección Postal: 2727 Mahan Drive, Mail Stop #3, Tallahassee, FL 32308',
-          'Sitio web: [ahca.myflorida.com](https://www.ahca.myflorida.com)',
-          'Formulario de Quejas en Línea: [Presentar una Queja](https://apps.ahca.myflorida.com/smcforms/)',
+          'Sitio web: [Agencia para la Administración del Cuidado de la Salud de Florida](https://ahca.myflorida.com/)',
+          'Formulario de Quejas en Línea: [Presentar una Queja sobre un Centro de Atención Médica con Licencia](https://apps.ahca.myflorida.com/hcfc/)',
         ],
       },
       {

@@ -927,28 +927,28 @@ const LocationImmokalee = () => {
                 </a>
               </div>
 
-              {/* Immokalee Community Action */}
+              {/* Coalition of Florida Farmworker Organizations */}
               <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
                   <Users className="w-6 h-6 text-green-800" />
                 </div>
                 
                 <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
-                  Immokalee Community Action
+                  Coalition of Florida Farmworker Organizations (COFFO)
                 </h3>
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'A grassroots organization dedicated to empowering the Immokalee community through advocacy, education, and social justice initiatives. They work tirelessly to improve working conditions, housing, and quality of life for farmworkers and their families.'
-                    : 'Una organización de base dedicada a empoderar a la comunidad de Immokalee a través de iniciativas de advocacy, educación y justicia social. Trabajan incansablemente para mejorar las condiciones laborales, vivienda y calidad de vida para trabajadores agrícolas y sus familias.'}
+                    ? 'COFFO supports migrant and seasonal farmworkers and rural families through programs focused on better living and working conditions, social justice, human dignity, and education. Its Immokalee multi-service office serves the local community.'
+                    : 'COFFO apoya a trabajadores agrícolas migrantes y de temporada y a familias rurales mediante programas enfocados en mejores condiciones de vida y trabajo, justicia social, dignidad humana y educación. Su oficina multiservicios de Immokalee atiende a la comunidad local.'}
                 </p>
 
                 <a
-                  href="https://www.immokaleeca.org/"
+                  href="https://www.coffo.org/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-auto"
-                  data-testid="link-community-action"
+                  data-testid="link-coffo"
                 >
                   <Button
                     className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
@@ -957,7 +957,7 @@ const LocationImmokalee = () => {
                       <ArrowRight className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-left leading-tight flex-1 py-2">
-                      {language === 'en' ? 'Learn About Their Mission' : 'Conocer Su Misión'}
+                      {language === 'en' ? 'Explore COFFO Services' : 'Explorar Servicios de COFFO'}
                     </span>
                   </Button>
                 </a>

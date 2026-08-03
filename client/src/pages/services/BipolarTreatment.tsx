@@ -168,6 +168,20 @@ const BipolarTreatment = () => {
                     {s('approach').paragraphs![0]}
                   </p>
 
+                  {language === 'en' && (
+                    <p className="text-base text-gray-600 mb-8 font-body leading-relaxed">
+                      Prepare for ongoing care with our{' '}
+                      <Link
+                        href="/blog/bipolar-medication-follow-up-questions"
+                        className="font-semibold text-green-700 hover:text-green-800 underline underline-offset-4"
+                        data-testid="link-bipolar-follow-up-guide"
+                      >
+                        bipolar medication follow-up questions
+                      </Link>
+                      .
+                    </p>
+                  )}
+
                   {/* Treatment List */}
                   <div className="grid gap-4 mb-8">
                     {approachItems.map((treatment, index) => (

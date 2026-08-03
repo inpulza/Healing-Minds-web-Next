@@ -622,24 +622,6 @@ const LocationGoldenGate = () => {
                     : 'Organización de defensa comunitaria enfocada en comprender el Plan Maestro de Golden Gate Estates y apoyar las necesidades de los residentes locales. Trabajan incansablemente para asegurar que los residentes tengan voz en las decisiones de planificación y desarrollo local que afectan su comunidad.'}
                 </p>
 
-                <a
-                  href="https://ggeaca.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-auto"
-                  data-testid="link-civic-association"
-                >
-                  <Button
-                    className="group flex items-center justify-start gap-3 rounded-full text-base font-semibold transition-all duration-300 px-6 w-full min-h-[3.5rem] whitespace-normal bg-green-800 text-white hover:bg-green-700"
-                  >
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 self-center bg-green-700">
-                      <ArrowRight className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="text-left leading-tight flex-1 py-2">
-                      {language === 'en' ? 'Learn About Their Mission' : 'Conocer Su Misión'}
-                    </span>
-                  </Button>
-                </a>
               </div>
 
               {/* Golden Gate Community Center */}

@@ -73,9 +73,9 @@ export const cookiePolicyContent: BilingualPageContent = {
           `**Third-Party Opt-out Links:** You can opt out of tracking by certain third parties by visiting the following links:`,
         ],
         bullets: [
-          `**Google Analytics:** [https://tools.google.com/dlpage/gaoptout](https://tools.google.com/dlpage/gaoptout)`,
-          `**Google Ads:** [https://myadcenter.google.com/](https://myadcenter.google.com/)`,
-          `**Microsoft:** [https://account.microsoft.com/privacy](https://account.microsoft.com/privacy)`,
+          `**Google Analytics:** [Google Analytics opt-out add-on](https://tools.google.com/dlpage/gaoptout)`,
+          `**Google Ads:** [Google My Ad Center](https://myadcenter.google.com/)`,
+          `**Microsoft:** [Microsoft privacy dashboard](https://account.microsoft.com/privacy)`,
         ],
       },
       {
@@ -177,9 +177,9 @@ export const cookiePolicyContent: BilingualPageContent = {
           `**Enlaces de Exclusión de Terceros:** Puede optar por no participar en el seguimiento de ciertos terceros visitando los siguientes enlaces:`,
         ],
         bullets: [
-          `**Google Analytics:** [https://tools.google.com/dlpage/gaoptout](https://tools.google.com/dlpage/gaoptout)`,
-          `**Google Ads:** [https://myadcenter.google.com/](https://myadcenter.google.com/)`,
-          `**Microsoft:** [https://account.microsoft.com/privacy](https://account.microsoft.com/privacy)`,
+          `**Google Analytics:** [Complemento de inhabilitación de Google Analytics](https://tools.google.com/dlpage/gaoptout)`,
+          `**Google Ads:** [Mi Centro de Anuncios de Google](https://myadcenter.google.com/)`,
+          `**Microsoft:** [Panel de privacidad de Microsoft](https://account.microsoft.com/privacy)`,
         ],
       },
       {

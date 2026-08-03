@@ -109,9 +109,9 @@ export const privacyPolicyContent: BilingualPageContent = {
         paragraphs: [`You have control over the information collected through cookies and tracking technologies.`],
         bullets: [
           `**Browser Settings:** You can set your browser to reject all or some cookies, or to alert you when cookies are being sent. Please note that if you disable cookies, some parts of this Site may not be accessible or function properly.`,
-          `**Google Analytics Opt-out:** To prevent your data from being used by Google Analytics, you can install Google's browser opt-out add-on, available at: [https://tools.google.com/dlpage/gaoptout](https://tools.google.com/dlpage/gaoptout).`,
-          `**Google Ads Settings:** You can manage your ad preferences and opt out of personalized advertising from Google at their Ad Center: [https://myadcenter.google.com/](https://myadcenter.google.com/).`,
-          `**Microsoft Privacy Controls:** You can manage your data and privacy settings with Microsoft through their privacy dashboard: [https://account.microsoft.com/privacy](https://account.microsoft.com/privacy).`,
+          `**Google Analytics Opt-out:** To prevent your data from being used by Google Analytics, install the [Google Analytics opt-out add-on](https://tools.google.com/dlpage/gaoptout).`,
+          `**Google Ads Settings:** Manage your ad preferences and opt out of personalized advertising through [Google My Ad Center](https://myadcenter.google.com/).`,
+          `**Microsoft Privacy Controls:** Manage your data and privacy settings through the [Microsoft privacy dashboard](https://account.microsoft.com/privacy).`,
         ],
       },
       {
@@ -242,9 +242,9 @@ export const privacyPolicyContent: BilingualPageContent = {
         paragraphs: [`Usted tiene control sobre la información que se recopila a través de cookies y tecnologías de seguimiento.`],
         bullets: [
           `**Configuración del Navegador:** Puede configurar su navegador para que rechace todas o algunas cookies, o para que le avise cuando se envíen cookies. Tenga en cuenta que si deshabilita las cookies, es posible que algunas partes de este Sitio no sean accesibles o no funcionen correctamente.`,
-          `**Exclusión de Google Analytics:** Para evitar que sus datos sean utilizados por Google Analytics, puede instalar el complemento de inhabilitación para navegadores de Google, disponible en: [https://tools.google.com/dlpage/gaoptout](https://tools.google.com/dlpage/gaoptout).`,
-          `**Configuración de Anuncios de Google:** Puede gestionar sus preferencias de anuncios y optar por no recibir publicidad personalizada de Google en su Centro de Anuncios: [https://myadcenter.google.com/](https://myadcenter.google.com/).`,
-          `**Controles de Privacidad de Microsoft:** Puede gestionar sus datos y la configuración de privacidad con Microsoft a través de su panel de privacidad: [https://account.microsoft.com/privacy](https://account.microsoft.com/privacy).`,
+          `**Exclusión de Google Analytics:** Para evitar que sus datos sean utilizados por Google Analytics, instale el [complemento de inhabilitación de Google Analytics](https://tools.google.com/dlpage/gaoptout).`,
+          `**Configuración de Anuncios de Google:** Gestione sus preferencias de anuncios y la publicidad personalizada desde [Mi Centro de Anuncios de Google](https://myadcenter.google.com/).`,
+          `**Controles de Privacidad de Microsoft:** Gestione sus datos y su configuración desde el [panel de privacidad de Microsoft](https://account.microsoft.com/privacy).`,
         ],
       },
       {
