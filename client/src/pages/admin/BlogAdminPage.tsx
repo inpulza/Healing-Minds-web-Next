@@ -54,6 +54,7 @@ import { LinkIntelligencePanel } from '@/components/admin/blog/LinkIntelligenceP
 import { PostLinkReportCard } from '@/components/admin/blog/PostLinkReportCard';
 import type { BlogPostLinkReport } from '@/components/admin/blog/link-intelligence-types';
 import { apiRequest, queryClient } from '@/lib/queryClient';
+import { truncateSeoText } from '@shared/seo-text';
 
 type BlogStatus = 'draft' | 'pending_review' | 'published' | 'rejected';
 type BlogLanguage = 'en' | 'es';
@@ -2429,7 +2430,7 @@ export default function BlogAdminPage() {
                           ...current,
                           title,
                           slug: current.slug || slugify(title),
-                          metaTitle: current.metaTitle || title.slice(0, 70),
+                          metaTitle: current.metaTitle || truncateSeoText(title, 60),
                         } : current);
                       }}
                     />
@@ -2488,8 +2489,8 @@ export default function BlogAdminPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="meta-title">Meta title</Label>
-                    <Input id="meta-title" value={form.metaTitle} maxLength={70} onChange={event => updateForm('metaTitle', event.target.value)} />
-                    <p className="text-xs text-slate-500">{form.metaTitle.length}/70</p>
+                    <Input id="meta-title" value={form.metaTitle} maxLength={60} onChange={event => updateForm('metaTitle', event.target.value)} />
+                    <p className="text-xs text-slate-500">{form.metaTitle.length}/60</p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="meta-description">Meta description</Label>

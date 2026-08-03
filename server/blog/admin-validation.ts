@@ -40,7 +40,7 @@ export const adminBlogPostSchema = z.object({
   categoryId: z.coerce.number().int().positive(),
   status: statusSchema.default("draft"),
   isFeatured: z.coerce.boolean().default(false),
-  metaTitle: z.string().trim().min(10).max(70),
+  metaTitle: z.string().trim().min(10).max(60),
   metaDescription: z.string().trim().min(50).max(160),
   readingTime: z.coerce.number().int().positive().optional().nullable(),
   publishedAt: z.coerce.date().optional().nullable(),
@@ -157,7 +157,7 @@ export function validatePostForPublish(post: BlogPostWithRelations): PublishChec
     {
       id: "metaTitle",
       label: "Meta title",
-      ok: Boolean(post.metaTitle && post.metaTitle.length <= 70),
+      ok: Boolean(post.metaTitle && post.metaTitle.length <= 60),
     },
     {
       id: "metaDescription",

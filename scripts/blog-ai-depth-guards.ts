@@ -149,6 +149,24 @@ async function checkSufficientDraftSkipsExpansion(): Promise<void> {
   assert.ok(countBlogDraftWords(draft.contentHtml) >= 800);
 }
 
+async function checkOverlongMetaTitleIsBounded(): Promise<void> {
+  let calls = 0;
+  const providerDraft = buildDraft(850);
+  providerDraft.metaTitle = "An intentionally overlong psychiatric care article title that must be shortened before publication";
+  globalThis.fetch = (async () => {
+    calls += 1;
+    return providerResponse(providerDraft);
+  }) as typeof fetch;
+
+  const draft = await generateBlogDraftWithAi(input);
+  assert.equal(calls, 1);
+  assert.equal(
+    draft.metaTitle,
+    "An intentionally overlong psychiatric care article title",
+    "Meta titles must stop at the last complete word within the 60-character budget",
+  );
+}
+
 async function checkFailedExpansionKeepsSafeDraft(): Promise<void> {
   let calls = 0;
   globalThis.fetch = (async () => {
@@ -202,6 +220,7 @@ async function checkOverlongExpansionKeepsInitialDraft(): Promise<void> {
 try {
   await checkShortDraftExpansion();
   await checkSufficientDraftSkipsExpansion();
+  await checkOverlongMetaTitleIsBounded();
   await checkFailedExpansionKeepsSafeDraft();
   await checkExpansionCannotDropValidatedLinks();
   await checkOverlongExpansionKeepsInitialDraft();

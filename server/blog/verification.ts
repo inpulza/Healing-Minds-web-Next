@@ -130,10 +130,10 @@ export function buildBlogVerificationReport(post: BlogPostWithRelations): BlogVe
     {
       id: "metaTitle",
       label: "Meta title",
-      ok: Boolean(post.metaTitle && post.metaTitle.length >= 10 && post.metaTitle.length <= 70),
+      ok: Boolean(post.metaTitle && post.metaTitle.length >= 10 && post.metaTitle.length <= 60),
       severity: "blocking",
       message: "The meta title must exist and stay within the safe length.",
-      detail: post.metaTitle ? `${post.metaTitle.length}/70 characters` : "Missing",
+      detail: post.metaTitle ? `${post.metaTitle.length}/60 characters` : "Missing",
       fixType: "metaTitle",
     },
     {

@@ -5,6 +5,24 @@ import {
   type Locator,
   type Page,
 } from "@playwright/test";
+import { readFileSync } from "node:fs";
+
+type PublicSeo = {
+  title: string;
+  description: string;
+  canonical: string;
+  lang: "en" | "es";
+};
+
+const seoManifest = JSON.parse(
+  readFileSync(new URL("../shared/seo-manifest.json", import.meta.url), "utf8"),
+) as Record<string, PublicSeo>;
+
+function seoFor(pathname: string): PublicSeo {
+  const seo = seoManifest[pathname];
+  if (!seo) throw new Error(`Missing SEO manifest entry for ${pathname}`);
+  return seo;
+}
 
 const deploymentUrl = process.env.E2E_BASE_URL
   ? new URL(process.env.E2E_BASE_URL)
@@ -119,63 +137,61 @@ type RouteCase = {
 const routes: RouteCase[] = [
   {
     entryPath: "/",
-    entryTitle:
-      "Expert Psychiatric Care in Naples, FL - Anxiety, Depression, ADHD, Therapy | Dr. Melva Reve",
-    entryDescription:
-      "Dr. Melva Reve provides expert psychiatric care in Naples, FL. Specializing in anxiety, depression, ADHD, and therapy. Mental health services for Southwest Florida. Call (239) 423-0272.",
-    entryCanonical: "https://www.healingmindsp.com/",
+    entryTitle: seoFor("/").title,
+    entryDescription: seoFor("/").description,
+    entryCanonical: seoFor("/").canonical,
     targetPath: "/about",
-    expectedTitle: "About Dr. Melva Reve - Psychiatrist in Naples, FL",
+    expectedTitle: seoFor("/about").title,
     expectedHeading: /Safe Space.*Heal.*Clarity/i,
-    expectedDescription:
-      "Learn about Dr. Melva Reve, a psychiatrist with 15+ years of experience serving Naples, FL. Bilingual care with cultural sensitivity.",
-    expectedCanonical: "https://www.healingmindsp.com/about",
+    expectedDescription: seoFor("/about").description,
+    expectedCanonical: seoFor("/about").canonical,
     expectedLocale: "en",
     secondPath: "/contact",
-    secondTitle: "Contact Dr. Melva Reve - Book Psychiatric Consultation Naples FL",
-    secondDescription:
-      "Contact Healing Minds Psychiatry in Naples, FL to schedule your consultation. Call (239) 423-0272 or send a message. Bilingual services available.",
-    secondCanonical: "https://www.healingmindsp.com/contact",
+    secondTitle: seoFor("/contact").title,
+    secondDescription: seoFor("/contact").description,
+    secondCanonical: seoFor("/contact").canonical,
   },
   {
     entryPath: "/es",
-    entryTitle:
-      "Atención Psiquiátrica Experta en Naples, FL - Ansiedad, Depresión, TDAH, Terapia | Dra. Melva Reve",
-    entryDescription:
-      "La psiquiatra Dra. Melva Reve brinda atención psiquiátrica experta en Naples, FL. Especializada en ansiedad, depresión, TDAH y terapia. Servicios de salud mental para el suroeste de Florida. Llame (239) 423-0272.",
-    entryCanonical: "https://www.healingmindsp.com/es",
+    entryTitle: seoFor("/es").title,
+    entryDescription: seoFor("/es").description,
+    entryCanonical: seoFor("/es").canonical,
     targetPath: "/es/acerca-de",
-    expectedTitle: "Acerca de la Dra. Melva Reve - Psiquiatra en Naples, FL",
+    expectedTitle: seoFor("/es/acerca-de").title,
     expectedHeading: /Espacio Seguro.*Sanar.*Claridad/i,
-    expectedDescription:
-      "Conozca a la Dra. Melva Reve, psiquiatra con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.",
-    expectedCanonical: "https://www.healingmindsp.com/es/acerca-de",
+    expectedDescription: seoFor("/es/acerca-de").description,
+    expectedCanonical: seoFor("/es/acerca-de").canonical,
     expectedLocale: "es",
     secondPath: "/es/contacto",
-    secondTitle: "Contactar Dra. Melva Reve - Reservar Consulta Psiquiátrica Naples FL",
-    secondDescription:
-      "Contacte Healing Minds Psychiatry en Naples, FL para programar su consulta. Llame (239) 423-0272 o envíe un mensaje. Servicios bilingües disponibles.",
-    secondCanonical: "https://www.healingmindsp.com/es/contacto",
+    secondTitle: seoFor("/es/contacto").title,
+    secondDescription: seoFor("/es/contacto").description,
+    secondCanonical: seoFor("/es/contacto").canonical,
   },
 ];
 
 const californiaRoutes = [
   {
     path: "/psychiatrist-california",
-    expectedTitle: "Online Psychiatrist in Spanish | California | Healing Minds",
-    expectedDescription:
-      "A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.",
-    expectedCanonical: "https://www.healingmindsp.com/psychiatrist-california",
+    expectedTitle: seoFor("/psychiatrist-california").title,
+    expectedDescription: seoFor("/psychiatrist-california").description,
+    expectedCanonical: seoFor("/psychiatrist-california").canonical,
     expectedLocale: "en",
   },
   {
     path: "/es/psiquiatra-california",
-    expectedTitle: "Psiquiatra Online en Español | California | Healing Minds",
-    expectedDescription:
-      "Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.",
-    expectedCanonical: "https://www.healingmindsp.com/es/psiquiatra-california",
+    expectedTitle: seoFor("/es/psiquiatra-california").title,
+    expectedDescription: seoFor("/es/psiquiatra-california").description,
+    expectedCanonical: seoFor("/es/psiquiatra-california").canonical,
     expectedLocale: "es",
   },
+] as const;
+
+const representativeMetadataRoutes = [
+  "/services/anxiety-treatment",
+  "/es/servicios/tratamiento-bipolar",
+  "/es/ubicaciones/psiquiatra-estero",
+  "/es/politica-comunicaciones",
+  "/blog/bipolar-medication-follow-up-questions",
 ] as const;
 
 const spanishSocialRoutes = [
@@ -283,8 +299,11 @@ async function expectUniqueMetadata(
   const description = page.locator('meta[name="description"]');
   const canonical = page.locator('link[rel="canonical"]');
   const openGraphTitle = page.locator('meta[property="og:title"]');
+  const openGraphDescription = page.locator('meta[property="og:description"]');
   const openGraphUrl = page.locator('meta[property="og:url"]');
   const twitterTitle = page.locator('meta[name="twitter:title"]');
+  const twitterDescription = page.locator('meta[name="twitter:description"]');
+  const twitterCard = page.locator('meta[name="twitter:card"]');
   const openGraphImage = page.locator('meta[property="og:image"]');
   const twitterImage = page.locator('meta[name="twitter:image"]');
   await expect(page).toHaveTitle(expectedTitle);
@@ -294,15 +313,71 @@ async function expectUniqueMetadata(
   await expect(canonical).toHaveAttribute("href", expectedCanonical);
   await expect(openGraphTitle).toHaveCount(1);
   await expect(openGraphTitle).toHaveAttribute("content", expectedTitle);
+  await expect(openGraphDescription).toHaveCount(1);
+  await expect(openGraphDescription).toHaveAttribute("content", expectedDescription);
   await expect(openGraphUrl).toHaveCount(1);
   await expect(openGraphUrl).toHaveAttribute("content", expectedCanonical);
   await expect(twitterTitle).toHaveCount(1);
   await expect(twitterTitle).toHaveAttribute("content", expectedTitle);
+  await expect(twitterDescription).toHaveCount(1);
+  await expect(twitterDescription).toHaveAttribute("content", expectedDescription);
+  await expect(twitterCard).toHaveCount(1);
+  await expect(twitterCard).toHaveAttribute("content", "summary_large_image");
   await expect(openGraphImage).toHaveCount(1);
   await expect(openGraphImage).toHaveAttribute("content", /^https:\/\//);
   await expect(twitterImage).toHaveCount(1);
   await expect(twitterImage).toHaveAttribute("content", /^https:\/\//);
 }
+
+async function expectBoundedMetadataParity(page: Page, expectedCanonical: string) {
+  const title = await page.title();
+  const description = await page.locator('meta[name="description"]').getAttribute("content");
+
+  expect(title, `${expectedCanonical}: empty title`).not.toBe("");
+  expect(title, `${expectedCanonical}: title has surrounding whitespace`).toBe(title.trim());
+  expect(title.length, `${expectedCanonical}: title length`).toBeLessThanOrEqual(60);
+  expect(description, `${expectedCanonical}: missing description`).not.toBeNull();
+  expect(description, `${expectedCanonical}: empty description`).not.toBe("");
+  expect(description, `${expectedCanonical}: description has surrounding whitespace`).toBe(
+    description?.trim(),
+  );
+  expect(description!.length, `${expectedCanonical}: description length`).toBeLessThanOrEqual(160);
+
+  await expectUniqueMetadata(page, title, description!, expectedCanonical);
+  return { title, description: description! };
+}
+
+async function expectExactDeploymentSha(page: Page) {
+  if (!deploymentOrigin) return;
+
+  const expectedSha = process.env.E2E_EXPECTED_SHA?.trim();
+  if (!expectedSha || !/^[a-f0-9]{40}$/i.test(expectedSha)) {
+    throw new Error("Deployed metadata E2E requires the exact 40-character E2E_EXPECTED_SHA");
+  }
+
+  const buildSha = page.locator('meta[name="healing-build-sha"]');
+  await expect(buildSha).toHaveCount(1);
+  await expect(buildSha).toHaveAttribute("content", expectedSha);
+}
+
+test("representative EN and ES metadata stays aligned after hydration", async ({ page }) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  for (const path of representativeMetadataRoutes) {
+    const seo = seoFor(path);
+    const response = await page.goto(path);
+    expect(response?.status(), `${path}: status`).toBe(200);
+    await expectReactHydrated(page.getByTestId("logo-link"));
+    await expect(page.locator("html")).toHaveAttribute("lang", seo.lang);
+    const actual = await expectBoundedMetadataParity(page, seo.canonical);
+    if (!path.startsWith("/blog/") && !path.startsWith("/es/blog/")) {
+      expect(actual).toEqual({ title: seo.title, description: seo.description });
+    }
+    await expectExactDeploymentSha(page);
+  }
+
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
 
 test("verified social profiles stay consistent in UI, outbound clicks and SSR identity", async ({
   page,
@@ -676,7 +751,7 @@ test("Spanish social metadata is self-referencing and responses are hardened", a
 
 test("Spanish Open Graph URL follows an in-app click to an affected route", async ({ page }) => {
   const path = "/es/servicios/tratamiento-adhd";
-  const expectedUrl = `https://www.healingmindsp.com${path}`;
+  const seo = seoFor(path);
 
   await page.goto("/es");
   await rejectInitialConsent(page);
@@ -685,12 +760,7 @@ test("Spanish Open Graph URL follows an in-app click to an affected route", asyn
   await link.click();
 
   await expect(page).toHaveURL(new RegExp(`${path.replaceAll("/", "\\/")}/?$`));
-  await expectUniqueMetadata(
-    page,
-    "Tratamiento TDAH Adultos en Naples, FL | Healing Minds Psychiatry",
-    "Tratamiento especializado de TDAH para adultos en Naples, FL. Dra. Melva Reve ofrece evaluación integral, manejo de medicamentos y estrategias personalizadas. Psiquiatra bilingüe experta.",
-    expectedUrl,
-  );
+  await expectUniqueMetadata(page, seo.title, seo.description, seo.canonical);
 });
 
 test("route scroll respects reduced motion without a smooth-scroll runtime", async ({
@@ -1191,6 +1261,24 @@ test("contextual service links settle on the intended articles in one client nav
 
 test.describe("server-rendered SEO without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
+
+  test("representative EN and ES metadata is complete in the initial HTML", async ({ page }) => {
+    const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+    for (const path of representativeMetadataRoutes) {
+      const seo = seoFor(path);
+      const response = await page.goto(path, { waitUntil: "domcontentloaded" });
+      expect(response?.status(), `${path}: status`).toBe(200);
+      await expect(page.locator("html")).toHaveAttribute("lang", seo.lang);
+      const actual = await expectBoundedMetadataParity(page, seo.canonical);
+      if (!path.startsWith("/blog/") && !path.startsWith("/es/blog/")) {
+        expect(actual).toEqual({ title: seo.title, description: seo.description });
+      }
+      await expectExactDeploymentSha(page);
+    }
+
+    expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+  });
 
   test("Spanish service HTML is Spanish before JavaScript", async ({ page }) => {
     const runtimeErrors = collectUnexpectedRuntimeErrors(page);

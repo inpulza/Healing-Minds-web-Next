@@ -71,8 +71,8 @@ function buildMetaDescription(value: string, excerpt: string, contentHtml: strin
 
 function buildMetaTitle(value: string, title: string): string {
   const candidate = (value || title).replace(/\s+/g, " ").trim();
-  if (candidate.length >= 10) return truncateSeoText(candidate, 70);
-  return truncateSeoText(`${title} | Healing Minds Psychiatry`, 70);
+  if (candidate.length >= 10) return truncateSeoText(candidate, 60);
+  return truncateSeoText(`${title} | Healing Minds Psychiatry`, 60);
 }
 
 function ensureDisclaimer(contentHtml: string, language: BlogLanguage): string {
