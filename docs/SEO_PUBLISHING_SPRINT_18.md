@@ -814,3 +814,8 @@ Out of scope:
 - retroactive edits to published content.
 
 The remote Sprint 17 branch must remain preserved.
+
+> Superseded on 2026-08-03 for translation automation only: the independent
+> bilingual-twins change implements a durable draft-only sibling workflow.
+> Topic planning and every other Sprint 18 boundary remain unchanged. See
+> `docs/BLOG_BILINGUAL_TWINS.md`.

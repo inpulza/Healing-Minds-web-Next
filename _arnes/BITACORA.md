@@ -744,3 +744,17 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Commit/push, PR, Quality, Code Review exacto, Preview inmutable y E2E desplegado desktop/móvil antes de fusionar. El artículo español de Neon sigue en el PR editorial separado ya diagnosticado.
 **Archivos tocados:** bitácora.
 **Evidencia:** `git diff --check`, TypeScript y 123/123 unitarios PASS; build Next 89/89 con presupuestos 669.5/750 KiB y 786.8/850 KiB; E2E local final 74 PASS y 6 skips deliberados por perfil. Consentimiento móvil focalizado 1/1 PASS. Inventario final: 79 rutas, máximos 60/157, cero excesos, vacíos, duplicados o deriva OG/Twitter. Jueces general, SEO y pruebas: GO, cero P0-P3.
+
+## 2026-08-03 Codex - gemelos bilingües durables y privados
+**Qué se hizo:** Auto Generate conserva primero el borrador fuente y crea después una corrida durable recuperable para el idioma contrario. El gemelo comparte `translationGroupId`, nace siempre draft, conserva estructura clínica, enlaces y fuentes bajo allowlist, reutiliza la imagen seleccionada sin gasto visual y aparece en el admin como missing/draft/pending_review/published con acción de abrir o reintentar.
+**Decisiones:** Dos artículos del mismo grupo e idioma quedan bloqueados por índice único en DB. La publicación es independiente. Rutas estáticas se traducen solo con el manifiesto real; links a artículos solo cambian si el sibling está publicado; fuentes externas solo usan una URL target-language curada del mismo host oficial. El run de traducción es un subpaso separado y durable: su fallo no modifica el run completado ni el borrador fuente.
+**Pendientes/bugs:** Completar suite/build/E2E local, publicar en PR draft, verificar Preview por SHA y clasificar todas las notas vigentes de Code Review antes de considerar el PR listo. No mergear ni aplicar la migración en Production desde esta tarea.
+**Archivos tocados:** schema/migración Drizzle, storage y worker de traducción, dispatcher de runs, API/admin, documentación, guardas PGlite/unitarias y E2E desktop/móvil.
+**Evidencia:** `db:verify` PASS con 5 migraciones, 112 statements, unicidad del sibling y publicación independiente; guardas focalizadas de traducción 4/4 PASS; TypeScript PASS. Suite completa, build, E2E y `diff --check` quedan pendientes al registrar esta entrada.
+
+## 2026-08-03 Codex - gate final local de gemelos bilingües
+**Qué se hizo:** Se ejecutó el pipeline completo sobre el contrato final y el admin real con APIs interceptadas sin secretos. El recorrido genera el draft target, observa el estado durable y abre el sibling en el editor.
+**Decisiones:** Los 404 de favicon/imagen de una primera fixture se trataron como fallo real del gate de consola; la fixture dejó de solicitar ambos recursos y la matriz final quedó limpia. No se relajó el detector de errores.
+**Pendientes/bugs:** Gates remotos del PR draft: aplicar migración solo en Preview/entorno autorizado, verificar deployment por SHA, repetir E2E y clasificar todas las notas de Code Review. No mergear ni modificar Production desde esta tarea.
+**Archivos tocados:** fixture E2E y bitácora en el remate.
+**Evidencia:** `npm test` 127/127 PASS; TypeScript PASS; build 89/89 y budgets 669.5/750 KiB + 786.8/850 KiB PASS; `db:verify`, link/topic/image guards y `git diff --check` PASS; E2E admin final 2/2 PASS (Desktop Chrome y Pixel 7), con 2 skips deliberados por perfil cruzado.

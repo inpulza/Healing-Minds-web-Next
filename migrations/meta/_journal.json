@@ -29,6 +29,13 @@
       "when": 1785551312684,
       "tag": "0003_durable_blog_image_jobs",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1785795158480,
+      "tag": "0004_bilingual_translation_siblings",
+      "breakpoints": true
     }
   ]
 }
