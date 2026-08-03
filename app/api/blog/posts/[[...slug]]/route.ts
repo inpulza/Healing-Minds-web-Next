@@ -1,5 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 import blogSnapshot from "@shared/blog-snapshot.json";
+import {
+  normalizeBlogArchiveCategory,
+  parseBlogArchivePage,
+} from "@shared/blog-archive";
+import { loadPublicBlogArchive } from "../../../../_routing/load-public-blog-index";
 
 export const runtime = "nodejs";
 
@@ -34,6 +39,19 @@ async function frozenResponse(request: NextRequest, context: RouteContext) {
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
+  const { slug: requestedSlug = [] } = await context.params;
+  if (requestedSlug.length === 0 && request.nextUrl.searchParams.has("page")) {
+    const language = request.nextUrl.searchParams.get("language") === "es" ? "es" : "en";
+    const archive = await loadPublicBlogArchive(language, {
+      page: parseBlogArchivePage(request.nextUrl.searchParams.get("page")),
+      category: normalizeBlogArchiveCategory(request.nextUrl.searchParams.get("category")),
+    });
+    return NextResponse.json(
+      { success: true, ...archive },
+      { headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600" } },
+    );
+  }
+
   if (!process.env.DATABASE_URL) return frozenResponse(request, context);
 
   try {

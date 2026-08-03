@@ -3,14 +3,14 @@ import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { metadataForPath } from "../_seo/metadata";
 import RootSlashSeoLinks from "../_seo/root-slash-links";
 import PublicPage from "../_routing/public-page";
-import DynamicBlogIndex from "../_routing/dynamic-blog-index";
 import DynamicBlogPost from "../_routing/dynamic-blog-post";
-import { loadPublicBlogIndex } from "../_routing/load-public-blog-index";
 import { loadPublicBlogPost, loadPublicBlogRedirect, matchBlogPath } from "../_routing/load-public-blog-post";
 import { publicRouteParams, resolvePublicRoute } from "../_routing/public-routes.mjs";
 
 export function generateStaticParams() {
-  return publicRouteParams.map(({ slug }) => ({ slug: [...slug] }));
+  return publicRouteParams
+    .filter(({ slug }) => slug.join("/") !== "blog" && slug.join("/") !== "es/blog")
+    .map(({ slug }) => ({ slug: [...slug] }));
 }
 
 export async function generateMetadata({
@@ -96,15 +96,7 @@ export default async function StaticPublicRoute({
   }
   if ("redirectTo" in route) redirect(route.redirectTo);
   if (!("page" in route)) notFound();
-  if (route.page === "BlogIndex") {
-    const initialBlogPosts = await loadPublicBlogIndex(route.locale);
-    return (
-      <DynamicBlogIndex
-        language={route.locale}
-        initialPosts={initialBlogPosts}
-      />
-    );
-  }
+  if (route.page === "BlogIndex") notFound();
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import { assetUrl } from '@/lib/asset-url';
 import { Link } from '@/lib/navigation';
 import { useQuery } from '@tanstack/react-query';
@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card';
 import { useLanguage } from '@/hooks/useLanguage';
 import { updateSEO } from '@/utils/seo';
 import doctorConsultation from '@/assets/doctor-consultation.webp';
+import { buildBlogArchiveHref } from '@shared/blog-archive';
 
 export type BlogLanguage = 'en' | 'es';
 
@@ -27,14 +28,22 @@ export type BlogPostListItem = {
   isFeatured: boolean;
 };
 
-type BlogListResponse = {
-  success: boolean;
+export type BlogArchivePage = {
   data: BlogPostListItem[];
+  categories: Array<{ name: string; slug: string }>;
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  category: string | null;
+  featuredPostId: number | null;
 };
 
 type BlogIndexProps = {
   language?: BlogLanguage;
-  initialPosts?: BlogPostListItem[];
+  initialArchive?: BlogArchivePage;
+  archivePath?: string;
+  persistentParams?: Record<string, string>;
 };
 
 function getBlogPostPath(post: Pick<BlogPostListItem, 'slug' | 'language'>): string {
@@ -65,6 +74,10 @@ const copy = {
     featured: 'Featured',
     minuteLabel: 'min',
     fallbackCategory: 'Mental Health',
+    previous: 'Previous',
+    next: 'Next',
+    pagination: 'Blog archive pages',
+    pageStatus: (page: number, totalPages: number) => `Page ${page} of ${totalPages}`,
   },
   es: {
     title: 'Blog de Salud Mental',
@@ -79,21 +92,50 @@ const copy = {
     featured: 'Destacado',
     minuteLabel: 'min',
     fallbackCategory: 'Salud Mental',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    pagination: 'Paginas del archivo del blog',
+    pageStatus: (page: number, totalPages: number) => `Pagina ${page} de ${totalPages}`,
   },
 };
 
-const BlogIndex = ({ language = 'en', initialPosts }: BlogIndexProps) => {
+function getVisiblePageNumbers(page: number, totalPages: number): number[] {
+  const pages = new Set([1, totalPages]);
+  for (let candidate = page - 2; candidate <= page + 2; candidate += 1) {
+    if (candidate > 0 && candidate <= totalPages) pages.add(candidate);
+  }
+  return Array.from(pages).sort((a, b) => a - b);
+}
+
+const BlogIndex = ({
+  language = 'en',
+  initialArchive,
+  archivePath,
+  persistentParams,
+}: BlogIndexProps) => {
   const { setLanguage } = useLanguage();
   const text = copy[language];
-  const blogPath = language === 'es' ? '/es/blog' : '/blog';
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
-  const { data, isLoading, isError } = useQuery<BlogListResponse>({
-    queryKey: [`/api/blog/posts?language=${language}`],
-    initialData: initialPosts === undefined
-      ? undefined
-      : { success: true, data: initialPosts },
+  const blogPath = archivePath || (language === 'es' ? '/es/blog' : '/blog');
+  const { data: queriedArchive, isLoading, isError } = useQuery<BlogArchivePage & { success: boolean }>({
+    queryKey: [`/api/blog/posts?language=${language}&page=1`],
+    initialData: initialArchive ? { success: true, ...initialArchive } : undefined,
     staleTime: 5 * 60 * 1000,
+  });
+  const archive: BlogArchivePage = queriedArchive || initialArchive || {
+    data: [],
+    categories: [],
+    page: 1,
+    pageSize: 9,
+    total: 0,
+    totalPages: 1,
+    category: null,
+    featuredPostId: null,
+  };
+  const canonicalPath = buildBlogArchiveHref({
+    archivePath: blogPath,
+    page: archive.page,
+    category: archive.category,
+    persistentParams,
   });
 
   useEffect(() => {
@@ -102,27 +144,27 @@ const BlogIndex = ({ language = 'en', initialPosts }: BlogIndexProps) => {
       title: text.seoTitle,
       description: text.seoDescription,
       lang: language,
-      canonical: blogPath,
+      canonical: canonicalPath,
     });
-  }, [blogPath, language, setLanguage, text.seoDescription, text.seoTitle]);
+  }, [canonicalPath, language, setLanguage, text.seoDescription, text.seoTitle]);
 
-  const posts = data?.data ?? [];
-  const categories = useMemo(() => {
-    const map = new Map<string, { name: string; slug: string }>();
-    posts.forEach(post => {
-      if (post.category?.slug) {
-        map.set(post.category.slug, post.category);
-      }
-    });
-    return Array.from(map.values()).sort((a, b) =>
-      a.name.localeCompare(b.name, language === 'es' ? 'es-US' : 'en-US'),
-    );
-  }, [language, posts]);
-  const visiblePosts = selectedCategory
-    ? posts.filter(post => post.category?.slug === selectedCategory)
+  const posts = archive.data;
+  const categories = [...archive.categories].sort((a, b) =>
+    a.name.localeCompare(b.name, language === 'es' ? 'es-US' : 'en-US'),
+  );
+  const featuredPost = archive.page === 1
+    ? posts.find(post => post.id === archive.featuredPostId) || posts[0]
+    : undefined;
+  const regularPosts = featuredPost
+    ? posts.filter(post => post.id !== featuredPost.id)
     : posts;
-  const featuredPost = visiblePosts.find(post => post.isFeatured) || visiblePosts[0];
-  const regularPosts = featuredPost ? visiblePosts.filter(post => post.id !== featuredPost.id) : visiblePosts;
+  const archiveHref = (page: number, category = archive.category) =>
+    buildBlogArchiveHref({
+      archivePath: blogPath,
+      page,
+      category,
+      persistentParams,
+    });
 
   return (
     <div className="min-h-screen bg-white">
@@ -167,34 +209,34 @@ const BlogIndex = ({ language = 'en', initialPosts }: BlogIndexProps) => {
               </Card>
             )}
 
-            {posts.length > 0 && (
+            {(posts.length > 0 || categories.length > 0) && (
               <div className="space-y-10">
                 {categories.length > 1 && (
                   <div className="flex flex-wrap gap-2" aria-label={language === 'es' ? 'Filtrar articulos por categoria' : 'Filter articles by category'}>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedCategory(null)}
+                    <a
+                      href={archiveHref(1, null)}
                       className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                        selectedCategory === null
+                        archive.category === null
                           ? 'bg-green-900 text-white'
                           : 'bg-green-50 text-green-900 hover:bg-green-100'
                       }`}
+                      aria-current={archive.category === null ? 'page' : undefined}
                     >
                       {text.allPosts}
-                    </button>
+                    </a>
                     {categories.map(category => (
-                      <button
+                      <a
                         key={category.slug}
-                        type="button"
-                        onClick={() => setSelectedCategory(category.slug)}
+                        href={archiveHref(1, category.slug)}
                         className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                          selectedCategory === category.slug
+                          archive.category === category.slug
                             ? 'bg-green-900 text-white'
                             : 'bg-green-50 text-green-900 hover:bg-green-100'
                         }`}
+                        aria-current={archive.category === category.slug ? 'page' : undefined}
                       >
                         {category.name}
-                      </button>
+                      </a>
                     ))}
                   </div>
                 )}
@@ -293,6 +335,53 @@ const BlogIndex = ({ language = 'en', initialPosts }: BlogIndexProps) => {
                   );
                     })}
                   </div>
+                )}
+
+                {archive.totalPages > 1 && (
+                  <nav className="flex flex-col items-center gap-4 pt-2" aria-label={text.pagination}>
+                    <p className="text-sm text-gray-600" aria-live="polite">
+                      {text.pageStatus(archive.page, archive.totalPages)}
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      {archive.page > 1 && (
+                        <a
+                          href={archiveHref(archive.page - 1)}
+                          rel="prev"
+                          className="rounded-full bg-green-50 px-4 py-2 text-sm font-semibold text-green-900 hover:bg-green-100"
+                        >
+                          {text.previous}
+                        </a>
+                      )}
+                      {getVisiblePageNumbers(archive.page, archive.totalPages).map((pageNumber, index, pages) => (
+                        <span key={pageNumber} className="contents">
+                          {index > 0 && pageNumber - pages[index - 1] > 1 && (
+                            <span className="px-1 text-gray-500" aria-hidden="true">&hellip;</span>
+                          )}
+                          <a
+                            href={archiveHref(pageNumber)}
+                            aria-current={pageNumber === archive.page ? 'page' : undefined}
+                            aria-label={`${language === 'es' ? 'Pagina' : 'Page'} ${pageNumber}`}
+                            className={`inline-flex h-10 min-w-10 items-center justify-center rounded-full px-3 text-sm font-semibold ${
+                              pageNumber === archive.page
+                                ? 'bg-green-900 text-white'
+                                : 'bg-green-50 text-green-900 hover:bg-green-100'
+                            }`}
+                          >
+                            {pageNumber}
+                          </a>
+                        </span>
+                      ))}
+                      {archive.page < archive.totalPages && (
+                        <a
+                          href={archiveHref(archive.page + 1)}
+                          rel="next"
+                          className="rounded-full bg-green-50 px-4 py-2 text-sm font-semibold text-green-900 hover:bg-green-100"
+                        >
+                          {text.next}
+                        </a>
+                      )}
+                    </div>
+                  </nav>
                 )}
               </div>
             )}
