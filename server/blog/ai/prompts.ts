@@ -23,7 +23,7 @@ const GENERATED_DRAFT_JSON_SHAPE = `{
   "slug": "lowercase-hyphenated-slug",
   "excerpt": "20 to 500 character summary",
   "contentHtml": "<p>...</p>",
-  "metaTitle": "70 characters max",
+  "metaTitle": "60 characters max",
   "metaDescription": "50 to 160 characters",
   "featuredImageAlt": "descriptive alt text",
   "riskNotes": ["short note for human reviewer"]

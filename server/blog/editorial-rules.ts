@@ -1,4 +1,7 @@
 import type { BlogLanguage } from "./storage";
+import { truncateSeoText } from "@shared/seo-text";
+
+export { truncateSeoText };
 
 export const medicalDisclaimerPatterns = [
   /not a substitute/i,
@@ -30,10 +33,4 @@ export function slugifyBlogValue(value: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 255);
-}
-
-export function truncateSeoText(value: string, maxLength: number): string {
-  const normalized = value.replace(/\s+/g, " ").trim();
-  if (normalized.length <= maxLength) return normalized;
-  return normalized.slice(0, maxLength - 1).trimEnd();
 }

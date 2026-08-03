@@ -109,7 +109,7 @@ export async function applyDeterministicBlogFix(
     }
 
     case "metaTitle": {
-      const metaTitle = truncateSeoText(post.metaTitle || post.title, 70);
+      const metaTitle = truncateSeoText(post.metaTitle || post.title, 60);
       if (metaTitle.length < 10) {
         return {
           success: false,
