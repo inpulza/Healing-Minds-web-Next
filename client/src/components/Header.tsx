@@ -247,7 +247,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
         <div ref={baseBarRef} className="flex items-center justify-between h-20 sm:h-24 md:h-28 lg:h-32 relative gap-4 lg:gap-6">
           {/* Logo */}
-          <Link href="/" data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'} className="flex-shrink-0">
+          <Link href={language === 'en' ? '/' : '/es'} data-testid="logo-link" aria-label={language === 'en' ? 'Healing Minds Psychiatry - Go to homepage' : 'Healing Minds Psychiatry - Ir al inicio'} className="flex-shrink-0">
             <div className="text-sm sm:text-base md:text-lg lg:text-xl font-body font-bold text-green-800 whitespace-nowrap">
               Healing Minds <span className="text-green-700">Psychiatry</span>
             </div>

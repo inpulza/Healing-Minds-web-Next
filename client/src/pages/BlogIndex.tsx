@@ -11,9 +11,9 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { updateSEO } from '@/utils/seo';
 import doctorConsultation from '@/assets/doctor-consultation.webp';
 
-type BlogLanguage = 'en' | 'es';
+export type BlogLanguage = 'en' | 'es';
 
-type BlogPostListItem = {
+export type BlogPostListItem = {
   id: number;
   slug: string;
   language: BlogLanguage;
@@ -34,6 +34,7 @@ type BlogListResponse = {
 
 type BlogIndexProps = {
   language?: BlogLanguage;
+  initialPosts?: BlogPostListItem[];
 };
 
 function getBlogPostPath(post: Pick<BlogPostListItem, 'slug' | 'language'>): string {
@@ -46,6 +47,7 @@ function formatDate(date: string | null, language: BlogLanguage): string {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'UTC',
   }).format(new Date(date));
 }
 
@@ -80,7 +82,7 @@ const copy = {
   },
 };
 
-const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
+const BlogIndex = ({ language = 'en', initialPosts }: BlogIndexProps) => {
   const { setLanguage } = useLanguage();
   const text = copy[language];
   const blogPath = language === 'es' ? '/es/blog' : '/blog';
@@ -88,6 +90,10 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
 
   const { data, isLoading, isError } = useQuery<BlogListResponse>({
     queryKey: [`/api/blog/posts?language=${language}`],
+    initialData: initialPosts === undefined
+      ? undefined
+      : { success: true, data: initialPosts },
+    staleTime: 5 * 60 * 1000,
   });
 
   useEffect(() => {
@@ -108,8 +114,10 @@ const BlogIndex = ({ language = 'en' }: BlogIndexProps) => {
         map.set(post.category.slug, post.category);
       }
     });
-    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
-  }, [posts]);
+    return Array.from(map.values()).sort((a, b) =>
+      a.name.localeCompare(b.name, language === 'es' ? 'es-US' : 'en-US'),
+    );
+  }, [language, posts]);
   const visiblePosts = selectedCategory
     ? posts.filter(post => post.category?.slug === selectedCategory)
     : posts;

@@ -1081,3 +1081,121 @@ test("sitemap XML preserves blog alternates, dates and priority", async ({ page 
     [...new Set(publishedPaths)].sort(),
   );
 });
+
+test.describe("server-rendered SEO without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("Spanish service HTML is Spanish before JavaScript", async ({ page }) => {
+    const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+    const response = await page.goto("/es/servicios/tratamiento-ansiedad", {
+      waitUntil: "domcontentloaded",
+    });
+
+    expect(response?.status()).toBe(200);
+    await expect(page.locator("html")).toHaveAttribute("lang", "es");
+    await expect(page.locator("h1")).toContainText(
+      "Tratamiento para la Ansiedad en Naples, FL",
+    );
+    await expect(page.locator("h1")).not.toContainText(
+      "Anxiety Treatment in Naples, FL",
+    );
+    expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+  });
+
+  test("Spanish home keeps its main internal journeys in Spanish", async ({ page }) => {
+    const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+    const response = await page.goto("/es", { waitUntil: "domcontentloaded" });
+
+    expect(response?.status()).toBe(200);
+    await expect(page.locator("html")).toHaveAttribute("lang", "es");
+    await expect(page.locator("h1")).toContainText(
+      "Atención psiquiátrica experta en Naples, FL",
+    );
+    await expect(page.locator("h1")).not.toContainText(
+      "Expert psychiatric care in Naples, FL",
+    );
+    await expect(page.getByTestId("logo-link")).toHaveAttribute("href", "/es");
+    expect(await page.locator('a[href="/es/servicios"]').count()).toBeGreaterThan(0);
+    expect(await page.locator('a[href="/es/blog"]').count()).toBeGreaterThan(0);
+    expect(await page.locator('a[href="/es/contacto"]').count()).toBeGreaterThan(0);
+    expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+  });
+
+  test("blog indexes expose every published article before JavaScript", async ({
+    page,
+  }) => {
+    const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+    for (const language of ["en", "es"] as const) {
+      const publishedPosts: Array<{ slug: string; language: "en" | "es" }> = [];
+      for (let pageIndex = 0; pageIndex < 10; pageIndex += 1) {
+        const apiResponse = await page.goto(
+          `/api/blog/posts?language=${language}&limit=100&offset=${pageIndex * 100}`,
+          { waitUntil: "domcontentloaded" },
+        );
+        expect(apiResponse?.status()).toBe(200);
+        const payload = (await apiResponse!.json()) as {
+          success?: boolean;
+          data?: Array<{ slug: string; language: "en" | "es" }>;
+        };
+        expect(payload.success).toBe(true);
+        expect(Array.isArray(payload.data)).toBe(true);
+        publishedPosts.push(...(payload.data ?? []));
+        if ((payload.data?.length ?? 0) < 100) break;
+        if (pageIndex === 9) {
+          throw new Error(`Published blog API exceeded the audited ${language} bound`);
+        }
+      }
+      expect(publishedPosts.length).toBeGreaterThan(0);
+
+      const indexPath = language === "es" ? "/es/blog" : "/blog";
+      const indexResponse = await page.goto(indexPath, {
+        waitUntil: "domcontentloaded",
+      });
+      expect(indexResponse?.status()).toBe(200);
+
+      for (const post of publishedPosts) {
+        const postPath = post.language === "es"
+          ? `/es/blog/${post.slug}`
+          : `/blog/${post.slug}`;
+        expect(
+          await page.locator(`a[href="${postPath}"]`).count(),
+          `${indexPath} should link to ${postPath} in the initial HTML`,
+        ).toBeGreaterThan(0);
+      }
+    }
+
+    expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+  });
+});
+
+test("Spanish blog navigation settles as a hydrated client transition", async ({
+  page,
+}) => {
+  const runtimeErrors = collectUnexpectedRuntimeErrors(page);
+
+  await page.goto("/es/blog");
+  await rejectInitialConsent(page);
+  const articlePath = "/es/blog/tratamiento-ansiedad-naples";
+  const articleLink = page.locator(`a[href="${articlePath}"]`).first();
+  await expect(articleLink).toBeVisible();
+  expect(await page.locator(`a[href="${articlePath}"]`).count()).toBeGreaterThan(0);
+
+  const navigationMarker = "healing-blog-client-transition";
+  await page.evaluate((marker) => {
+    (window as unknown as Record<string, string>).__healingNavigationMarker = marker;
+  }, navigationMarker);
+
+  await articleLink.click();
+  await expect(page).toHaveURL(articlePath);
+  expect(
+    await page.evaluate(
+      () => (window as unknown as Record<string, string>).__healingNavigationMarker,
+    ),
+    "the marker must survive a Next client transition",
+  ).toBe(navigationMarker);
+  await expect(page.locator("h1")).toContainText(
+    "Tratamiento de Ansiedad en Naples",
+  );
+  expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});

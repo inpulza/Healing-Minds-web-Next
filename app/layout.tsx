@@ -46,7 +46,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       className={`${instrumentSans.variable} ${playfairDisplay.variable}`}
     >
       <body>
-        <Providers>{children}</Providers>
+        <Providers initialLanguage={language}>{children}</Providers>
       </body>
     </html>
   );

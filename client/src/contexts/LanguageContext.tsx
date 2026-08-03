@@ -3,7 +3,7 @@ import { useLocation } from '@/lib/navigation';
 import { hasBilingualCounterpart } from '../utils/urlMapping';
 import { translations } from '../data/translations';
 
-type Language = 'en' | 'es';
+export type Language = 'en' | 'es';
 
 interface LanguageContextType {
   language: Language;
@@ -23,10 +23,14 @@ export const useLanguage = () => {
 
 interface LanguageProviderProps {
   children: ReactNode;
+  initialLanguage?: Language;
 }
 
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({
+  children,
+  initialLanguage = 'en',
+}) => {
+  const [language, setLanguage] = useState<Language>(initialLanguage);
   const [location] = useLocation();
 
   // URL-driven language sync: automatically set language based on current URL
