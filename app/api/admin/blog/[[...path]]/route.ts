@@ -397,7 +397,8 @@ export async function POST(request: NextRequest, context: RouteContext) {
         import("../../../../../server/blog/translation/workflow"),
         import("../../../../../server/blog/admin-routes"),
       ]);
-      const queued = await translation.queueBlogTranslation(postId);
+      const refreshDraft = body.refreshDraft === true;
+      const queued = await translation.queueBlogTranslation(postId, { refreshDraft });
       if (queued.run?.status === "queued") after(() => admin.executePersistedBlogGenerationRun(queued.run!.id));
       return json({
         success: true,
@@ -407,6 +408,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
           runId: queued.run?.id || null,
           status: queued.sibling?.status || queued.run?.status || "missing",
           created: queued.created,
+          refreshDraft,
         },
       }, queued.created ? 202 : 200);
     }
@@ -713,7 +715,40 @@ export async function POST(request: NextRequest, context: RouteContext) {
             });
           }
         }
-        return json({ success: true, ...result }, 201);
+        let translation: Record<string, unknown> = {
+          targetLanguage: payload.language === "en" ? "es" : "en",
+          state: "missing",
+          recoverable: true,
+        };
+        try {
+          const translationWorkflow = await import("../../../../../server/blog/translation/workflow");
+          const queuedTranslation = await translationWorkflow.queueBlogTranslation(result.data.id);
+          const translationRunId = queuedTranslation.run?.id || null;
+          translation = queuedTranslation.sibling
+            ? {
+                targetLanguage: queuedTranslation.sibling.language,
+                state: queuedTranslation.sibling.status,
+                siblingId: queuedTranslation.sibling.id,
+                recoverable: true,
+              }
+            : {
+                targetLanguage: payload.language === "en" ? "es" : "en",
+                state: queuedTranslation.run?.status || "missing",
+                runId: translationRunId,
+                recoverable: true,
+              };
+          if (translationRunId && queuedTranslation.run?.status === "queued") {
+            after(() => admin.executePersistedBlogGenerationRun(translationRunId));
+          }
+        } catch (translationError) {
+          translation = {
+            ...translation,
+            message: translationError instanceof Error
+              ? translationError.message
+              : "Translation could not be queued",
+          };
+        }
+        return json({ success: true, ...result, translation }, 201);
       } catch (error) {
         if (claimedPlanningRun) {
           const generation = await import("../../../../../server/blog/generation/storage");

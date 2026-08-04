@@ -785,3 +785,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Push, Preview exacta, Quality completa, relectura/clasificación de Code Review y squash merge de #21 si todo permanece verde.
 **Archivos tocados:** bitácora en este cierre de evidencia.
 **Evidencia:** TypeScript, 129/129 unitarios, 5 migraciones/112 statements, build 87/87, budgets y `git diff --check` PASS. E2E focalizado combinado: 4 PASS y 2 skips deliberados por perfil, cubriendo archivo 10+ y admin del gemelo en Desktop Chrome y Pixel 7 sin errores inesperados.
+
+## 2026-08-04 Codex - contrato bilingüe completo para ambos generadores
+**Qué se hizo:** Se comprobó la UI productiva y el patrón histórico de XL Homes. Auto Generate ya encadenaba el idioma contrario, pero AI Generate con topic/keyword/contexto solo creaba la fuente. Ambos flujos comparten ahora el contrato de par y la UI llama al idioma elegido `Source language`. Se agregó un refresh confirmado del sibling desde el post actual, limitado a drafts y protegido contra cambios concurrentes en cualquiera de las dos versiones.
+**Decisiones:** EN crea fuente EN y sibling ES; ES crea fuente ES y sibling EN. Ambos quedan privados y se publican por separado. Las correcciones nunca pisan automáticamente un sibling revisado: pending_review y published están bloqueados, y un draft solo se reemplaza tras confirmación explícita.
+**Producción:** Se verificaron cero duplicados, se reconciliaron en el journal las migraciones 0002/0003 ya físicamente presentes y se aplicó 0004 en una transacción. Resultado: 5 migraciones, índice bilingüe único activo, índice viejo retirado, 0 duplicados y 7 posts intactos.
+**Archivos tocados:** workflow/storage/API Next y Express, admin UI, E2E, tests de contrato, documentación, decisiones y bitácora.
+**Evidencia:** TypeScript PASS; 129/129 tests PASS; db:verify 5 migraciones/112 statements PASS; build 87/87 y budgets PASS; E2E admin desktop/mobile 2/2 PASS con 2 skips de perfil, sin errores inesperados. Pendiente PR, Preview exacta, E2E desplegado y Code Review.

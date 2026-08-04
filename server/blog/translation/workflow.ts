@@ -6,6 +6,7 @@ import {
   getBlogPostById,
   getBlogTags,
   type BlogLanguage,
+  type BlogPostInput,
   type BlogPostWithRelations,
 } from "../storage";
 import { buildTopicKey } from "../ai/topic-normalization";
@@ -28,6 +29,7 @@ import {
   assertBlogTranslationSchemaReady,
   createBlogTranslationSibling,
   getBlogTranslationSibling,
+  replaceBlogTranslationSiblingDraft,
 } from "./storage";
 
 function json(value: unknown): JsonObject {
@@ -42,7 +44,10 @@ function translationKey(source: Pick<BlogPostWithRelations, "translationGroupId"
   return `blog-translation:${source.translationGroupId}:${targetLanguage}`;
 }
 
-export async function queueBlogTranslation(sourcePostId: number): Promise<{
+export async function queueBlogTranslation(
+  sourcePostId: number,
+  options: { refreshDraft?: boolean } = {},
+): Promise<{
   source: BlogPostWithRelations;
   sibling: BlogPostWithRelations | null;
   run: BlogGenerationRun | null;
@@ -51,16 +56,25 @@ export async function queueBlogTranslation(sourcePostId: number): Promise<{
   const source = await getBlogPostById(sourcePostId);
   if (!source) throw Object.assign(new Error("Source blog post not found"), { statusCode: 404 });
   const sibling = await getBlogTranslationSibling(source);
-  if (sibling) return { source, sibling, run: null, created: false };
+  if (sibling && !options.refreshDraft) return { source, sibling, run: null, created: false };
+  if (options.refreshDraft && sibling?.status !== "draft") {
+    throw Object.assign(
+      new Error("Only a draft sibling can be refreshed from its source"),
+      { statusCode: 409, code: "blog_translation_refresh_requires_draft" },
+    );
+  }
   // Fail before queueing a run or calling the provider. Deploying the code and
   // applying its additive uniqueness migration are intentionally separate
   // operations, so an un-migrated environment must never incur AI spend.
   await assertBlogTranslationSchemaReady();
   const targetLanguage = targetFor(source);
-  const idempotencyKey = translationKey(source, targetLanguage);
+  const idempotencyKey = options.refreshDraft
+    ? `${translationKey(source, targetLanguage)}:refresh:${source.updatedAt.getTime()}:${sibling!.id}:${sibling!.updatedAt.getTime()}`
+    : translationKey(source, targetLanguage);
   const existing = await getBlogGenerationRunByIdempotencyKey(idempotencyKey);
   if (existing) {
-    if (existing.status === "failed" || existing.status === "interrupted" || existing.status === "completed") {
+    if (existing.status === "completed") return { source, sibling: sibling || null, run: existing, created: false };
+    if (existing.status === "failed" || existing.status === "interrupted") {
       const open = await getOpenBlogGenerationRun();
       if (open && open.id !== existing.id) throw Object.assign(new Error(`Generation run ${open.id} is already ${open.status}`), { statusCode: 409 });
       const requeued = await requeueBlogGenerationRun(existing.id, existing.workflow ? json(existing.workflow) : undefined);
@@ -76,11 +90,23 @@ export async function queueBlogTranslation(sourcePostId: number): Promise<{
     sourceLanguage: source.language,
     targetLanguage,
     translationGroupId: source.translationGroupId,
+    refreshDraft: Boolean(options.refreshDraft),
+    siblingId: sibling?.id || null,
+    sourceUpdatedAt: source.updatedAt.toISOString(),
+    siblingUpdatedAt: sibling?.updatedAt.toISOString() || null,
     step: "queued",
   });
   const creation = await createBlogGenerationRunIfAbsent({
     idempotencyKey,
-    input: json({ mode: "translation", sourcePostId: source.id, targetLanguage }),
+    input: json({
+      mode: "translation",
+      sourcePostId: source.id,
+      targetLanguage,
+      refreshDraft: Boolean(options.refreshDraft),
+      siblingId: sibling?.id || null,
+      sourceUpdatedAt: source.updatedAt.toISOString(),
+      siblingUpdatedAt: sibling?.updatedAt.toISOString() || null,
+    }),
     workflow,
   });
   const queued = creation.created ? await queuePreparedBlogGenerationRun(creation.run.id, workflow) : creation.run;
@@ -98,16 +124,29 @@ export async function executePersistedBlogTranslationRun(runId: number): Promise
   if (!claimed) return;
   const sourcePostId = Number(claimed.input.sourcePostId);
   const targetLanguage = claimed.input.targetLanguage === "es" ? "es" : "en";
+  const refreshDraft = claimed.input.refreshDraft === true;
   let source: BlogPostWithRelations | undefined;
   try {
     source = await getBlogPostById(sourcePostId);
     if (!source) throw Object.assign(new Error("Source blog post no longer exists"), { statusCode: 404 });
+    if (refreshDraft && source.updatedAt.toISOString() !== claimed.input.sourceUpdatedAt) {
+      throw Object.assign(
+        new Error("The source post changed after refresh was queued. Retry from the current version."),
+        { statusCode: 409, code: "blog_translation_refresh_source_changed" },
+      );
+    }
     const existing = await getBlogTranslationSibling(source);
-    if (existing) {
+    if (existing && !refreshDraft) {
       const response = json({ success: true, post: existing, created: false, sourcePostId, targetLanguage });
       await completeBlogGenerationRun(runId, { postId: existing.id, result: response });
       await appendBlogGenerationEvent({ runId, eventType: "complete", payload: response });
       return;
+    }
+    if (refreshDraft && existing?.status !== "draft") {
+      throw Object.assign(
+        new Error("Only a draft sibling can be refreshed from its source"),
+        { statusCode: 409, code: "blog_translation_refresh_requires_draft" },
+      );
     }
     const workflow = json({ ...claimed.workflow, step: "translating" });
     await appendBlogGenerationEvent({ runId, eventType: "progress", payload: json({ runId, workflow }) });
@@ -131,7 +170,7 @@ export async function executePersistedBlogTranslationRun(runId: number): Promise
       targetSourceUrls,
     });
     const content = sanitizeBlogContentHtml(draft.contentHtml);
-    const created = await createBlogTranslationSibling({
+    const siblingValues: BlogPostInput = {
       title: draft.title,
       slug: draft.slug,
       language: targetLanguage,
@@ -157,7 +196,18 @@ export async function executePersistedBlogTranslationRun(runId: number): Promise
       topicStrategyVersion: source.topicStrategyVersion,
       publishedAt: null,
       tagIds: tag ? [tag.id] : [],
-    }, runId);
+    };
+    const created = refreshDraft
+      ? {
+          post: await replaceBlogTranslationSiblingDraft(
+            siblingValues,
+            existing!.id,
+            runId,
+            new Date(String(claimed.input.siblingUpdatedAt)),
+          ),
+          created: false,
+        }
+      : await createBlogTranslationSibling(siblingValues, runId);
     const response = json({
       success: true,
       sourcePostId,
@@ -167,6 +217,7 @@ export async function executePersistedBlogTranslationRun(runId: number): Promise
       imagePolicy: source.featuredImage ? "reused-approved-neutral-image" : "no-image-no-automatic-visual-spend",
       requiresHumanReview: true,
       publication: "independent",
+      refreshedFromSource: refreshDraft,
     });
     const completed = await completeBlogGenerationRun(runId, { postId: created.post.id, result: response });
     if (!completed) throw new Error("Translation run could not be completed");

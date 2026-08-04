@@ -1747,10 +1747,46 @@ export function registerAdminBlogRoutes(app: Express): void {
           );
         }
       }
+      let translation: Record<string, unknown> = {
+        targetLanguage: payload.language === "en" ? "es" : "en",
+        state: "missing",
+        recoverable: true,
+      };
+      let translationRunId: number | null = null;
+      try {
+        const translationWorkflow = await import("./translation/workflow");
+        const queuedTranslation = await translationWorkflow.queueBlogTranslation(result.data.id);
+        translationRunId = queuedTranslation.run?.id || null;
+        translation = queuedTranslation.sibling
+          ? {
+              targetLanguage: queuedTranslation.sibling.language,
+              state: queuedTranslation.sibling.status,
+              siblingId: queuedTranslation.sibling.id,
+              recoverable: true,
+            }
+          : {
+              targetLanguage: payload.language === "en" ? "es" : "en",
+              state: queuedTranslation.run?.status || "missing",
+              runId: translationRunId,
+              recoverable: true,
+            };
+      } catch (translationError) {
+        translation = {
+          ...translation,
+          message: translationError instanceof Error
+            ? translationError.message
+            : "Translation could not be queued",
+        };
+      }
       res.status(201).json({
         success: true,
         ...result,
+        translation,
       });
+      if (translationRunId) {
+        void executePersistedBlogGenerationRun(translationRunId)
+          .catch(error => console.error(`Could not execute translation run ${translationRunId}:`, error));
+      }
     } catch (error) {
       if (claimedPlanningRun) {
         await failBlogGenerationRun(claimedPlanningRun.id, {
