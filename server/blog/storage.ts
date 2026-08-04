@@ -36,6 +36,12 @@ import {
   lockBlogRedirectPaths,
   type BlogRedirectTransaction,
 } from "./redirect-lock";
+import {
+  BLOG_ARCHIVE_PAGE_SIZE,
+  getBlogArchiveRegularLimit,
+  getBlogArchiveRegularOffset,
+  getBlogArchiveTotalPages,
+} from "@shared/blog-archive";
 
 export type BlogLanguage = "en" | "es";
 
@@ -52,6 +58,19 @@ export type GetBlogPostsOptions = {
   tagSlug?: string;
   limit?: number;
   offset?: number;
+};
+
+export type BlogArchiveCategory = Pick<BlogCategory, "name" | "slug">;
+
+export type BlogArchiveResult = {
+  posts: BlogPostWithRelations[];
+  categories: BlogArchiveCategory[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  category: string | null;
+  featuredPostId: number | null;
 };
 
 export type GetAdminBlogPostsOptions = {
@@ -297,6 +316,106 @@ export async function getBlogPosts(options: GetBlogPostsOptions = {}): Promise<B
     .offset(offset);
 
   return hydratePosts(rows);
+}
+
+export async function getBlogArchive({
+  language,
+  categorySlug,
+  page = 1,
+  pageSize = BLOG_ARCHIVE_PAGE_SIZE,
+}: {
+  language: BlogLanguage;
+  categorySlug?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<BlogArchiveResult> {
+  const safePage = Math.max(1, Math.floor(page));
+  const safePageSize = Math.max(2, Math.min(24, Math.floor(pageSize)));
+  const conditions: SQL[] = [
+    eq(blogPosts.status, "published"),
+    eq(blogPosts.language, language),
+  ];
+  if (categorySlug) {
+    conditions.push(
+      eq(blogCategories.slug, categorySlug),
+      eq(blogCategories.language, language),
+    );
+  }
+  const where = and(...conditions);
+
+  const [countRows, categoryRows, featuredRows] = await Promise.all([
+    db
+      .select({ value: count(blogPosts.id) })
+      .from(blogPosts)
+      .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .where(where),
+    db
+      .select({ name: blogCategories.name, slug: blogCategories.slug })
+      .from(blogPosts)
+      .innerJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .where(and(
+        eq(blogPosts.status, "published"),
+        eq(blogPosts.language, language),
+        eq(blogCategories.language, language),
+      ))
+      .groupBy(blogCategories.id, blogCategories.name, blogCategories.slug),
+    db
+      .select({
+        post: blogPosts,
+        author: blogAuthors,
+        category: blogCategories,
+      })
+      .from(blogPosts)
+      .leftJoin(blogAuthors, eq(blogPosts.authorId, blogAuthors.id))
+      .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .where(where)
+      .orderBy(
+        desc(blogPosts.isFeatured),
+        desc(blogPosts.publishedAt),
+        desc(blogPosts.createdAt),
+        desc(blogPosts.id),
+      )
+      .limit(1),
+  ]);
+
+  const total = Number(countRows[0]?.value || 0);
+  const totalPages = getBlogArchiveTotalPages(total, safePageSize);
+  const featuredRow = featuredRows[0];
+  const regularConditions = featuredRow
+    ? [...conditions, ne(blogPosts.id, featuredRow.post.id)]
+    : conditions;
+  const regularRows = await db
+    .select({
+      post: blogPosts,
+      author: blogAuthors,
+      category: blogCategories,
+    })
+    .from(blogPosts)
+    .leftJoin(blogAuthors, eq(blogPosts.authorId, blogAuthors.id))
+    .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+    .where(and(...regularConditions))
+    .orderBy(
+      desc(blogPosts.publishedAt),
+      desc(blogPosts.createdAt),
+      desc(blogPosts.id),
+    )
+    .limit(getBlogArchiveRegularLimit(safePage, safePageSize))
+    .offset(getBlogArchiveRegularOffset(safePage, safePageSize));
+
+  const visibleRows = safePage === 1 && featuredRow
+    ? [featuredRow, ...regularRows]
+    : regularRows;
+
+  return {
+    posts: await hydratePosts(visibleRows),
+    categories: categoryRows,
+    page: safePage,
+    pageSize: safePageSize,
+    total,
+    totalPages,
+    category: categorySlug || null,
+    featuredPostId: featuredRow?.post.id || null,
+  };
 }
 
 export async function getAdminBlogPosts(options: GetAdminBlogPostsOptions = {}): Promise<BlogPostWithRelations[]> {

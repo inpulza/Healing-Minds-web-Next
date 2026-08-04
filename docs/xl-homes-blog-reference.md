@@ -294,6 +294,19 @@ CodeX tiene acceso al repositorio, así que en vez de copiar código aquí, esta
 11. **`client/src/components/BlogSEO.tsx`** (~líneas 47-58)
     - Extraer: cómo inyecta/actualiza `<script type="application/ld+json">` en el `<head>` lado cliente (complementa al SSR).
 
+## Auditoria del archivo publico para Healing Minds (2026-08-03)
+
+La implementacion viva de XL Homes en `client/src/pages/BlogPage.tsx` hace tres cosas utiles: separa una tarjeta featured, muestra el resto en grid de tres columnas y carga bloques de nueve mediante `limit/offset`, conservando el filtro de categoria en la URL. Ese patron visual se adapta a Healing Minds.
+
+No se copia literalmente su deuda:
+
+- XL decide el featured solo dentro del bloque cargado y luego lo elimina del grid. Si el destacado cae en otro offset, puede desaparecer de esa pagina y el total visible deja de coincidir con el total de API.
+- Load More agrega contenido solo por JavaScript. No crea una URL SSR por bloque ni enlaces anterior/siguiente, por lo que un crawler no tiene un camino HTML estable hasta cada lote.
+- El orden usa fecha sin `id` como ultimo desempate; publicaciones con timestamps iguales pueden saltar entre paginas.
+- El filtro se aplica en cliente y el archivo inicial no es un contrato SSR paginado.
+
+Healing Minds conserva featured + grid, pero usa paginas SSR reales (`?page=N`) con anchors accesibles, orden total `publishedAt DESC, createdAt DESC, id DESC`, un unico featured efectivo separado una sola vez y filtros independientes por idioma. La API y el sitemap siguen exponiendo todos los publicados; la paginacion solo controla cuantos se componen en cada pagina visible.
+
 ### Los 3 puntos donde CodeX NO debe improvisar
 - **Render síncrono desde `window.__SSR_BLOG_POST__`** (`BlogPostPage.tsx` + `ssr-meta.ts`): si lo cambia por un fetch async, vuelve el Soft 404.
 - **Allowlist de `sanitize-html`** (`sanitizeContentHtml`): copiar el mismo set de tags/atributos para no romper el HTML del artículo ni abrir XSS.
