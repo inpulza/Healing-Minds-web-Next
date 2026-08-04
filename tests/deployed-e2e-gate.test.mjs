@@ -72,6 +72,24 @@ test("Preview credentials are scoped to the deployment origin", () => {
   assert.match(specs[0], /credentialLeaks/);
 });
 
+test("archive and admin E2E reuse origin-scoped Preview authentication", () => {
+  const helper = fs.readFileSync("e2e/preview-auth.ts", "utf8");
+  const specs = ["e2e/blog-archive.spec.ts", "e2e/blog-translation-admin.spec.ts"].map((path) =>
+    fs.readFileSync(path, "utf8"),
+  );
+
+  assert.match(helper, /page\.route\(`\$\{deploymentOrigin\}\/\*\*`/);
+  assert.match(helper, /route\.fetch\(\{/);
+  assert.match(helper, /maxRedirects:\s*0/);
+  assert.match(helper, /route\.fulfill\(\{ response \}\)/);
+  assert.doesNotMatch(helper, /route\.continue\(/);
+  assert.match(helper, /page\.unrouteAll\(\{ behavior: "ignoreErrors" \}\)/);
+  for (const spec of specs) {
+    assert.match(spec, /authenticateProtectedPreview/);
+    assert.match(spec, /finishProtectedPreview/);
+  }
+});
+
 test("analytics Preview audit validates auth scope and sitewide TikTok shutdown", () => {
   const audit = fs.readFileSync("scripts/audit-analytics-preview.mjs", "utf8");
   const hostValidation = audit.indexOf('healingMindsImmutablePreviewHost.test');

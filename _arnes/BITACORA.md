@@ -820,3 +820,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** PR #26 sigue draft hasta Quality, E2E de Preview contra SHA exacto y clasificación final de todas las notas de Code Review. No se fusiona basándose solo en que el TTL haya recuperado Production.
 **Archivos tocados:** bitácora; sin mutaciones de datos ni configuración.
 **Evidencia:** DB ES `total=2`, ids 2 y 12; SSR productivo contiene `seguimiento-depresion-cuando-sintomas-mejoran-desigualmente`; Chrome recargado contiene `Qué Revisar Cuando los Síntomas de Depresión Mejoran de Manera Desigual`.
+
+## 2026-08-04 Codex - endurecimiento del E2E de Preview protegido
+**Qué se hizo:** La primera corrida desplegada reveló que el archivo fixture no reutilizaba la autenticación de Preview del admin y que dos conteos se ejecutaban antes de asentarse la navegación. Se extrajo un helper común, limitado al origin exacto de Healing Minds y sin seguir redirects; los clics de página esperan URL y estado visible antes de contar.
+**Decisiones:** Las credenciales de Preview nunca se configuran como headers globales porque podrían viajar a terceros. El teardown ignora solo callbacks cancelados al cerrar la página; errores durante el recorrido siguen fallando el test.
+**Pendientes/bugs:** Repetir suite completa y E2E contra el Preview del SHA que incluya este gate, no solo contra el deployment anterior usado para desarrollar el test.
+**Archivos tocados:** helper E2E de Preview, archivo E2E, admin bilingüe E2E, contrato del gate y bitácora.
+**Evidencia:** contrato focalizado 8/8 PASS; Preview desktop/móvil archivo + admin 4 PASS y 2 skips deliberados, sin errores inesperados.
