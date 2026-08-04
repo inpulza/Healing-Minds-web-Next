@@ -806,3 +806,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Crear PR, verificar Preview exacta, completar Code Review y Production antes de pedir un nuevo Retry.
 **Archivos tocados:** `server/blog/translation/provider.ts`, `tests/blog-translation.test.mjs`, `_arnes/DECISIONES.md`, `_arnes/BITACORA.md`.
 **Evidencia:** Prueba focalizada 4/4 PASS; suite 129/129 PASS; TypeScript PASS; db:verify 5 migraciones/112 statements PASS; build 87/87 y budgets PASS; E2E admin local desktop/móvil 2/2 PASS con 2 skips deliberados por perfil y sin errores inesperados.
+
+## 2026-08-04 Codex - invalidación inmediata del archivo al publicar
+**Qué se hizo:** Se confirmó en vivo que la API ES devolvía dos posts publicados y el detalle del nuevo sibling respondía 200, mientras `/es/blog` seguía renderizando solo ansiedad. El archivo conserva una caché de cinco minutos que la acción de publicar no invalidaba.
+**Decisiones:** Publicar, despublicar o borrar un post publicado expira inmediatamente `public-blog-index`; el TTL de 300 segundos queda solo como respaldo. Se invalida el tag compartido para cubrir EN/ES, categorías y páginas sin mantener una lista frágil de rutas.
+**Pendientes/bugs:** Crear PR, verificar Preview exacta, completar Code Review y Production.
+**Archivos tocados:** ruta admin Next, contrato unitario, decisiones y bitácora.
+**Evidencia:** Diagnóstico productivo: API ES 2 published; detalle 200; SSR/browser del archivo solo 1. Corrección: 130/130 tests, TypeScript, db:verify 5 migraciones/112 statements, build 87/87 y budgets PASS; E2E archivo + admin local desktop/móvil 4 PASS con 2 skips deliberados por perfil y sin errores inesperados.

@@ -58,3 +58,20 @@ test("blog indexes receive a server-loaded list before hydration", () => {
   assert.match(index, /timeZone:\s*["']UTC["']/);
   assert.match(index, /localeCompare\(b\.name, language === 'es' \? 'es-US' : 'en-US'\)/);
 });
+
+test("publishing, unpublishing and deleting invalidate the public archive immediately", () => {
+  const adminRoute = read("app/api/admin/blog/[[...path]]/route.ts");
+  assert.match(adminRoute, /import \{ revalidateTag \} from "next\/cache"/);
+  assert.match(
+    adminRoute,
+    /function invalidatePublicBlogArchiveCache\(\): void \{\s*revalidateTag\("public-blog-index", \{ expire: 0 \}\);\s*\}/,
+  );
+  assert.match(
+    adminRoute,
+    /if \(existing\.status === "published" \|\| transition\.post\.status === "published"\) \{\s*invalidatePublicBlogArchiveCache\(\);\s*\}/,
+  );
+  assert.match(
+    adminRoute,
+    /if \(post\.status === "published"\) invalidatePublicBlogArchiveCache\(\);/,
+  );
+});
