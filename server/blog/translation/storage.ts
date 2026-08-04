@@ -1,7 +1,21 @@
 import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { blogGenerationRuns, blogPosts, blogPostTags, type BlogGenerationRun } from "@shared/schema";
-import { db } from "../../db";
+import { db, pool } from "../../db";
 import { getBlogPostById, type BlogLanguage, type BlogPostInput, type BlogPostWithRelations } from "../storage";
+
+export async function assertBlogTranslationSchemaReady(): Promise<void> {
+  const result = await pool.query<{ ready: boolean }>(`
+    select to_regclass('public.idx_blog_posts_translation_group_language') is not null as ready
+  `);
+  if (result.rows[0]?.ready) return;
+  throw Object.assign(
+    new Error("Bilingual draft generation is unavailable until migration 0004_bilingual_translation_siblings is applied"),
+    {
+      statusCode: 503,
+      code: "blog_translation_migration_required",
+    },
+  );
+}
 
 export async function getBlogTranslationSibling(
   source: Pick<BlogPostWithRelations, "id" | "language" | "translationGroupId">,

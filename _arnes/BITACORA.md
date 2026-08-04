@@ -771,3 +771,17 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Gates remotos del PR draft: Preview por SHA exacto, E2E desplegado desktop/móvil y clasificación completa de Code Review.
 **Archivos tocados:** bitácora solamente en este remate.
 **Evidencia:** `git diff --check` PASS; crawl SSR de todos los posts paginados 2/2 PASS en Desktop Chrome y Pixel 7; fixture de archivo 10+ ya cerrada 2/2 en ambos perfiles.
+
+## 2026-08-04 Codex - preflight de migración antes de traducción
+**Qué se hizo:** Tras la orden de merge, el PR bilingüe se realineó con el `main` que ya contiene el archivo público. La cola comprueba ahora que existe el índice único de la migración 0004 antes de crear un run o llamar al proveedor.
+**Decisiones:** La orden de fusionar no autoriza mutar la DB de Production. El código puede desplegarse antes del schema, pero falla en cerrado con `blog_translation_migration_required` y 503, sin gasto IA ni borrador parcial. Si el sibling ya existe, puede abrirse aunque el entorno aún no tenga el índice.
+**Pendientes/bugs:** Repetir check, unitarios, db:verify, build, E2E y gates remotos sobre el nuevo HEAD antes de fusionar #21.
+**Archivos tocados:** storage/workflow de traducción, contrato unitario, documentación, decisiones y bitácora.
+**Evidencia:** Pendiente al registrar esta entrada.
+
+## 2026-08-04 Codex - gate local combinado antes de actualizar PR #21
+**Qué se hizo:** Se validó el gemelo bilingüe ya montado sobre el archivo público fusionado y con el preflight de migración fail-closed.
+**Decisiones:** El nuevo HEAD solo se publicará tras pasar tanto el archivo como el flujo admin bilingüe en desktop y móvil; los gates remotos deberán repetirse por ser un update del PR.
+**Pendientes/bugs:** Push, Preview exacta, Quality completa, relectura/clasificación de Code Review y squash merge de #21 si todo permanece verde.
+**Archivos tocados:** bitácora en este cierre de evidencia.
+**Evidencia:** TypeScript, 129/129 unitarios, 5 migraciones/112 statements, build 87/87, budgets y `git diff --check` PASS. E2E focalizado combinado: 4 PASS y 2 skips deliberados por perfil, cubriendo archivo 10+ y admin del gemelo en Desktop Chrome y Pixel 7 sin errores inesperados.

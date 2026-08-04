@@ -24,7 +24,11 @@ import {
 import type { JsonObject } from "../generation/types";
 import { buildBlogTranslationLinkMap, preferCuratedTargetLanguageSources } from "./links";
 import { translateBlogPostWithAi } from "./provider";
-import { createBlogTranslationSibling, getBlogTranslationSibling } from "./storage";
+import {
+  assertBlogTranslationSchemaReady,
+  createBlogTranslationSibling,
+  getBlogTranslationSibling,
+} from "./storage";
 
 function json(value: unknown): JsonObject {
   return JSON.parse(JSON.stringify(value)) as JsonObject;
@@ -48,6 +52,10 @@ export async function queueBlogTranslation(sourcePostId: number): Promise<{
   if (!source) throw Object.assign(new Error("Source blog post not found"), { statusCode: 404 });
   const sibling = await getBlogTranslationSibling(source);
   if (sibling) return { source, sibling, run: null, created: false };
+  // Fail before queueing a run or calling the provider. Deploying the code and
+  // applying its additive uniqueness migration are intentionally separate
+  // operations, so an un-migrated environment must never incur AI spend.
+  await assertBlogTranslationSchemaReady();
   const targetLanguage = targetFor(source);
   const idempotencyKey = translationKey(source, targetLanguage);
   const existing = await getBlogGenerationRunByIdempotencyKey(idempotencyKey);

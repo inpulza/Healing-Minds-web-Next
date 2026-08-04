@@ -11,6 +11,7 @@ test("translation workflow is durable, draft-only and chained after source compl
   assert.match(workflow, /status: "draft"/);
   assert.match(workflow, /publishedAt: null/);
   assert.match(workflow, /sourcePreserved: Boolean\(source\)/);
+  assert.match(workflow, /assertBlogTranslationSchemaReady\(\)[\s\S]*const targetLanguage/);
   assert.match(workflow, /requeueBlogGenerationRun/);
   assert.match(workflow, /translationKey\(source, targetLanguage\)/);
   assert.match(admin, /completeBlogGenerationRun[\s\S]*queueBlogTranslation/);
@@ -23,6 +24,7 @@ test("database contract prevents duplicate siblings and keeps publication indepe
   assert.match(schema, /uniqueIndex\("idx_blog_posts_translation_group_language"\)/);
   assert.match(migration, /CREATE UNIQUE INDEX "idx_blog_posts_translation_group_language"/);
   assert.match(read("scripts/verify-migration-pglite.mjs"), /Publishing one language must not publish its sibling/);
+  assert.match(read("server/blog/translation/storage.ts"), /blog_translation_migration_required/);
 });
 
 test("provider preserves mapped links and rejects invented URLs", () => {

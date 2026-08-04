@@ -54,3 +54,6 @@ Migration `0004_bilingual_translation_siblings.sql` replaces the non-unique grou
 index with `UNIQUE (translation_group_id, language)`. No new environment
 variable or secret is required; translation uses the existing blog AI model,
 timeout and key. Apply the migration before enabling the UI in an environment.
+Until that index exists, the queue endpoint returns a recoverable `503` before
+creating a run or calling the provider, so a code deployment cannot incur AI
+spend and then fail while inserting the sibling.
