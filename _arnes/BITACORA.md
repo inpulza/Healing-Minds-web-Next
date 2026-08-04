@@ -813,3 +813,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Crear PR, verificar Preview exacta, completar Code Review y Production.
 **Archivos tocados:** ruta admin Next, contrato unitario, decisiones y bitácora.
 **Evidencia:** Diagnóstico productivo: API ES 2 published; detalle 200; SSR/browser del archivo solo 1. Corrección: 130/130 tests, TypeScript, db:verify 5 migraciones/112 statements, build 87/87 y budgets PASS; E2E archivo + admin local desktop/móvil 4 PASS con 2 skips deliberados por perfil y sin errores inesperados.
+
+## 2026-08-04 Codex - confirmación de la causa y recuperación por TTL
+**Qué se hizo:** Se ejecutó `getBlogArchive` contra Neon Production en modo lectura y devolvió los dos posts ES en el orden correcto: ansiedad como featured y depresión como tarjeta regular. Tras expirar la ventana existente, una respuesta fresca de `/es/blog` (`X-Vercel-Cache: MISS`) incluyó el slug nuevo y Chrome confirmó visualmente el título.
+**Decisiones:** El incidente no fue un estado editorial incorrecto ni un bug de featured/grid. Fue una demora de visibilidad causada por no invalidar la caché de datos al cambiar el estado publicado. Se conserva el TTL como respaldo, pero el publish gate debe invalidarlo inmediatamente.
+**Pendientes/bugs:** PR #26 sigue draft hasta Quality, E2E de Preview contra SHA exacto y clasificación final de todas las notas de Code Review. No se fusiona basándose solo en que el TTL haya recuperado Production.
+**Archivos tocados:** bitácora; sin mutaciones de datos ni configuración.
+**Evidencia:** DB ES `total=2`, ids 2 y 12; SSR productivo contiene `seguimiento-depresion-cuando-sintomas-mejoran-desigualmente`; Chrome recargado contiene `Qué Revisar Cuando los Síntomas de Depresión Mejoran de Manera Desigual`.
