@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { truncateSeoText } from "@shared/seo-text";
 import type { BlogLanguage, BlogPostWithRelations } from "../storage";
 import type { BlogTranslationDraft } from "./types";
 
@@ -13,6 +14,33 @@ const translationSchema = z.object({
   targetKeyword: z.string().trim().min(3).max(120),
   expertiseAngle: z.string().trim().max(2_000),
 });
+
+const providerTranslationSchema = translationSchema.extend({
+  // Providers can miss editorial character targets by a few characters. Keep
+  // a defensive input ceiling, then normalize SEO-only fields locally before
+  // applying the strict persistence contract below.
+  metaTitle: z.string().trim().min(5).max(300),
+  metaDescription: z.string().trim().min(20).max(1_000),
+});
+
+export function normalizeBlogTranslationDraft(value: unknown): BlogTranslationDraft {
+  try {
+    const draft = providerTranslationSchema.parse(value);
+    return translationSchema.parse({
+      ...draft,
+      metaTitle: truncateSeoText(draft.metaTitle, 70),
+      metaDescription: truncateSeoText(draft.metaDescription, 160),
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      throw Object.assign(
+        new Error("The translation draft returned invalid editorial fields. Retry the translation."),
+        { statusCode: 502, code: "blog_translation_invalid_draft", cause: error },
+      );
+    }
+    throw error;
+  }
+}
 
 type ProviderResponse = { choices?: Array<{ finish_reason?: string; message?: { content?: string } }> };
 
@@ -71,6 +99,7 @@ export async function translateBlogPostWithAi(input: {
   const prompt = [
     `Create a clinically conservative ${targetName} adaptation of this educational psychiatry article.`,
     "Return one JSON object with title, slug, excerpt, contentHtml, metaTitle, metaDescription, featuredImageAlt, targetKeyword, expertiseAngle.",
+    "Keep metaTitle at 70 characters or fewer and metaDescription at 160 characters or fewer.",
     "Preserve meaning, heading hierarchy, paragraph/list structure, disclaimer, citations and all links. Do not add clinical claims, advice, dosages, guarantees, patient stories, sources or URLs.",
     "Translate all visible text including headings, link labels, image alt/captions and the medical disclaimer. Keep the article a human-review draft.",
     `For each exact source URL key, use only its exact mapped value: ${JSON.stringify(input.linkMap)}.`,
@@ -108,7 +137,7 @@ export async function translateBlogPostWithAi(input: {
     const choice = payload.choices?.[0];
     if (choice?.finish_reason === "length") throw Object.assign(new Error("Blog translation response was truncated"), { statusCode: 502 });
     if (!choice?.message?.content) throw Object.assign(new Error("Blog translation provider returned no content"), { statusCode: 502 });
-    const draft = translationSchema.parse(JSON.parse(choice.message.content));
+    const draft = normalizeBlogTranslationDraft(JSON.parse(choice.message.content));
     assertTranslationLinkContract(input.source.content || "", draft.contentHtml, input.linkMap, input.targetSourceUrls);
     return draft;
   } catch (error) {
