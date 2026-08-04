@@ -792,3 +792,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Producción:** Se verificaron cero duplicados, se reconciliaron en el journal las migraciones 0002/0003 ya físicamente presentes y se aplicó 0004 en una transacción. Resultado: 5 migraciones, índice bilingüe único activo, índice viejo retirado, 0 duplicados y 7 posts intactos.
 **Archivos tocados:** workflow/storage/API Next y Express, admin UI, E2E, tests de contrato, documentación, decisiones y bitácora.
 **Evidencia:** TypeScript PASS; 129/129 tests PASS; db:verify 5 migraciones/112 statements PASS; build 87/87 y budgets PASS; E2E admin desktop/mobile 2/2 PASS con 2 skips de perfil, sin errores inesperados. Pendiente PR, Preview exacta, E2E desplegado y Code Review.
+
+## 2026-08-04 Codex - normalización recuperable de metadata bilingüe
+**Qué se hizo:** Se reprodujo el rechazo real de `metaDescription` por superar 160 caracteres. La traducción ahora acota localmente meta title y meta description por frontera de palabra antes de persistir, y las respuestas estructuralmente inválidas muestran un error editorial estable en vez del array interno de Zod.
+**Decisiones:** La normalización solo toca metadata SEO; no recorta cuerpo, claims, enlaces ni fuentes. El prompt mantiene los límites como instrucción y el servidor los garantiza sin una segunda llamada al proveedor.
+**Pendientes/bugs:** Crear PR, verificar Preview por SHA y completar Code Review antes de integrar.
+**Archivos tocados:** `server/blog/translation/provider.ts`, `tests/blog-translation.test.mjs`, `_arnes/DECISIONES.md`, `_arnes/BITACORA.md`.
+**Evidencia:** Prueba focalizada de traducción 4/4 PASS; suite completa 129/129 PASS; TypeScript PASS; db:verify 5 migraciones/112 statements PASS; build 87/87 y budgets PASS; E2E admin local desktop/móvil 2/2 PASS con 2 skips deliberados por perfil y sin errores inesperados.
