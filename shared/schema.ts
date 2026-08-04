@@ -232,7 +232,7 @@ export const blogPosts = pgTable(
     index("idx_blog_posts_category_id").on(table.categoryId),
     index("idx_blog_posts_topic_key").on(table.language, table.topicKey),
     index("idx_blog_posts_topic_strategy").on(table.language, table.contentPillar, table.patientStage),
-    index("idx_blog_posts_translation_group").on(table.translationGroupId),
+    uniqueIndex("idx_blog_posts_translation_group_language").on(table.translationGroupId, table.language),
   ],
 );
 

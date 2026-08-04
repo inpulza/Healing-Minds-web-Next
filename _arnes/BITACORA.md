@@ -745,6 +745,19 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Archivos tocados:** bitácora.
 **Evidencia:** `git diff --check`, TypeScript y 123/123 unitarios PASS; build Next 89/89 con presupuestos 669.5/750 KiB y 786.8/850 KiB; E2E local final 74 PASS y 6 skips deliberados por perfil. Consentimiento móvil focalizado 1/1 PASS. Inventario final: 79 rutas, máximos 60/157, cero excesos, vacíos, duplicados o deriva OG/Twitter. Jueces general, SEO y pruebas: GO, cero P0-P3.
 
+## 2026-08-03 Codex - gemelos bilingües durables y privados
+**Qué se hizo:** Auto Generate conserva primero el borrador fuente y crea después una corrida durable recuperable para el idioma contrario. El gemelo comparte `translationGroupId`, nace siempre draft, conserva estructura clínica, enlaces y fuentes bajo allowlist, reutiliza la imagen seleccionada sin gasto visual y aparece en el admin como missing/draft/pending_review/published con acción de abrir o reintentar.
+**Decisiones:** Dos artículos del mismo grupo e idioma quedan bloqueados por índice único en DB. La publicación es independiente. Rutas estáticas se traducen solo con el manifiesto real; links a artículos solo cambian si el sibling está publicado; fuentes externas solo usan una URL target-language curada del mismo host oficial. El run de traducción es un subpaso separado y durable: su fallo no modifica el run completado ni el borrador fuente.
+**Pendientes/bugs:** Completar suite/build/E2E local, publicar en PR draft, verificar Preview por SHA y clasificar todas las notas vigentes de Code Review antes de considerar el PR listo. No mergear ni aplicar la migración en Production desde esta tarea.
+**Archivos tocados:** schema/migración Drizzle, storage y worker de traducción, dispatcher de runs, API/admin, documentación, guardas PGlite/unitarias y E2E desktop/móvil.
+**Evidencia:** `db:verify` PASS con 5 migraciones, 112 statements, unicidad del sibling y publicación independiente; guardas focalizadas de traducción 4/4 PASS; TypeScript PASS. Suite completa, build, E2E y `diff --check` quedan pendientes al registrar esta entrada.
+
+## 2026-08-03 Codex - gate final local de gemelos bilingües
+**Qué se hizo:** Se ejecutó el pipeline completo sobre el contrato final y el admin real con APIs interceptadas sin secretos. El recorrido genera el draft target, observa el estado durable y abre el sibling en el editor.
+**Decisiones:** Los 404 de favicon/imagen de una primera fixture se trataron como fallo real del gate de consola; la fixture dejó de solicitar ambos recursos y la matriz final quedó limpia. No se relajó el detector de errores.
+**Pendientes/bugs:** Gates remotos del PR draft: aplicar migración solo en Preview/entorno autorizado, verificar deployment por SHA, repetir E2E y clasificar todas las notas de Code Review. No mergear ni modificar Production desde esta tarea.
+**Archivos tocados:** fixture E2E y bitácora en el remate.
+**Evidencia:** `npm test` 127/127 PASS; TypeScript PASS; build 89/89 y budgets 669.5/750 KiB + 786.8/850 KiB PASS; `db:verify`, link/topic/image guards y `git diff --check` PASS; E2E admin final 2/2 PASS (Desktop Chrome y Pixel 7), con 2 skips deliberados por perfil cruzado.
 ## 2026-08-03 Codex - archivo público escalable por idioma
 **Qué se hizo:** Se inspeccionó la implementación viva de XL Homes y se documentaron su featured, grid y Load More junto con sus límites SEO. Healing Minds separa ahora los índices `/blog` y `/es/blog` en rutas SSR dinámicas, pagina nueve publicaciones por URL, mantiene un único featured efectivo y ofrece categorías y navegación anterior/siguiente/numerada con anchors reales. Se añadió una fixture de navegador protegida y no indexable con 14 EN y 12 ES.
 **Decisiones:** No se copia el offset cliente de XL Homes. La página 1 muestra featured más ocho regulares; las siguientes muestran nueve regulares. El desempate por id impide saltos y el post featured se excluye de todas las páginas regulares. El sitemap y la API pública conservan todas las publicaciones; solo cambia la composición del archivo. El conteo CMS global se documenta por separado del archivo por idioma.
@@ -758,3 +771,17 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Gates remotos del PR draft: Preview por SHA exacto, E2E desplegado desktop/móvil y clasificación completa de Code Review.
 **Archivos tocados:** bitácora solamente en este remate.
 **Evidencia:** `git diff --check` PASS; crawl SSR de todos los posts paginados 2/2 PASS en Desktop Chrome y Pixel 7; fixture de archivo 10+ ya cerrada 2/2 en ambos perfiles.
+
+## 2026-08-04 Codex - preflight de migración antes de traducción
+**Qué se hizo:** Tras la orden de merge, el PR bilingüe se realineó con el `main` que ya contiene el archivo público. La cola comprueba ahora que existe el índice único de la migración 0004 antes de crear un run o llamar al proveedor.
+**Decisiones:** La orden de fusionar no autoriza mutar la DB de Production. El código puede desplegarse antes del schema, pero falla en cerrado con `blog_translation_migration_required` y 503, sin gasto IA ni borrador parcial. Si el sibling ya existe, puede abrirse aunque el entorno aún no tenga el índice.
+**Pendientes/bugs:** Repetir check, unitarios, db:verify, build, E2E y gates remotos sobre el nuevo HEAD antes de fusionar #21.
+**Archivos tocados:** storage/workflow de traducción, contrato unitario, documentación, decisiones y bitácora.
+**Evidencia:** Pendiente al registrar esta entrada.
+
+## 2026-08-04 Codex - gate local combinado antes de actualizar PR #21
+**Qué se hizo:** Se validó el gemelo bilingüe ya montado sobre el archivo público fusionado y con el preflight de migración fail-closed.
+**Decisiones:** El nuevo HEAD solo se publicará tras pasar tanto el archivo como el flujo admin bilingüe en desktop y móvil; los gates remotos deberán repetirse por ser un update del PR.
+**Pendientes/bugs:** Push, Preview exacta, Quality completa, relectura/clasificación de Code Review y squash merge de #21 si todo permanece verde.
+**Archivos tocados:** bitácora en este cierre de evidencia.
+**Evidencia:** TypeScript, 129/129 unitarios, 5 migraciones/112 statements, build 87/87, budgets y `git diff --check` PASS. E2E focalizado combinado: 4 PASS y 2 skips deliberados por perfil, cubriendo archivo 10+ y admin del gemelo en Desktop Chrome y Pixel 7 sin errores inesperados.

@@ -76,7 +76,9 @@ test("Next owns durable AI planning, generation and SSE recovery", () => {
     assert.match(route, new RegExp(endpoint));
   }
   assert.match(route, /Idempotency-Key header is required/);
-  assert.match(route, /executePersistedAutoGenerateRun/);
+  assert.match(route, /executePersistedBlogGenerationRun/);
+  assert.match(expressAdminRoutes, /executePersistedAutoGenerateRun/);
+  assert.match(expressAdminRoutes, /input\.mode === "translation"/);
   assert.match(route, /Content-Type": "text\/event-stream/);
   assert.match(route, /after\(\(\) =>/);
 });

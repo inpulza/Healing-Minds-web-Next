@@ -101,6 +101,12 @@ type BlogPost = {
   author: BlogAuthor | null;
   category: BlogCategory | null;
   tags: BlogTag[];
+  translationPair?: {
+    targetLanguage: BlogLanguage;
+    state: 'missing' | 'draft' | 'pending_review' | 'published';
+    sibling: Pick<BlogPost, 'id' | 'title' | 'slug' | 'language' | 'status'> | null;
+    run: { id: number; status: 'queued' | 'running' | 'failed' | 'interrupted'; error?: string } | null;
+  };
 };
 
 type BlogPostImage = {
@@ -703,6 +709,12 @@ export default function BlogAdminPage() {
   const postsQuery = useQuery<ApiResponse<BlogPost[]>>({
     queryKey: [`/api/admin/blog/posts?status=${statusFilter}&language=${languageFilter}&search=${encodeURIComponent(search)}`],
     enabled: authenticated,
+    refetchInterval: query => {
+      const response = query.state.data as ApiResponse<BlogPost[]> | undefined;
+      return response?.data?.some(post => post.translationPair?.run?.status === 'queued' || post.translationPair?.run?.status === 'running')
+        ? 2000
+        : false;
+    },
   });
 
   const statsQuery = useQuery<ApiResponse<Record<BlogStatus, number>>>({
@@ -1005,6 +1017,20 @@ export default function BlogAdminPage() {
     },
   });
 
+  const translationMutation = useMutation({
+    mutationFn: async (postId: number) => {
+      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/translation`);
+      return response.json() as Promise<ApiResponse<{ runId: number | null; status: string }>>;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Translation draft could not be queued');
+    },
+  });
+
   const seoMutation = useMutation({
     mutationFn: async (postId: number) => {
       const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/seo-check?google=false`);
@@ -1299,6 +1325,15 @@ export default function BlogAdminPage() {
     setAiNotes(null);
     setActionError(null);
     setEditorOpen(true);
+  };
+
+  const openTranslationSibling = async (siblingId: number) => {
+    try {
+      const response = await fetchJson<ApiResponse<BlogPost>>(`/api/admin/blog/posts/${siblingId}`);
+      openEditPost(response.data);
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : 'Translation sibling could not be opened');
+    }
   };
 
   const openPostPreview = async (post: BlogPost) => {
@@ -1671,6 +1706,7 @@ export default function BlogAdminPage() {
                     <TableHead>Post</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Language</TableHead>
+                    <TableHead>Translation pair</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Updated</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -1679,11 +1715,11 @@ export default function BlogAdminPage() {
                 <TableBody>
                   {postsQuery.isLoading ? (
                     <TableRow>
-                      <TableCell colSpan={6}>Loading posts...</TableCell>
+                      <TableCell colSpan={7}>Loading posts...</TableCell>
                     </TableRow>
                   ) : posts.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6}>No posts found.</TableCell>
+                      <TableCell colSpan={7}>No posts found.</TableCell>
                     </TableRow>
                   ) : posts.map(post => (
                     <TableRow key={post.id}>
@@ -1695,6 +1731,40 @@ export default function BlogAdminPage() {
                         <Badge className={statusClasses[post.status]}>{statusLabels[post.status]}</Badge>
                       </TableCell>
                       <TableCell>{post.language.toUpperCase()}</TableCell>
+                      <TableCell>
+                        <div className="flex min-w-36 flex-col items-start gap-1">
+                          <Badge variant="outline">
+                            {post.translationPair?.targetLanguage.toUpperCase() || (post.language === 'en' ? 'ES' : 'EN')}: {post.translationPair?.state || 'missing'}
+                          </Badge>
+                          {post.translationPair?.sibling ? (
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="h-auto p-0 text-xs"
+                              onClick={() => void openTranslationSibling(post.translationPair!.sibling!.id)}
+                            >
+                              Open and review sibling
+                            </Button>
+                          ) : post.translationPair?.run?.status === 'queued' || post.translationPair?.run?.status === 'running' ? (
+                            <span className="text-xs text-slate-500">Translation in progress…</span>
+                          ) : (
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="h-auto p-0 text-xs"
+                              disabled={translationMutation.isPending}
+                              onClick={() => translationMutation.mutate(post.id)}
+                            >
+                              {post.translationPair?.run?.status === 'failed' || post.translationPair?.run?.status === 'interrupted'
+                                ? 'Retry translation draft'
+                                : 'Generate translation draft'}
+                            </Button>
+                          )}
+                          {post.translationPair?.run?.error && (
+                            <span className="max-w-52 text-xs text-red-700">{post.translationPair.run.error}</span>
+                          )}
+                        </div>
+                      </TableCell>
                       <TableCell>{post.category?.name || 'Uncategorized'}</TableCell>
                       <TableCell>{new Date(post.updatedAt).toLocaleDateString()}</TableCell>
                       <TableCell>

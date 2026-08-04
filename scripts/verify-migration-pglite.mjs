@@ -63,6 +63,29 @@ try {
   if (Number(contactResult.rows[0]?.total) !== 1) throw new Error("Contact insert smoke test failed");
 
   await db.exec(`insert into blog_posts (title, slug) values ('Image job migration check', 'image-job-migration-check')`);
+  const translationGroup = await db.query(`select translation_group_id from blog_posts where id = 1`);
+  const translationGroupId = String(translationGroup.rows[0]?.translation_group_id || "");
+  await db.query(
+    `insert into blog_posts (title, slug, language, translation_group_id, status)
+     values ('Borrador gemelo', 'borrador-gemelo', 'es', $1, 'draft')`,
+    [translationGroupId],
+  );
+  let duplicateTranslationRejected = false;
+  try {
+    await db.query(
+      `insert into blog_posts (title, slug, language, translation_group_id, status)
+       values ('Gemelo duplicado', 'gemelo-duplicado', 'es', $1, 'draft')`,
+      [translationGroupId],
+    );
+  } catch {
+    duplicateTranslationRejected = true;
+  }
+  if (!duplicateTranslationRejected) throw new Error("A translation group must allow only one post per language");
+  await db.exec(`update blog_posts set status = 'published', published_at = now() where id = 1`);
+  const independentSibling = await db.query(`select status, published_at from blog_posts where slug = 'borrador-gemelo'`);
+  if (independentSibling.rows[0]?.status !== "draft" || independentSibling.rows[0]?.published_at !== null) {
+    throw new Error("Publishing one language must not publish its sibling");
+  }
   await db.exec(`
     insert into blog_image_generation_jobs (post_id, idempotency_key, operation, role)
     values (1, 'migration-image-job-key-1', 'generate_set', 'all')
@@ -191,6 +214,8 @@ try {
     imageJobAdmissionGate: "pass",
     imageJobSingleWorker: "pass",
     imageJobStaleRecovery: "pass",
+    translationSiblingUnique: "pass",
+    translationIndependentPublish: "pass",
   }));
 } finally {
   await db.close();

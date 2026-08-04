@@ -144,7 +144,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
       ]);
       const initialRun = await generation.getBlogGenerationRun(runId);
       if (!initialRun) return json({ success: false, message: "Generation run not found" }, 404);
-      if (initialRun.status === "queued") after(() => admin.executePersistedAutoGenerateRun(initialRun.id));
+      if (initialRun.status === "queued") after(() => admin.executePersistedBlogGenerationRun(initialRun.id));
       const encoder = new TextEncoder();
       let cancelled = false;
       const stream = new ReadableStream<Uint8Array>({
@@ -216,14 +216,44 @@ export async function GET(request: NextRequest, context: RouteContext) {
         : "all";
       const rawLanguage = request.nextUrl.searchParams.get("language");
       const requestedLanguage = rawLanguage === "en" || rawLanguage === "es" ? rawLanguage : "all";
+      const posts = await storage.getAdminBlogPosts({
+        status,
+        language: requestedLanguage,
+        search: request.nextUrl.searchParams.get("search")?.trim() || undefined,
+      });
+      const translations = await import("../../../../../server/blog/translation/storage");
+      const pairs = await translations.getBlogTranslationPairs(posts);
       return json({
         success: true,
-        data: await storage.getAdminBlogPosts({
-          status,
-          language: requestedLanguage,
-          search: request.nextUrl.searchParams.get("search")?.trim() || undefined,
+        data: posts.map(post => {
+          const pair = pairs.get(post.id);
+          const sibling = pair?.sibling || null;
+          const siblingState = sibling?.status === "published" || sibling?.status === "pending_review"
+            ? sibling.status
+            : sibling ? "draft" : "missing";
+          const activeRun = pair?.run && ["queued", "running", "failed", "interrupted"].includes(pair.run.status)
+            ? { id: pair.run.id, status: pair.run.status, error: typeof pair.run.result?.error === "string" ? pair.run.result.error : undefined }
+            : null;
+          return {
+            ...post,
+            translationPair: {
+              targetLanguage: post.language === "en" ? "es" : "en",
+              state: siblingState,
+              sibling: sibling ? { id: sibling.id, title: sibling.title, slug: sibling.slug, language: sibling.language, status: sibling.status } : null,
+              run: activeRun,
+            },
+          };
         }),
       });
+    }
+    if (segments.length === 3 && segments[0] === "posts" && segments[2] === "translation") {
+      const postId = Number(segments[1]);
+      if (!Number.isInteger(postId) || postId <= 0) return json({ success: false, message: "Invalid post id" }, 400);
+      const post = await storage.getBlogPostById(postId);
+      if (!post) return json({ success: false, message: "Blog post not found" }, 404);
+      const translation = await import("../../../../../server/blog/translation/storage");
+      const sibling = await translation.getBlogTranslationSibling(post);
+      return json({ success: true, data: { source: post, sibling: sibling || null } });
     }
     if (segments.length === 3 && segments[0] === "posts" && segments[2] === "images") {
       const postId = Number(segments[1]);
@@ -360,6 +390,26 @@ export async function POST(request: NextRequest, context: RouteContext) {
       import("../../../../../server/blog/sanitize"),
       import("../../../../../server/blog/verification"),
     ]);
+    if (segments.length === 3 && segments[0] === "posts" && segments[2] === "translation") {
+      const postId = Number(segments[1]);
+      if (!Number.isInteger(postId) || postId <= 0) return json({ success: false, message: "Invalid post id" }, 400);
+      const [translation, admin] = await Promise.all([
+        import("../../../../../server/blog/translation/workflow"),
+        import("../../../../../server/blog/admin-routes"),
+      ]);
+      const queued = await translation.queueBlogTranslation(postId);
+      if (queued.run?.status === "queued") after(() => admin.executePersistedBlogGenerationRun(queued.run!.id));
+      return json({
+        success: true,
+        data: {
+          sourcePostId: postId,
+          sibling: queued.sibling,
+          runId: queued.run?.id || null,
+          status: queued.sibling?.status || queued.run?.status || "missing",
+          created: queued.created,
+        },
+      }, queued.created ? 202 : 200);
+    }
     if (["links", "link-sources", "link-audits"].includes(segments[0]) || (segments[0] === "posts" && segments[2] === "links")) {
       const config = await import("../../../../../server/blog/links/config");
       if (!config.getBlogLinkConfig().enabled) {
@@ -452,7 +502,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
       await generation.markStaleBlogGenerationRunsInterrupted(new Date(Date.now() - 5 * 60 * 1000));
       const existing = await generation.getBlogGenerationRunByIdempotencyKey(idempotencyKey);
       if (existing) {
-        if (existing.status === "queued") after(() => admin.executePersistedAutoGenerateRun(existing.id));
+        if (existing.status === "queued") after(() => admin.executePersistedBlogGenerationRun(existing.id));
         return json({
           success: true,
           data: {
@@ -489,7 +539,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
       const run = creation.run;
       const creationAction = decideGenerationRunCreationAction(creation);
       if (creationAction !== "queue_new") {
-        if (creationAction === "resume_queued") after(() => admin.executePersistedAutoGenerateRun(run.id));
+        if (creationAction === "resume_queued") after(() => admin.executePersistedBlogGenerationRun(run.id));
         return json({
           success: true,
           data: {
@@ -506,7 +556,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
       });
       const queued = await generation.queuePreparedBlogGenerationRun(run.id, JSON.parse(JSON.stringify(workflow)));
       if (!queued) throw new Error("Generation run could not be queued");
-      after(() => admin.executePersistedAutoGenerateRun(run.id));
+      after(() => admin.executePersistedBlogGenerationRun(run.id));
       return json({ success: true, data: { runId: run.id, status: "queued", workflow } }, 202);
     }
     if (segments.length === 1 && segments[0] === "topic-plan") {

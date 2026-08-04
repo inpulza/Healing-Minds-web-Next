@@ -211,6 +211,45 @@ export async function heartbeatBlogGenerationRun(
   return updated;
 }
 
+export async function requeueBlogGenerationRun(
+  runId: number,
+  workflow?: UpdateGenerationRunInput["workflow"],
+): Promise<GenerationRun | undefined> {
+  const now = new Date();
+  const [queued] = await db
+    .update(blogGenerationRuns)
+    .set({
+      status: "queued",
+      ...(workflow !== undefined ? { workflow } : {}),
+      result: null,
+      startedAt: null,
+      completedAt: null,
+      heartbeatAt: now,
+      updatedAt: now,
+    })
+    .where(and(
+      eq(blogGenerationRuns.id, runId),
+      inArray(blogGenerationRuns.status, ["failed", "interrupted", "completed"]),
+    ))
+    .returning();
+  return queued;
+}
+
+export async function updateCompletedBlogGenerationRunResult(
+  runId: number,
+  result: UpdateGenerationRunInput["result"],
+): Promise<GenerationRun | undefined> {
+  const [updated] = await db
+    .update(blogGenerationRuns)
+    .set({ result, updatedAt: new Date() })
+    .where(and(
+      eq(blogGenerationRuns.id, runId),
+      eq(blogGenerationRuns.status, "completed"),
+    ))
+    .returning();
+  return updated;
+}
+
 export async function completeBlogGenerationRun(
   runId: number,
   values: CompleteGenerationRunInput,

@@ -78,6 +78,7 @@ import {
   markStaleBlogGenerationRunsInterrupted,
   queuePreparedBlogGenerationRun,
   updateBlogGenerationRun,
+  updateCompletedBlogGenerationRunResult,
 } from "./generation/storage";
 import type { GenerationRun, JsonObject } from "./generation/types";
 import { decideGenerationRunCreationAction } from "./generation/idempotency";
@@ -1000,11 +1001,33 @@ export async function executePersistedAutoGenerateRun(runId: number): Promise<vo
       result: toJsonObject(response),
     });
     if (!completed) throw new Error("Could not complete the generation run");
+    let translation: Record<string, unknown> = { state: "missing", recoverable: true };
+    let translationRunId: number | null = null;
+    try {
+      const translationWorkflow = await import("./translation/workflow");
+      const queuedTranslation = await translationWorkflow.queueBlogTranslation(result.data.id);
+      translationRunId = queuedTranslation.run?.id || null;
+      translation = queuedTranslation.sibling
+        ? { state: queuedTranslation.sibling.status, siblingId: queuedTranslation.sibling.id }
+        : { state: queuedTranslation.run?.status || "missing", runId: translationRunId, recoverable: true };
+      await updateCompletedBlogGenerationRunResult(runId, toJsonObject({ ...response, translation }));
+    } catch (translationError) {
+      translation = {
+        state: "missing",
+        recoverable: true,
+        message: translationError instanceof Error ? translationError.message : "Translation could not be queued",
+      };
+      await updateCompletedBlogGenerationRunResult(runId, toJsonObject({ ...response, translation }));
+    }
     await appendBlogGenerationEvent({
       runId,
       eventType: "complete",
-      payload: toJsonObject(response),
+      payload: toJsonObject({ ...response, translation }),
     }).catch(eventError => console.error("Could not persist generation completion event:", eventError));
+    if (translationRunId) {
+      const translationWorkflow = await import("./translation/workflow");
+      await translationWorkflow.executePersistedBlogTranslationRun(translationRunId);
+    }
   } catch (error) {
     const runError = error as Error & { statusCode?: number; code?: string; workflow?: BlogGenerationWorkflow };
     const currentRun = await getBlogGenerationRun(runId).catch(() => undefined);
@@ -1039,6 +1062,15 @@ export async function executePersistedAutoGenerateRun(runId: number): Promise<vo
   } finally {
     clearInterval(heartbeatTimer);
   }
+}
+
+export async function executePersistedBlogGenerationRun(runId: number): Promise<void> {
+  const run = await getBlogGenerationRun(runId);
+  if (run?.input.mode === "translation") {
+    const translation = await import("./translation/workflow");
+    return translation.executePersistedBlogTranslationRun(runId);
+  }
+  return executePersistedAutoGenerateRun(runId);
 }
 
 function runPostPublishCheckInBackground(path: string): void {
