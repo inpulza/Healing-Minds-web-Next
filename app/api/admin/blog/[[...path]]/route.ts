@@ -1,4 +1,5 @@
 import { after, NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import type { BlogGenerationRun } from "@shared/schema";
 import type { GuidedTopicTrustedContext } from "../../../../../server/blog/ai/topic-planner";
 import { decideGenerationRunCreationAction } from "../../../../../server/blog/generation/idempotency";
@@ -12,6 +13,10 @@ type RouteContext = { params: Promise<{ path?: string[] }> };
 
 function json(data: unknown, status = 200) {
   return NextResponse.json(data, { status, headers: noStoreHeaders });
+}
+
+function invalidatePublicBlogArchiveCache(): void {
+  revalidateTag("public-blog-index", { expire: 0 });
 }
 
 function language(value: string | null): "en" | "es" | undefined {
@@ -1052,6 +1057,9 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       { redirect, deactivateRedirectPath: payload.status === "published" ? currentPath : null },
     );
     if (!transition) return json({ success: false, message: "Blog post not found" }, 404);
+    if (existing.status === "published" || transition.post.status === "published") {
+      invalidatePublicBlogArchiveCache();
+    }
     return json({
       success: true,
       data: transition.post,
@@ -1126,6 +1134,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       expectedUpdatedAt: post.updatedAt,
     });
     if (!deletion.deleted) return json({ success: false, message: "Blog post not found" }, 404);
+    if (post.status === "published") invalidatePublicBlogArchiveCache();
     let imageCleanupWarning: string | null = null;
     try {
       await imageService.deleteBlogImageObjectsOnly(deletion.imageObjectKeys);

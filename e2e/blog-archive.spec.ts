@@ -1,4 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
+import { authenticateProtectedPreview, finishProtectedPreview } from "./preview-auth";
+
+test.afterEach(async ({ page }) => {
+  await finishProtectedPreview(page);
+});
 
 function collectRuntimeErrors(page: Page): string[] {
   const errors: string[] = [];
@@ -21,7 +26,7 @@ async function articleHrefs(page: Page, language: "en" | "es"): Promise<string[]
 
 test("the bilingual archive paginates 10+ posts without duplicates and keeps filters crawlable", async ({ page }) => {
   const runtimeErrors = collectRuntimeErrors(page);
-  await page.setExtraHTTPHeaders({ "x-e2e-blog-fixtures": "1" });
+  await authenticateProtectedPreview(page, { "x-e2e-blog-fixtures": "1" });
 
   const firstResponse = await page.goto("/e2e-fixtures/blog-archive?language=en", {
     waitUntil: "domcontentloaded",
@@ -46,6 +51,8 @@ test("the bilingual archive paginates 10+ posts without duplicates and keeps fil
   const anxietyPageOne = await articleHrefs(page, "en");
   expect(anxietyPageOne).toHaveLength(9);
   await page.getByRole("link", { name: "Page 2", exact: true }).click();
+  await expect(page).toHaveURL(/(?:category=anxiety-care.*page=2|page=2.*category=anxiety-care)/);
+  await expect(page.getByText("Page 2 of 2", { exact: true })).toBeVisible();
   const anxietyPageTwo = await articleHrefs(page, "en");
   expect(anxietyPageTwo).toHaveLength(1);
   expect(new Set([...anxietyPageOne, ...anxietyPageTwo]).size).toBe(10);
@@ -55,6 +62,8 @@ test("the bilingual archive paginates 10+ posts without duplicates and keeps fil
   await expect(page.getByText("Pagina 1 de 2", { exact: true })).toBeVisible();
   const spanishPageOne = await articleHrefs(page, "es");
   await page.getByRole("link", { name: "Pagina 2", exact: true }).click();
+  await expect(page).toHaveURL(/language=es.*page=2|page=2.*language=es/);
+  await expect(page.getByText("Pagina 2 de 2", { exact: true })).toBeVisible();
   const spanishPageTwo = await articleHrefs(page, "es");
   expect(new Set([...spanishPageOne, ...spanishPageTwo]).size).toBe(12);
   expect([...spanishPageOne, ...spanishPageTwo].every(href => href.startsWith("/es/blog/es-"))).toBe(true);

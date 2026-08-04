@@ -806,3 +806,38 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Crear PR, verificar Preview exacta, completar Code Review y Production antes de pedir un nuevo Retry.
 **Archivos tocados:** `server/blog/translation/provider.ts`, `tests/blog-translation.test.mjs`, `_arnes/DECISIONES.md`, `_arnes/BITACORA.md`.
 **Evidencia:** Prueba focalizada 4/4 PASS; suite 129/129 PASS; TypeScript PASS; db:verify 5 migraciones/112 statements PASS; build 87/87 y budgets PASS; E2E admin local desktop/móvil 2/2 PASS con 2 skips deliberados por perfil y sin errores inesperados.
+
+## 2026-08-04 Codex - invalidación inmediata del archivo al publicar
+**Qué se hizo:** Se confirmó en vivo que la API ES devolvía dos posts publicados y el detalle del nuevo sibling respondía 200, mientras `/es/blog` seguía renderizando solo ansiedad. El archivo conserva una caché de cinco minutos que la acción de publicar no invalidaba.
+**Decisiones:** Publicar, despublicar o borrar un post publicado expira inmediatamente `public-blog-index`; el TTL de 300 segundos queda solo como respaldo. Se invalida el tag compartido para cubrir EN/ES, categorías y páginas sin mantener una lista frágil de rutas.
+**Pendientes/bugs:** Crear PR, verificar Preview exacta, completar Code Review y Production.
+**Archivos tocados:** ruta admin Next, contrato unitario, decisiones y bitácora.
+**Evidencia:** Diagnóstico productivo: API ES 2 published; detalle 200; SSR/browser del archivo solo 1. Corrección: 130/130 tests, TypeScript, db:verify 5 migraciones/112 statements, build 87/87 y budgets PASS; E2E archivo + admin local desktop/móvil 4 PASS con 2 skips deliberados por perfil y sin errores inesperados.
+
+## 2026-08-04 Codex - confirmación de la causa y recuperación por TTL
+**Qué se hizo:** Se ejecutó `getBlogArchive` contra Neon Production en modo lectura y devolvió los dos posts ES en el orden correcto: ansiedad como featured y depresión como tarjeta regular. Tras expirar la ventana existente, una respuesta fresca de `/es/blog` (`X-Vercel-Cache: MISS`) incluyó el slug nuevo y Chrome confirmó visualmente el título.
+**Decisiones:** El incidente no fue un estado editorial incorrecto ni un bug de featured/grid. Fue una demora de visibilidad causada por no invalidar la caché de datos al cambiar el estado publicado. Se conserva el TTL como respaldo, pero el publish gate debe invalidarlo inmediatamente.
+**Pendientes/bugs:** PR #26 sigue draft hasta Quality, E2E de Preview contra SHA exacto y clasificación final de todas las notas de Code Review. No se fusiona basándose solo en que el TTL haya recuperado Production.
+**Archivos tocados:** bitácora; sin mutaciones de datos ni configuración.
+**Evidencia:** DB ES `total=2`, ids 2 y 12; SSR productivo contiene `seguimiento-depresion-cuando-sintomas-mejoran-desigualmente`; Chrome recargado contiene `Qué Revisar Cuando los Síntomas de Depresión Mejoran de Manera Desigual`.
+
+## 2026-08-04 Codex - endurecimiento del E2E de Preview protegido
+**Qué se hizo:** La primera corrida desplegada reveló que el archivo fixture no reutilizaba la autenticación de Preview del admin y que dos conteos se ejecutaban antes de asentarse la navegación. Se extrajo un helper común, limitado al origin exacto de Healing Minds y sin seguir redirects; los clics de página esperan URL y estado visible antes de contar.
+**Decisiones:** Las credenciales de Preview nunca se configuran como headers globales porque podrían viajar a terceros. El teardown ignora solo callbacks cancelados al cerrar la página; errores durante el recorrido siguen fallando el test.
+**Pendientes/bugs:** Repetir suite completa y E2E contra el Preview del SHA que incluya este gate, no solo contra el deployment anterior usado para desarrollar el test.
+**Archivos tocados:** helper E2E de Preview, archivo E2E, admin bilingüe E2E, contrato del gate y bitácora.
+**Evidencia:** contrato focalizado 8/8 PASS; Preview desktop/móvil archivo + admin 4 PASS y 2 skips deliberados, sin errores inesperados.
+
+## 2026-08-04 Codex - clasificación Code Review PR #26, ronda 1
+**Qué se hizo:** Se leyó la revisión de Vercel Agent sobre `main` y HEAD `87b68c2`. Una nota señaló que el helper devolvía temprano sin `E2E_BASE_URL` y perdía `x-e2e-blog-fixtures` en ejecuciones locales.
+**Clasificación:** 1 válida; 0 inválidas; 0 ya resueltas; 0 no aplica; 0 requieren decisión. Se aplica el header no secreto directamente solo en local; las credenciales de Preview continúan limitadas al origin exacto.
+**Pendientes/bugs:** Repetir local E2E, gates, Preview exacta y una nueva lectura completa de notas después del push.
+**Archivos tocados:** helper E2E y bitácora.
+**Evidencia:** Pendiente al registrar la clasificación.
+
+## 2026-08-04 Codex - cierre local de la nota válida PR #26
+**Qué se hizo:** Se corrigió el helper y se ejecutó el HEAD aislado en puerto 3101 porque 3100 pertenecía a otro worktree. El primer intento aislado heredó `VERCEL_ENV=production` del env descargado y el fixture se cerró correctamente con 404; al arrancar el mismo build como development, el recorrido completo pasó.
+**Decisiones:** No se detuvo ni modificó el servidor ajeno de 3100. El proceso temporal de 3101 fue verificado por ruta de worktree y detenido al terminar. Los fixtures permanecen inaccesibles en Production por diseño.
+**Pendientes/bugs:** Push, nueva Preview por SHA, E2E desplegado y nueva ronda completa de Code Review.
+**Archivos tocados:** bitácora; helper ya corregido en la entrada anterior.
+**Evidencia:** E2E local aislado archivo + admin desktop/móvil: 4 PASS, 2 skips deliberados, cero errores inesperados.
