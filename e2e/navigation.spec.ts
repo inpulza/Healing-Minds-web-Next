@@ -1438,7 +1438,7 @@ test.describe("server-rendered SEO without JavaScript", () => {
     expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
   });
 
-  test("blog indexes expose every published article before JavaScript", async ({
+  test("blog archive pages expose every published article through crawlable pagination", async ({
     page,
   }) => {
     const runtimeErrors = collectUnexpectedRuntimeErrors(page);
@@ -1466,20 +1466,24 @@ test.describe("server-rendered SEO without JavaScript", () => {
       expect(publishedPosts.length).toBeGreaterThan(0);
 
       const indexPath = language === "es" ? "/es/blog" : "/blog";
-      const indexResponse = await page.goto(indexPath, {
-        waitUntil: "domcontentloaded",
-      });
-      expect(indexResponse?.status()).toBe(200);
-
-      for (const post of publishedPosts) {
-        const postPath = post.language === "es"
-          ? `/es/blog/${post.slug}`
-          : `/blog/${post.slug}`;
-        expect(
-          await page.locator(`a[href="${postPath}"]`).count(),
-          `${indexPath} should link to ${postPath} in the initial HTML`,
-        ).toBeGreaterThan(0);
+      const expectedPaths = new Set(publishedPosts.map(post =>
+        post.language === "es" ? `/es/blog/${post.slug}` : `/blog/${post.slug}`,
+      ));
+      const discoveredPaths = new Set<string>();
+      const expectedPageCount = Math.max(1, Math.ceil(publishedPosts.length / 9));
+      for (let archivePage = 1; archivePage <= expectedPageCount; archivePage += 1) {
+        const archivePath = archivePage === 1 ? indexPath : `${indexPath}?page=${archivePage}`;
+        const indexResponse = await page.goto(archivePath, { waitUntil: "domcontentloaded" });
+        expect(indexResponse?.status()).toBe(200);
+        const hrefs = await page.locator(
+          `main a[href^="${language === "es" ? "/es/blog/" : "/blog/"}"]`,
+        ).evaluateAll(links => links.map(link => link.getAttribute("href")).filter(Boolean));
+        hrefs.forEach(href => discoveredPaths.add(href!));
+        if (archivePage < expectedPageCount) {
+          await expect(page.locator(`a[href="${indexPath}?page=${archivePage + 1}"]`)).toHaveCount(1);
+        }
       }
+      expect(discoveredPaths).toEqual(expectedPaths);
     }
 
     expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);

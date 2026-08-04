@@ -38,21 +38,23 @@ test("dynamic blog pages receive server-loaded content and metadata", () => {
 });
 
 test("blog indexes receive a server-loaded list before hydration", () => {
-  const page = read("app/[...slug]/page.tsx");
+  const englishPage = read("app/blog/page.tsx");
+  const spanishPage = read("app/es/blog/page.tsx");
+  const page = read("app/_routing/blog-index-page.tsx");
   const loader = read("app/_routing/load-public-blog-index.ts");
   const wrapper = read("app/_routing/dynamic-blog-index.tsx");
   const index = read("client/src/pages/BlogIndex.tsx");
 
-  assert.match(page, /route\.page === ["']BlogIndex["']/);
-  assert.match(page, /loadPublicBlogIndex\(route\.locale\)/);
+  assert.match(englishPage, /BlogIndexPage language="en"/);
+  assert.match(spanishPage, /BlogIndexPage language="es"/);
+  assert.match(page, /loadPublicBlogArchive\(language/);
   assert.match(page, /<DynamicBlogIndex/);
   assert.match(loader, /unstable_cache/);
-  assert.match(loader, /getBlogPosts/);
+  assert.match(loader, /getBlogArchive/);
   assert.match(loader, /blogSnapshot/);
-  assert.match(wrapper, /<BlogIndex language=\{language\} initialPosts=\{initialPosts\}/);
-  assert.match(index, /initialPosts === undefined/);
-  assert.match(index, /\{ success: true, data: initialPosts \}/);
+  assert.match(wrapper, /initialArchive=\{initialArchive\}/);
+  assert.match(index, /archive\.data/);
+  assert.match(index, /buildBlogArchiveHref/);
   assert.match(index, /timeZone:\s*["']UTC["']/);
-  assert.match(index, /localeCompare\(b\.name, language === ["']es["'] \? ["']es-US["'] : ["']en-US["']\)/);
-  assert.match(index, /\[language, posts\]/);
+  assert.match(index, /localeCompare\(b\.name, language === 'es' \? 'es-US' : 'en-US'\)/);
 });

@@ -1,16 +1,27 @@
 "use client";
 
 import BlogIndex, {
+  type BlogArchivePage,
   type BlogLanguage,
-  type BlogPostListItem,
 } from "@/pages/BlogIndex";
 
 export default function DynamicBlogIndex({
   language,
-  initialPosts,
+  initialArchive,
+  archivePath,
+  persistentParams,
 }: {
   language: BlogLanguage;
-  initialPosts: BlogPostListItem[];
+  initialArchive: BlogArchivePage;
+  archivePath?: string;
+  persistentParams?: Record<string, string>;
 }) {
-  return <BlogIndex language={language} initialPosts={initialPosts} />;
+  return (
+    <BlogIndex
+      language={language}
+      initialArchive={initialArchive}
+      archivePath={archivePath}
+      persistentParams={persistentParams}
+    />
+  );
 }

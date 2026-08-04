@@ -758,3 +758,16 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Gates remotos del PR draft: aplicar migración solo en Preview/entorno autorizado, verificar deployment por SHA, repetir E2E y clasificar todas las notas de Code Review. No mergear ni modificar Production desde esta tarea.
 **Archivos tocados:** fixture E2E y bitácora en el remate.
 **Evidencia:** `npm test` 127/127 PASS; TypeScript PASS; build 89/89 y budgets 669.5/750 KiB + 786.8/850 KiB PASS; `db:verify`, link/topic/image guards y `git diff --check` PASS; E2E admin final 2/2 PASS (Desktop Chrome y Pixel 7), con 2 skips deliberados por perfil cruzado.
+## 2026-08-03 Codex - archivo público escalable por idioma
+**Qué se hizo:** Se inspeccionó la implementación viva de XL Homes y se documentaron su featured, grid y Load More junto con sus límites SEO. Healing Minds separa ahora los índices `/blog` y `/es/blog` en rutas SSR dinámicas, pagina nueve publicaciones por URL, mantiene un único featured efectivo y ofrece categorías y navegación anterior/siguiente/numerada con anchors reales. Se añadió una fixture de navegador protegida y no indexable con 14 EN y 12 ES.
+**Decisiones:** No se copia el offset cliente de XL Homes. La página 1 muestra featured más ocho regulares; las siguientes muestran nueve regulares. El desempate por id impide saltos y el post featured se excluye de todas las páginas regulares. El sitemap y la API pública conservan todas las publicaciones; solo cambia la composición del archivo. El conteo CMS global se documenta por separado del archivo por idioma.
+**Pendientes/bugs:** Crear PR draft, esperar Preview del SHA exacto, ejecutar E2E desplegado desktop/móvil y clasificar todas las notas vigentes de Code Review. No mergear.
+**Archivos tocados:** storage y helper de paginación, loaders y rutas SSR EN/ES, índice público, API, fixture/E2E, contratos unitarios, documentación XL/archivo, decisiones y bitácora.
+**Evidencia:** `npm test` 125/125 PASS; TypeScript PASS; `db:verify` 4 migraciones/110 statements/20 tablas/23 FKs PASS; guards blog link/topic/image PASS; build Next 87/87 estáticas PASS, `/blog` y `/es/blog` dinámicas, presupuestos 669.4/750 KiB y 778.3/850 KiB; E2E focalizado con 10+ fixtures 2/2 PASS en Desktop Chrome y Pixel 7; `git diff --check` pendiente de la revisión final previa al commit.
+
+## 2026-08-03 Codex - gate final local del archivo público
+**Qué se hizo:** Se repitió el contrato crawlable modificado después del build final. El navegador sin JavaScript recorrió las páginas numeradas EN/ES y comparó la unión de enlaces con todos los posts publicados de la API.
+**Decisiones:** La ejecución combinada con todo `navigation.spec.ts` agotó el límite externo de 184 segundos sin emitir un fallo de producto; no se usa como evidencia. Cuenta la ejecución focalizada posterior del test realmente modificado, junto con la matriz propia de 10+ fixtures.
+**Pendientes/bugs:** Gates remotos del PR draft: Preview por SHA exacto, E2E desplegado desktop/móvil y clasificación completa de Code Review.
+**Archivos tocados:** bitácora solamente en este remate.
+**Evidencia:** `git diff --check` PASS; crawl SSR de todos los posts paginados 2/2 PASS en Desktop Chrome y Pixel 7; fixture de archivo 10+ ya cerrada 2/2 en ambos perfiles.
