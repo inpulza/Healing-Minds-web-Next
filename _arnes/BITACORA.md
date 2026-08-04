@@ -827,3 +827,17 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Repetir suite completa y E2E contra el Preview del SHA que incluya este gate, no solo contra el deployment anterior usado para desarrollar el test.
 **Archivos tocados:** helper E2E de Preview, archivo E2E, admin bilingüe E2E, contrato del gate y bitácora.
 **Evidencia:** contrato focalizado 8/8 PASS; Preview desktop/móvil archivo + admin 4 PASS y 2 skips deliberados, sin errores inesperados.
+
+## 2026-08-04 Codex - clasificación Code Review PR #26, ronda 1
+**Qué se hizo:** Se leyó la revisión de Vercel Agent sobre `main` y HEAD `87b68c2`. Una nota señaló que el helper devolvía temprano sin `E2E_BASE_URL` y perdía `x-e2e-blog-fixtures` en ejecuciones locales.
+**Clasificación:** 1 válida; 0 inválidas; 0 ya resueltas; 0 no aplica; 0 requieren decisión. Se aplica el header no secreto directamente solo en local; las credenciales de Preview continúan limitadas al origin exacto.
+**Pendientes/bugs:** Repetir local E2E, gates, Preview exacta y una nueva lectura completa de notas después del push.
+**Archivos tocados:** helper E2E y bitácora.
+**Evidencia:** Pendiente al registrar la clasificación.
+
+## 2026-08-04 Codex - cierre local de la nota válida PR #26
+**Qué se hizo:** Se corrigió el helper y se ejecutó el HEAD aislado en puerto 3101 porque 3100 pertenecía a otro worktree. El primer intento aislado heredó `VERCEL_ENV=production` del env descargado y el fixture se cerró correctamente con 404; al arrancar el mismo build como development, el recorrido completo pasó.
+**Decisiones:** No se detuvo ni modificó el servidor ajeno de 3100. El proceso temporal de 3101 fue verificado por ruta de worktree y detenido al terminar. Los fixtures permanecen inaccesibles en Production por diseño.
+**Pendientes/bugs:** Push, nueva Preview por SHA, E2E desplegado y nueva ronda completa de Code Review.
+**Archivos tocados:** bitácora; helper ya corregido en la entrada anterior.
+**Evidencia:** E2E local aislado archivo + admin desktop/móvil: 4 PASS, 2 skips deliberados, cero errores inesperados.

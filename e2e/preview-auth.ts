@@ -15,7 +15,14 @@ export async function authenticateProtectedPreview(
   page: Page,
   headers: Record<string, string> = {},
 ) {
-  if (!deploymentOrigin || (!previewCredential && Object.keys(headers).length === 0)) return;
+  const hasHeaders = Object.keys(headers).length > 0;
+
+  if (!deploymentOrigin) {
+    if (hasHeaders) await page.setExtraHTTPHeaders(headers);
+    return;
+  }
+
+  if (!previewCredential && !hasHeaders) return;
 
   await page.route(`${deploymentOrigin}/**`, async route => {
     let response;
