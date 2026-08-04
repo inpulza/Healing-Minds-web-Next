@@ -36,15 +36,23 @@ test("database contract prevents duplicate siblings and keeps publication indepe
 test("provider normalizes SEO metadata, preserves mapped links and rejects invented URLs", () => {
   const script = `
     import assert from 'node:assert/strict';
-    import { assertTranslationLinkContract, normalizeBlogTranslationDraft, translateBlogPostWithAi } from './server/blog/translation/provider.ts';
+    import { applyTranslationLinkMap, assertTranslationLinkContract, normalizeBlogTranslationDraft, translateBlogPostWithAi } from './server/blog/translation/provider.ts';
     const sourceHtml = '<h2>Care</h2><p><a href="/services">Care</a> <a href="https://www.nimh.nih.gov/health/topics/depression">Source</a></p><p>Educational only.</p>';
     const mapped = { '/services': '/es/servicios', 'https://www.nimh.nih.gov/health/topics/depression': 'https://www.nimh.nih.gov/health/publications/espanol/depresion' };
     assert.doesNotThrow(() => assertTranslationLinkContract(sourceHtml, '<h2>Atencion</h2><p><a href="/es/servicios">Atencion</a> <a href="https://www.nimh.nih.gov/health/publications/espanol/depresion">Fuente</a></p>', mapped, []));
     assert.throws(() => assertTranslationLinkContract(sourceHtml, '<a href="https://invented.invalid/es">X</a>', mapped, []), /invented/i);
+    assert.equal(
+      applyTranslationLinkMap('<a href="/services">Care</a><a href="https://www.nimh.nih.gov/health/topics/depression">Source</a>', mapped),
+      '<a href="/es/servicios">Care</a><a href="https://www.nimh.nih.gov/health/publications/espanol/depresion">Source</a>',
+    );
+    assert.throws(
+      () => assertTranslationLinkContract(sourceHtml, '<p>La traduccion omitio ambos enlaces.</p>', mapped, []),
+      /removed source links/i,
+    );
     process.env.OPENAI_API_KEY = 'test-only';
     globalThis.fetch = async () => new Response(JSON.stringify({ choices: [{ finish_reason: 'stop', message: { content: JSON.stringify({
       title: 'Entender la depresion', slug: 'entender-la-depresion', excerpt: 'Una guia educativa y conservadora para pacientes.',
-      contentHtml: '<h2>Atencion</h2><p><a href="/es/servicios">Atencion</a> <a href="https://www.nimh.nih.gov/health/publications/espanol/depresion">Fuente</a></p><p>Este contenido es educativo y no sustituye la evaluacion profesional.</p>',
+      contentHtml: '<h2>Atencion</h2><p><a href="/services">Atencion</a> <a href="https://www.nimh.nih.gov/health/topics/depression">Fuente</a></p><p>Este contenido es educativo y no sustituye la evaluacion profesional.</p>',
       metaTitle: 'Entender la depresion y reconocer cuando conviene buscar evaluacion profesional especializada', metaDescription: 'Informacion educativa sobre depresion, sus sintomas, la evaluacion profesional y las opciones de apoyo que pueden ayudar a una persona a reconocer cuando conviene buscar atencion de salud mental.',
       featuredImageAlt: 'Persona conversando con un profesional', targetKeyword: 'depresion', expertiseAngle: 'Educacion conservadora'
     }) } }] }), { status: 200, headers: { 'content-type': 'application/json' } });
@@ -53,6 +61,10 @@ test("provider normalizes SEO metadata, preserves mapped links and rejects inven
       targetLanguage: 'es', linkMap: mapped, targetSourceUrls: []
     });
     assert.equal(translated.slug, 'entender-la-depresion');
+    assert.deepEqual(
+      Array.from(translated.contentHtml.matchAll(/href="([^"]+)"/g), match => match[1]),
+      ['/es/servicios', 'https://www.nimh.nih.gov/health/publications/espanol/depresion'],
+    );
     assert.ok(translated.metaTitle.length <= 70);
     assert.ok(translated.metaDescription.length <= 160);
     assert.equal(translated.metaTitle, 'Entender la depresion y reconocer cuando conviene buscar evaluacion');

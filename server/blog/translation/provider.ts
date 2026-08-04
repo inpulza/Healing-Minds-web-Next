@@ -48,6 +48,13 @@ export function extractHtmlHrefs(html: string): string[] {
   return Array.from(html.matchAll(/\bhref\s*=\s*["']([^"']+)["']/gi), match => match[1]);
 }
 
+export function applyTranslationLinkMap(html: string, linkMap: Record<string, string>): string {
+  return html.replace(
+    /(\bhref\s*=\s*["'])([^"']+)(["'])/gi,
+    (_match, prefix: string, href: string, suffix: string) => `${prefix}${linkMap[href] || href}${suffix}`,
+  );
+}
+
 export function assertTranslationLinkContract(
   sourceHtml: string,
   translatedHtml: string,
@@ -96,6 +103,7 @@ export async function translateBlogPostWithAi(input: {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), positiveInt(process.env.BLOG_AI_TIMEOUT_MS, 60_000));
   const targetName = input.targetLanguage === "es" ? "Spanish" : "English";
+  const mappedSourceContent = applyTranslationLinkMap(input.source.content || "", input.linkMap);
   const prompt = [
     `Create a clinically conservative ${targetName} adaptation of this educational psychiatry article.`,
     "Return one JSON object with title, slug, excerpt, contentHtml, metaTitle, metaDescription, featuredImageAlt, targetKeyword, expertiseAngle.",
@@ -108,7 +116,7 @@ export async function translateBlogPostWithAi(input: {
       title: input.source.title,
       slug: input.source.slug,
       excerpt: input.source.excerpt || "",
-      contentHtml: input.source.content || "",
+      contentHtml: mappedSourceContent,
       metaTitle: input.source.metaTitle || input.source.title,
       metaDescription: input.source.metaDescription || input.source.excerpt || "",
       featuredImageAlt: input.source.featuredImageAlt || input.source.title,
@@ -138,8 +146,12 @@ export async function translateBlogPostWithAi(input: {
     if (choice?.finish_reason === "length") throw Object.assign(new Error("Blog translation response was truncated"), { statusCode: 502 });
     if (!choice?.message?.content) throw Object.assign(new Error("Blog translation provider returned no content"), { statusCode: 502 });
     const draft = normalizeBlogTranslationDraft(JSON.parse(choice.message.content));
-    assertTranslationLinkContract(input.source.content || "", draft.contentHtml, input.linkMap, input.targetSourceUrls);
-    return draft;
+    const linkedDraft = {
+      ...draft,
+      contentHtml: applyTranslationLinkMap(draft.contentHtml, input.linkMap),
+    };
+    assertTranslationLinkContract(input.source.content || "", linkedDraft.contentHtml, input.linkMap, input.targetSourceUrls);
+    return linkedDraft;
   } catch (error) {
     if ((error as { name?: string }).name === "AbortError") {
       throw Object.assign(new Error("Blog translation provider timed out"), { statusCode: 504 });

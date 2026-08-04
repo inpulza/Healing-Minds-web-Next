@@ -799,3 +799,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Crear PR, verificar Preview por SHA y completar Code Review antes de integrar.
 **Archivos tocados:** `server/blog/translation/provider.ts`, `tests/blog-translation.test.mjs`, `_arnes/DECISIONES.md`, `_arnes/BITACORA.md`.
 **Evidencia:** Prueba focalizada de traducción 4/4 PASS; suite completa 129/129 PASS; TypeScript PASS; db:verify 5 migraciones/112 statements PASS; build 87/87 y budgets PASS; E2E admin local desktop/móvil 2/2 PASS con 2 skips deliberados por perfil y sin errores inesperados.
+
+## 2026-08-04 Codex - normalización determinista de enlaces del gemelo
+**Qué se hizo:** Un reintento productivo para el post publicado EN `depression-follow-up-when-symptoms-improve-unevenly` falló con `Translation removed source links: /services`. El contrato podía aceptar que el proveedor retuviera `/services` y después exigir `/es/servicios`, produciendo un falso "removed". El mapa autorizado se aplica ahora antes y después del proveedor.
+**Decisiones:** Solo se reemplazan coincidencias exactas de `href` presentes en `linkMap`. Si la IA elimina realmente el anchor o inventa una URL, la traducción sigue rechazándose completa; el post fuente y cualquier publicación existente permanecen intactos.
+**Pendientes/bugs:** Crear PR, verificar Preview exacta, completar Code Review y Production antes de pedir un nuevo Retry.
+**Archivos tocados:** `server/blog/translation/provider.ts`, `tests/blog-translation.test.mjs`, `_arnes/DECISIONES.md`, `_arnes/BITACORA.md`.
+**Evidencia:** Prueba focalizada 4/4 PASS; suite 129/129 PASS; TypeScript PASS; db:verify 5 migraciones/112 statements PASS; build 87/87 y budgets PASS; E2E admin local desktop/móvil 2/2 PASS con 2 skips deliberados por perfil y sin errores inesperados.
