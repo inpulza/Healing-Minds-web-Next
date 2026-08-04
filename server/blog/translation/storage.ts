@@ -91,6 +91,52 @@ export async function createBlogTranslationSibling(
   return { post, created: result.created };
 }
 
+export async function replaceBlogTranslationSiblingDraft(
+  values: BlogPostInput,
+  siblingId: number,
+  runId: number,
+  expectedSiblingUpdatedAt: Date,
+): Promise<BlogPostWithRelations> {
+  const result = await db.transaction(async tx => {
+    const { tagIds = [], ...postValues } = values;
+    const [updated] = await tx.update(blogPosts)
+      .set({ ...postValues, status: "draft", publishedAt: null, updatedAt: new Date() })
+      .where(and(
+        eq(blogPosts.id, siblingId),
+        eq(blogPosts.status, "draft"),
+        eq(blogPosts.translationGroupId, values.translationGroupId!),
+        eq(blogPosts.language, values.language || "en"),
+        eq(blogPosts.updatedAt, expectedSiblingUpdatedAt),
+      ))
+      .returning({ id: blogPosts.id });
+    if (!updated) {
+      throw Object.assign(
+        new Error("The sibling draft changed after refresh was queued. Review it and retry explicitly."),
+        { statusCode: 409, code: "blog_translation_refresh_sibling_changed" },
+      );
+    }
+    await tx.delete(blogPostTags).where(eq(blogPostTags.postId, siblingId));
+    if (tagIds.length > 0) {
+      await tx.insert(blogPostTags)
+        .values(Array.from(new Set(tagIds)).map((tagId, position) => ({ postId: siblingId, tagId, position })))
+        .onConflictDoNothing();
+    }
+    const [linked] = await tx.update(blogGenerationRuns)
+      .set({ postId: siblingId, heartbeatAt: new Date(), updatedAt: new Date() })
+      .where(and(
+        eq(blogGenerationRuns.id, runId),
+        eq(blogGenerationRuns.status, "running"),
+        or(isNull(blogGenerationRuns.postId), eq(blogGenerationRuns.postId, siblingId)),
+      ))
+      .returning({ id: blogGenerationRuns.id });
+    if (!linked) throw new Error("Translation refresh run could not claim its sibling draft");
+    return updated.id;
+  });
+  const post = await getBlogPostById(result);
+  if (!post) throw new Error("Refreshed translation draft could not be loaded");
+  return post;
+}
+
 export async function listRecentBlogTranslationRuns(): Promise<BlogGenerationRun[]> {
   return db.select().from(blogGenerationRuns)
     .where(sql`${blogGenerationRuns.input}->>'mode' = 'translation'`)

@@ -14,8 +14,14 @@ test("translation workflow is durable, draft-only and chained after source compl
   assert.match(workflow, /assertBlogTranslationSchemaReady\(\)[\s\S]*const targetLanguage/);
   assert.match(workflow, /requeueBlogGenerationRun/);
   assert.match(workflow, /translationKey\(source, targetLanguage\)/);
+  assert.match(workflow, /refreshDraft[\s\S]*source\.updatedAt\.getTime\(\)/);
+  assert.match(workflow, /replaceBlogTranslationSiblingDraft/);
+  assert.match(workflow, /source\.updatedAt\.toISOString\(\) !== claimed\.input\.sourceUpdatedAt/);
+  assert.match(workflow, /Only a draft sibling can be refreshed from its source/);
+  assert.match(read("server/blog/translation/storage.ts"), /blog_translation_refresh_sibling_changed/);
   assert.match(admin, /completeBlogGenerationRun[\s\S]*queueBlogTranslation/);
   assert.match(admin, /updateCompletedBlogGenerationRunResult/);
+  assert.match(read("app/api/admin/blog/[[...path]]/route.ts"), /generate-draft[\s\S]*queueBlogTranslation\(result\.data\.id\)/);
 });
 
 test("database contract prevents duplicate siblings and keeps publication independent", () => {

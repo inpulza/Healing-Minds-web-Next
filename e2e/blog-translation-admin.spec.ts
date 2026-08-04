@@ -1,5 +1,30 @@
 import { expect, test, type Page } from "@playwright/test";
 
+const deploymentUrl = process.env.E2E_BASE_URL ? new URL(process.env.E2E_BASE_URL) : null;
+const deploymentOrigin = deploymentUrl?.origin ?? null;
+const protectedPreviewHost = /^(?:healing-minds-psychi-git-[a-z0-9-]+-inpulzasolutions-6847s-projects|healing-minds-psychiatry-nextjs-[a-z0-9]+)\.vercel\.app$/i;
+const previewCredential = deploymentUrl && protectedPreviewHost.test(deploymentUrl.hostname)
+  ? process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+    ? { name: "x-vercel-protection-bypass", value: process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
+    : process.env.VERCEL_OIDC_TOKEN
+      ? { name: "x-vercel-trusted-oidc-idp-token", value: process.env.VERCEL_OIDC_TOKEN }
+      : null
+  : null;
+
+async function authenticateProtectedPreview(page: Page) {
+  if (!deploymentOrigin || !previewCredential) return;
+  await page.route(`${deploymentOrigin}/**`, async route => {
+    const response = await route.fetch({
+      headers: {
+        ...(await route.request().allHeaders()),
+        [previewCredential.name]: previewCredential.value,
+      },
+      maxRedirects: 0,
+    });
+    await route.fulfill({ response });
+  });
+}
+
 const source = {
   id: 11, title: "Understanding anxiety", slug: "understanding-anxiety", language: "en", translationGroupId: "4a6829e5-68cc-4b2a-9c51-19616ec41f8b",
   excerpt: "Educational guide", content: "<p>Educational content.</p>", featuredImage: null, featuredImageAlt: "Calm setting",
@@ -10,7 +35,8 @@ const source = {
 const sibling = { ...source, id: 22, title: "Entender la ansiedad", slug: "entender-la-ansiedad", language: "es", status: "draft", category: { id: 2, name: "Condiciones", slug: "condiciones", language: "es" } };
 
 async function mockAdmin(page: Page) {
-  let poll = 0;
+  let ready = false;
+  const translationRequests: unknown[] = [];
   await page.route("**/favicon.ico", route => route.fulfill({ status: 204, body: "" }));
   await page.route("**/api/admin/**", async route => {
     const request = route.request();
@@ -21,13 +47,23 @@ async function mockAdmin(page: Page) {
     if (path === "/api/admin/runtime") return reply({ success: true, data: { runtime: "test" } });
     if (path.endsWith("/links/config")) return reply({ success: true, data: { enabled: false } });
     if (path === "/api/admin/blog/posts" && request.method() === "GET") {
-      poll += 1;
-      const ready = poll >= 2;
       return reply({ success: true, data: [{ ...source, translationPair: ready
         ? { targetLanguage: "es", state: "draft", sibling: { id: 22, title: sibling.title, slug: sibling.slug, language: "es", status: "draft" }, run: null }
         : { targetLanguage: "es", state: "missing", sibling: null, run: null } }] });
     }
-    if (path === "/api/admin/blog/posts/11/translation" && request.method() === "POST") return reply({ success: true, data: { runId: 7, status: "queued" } }, 202);
+    if (path === "/api/admin/blog/posts/11/translation" && request.method() === "POST") {
+      const requestBody = request.postDataJSON();
+      translationRequests.push(requestBody);
+      if (!requestBody?.refreshDraft) ready = true;
+      return reply({ success: true, data: { runId: 7, status: "queued" } }, 202);
+    }
+    if (path === "/api/admin/blog/generate-draft" && request.method() === "POST") {
+      return reply({
+        success: true,
+        data: source,
+        translation: { targetLanguage: "es", state: "queued", runId: 8, recoverable: true },
+      }, 201);
+    }
     if (path === "/api/admin/blog/posts/22") return reply({ success: true, data: sibling });
     if (path.endsWith("/stats")) return reply({ success: true, data: { draft: 2, pending_review: 0, published: 0, rejected: 0 } });
     if (path.endsWith("/authors")) return reply({ success: true, data: [source.author] });
@@ -36,6 +72,7 @@ async function mockAdmin(page: Page) {
     if (path.endsWith("/images/config")) return reply({ success: true, data: { enabled: false, storage: "not-configured", model: "test" } });
     return reply({ success: true, data: [] });
   });
+  return { translationRequests };
 }
 
 for (const name of ["desktop", "mobile"] as const) {
@@ -44,11 +81,29 @@ for (const name of ["desktop", "mobile"] as const) {
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
-    await mockAdmin(page);
+    await authenticateProtectedPreview(page);
+    const mocked = await mockAdmin(page);
     await page.goto("/admin/blog");
+    await page.getByRole("button", { name: "Auto Generate" }).click();
+    await expect(page.getByText("Choose the source language. The strategy engine creates that private draft, then queues its private sibling in the other language.")).toBeVisible();
+    await expect(page.getByLabel("Source language")).toBeVisible();
+    await page.getByRole("button", { name: "Close" }).click();
+    await page.getByRole("button", { name: "AI Generate" }).click();
+    await expect(page.getByLabel("Topic")).toBeVisible();
+    await expect(page.getByLabel("Target keyword")).toBeVisible();
+    await expect(page.getByLabel("Additional context")).toBeVisible();
+    await expect(page.getByLabel("Source language")).toBeVisible();
+    await page.getByLabel("Topic").fill("Anxiety treatment options in Naples");
+    await page.getByRole("button", { name: "Generate Draft" }).click();
+    await expect(page.getByText("The Spanish sibling is queued and remains private until separate review and publication.")).toBeVisible();
+    await page.getByRole("dialog", { name: "Edit blog post" }).press("Escape");
     await expect(page.getByText("ES: missing")).toBeVisible();
     await page.getByRole("button", { name: "Generate translation draft" }).click();
     await expect(page.getByRole("button", { name: "Open and review sibling" })).toBeVisible();
+    page.once("dialog", dialog => dialog.accept());
+    await page.getByRole("button", { name: "Refresh sibling from this post" }).click();
+    await expect.poll(() => mocked.translationRequests.length).toBe(2);
+    expect(mocked.translationRequests[1]).toEqual({ refreshDraft: true });
     await page.getByRole("button", { name: "Open and review sibling" }).click();
     await expect(page.locator("#post-title")).toHaveValue("Entender la ansiedad");
     expect(errors).toEqual([]);
