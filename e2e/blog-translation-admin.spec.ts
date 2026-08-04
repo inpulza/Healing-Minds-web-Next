@@ -1,5 +1,30 @@
 import { expect, test, type Page } from "@playwright/test";
 
+const deploymentUrl = process.env.E2E_BASE_URL ? new URL(process.env.E2E_BASE_URL) : null;
+const deploymentOrigin = deploymentUrl?.origin ?? null;
+const protectedPreviewHost = /^(?:healing-minds-psychi-git-[a-z0-9-]+-inpulzasolutions-6847s-projects|healing-minds-psychiatry-nextjs-[a-z0-9]+)\.vercel\.app$/i;
+const previewCredential = deploymentUrl && protectedPreviewHost.test(deploymentUrl.hostname)
+  ? process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+    ? { name: "x-vercel-protection-bypass", value: process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
+    : process.env.VERCEL_OIDC_TOKEN
+      ? { name: "x-vercel-trusted-oidc-idp-token", value: process.env.VERCEL_OIDC_TOKEN }
+      : null
+  : null;
+
+async function authenticateProtectedPreview(page: Page) {
+  if (!deploymentOrigin || !previewCredential) return;
+  await page.route(`${deploymentOrigin}/**`, async route => {
+    const response = await route.fetch({
+      headers: {
+        ...(await route.request().allHeaders()),
+        [previewCredential.name]: previewCredential.value,
+      },
+      maxRedirects: 0,
+    });
+    await route.fulfill({ response });
+  });
+}
+
 const source = {
   id: 11, title: "Understanding anxiety", slug: "understanding-anxiety", language: "en", translationGroupId: "4a6829e5-68cc-4b2a-9c51-19616ec41f8b",
   excerpt: "Educational guide", content: "<p>Educational content.</p>", featuredImage: null, featuredImageAlt: "Calm setting",
@@ -56,6 +81,7 @@ for (const name of ["desktop", "mobile"] as const) {
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+    await authenticateProtectedPreview(page);
     const mocked = await mockAdmin(page);
     await page.goto("/admin/blog");
     await page.getByRole("button", { name: "Auto Generate" }).click();
