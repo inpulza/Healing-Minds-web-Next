@@ -824,13 +824,25 @@ export async function POST(request: NextRequest, context: RouteContext) {
       if (!Number.isInteger(postId) || postId <= 0) return json({ success: false, message: "Invalid blog post id" }, 400);
       const post = await storage.getBlogPostById(postId);
       if (!post) return json({ success: false, message: "Blog post not found" }, 404);
-      if (post.status !== "draft") return json({ success: false, message: "Blog image changes are allowed only while the post is a draft" }, 409);
       const [imageConfig, imageService, images, imageJobs] = await Promise.all([
         import("../../../../../server/blog/images/config"),
         import("../../../../../server/blog/images/service"),
         import("../../../../../server/blog/images/storage"),
         import("../../../../../server/blog/images/job-storage"),
       ]);
+      if (segments.length === 4 && segments[3] === "reconcile-sibling") {
+        const result = await imageService.reconcileBilingualBlogImages(post);
+        const currentPost = await storage.getBlogPostById(postId);
+        return json({
+          success: true,
+          data: {
+            ...result,
+            post: currentPost,
+            images: await images.listBlogPostImages(postId),
+          },
+        });
+      }
+      if (post.status !== "draft") return json({ success: false, message: "Blog image changes are allowed only while the post is a draft" }, 409);
       if (segments.length === 4 && segments[3] === "reuse-sibling") {
         const result = await imageService.reuseSelectedSiblingBlogImages(post);
         const updatedPost = await storage.getBlogPostById(postId);
@@ -931,15 +943,27 @@ export async function POST(request: NextRequest, context: RouteContext) {
       }
       if (segments[4] === "select") {
         const selected = await images.selectBlogPostImage(postId, imageId);
-        return selected
-          ? json({ success: true, data: selected })
-          : json({ success: false, message: "Only completed image variants can be selected" }, 409);
+        if (!selected) return json({ success: false, message: "Only completed image variants can be selected" }, 409);
+        let siblingSync: Awaited<ReturnType<typeof imageService.syncSelectedBlogImagesToDraftSibling>> | null = null;
+        try {
+          const updatedPost = await storage.getBlogPostById(postId);
+          if (updatedPost) siblingSync = await imageService.syncSelectedBlogImagesToDraftSibling(updatedPost);
+        } catch (syncError) {
+          console.error(`Selected blog image ${imageId}, but sibling synchronization must retry:`, syncError);
+        }
+        return json({ success: true, data: selected, siblingSync });
       }
       if (segments[4] === "deselect") {
         const deselected = await images.deselectInlineBlogPostImage(postId, imageId);
-        return deselected
-          ? json({ success: true, data: deselected })
-          : json({ success: false, message: "Only a selected inline image on a draft can be removed from its slot" }, 409);
+        if (!deselected) return json({ success: false, message: "Only a selected inline image on a draft can be removed from its slot" }, 409);
+        let siblingSync: Awaited<ReturnType<typeof imageService.syncSelectedBlogImagesToDraftSibling>> | null = null;
+        try {
+          const updatedPost = await storage.getBlogPostById(postId);
+          if (updatedPost) siblingSync = await imageService.syncSelectedBlogImagesToDraftSibling(updatedPost);
+        } catch (syncError) {
+          console.error(`Deselected blog image ${imageId}, but sibling synchronization must retry:`, syncError);
+        }
+        return json({ success: true, data: deselected, siblingSync });
       }
     }
     return json({ success: false, message: "Admin blog write endpoint not found" }, 404);

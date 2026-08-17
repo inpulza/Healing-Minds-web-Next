@@ -4,7 +4,6 @@ import { useLocation } from '@/lib/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   CheckCircle2,
-  Copy,
   AlertTriangle,
   ExternalLink,
   Eye,
@@ -164,9 +163,12 @@ type BlogTranslationDetail = {
   sibling: BlogPost | null;
 };
 
-type SiblingImageReuseResult = {
+type SiblingImageSyncResult = {
+  status: 'synced' | 'skipped';
+  reason?: 'missing-sibling' | 'published-sibling' | 'already-aligned';
   sourcePostId: number;
-  sourceLanguage: BlogLanguage;
+  sourceLanguage?: BlogLanguage;
+  targetPostId: number | null;
   selected: BlogPostImage[];
   uploadedCopies: number;
   reusedExisting: number;
@@ -692,6 +694,7 @@ export default function BlogAdminPage() {
   const autoGenerateIdempotencyKeyRef = useRef<string | null>(null);
   const previewRequestIdRef = useRef(0);
   const handledImageJobIdRef = useRef<number | null>(null);
+  const reconciledImagePairRef = useRef<string | null>(null);
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [deleteConfirmSlug, setDeleteConfirmSlug] = useState('');
@@ -891,30 +894,42 @@ export default function BlogAdminPage() {
     },
   });
 
-  const reuseSiblingImagesMutation = useMutation({
+  const reconcileSiblingImagesMutation = useMutation({
     mutationFn: async ({ postId }: { postId: number }) => {
-      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/reuse-sibling`);
-      return response.json() as Promise<ApiResponse<SiblingImageReuseResult>>;
+      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/reconcile-sibling`);
+      return response.json() as Promise<ApiResponse<SiblingImageSyncResult>>;
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
         [`/api/admin/blog/posts/${variables.postId}/images`],
         { success: true, data: data.data.images },
       );
-      setForm(current => current ? {
-        ...current,
-        featuredImage: data.data.post.featuredImage || current.featuredImage,
-        featuredImageAlt: data.data.post.featuredImageAlt || current.featuredImageAlt,
-      } : current);
+      if (data.data.targetPostId === variables.postId) {
+        setForm(current => current ? {
+          ...current,
+          featuredImage: data.data.post.featuredImage || current.featuredImage,
+          featuredImageAlt: data.data.post.featuredImageAlt || current.featuredImageAlt,
+        } : current);
+      }
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
-      const sourceLabel = data.data.sourceLanguage === 'en' ? 'English' : 'Spanish';
-      setPairNotice(`Approved ${sourceLabel} images are now copied into this draft for independent review. No new AI image request was sent.`);
+      if (data.data.status === 'synced') {
+        const sourceLabel = data.data.sourceLanguage === 'en' ? 'English' : 'Spanish';
+        setPairNotice(`Approved ${sourceLabel} images were synchronized automatically with the sibling draft. No new AI image request was sent.`);
+      }
       setActionError(null);
     },
     onError: error => {
-      setActionError(error instanceof Error ? error.message : 'Sibling images could not be reused');
+      setActionError(error instanceof Error ? error.message : 'Sibling images could not be synchronized');
     },
   });
+
+  useEffect(() => {
+    if (!editorOpen || !form?.id || !translationSibling || imagesQuery.isLoading) return;
+    const pairKey = [form.id, translationSibling.id].sort((a, b) => a - b).join(':');
+    if (reconciledImagePairRef.current === pairKey || reconcileSiblingImagesMutation.isPending) return;
+    reconciledImagePairRef.current = pairKey;
+    reconcileSiblingImagesMutation.mutate({ postId: form.id });
+  }, [editorOpen, form?.id, translationSibling?.id, imagesQuery.isLoading]);
 
   const regenerateImageMutation = useMutation({
     mutationFn: async ({ postId, imageId }: { postId: number; imageId: number }) => {
@@ -1378,6 +1393,7 @@ export default function BlogAdminPage() {
   };
 
   const openNewPost = () => {
+    reconciledImagePairRef.current = null;
     setForm(createEmptyForm(authors, categories));
     setChecks([]);
     setVerification(null);
@@ -1388,6 +1404,7 @@ export default function BlogAdminPage() {
   };
 
   const openEditPost = (post: BlogPost) => {
+    reconciledImagePairRef.current = null;
     setForm(formFromPost(post));
     setChecks([]);
     setVerification(null);
@@ -2691,25 +2708,11 @@ export default function BlogAdminPage() {
                       </h3>
                       <p className="mt-1 max-w-2xl text-xs leading-relaxed text-slate-600">
                         The current curated hero stays selected until you explicitly choose a completed AI candidate.
-                        Inline images are placed after their saved heading without changing article HTML.
+                        Inline images are placed after their saved heading without changing article HTML. Approved images stay synchronized automatically with a sibling draft, without another AI generation request.
                       </p>
                     </div>
                     {form.id && form.status === 'draft' && (
                       <div className="flex flex-wrap gap-2">
-                        {translationSibling && (
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            disabled={reuseSiblingImagesMutation.isPending || imageJobActive}
-                            onClick={() => reuseSiblingImagesMutation.mutate({ postId: form.id! })}
-                          >
-                            {reuseSiblingImagesMutation.isPending
-                              ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              : <Copy className="mr-2 h-4 w-4" />}
-                            Reuse approved images from {translationSibling.language === 'en' ? 'English' : 'Spanish'}
-                          </Button>
-                        )}
                         <Button
                           type="button"
                           size="sm"
@@ -2788,7 +2791,7 @@ export default function BlogAdminPage() {
                           || selectImageMutation.isPending
                           || deselectImageMutation.isPending
                           || deleteImageMutation.isPending
-                          || reuseSiblingImagesMutation.isPending;
+                          || reconcileSiblingImagesMutation.isPending;
                         return (
                           <article key={image.id} className="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200/70">
                             {image.publicUrl ? (

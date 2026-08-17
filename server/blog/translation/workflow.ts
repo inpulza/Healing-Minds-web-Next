@@ -24,6 +24,10 @@ import {
 } from "../generation/storage";
 import type { JsonObject } from "../generation/types";
 import { buildBlogTranslationLinkMap, preferCuratedTargetLanguageSources } from "./links";
+import {
+  reconcileBilingualBlogImages,
+  syncSelectedBlogImagesToDraftSibling,
+} from "../images/service";
 import { translateBlogPostWithAi } from "./provider";
 import {
   assertBlogTranslationSchemaReady,
@@ -56,7 +60,12 @@ export async function queueBlogTranslation(
   const source = await getBlogPostById(sourcePostId);
   if (!source) throw Object.assign(new Error("Source blog post not found"), { statusCode: 404 });
   const sibling = await getBlogTranslationSibling(source);
-  if (sibling && !options.refreshDraft) return { source, sibling, run: null, created: false };
+  if (sibling && !options.refreshDraft) {
+    await reconcileBilingualBlogImages(source).catch(error => {
+      console.error(`Translation pair ${source.translationGroupId} needs an image synchronization retry:`, error);
+    });
+    return { source, sibling, run: null, created: false };
+  }
   if (options.refreshDraft && sibling?.status !== "draft") {
     throw Object.assign(
       new Error("Only a draft sibling can be refreshed from its source"),
@@ -137,7 +146,11 @@ export async function executePersistedBlogTranslationRun(runId: number): Promise
     }
     const existing = await getBlogTranslationSibling(source);
     if (existing && !refreshDraft) {
-      const response = json({ success: true, post: existing, created: false, sourcePostId, targetLanguage });
+      const imageSync = await syncSelectedBlogImagesToDraftSibling(source).catch(error => {
+        console.error(`Translation pair ${source!.translationGroupId} needs an image synchronization retry:`, error);
+        return { status: "retry-required" as const };
+      });
+      const response = json({ success: true, post: existing, created: false, sourcePostId, targetLanguage, imageSync });
       await completeBlogGenerationRun(runId, { postId: existing.id, result: response });
       await appendBlogGenerationEvent({ runId, eventType: "complete", payload: response });
       return;
@@ -208,13 +221,18 @@ export async function executePersistedBlogTranslationRun(runId: number): Promise
           created: false,
         }
       : await createBlogTranslationSibling(siblingValues, runId);
+    const imageSync = await syncSelectedBlogImagesToDraftSibling(source).catch(error => {
+      console.error(`Translation pair ${source!.translationGroupId} needs an image synchronization retry:`, error);
+      return { status: "retry-required" as const };
+    });
     const response = json({
       success: true,
       sourcePostId,
       post: created.post,
       created: created.created,
       targetLanguage,
-      imagePolicy: source.featuredImage ? "reused-approved-neutral-image" : "no-image-no-automatic-visual-spend",
+      imagePolicy: source.featuredImage ? "approved-images-synchronized-without-generation" : "no-image-no-automatic-visual-spend",
+      imageSync,
       requiresHumanReview: true,
       publication: "independent",
       refreshedFromSource: refreshDraft,
