@@ -71,3 +71,44 @@ ampliaron: una candidata hero distinta aparece automáticamente en el editor del
 otro idioma con estado `candidate`, junto al hero/inline seleccionados, sin
 request a generación. El gate humano sigue intacto y las variantes `rejected`
 no se propagan.
+
+## Endurecimiento posterior a la revisión tardía
+
+PR #28 se integró tras una lectura de Code Review sin hilos, pero ocho minutos
+después apareció una revisión nueva con siete casos límite válidos. El hotfix
+los cubre sin cambiar el contrato editorial:
+
+- Un set solo de candidatos, todavía sin hero elegido, también se sincroniza.
+- Cuando el job de imágenes termina, la pareja abierta se reconcilia de nuevo
+  sin cerrar el editor, pulsar otro botón ni lanzar otra generación.
+- Eliminar una candidata en un draft elimina su copia del sibling draft para
+  que una reconciliación posterior no la resucite.
+- Selecciones y candidatas se registran juntas en una transacción; los Blobs
+  preparados que no llegan a persistirse conservan cleanup seguro.
+- Los Blobs legacy sin checksum se descargan una vez, se verifican con SHA-256
+  y dejan de duplicarse en reconciliaciones sucesivas.
+- Un set autoritativo sin hero limpia también `featuredImage` y su alt anterior.
+- Los slots inline no se renumeran: si sobrevive `inline:2`, sigue siendo
+  `inline:2` y se reancla al segundo heading del idioma destino.
+
+Evidencia local del hotfix: `npm run check` PASS; 135/135 tests PASS;
+`db:verify` y `blog:image-check` PASS; build Next PASS con 87 páginas y budgets
+669.5/750 KiB y 778.4/850 KiB; Playwright focalizado 6 PASS/6 skips cruzados en
+Desktop Chrome y Pixel 7, incluyendo reconciliación automática al completar el
+job, EN→ES y ES→EN; `git diff --check` PASS.
+
+Preview del hotfix: PR draft #29, deployment Vercel
+`dpl_48oxLAoEYsCAh4Lq6rSF5egpCg4r` READY sobre el SHA exacto
+`db7f4c698a57ea66e3231d85b153cec6bca7bf68`. El E2E desplegado repitió los
+tres recorridos en Desktop Chrome y Pixel 7: 6 PASS/6 skips cruzados, cero
+errores inesperados. La autenticación del Preview usó OIDC efímero sin leer,
+imprimir ni persistir el token.
+
+Code Review de PR #29 sobre `b2b43ac955`: 4 hallazgos válidos, 0 inválidos,
+0 ya resueltos, 0 no aplicables y 0 que requieran decisión. Se corrigieron la
+portada nula retenida en el formulario, el job terminal solapado con otra
+reconciliación, la descarga innecesaria de una fila rechazada cuyo Blob ya no
+existe y la reutilización de una misma fila target ante colisión de checksum.
+El gate local posterior quedó en TypeScript PASS, 135/135 tests, `db:verify`,
+image guards y build PASS; Playwright focalizado 12 PASS/12 skips cruzados en
+Desktop Chrome y Pixel 7, con los cuatro casos de revisión reproducidos.

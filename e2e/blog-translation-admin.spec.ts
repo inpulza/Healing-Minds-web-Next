@@ -40,7 +40,7 @@ const sourceImages = [
   {
     id: 103, postId: 11, role: "hero", slot: "hero", anchorHeading: null, source: "ai", generationStatus: "completed", reviewStatus: "candidate",
     objectKey: "blog-images/posts/post-11-hero-1700000000000-eeeeeeeeeeee.webp", publicUrl: "/public-objects/blog-images/posts/post-11-hero-1700000000000-eeeeeeeeeeee.webp", mimeType: "image/webp",
-    width: 1536, height: 1024, bytes: 1234, checksum: "e".repeat(64), alt: "Alternative calm setting", caption: null, model: "gpt-image-2", imageJobId: 1, errorMessage: null, sortOrder: 0, createdAt: new Date().toISOString(),
+    width: 1536, height: 1024, bytes: 1234, checksum: "a".repeat(64), alt: "Alternative calm setting", caption: null, model: "gpt-image-2", imageJobId: 1, errorMessage: null, sortOrder: 0, createdAt: new Date().toISOString(),
   },
 ];
 const initialSiblingImages = [{
@@ -56,13 +56,32 @@ const reusedSiblingImages = sourceImages.map((image, index) => ({
   anchorHeading: image.role === "inline" ? "Lo que pueden esperar los pacientes" : null,
 }));
 
-async function mockAdmin(page: Page) {
-  let ready = false;
+type MockImageJob = {
+  id: number;
+  postId: number;
+  status: "queued" | "completed";
+  operation: "generate_set";
+  role: "all";
+  result: Record<string, number>;
+};
+
+async function mockAdmin(
+  page: Page,
+  options: {
+    allowImageGeneration?: boolean;
+    initialPairReady?: boolean;
+    reconcileDelayMs?: number;
+    removeHeroOnReconcile?: boolean;
+  } = {},
+) {
+  let ready = Boolean(options.initialPairReady);
   let imagesReused = false;
+  let generatedJob: MockImageJob | null = null;
   const translationRequests: unknown[] = [];
   const reconcileRequests: number[] = [];
   const imageGenerationRequests: string[] = [];
   const saveRequests: unknown[] = [];
+  const deletedImageRequests: number[] = [];
   await page.route("**/favicon.ico", route => route.fulfill({ status: 204, body: "" }));
   await page.route("**/public-objects/blog-images/**", route => route.fulfill({
     status: 200,
@@ -81,6 +100,17 @@ async function mockAdmin(page: Page) {
     const reply = (body: unknown, status = 200) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) });
     if (request.method() === "POST" && /\/images\/(generate|\d+\/regenerate)$/.test(path)) {
       imageGenerationRequests.push(path);
+      if (options.allowImageGeneration) {
+        generatedJob = {
+          id: 99,
+          postId: 22,
+          status: "queued",
+          operation: "generate_set",
+          role: "all",
+          result: { total: 3, completed: 0, failed: 0, pending: 3, generating: 0 },
+        };
+        return reply({ success: true, data: generatedJob }, 202);
+      }
       return reply({ success: false, message: "Unexpected image generation request" }, 500);
     }
     if (path === "/api/admin/session") return reply({ authenticated: true });
@@ -108,16 +138,43 @@ async function mockAdmin(page: Page) {
       return reply({ success: true, data: { source: sibling, sibling: source } });
     }
     if (path === "/api/admin/blog/posts/22/images" && request.method() === "GET") {
-      return reply({ success: true, data: imagesReused ? reusedSiblingImages : initialSiblingImages });
+      const synchronizedImages = options.removeHeroOnReconcile
+        ? reusedSiblingImages.filter(image => image.reviewStatus === "candidate")
+        : reusedSiblingImages;
+      return reply({
+        success: true,
+        data: (imagesReused ? synchronizedImages : initialSiblingImages)
+          .filter(image => !deletedImageRequests.includes(image.id)),
+      });
     }
     if (path === "/api/admin/blog/posts/22/images/job" && request.method() === "GET") {
+      if (generatedJob) {
+        generatedJob = {
+          ...generatedJob,
+          status: "completed",
+          result: { total: 3, completed: 3, failed: 0, pending: 0, generating: 0 },
+        };
+        return reply({ success: true, data: generatedJob });
+      }
       return reply({ success: true, data: null });
     }
     if (path === "/api/admin/blog/posts/22/images/reconcile-sibling" && request.method() === "POST") {
       reconcileRequests.push(22);
+      if (options.reconcileDelayMs) {
+        await new Promise(resolve => setTimeout(resolve, options.reconcileDelayMs));
+      }
       imagesReused = true;
-      const updated = { ...sibling, featuredImage: reusedSiblingImages[0].publicUrl, featuredImageAlt: reusedSiblingImages[0].alt };
-      return reply({ success: true, data: { status: "synced", sourcePostId: 11, sourceLanguage: "en", targetPostId: 22, selected: reusedSiblingImages.filter(image => image.reviewStatus === "selected"), candidates: reusedSiblingImages.filter(image => image.reviewStatus === "candidate"), uploadedCopies: 3, reusedExisting: 0, post: updated, images: reusedSiblingImages } });
+      const synchronizedImages = options.removeHeroOnReconcile
+        ? reusedSiblingImages.filter(image => image.reviewStatus === "candidate")
+        : reusedSiblingImages;
+      const updated = options.removeHeroOnReconcile
+        ? { ...sibling, featuredImage: null, featuredImageAlt: null }
+        : { ...sibling, featuredImage: reusedSiblingImages[0].publicUrl, featuredImageAlt: reusedSiblingImages[0].alt };
+      return reply({ success: true, data: { status: "synced", sourcePostId: 11, sourceLanguage: "en", targetPostId: 22, selected: synchronizedImages.filter(image => image.reviewStatus === "selected"), candidates: synchronizedImages.filter(image => image.reviewStatus === "candidate"), uploadedCopies: synchronizedImages.length, reusedExisting: 0, post: updated, images: synchronizedImages } });
+    }
+    if (/^\/api\/admin\/blog\/posts\/22\/images\/\d+$/.test(path) && request.method() === "DELETE") {
+      deletedImageRequests.push(Number(path.split("/").at(-1)));
+      return reply({ success: true });
     }
     if (path === "/api/admin/blog/posts/22" && request.method() === "PUT") {
       const requestBody = request.postDataJSON();
@@ -132,10 +189,74 @@ async function mockAdmin(page: Page) {
     if (path.endsWith("/authors")) return reply({ success: true, data: [source.author] });
     if (path.endsWith("/categories")) return reply({ success: true, data: [source.category, sibling.category] });
     if (path.endsWith("/tags")) return reply({ success: true, data: [] });
-    if (path.endsWith("/images/config")) return reply({ success: true, data: { enabled: false, storage: "not-configured", model: "test" } });
+    if (path.endsWith("/images/config")) return reply({ success: true, data: { enabled: Boolean(options.allowImageGeneration), storage: "vercel-blob", model: "test" } });
     return reply({ success: true, data: [] });
   });
-  return { translationRequests, reconcileRequests, imageGenerationRequests, saveRequests };
+  return { translationRequests, reconcileRequests, imageGenerationRequests, saveRequests, deletedImageRequests };
+}
+
+for (const name of ["desktop", "mobile"] as const) {
+  test(`a completed image job resynchronizes the open bilingual pair on ${name}`, async ({ page }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith(name), `Covered by ${name} project`);
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.message));
+    page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+    page.on("response", response => {
+      const path = new URL(response.url()).pathname;
+      if (path.startsWith("/api/admin/") && response.status() >= 400) errors.push(`${response.status()} ${path}`);
+    });
+    await authenticateProtectedPreview(page);
+    const mocked = await mockAdmin(page, { allowImageGeneration: true, initialPairReady: true });
+    await page.goto("/admin/blog");
+    await page.getByRole("button", { name: "Open and review sibling" }).click();
+    await expect.poll(() => mocked.reconcileRequests).toEqual([22]);
+    await page.getByRole("button", { name: "Generate set" }).click();
+    await expect.poll(() => mocked.imageGenerationRequests.length).toBe(1);
+    await expect.poll(() => mocked.reconcileRequests, { timeout: 8_000 }).toEqual([22, 22]);
+    expect(errors).toEqual([]);
+  });
+
+  test(`a terminal image job waits for an overlapping reconciliation on ${name}`, async ({ page }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith(name), `Covered by ${name} project`);
+    await authenticateProtectedPreview(page);
+    const mocked = await mockAdmin(page, {
+      allowImageGeneration: true,
+      initialPairReady: true,
+      reconcileDelayMs: 2_000,
+    });
+    await page.goto("/admin/blog");
+    await page.getByRole("button", { name: "Open and review sibling" }).click();
+    await expect.poll(() => mocked.reconcileRequests).toEqual([22]);
+    await page.getByRole("button", { name: "Generate set" }).click();
+    await expect.poll(() => mocked.imageGenerationRequests.length).toBe(1);
+    await expect.poll(() => mocked.reconcileRequests, { timeout: 12_000 }).toEqual([22, 22]);
+  });
+
+  test(`authoritative hero removal stays cleared after saving on ${name}`, async ({ page }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith(name), `Covered by ${name} project`);
+    await authenticateProtectedPreview(page);
+    const mocked = await mockAdmin(page, { initialPairReady: true, removeHeroOnReconcile: true });
+    await page.goto("/admin/blog");
+    await page.getByRole("button", { name: "Open and review sibling" }).click();
+    await expect(page.getByLabel("Featured image URL")).toHaveValue("");
+    await page.getByRole("button", { name: "Save draft" }).click();
+    await expect.poll(() => mocked.saveRequests.length).toBe(1);
+    expect(mocked.saveRequests[0]).toMatchObject({ featuredImage: null, featuredImageAlt: null });
+  });
+
+  test(`deleting a bilingual candidate removes it without regeneration on ${name}`, async ({ page }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith(name), `Covered by ${name} project`);
+    await authenticateProtectedPreview(page);
+    const mocked = await mockAdmin(page, { initialPairReady: true });
+    await page.goto("/admin/blog");
+    await page.getByRole("button", { name: "Open and review sibling" }).click();
+    await expect(page.getByRole("button", { name: "Delete" })).toHaveCount(1);
+    page.once("dialog", dialog => dialog.accept());
+    await page.getByRole("button", { name: "Delete" }).click();
+    await expect.poll(() => mocked.deletedImageRequests).toEqual([303]);
+    await expect(page.getByRole("button", { name: "Delete" })).toHaveCount(0);
+    expect(mocked.imageGenerationRequests).toEqual([]);
+  });
 }
 
 async function mockSpanishFirstPair(page: Page) {

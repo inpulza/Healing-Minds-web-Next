@@ -862,12 +862,6 @@ export default function BlogAdminPage() {
     queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
   };
 
-  useEffect(() => {
-    if (!imageJob || imageJobActive || handledImageJobIdRef.current === imageJob.id) return;
-    handledImageJobIdRef.current = imageJob.id;
-    refreshImages(imageJob.postId);
-  }, [imageJob?.id, imageJob?.postId, imageJob?.status, imageJobActive]);
-
   const generateImagesMutation = useMutation({
     mutationFn: async ({ postId, role }: { postId: number; role: 'hero' | 'inline' | 'all' }) => {
       const response = await apiRequest(
@@ -908,8 +902,8 @@ export default function BlogAdminPage() {
       if (data.data.targetPostId === variables.postId) {
         setForm(current => current ? {
           ...current,
-          featuredImage: data.data.post.featuredImage || current.featuredImage,
-          featuredImageAlt: data.data.post.featuredImageAlt || current.featuredImageAlt,
+          featuredImage: data.data.post.featuredImage ?? '',
+          featuredImageAlt: data.data.post.featuredImageAlt ?? '',
         } : current);
       }
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
@@ -923,6 +917,33 @@ export default function BlogAdminPage() {
       setActionError(error instanceof Error ? error.message : 'Sibling images could not be synchronized');
     },
   });
+
+  useEffect(() => {
+    if (!imageJob || imageJobActive || handledImageJobIdRef.current === imageJob.id) return;
+    const hasOpenSiblingPair = Boolean(
+      editorOpen
+      && form?.id === imageJob.postId
+      && translationSibling,
+    );
+    if (hasOpenSiblingPair && reconcileSiblingImagesMutation.isPending) return;
+    handledImageJobIdRef.current = imageJob.id;
+    refreshImages(imageJob.postId);
+    reconciledImagePairRef.current = null;
+    if (hasOpenSiblingPair && form?.id && translationSibling) {
+      const pairKey = [form.id, translationSibling.id].sort((a, b) => a - b).join(':');
+      reconciledImagePairRef.current = pairKey;
+      reconcileSiblingImagesMutation.mutate({ postId: imageJob.postId });
+    }
+  }, [
+    imageJob?.id,
+    imageJob?.postId,
+    imageJob?.status,
+    imageJobActive,
+    editorOpen,
+    form?.id,
+    translationSibling?.id,
+    reconcileSiblingImagesMutation.isPending,
+  ]);
 
   useEffect(() => {
     if (!editorOpen || !form?.id || !translationSibling || imagesQuery.isLoading) return;
