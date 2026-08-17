@@ -96,3 +96,10 @@ Evidencia local del hotfix: `npm run check` PASS; 135/135 tests PASS;
 669.5/750 KiB y 778.4/850 KiB; Playwright focalizado 6 PASS/6 skips cruzados en
 Desktop Chrome y Pixel 7, incluyendo reconciliación automática al completar el
 job, EN→ES y ES→EN; `git diff --check` PASS.
+
+Preview del hotfix: PR draft #29, deployment Vercel
+`dpl_48oxLAoEYsCAh4Lq6rSF5egpCg4r` READY sobre el SHA exacto
+`db7f4c698a57ea66e3231d85b153cec6bca7bf68`. El E2E desplegado repitió los
+tres recorridos en Desktop Chrome y Pixel 7: 6 PASS/6 skips cruzados, cero
+errores inesperados. La autenticación del Preview usó OIDC efímero sin leer,
+imprimir ni persistir el token.

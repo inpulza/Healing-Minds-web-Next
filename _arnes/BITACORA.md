@@ -878,3 +878,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Crear PR hotfix, verificar Preview por SHA exacto, esperar la revisión tardía y solo integrar si Quality, E2E y todos los hilos quedan limpios.
 **Archivos tocados:** storage/servicio de imágenes, editor admin, E2E y contrato unitario, decisiones, evidencia y bitácora.
 **Evidencia local:** TypeScript PASS; prueba focalizada 4/4 PASS; suite completa 135/135 PASS; `db:verify` 5 migraciones/112 statements/20 tablas/23 FKs PASS; image guards PASS; build 87 páginas y budgets 669.5/750 KiB + 778.4/850 KiB PASS; Playwright focalizado 6 PASS/6 skips deliberados por perfil en Desktop Chrome y Pixel 7, sin errores inesperados; `git diff --check` PASS.
+
+## 2026-08-17 Codex - Preview exacto del hotfix PR #29
+**Qué se hizo:** La rama del hotfix se publicó como PR draft #29. Vercel construyó el SHA exacto `db7f4c698a57ea66e3231d85b153cec6bca7bf68` en el proyecto/equipo oficiales y el recorrido bilingüe completo se repitió sobre ese Preview protegido.
+**Decisiones:** El token OIDC fue efímero y limitado a la ejecución; no se leyó, imprimió ni persistió. El PR continúa draft hasta registrar esta evidencia, repetir el Preview sobre el HEAD documental y completar Quality y Code Review, incluida una espera suficiente para revisiones tardías.
+**Pendientes/bugs:** Push documental final, nuevo Preview por SHA, E2E desplegado, marcar ready y cerrar todos los hilos antes de integrar.
+**Archivos tocados:** bitácora y evidencia.
+**Evidencia:** deployment `dpl_48oxLAoEYsCAh4Lq6rSF5egpCg4r` READY, Preview, proyecto `healing-minds-psychiatry-nextjs`, equipo `inpulzasolutions-6847s-projects`, rama `fix/bilingual-image-sync-review`, creador Vercel `inpulzasolutions-6847`; Playwright desplegado 6 PASS/6 skips cruzados en Desktop Chrome y Pixel 7, sin errores inesperados y con comprobación de SHA exacto.
