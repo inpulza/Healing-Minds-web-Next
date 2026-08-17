@@ -855,3 +855,11 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Crear PR draft, esperar Preview del SHA exacto, correr el E2E desplegado y clasificar cada nota de Code Review antes de cualquier merge. No se hizo deploy ni se cambió Vercel/Neon.
 **Archivos tocados:** servicio/storage/rutas de imágenes Next y legacy, workflow de traducción, admin UI, unitarios/E2E, metodología bilingüe/visual, decisiones, evidencia y bitácora.
 **Evidencia:** TypeScript PASS; 135/135 unitarios PASS; `db:verify` 5 migraciones/112 statements/20 tablas/23 FKs PASS; image guard PASS; build 87 páginas y budgets 669.5/750 KiB + 778.4/850 KiB PASS; Playwright focalizado 4 PASS/4 skips y matriz completa 80 PASS/10 skips en Desktop Chrome y Pixel 7, sin fallos ni requests inesperadas de generación; `git diff --check` PASS.
+
+## 2026-08-17 Codex - Preview y Code Review inicial del PR #28
+**Qué se hizo:** Se publicó la rama `fix/bilingual-image-auto-sync` como PR draft #28. Vercel construyó el Preview del SHA `40d472202b61b3c6b22db158ea228e1bf1e13001` en el proyecto y equipo oficiales. El primer E2E desplegado fue redirigido al login de Vercel porque no había credencial local; se repitió con un token OIDC efímero emitido por el proyecto y el recorrido bilingüe pasó.
+**Clasificación Code Review:** 0 notas válidas, 0 inválidas, 0 ya resueltas, 0 no aplicables y 0 que requieran decisión. Solo existía el comentario operativo de Vercel.
+**Decisiones:** Un redirect de Deployment Protection no se presenta como fallo de la app. No se descargó, leyó ni imprimió ningún secreto y no se cambió ninguna variable; el token efímero solo vivió en el proceso de prueba.
+**Pendientes/bugs:** Este registro documental crea un nuevo HEAD; repetir Preview por SHA exacto, E2E desplegado y lectura completa de Code Review antes del cierre. No mergear ni promover a Production.
+**Archivos tocados:** bitácora.
+**Evidencia:** Vercel deployment `dpl_CS3oGb6ATX6c4VbKHynywoZQ3X5D` READY, Preview, proyecto `healing-minds-psychiatry-nextjs`, equipo `inpulzasolutions-6847s-projects`, SHA exacto `40d4722`; E2E desplegado 4 PASS/4 skips en Desktop Chrome y Pixel 7, sin errores inesperados después del bypass OIDC seguro.

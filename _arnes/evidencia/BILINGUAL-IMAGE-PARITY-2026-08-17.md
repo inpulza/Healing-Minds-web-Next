@@ -51,6 +51,12 @@ Fecha: 2026-08-17
   metadata legacy normalizada y cero errores de página/consola/API.
 - Playwright completo: 80 PASS, 10 skips deliberados por perfil, 0 fallos.
 - `git diff --check`: PASS antes del gate remoto.
+- PR draft #28, Preview Vercel `READY` sobre el SHA exacto `40d4722` y E2E
+  desplegado focalizado: 4 PASS/4 skips cruzados en Desktop Chrome y Pixel 7.
+  Deployment Protection rechazó correctamente la corrida sin credencial; la
+  repetición usó OIDC efímero sin leer, imprimir ni persistir el token.
+- Code Review inicial: 0 hilos y 0 hallazgos accionables; solo comentario
+  operativo de Vercel.
 
 No se leyó ni imprimió ningún secreto. No se modificó Vercel, Neon, Production
 ni el dominio.
