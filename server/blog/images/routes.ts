@@ -7,8 +7,10 @@ import {
   createPersistedBlogImageSetJob,
   deleteBlogImageVariant,
   executePersistedBlogImageGenerationJob,
+  reconcileBilingualBlogImages,
   recoverPersistedBlogImageGenerationJob,
   reuseSelectedSiblingBlogImages,
+  syncSelectedBlogImagesToDraftSibling,
 } from "./service";
 import {
   admitBlogImageGenerationJob,
@@ -172,6 +174,26 @@ export function registerBlogImageRoutes(app: Express): void {
     }
   });
 
+  app.post("/api/admin/blog/posts/:postId/images/reconcile-sibling", async (req, res) => {
+    const postId = parsePositiveId(req.params.postId);
+    if (!postId) return res.status(400).json({ success: false, message: "Invalid blog post id" });
+    try {
+      const post = await getBlogPostById(postId);
+      if (!post) return res.status(404).json({ success: false, message: "Blog post not found" });
+      const result = await reconcileBilingualBlogImages(post);
+      res.status(200).json({
+        success: true,
+        data: {
+          ...result,
+          post: await getBlogPostById(postId),
+          images: await listBlogPostImages(postId),
+        },
+      });
+    } catch (error) {
+      sendImageError(res, error);
+    }
+  });
+
   app.post("/api/admin/blog/posts/:postId/images/:imageId/regenerate", async (req, res) => {
     const postId = parsePositiveId(req.params.postId);
     const imageId = parsePositiveId(req.params.imageId);
@@ -221,7 +243,14 @@ export function registerBlogImageRoutes(app: Express): void {
       if (!selected) {
         return res.status(409).json({ success: false, message: "Only completed image variants can be selected" });
       }
-      res.status(200).json({ success: true, data: selected });
+      let siblingSync = null;
+      try {
+        const updatedPost = await getBlogPostById(postId);
+        if (updatedPost) siblingSync = await syncSelectedBlogImagesToDraftSibling(updatedPost);
+      } catch (syncError) {
+        console.error(`Selected blog image ${imageId}, but sibling synchronization must retry:`, syncError);
+      }
+      res.status(200).json({ success: true, data: selected, siblingSync });
     } catch (error) {
       sendImageError(res, error);
     }
@@ -240,7 +269,14 @@ export function registerBlogImageRoutes(app: Express): void {
           message: "Only a selected inline image on a draft can be removed from its slot",
         });
       }
-      res.status(200).json({ success: true, data: deselected });
+      let siblingSync = null;
+      try {
+        const updatedPost = await getBlogPostById(postId);
+        if (updatedPost) siblingSync = await syncSelectedBlogImagesToDraftSibling(updatedPost);
+      } catch (syncError) {
+        console.error(`Deselected blog image ${imageId}, but sibling synchronization must retry:`, syncError);
+      }
+      res.status(200).json({ success: true, data: deselected, siblingSync });
     } catch (error) {
       sendImageError(res, error);
     }

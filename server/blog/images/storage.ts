@@ -153,6 +153,7 @@ export async function replaceSelectedDraftBlogImages(input: {
   postId: number;
   expectedUpdatedAt: Date;
   selections: DraftBlogImageSelection[];
+  authoritative?: boolean;
 }): Promise<BlogPostImage[]> {
   if (input.selections.length === 0) return [];
   if (new Set(input.selections.map(selection => selection.slot)).size !== input.selections.length) {
@@ -178,19 +179,31 @@ export async function replaceSelectedDraftBlogImages(input: {
       );
     }
 
-    const selected: BlogPostImage[] = [];
-    for (const selection of input.selections) {
-      if (Boolean(selection.existingImageId) === Boolean(selection.values)) {
-        throw Object.assign(new Error("Sibling image reuse selection is invalid"), { statusCode: 400 });
-      }
+    if (input.authoritative) {
       await tx
         .update(blogPostImages)
         .set({ reviewStatus: "candidate", updatedAt: new Date() })
         .where(and(
           eq(blogPostImages.postId, input.postId),
-          eq(blogPostImages.slot, selection.slot),
           eq(blogPostImages.reviewStatus, "selected"),
         ));
+    }
+
+    const selected: BlogPostImage[] = [];
+    for (const selection of input.selections) {
+      if (Boolean(selection.existingImageId) === Boolean(selection.values)) {
+        throw Object.assign(new Error("Sibling image reuse selection is invalid"), { statusCode: 400 });
+      }
+      if (!input.authoritative) {
+        await tx
+          .update(blogPostImages)
+          .set({ reviewStatus: "candidate", updatedAt: new Date() })
+          .where(and(
+            eq(blogPostImages.postId, input.postId),
+            eq(blogPostImages.slot, selection.slot),
+            eq(blogPostImages.reviewStatus, "selected"),
+          ));
+      }
 
       if (selection.existingImageId) {
         const [updated] = await tx

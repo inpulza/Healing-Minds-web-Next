@@ -33,6 +33,7 @@ import {
   queueBlogImageCleanup,
   replaceSelectedDraftBlogImages,
   updateBlogPostImage,
+  updateDraftBlogPostImage,
 } from "./storage";
 import {
   deleteBlogImageObject,
@@ -112,11 +113,13 @@ export type BlogSiblingImageReuseResult = {
   sourcePostId: number;
   sourceLanguage: "en" | "es";
   selected: BlogPostImage[];
+  candidates: BlogPostImage[];
   uploadedCopies: number;
   reusedExisting: number;
 };
 
-export async function reuseSelectedSiblingBlogImages(
+async function copyAvailableBlogImages(
+  source: BlogPostWithRelations,
   target: BlogPostWithRelations,
 ): Promise<BlogSiblingImageReuseResult> {
   if (target.status !== "draft") {
@@ -124,29 +127,28 @@ export async function reuseSelectedSiblingBlogImages(
       statusCode: 409,
     });
   }
-  const sibling = await getBlogTranslationSibling(target);
-  if (!sibling) {
-    throw Object.assign(new Error("This draft does not have a translation sibling yet"), { statusCode: 409 });
-  }
-
   const [selectedSourceImages, allSourceImages, targetImages] = await Promise.all([
-    getSelectedBlogPostImages(sibling.id),
-    listBlogPostImages(sibling.id),
+    getSelectedBlogPostImages(source.id),
+    listBlogPostImages(source.id),
     listBlogPostImages(target.id),
   ]);
   const reusable = selectedSourceImages.filter(image => image.publicUrl && image.generationStatus === "completed");
-  if (!reusable.some(image => image.role === "hero") && sibling.featuredImage) {
+  const candidateSourceImages = allSourceImages.filter(image =>
+    image.reviewStatus === "candidate"
+    && image.generationStatus === "completed"
+    && image.publicUrl);
+  if (!reusable.some(image => image.role === "hero") && source.featuredImage) {
     const registeredHero = allSourceImages.find(image =>
       image.role === "hero"
-      && image.publicUrl === sibling.featuredImage
+      && image.publicUrl === source.featuredImage
       && image.generationStatus === "completed");
     if (registeredHero) reusable.unshift(registeredHero);
   }
 
   const hero = reusable.find(image => image.role === "hero") || null;
   const inline = reusable.filter(image => image.role === "inline").slice(0, 2);
-  if (!hero && inline.length === 0 && !sibling.featuredImage) {
-    throw Object.assign(new Error("The translation sibling has no approved images to reuse"), { statusCode: 409 });
+  if (!hero && inline.length === 0 && !source.featuredImage) {
+    throw Object.assign(new Error("The source post has no approved images to synchronize"), { statusCode: 409 });
   }
 
   const targetAnchors = getInlineImageAnchors(target.content || "", inline.length);
@@ -157,13 +159,13 @@ export async function reuseSelectedSiblingBlogImages(
     anchorHeading: string | null;
     publicUrl: string;
   }> = [];
-  if (hero?.publicUrl || sibling.featuredImage) {
+  if (hero?.publicUrl || source.featuredImage) {
     sources.push({
       image: hero,
       role: "hero",
       slot: "hero",
       anchorHeading: null,
-      publicUrl: hero?.publicUrl || sibling.featuredImage!,
+      publicUrl: hero?.publicUrl || source.featuredImage!,
     });
   }
   inline.forEach((image, index) => {
@@ -179,6 +181,7 @@ export async function reuseSelectedSiblingBlogImages(
 
   const selections: Parameters<typeof replaceSelectedDraftBlogImages>[0]["selections"] = [];
   const uploadedObjectKeys: string[] = [];
+  let uploadedCopies = 0;
   let reusedExisting = 0;
   try {
     for (const source of sources) {
@@ -318,18 +321,280 @@ export async function reuseSelectedSiblingBlogImages(
       postId: target.id,
       expectedUpdatedAt: target.updatedAt,
       selections,
+      authoritative: true,
     });
+    uploadedCopies += uploadedObjectKeys.length;
+    uploadedObjectKeys.length = 0;
+
+    const candidates: BlogPostImage[] = [];
+    const refreshedTargetImages = await listBlogPostImages(target.id);
+    const allTargetAnchors = getInlineImageAnchors(target.content || "", 2);
+    for (const sourceImage of candidateSourceImages) {
+      const anchorIndex = sourceImage.role === "inline"
+        ? Math.max(0, (Number(sourceImage.slot.split(":")[1]) || 1) - 1)
+        : -1;
+      const anchorHeading = sourceImage.role === "inline"
+        ? allTargetAnchors[anchorIndex] || null
+        : null;
+      const alt = buildBlogImageAlt(target, sourceImage.role, anchorHeading);
+      const caption = buildBlogImageCaption(target, sourceImage.role, anchorHeading);
+      const existing = refreshedTargetImages.find(image =>
+        image.slot === sourceImage.slot
+        && image.generationStatus === "completed"
+        && image.publicUrl
+        && (sourceImage.checksum
+          ? image.checksum === sourceImage.checksum
+          : image.publicUrl === sourceImage.publicUrl));
+      if (existing) {
+        reusedExisting += 1;
+        const updated = await updateDraftBlogPostImage(target.id, existing.id, {
+          role: sourceImage.role,
+          anchorHeading,
+          alt,
+          caption,
+          sortOrder: sourceImage.sortOrder,
+        });
+        candidates.push(updated || existing);
+        continue;
+      }
+
+      const managed = isManagedBlogImagePublicUrl(sourceImage.publicUrl!);
+      if (sourceImage.source === "ai" && !managed) {
+        throw Object.assign(
+          new Error("The sibling AI image candidate is not in managed Vercel Blob storage and cannot be copied safely"),
+          { statusCode: 409 },
+        );
+      }
+
+      let objectKey: string | null = null;
+      let publicUrl = sourceImage.publicUrl!;
+      let bytesLength = sourceImage.bytes;
+      let checksum = sourceImage.checksum;
+      if (managed) {
+        const sourceObjectKey = sourceImage.objectKey
+          || sourceImage.publicUrl!.slice("/public-objects/".length);
+        const bytes = await downloadBlogImage(sourceObjectKey);
+        checksum = checksum || crypto.createHash("sha256").update(bytes).digest("hex");
+        objectKey = buildObjectKey(target.id, sourceImage.role, sourceImage.slot);
+        await uploadBlogImage(objectKey, bytes);
+        uploadedObjectKeys.push(objectKey);
+        publicUrl = getManagedBlogImagePublicUrl(objectKey);
+        bytesLength = bytes.length;
+      }
+
+      const created = await createDraftBlogPostImage({
+        postId: target.id,
+        role: sourceImage.role,
+        slot: sourceImage.slot,
+        anchorHeading,
+        source: sourceImage.source,
+        generationStatus: "completed",
+        reviewStatus: "candidate",
+        objectKey,
+        publicUrl,
+        mimeType: sourceImage.mimeType,
+        width: sourceImage.width,
+        height: sourceImage.height,
+        bytes: bytesLength,
+        checksum,
+        alt,
+        caption,
+        safeVisualBrief: sourceImage.safeVisualBrief,
+        prompt: sourceImage.prompt,
+        promptVersion: sourceImage.promptVersion,
+        provider: sourceImage.provider,
+        model: sourceImage.model,
+        generationRunId: null,
+        imageJobId: null,
+        startedAt: sourceImage.startedAt,
+        completedAt: new Date(),
+        durationMs: sourceImage.durationMs,
+        errorCode: null,
+        errorMessage: null,
+        sortOrder: sourceImage.sortOrder,
+      });
+      if (objectKey) {
+        uploadedCopies += 1;
+        const cleanupIndex = uploadedObjectKeys.indexOf(objectKey);
+        if (cleanupIndex >= 0) uploadedObjectKeys.splice(cleanupIndex, 1);
+      }
+      candidates.push(created);
+      refreshedTargetImages.push(created);
+    }
     return {
-      sourcePostId: sibling.id,
-      sourceLanguage: sibling.language === "es" ? "es" : "en",
+      sourcePostId: source.id,
+      sourceLanguage: source.language === "es" ? "es" : "en",
       selected,
-      uploadedCopies: uploadedObjectKeys.length,
+      candidates,
+      uploadedCopies,
       reusedExisting,
     };
   } catch (error) {
     await cleanupUnregisteredSiblingCopies(uploadedObjectKeys);
     throw error;
   }
+}
+
+export async function reuseSelectedSiblingBlogImages(
+  target: BlogPostWithRelations,
+): Promise<BlogSiblingImageReuseResult> {
+  const sibling = await getBlogTranslationSibling(target);
+  if (!sibling) {
+    throw Object.assign(new Error("This draft does not have a translation sibling yet"), { statusCode: 409 });
+  }
+  return copyAvailableBlogImages(sibling, target);
+}
+
+export type BlogSiblingImageSyncResult =
+  | ({ status: "synced"; targetPostId: number } & BlogSiblingImageReuseResult)
+  | {
+      status: "skipped";
+      reason: "missing-sibling" | "published-sibling" | "already-aligned";
+      sourcePostId: number;
+      targetPostId: number | null;
+      selected: BlogPostImage[];
+      candidates: BlogPostImage[];
+      uploadedCopies: 0;
+      reusedExisting: 0;
+    };
+
+function imageIdentity(image: BlogPostImage): string {
+  return `${image.slot}:${image.checksum || image.publicUrl || "missing"}`;
+}
+
+function availableImagePriority(images: BlogPostImage[]): number {
+  const completed = images.filter(image =>
+    image.reviewStatus !== "rejected"
+    && image.generationStatus === "completed"
+    && image.publicUrl);
+  const selectedCount = completed.filter(image => image.reviewStatus === "selected").length;
+  const inlineCount = completed.filter(image => image.role === "inline").length;
+  const aiCount = completed.filter(image => image.source === "ai").length;
+  const heroCount = completed.some(image => image.role === "hero") ? 1 : 0;
+  return selectedCount * 10_000 + completed.length * 1_000 + inlineCount * 100 + aiCount * 10 + heroCount;
+}
+
+function availableImageSignature(images: BlogPostImage[]): string {
+  return images
+    .filter(image =>
+      image.reviewStatus !== "rejected"
+      && image.generationStatus === "completed"
+      && image.publicUrl)
+    .map(image => `${image.reviewStatus}:${imageIdentity(image)}`)
+    .sort()
+    .join("|");
+}
+
+export async function syncSelectedBlogImagesToDraftSibling(
+  source: BlogPostWithRelations,
+): Promise<BlogSiblingImageSyncResult> {
+  const sibling = await getBlogTranslationSibling(source);
+  if (!sibling) {
+    return {
+      status: "skipped",
+      reason: "missing-sibling",
+      sourcePostId: source.id,
+      targetPostId: null,
+      selected: [],
+      candidates: [],
+      uploadedCopies: 0,
+      reusedExisting: 0,
+    };
+  }
+  if (sibling.status !== "draft") {
+    return {
+      status: "skipped",
+      reason: "published-sibling",
+      sourcePostId: source.id,
+      targetPostId: sibling.id,
+      selected: [],
+      candidates: [],
+      uploadedCopies: 0,
+      reusedExisting: 0,
+    };
+  }
+  const result = await copyAvailableBlogImages(source, sibling);
+  return { status: "synced", targetPostId: sibling.id, ...result };
+}
+
+export async function reconcileBilingualBlogImages(
+  current: BlogPostWithRelations,
+): Promise<BlogSiblingImageSyncResult> {
+  const sibling = await getBlogTranslationSibling(current);
+  if (!sibling) {
+    return {
+      status: "skipped",
+      reason: "missing-sibling",
+      sourcePostId: current.id,
+      targetPostId: null,
+      selected: [],
+      candidates: [],
+      uploadedCopies: 0,
+      reusedExisting: 0,
+    };
+  }
+
+  const [currentImages, siblingImages] = await Promise.all([
+    listBlogPostImages(current.id),
+    listBlogPostImages(sibling.id),
+  ]);
+  if (availableImageSignature(currentImages) === availableImageSignature(siblingImages)) {
+    return {
+      status: "skipped",
+      reason: "already-aligned",
+      sourcePostId: current.id,
+      targetPostId: sibling.id,
+      selected: [],
+      candidates: [],
+      uploadedCopies: 0,
+      reusedExisting: 0,
+    };
+  }
+
+  const currentPriority = availableImagePriority(currentImages);
+  const siblingPriority = availableImagePriority(siblingImages);
+  let source: BlogPostWithRelations;
+  let target: BlogPostWithRelations;
+  if (currentPriority !== siblingPriority) {
+    source = currentPriority > siblingPriority ? current : sibling;
+    target = source.id === current.id ? sibling : current;
+  } else if (current.status !== "draft" && sibling.status === "draft") {
+    source = current;
+    target = sibling;
+  } else if (sibling.status !== "draft" && current.status === "draft") {
+    source = sibling;
+    target = current;
+  } else if (current.status === "draft" && sibling.status === "draft") {
+    const currentWasFirst = current.createdAt.getTime() < sibling.createdAt.getTime()
+      || (current.createdAt.getTime() === sibling.createdAt.getTime() && current.id < sibling.id);
+    source = currentWasFirst ? current : sibling;
+    target = currentWasFirst ? sibling : current;
+  } else {
+    return {
+      status: "skipped",
+      reason: "published-sibling",
+      sourcePostId: current.id,
+      targetPostId: sibling.id,
+      selected: [],
+      candidates: [],
+      uploadedCopies: 0,
+      reusedExisting: 0,
+    };
+  }
+  if (target.status !== "draft") {
+    return {
+      status: "skipped",
+      reason: "published-sibling",
+      sourcePostId: source.id,
+      targetPostId: target.id,
+      selected: [],
+      candidates: [],
+      uploadedCopies: 0,
+      reusedExisting: 0,
+    };
+  }
+  const result = await copyAvailableBlogImages(source, target);
+  return { status: "synced", targetPostId: target.id, ...result };
 }
 
 function assertBlogImageInputsSafe(input: GenerateVariantInput): void {

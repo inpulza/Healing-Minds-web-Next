@@ -52,23 +52,33 @@ English creates an English source and queues a Spanish sibling; selecting
 Spanish creates a Spanish source and queues an English sibling. Both remain
 private drafts and are reviewed and published independently.
 
-Edits are intentionally not mirrored silently. A row whose sibling is still a
+Text edits are intentionally not mirrored silently. A row whose sibling is still a
 `draft` exposes **Refresh sibling from this post**. The editor must confirm that
 the current sibling draft will be replaced. The refresh is version-bound to
 both rows and fails recoverably if either row changes while the run is queued.
 `pending_review` and `published` siblings can never be overwritten by refresh.
 
-Image review remains independent from text refresh. If the source language gets
-new approved hero or inline images after the sibling was created, the sibling
-draft exposes **Reuse approved images from English/Spanish**. This is an
-explicit editor action: it never propagates silently and never calls the image
-provider. Curated assets may reuse their stable public URL. Managed AI assets
-are downloaded from the source Blob and uploaded under target-post keys, so
-each language owns an independently deletable copy. Inline copies keep their
-order and are re-anchored to headings in the target-language article; alt text
-and captions are rebuilt in that language. The write is draft-only,
-version-guarded and atomic. Uploaded objects that cannot be registered are
-deleted immediately or placed in the durable cleanup queue.
+Image review remains independent from text refresh, but the complete available image set
+is shared automatically with the sibling while that destination remains a
+`draft`. It does not matter whether English or Spanish was generated first:
+creating the sibling, selecting a completed hero/inline candidate, removing an
+inline placement, or opening an older misaligned pair reconciles the selected
+images and every completed candidate
+set without an extra editor button and without calling the image provider.
+
+Candidate images are copied as candidates and never promoted by this
+synchronization; the human selection remains the approval gate in each draft.
+Curated assets may
+reuse their stable public URL. Managed AI assets are downloaded from the source
+Blob and uploaded under target-post keys, so each language owns an
+independently deletable copy. Inline copies keep their order and are
+re-anchored to headings in the target-language article; alt text and captions
+are rebuilt in that language. The destination write is draft-only,
+version-guarded, authoritative and atomic, so a removed inline selection is
+also removed from the sibling's rendered set. A `pending_review` or
+`published` destination is never changed silently. Uploaded objects that
+cannot be registered are deleted immediately or placed in the durable cleanup
+queue.
 
 ## Public privacy and SEO
 

@@ -159,6 +159,9 @@ Before adapting this method to another client:
 10. Roll the environment flag from Preview to Production only after human
     approval.
 11. For bilingual siblings, do not share one deletable Blob row between posts.
-    Copy approved managed image bytes into target-owned keys only after an
-    explicit editor action, rebuild target-language alt/caption, and verify the
-    target draft independently without another paid generation.
+    Synchronize the complete available image set automatically in either language
+    while the destination is still a draft, copy managed bytes into
+    target-owned keys, preserve completed candidates as candidates, rebuild
+    target-language alt/caption, and verify both directions without another
+    paid generation. Never overwrite a reviewed or published destination
+    silently.
