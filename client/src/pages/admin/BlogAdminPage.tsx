@@ -4,6 +4,7 @@ import { useLocation } from '@/lib/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   CheckCircle2,
+  Copy,
   AlertTriangle,
   ExternalLink,
   Eye,
@@ -156,6 +157,21 @@ type BlogImageGenerationJob = {
     errorMessage?: string;
     recoveryWarning?: string;
   } | null;
+};
+
+type BlogTranslationDetail = {
+  source: BlogPost;
+  sibling: BlogPost | null;
+};
+
+type SiblingImageReuseResult = {
+  sourcePostId: number;
+  sourceLanguage: BlogLanguage;
+  selected: BlogPostImage[];
+  uploadedCopies: number;
+  reusedExisting: number;
+  post: BlogPost;
+  images: BlogPostImage[];
 };
 
 type PublishCheck = {
@@ -578,8 +594,8 @@ function formFromPost(post: BlogPost): FormState {
     categoryId: post.categoryId ? String(post.categoryId) : '',
     status: post.status,
     isFeatured: post.isFeatured,
-    metaTitle: post.metaTitle || '',
-    metaDescription: post.metaDescription || '',
+    metaTitle: truncateSeoText(post.metaTitle || '', 60),
+    metaDescription: truncateSeoText(post.metaDescription || '', 160),
     tagIds: post.tags.map(tag => tag.id),
   };
 }
@@ -629,8 +645,8 @@ function toPayload(form: FormState) {
     authorId: Number(form.authorId),
     categoryId: Number(form.categoryId),
     isFeatured: form.isFeatured,
-    metaTitle: form.metaTitle,
-    metaDescription: form.metaDescription,
+    metaTitle: truncateSeoText(form.metaTitle, 60),
+    metaDescription: truncateSeoText(form.metaDescription, 160),
     tagIds: form.tagIds,
   };
 }
@@ -756,6 +772,11 @@ export default function BlogAdminPage() {
     enabled: authenticated && editorOpen && Boolean(form?.id),
   });
 
+  const translationDetailQuery = useQuery<ApiResponse<BlogTranslationDetail>>({
+    queryKey: [`/api/admin/blog/posts/${form?.id || 'none'}/translation`],
+    enabled: authenticated && editorOpen && Boolean(form?.id),
+  });
+
   const imageJobQuery = useQuery<ApiResponse<BlogImageGenerationJob | null>>({
     queryKey: [`/api/admin/blog/posts/${form?.id || 'none'}/images/job`],
     enabled: authenticated && editorOpen && Boolean(form?.id),
@@ -785,6 +806,7 @@ export default function BlogAdminPage() {
     || imageJob?.status === 'queued'
     || imageJob?.status === 'running';
   const imageConfig = imageConfigQuery.data?.data;
+  const translationSibling = translationDetailQuery.data?.data?.sibling || null;
   const stats = statsQuery.data?.data;
   const runtime = runtimeQuery.data?.data?.runtime || 'unknown';
   const linkIntelligenceEnabled = linkConfigQuery.data?.data?.enabled ?? false;
@@ -866,6 +888,31 @@ export default function BlogAdminPage() {
     onError: (error, variables) => {
       queryClient.invalidateQueries({ queryKey: [`/api/admin/blog/posts/${variables.postId}/images/job`] });
       setActionError(error instanceof Error ? error.message : 'Image generation failed');
+    },
+  });
+
+  const reuseSiblingImagesMutation = useMutation({
+    mutationFn: async ({ postId }: { postId: number }) => {
+      const response = await apiRequest('POST', `/api/admin/blog/posts/${postId}/images/reuse-sibling`);
+      return response.json() as Promise<ApiResponse<SiblingImageReuseResult>>;
+    },
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(
+        [`/api/admin/blog/posts/${variables.postId}/images`],
+        { success: true, data: data.data.images },
+      );
+      setForm(current => current ? {
+        ...current,
+        featuredImage: data.data.post.featuredImage || current.featuredImage,
+        featuredImageAlt: data.data.post.featuredImageAlt || current.featuredImageAlt,
+      } : current);
+      queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
+      const sourceLabel = data.data.sourceLanguage === 'en' ? 'English' : 'Spanish';
+      setPairNotice(`Approved ${sourceLabel} images are now copied into this draft for independent review. No new AI image request was sent.`);
+      setActionError(null);
+    },
+    onError: error => {
+      setActionError(error instanceof Error ? error.message : 'Sibling images could not be reused');
     },
   });
 
@@ -2649,6 +2696,20 @@ export default function BlogAdminPage() {
                     </div>
                     {form.id && form.status === 'draft' && (
                       <div className="flex flex-wrap gap-2">
+                        {translationSibling && (
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            disabled={reuseSiblingImagesMutation.isPending || imageJobActive}
+                            onClick={() => reuseSiblingImagesMutation.mutate({ postId: form.id! })}
+                          >
+                            {reuseSiblingImagesMutation.isPending
+                              ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              : <Copy className="mr-2 h-4 w-4" />}
+                            Reuse approved images from {translationSibling.language === 'en' ? 'English' : 'Spanish'}
+                          </Button>
+                        )}
                         <Button
                           type="button"
                           size="sm"
@@ -2726,7 +2787,8 @@ export default function BlogAdminPage() {
                           || regenerateImageMutation.isPending
                           || selectImageMutation.isPending
                           || deselectImageMutation.isPending
-                          || deleteImageMutation.isPending;
+                          || deleteImageMutation.isPending
+                          || reuseSiblingImagesMutation.isPending;
                         return (
                           <article key={image.id} className="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200/70">
                             {image.publicUrl ? (

@@ -8,7 +8,7 @@ const translationSchema = z.object({
   slug: z.string().trim().min(3).max(255).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   excerpt: z.string().trim().min(20),
   contentHtml: z.string().trim().min(100),
-  metaTitle: z.string().trim().min(5).max(70),
+  metaTitle: z.string().trim().min(5).max(60),
   metaDescription: z.string().trim().min(20).max(160),
   featuredImageAlt: z.string().trim().min(3).max(255),
   targetKeyword: z.string().trim().min(3).max(120),
@@ -28,7 +28,7 @@ export function normalizeBlogTranslationDraft(value: unknown): BlogTranslationDr
     const draft = providerTranslationSchema.parse(value);
     return translationSchema.parse({
       ...draft,
-      metaTitle: truncateSeoText(draft.metaTitle, 70),
+      metaTitle: truncateSeoText(draft.metaTitle, 60),
       metaDescription: truncateSeoText(draft.metaDescription, 160),
     });
   } catch (error) {
@@ -107,7 +107,7 @@ export async function translateBlogPostWithAi(input: {
   const prompt = [
     `Create a clinically conservative ${targetName} adaptation of this educational psychiatry article.`,
     "Return one JSON object with title, slug, excerpt, contentHtml, metaTitle, metaDescription, featuredImageAlt, targetKeyword, expertiseAngle.",
-    "Keep metaTitle at 70 characters or fewer and metaDescription at 160 characters or fewer.",
+    "Keep metaTitle at 60 characters or fewer and metaDescription at 160 characters or fewer.",
     "Preserve meaning, heading hierarchy, paragraph/list structure, disclaimer, citations and all links. Do not add clinical claims, advice, dosages, guarantees, patient stories, sources or URLs.",
     "Translate all visible text including headings, link labels, image alt/captions and the medical disclaimer. Keep the article a human-review draft.",
     `For each exact source URL key, use only its exact mapped value: ${JSON.stringify(input.linkMap)}.`,

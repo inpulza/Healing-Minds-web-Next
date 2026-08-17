@@ -34,6 +34,10 @@ This supersedes only the translation-automation exclusion recorded in Sprint
   it introduces an unapproved URL or removes a required link.
 - The already selected editorial image is reused and its visible text/alt is
   adapted. The translation run never triggers new image generation or spend.
+- Translation metadata follows the same persistence contract as manual edits:
+  `metaTitle` is normalized to 60 characters and `metaDescription` to 160 at a
+  word boundary. The admin also normalizes older over-limit drafts when they
+  are opened, before a save can reach the strict API validator.
 
 ## Admin states
 
@@ -53,6 +57,18 @@ Edits are intentionally not mirrored silently. A row whose sibling is still a
 the current sibling draft will be replaced. The refresh is version-bound to
 both rows and fails recoverably if either row changes while the run is queued.
 `pending_review` and `published` siblings can never be overwritten by refresh.
+
+Image review remains independent from text refresh. If the source language gets
+new approved hero or inline images after the sibling was created, the sibling
+draft exposes **Reuse approved images from English/Spanish**. This is an
+explicit editor action: it never propagates silently and never calls the image
+provider. Curated assets may reuse their stable public URL. Managed AI assets
+are downloaded from the source Blob and uploaded under target-post keys, so
+each language owns an independently deletable copy. Inline copies keep their
+order and are re-anchored to headings in the target-language article; alt text
+and captions are rebuilt in that language. The write is draft-only,
+version-guarded and atomic. Uploaded objects that cannot be registered are
+deleted immediately or placed in the durable cleanup queue.
 
 ## Public privacy and SEO
 

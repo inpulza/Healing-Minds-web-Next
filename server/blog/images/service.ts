@@ -24,18 +24,25 @@ import {
   createDraftBlogPostImage,
   ensureCuratedHeroImage,
   finalizeBlogPostImageDeletion,
+  getSelectedBlogPostImages,
   getBlogPostImage,
+  listBlogPostImages,
   listQueuedBlogImageCleanupKeys,
   markStaleGeneratingBlogImagesFailed,
   markBlogImageCleanupFailed,
+  queueBlogImageCleanup,
+  replaceSelectedDraftBlogImages,
   updateBlogPostImage,
 } from "./storage";
 import {
   deleteBlogImageObject,
+  downloadBlogImage,
   getManagedBlogImagePublicUrl,
+  isManagedBlogImagePublicUrl,
   uploadBlogImage,
 } from "./object-storage";
 import { getInlineImageAnchors } from "./render";
+import { getBlogTranslationSibling } from "../translation/storage";
 import { summarizeBlogImageJobSlots } from "./job-summary";
 import {
   claimBlogImageGenerationJob,
@@ -87,6 +94,242 @@ function buildObjectKey(postId: number, role: BlogPostImageRole, slot: string): 
     ? "hero"
     : `inline-${Math.max(1, Number(slot.split(":")[1]) || 1)}`;
   return `blog-images/posts/post-${postId}-${slotPart}-${Date.now()}-${crypto.randomBytes(6).toString("hex")}.webp`;
+}
+
+async function cleanupUnregisteredSiblingCopies(objectKeys: string[]): Promise<void> {
+  for (const objectKey of objectKeys) {
+    try {
+      await deleteBlogImageObject(objectKey);
+    } catch (error) {
+      await queueBlogImageCleanup(objectKey, error).catch(queueError => {
+        console.error("Could not queue an unregistered sibling image copy for cleanup:", queueError);
+      });
+    }
+  }
+}
+
+export type BlogSiblingImageReuseResult = {
+  sourcePostId: number;
+  sourceLanguage: "en" | "es";
+  selected: BlogPostImage[];
+  uploadedCopies: number;
+  reusedExisting: number;
+};
+
+export async function reuseSelectedSiblingBlogImages(
+  target: BlogPostWithRelations,
+): Promise<BlogSiblingImageReuseResult> {
+  if (target.status !== "draft") {
+    throw Object.assign(new Error("Blog image changes are allowed only while the post is a draft"), {
+      statusCode: 409,
+    });
+  }
+  const sibling = await getBlogTranslationSibling(target);
+  if (!sibling) {
+    throw Object.assign(new Error("This draft does not have a translation sibling yet"), { statusCode: 409 });
+  }
+
+  const [selectedSourceImages, allSourceImages, targetImages] = await Promise.all([
+    getSelectedBlogPostImages(sibling.id),
+    listBlogPostImages(sibling.id),
+    listBlogPostImages(target.id),
+  ]);
+  const reusable = selectedSourceImages.filter(image => image.publicUrl && image.generationStatus === "completed");
+  if (!reusable.some(image => image.role === "hero") && sibling.featuredImage) {
+    const registeredHero = allSourceImages.find(image =>
+      image.role === "hero"
+      && image.publicUrl === sibling.featuredImage
+      && image.generationStatus === "completed");
+    if (registeredHero) reusable.unshift(registeredHero);
+  }
+
+  const hero = reusable.find(image => image.role === "hero") || null;
+  const inline = reusable.filter(image => image.role === "inline").slice(0, 2);
+  if (!hero && inline.length === 0 && !sibling.featuredImage) {
+    throw Object.assign(new Error("The translation sibling has no approved images to reuse"), { statusCode: 409 });
+  }
+
+  const targetAnchors = getInlineImageAnchors(target.content || "", inline.length);
+  const sources: Array<{
+    image: BlogPostImage | null;
+    role: BlogPostImageRole;
+    slot: string;
+    anchorHeading: string | null;
+    publicUrl: string;
+  }> = [];
+  if (hero?.publicUrl || sibling.featuredImage) {
+    sources.push({
+      image: hero,
+      role: "hero",
+      slot: "hero",
+      anchorHeading: null,
+      publicUrl: hero?.publicUrl || sibling.featuredImage!,
+    });
+  }
+  inline.forEach((image, index) => {
+    if (!image.publicUrl) return;
+    sources.push({
+      image,
+      role: "inline",
+      slot: `inline:${index + 1}`,
+      anchorHeading: targetAnchors[index] || null,
+      publicUrl: image.publicUrl,
+    });
+  });
+
+  const selections: Parameters<typeof replaceSelectedDraftBlogImages>[0]["selections"] = [];
+  const uploadedObjectKeys: string[] = [];
+  let reusedExisting = 0;
+  try {
+    for (const source of sources) {
+      const alt = buildBlogImageAlt(target, source.role, source.anchorHeading);
+      const caption = buildBlogImageCaption(target, source.role, source.anchorHeading);
+      const sourceImage = source.image;
+      const managed = isManagedBlogImagePublicUrl(source.publicUrl);
+      if (sourceImage?.source === "ai" && !managed) {
+        throw Object.assign(
+          new Error("The sibling AI image is not in managed Vercel Blob storage and cannot be copied safely"),
+          { statusCode: 409 },
+        );
+      }
+
+      if (!managed) {
+        const existing = targetImages.find(image =>
+          image.slot === source.slot
+          && image.publicUrl === source.publicUrl
+          && image.generationStatus === "completed");
+        if (existing) reusedExisting += 1;
+        selections.push({
+          slot: source.slot,
+          existingImageId: existing?.id,
+          values: existing ? undefined : {
+            postId: target.id,
+            role: source.role,
+            slot: source.slot,
+            anchorHeading: source.anchorHeading,
+            source: "curated",
+            generationStatus: "completed",
+            reviewStatus: "selected",
+            objectKey: null,
+            publicUrl: source.publicUrl,
+            mimeType: sourceImage?.mimeType || null,
+            width: sourceImage?.width || null,
+            height: sourceImage?.height || null,
+            bytes: sourceImage?.bytes || null,
+            checksum: sourceImage?.checksum || null,
+            alt,
+            caption,
+            safeVisualBrief: null,
+            prompt: null,
+            promptVersion: null,
+            provider: null,
+            model: null,
+            generationRunId: null,
+            imageJobId: null,
+            startedAt: null,
+            completedAt: new Date(),
+            durationMs: null,
+            errorCode: null,
+            errorMessage: null,
+            sortOrder: source.role === "hero" ? 0 : sources.indexOf(source),
+          },
+          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sources.indexOf(source) },
+        });
+        continue;
+      }
+
+      const sourceObjectKey = sourceImage?.objectKey
+        || source.publicUrl.slice("/public-objects/".length);
+      const existing = sourceImage?.checksum
+        ? targetImages.find(image =>
+          image.slot === source.slot
+          && image.checksum === sourceImage.checksum
+          && image.generationStatus === "completed"
+          && image.publicUrl)
+        : undefined;
+      if (existing) {
+        reusedExisting += 1;
+        selections.push({
+          slot: source.slot,
+          existingImageId: existing.id,
+          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sources.indexOf(source) },
+        });
+        continue;
+      }
+
+      const bytes = await downloadBlogImage(sourceObjectKey);
+      const checksum = sourceImage?.checksum || crypto.createHash("sha256").update(bytes).digest("hex");
+      const checksumMatch = targetImages.find(image =>
+        image.slot === source.slot
+        && image.checksum === checksum
+        && image.generationStatus === "completed"
+        && image.publicUrl);
+      if (checksumMatch) {
+        reusedExisting += 1;
+        selections.push({
+          slot: source.slot,
+          existingImageId: checksumMatch.id,
+          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sources.indexOf(source) },
+        });
+        continue;
+      }
+
+      const objectKey = buildObjectKey(target.id, source.role, source.slot);
+      await uploadBlogImage(objectKey, bytes);
+      uploadedObjectKeys.push(objectKey);
+      selections.push({
+        slot: source.slot,
+        values: {
+          postId: target.id,
+          role: source.role,
+          slot: source.slot,
+          anchorHeading: source.anchorHeading,
+          source: sourceImage?.source || "ai",
+          generationStatus: "completed",
+          reviewStatus: "selected",
+          objectKey,
+          publicUrl: getManagedBlogImagePublicUrl(objectKey),
+          mimeType: "image/webp",
+          width: sourceImage?.width || null,
+          height: sourceImage?.height || null,
+          bytes: bytes.length,
+          checksum,
+          alt,
+          caption,
+          safeVisualBrief: sourceImage?.safeVisualBrief || null,
+          prompt: sourceImage?.prompt || null,
+          promptVersion: sourceImage?.promptVersion || null,
+          provider: sourceImage?.provider || null,
+          model: sourceImage?.model || null,
+          generationRunId: null,
+          imageJobId: null,
+          startedAt: sourceImage?.startedAt || null,
+          completedAt: new Date(),
+          durationMs: sourceImage?.durationMs || null,
+          errorCode: null,
+          errorMessage: null,
+          sortOrder: source.role === "hero" ? 0 : sources.indexOf(source),
+        },
+        updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sources.indexOf(source) },
+      });
+    }
+
+    const selected = await replaceSelectedDraftBlogImages({
+      postId: target.id,
+      expectedUpdatedAt: target.updatedAt,
+      selections,
+    });
+    return {
+      sourcePostId: sibling.id,
+      sourceLanguage: sibling.language === "es" ? "es" : "en",
+      selected,
+      uploadedCopies: uploadedObjectKeys.length,
+      reusedExisting,
+    };
+  } catch (error) {
+    await cleanupUnregisteredSiblingCopies(uploadedObjectKeys);
+    throw error;
+  }
 }
 
 function assertBlogImageInputsSafe(input: GenerateVariantInput): void {

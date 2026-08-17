@@ -7,17 +7,70 @@ test.afterEach(async ({ page }) => {
 
 const source = {
   id: 11, title: "Understanding anxiety", slug: "understanding-anxiety", language: "en", translationGroupId: "4a6829e5-68cc-4b2a-9c51-19616ec41f8b",
-  excerpt: "Educational guide", content: "<p>Educational content.</p>", featuredImage: null, featuredImageAlt: "Calm setting",
+  excerpt: "Educational guide", content: "<h2>What patients can expect</h2><p>Educational content.</p>", featuredImage: "/public-objects/blog-images/posts/post-11-hero-1700000000000-aaaaaaaaaaaa.webp", featuredImageAlt: "Calm setting",
   authorId: 1, categoryId: 1, status: "draft", isFeatured: false, metaTitle: "Understanding anxiety", metaDescription: "Educational anxiety information",
   readingTime: 5, publishedAt: null, updatedAt: new Date().toISOString(), author: { id: 1, name: "Clinical Team", title: "Reviewer" },
   category: { id: 1, name: "Conditions", slug: "conditions", language: "en" }, tags: [],
 };
-const sibling = { ...source, id: 22, title: "Entender la ansiedad", slug: "entender-la-ansiedad", language: "es", status: "draft", category: { id: 2, name: "Condiciones", slug: "condiciones", language: "es" } };
+const sibling = {
+  ...source,
+  id: 22,
+  title: "Entender la ansiedad",
+  slug: "entender-la-ansiedad",
+  language: "es",
+  status: "draft",
+  content: "<h2>Lo que pueden esperar los pacientes</h2><p>Contenido educativo.</p>",
+  featuredImage: "/images/blog/anxiety-treatment.webp",
+  featuredImageAlt: "Persona en un entorno tranquilo",
+  metaTitle: "Entender la ansiedad: opciones de atención psiquiátrica en Naples y Florida",
+  category: { id: 2, name: "Condiciones", slug: "condiciones", language: "es" },
+};
+
+const sourceImages = [
+  {
+    id: 101, postId: 11, role: "hero", slot: "hero", anchorHeading: null, source: "ai", generationStatus: "completed", reviewStatus: "selected",
+    objectKey: "blog-images/posts/post-11-hero-1700000000000-aaaaaaaaaaaa.webp", publicUrl: source.featuredImage, mimeType: "image/webp",
+    width: 1536, height: 1024, bytes: 1234, checksum: "a".repeat(64), alt: source.featuredImageAlt, caption: null, model: "gpt-image-2", imageJobId: 1, errorMessage: null, sortOrder: 0, createdAt: new Date().toISOString(),
+  },
+  {
+    id: 102, postId: 11, role: "inline", slot: "inline:1", anchorHeading: "What patients can expect", source: "ai", generationStatus: "completed", reviewStatus: "selected",
+    objectKey: "blog-images/posts/post-11-inline-1-1700000000000-bbbbbbbbbbbb.webp", publicUrl: "/public-objects/blog-images/posts/post-11-inline-1-1700000000000-bbbbbbbbbbbb.webp", mimeType: "image/webp",
+    width: 1536, height: 1024, bytes: 1234, checksum: "b".repeat(64), alt: "Calm consultation", caption: "Educational photograph", model: "gpt-image-2", imageJobId: 1, errorMessage: null, sortOrder: 1, createdAt: new Date().toISOString(),
+  },
+];
+const initialSiblingImages = [{
+  ...sourceImages[0], id: 201, postId: 22, source: "curated", objectKey: null, publicUrl: sibling.featuredImage, checksum: null, alt: sibling.featuredImageAlt, model: null, imageJobId: null,
+}];
+const reusedSiblingImages = sourceImages.map((image, index) => ({
+  ...image,
+  id: 301 + index,
+  postId: 22,
+  objectKey: image.role === "hero"
+    ? "blog-images/posts/post-22-hero-1700000000001-cccccccccccc.webp"
+    : "blog-images/posts/post-22-inline-1-1700000000001-dddddddddddd.webp",
+  publicUrl: image.role === "hero"
+    ? "/public-objects/blog-images/posts/post-22-hero-1700000000001-cccccccccccc.webp"
+    : "/public-objects/blog-images/posts/post-22-inline-1-1700000000001-dddddddddddd.webp",
+  alt: image.role === "hero" ? "Fotografía editorial serena para Entender la ansiedad" : "Fotografía editorial serena para Lo que pueden esperar los pacientes en el artículo",
+  anchorHeading: image.role === "inline" ? "Lo que pueden esperar los pacientes" : null,
+}));
 
 async function mockAdmin(page: Page) {
   let ready = false;
+  let imagesReused = false;
   const translationRequests: unknown[] = [];
+  const saveRequests: unknown[] = [];
   await page.route("**/favicon.ico", route => route.fulfill({ status: 204, body: "" }));
+  await page.route("**/public-objects/blog-images/**", route => route.fulfill({
+    status: 200,
+    contentType: "image/png",
+    body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64"),
+  }));
+  await page.route("**/images/blog/**", route => route.fulfill({
+    status: 200,
+    contentType: "image/png",
+    body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64"),
+  }));
   await page.route("**/api/admin/**", async route => {
     const request = route.request();
     const url = new URL(request.url());
@@ -44,6 +97,28 @@ async function mockAdmin(page: Page) {
         translation: { targetLanguage: "es", state: "queued", runId: 8, recoverable: true },
       }, 201);
     }
+    if (path === "/api/admin/blog/posts/22/translation" && request.method() === "GET") {
+      return reply({ success: true, data: { source: sibling, sibling: source } });
+    }
+    if (path === "/api/admin/blog/posts/22/images" && request.method() === "GET") {
+      return reply({ success: true, data: imagesReused ? reusedSiblingImages : initialSiblingImages });
+    }
+    if (path === "/api/admin/blog/posts/22/images/job" && request.method() === "GET") {
+      return reply({ success: true, data: null });
+    }
+    if (path === "/api/admin/blog/posts/22/images/reuse-sibling" && request.method() === "POST") {
+      imagesReused = true;
+      const updated = { ...sibling, featuredImage: reusedSiblingImages[0].publicUrl, featuredImageAlt: reusedSiblingImages[0].alt };
+      return reply({ success: true, data: { sourcePostId: 11, sourceLanguage: "en", selected: reusedSiblingImages, uploadedCopies: 2, reusedExisting: 0, post: updated, images: reusedSiblingImages } });
+    }
+    if (path === "/api/admin/blog/posts/22" && request.method() === "PUT") {
+      const requestBody = request.postDataJSON();
+      saveRequests.push(requestBody);
+      if (String(requestBody?.metaTitle || "").length > 60) {
+        return reply({ success: false, message: "Invalid blog payload", errors: [{ path: "metaTitle", message: "String must contain at most 60 character(s)" }] }, 400);
+      }
+      return reply({ success: true, data: { ...sibling, ...requestBody, featuredImage: reusedSiblingImages[0].publicUrl, featuredImageAlt: reusedSiblingImages[0].alt } });
+    }
     if (path === "/api/admin/blog/posts/22") return reply({ success: true, data: sibling });
     if (path.endsWith("/stats")) return reply({ success: true, data: { draft: 2, pending_review: 0, published: 0, rejected: 0 } });
     if (path.endsWith("/authors")) return reply({ success: true, data: [source.author] });
@@ -52,7 +127,7 @@ async function mockAdmin(page: Page) {
     if (path.endsWith("/images/config")) return reply({ success: true, data: { enabled: false, storage: "not-configured", model: "test" } });
     return reply({ success: true, data: [] });
   });
-  return { translationRequests };
+  return { translationRequests, saveRequests };
 }
 
 for (const name of ["desktop", "mobile"] as const) {
@@ -61,6 +136,12 @@ for (const name of ["desktop", "mobile"] as const) {
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+    page.on("response", response => {
+      const path = new URL(response.url()).pathname;
+      if (path.startsWith("/api/admin/") && response.status() >= 400) {
+        errors.push(`${response.status()} ${path}`);
+      }
+    });
     await authenticateProtectedPreview(page);
     const mocked = await mockAdmin(page);
     await page.goto("/admin/blog");
@@ -86,6 +167,15 @@ for (const name of ["desktop", "mobile"] as const) {
     expect(mocked.translationRequests[1]).toEqual({ refreshDraft: true });
     await page.getByRole("button", { name: "Open and review sibling" }).click();
     await expect(page.locator("#post-title")).toHaveValue("Entender la ansiedad");
+    await expect(page.locator("#meta-title")).toHaveValue(/.{1,60}/);
+    expect((await page.locator("#meta-title").inputValue()).length).toBeLessThanOrEqual(60);
+    await page.getByRole("button", { name: "Reuse approved images from English" }).click();
+    await expect(page.getByText("Approved English images are now copied into this draft for independent review. No new AI image request was sent.")).toBeVisible();
+    await expect(page.locator("#featured-image")).toHaveValue(reusedSiblingImages[0].publicUrl);
+    await expect(page.getByText("After: Lo que pueden esperar los pacientes")).toBeVisible();
+    await page.getByRole("button", { name: "Save draft" }).click();
+    await expect.poll(() => mocked.saveRequests.length).toBe(1);
+    expect(String((mocked.saveRequests[0] as { metaTitle?: string }).metaTitle || "").length).toBeLessThanOrEqual(60);
     expect(errors).toEqual([]);
   });
 }

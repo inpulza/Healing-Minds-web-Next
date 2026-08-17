@@ -8,6 +8,7 @@ import {
   deleteBlogImageVariant,
   executePersistedBlogImageGenerationJob,
   recoverPersistedBlogImageGenerationJob,
+  reuseSelectedSiblingBlogImages,
 } from "./service";
 import {
   admitBlogImageGenerationJob,
@@ -147,6 +148,25 @@ export function registerBlogImageRoutes(app: Express): void {
       }
       if (job.status === "queued") scheduleImageJob(job.id);
       res.status(creation.created ? 202 : 200).json({ success: true, data: job });
+    } catch (error) {
+      sendImageError(res, error);
+    }
+  });
+
+  app.post("/api/admin/blog/posts/:postId/images/reuse-sibling", async (req, res) => {
+    const postId = parsePositiveId(req.params.postId);
+    if (!postId) return res.status(400).json({ success: false, message: "Invalid blog post id" });
+    try {
+      const post = await getDraftPost(postId);
+      const result = await reuseSelectedSiblingBlogImages(post);
+      res.status(200).json({
+        success: true,
+        data: {
+          ...result,
+          post: await getBlogPostById(postId),
+          images: await listBlogPostImages(postId),
+        },
+      });
     } catch (error) {
       sendImageError(res, error);
     }

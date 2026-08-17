@@ -158,3 +158,7 @@ Before adapting this method to another client:
 9. Confirm the draft remains private throughout generation and preview.
 10. Roll the environment flag from Preview to Production only after human
     approval.
+11. For bilingual siblings, do not share one deletable Blob row between posts.
+    Copy approved managed image bytes into target-owned keys only after an
+    explicit editor action, rebuild target-language alt/caption, and verify the
+    target draft independently without another paid generation.

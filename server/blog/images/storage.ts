@@ -37,6 +37,26 @@ export async function markBlogImageCleanupFailed(objectKey: string, error: unkno
     .where(eq(blogImageCleanupQueue.objectKey, objectKey));
 }
 
+export async function queueBlogImageCleanup(objectKey: string, error: unknown): Promise<void> {
+  const message = error instanceof Error ? error.message : "Blog image object cleanup failed";
+  await db
+    .insert(blogImageCleanupQueue)
+    .values({
+      objectKey,
+      attempts: 1,
+      lastError: message.slice(0, 1000),
+      updatedAt: new Date(),
+    })
+    .onConflictDoUpdate({
+      target: blogImageCleanupQueue.objectKey,
+      set: {
+        attempts: sql`${blogImageCleanupQueue.attempts} + 1`,
+        lastError: message.slice(0, 1000),
+        updatedAt: new Date(),
+      },
+    });
+}
+
 export async function listBlogPostImages(postId: number): Promise<BlogPostImage[]> {
   return db
     .select()
@@ -119,6 +139,106 @@ export async function createDraftBlogPostImage(values: InsertBlogPostImage): Pro
     }
     const [created] = await tx.insert(blogPostImages).values(values).returning();
     return created;
+  });
+}
+
+export type DraftBlogImageSelection = {
+  slot: string;
+  existingImageId?: number;
+  values?: InsertBlogPostImage;
+  updates: Partial<InsertBlogPostImage>;
+};
+
+export async function replaceSelectedDraftBlogImages(input: {
+  postId: number;
+  expectedUpdatedAt: Date;
+  selections: DraftBlogImageSelection[];
+}): Promise<BlogPostImage[]> {
+  if (input.selections.length === 0) return [];
+  if (new Set(input.selections.map(selection => selection.slot)).size !== input.selections.length) {
+    throw Object.assign(new Error("Sibling image reuse contains duplicate slots"), { statusCode: 400 });
+  }
+  return db.transaction(async tx => {
+    const [post] = await tx
+      .select({ id: blogPosts.id, status: blogPosts.status, updatedAt: blogPosts.updatedAt })
+      .from(blogPosts)
+      .where(eq(blogPosts.id, input.postId))
+      .limit(1)
+      .for("update");
+    if (!post) throw Object.assign(new Error("Blog post not found"), { statusCode: 404 });
+    if (post.status !== "draft") {
+      throw Object.assign(new Error("Blog image changes are allowed only while the post is a draft"), {
+        statusCode: 409,
+      });
+    }
+    if (post.updatedAt.getTime() !== input.expectedUpdatedAt.getTime()) {
+      throw Object.assign(
+        new Error("The draft changed while sibling images were being prepared. Review it and retry."),
+        { statusCode: 409 },
+      );
+    }
+
+    const selected: BlogPostImage[] = [];
+    for (const selection of input.selections) {
+      if (Boolean(selection.existingImageId) === Boolean(selection.values)) {
+        throw Object.assign(new Error("Sibling image reuse selection is invalid"), { statusCode: 400 });
+      }
+      await tx
+        .update(blogPostImages)
+        .set({ reviewStatus: "candidate", updatedAt: new Date() })
+        .where(and(
+          eq(blogPostImages.postId, input.postId),
+          eq(blogPostImages.slot, selection.slot),
+          eq(blogPostImages.reviewStatus, "selected"),
+        ));
+
+      if (selection.existingImageId) {
+        const [updated] = await tx
+          .update(blogPostImages)
+          .set({ ...selection.updates, reviewStatus: "selected", updatedAt: new Date() })
+          .where(and(
+            eq(blogPostImages.id, selection.existingImageId),
+            eq(blogPostImages.postId, input.postId),
+            eq(blogPostImages.slot, selection.slot),
+            eq(blogPostImages.generationStatus, "completed"),
+          ))
+          .returning();
+        if (!updated?.publicUrl) {
+          throw Object.assign(new Error("A reusable sibling image is no longer available"), { statusCode: 409 });
+        }
+        selected.push(updated);
+      } else if (selection.values) {
+        const [created] = await tx
+          .insert(blogPostImages)
+          .values({
+            ...selection.values,
+            postId: input.postId,
+            slot: selection.slot,
+            ...selection.updates,
+            generationStatus: "completed",
+            reviewStatus: "selected",
+            updatedAt: new Date(),
+          })
+          .returning();
+        if (!created?.publicUrl) {
+          throw Object.assign(new Error("A sibling image copy could not be registered"), { statusCode: 500 });
+        }
+        selected.push(created);
+      }
+    }
+
+    const hero = selected.find(image => image.role === "hero");
+    if (hero?.publicUrl) {
+      await tx
+        .update(blogPosts)
+        .set({
+          featuredImage: hero.publicUrl,
+          featuredImageAlt: hero.alt,
+          updatedAt: new Date(),
+        })
+        .where(eq(blogPosts.id, input.postId));
+    }
+    return selected;
   });
 }
 
