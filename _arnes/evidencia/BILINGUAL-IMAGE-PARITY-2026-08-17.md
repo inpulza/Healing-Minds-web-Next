@@ -103,3 +103,12 @@ Preview del hotfix: PR draft #29, deployment Vercel
 tres recorridos en Desktop Chrome y Pixel 7: 6 PASS/6 skips cruzados, cero
 errores inesperados. La autenticación del Preview usó OIDC efímero sin leer,
 imprimir ni persistir el token.
+
+Code Review de PR #29 sobre `b2b43ac955`: 4 hallazgos válidos, 0 inválidos,
+0 ya resueltos, 0 no aplicables y 0 que requieran decisión. Se corrigieron la
+portada nula retenida en el formulario, el job terminal solapado con otra
+reconciliación, la descarga innecesaria de una fila rechazada cuyo Blob ya no
+existe y la reutilización de una misma fila target ante colisión de checksum.
+El gate local posterior quedó en TypeScript PASS, 135/135 tests, `db:verify`,
+image guards y build PASS; Playwright focalizado 12 PASS/12 skips cruzados en
+Desktop Chrome y Pixel 7, con los cuatro casos de revisión reproducidos.

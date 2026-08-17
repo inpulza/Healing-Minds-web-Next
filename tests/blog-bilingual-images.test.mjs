@@ -22,6 +22,8 @@ test("the complete available image set synchronizes in either language without a
   assert.match(legacyRoute, /reconcile-sibling[\s\S]*reconcileBilingualBlogImages/);
   assert.match(client, /reconcileSiblingImagesMutation\.mutate/);
   assert.match(client, /handledImageJobIdRef[\s\S]*reconciledImagePairRef\.current = null[\s\S]*reconcileSiblingImagesMutation\.mutate/);
+  assert.match(client, /hasOpenSiblingPair && reconcileSiblingImagesMutation\.isPending[\s\S]*handledImageJobIdRef\.current = imageJob\.id/);
+  assert.match(client, /featuredImage: data\.data\.post\.featuredImage \?\? ''[\s\S]*featuredImageAlt: data\.data\.post\.featuredImageAlt \?\? ''/);
   assert.doesNotMatch(client, /Reuse approved images from/);
   assert.match(client, /No new AI image request was sent/);
   assert.match(synchronizationFunctions, /getSelectedBlogPostImages/);
@@ -53,6 +55,8 @@ test("sibling image parity is authoritative, draft-only, atomic and independentl
   assert.doesNotMatch(synchronizationFunctions, /candidateSourceImages[\s\S]*createDraftBlogPostImage/);
   assert.match(service, /availableImageSignature[\s\S]*reviewStatus !== "rejected"/);
   assert.match(service, /hydrateManagedImageChecksums[\s\S]*crypto\.createHash\("sha256"\)/);
+  assert.match(service, /image\.reviewStatus === "rejected"/);
+  assert.match(service, /reservedTargetImageIds[\s\S]*!reservedTargetImageIds\.has\(image\.id\)/);
   assert.match(service, /slot: image\.slot[\s\S]*targetAnchors\[slotIndex\]/);
   assert.match(storage, /featuredImage: hero\.publicUrl/);
   assert.match(service, /authoritative: true/);

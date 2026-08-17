@@ -115,6 +115,7 @@ async function hydrateManagedImageChecksums(images: BlogPostImage[]): Promise<Bl
       image.checksum
       || !image.publicUrl
       || image.generationStatus !== "completed"
+      || image.reviewStatus === "rejected"
       || !isManagedBlogImagePublicUrl(image.publicUrl)
     ) return image;
     const objectKey = image.objectKey || image.publicUrl.slice("/public-objects/".length);
@@ -216,6 +217,7 @@ async function copyAvailableBlogImages(
 
   const selections: Parameters<typeof replaceDraftBlogImageSet>[0]["selections"] = [];
   const candidateCopies: Parameters<typeof replaceDraftBlogImageSet>[0]["candidates"] = [];
+  const reservedTargetImageIds = new Set<number>();
   const uploadedObjectKeys: string[] = [];
   let uploadedCopies = 0;
   let reusedExisting = 0;
@@ -238,6 +240,7 @@ async function copyAvailableBlogImages(
           && image.publicUrl === source.publicUrl
           && image.generationStatus === "completed");
         if (existing) reusedExisting += 1;
+        if (existing) reservedTargetImageIds.add(existing.id);
         selections.push({
           slot: source.slot,
           existingImageId: existing?.id,
@@ -288,6 +291,7 @@ async function copyAvailableBlogImages(
         : undefined;
       if (existing) {
         reusedExisting += 1;
+        reservedTargetImageIds.add(existing.id);
         selections.push({
           slot: source.slot,
           existingImageId: existing.id,
@@ -305,6 +309,7 @@ async function copyAvailableBlogImages(
         && image.publicUrl);
       if (checksumMatch) {
         reusedExisting += 1;
+        reservedTargetImageIds.add(checksumMatch.id);
         selections.push({
           slot: source.slot,
           existingImageId: checksumMatch.id,
@@ -364,6 +369,8 @@ async function copyAvailableBlogImages(
       const alt = buildBlogImageAlt(target, sourceImage.role, anchorHeading);
       const caption = buildBlogImageCaption(target, sourceImage.role, anchorHeading);
       const existing = targetImages.find(image =>
+        !reservedTargetImageIds.has(image.id)
+        &&
         image.slot === sourceImage.slot
         && image.generationStatus === "completed"
         && image.publicUrl
@@ -372,6 +379,7 @@ async function copyAvailableBlogImages(
           : image.publicUrl === sourceImage.publicUrl));
       if (existing) {
         reusedExisting += 1;
+        reservedTargetImageIds.add(existing.id);
         candidateCopies.push({
           slot: sourceImage.slot,
           existingImageId: existing.id,
