@@ -56,9 +56,22 @@ const reusedSiblingImages = sourceImages.map((image, index) => ({
   anchorHeading: image.role === "inline" ? "Lo que pueden esperar los pacientes" : null,
 }));
 
-async function mockAdmin(page: Page) {
-  let ready = false;
+type MockImageJob = {
+  id: number;
+  postId: number;
+  status: "queued" | "completed";
+  operation: "generate_set";
+  role: "all";
+  result: Record<string, number>;
+};
+
+async function mockAdmin(
+  page: Page,
+  options: { allowImageGeneration?: boolean; initialPairReady?: boolean } = {},
+) {
+  let ready = Boolean(options.initialPairReady);
   let imagesReused = false;
+  let generatedJob: MockImageJob | null = null;
   const translationRequests: unknown[] = [];
   const reconcileRequests: number[] = [];
   const imageGenerationRequests: string[] = [];
@@ -81,6 +94,17 @@ async function mockAdmin(page: Page) {
     const reply = (body: unknown, status = 200) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) });
     if (request.method() === "POST" && /\/images\/(generate|\d+\/regenerate)$/.test(path)) {
       imageGenerationRequests.push(path);
+      if (options.allowImageGeneration) {
+        generatedJob = {
+          id: 99,
+          postId: 22,
+          status: "queued",
+          operation: "generate_set",
+          role: "all",
+          result: { total: 3, completed: 0, failed: 0, pending: 3, generating: 0 },
+        };
+        return reply({ success: true, data: generatedJob }, 202);
+      }
       return reply({ success: false, message: "Unexpected image generation request" }, 500);
     }
     if (path === "/api/admin/session") return reply({ authenticated: true });
@@ -111,6 +135,14 @@ async function mockAdmin(page: Page) {
       return reply({ success: true, data: imagesReused ? reusedSiblingImages : initialSiblingImages });
     }
     if (path === "/api/admin/blog/posts/22/images/job" && request.method() === "GET") {
+      if (generatedJob) {
+        generatedJob = {
+          ...generatedJob,
+          status: "completed",
+          result: { total: 3, completed: 3, failed: 0, pending: 0, generating: 0 },
+        };
+        return reply({ success: true, data: generatedJob });
+      }
       return reply({ success: true, data: null });
     }
     if (path === "/api/admin/blog/posts/22/images/reconcile-sibling" && request.method() === "POST") {
@@ -132,10 +164,32 @@ async function mockAdmin(page: Page) {
     if (path.endsWith("/authors")) return reply({ success: true, data: [source.author] });
     if (path.endsWith("/categories")) return reply({ success: true, data: [source.category, sibling.category] });
     if (path.endsWith("/tags")) return reply({ success: true, data: [] });
-    if (path.endsWith("/images/config")) return reply({ success: true, data: { enabled: false, storage: "not-configured", model: "test" } });
+    if (path.endsWith("/images/config")) return reply({ success: true, data: { enabled: Boolean(options.allowImageGeneration), storage: "vercel-blob", model: "test" } });
     return reply({ success: true, data: [] });
   });
   return { translationRequests, reconcileRequests, imageGenerationRequests, saveRequests };
+}
+
+for (const name of ["desktop", "mobile"] as const) {
+  test(`a completed image job resynchronizes the open bilingual pair on ${name}`, async ({ page }, testInfo) => {
+    test.skip(!testInfo.project.name.startsWith(name), `Covered by ${name} project`);
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.message));
+    page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+    page.on("response", response => {
+      const path = new URL(response.url()).pathname;
+      if (path.startsWith("/api/admin/") && response.status() >= 400) errors.push(`${response.status()} ${path}`);
+    });
+    await authenticateProtectedPreview(page);
+    const mocked = await mockAdmin(page, { allowImageGeneration: true, initialPairReady: true });
+    await page.goto("/admin/blog");
+    await page.getByRole("button", { name: "Open and review sibling" }).click();
+    await expect.poll(() => mocked.reconcileRequests).toEqual([22]);
+    await page.getByRole("button", { name: "Generate set" }).click();
+    await expect.poll(() => mocked.imageGenerationRequests.length).toBe(1);
+    await expect.poll(() => mocked.reconcileRequests, { timeout: 8_000 }).toEqual([22, 22]);
+    expect(errors).toEqual([]);
+  });
 }
 
 async function mockSpanishFirstPair(page: Page) {

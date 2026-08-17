@@ -31,9 +31,9 @@ import {
   markStaleGeneratingBlogImagesFailed,
   markBlogImageCleanupFailed,
   queueBlogImageCleanup,
-  replaceSelectedDraftBlogImages,
+  releaseBlogPostImageDeletionClaim,
+  replaceDraftBlogImageSet,
   updateBlogPostImage,
-  updateDraftBlogPostImage,
 } from "./storage";
 import {
   deleteBlogImageObject,
@@ -109,6 +109,38 @@ async function cleanupUnregisteredSiblingCopies(objectKeys: string[]): Promise<v
   }
 }
 
+async function hydrateManagedImageChecksums(images: BlogPostImage[]): Promise<BlogPostImage[]> {
+  return Promise.all(images.map(async image => {
+    if (
+      image.checksum
+      || !image.publicUrl
+      || image.generationStatus !== "completed"
+      || !isManagedBlogImagePublicUrl(image.publicUrl)
+    ) return image;
+    const objectKey = image.objectKey || image.publicUrl.slice("/public-objects/".length);
+    const bytes = await downloadBlogImage(objectKey);
+    const checksum = crypto.createHash("sha256").update(bytes).digest("hex");
+    const updated = await updateBlogPostImage(image.id, {
+      checksum,
+      bytes: image.bytes || bytes.length,
+    });
+    return updated || { ...image, checksum, bytes: image.bytes || bytes.length };
+  }));
+}
+
+async function cleanupPrunedSiblingObjects(objectKeys: string[]): Promise<void> {
+  for (const objectKey of objectKeys) {
+    try {
+      await deleteBlogImageObject(objectKey);
+      await completeBlogImageCleanup(objectKey);
+    } catch (error) {
+      await markBlogImageCleanupFailed(objectKey, error).catch(queueError => {
+        console.error(`Could not update durable sibling candidate cleanup for ${objectKey}:`, queueError);
+      });
+    }
+  }
+}
+
 export type BlogSiblingImageReuseResult = {
   sourcePostId: number;
   sourceLanguage: "en" | "es";
@@ -127,11 +159,17 @@ async function copyAvailableBlogImages(
       statusCode: 409,
     });
   }
-  const [selectedSourceImages, allSourceImages, targetImages] = await Promise.all([
+  const [selectedSourceRows, allSourceRows, targetRows] = await Promise.all([
     getSelectedBlogPostImages(source.id),
     listBlogPostImages(source.id),
     listBlogPostImages(target.id),
   ]);
+  const [allSourceImages, targetImages] = await Promise.all([
+    hydrateManagedImageChecksums(allSourceRows),
+    hydrateManagedImageChecksums(targetRows),
+  ]);
+  const hydratedSourceById = new Map(allSourceImages.map(image => [image.id, image]));
+  const selectedSourceImages = selectedSourceRows.map(image => hydratedSourceById.get(image.id) || image);
   const reusable = selectedSourceImages.filter(image => image.publicUrl && image.generationStatus === "completed");
   const candidateSourceImages = allSourceImages.filter(image =>
     image.reviewStatus === "candidate"
@@ -147,11 +185,7 @@ async function copyAvailableBlogImages(
 
   const hero = reusable.find(image => image.role === "hero") || null;
   const inline = reusable.filter(image => image.role === "inline").slice(0, 2);
-  if (!hero && inline.length === 0 && !source.featuredImage) {
-    throw Object.assign(new Error("The source post has no approved images to synchronize"), { statusCode: 409 });
-  }
-
-  const targetAnchors = getInlineImageAnchors(target.content || "", inline.length);
+  const targetAnchors = getInlineImageAnchors(target.content || "", 2);
   const sources: Array<{
     image: BlogPostImage | null;
     role: BlogPostImageRole;
@@ -168,18 +202,20 @@ async function copyAvailableBlogImages(
       publicUrl: hero?.publicUrl || source.featuredImage!,
     });
   }
-  inline.forEach((image, index) => {
+  inline.forEach(image => {
     if (!image.publicUrl) return;
+    const slotIndex = Math.max(0, (Number(image.slot.split(":")[1]) || 1) - 1);
     sources.push({
       image,
       role: "inline",
-      slot: `inline:${index + 1}`,
-      anchorHeading: targetAnchors[index] || null,
+      slot: image.slot,
+      anchorHeading: targetAnchors[slotIndex] || null,
       publicUrl: image.publicUrl,
     });
   });
 
-  const selections: Parameters<typeof replaceSelectedDraftBlogImages>[0]["selections"] = [];
+  const selections: Parameters<typeof replaceDraftBlogImageSet>[0]["selections"] = [];
+  const candidateCopies: Parameters<typeof replaceDraftBlogImageSet>[0]["candidates"] = [];
   const uploadedObjectKeys: string[] = [];
   let uploadedCopies = 0;
   let reusedExisting = 0;
@@ -234,9 +270,9 @@ async function copyAvailableBlogImages(
             durationMs: null,
             errorCode: null,
             errorMessage: null,
-            sortOrder: source.role === "hero" ? 0 : sources.indexOf(source),
+            sortOrder: source.role === "hero" ? 0 : sourceImage?.sortOrder || 1,
           },
-          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sources.indexOf(source) },
+          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sourceImage?.sortOrder || 1 },
         });
         continue;
       }
@@ -255,7 +291,7 @@ async function copyAvailableBlogImages(
         selections.push({
           slot: source.slot,
           existingImageId: existing.id,
-          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sources.indexOf(source) },
+          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sourceImage?.sortOrder || 1 },
         });
         continue;
       }
@@ -272,7 +308,7 @@ async function copyAvailableBlogImages(
         selections.push({
           slot: source.slot,
           existingImageId: checksumMatch.id,
-          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sources.indexOf(source) },
+          updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sourceImage?.sortOrder || 1 },
         });
         continue;
       }
@@ -311,23 +347,12 @@ async function copyAvailableBlogImages(
           durationMs: sourceImage?.durationMs || null,
           errorCode: null,
           errorMessage: null,
-          sortOrder: source.role === "hero" ? 0 : sources.indexOf(source),
+          sortOrder: source.role === "hero" ? 0 : sourceImage?.sortOrder || 1,
         },
-        updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sources.indexOf(source) },
+        updates: { role: source.role, anchorHeading: source.anchorHeading, alt, caption, sortOrder: source.role === "hero" ? 0 : sourceImage?.sortOrder || 1 },
       });
     }
 
-    const selected = await replaceSelectedDraftBlogImages({
-      postId: target.id,
-      expectedUpdatedAt: target.updatedAt,
-      selections,
-      authoritative: true,
-    });
-    uploadedCopies += uploadedObjectKeys.length;
-    uploadedObjectKeys.length = 0;
-
-    const candidates: BlogPostImage[] = [];
-    const refreshedTargetImages = await listBlogPostImages(target.id);
     const allTargetAnchors = getInlineImageAnchors(target.content || "", 2);
     for (const sourceImage of candidateSourceImages) {
       const anchorIndex = sourceImage.role === "inline"
@@ -338,23 +363,20 @@ async function copyAvailableBlogImages(
         : null;
       const alt = buildBlogImageAlt(target, sourceImage.role, anchorHeading);
       const caption = buildBlogImageCaption(target, sourceImage.role, anchorHeading);
-      const existing = refreshedTargetImages.find(image =>
+      const existing = targetImages.find(image =>
         image.slot === sourceImage.slot
         && image.generationStatus === "completed"
         && image.publicUrl
-        && (sourceImage.checksum
+        && (sourceImage.checksum && image.checksum
           ? image.checksum === sourceImage.checksum
           : image.publicUrl === sourceImage.publicUrl));
       if (existing) {
         reusedExisting += 1;
-        const updated = await updateDraftBlogPostImage(target.id, existing.id, {
-          role: sourceImage.role,
-          anchorHeading,
-          alt,
-          caption,
-          sortOrder: sourceImage.sortOrder,
+        candidateCopies.push({
+          slot: sourceImage.slot,
+          existingImageId: existing.id,
+          updates: { role: sourceImage.role, anchorHeading, alt, caption, sortOrder: sourceImage.sortOrder },
         });
-        candidates.push(updated || existing);
         continue;
       }
 
@@ -382,50 +404,59 @@ async function copyAvailableBlogImages(
         bytesLength = bytes.length;
       }
 
-      const created = await createDraftBlogPostImage({
-        postId: target.id,
-        role: sourceImage.role,
+      candidateCopies.push({
         slot: sourceImage.slot,
-        anchorHeading,
-        source: sourceImage.source,
-        generationStatus: "completed",
-        reviewStatus: "candidate",
-        objectKey,
-        publicUrl,
-        mimeType: sourceImage.mimeType,
-        width: sourceImage.width,
-        height: sourceImage.height,
-        bytes: bytesLength,
-        checksum,
-        alt,
-        caption,
-        safeVisualBrief: sourceImage.safeVisualBrief,
-        prompt: sourceImage.prompt,
-        promptVersion: sourceImage.promptVersion,
-        provider: sourceImage.provider,
-        model: sourceImage.model,
-        generationRunId: null,
-        imageJobId: null,
-        startedAt: sourceImage.startedAt,
-        completedAt: new Date(),
-        durationMs: sourceImage.durationMs,
-        errorCode: null,
-        errorMessage: null,
-        sortOrder: sourceImage.sortOrder,
+        values: {
+          postId: target.id,
+          role: sourceImage.role,
+          slot: sourceImage.slot,
+          anchorHeading,
+          source: sourceImage.source,
+          generationStatus: "completed",
+          reviewStatus: "candidate",
+          objectKey,
+          publicUrl,
+          mimeType: sourceImage.mimeType,
+          width: sourceImage.width,
+          height: sourceImage.height,
+          bytes: bytesLength,
+          checksum,
+          alt,
+          caption,
+          safeVisualBrief: sourceImage.safeVisualBrief,
+          prompt: sourceImage.prompt,
+          promptVersion: sourceImage.promptVersion,
+          provider: sourceImage.provider,
+          model: sourceImage.model,
+          generationRunId: null,
+          imageJobId: null,
+          startedAt: sourceImage.startedAt,
+          completedAt: new Date(),
+          durationMs: sourceImage.durationMs,
+          errorCode: null,
+          errorMessage: null,
+          sortOrder: sourceImage.sortOrder,
+        },
+        updates: { role: sourceImage.role, anchorHeading, alt, caption, sortOrder: sourceImage.sortOrder },
       });
-      if (objectKey) {
-        uploadedCopies += 1;
-        const cleanupIndex = uploadedObjectKeys.indexOf(objectKey);
-        if (cleanupIndex >= 0) uploadedObjectKeys.splice(cleanupIndex, 1);
-      }
-      candidates.push(created);
-      refreshedTargetImages.push(created);
     }
+
+    const synchronized = await replaceDraftBlogImageSet({
+      postId: target.id,
+      expectedUpdatedAt: target.updatedAt,
+      selections,
+      candidates: candidateCopies,
+      authoritative: true,
+      pruneCandidates: true,
+    });
+    uploadedCopies = uploadedObjectKeys.length;
+    uploadedObjectKeys.length = 0;
+    await cleanupPrunedSiblingObjects(synchronized.staleObjectKeys);
     return {
       sourcePostId: source.id,
       sourceLanguage: source.language === "es" ? "es" : "en",
-      selected,
-      candidates,
+      selected: synchronized.selected,
+      candidates: synchronized.candidates,
       uploadedCopies,
       reusedExisting,
     };
@@ -534,9 +565,13 @@ export async function reconcileBilingualBlogImages(
     };
   }
 
-  const [currentImages, siblingImages] = await Promise.all([
+  const [currentRows, siblingRows] = await Promise.all([
     listBlogPostImages(current.id),
     listBlogPostImages(sibling.id),
+  ]);
+  const [currentImages, siblingImages] = await Promise.all([
+    hydrateManagedImageChecksums(currentRows),
+    hydrateManagedImageChecksums(siblingRows),
   ]);
   if (availableImageSignature(currentImages) === availableImageSignature(siblingImages)) {
     return {
@@ -990,6 +1025,19 @@ export async function deleteBlogImageVariant(postId: number, imageId: number): P
     throw Object.assign(new Error("Only an unselected AI variant on a draft can be deleted"), {
       statusCode: 409,
     });
+  }
+  const post = await getBlogPostById(postId);
+  if (!post) {
+    await releaseBlogPostImageDeletionClaim(postId, imageId);
+    throw Object.assign(new Error("Blog post not found"), { statusCode: 404 });
+  }
+  try {
+    await syncSelectedBlogImagesToDraftSibling(post);
+  } catch (error) {
+    await releaseBlogPostImageDeletionClaim(postId, imageId).catch(releaseError => {
+      console.error(`Could not release blog image ${imageId} after sibling synchronization failed:`, releaseError);
+    });
+    throw error;
   }
   if (claimed.objectKey) await deleteBlogImageObject(claimed.objectKey);
   const deleted = await finalizeBlogPostImageDeletion(postId, imageId);

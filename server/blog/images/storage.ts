@@ -149,13 +149,20 @@ export type DraftBlogImageSelection = {
   updates: Partial<InsertBlogPostImage>;
 };
 
-export async function replaceSelectedDraftBlogImages(input: {
+export type DraftBlogImageSetResult = {
+  selected: BlogPostImage[];
+  candidates: BlogPostImage[];
+  staleObjectKeys: string[];
+};
+
+export async function replaceDraftBlogImageSet(input: {
   postId: number;
   expectedUpdatedAt: Date;
   selections: DraftBlogImageSelection[];
+  candidates: DraftBlogImageSelection[];
   authoritative?: boolean;
-}): Promise<BlogPostImage[]> {
-  if (input.selections.length === 0) return [];
+  pruneCandidates?: boolean;
+}): Promise<DraftBlogImageSetResult> {
   if (new Set(input.selections.map(selection => selection.slot)).size !== input.selections.length) {
     throw Object.assign(new Error("Sibling image reuse contains duplicate slots"), { statusCode: 400 });
   }
@@ -240,6 +247,77 @@ export async function replaceSelectedDraftBlogImages(input: {
       }
     }
 
+    const candidates: BlogPostImage[] = [];
+    for (const candidate of input.candidates) {
+      if (Boolean(candidate.existingImageId) === Boolean(candidate.values)) {
+        throw Object.assign(new Error("Sibling image candidate reuse is invalid"), { statusCode: 400 });
+      }
+      if (candidate.existingImageId) {
+        const [updated] = await tx
+          .update(blogPostImages)
+          .set({ ...candidate.updates, reviewStatus: "candidate", updatedAt: new Date() })
+          .where(and(
+            eq(blogPostImages.id, candidate.existingImageId),
+            eq(blogPostImages.postId, input.postId),
+            eq(blogPostImages.slot, candidate.slot),
+            eq(blogPostImages.generationStatus, "completed"),
+          ))
+          .returning();
+        if (!updated?.publicUrl) {
+          throw Object.assign(new Error("A reusable sibling image candidate is no longer available"), { statusCode: 409 });
+        }
+        candidates.push(updated);
+      } else if (candidate.values) {
+        const [created] = await tx
+          .insert(blogPostImages)
+          .values({
+            ...candidate.values,
+            postId: input.postId,
+            slot: candidate.slot,
+            ...candidate.updates,
+            generationStatus: "completed",
+            reviewStatus: "candidate",
+            updatedAt: new Date(),
+          })
+          .returning();
+        if (!created?.publicUrl) {
+          throw Object.assign(new Error("A sibling image candidate copy could not be registered"), { statusCode: 500 });
+        }
+        candidates.push(created);
+      }
+    }
+
+    const staleObjectKeys: string[] = [];
+    if (input.pruneCandidates) {
+      const keepIds = new Set(candidates.map(candidate => candidate.id));
+      const existingCandidates = await tx
+        .select()
+        .from(blogPostImages)
+        .where(and(
+          eq(blogPostImages.postId, input.postId),
+          eq(blogPostImages.reviewStatus, "candidate"),
+          eq(blogPostImages.generationStatus, "completed"),
+        ));
+      const staleCandidates = existingCandidates.filter(candidate => !keepIds.has(candidate.id));
+      staleObjectKeys.push(...staleCandidates
+        .map(candidate => candidate.objectKey)
+        .filter((objectKey): objectKey is string => Boolean(objectKey)));
+      if (staleObjectKeys.length > 0) {
+        await tx
+          .insert(blogImageCleanupQueue)
+          .values(staleObjectKeys.map(objectKey => ({
+            objectKey,
+            lastError: "Queued after authoritative sibling candidate synchronization",
+          })))
+          .onConflictDoNothing({ target: blogImageCleanupQueue.objectKey });
+      }
+      if (staleCandidates.length > 0) {
+        await tx
+          .delete(blogPostImages)
+          .where(inArray(blogPostImages.id, staleCandidates.map(candidate => candidate.id)));
+      }
+    }
+
     const hero = selected.find(image => image.role === "hero");
     if (hero?.publicUrl) {
       await tx
@@ -250,9 +328,32 @@ export async function replaceSelectedDraftBlogImages(input: {
           updatedAt: new Date(),
         })
         .where(eq(blogPosts.id, input.postId));
+    } else if (input.authoritative) {
+      await tx
+        .update(blogPosts)
+        .set({
+          featuredImage: null,
+          featuredImageAlt: null,
+          updatedAt: new Date(),
+        })
+        .where(eq(blogPosts.id, input.postId));
     }
-    return selected;
+    return { selected, candidates, staleObjectKeys };
   });
+}
+
+export async function replaceSelectedDraftBlogImages(input: {
+  postId: number;
+  expectedUpdatedAt: Date;
+  selections: DraftBlogImageSelection[];
+  authoritative?: boolean;
+}): Promise<BlogPostImage[]> {
+  const result = await replaceDraftBlogImageSet({
+    ...input,
+    candidates: [],
+    pruneCandidates: false,
+  });
+  return result.selected;
 }
 
 export async function updateBlogPostImage(
@@ -445,6 +546,28 @@ export async function finalizeBlogPostImageDeletion(
       .returning({ id: blogPostImages.id });
     return deleted.length > 0;
   });
+}
+
+export async function releaseBlogPostImageDeletionClaim(
+  postId: number,
+  imageId: number,
+): Promise<BlogPostImage | undefined> {
+  const [released] = await db
+    .update(blogPostImages)
+    .set({
+      reviewStatus: "candidate",
+      errorCode: null,
+      errorMessage: null,
+      updatedAt: new Date(),
+    })
+    .where(and(
+      eq(blogPostImages.id, imageId),
+      eq(blogPostImages.postId, postId),
+      eq(blogPostImages.reviewStatus, "rejected"),
+      eq(blogPostImages.errorCode, "deletion_pending"),
+    ))
+    .returning();
+  return released;
 }
 
 export async function ensureCuratedHeroImage(post: BlogPostWithRelations): Promise<BlogPostImage | undefined> {
