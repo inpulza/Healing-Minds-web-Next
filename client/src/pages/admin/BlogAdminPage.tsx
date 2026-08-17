@@ -170,6 +170,7 @@ type SiblingImageSyncResult = {
   sourceLanguage?: BlogLanguage;
   targetPostId: number | null;
   selected: BlogPostImage[];
+  candidates: BlogPostImage[];
   uploadedCopies: number;
   reusedExisting: number;
   post: BlogPost;
@@ -914,7 +915,7 @@ export default function BlogAdminPage() {
       queryClient.invalidateQueries({ predicate: query => String(query.queryKey[0]).startsWith('/api/admin/blog/posts') });
       if (data.data.status === 'synced') {
         const sourceLabel = data.data.sourceLanguage === 'en' ? 'English' : 'Spanish';
-        setPairNotice(`Approved ${sourceLabel} images were synchronized automatically with the sibling draft. No new AI image request was sent.`);
+        setPairNotice(`The complete ${sourceLabel} image set was synchronized automatically with the sibling draft. No new AI image request was sent.`);
       }
       setActionError(null);
     },
@@ -2708,7 +2709,7 @@ export default function BlogAdminPage() {
                       </h3>
                       <p className="mt-1 max-w-2xl text-xs leading-relaxed text-slate-600">
                         The current curated hero stays selected until you explicitly choose a completed AI candidate.
-                        Inline images are placed after their saved heading without changing article HTML. Approved images stay synchronized automatically with a sibling draft, without another AI generation request.
+                        Inline images are placed after their saved heading without changing article HTML. Selected images and completed candidates stay synchronized automatically with a sibling draft, without another AI generation request.
                       </p>
                     </div>
                     {form.id && form.status === 'draft' && (

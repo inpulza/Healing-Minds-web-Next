@@ -58,15 +58,17 @@ the current sibling draft will be replaced. The refresh is version-bound to
 both rows and fails recoverably if either row changes while the run is queued.
 `pending_review` and `published` siblings can never be overwritten by refresh.
 
-Image review remains independent from text refresh, but an approved image set
+Image review remains independent from text refresh, but the complete available image set
 is shared automatically with the sibling while that destination remains a
 `draft`. It does not matter whether English or Spanish was generated first:
 creating the sibling, selecting a completed hero/inline candidate, removing an
-inline placement, or opening an older misaligned pair reconciles the approved
+inline placement, or opening an older misaligned pair reconciles the selected
+images and every completed candidate
 set without an extra editor button and without calling the image provider.
 
-Candidate images are never promoted by this synchronization; the human
-selection in the first language remains the approval gate. Curated assets may
+Candidate images are copied as candidates and never promoted by this
+synchronization; the human selection remains the approval gate in each draft.
+Curated assets may
 reuse their stable public URL. Managed AI assets are downloaded from the source
 Blob and uploaded under target-post keys, so each language owns an
 independently deletable copy. Inline copies keep their order and are

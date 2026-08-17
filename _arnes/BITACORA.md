@@ -863,3 +863,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Este registro documental crea un nuevo HEAD; repetir Preview por SHA exacto, E2E desplegado y lectura completa de Code Review antes del cierre. No mergear ni promover a Production.
 **Archivos tocados:** bitácora.
 **Evidencia:** Vercel deployment `dpl_CS3oGb6ATX6c4VbKHynywoZQ3X5D` READY, Preview, proyecto `healing-minds-psychiatry-nextjs`, equipo `inpulzasolutions-6847s-projects`, SHA exacto `40d4722`; E2E desplegado 4 PASS/4 skips en Desktop Chrome y Pixel 7, sin errores inesperados después del bypass OIDC seguro.
+
+## 2026-08-17 Codex - paridad del set visual completo EN/ES
+**Qué se hizo:** Se precisó el requisito con la evidencia del editor: “las mismas fotos” incluye no solo hero/inline ya seleccionados, sino también cada variante AI completada que todavía aparece como `candidate`. La reconciliación automática copia ahora el set visible completo al sibling draft en ambos sentidos y la UI confirma el set completo sin botón ni regeneración.
+**Decisiones:** Una candidata copiada conserva estado `candidate`; verla en el otro idioma no la aprueba ni la publica. Selecciones y colocaciones inline siguen sincronizadas, mientras cada candidata continúa bajo revisión humana. Los Blobs AI se duplican bajo claves propias del post destino y las variantes rechazadas no se reintroducen.
+**Pendientes/bugs:** Publicar este nuevo HEAD en el PR draft #28, verificar el Preview exacto, repetir E2E desplegado y releer Code Review. No mergear ni promover a Production.
+**Archivos tocados:** servicio de imágenes, admin UI, E2E/contrato unitario, documentación bilingüe/visual, decisiones, evidencia y bitácora.
+**Evidencia local:** TypeScript PASS; 135/135 tests PASS; `db:verify` 5 migraciones/112 statements/20 tablas/23 FKs PASS; image guards PASS; build 87 páginas y budgets 669.5/750 KiB + 778.4/850 KiB PASS; Playwright focalizado 4 PASS/4 skips en Desktop Chrome y Pixel 7, incluyendo una candidata hero visible en el hermano y cero requests de generación.

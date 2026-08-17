@@ -19,13 +19,15 @@ Fecha: 2026-08-17
 - Sincronización automática EN→ES y ES→EN al crear el sibling, seleccionar una
   variante completada, quitar una colocación inline o abrir una pareja antigua
   desalineada. El botón manual desaparece.
-- Solo el conjunto seleccionado por una persona se propaga; candidatos no
-  aprobados siguen sin aparecer en el artículo hermano.
+- Se propaga el set completo disponible: hero/inline seleccionados y también
+  las variantes completadas. Las no elegidas conservan estado `candidate`, se
+  ven en el editor hermano y siguen fuera del artículo hasta aprobación humana.
 - Las imágenes AI se copian byte a byte desde el Blob fuente a claves propias
   del post destino; no hay una nueva llamada a GPT Image ni un objeto borrable
   compartido entre idiomas.
-- Hero, orden inline, anchors del idioma destino, alt y caption quedan
-  seleccionados en una transacción autoritativa. Quitar un inline en el origen
+- Hero, orden inline, anchors del idioma destino, alt y caption seleccionados
+  se aplican autoritativamente; las candidatas se registran sin promoverlas.
+  Quitar un inline en el origen
   deselecciona ese slot en el sibling. Un cambio concurrente devuelve 409 sin
   aplicar un estado parcial.
 - La escritura automática solo acepta un destino `draft`; un sibling en review
@@ -60,3 +62,12 @@ Fecha: 2026-08-17
 
 No se leyó ni imprimió ningún secreto. No se modificó Vercel, Neon, Production
 ni el dominio.
+
+## Precisión final del requisito
+
+La comprobación visual posterior aclaró que el set hermano debe incluir también
+las imágenes AI completadas que aún no fueron elegidas. El contrato y el E2E se
+ampliaron: una candidata hero distinta aparece automáticamente en el editor del
+otro idioma con estado `candidate`, junto al hero/inline seleccionados, sin
+request a generación. El gate humano sigue intacto y las variantes `rejected`
+no se propagan.

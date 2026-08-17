@@ -6,13 +6,13 @@ import test from "node:test";
 const root = process.cwd();
 const read = relativePath => fs.readFileSync(path.join(root, relativePath), "utf8");
 
-test("approved images synchronize automatically in either language without another AI request", () => {
+test("the complete available image set synchronizes in either language without another AI request", () => {
   const route = read("app/api/admin/blog/[[...path]]/route.ts");
   const legacyRoute = read("server/blog/images/routes.ts");
   const client = read("client/src/pages/admin/BlogAdminPage.tsx");
   const service = read("server/blog/images/service.ts");
   const synchronizationFunctions = service.slice(
-    service.indexOf("async function copySelectedBlogImages"),
+    service.indexOf("async function copyAvailableBlogImages"),
     service.indexOf("function assertBlogImageInputsSafe"),
   );
 
@@ -39,13 +39,16 @@ test("sibling image parity is authoritative, draft-only, atomic and independentl
   assert.match(storage, /replaceSelectedDraftBlogImages[\s\S]*post\.status !== "draft"/);
   assert.match(storage, /expectedUpdatedAt[\s\S]*The draft changed while sibling images were being prepared/);
   assert.match(storage, /input\.authoritative[\s\S]*reviewStatus: "candidate"[\s\S]*reviewStatus: "selected"/);
+  assert.match(service, /candidateSourceImages[\s\S]*reviewStatus === "candidate"/);
+  assert.match(service, /candidateSourceImages[\s\S]*createDraftBlogPostImage/);
+  assert.match(service, /availableImageSignature[\s\S]*reviewStatus !== "rejected"/);
   assert.match(storage, /featuredImage: hero\.publicUrl/);
   assert.match(service, /authoritative: true/);
   assert.match(service, /cleanupUnregisteredSiblingCopies/);
   assert.match(service, /queueBlogImageCleanup/);
 });
 
-test("translation creation applies the approved source image set to the new sibling draft", () => {
+test("translation creation applies the available source image set to the new sibling draft", () => {
   const workflow = read("server/blog/translation/workflow.ts");
   assert.match(workflow, /createBlogTranslationSibling[\s\S]*syncSelectedBlogImagesToDraftSibling\(source\)/);
   assert.match(workflow, /approved-images-synchronized-without-generation/);

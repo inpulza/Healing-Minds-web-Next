@@ -33,6 +33,7 @@ import {
   queueBlogImageCleanup,
   replaceSelectedDraftBlogImages,
   updateBlogPostImage,
+  updateDraftBlogPostImage,
 } from "./storage";
 import {
   deleteBlogImageObject,
@@ -112,11 +113,12 @@ export type BlogSiblingImageReuseResult = {
   sourcePostId: number;
   sourceLanguage: "en" | "es";
   selected: BlogPostImage[];
+  candidates: BlogPostImage[];
   uploadedCopies: number;
   reusedExisting: number;
 };
 
-async function copySelectedBlogImages(
+async function copyAvailableBlogImages(
   source: BlogPostWithRelations,
   target: BlogPostWithRelations,
 ): Promise<BlogSiblingImageReuseResult> {
@@ -131,6 +133,10 @@ async function copySelectedBlogImages(
     listBlogPostImages(target.id),
   ]);
   const reusable = selectedSourceImages.filter(image => image.publicUrl && image.generationStatus === "completed");
+  const candidateSourceImages = allSourceImages.filter(image =>
+    image.reviewStatus === "candidate"
+    && image.generationStatus === "completed"
+    && image.publicUrl);
   if (!reusable.some(image => image.role === "hero") && source.featuredImage) {
     const registeredHero = allSourceImages.find(image =>
       image.role === "hero"
@@ -175,6 +181,7 @@ async function copySelectedBlogImages(
 
   const selections: Parameters<typeof replaceSelectedDraftBlogImages>[0]["selections"] = [];
   const uploadedObjectKeys: string[] = [];
+  let uploadedCopies = 0;
   let reusedExisting = 0;
   try {
     for (const source of sources) {
@@ -316,11 +323,110 @@ async function copySelectedBlogImages(
       selections,
       authoritative: true,
     });
+    uploadedCopies += uploadedObjectKeys.length;
+    uploadedObjectKeys.length = 0;
+
+    const candidates: BlogPostImage[] = [];
+    const refreshedTargetImages = await listBlogPostImages(target.id);
+    const allTargetAnchors = getInlineImageAnchors(target.content || "", 2);
+    for (const sourceImage of candidateSourceImages) {
+      const anchorIndex = sourceImage.role === "inline"
+        ? Math.max(0, (Number(sourceImage.slot.split(":")[1]) || 1) - 1)
+        : -1;
+      const anchorHeading = sourceImage.role === "inline"
+        ? allTargetAnchors[anchorIndex] || null
+        : null;
+      const alt = buildBlogImageAlt(target, sourceImage.role, anchorHeading);
+      const caption = buildBlogImageCaption(target, sourceImage.role, anchorHeading);
+      const existing = refreshedTargetImages.find(image =>
+        image.slot === sourceImage.slot
+        && image.generationStatus === "completed"
+        && image.publicUrl
+        && (sourceImage.checksum
+          ? image.checksum === sourceImage.checksum
+          : image.publicUrl === sourceImage.publicUrl));
+      if (existing) {
+        reusedExisting += 1;
+        const updated = await updateDraftBlogPostImage(target.id, existing.id, {
+          role: sourceImage.role,
+          anchorHeading,
+          alt,
+          caption,
+          sortOrder: sourceImage.sortOrder,
+        });
+        candidates.push(updated || existing);
+        continue;
+      }
+
+      const managed = isManagedBlogImagePublicUrl(sourceImage.publicUrl!);
+      if (sourceImage.source === "ai" && !managed) {
+        throw Object.assign(
+          new Error("The sibling AI image candidate is not in managed Vercel Blob storage and cannot be copied safely"),
+          { statusCode: 409 },
+        );
+      }
+
+      let objectKey: string | null = null;
+      let publicUrl = sourceImage.publicUrl!;
+      let bytesLength = sourceImage.bytes;
+      let checksum = sourceImage.checksum;
+      if (managed) {
+        const sourceObjectKey = sourceImage.objectKey
+          || sourceImage.publicUrl!.slice("/public-objects/".length);
+        const bytes = await downloadBlogImage(sourceObjectKey);
+        checksum = checksum || crypto.createHash("sha256").update(bytes).digest("hex");
+        objectKey = buildObjectKey(target.id, sourceImage.role, sourceImage.slot);
+        await uploadBlogImage(objectKey, bytes);
+        uploadedObjectKeys.push(objectKey);
+        publicUrl = getManagedBlogImagePublicUrl(objectKey);
+        bytesLength = bytes.length;
+      }
+
+      const created = await createDraftBlogPostImage({
+        postId: target.id,
+        role: sourceImage.role,
+        slot: sourceImage.slot,
+        anchorHeading,
+        source: sourceImage.source,
+        generationStatus: "completed",
+        reviewStatus: "candidate",
+        objectKey,
+        publicUrl,
+        mimeType: sourceImage.mimeType,
+        width: sourceImage.width,
+        height: sourceImage.height,
+        bytes: bytesLength,
+        checksum,
+        alt,
+        caption,
+        safeVisualBrief: sourceImage.safeVisualBrief,
+        prompt: sourceImage.prompt,
+        promptVersion: sourceImage.promptVersion,
+        provider: sourceImage.provider,
+        model: sourceImage.model,
+        generationRunId: null,
+        imageJobId: null,
+        startedAt: sourceImage.startedAt,
+        completedAt: new Date(),
+        durationMs: sourceImage.durationMs,
+        errorCode: null,
+        errorMessage: null,
+        sortOrder: sourceImage.sortOrder,
+      });
+      if (objectKey) {
+        uploadedCopies += 1;
+        const cleanupIndex = uploadedObjectKeys.indexOf(objectKey);
+        if (cleanupIndex >= 0) uploadedObjectKeys.splice(cleanupIndex, 1);
+      }
+      candidates.push(created);
+      refreshedTargetImages.push(created);
+    }
     return {
       sourcePostId: source.id,
       sourceLanguage: source.language === "es" ? "es" : "en",
       selected,
-      uploadedCopies: uploadedObjectKeys.length,
+      candidates,
+      uploadedCopies,
       reusedExisting,
     };
   } catch (error) {
@@ -336,7 +442,7 @@ export async function reuseSelectedSiblingBlogImages(
   if (!sibling) {
     throw Object.assign(new Error("This draft does not have a translation sibling yet"), { statusCode: 409 });
   }
-  return copySelectedBlogImages(sibling, target);
+  return copyAvailableBlogImages(sibling, target);
 }
 
 export type BlogSiblingImageSyncResult =
@@ -347,6 +453,7 @@ export type BlogSiblingImageSyncResult =
       sourcePostId: number;
       targetPostId: number | null;
       selected: BlogPostImage[];
+      candidates: BlogPostImage[];
       uploadedCopies: 0;
       reusedExisting: 0;
     };
@@ -355,18 +462,25 @@ function imageIdentity(image: BlogPostImage): string {
   return `${image.slot}:${image.checksum || image.publicUrl || "missing"}`;
 }
 
-function approvedImagePriority(images: BlogPostImage[]): number {
-  const completed = images.filter(image => image.generationStatus === "completed" && image.publicUrl);
+function availableImagePriority(images: BlogPostImage[]): number {
+  const completed = images.filter(image =>
+    image.reviewStatus !== "rejected"
+    && image.generationStatus === "completed"
+    && image.publicUrl);
+  const selectedCount = completed.filter(image => image.reviewStatus === "selected").length;
   const inlineCount = completed.filter(image => image.role === "inline").length;
   const aiCount = completed.filter(image => image.source === "ai").length;
   const heroCount = completed.some(image => image.role === "hero") ? 1 : 0;
-  return inlineCount * 100 + aiCount * 10 + heroCount;
+  return selectedCount * 10_000 + completed.length * 1_000 + inlineCount * 100 + aiCount * 10 + heroCount;
 }
 
-function approvedImageSignature(images: BlogPostImage[]): string {
+function availableImageSignature(images: BlogPostImage[]): string {
   return images
-    .filter(image => image.generationStatus === "completed" && image.publicUrl)
-    .map(imageIdentity)
+    .filter(image =>
+      image.reviewStatus !== "rejected"
+      && image.generationStatus === "completed"
+      && image.publicUrl)
+    .map(image => `${image.reviewStatus}:${imageIdentity(image)}`)
     .sort()
     .join("|");
 }
@@ -382,6 +496,7 @@ export async function syncSelectedBlogImagesToDraftSibling(
       sourcePostId: source.id,
       targetPostId: null,
       selected: [],
+      candidates: [],
       uploadedCopies: 0,
       reusedExisting: 0,
     };
@@ -393,11 +508,12 @@ export async function syncSelectedBlogImagesToDraftSibling(
       sourcePostId: source.id,
       targetPostId: sibling.id,
       selected: [],
+      candidates: [],
       uploadedCopies: 0,
       reusedExisting: 0,
     };
   }
-  const result = await copySelectedBlogImages(source, sibling);
+  const result = await copyAvailableBlogImages(source, sibling);
   return { status: "synced", targetPostId: sibling.id, ...result };
 }
 
@@ -412,29 +528,31 @@ export async function reconcileBilingualBlogImages(
       sourcePostId: current.id,
       targetPostId: null,
       selected: [],
+      candidates: [],
       uploadedCopies: 0,
       reusedExisting: 0,
     };
   }
 
   const [currentImages, siblingImages] = await Promise.all([
-    getSelectedBlogPostImages(current.id),
-    getSelectedBlogPostImages(sibling.id),
+    listBlogPostImages(current.id),
+    listBlogPostImages(sibling.id),
   ]);
-  if (approvedImageSignature(currentImages) === approvedImageSignature(siblingImages)) {
+  if (availableImageSignature(currentImages) === availableImageSignature(siblingImages)) {
     return {
       status: "skipped",
       reason: "already-aligned",
       sourcePostId: current.id,
       targetPostId: sibling.id,
       selected: [],
+      candidates: [],
       uploadedCopies: 0,
       reusedExisting: 0,
     };
   }
 
-  const currentPriority = approvedImagePriority(currentImages);
-  const siblingPriority = approvedImagePriority(siblingImages);
+  const currentPriority = availableImagePriority(currentImages);
+  const siblingPriority = availableImagePriority(siblingImages);
   let source: BlogPostWithRelations;
   let target: BlogPostWithRelations;
   if (currentPriority !== siblingPriority) {
@@ -458,6 +576,7 @@ export async function reconcileBilingualBlogImages(
       sourcePostId: current.id,
       targetPostId: sibling.id,
       selected: [],
+      candidates: [],
       uploadedCopies: 0,
       reusedExisting: 0,
     };
@@ -469,11 +588,12 @@ export async function reconcileBilingualBlogImages(
       sourcePostId: source.id,
       targetPostId: target.id,
       selected: [],
+      candidates: [],
       uploadedCopies: 0,
       reusedExisting: 0,
     };
   }
-  const result = await copySelectedBlogImages(source, target);
+  const result = await copyAvailableBlogImages(source, target);
   return { status: "synced", targetPostId: target.id, ...result };
 }
 

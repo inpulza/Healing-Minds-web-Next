@@ -37,6 +37,11 @@ const sourceImages = [
     objectKey: "blog-images/posts/post-11-inline-1-1700000000000-bbbbbbbbbbbb.webp", publicUrl: "/public-objects/blog-images/posts/post-11-inline-1-1700000000000-bbbbbbbbbbbb.webp", mimeType: "image/webp",
     width: 1536, height: 1024, bytes: 1234, checksum: "b".repeat(64), alt: "Calm consultation", caption: "Educational photograph", model: "gpt-image-2", imageJobId: 1, errorMessage: null, sortOrder: 1, createdAt: new Date().toISOString(),
   },
+  {
+    id: 103, postId: 11, role: "hero", slot: "hero", anchorHeading: null, source: "ai", generationStatus: "completed", reviewStatus: "candidate",
+    objectKey: "blog-images/posts/post-11-hero-1700000000000-eeeeeeeeeeee.webp", publicUrl: "/public-objects/blog-images/posts/post-11-hero-1700000000000-eeeeeeeeeeee.webp", mimeType: "image/webp",
+    width: 1536, height: 1024, bytes: 1234, checksum: "e".repeat(64), alt: "Alternative calm setting", caption: null, model: "gpt-image-2", imageJobId: 1, errorMessage: null, sortOrder: 0, createdAt: new Date().toISOString(),
+  },
 ];
 const initialSiblingImages = [{
   ...sourceImages[0], id: 201, postId: 22, source: "curated", objectKey: null, publicUrl: sibling.featuredImage, checksum: null, alt: sibling.featuredImageAlt, model: null, imageJobId: null,
@@ -45,12 +50,8 @@ const reusedSiblingImages = sourceImages.map((image, index) => ({
   ...image,
   id: 301 + index,
   postId: 22,
-  objectKey: image.role === "hero"
-    ? "blog-images/posts/post-22-hero-1700000000001-cccccccccccc.webp"
-    : "blog-images/posts/post-22-inline-1-1700000000001-dddddddddddd.webp",
-  publicUrl: image.role === "hero"
-    ? "/public-objects/blog-images/posts/post-22-hero-1700000000001-cccccccccccc.webp"
-    : "/public-objects/blog-images/posts/post-22-inline-1-1700000000001-dddddddddddd.webp",
+  objectKey: `blog-images/posts/post-22-${image.role}-${1700000000001 + index}-${index === 0 ? "cccccccccccc" : index === 1 ? "dddddddddddd" : "ffffffffffff"}.webp`,
+  publicUrl: `/public-objects/blog-images/posts/post-22-${image.role}-${1700000000001 + index}-${index === 0 ? "cccccccccccc" : index === 1 ? "dddddddddddd" : "ffffffffffff"}.webp`,
   alt: image.role === "hero" ? "Fotografía editorial serena para Entender la ansiedad" : "Fotografía editorial serena para Lo que pueden esperar los pacientes en el artículo",
   anchorHeading: image.role === "inline" ? "Lo que pueden esperar los pacientes" : null,
 }));
@@ -116,7 +117,7 @@ async function mockAdmin(page: Page) {
       reconcileRequests.push(22);
       imagesReused = true;
       const updated = { ...sibling, featuredImage: reusedSiblingImages[0].publicUrl, featuredImageAlt: reusedSiblingImages[0].alt };
-      return reply({ success: true, data: { status: "synced", sourcePostId: 11, sourceLanguage: "en", targetPostId: 22, selected: reusedSiblingImages, uploadedCopies: 2, reusedExisting: 0, post: updated, images: reusedSiblingImages } });
+      return reply({ success: true, data: { status: "synced", sourcePostId: 11, sourceLanguage: "en", targetPostId: 22, selected: reusedSiblingImages.filter(image => image.reviewStatus === "selected"), candidates: reusedSiblingImages.filter(image => image.reviewStatus === "candidate"), uploadedCopies: 3, reusedExisting: 0, post: updated, images: reusedSiblingImages } });
     }
     if (path === "/api/admin/blog/posts/22" && request.method() === "PUT") {
       const requestBody = request.postDataJSON();
@@ -202,8 +203,9 @@ async function mockSpanishFirstPair(page: Page) {
           sourcePostId: 22,
           sourceLanguage: "es",
           targetPostId: 11,
-          selected: sourceImages,
-          uploadedCopies: 2,
+          selected: sourceImages.filter(image => image.reviewStatus === "selected"),
+          candidates: sourceImages.filter(image => image.reviewStatus === "candidate"),
+          uploadedCopies: 3,
           reusedExisting: 0,
           post: source,
           images: sourceImages,
@@ -260,9 +262,10 @@ for (const name of ["desktop", "mobile"] as const) {
     await expect(page.locator("#meta-title")).toHaveValue(/.{1,60}/);
     expect((await page.locator("#meta-title").inputValue()).length).toBeLessThanOrEqual(60);
     await expect.poll(() => mocked.reconcileRequests).toEqual([22]);
-    await expect(page.getByText("Approved English images were synchronized automatically with the sibling draft. No new AI image request was sent.")).toBeVisible();
+    await expect(page.getByText("The complete English image set was synchronized automatically with the sibling draft. No new AI image request was sent.")).toBeVisible();
     await expect(page.getByRole("button", { name: /Reuse approved images from/ })).toHaveCount(0);
     await expect(page.locator("#featured-image")).toHaveValue(reusedSiblingImages[0].publicUrl);
+    await expect(page.locator(`img[src="${reusedSiblingImages[2].publicUrl}"]`)).toBeVisible();
     await expect(page.getByText("After: Lo que pueden esperar los pacientes")).toBeVisible();
     await page.getByRole("button", { name: "Save draft" }).click();
     await expect.poll(() => mocked.saveRequests.length).toBe(1);
@@ -273,7 +276,7 @@ for (const name of ["desktop", "mobile"] as const) {
 }
 
 for (const name of ["desktop", "mobile"] as const) {
-  test(`Spanish-first approved images appear automatically in the English sibling on ${name}`, async ({ page }, testInfo) => {
+  test(`Spanish-first selected images and candidates appear automatically in the English sibling on ${name}`, async ({ page }, testInfo) => {
     test.skip(!testInfo.project.name.startsWith(name), `Covered by ${name} project`);
     const errors: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
@@ -288,8 +291,9 @@ for (const name of ["desktop", "mobile"] as const) {
     await page.getByRole("button", { name: "Open and review sibling" }).click();
     await expect(page.locator("#post-title")).toHaveValue("Understanding anxiety");
     await expect.poll(() => mocked.reconcileRequests).toEqual([11]);
-    await expect(page.getByText("Approved Spanish images were synchronized automatically with the sibling draft. No new AI image request was sent.")).toBeVisible();
+    await expect(page.getByText("The complete Spanish image set was synchronized automatically with the sibling draft. No new AI image request was sent.")).toBeVisible();
     await expect(page.locator("#featured-image")).toHaveValue(sourceImages[0].publicUrl);
+    await expect(page.locator(`img[src="${sourceImages[2].publicUrl}"]`)).toBeVisible();
     await expect(page.getByText("After: What patients can expect")).toBeVisible();
     await expect(page.getByRole("button", { name: /Reuse approved images from/ })).toHaveCount(0);
     expect(mocked.imageGenerationRequests).toEqual([]);
