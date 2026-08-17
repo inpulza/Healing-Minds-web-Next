@@ -65,9 +65,9 @@ test("provider normalizes SEO metadata, preserves mapped links and rejects inven
       Array.from(translated.contentHtml.matchAll(/href="([^"]+)"/g), match => match[1]),
       ['/es/servicios', 'https://www.nimh.nih.gov/health/publications/espanol/depresion'],
     );
-    assert.ok(translated.metaTitle.length <= 70);
+    assert.ok(translated.metaTitle.length <= 60);
     assert.ok(translated.metaDescription.length <= 160);
-    assert.equal(translated.metaTitle, 'Entender la depresion y reconocer cuando conviene buscar evaluacion');
+    assert.equal(translated.metaTitle, 'Entender la depresion y reconocer cuando conviene buscar');
     assert.equal(translated.metaDescription, 'Informacion educativa sobre depresion, sus sintomas, la evaluacion profesional y las opciones de apoyo que pueden ayudar a una persona a reconocer cuando');
     assert.throws(() => normalizeBlogTranslationDraft({}), error => {
       assert.equal(error.code, 'blog_translation_invalid_draft');

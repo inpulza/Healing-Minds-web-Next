@@ -831,6 +831,18 @@ export async function POST(request: NextRequest, context: RouteContext) {
         import("../../../../../server/blog/images/storage"),
         import("../../../../../server/blog/images/job-storage"),
       ]);
+      if (segments.length === 4 && segments[3] === "reuse-sibling") {
+        const result = await imageService.reuseSelectedSiblingBlogImages(post);
+        const updatedPost = await storage.getBlogPostById(postId);
+        return json({
+          success: true,
+          data: {
+            ...result,
+            post: updatedPost,
+            images: await images.listBlogPostImages(postId),
+          },
+        });
+      }
       if (segments.length === 4 && segments[3] === "generate") {
         imageConfig.assertBlogImageConfigured();
         const idempotencyKey = request.headers.get("Idempotency-Key")?.trim() || "";
