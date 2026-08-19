@@ -2477,7 +2477,7 @@ function getFAQPageSchema(baseUrl: string) {
         "name": "Do you accept insurance?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We accept most major insurance plans including Aetna, Blue Cross Blue Shield, Cigna, United Healthcare, Humana, Medicare, and Tricare. Our staff will verify your benefits and explain your coverage before your first appointment. We also offer flexible payment options for those without insurance coverage."
+          "text": "We accept most major insurance plans including Aetna, Cigna, United Healthcare, Humana, Medicare, and Tricare. Our staff will verify your benefits and explain your coverage before your first appointment. We also offer flexible payment options for those without insurance coverage."
         }
       },
       {

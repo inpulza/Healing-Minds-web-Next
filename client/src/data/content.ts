@@ -45,7 +45,6 @@ export const serviceAreas = [
 export const acceptedInsurance = [
   "Most major insurance plans",
   "Aetna",
-  "Blue Cross Blue Shield",
   "Cigna",
   "UnitedHealthcare",
   "Medicare",
@@ -210,7 +209,7 @@ export const faqData = {
     {
       question: "What insurance plans do you accept?",
       answer:
-        "We accept most major insurance plans including Aetna, Blue Cross Blue Shield, Cigna, UnitedHealthcare, Medicare, and Medicaid. We verify benefits before your first appointment.",
+        "We accept most major insurance plans including Aetna, Cigna, UnitedHealthcare, Medicare, and Medicaid. We verify benefits before your first appointment.",
     },
     {
       question: "What is the cost of treatment?",
@@ -242,7 +241,7 @@ export const faqData = {
     {
       question: "¿Qué planes de seguro aceptan?",
       answer:
-        "Aceptamos la mayoría de los planes de seguro principales incluyendo Aetna, Blue Cross Blue Shield, Cigna, UnitedHealthcare, Medicare, y Medicaid. Verificamos beneficios antes de su primera cita.",
+        "Aceptamos la mayoría de los planes de seguro principales, incluyendo Aetna, Cigna, UnitedHealthcare, Medicare y Medicaid. Verificamos beneficios antes de su primera cita.",
     },
     {
       question: "¿Cuál es el costo del tratamiento?",
