@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { authenticateProtectedPreview, finishProtectedPreview } from "./preview-auth";
 
 const affectedRoutes = [
   "/",
@@ -19,6 +20,14 @@ const affectedRoutes = [
 
 const unsupportedPlanPattern = /florida\s*blue|blue\s*cross\s*blue\s*shield|bluecross\s*blueshield/i;
 const retiredLogoPattern = /6_1755868276798/i;
+
+test.beforeEach(async ({ page }) => {
+  await authenticateProtectedPreview(page);
+});
+
+test.afterEach(async ({ page }) => {
+  await finishProtectedPreview(page);
+});
 
 async function rejectConsentIfVisible(page: Page) {
   const reject = page.getByTestId("button-reject-all");
