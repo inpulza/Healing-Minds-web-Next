@@ -26,7 +26,6 @@ import sunshineHealthLogo from '../assets/insurance-sunshine.webp';
 import avmedLogo from '../assets/insurance-avmed.webp';
 import wellcareLogo from '../assets/insurance-wellcare.webp';
 import doctorsHealthcareLogo from '@assets/3_1755868276797.webp';
-import floridaBlueLogo from '@assets/6_1755868276798.webp';
 import unitedHealthcareLogo from '@assets/8_1755868276798.webp';
 import oscarLogo from '@assets/10_1755868276798.webp';
 import { contactContent } from '@/data/pageContent/mainPages/contact';
@@ -216,7 +215,6 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
     { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
     { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
     { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
-    { src: floridaBlueLogo, alt: 'Florida Blue', name: 'Florida Blue' },
     { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' },
     { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
     { src: oscarLogo, alt: 'Oscar Health', name: 'Oscar' },

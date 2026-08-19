@@ -152,7 +152,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `Do you accept insurance for psychiatric services?`,
         paragraphs: [
-          `Yes. We accept most major insurance plans including Medicare, Aetna, Cigna, BlueCross BlueShield, United Healthcare, and others. Self-pay rates and flexible payment plans are also available. We verify your benefits before the first appointment.`,
+          `Yes. We accept most major insurance plans including Medicare, Aetna, Cigna, United Healthcare, and others. Self-pay rates and flexible payment plans are also available. We verify your benefits before the first appointment.`,
         ],
       },
       {
@@ -354,7 +354,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `¿Aceptan seguro médico para servicios psiquiátricos?`,
         paragraphs: [
-          `Sí. Aceptamos la mayoría de los planes de seguro principales, incluyendo Medicare, Aetna, Cigna, BlueCross BlueShield, United Healthcare y otros. También hay tarifas de pago personal y planes de pago flexibles disponibles. Verificamos sus beneficios antes de la primera cita.`,
+          `Sí. Aceptamos la mayoría de los planes de seguro principales, incluyendo Medicare, Aetna, Cigna, United Healthcare y otros. También hay tarifas de pago personal y planes de pago flexibles disponibles. Verificamos sus beneficios antes de la primera cita.`,
         ],
       },
       {

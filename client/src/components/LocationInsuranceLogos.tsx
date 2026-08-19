@@ -16,7 +16,6 @@ import avmedLogo from '../assets/insurance-avmed.webp';           // 39KB vs 91K
 import wellcareLogo from '../assets/insurance-wellcare.webp';     // 30KB vs 67KB PNG
 // Additional WebP optimized logos
 import doctorsHealthcareLogo from '@assets/3_1755868276797.webp';  // 77KB vs 197KB PNG
-import floridaBlueLogo from '@assets/6_1755868276798.webp';         // 77KB vs 201KB PNG
 import unitedHealthcareLogo from '@assets/8_1755868276798.webp';   // 71KB vs 173KB PNG
 import oscarLogo from '@assets/10_1755868276798.webp';              // 39KB vs 91KB PNG
 
@@ -31,7 +30,6 @@ const LocationInsuranceLogos = () => {
     { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
     { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
     { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
-    { src: floridaBlueLogo, alt: 'Florida Blue', name: 'Florida Blue' },
     { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' },
     { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
     { src: oscarLogo, alt: 'Oscar Health', name: 'Oscar' },

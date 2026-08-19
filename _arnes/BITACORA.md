@@ -893,3 +893,10 @@ Plantilla de entrada (cópiala tal cual y rellena):
 **Pendientes/bugs:** Push, Preview/Quality/E2E del nuevo SHA y una segunda ronda completa de Code Review; resolver los cuatro hilos cuando el HEAD que los corrige quede verificable.
 **Archivos tocados:** servicio de imágenes, editor admin, E2E, contrato unitario, evidencia y bitácora.
 **Evidencia local:** TypeScript PASS; 135/135 tests PASS; `db:verify` e image guards PASS; build 87 páginas y budgets 669.5/750 KiB + 778.4/850 KiB PASS; Playwright focalizado 12 PASS/12 skips cruzados en Desktop Chrome y Pixel 7, cubriendo solapamiento, hero nulo, borrado bilingüe, colisión de checksum, EN→ES y ES→EN; `git diff --check` PASS.
+
+## 2026-08-19 Codex - retirada completa de Florida Blue / Blue Cross Blue Shield
+**Qué se hizo:** A petición de la Dra. Melva Vidal, se retiró el plan no aceptado de los tres inventarios visuales de seguros, de las preguntas frecuentes EN/ES de inicio, servicios, Marco Island, Estero, Vanderbilt Beach y telepsiquiatría, y del FAQ estructurado que leen los buscadores. También se eliminaron los archivos PNG y WebP del logotipo.
+**Decisiones:** Los artefactos históricos de auditoría conservados en `_arnes/captura` no son contenido público y permanecen intactos como evidencia. Se añadió un contrato que falla si el nombre comercial, la denominación Blue Cross Blue Shield o los archivos retirados reaparecen en fuentes públicas.
+**Pendientes/bugs:** Publicar el PR, verificar el Preview del SHA exacto, leer y clasificar todas las notas de Code Review y, si queda limpio, integrar por squash y verificar Production.
+**Archivos tocados:** componentes de seguros de inicio, contacto y ubicaciones; datos de contenido y FAQs EN/ES; schema FAQ del servidor; dos assets retirados; contrato unitario y E2E de seguros.
+**Evidencia local:** TypeScript PASS; 137/137 unitarios PASS; build de 87 páginas y budgets 669.5/750 KiB + 778.4/850 KiB PASS; Playwright 2/2 PASS en Desktop Chrome y Pixel 7 recorriendo 14 rutas afectadas, sin el texto, el logo, requests retiradas ni errores inesperados; `git diff --check` PASS.

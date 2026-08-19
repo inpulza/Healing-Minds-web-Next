@@ -121,7 +121,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you accept Medicare for Marco Island residents?",
-        answer: "Yes, we accept Medicare, as well as most other major plans (Aetna, Cigna, Florida Blue) common in the Marco Island community. Please call to verify your plan."
+        answer: "Yes, we accept Medicare, as well as other major plans such as Aetna and Cigna. Please call to verify your plan."
       },
       {
         question: "What mental health services do you offer related to events like the Marco Island Seafood & Music Festival?",
@@ -163,7 +163,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Aceptan Medicare para residentes de Marco Island?",
-        answer: "Sí, aceptamos Medicare, así como la mayoría de los otros planes principales (Aetna, Cigna, Florida Blue) comunes en la comunidad de Marco Island. Por favor llame para verificar su plan."
+        answer: "Sí, aceptamos Medicare, así como otros planes principales, como Aetna y Cigna. Por favor llame para verificar su plan."
       },
       {
         question: "¿Qué servicios de salud mental ofrecen relacionados con eventos como el Marco Island Seafood & Music Festival?",
@@ -204,7 +204,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What insurance do you accept that's common in Estero?",
-        answer: "We accept major commercial insurance plans used by Estero employers (like Aetna, Cigna, Florida Blue), as well as Medicare and Florida Medicaid. Call to verify your coverage."
+        answer: "We accept major commercial insurance plans used by Estero employers, such as Aetna and Cigna, as well as Medicare and Florida Medicaid. Call to verify your coverage."
       },
       {
         question: "Does Dr. Reve speak Spanish?",
@@ -246,7 +246,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Qué seguros aceptan que sean comunes en Estero?",
-        answer: "Aceptamos los principales planes de seguro comerciales utilizados por los empleadores en Estero (como Aetna, Cigna, Florida Blue), así como Medicare y Medicaid de Florida. Llame para verificar su cobertura."
+        answer: "Aceptamos los principales planes de seguro comerciales utilizados por los empleadores en Estero, como Aetna y Cigna, así como Medicare y Medicaid de Florida. Llame para verificar su cobertura."
       },
       {
         question: "¿La Dra. Reve habla español?",
@@ -370,7 +370,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What insurance do you accept for Vanderbilt Beach area patients?",
-        answer: "We accept most major insurance plans common in the Vanderbilt Beach area, including Medicare, Aetna, Cigna, and Florida Blue. Please call to verify coverage for your specific plan."
+        answer: "We accept most major insurance plans common in the Vanderbilt Beach area, including Medicare, Aetna, and Cigna. Please call to verify coverage for your specific plan."
       },
       {
         question: "Do you provide bilingual services for the Vanderbilt Beach community?",
@@ -412,7 +412,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Qué seguro aceptan para pacientes del área de Vanderbilt Beach?",
-        answer: "Aceptamos la mayoría de los principales planes de seguro comunes en el área de Vanderbilt Beach, incluyendo Medicare, Aetna, Cigna, y Florida Blue. Por favor llame para verificar la cobertura de su plan específico."
+        answer: "Aceptamos la mayoría de los principales planes de seguro comunes en el área de Vanderbilt Beach, incluyendo Medicare, Aetna y Cigna. Por favor llame para verificar la cobertura de su plan específico."
       },
       {
         question: "¿Proporcionan servicios bilingües para la comunidad de Vanderbilt Beach?",
@@ -825,7 +825,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Does insurance cover telepsychiatry services?",
-        answer: "Most insurance plans now cover telepsychiatry the same as in-person visits. We accept Aetna, Cigna, Medicare, Florida Blue, and most major insurance plans. Contact us to verify your specific coverage."
+        answer: "Most insurance plans now cover telepsychiatry the same as in-person visits. We accept Aetna, Cigna, Medicare, and most major insurance plans. Contact us to verify your specific coverage."
       },
       {
         question: "Can I switch between telehealth and in-person visits?",
@@ -867,7 +867,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿El seguro cubre los servicios de telepsiquiatría?",
-        answer: "La mayoría de los planes de seguro ahora cubren la telepsiquiatría igual que las visitas en persona. Aceptamos Aetna, Cigna, Medicare, Florida Blue y la mayoría de los principales planes de seguro. Contáctenos para verificar su cobertura específica."
+        answer: "La mayoría de los planes de seguro ahora cubren la telepsiquiatría igual que las visitas en persona. Aceptamos Aetna, Cigna, Medicare y la mayoría de los principales planes de seguro. Contáctenos para verificar su cobertura específica."
       },
       {
         question: "¿Puedo alternar entre visitas de telesalud y en persona?",
