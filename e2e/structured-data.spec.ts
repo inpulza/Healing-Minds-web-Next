@@ -22,6 +22,18 @@ function graphTypes(block: unknown): string[] {
   return graph.flatMap((node) => Array.isArray(node["@type"]) ? node["@type"] : node["@type"] || []);
 }
 
+async function expectReactHydrated(page: Page) {
+  const toggle = page.getByTestId("mobile-menu-toggle");
+  await expect.poll(
+    () => toggle.evaluate((element) =>
+      Object.keys(element).some(
+        (key) => key.startsWith("__reactProps$") || key.startsWith("__reactFiber$"),
+      ),
+    ).catch(() => false),
+    { message: "expected React navigation handlers to be attached", timeout: 10_000 },
+  ).toBe(true);
+}
+
 async function fetchHtml(request: APIRequestContext, url: string, userAgent?: string) {
   const response = await request.get(url, {
     headers: userAgent ? { "user-agent": userAgent } : undefined,
@@ -115,6 +127,7 @@ test("hydrated navigation replaces the route graph without duplicates or console
   await page.goto("/");
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
   await expect.poll(() => page.locator("#page-structured-data").textContent()).toContain("MedicalClinic");
+  await expectReactHydrated(page);
 
   await navigateFromHeader(page, "/about", isMobile);
   await expect(page).toHaveURL(/\/about$/);
