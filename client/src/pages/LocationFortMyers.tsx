@@ -60,12 +60,12 @@ const LocationFortMyers = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Fort Myers Location",
+      title: "Serving Fort Myers from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Fort Myers, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationFortMyers = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Fort Myers",
+      title: "Atención para Fort Myers desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Fort Myers, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -148,7 +148,7 @@ const LocationFortMyers = () => {
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
-                      {language === 'en' ? (<>Your Trusted <span className="font-display italic">Psychiatrist</span> in Fort Myers, FL</>) : (<>Su <span className="font-display italic">Psiquiatra</span> de Confianza en Fort Myers, FL</>)}
+                      {language === 'en' ? (<><span className="font-display italic">Psychiatrist</span> Serving Fort Myers, FL</>) : (<><span className="font-display italic">Psiquiatra</span> para residentes de Fort Myers, FL</>)}
                     </p>
                   </div>
                 </div>
@@ -173,7 +173,7 @@ const LocationFortMyers = () => {
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Serving Fort Myers' : 'Sirviendo Fort Myers'}</span></div>
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
-                      {language === 'en' ? (<>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Fort Myers, FL</span></>) : (<>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Fort Myers, FL</span></>)}
+                      {language === 'en' ? (<><span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}<span className="font-display italic text-green-700">Fort Myers, FL</span></>) : (<><span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}<span className="font-display italic text-green-700">Fort Myers, FL</span></>)}
                     </h1>
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{local.heroDescription[language]}</p>
                     <Button onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
@@ -460,8 +460,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Head north from downtown Fort Myers library toward US-41 (Tamiami Trail)'
-                        : 'Diríjase hacia el norte desde la biblioteca del centro de Fort Myers hacia US-41 (Tamiami Trail)'}
+                        ? 'Follow current directions from the library to I-75 South toward Naples'
+                        : 'Siga las indicaciones actuales desde la biblioteca hasta la I-75 Sur hacia Naples'}
                     </p>
                   </div>
                   
@@ -471,8 +471,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Turn right (north) on US-41 Tamiami Trail and continue toward Naples'
-                        : 'Gire a la derecha (norte) en US-41 Tamiami Trail y continúe hacia Naples'}
+                        ? 'Continue south into Collier County, following live directions toward Naples'
+                        : 'Continúe hacia el sur hasta el condado de Collier, siguiendo las indicaciones en vivo hacia Naples'}
                     </p>
                   </div>
 
@@ -482,8 +482,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Our practice is located at 4760 Tamiami Trl N # 25, about 10 minutes north'
-                        : 'Nuestra práctica está ubicada en 4760 Tamiami Trl N # 25, aproximadamente 10 minutos al norte'}
+                        ? 'Follow Pine Ridge Road west to US-41, then turn south to 4760 Tamiami Trl N #25'
+                        : 'Siga Pine Ridge Road al oeste hasta US-41 y gire al sur hacia 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -491,7 +491,7 @@ const LocationFortMyers = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '12-15 minutes' : '12-15 minutos'}</span>
+                    <span>{local.duration[language]} — {language === 'en' ? 'traffic varies' : 'el tráfico varía'}</span>
                   </div>
 
                   <Button 
@@ -528,8 +528,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Exit Edison & Ford estates and head north on McGregor Boulevard'
-                        : 'Salga de Edison & Ford estates y diríjase al norte por McGregor Boulevard'}
+                        ? 'Follow current directions from the estates to I-75 South toward Naples'
+                        : 'Siga las indicaciones actuales desde Edison & Ford Estates hasta la I-75 Sur hacia Naples'}
                     </p>
                   </div>
                   
@@ -539,8 +539,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Turn right on Colonial Boulevard, then left on US-41 Tamiami Trail North'
-                        : 'Gire a la derecha en Colonial Boulevard, luego a la izquierda en US-41 Tamiami Trail Norte'}
+                        ? 'Continue south into Collier County, following live directions toward Naples'
+                        : 'Continúe hacia el sur hasta el condado de Collier, siguiendo las indicaciones en vivo hacia Naples'}
                     </p>
                   </div>
 
@@ -550,8 +550,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Continue north on Tamiami Trail to our mental health practice at 4760 # 25'
-                        : 'Continúe al norte por Tamiami Trail hacia nuestra práctica de salud mental en 4760 # 25'}
+                        ? 'Follow Pine Ridge Road west to US-41, then turn south to 4760 Tamiami Trl N #25'
+                        : 'Siga Pine Ridge Road al oeste hasta US-41 y gire al sur hacia 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -559,7 +559,7 @@ const LocationFortMyers = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '15-20 minutes' : '15-20 minutos'}</span>
+                    <span>{local.duration[language]} — {language === 'en' ? 'traffic varies' : 'el tráfico varía'}</span>
                   </div>
 
                   <Button 
@@ -596,8 +596,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'From downtown River District, head north toward Cleveland Avenue'
-                        : 'Desde el downtown River District, diríjase al norte hacia Cleveland Avenue'}
+                        ? 'Follow current directions from the River District to I-75 South toward Naples'
+                        : 'Siga las indicaciones actuales desde River District hasta la I-75 Sur hacia Naples'}
                     </p>
                   </div>
                   
@@ -607,8 +607,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Turn right on Cleveland Avenue, then left on US-41 North (Tamiami Trail)'
-                        : 'Gire a la derecha en Cleveland Avenue, luego a la izquierda en US-41 Norte (Tamiami Trail)'}
+                        ? 'Continue south into Collier County, following live directions toward Naples'
+                        : 'Continúe hacia el sur hasta el condado de Collier, siguiendo las indicaciones en vivo hacia Naples'}
                     </p>
                   </div>
 
@@ -618,8 +618,8 @@ const LocationFortMyers = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Look for our psychiatric practice at 4760 Tamiami Trl N # 25 on the right'
-                        : 'Busque nuestra práctica psiquiátrica en 4760 Tamiami Trl N # 25 a la derecha'}
+                        ? 'Follow Pine Ridge Road west to US-41, then turn south to 4760 Tamiami Trl N #25'
+                        : 'Siga Pine Ridge Road al oeste hasta US-41 y gire al sur hacia 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -627,7 +627,7 @@ const LocationFortMyers = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '10-15 minutes' : '10-15 minutos'}</span>
+                    <span>{local.duration[language]} — {language === 'en' ? 'traffic varies' : 'el tráfico varía'}</span>
                   </div>
 
                   <Button 
@@ -658,8 +658,8 @@ const LocationFortMyers = () => {
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Straight drive north on US-41 from Fort Myers. Our Naples psychiatric practice is directly on Tamiami Trail for easy access.'
-                            : 'Viaje directo al norte por US-41 desde Fort Myers. Nuestra práctica psiquiátrica en Naples está directamente en Tamiami Trail para fácil acceso.'}
+                            ? 'Travel south from Fort Myers toward Naples. The recommended route uses I-75 South, Pine Ridge Road and US-41.'
+                            : 'Viaje al sur desde Fort Myers hacia Naples. La ruta recomendada usa la I-75 Sur, Pine Ridge Road y US-41.'}
                         </p>
                       </div>
                     </div>
@@ -684,12 +684,12 @@ const LocationFortMyers = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Short Drive' : 'Viaje Corto'}
+                          {language === 'en' ? 'Plan for Traffic' : 'Planifique el Tráfico'}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Quick 10-20 minute drive from Fort Myers makes accessing specialized psychiatric care both convenient and private'
-                            : 'Rápido viaje de 10-20 minutos desde Fort Myers hace que el acceso a atención psiquiátrica especializada sea conveniente y privado'}
+                            ? 'The trip is about 40–45 minutes in typical conditions, but the starting point and live traffic can change the estimate.'
+                            : 'El trayecto es de unos 40–45 minutos en condiciones típicas, pero el punto de partida y el tráfico pueden cambiar la estimación.'}
                         </p>
                       </div>
                     </div>
@@ -944,7 +944,7 @@ const LocationFortMyers = () => {
                       {content.addressTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
+                      4760 Tamiami Trl N #25<br />
                       Naples, FL 34103
                     </p>
                   </div>

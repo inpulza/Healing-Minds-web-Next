@@ -14,6 +14,7 @@ import CharmHealthBooking from '@/components/CharmHealthBooking';
 import GoogleMapsEmbed from '@/components/GoogleMapsEmbed';
 import OptimizedImage from '@/components/OptimizedImage';
 import { Phone, Mail, MapPin, AlertTriangle } from 'lucide-react';
+import { practiceProfile } from '@shared/practice-profile';
 import aetnaLogo from '../assets/insurance-aetna.webp';
 import ambetterLogo from '../assets/insurance-ambetter.webp';
 import cignaLogo from '../assets/insurance-cigna.webp';
@@ -203,8 +204,8 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
     {
       icon: MapPin,
       title: t('contact.address'),
-      value: '4760 Tamiami Trl N # 25\nNaples, FL 34103',
-      link: 'https://www.google.com/maps/dir/?api=1&destination=Healing+Minds+Psychiatry,4760+Tamiami+Trl+N+%23+25,Naples,FL+34103',
+      value: `${practiceProfile.addressLineOne}\nNaples, FL 34103`,
+      link: practiceProfile.bookingDirectionsUrl,
       subtext: section('addressSubtext').paragraphs![0]
     }
   ];

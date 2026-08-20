@@ -34,13 +34,15 @@ const expectedProfiles = {
 const runtimeFiles = [
   "app/layout.tsx",
   "app/page.tsx",
-  "app/_seo/social-identity-structured-data.tsx",
+  "app/_seo/structured-data.ts",
+  "app/_seo/structured-data-script.tsx",
   "client/src/components/About.tsx",
   "client/src/components/CompactVideoCarousel.tsx",
   "client/src/components/Footer.tsx",
   "client/src/data/pageContent/mainPages/about.ts",
   "client/src/hooks/useTikTokVideos.ts",
   "server/utils/html-injection.ts",
+  "shared/practice-profile.ts",
   "shared/social-profiles.ts",
 ];
 
@@ -73,23 +75,24 @@ test("active UI and schema sources cannot reintroduce stale social profiles", ()
     assert.doesNotMatch(source, new RegExp(staleIdentity.replaceAll(".", "\\."), "i"));
   }
 
-  assert.match(source, /social-identity-structured-data/);
+  assert.match(source, /page-structured-data/);
   assert.match(source, /organizationSocialProfileUrls/);
-  assert.match(source, /physicianSocialProfileUrls/);
   assert.match(source, /favicon-512\.png/);
   assert.match(source, /https:\/\/schema\.org\/Psychiatric/);
+  assert.match(source, /npiregistry\.cms\.hhs\.gov\/provider-view\/1417786278/);
   assert.match(source, /npiregistry\.cms\.hhs\.gov\/provider-view\/1982233631/);
-  assert.equal(
-    (source.match(/address: practiceAddress/g) || []).length,
-    2,
-    "organization and physician must each expose the verified practice address",
-  );
+  assert.match(source, /4760 Tamiami Trl N #25/);
+  assert.match(source, /4284755814550718591/);
 });
 
-test("organization identity is owned by the home route segment", () => {
+test("structured data is owned by public page segments, not the persistent layout", () => {
   const layout = fs.readFileSync(path.join(process.cwd(), "app", "layout.tsx"), "utf8");
   const home = fs.readFileSync(path.join(process.cwd(), "app", "page.tsx"), "utf8");
+  const catchAll = fs.readFileSync(path.join(process.cwd(), "app", "[...slug]", "page.tsx"), "utf8");
+  const blogIndex = fs.readFileSync(path.join(process.cwd(), "app", "_routing", "blog-index-page.tsx"), "utf8");
 
-  assert.doesNotMatch(layout, /SocialIdentityStructuredData/);
-  assert.match(home, /<SocialIdentityStructuredData\s*\/>/);
+  assert.doesNotMatch(layout, /StructuredDataScript/);
+  assert.match(home, /<StructuredDataScript/);
+  assert.match(catchAll, /<StructuredDataScript/);
+  assert.match(blogIndex, /<StructuredDataScript/);
 });

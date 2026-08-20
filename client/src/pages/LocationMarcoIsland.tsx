@@ -60,12 +60,12 @@ const LocationMarcoIsland = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Marco Island Location",
+      title: "Serving Marco Island from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Marco Island, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationMarcoIsland = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Marco Island",
+      title: "Atención para Marco Island desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Marco Island, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -162,11 +162,11 @@ const LocationMarcoIsland = () => {
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic">Psychiatrist</span> in Marco Island, FL
+                          <span className="font-display italic">Psychiatrist</span> Serving Marco Island, FL
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic">Psiquiatra</span> de Confianza en Marco Island, FL
+                          <span className="font-display italic">Psiquiatra</span> para residentes de Marco Island, FL
                         </>
                       )}
                     </p>
@@ -253,12 +253,12 @@ const LocationMarcoIsland = () => {
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                          <span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}
                           <span className="font-display italic text-green-700">Marco Island, FL</span>
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                          <span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}
                           <span className="font-display italic text-green-700">Marco Island, FL</span>
                         </>
                       )}
@@ -583,8 +583,8 @@ const LocationMarcoIsland = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Cross the bridge to Naples, continue on US-41 North. Our practice is at 4760 Tamiami Trl N # 25'
-                        : 'Cruce el puente hacia Naples, continúe por US-41 Norte. Nuestra práctica está en 4760 Tamiami Trl N # 25'}
+                        ? 'Cross the bridge to Naples, continue on US-41 North. Our practice is at 4760 Tamiami Trl N #25'
+                        : 'Cruce el puente hacia Naples, continúe por US-41 Norte. Nuestra práctica está en 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -592,7 +592,7 @@ const LocationMarcoIsland = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -651,8 +651,8 @@ const LocationMarcoIsland = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Take US-41 North to our mental health practice at 4760 Tamiami Trl N # 25'
-                        : 'Tome US-41 Norte hacia nuestra práctica de salud mental en 4760 Tamiami Trl N # 25'}
+                        ? 'Take US-41 North to our mental health practice at 4760 Tamiami Trl N #25'
+                        : 'Tome US-41 Norte hacia nuestra práctica de salud mental en 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -660,7 +660,7 @@ const LocationMarcoIsland = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -719,8 +719,8 @@ const LocationMarcoIsland = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Cross bridge to Naples and head north on US-41 to 4760 Tamiami Trl N # 25'
-                        : 'Cruce el puente hacia Naples y diríjase al norte por US-41 hacia 4760 Tamiami Trl N # 25'}
+                        ? 'Cross bridge to Naples and head north on US-41 to 4760 Tamiami Trl N #25'
+                        : 'Cruce el puente hacia Naples y diríjase al norte por US-41 hacia 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -728,7 +728,7 @@ const LocationMarcoIsland = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '30-35 minutes' : '30-35 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -1045,7 +1045,7 @@ const LocationMarcoIsland = () => {
                       {content.addressTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
+                      4760 Tamiami Trl N #25<br />
                       Naples, FL 34103
                     </p>
                   </div>

@@ -73,13 +73,13 @@ const HomeEspanol = () => {
         <SuspenseWrapper priority="medium">
           <LazyTestimonials />
         </SuspenseWrapper>
-        <SuspenseWrapper priority="medium">
+        <SuspenseWrapper priority="medium" preload>
           <LazyFAQ />
         </SuspenseWrapper>
         <SuspenseWrapper priority="medium">
           <LazyForPatients />
         </SuspenseWrapper>
-        <SuspenseWrapper priority="medium">
+        <SuspenseWrapper priority="medium" preload>
           <LazyContact headingLevel="h2" />
         </SuspenseWrapper>
       </main>

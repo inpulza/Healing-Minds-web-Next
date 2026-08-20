@@ -60,12 +60,12 @@ const LocationEstero = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Estero Location",
+      title: "Serving Estero from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Estero, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationEstero = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Estero",
+      title: "Atención para Estero desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Estero, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -148,7 +148,7 @@ const LocationEstero = () => {
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
-                      {language === 'en' ? (<>Your Trusted <span className="font-display italic">Psychiatrist</span> in Estero, FL</>) : (<>Su <span className="font-display italic">Psiquiatra</span> de Confianza en Estero, FL</>)}
+                      {language === 'en' ? (<><span className="font-display italic">Psychiatrist</span> Serving Estero, FL</>) : (<><span className="font-display italic">Psiquiatra</span> para residentes de Estero, FL</>)}
                     </p>
                   </div>
                 </div>
@@ -173,7 +173,7 @@ const LocationEstero = () => {
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Serving Estero' : 'Sirviendo Estero'}</span></div>
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
-                      {language === 'en' ? (<>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Estero, FL</span></>) : (<>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Estero, FL</span></>)}
+                      {language === 'en' ? (<><span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}<span className="font-display italic text-green-700">Estero, FL</span></>) : (<><span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}<span className="font-display italic text-green-700">Estero, FL</span></>)}
                     </h1>
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{local.heroDescription[language]}</p>
                     <Button onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>
@@ -460,8 +460,8 @@ const LocationEstero = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Head north from the library area toward US-41 (Tamiami Trail)'
-                        : 'Diríjase hacia el norte desde el área de la biblioteca hacia US-41 (Tamiami Trail)'}
+                        ? 'Leave the library area and follow signs toward US-41 (Tamiami Trail)'
+                        : 'Salga del área de la biblioteca y siga las señales hacia US-41 (Tamiami Trail)'}
                     </p>
                   </div>
                   
@@ -471,8 +471,8 @@ const LocationEstero = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Turn right (north) on US-41 and continue toward Naples'
-                        : 'Gire a la derecha (norte) en US-41 y continúe hacia Naples'}
+                        ? 'Join US-41 southbound and continue toward Naples'
+                        : 'Incorpórese a US-41 en dirección sur y continúe hacia Naples'}
                     </p>
                   </div>
 
@@ -482,8 +482,8 @@ const LocationEstero = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Our practice is located at 4760 Tamiami Trl N # 25, just past Wiggins Pass Road'
-                        : 'Nuestra práctica está ubicada en 4760 Tamiami Trl N # 25, justo después de Wiggins Pass Road'}
+                        ? 'Follow live directions to our only office at 4760 Tamiami Trl N #25'
+                        : 'Siga las indicaciones en vivo hasta nuestra única oficina en 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -491,7 +491,7 @@ const LocationEstero = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '15-20 minutes' : '15-20 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -539,8 +539,8 @@ const LocationEstero = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Turn right (north) on US-41 Tamiami Trail toward Naples'
-                        : 'Gire a la derecha (norte) en US-41 Tamiami Trail hacia Naples'}
+                        ? 'Join US-41 southbound and continue toward Naples'
+                        : 'Incorpórese a US-41 en dirección sur y continúe hacia Naples'}
                     </p>
                   </div>
 
@@ -550,8 +550,8 @@ const LocationEstero = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Continue north. Our mental health practice is at 4760 Tamiami Trl N # 25'
-                        : 'Continúe hacia el norte. Nuestra práctica de salud mental está en 4760 Tamiami Trl N # 25'}
+                        ? 'Continue south to our only office at 4760 Tamiami Trl N #25'
+                        : 'Continúe hacia el sur hasta nuestra única oficina en 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -559,7 +559,7 @@ const LocationEstero = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '18-22 minutes' : '18-22 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -607,8 +607,8 @@ const LocationEstero = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Turn right (north) on US-41 Tamiami Trail and continue toward Naples'
-                        : 'Gire a la derecha (norte) en US-41 Tamiami Trail y continúe hacia Naples'}
+                        ? 'Join US-41 southbound and continue toward Naples'
+                        : 'Incorpórese a US-41 en dirección sur y continúe hacia Naples'}
                     </p>
                   </div>
 
@@ -618,8 +618,8 @@ const LocationEstero = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Look for our psychiatric practice at 4760 Tamiami Trl N # 25, near Wiggins Pass'
-                        : 'Busque nuestra práctica psiquiátrica en 4760 Tamiami Trl N # 25, cerca de Wiggins Pass'}
+                        ? 'Follow live directions to our only office at 4760 Tamiami Trl N #25'
+                        : 'Siga las indicaciones en vivo hasta nuestra única oficina en 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -627,7 +627,7 @@ const LocationEstero = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '20-25 minutes' : '20-25 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -944,7 +944,7 @@ const LocationEstero = () => {
                       {content.addressTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
+                      4760 Tamiami Trl N #25<br />
                       Naples, FL 34103
                     </p>
                   </div>

@@ -144,7 +144,7 @@ export const forPatientsContent: BilingualPageContent = {
         ],
         paragraphs: [
           `Bring your insurance card, photo ID, a list of current medications, and a summary of the symptoms or concerns you want to discuss. Arriving 5–10 minutes early helps with intake paperwork. For telehealth, test your camera and microphone the day before.`,
-          `New patient appointments are typically available within 1–2 weeks of scheduling. Telehealth slots often have greater flexibility. Call (239) 423-0272 or book online to check current availability.`,
+          `Appointment availability varies. Call (239) 423-0272 or request a time online, and the office will confirm the next available appointment.`,
           `Yes. We welcome patients transferring from another provider. Please bring your prior records, a list of current medications, and any relevant diagnostic history to your first appointment. We can also request records on your behalf with a signed release.`,
           `Please provide at least 24 business hours' notice to avoid a $50 late cancellation or no-show fee. We understand emergencies happen — genuine medical emergencies are always excepted. See our Cancellation Policy for full details.`,
           `Not always. The first appointment is an evaluation. Dr. Reve will discuss all treatment options — which may or may not include medication — and will collaborate with you on the best approach for your specific situation.`,
@@ -160,7 +160,7 @@ export const forPatientsContent: BilingualPageContent = {
       {
         key: 'ctaBody',
         paragraphs: [
-          `New patient appointments typically available within 1–2 weeks. In-person in Naples or telehealth throughout Florida. Dr. Reve is accepting new patients now.`,
+          `Request an appointment in Naples or ask whether telehealth is appropriate for your visit. The office will confirm current availability.`,
         ],
       },
       {
@@ -294,7 +294,7 @@ export const forPatientsContent: BilingualPageContent = {
         ],
         paragraphs: [
           `Traiga su tarjeta de seguro, identificación con foto, una lista de medicamentos actuales y un resumen de los síntomas o preocupaciones que desea discutir. Llegar 5–10 minutos antes ayuda con los trámites de ingreso. Para telesalud, pruebe su cámara y micrófono el día anterior.`,
-          `Las citas para nuevos pacientes generalmente están disponibles dentro de 1–2 semanas después de programar. Los horarios de telesalud suelen tener mayor flexibilidad. Llame al (239) 423-0272 o reserve en línea para verificar la disponibilidad actual.`,
+          `La disponibilidad de citas varía. Llame al (239) 423-0272 o solicite un horario en línea, y la oficina confirmará la próxima cita disponible.`,
           `Sí. Damos la bienvenida a pacientes que se transfieren de otro proveedor. Traiga sus registros anteriores, una lista de medicamentos actuales y cualquier historial diagnóstico relevante a su primera cita. También podemos solicitar registros en su nombre con una autorización firmada.`,
           `Por favor proporcione al menos 24 horas hábiles de aviso para evitar un cargo de $50 por cancelación tardía o ausencia. Entendemos que ocurren emergencias — las emergencias médicas genuinas siempre están exceptuadas.`,
           `No necesariamente. La primera cita es una evaluación. La Dra. Reve discutirá todas las opciones de tratamiento — que pueden o no incluir medicamentos — y colaborará con usted en el mejor enfoque para su situación específica.`,
@@ -310,7 +310,7 @@ export const forPatientsContent: BilingualPageContent = {
       {
         key: 'ctaBody',
         paragraphs: [
-          `Citas para nuevos pacientes generalmente disponibles en 1–2 semanas. En persona en Naples o telesalud en toda Florida. La Dra. Reve está aceptando nuevos pacientes ahora.`,
+          `Solicite una cita en Naples o pregunte si la telesalud es apropiada para su visita. La oficina confirmará la disponibilidad actual.`,
         ],
       },
       {

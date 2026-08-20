@@ -9,6 +9,7 @@ import { useState } from 'react';
 import TikTokIcon from '@/components/TikTokIcon';
 import { useCookieConsent } from '@/hooks/useCookieConsent';
 import { socialProfiles } from '@shared/social-profiles';
+import { practiceProfile } from '@shared/practice-profile';
 
 const socialLinks = [
   { ...socialProfiles.linkedin, icon: Linkedin },
@@ -293,7 +294,7 @@ const Footer = () => {
             <div className="space-y-2" data-testid="footer-contact-info">
               <div className="flex items-center text-green-200 text-sm">
                 <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-                <span data-testid="footer-address">4760 Tamiami Trl N # 25, Naples, FL 34103</span>
+                <span data-testid="footer-address">{practiceProfile.addressDisplay}</span>
               </div>
               <div className="flex items-center text-green-200 text-sm">
                 <Phone className="w-4 h-4 mr-2 flex-shrink-0" />

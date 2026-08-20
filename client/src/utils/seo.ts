@@ -1,9 +1,5 @@
 import { getRobotsPolicy, normalizeRoutePath } from '@shared/routeManifest';
 
-function isDevelopment(): boolean {
-  return process.env.NODE_ENV === 'development';
-}
-
 interface SEOData {
   title: string;
   description: string;
@@ -67,8 +63,8 @@ function syncRouteSignals() {
     tag.setAttribute('content', robots);
   }
 
-  // Always self-referencing, exactly like the server (html-injection.ts picks the
-  // canonical from the requested URL's language). Deliberately NOT data.canonical:
+  // Always self-referencing, exactly like the App Router metadata. Deliberately
+  // NOT data.canonical:
   // several bilingual pages hardcode the English canonical, which would point the
   // Spanish route at the English URL.
   const tag = upsertHeadTag('link[rel="canonical"]', () => {
@@ -78,11 +74,6 @@ function syncRouteSignals() {
   });
   tag.setAttribute('href', `${productionOrigin()}${currentPath}`);
 }
-
-// Global guards for schema initialization to prevent duplicates
-let globalSchemaInitialized = false;
-let globalSchemaTimestamp: number | null = null;
-const SCHEMA_COOLDOWN_MS = 5000; // 5 second cooldown between schema additions
 
 // Helper function to create new meta tags (used after deduplication)
 function createMetaTag(name: string, content: string, attribute: string = 'name') {
@@ -112,8 +103,8 @@ export const updateSEO = (data: SEOData) => {
   // This is essential for SPA navigation where multiple route changes could accumulate tags
   
   // Step 1: Remove existing meta tags that we're about to update
-  // NOTA: NO incluimos 'link[rel="canonical"]'. El canonical lo inyecta exclusivamente
-  // el servidor (server/utils/html-injection.ts) por ruta, para evitar canonicals
+  // NOTA: NO incluimos 'link[rel="canonical"]'. El canonical lo gestiona exclusivamente
+  // el App Router mediante metadataForPath/generateMetadata, para evitar canonicals
   // duplicados o inconsistentes entre el HTML inicial y el DOM tras hidratación.
   const metaTags = [
     'meta[name="description"]',
@@ -166,8 +157,8 @@ export const updateSEO = (data: SEOData) => {
     createMetaTag('keywords', data.keywords);
   }
   
-  // Step 5: Canonical y robots de la ruta de entrada los gestiona el servidor
-  // (ver server/utils/html-injection.ts) y el cliente NO los toca, para evitar
+  // Step 5: Canonical y robots de la ruta de entrada los gestiona Next.js
+  // (metadataForPath/generateMetadata) y el cliente NO los toca, para evitar
   // que tras la hidratación cambien respecto al HTML inicial (causaba
   // "duplicate canonical" / "Google chose different canonical" en Search
   // Console). Sí los sincronizamos cuando el usuario navega a otra ruta dentro
@@ -195,128 +186,4 @@ export const updateSEO = (data: SEOData) => {
   if (data.ogImage) {
     createMetaTag('twitter:image', data.ogImage, 'name');
   }
-};
-
-// DEPRECATED: Schema injection is now handled server-side only
-// All JSON-LD schemas are injected server-side via server/utils/html-injection.ts
-// This prevents duplicate schemas and conflicts with Google Rich Results
-// Keeping this function for backward compatibility but it does nothing
-export const addMedicalBusinessSchema = () => {
-  if (isDevelopment()) {
-    console.log('ℹ️ Schema injection is now handled server-side only. Client-side schema injection is disabled to prevent duplicates.');
-  }
-  // All schema injection has been moved to server-side for better SEO and to prevent duplicates
-  return;
-};
-
-// FUNCTION PERMANENTLY REMOVED: addPhysicianSchema
-// All physician information is now integrated into the main MedicalClinic schema above.
-// This prevents Google Rich Results from detecting duplicate or conflicting schemas.
-// DO NOT RE-ADD THIS FUNCTION - it causes schema conflicts and validation issues.
-
-// Enhanced Service Schema Generator for Hub & Spoke Model
-// Creates Service schemas for satellite location pages that reference the main MedicalClinic
-export const addLocationServiceSchema = (serviceConfig: {
-  locationName: string;
-  description: string;
-  pageId: string;
-  language?: 'en' | 'es';
-}) => {
-  // Define available services in both languages
-  const services = {
-    en: [
-      "Anxiety Treatment",
-      "Depression Treatment", 
-      "ADHD Treatment",
-      "PTSD Treatment",
-      "Bipolar Treatment",
-      "Medication Management"
-    ],
-    es: [
-      "Tratamiento de Ansiedad",
-      "Tratamiento de Depresión",
-      "Tratamiento de TDAH", 
-      "Tratamiento de TEPT",
-      "Tratamiento Bipolar",
-      "Manejo de Medicamentos"
-    ]
-  };
-
-  const lang = serviceConfig.language || 'en';
-  const serviceName = lang === 'en' 
-    ? `Psychiatric Services for ${serviceConfig.locationName}`
-    : `Servicios Psiquiátricos para ${serviceConfig.locationName}`;
-
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": serviceName,
-    "description": serviceConfig.description,
-    "serviceType": lang === 'en' ? "Mental Health Services" : "Servicios de Salud Mental",
-    "areaServed": {
-      "@type": "City", 
-      "name": serviceConfig.locationName,
-      "addressRegion": "FL"
-    },
-    "provider": {
-      "@type": "MedicalClinic",
-      "@id": "https://www.healingmindsp.com/#MedicalClinic"
-    },
-    "availableService": services[lang]
-  };
-
-  // Remove existing service schema for this location if present
-  const existingSchema = document.querySelector(`script[type="application/ld+json"]#${serviceConfig.pageId}-service-schema`);
-  if (existingSchema) {
-    existingSchema.remove();
-    console.log(`🧹 Removed existing service schema for ${serviceConfig.locationName}`);
-  }
-
-  // Add new service schema to head
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.id = `${serviceConfig.pageId}-service-schema`;
-  script.setAttribute('data-schema-type', 'location-service');
-  script.setAttribute('data-location', serviceConfig.locationName);
-  script.textContent = JSON.stringify(schema, null, 2);
-  document.head.appendChild(script);
-  
-  console.log(`✅ Location Service schema added for ${serviceConfig.locationName}`);
-};
-
-// Legacy function - kept for backward compatibility
-export const addServiceSchema = (serviceConfig: {
-  serviceType: string;
-  name: string;
-  description: string;
-  pageId: string;
-  areaServed?: string;
-}) => {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": serviceConfig.serviceType,
-    "name": serviceConfig.name,
-    "description": serviceConfig.description,
-    "areaServed": {
-      "@type": "City",
-      "name": serviceConfig.areaServed || "Naples"
-    },
-    "provider": {
-      "@id": "https://www.healingmindsp.com/#MedicalClinic"
-    }
-  };
-
-  // Remove existing service schema if present
-  const existingSchema = document.querySelector(`script[type="application/ld+json"]#${serviceConfig.pageId}-service-schema`);
-  if (existingSchema) {
-    existingSchema.remove();
-  }
-
-  // Add service schema to head
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.id = `${serviceConfig.pageId}-service-schema`;
-  script.textContent = JSON.stringify(schema, null, 2);
-  document.head.appendChild(script);
 };

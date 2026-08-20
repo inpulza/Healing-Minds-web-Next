@@ -1,3 +1,10 @@
+/**
+ * LEGACY EXPRESS/VITE RENDERER ONLY.
+ *
+ * The active Next.js/Vercel App Router does not call this module for public
+ * pages. Active metadata and JSON-LD live under app/_seo/. Keep this file only
+ * for the separately-invoked legacy runtime until that runtime is retired.
+ */
 import { Request } from 'express';
 import { cityHyperlocal, type Lang } from '@/data/locationHyperlocal';
 import { locationFAQs } from '@/data/locationFAQs';
@@ -50,7 +57,7 @@ import { sanitizeRenderedBlogContentHtml } from '../blog/sanitize';
 import { getSelectedBlogPostImages } from '../blog/images/storage';
 import { materializeSelectedInlineImages } from '../blog/images/render';
 import { getSeoSiteConfig } from '../seo/config';
-import { getKnownRoutePaths, getBilingualUrlMap, getSitemapEntries } from '@shared/routeManifest';
+import { getBilingualUrlMap, getSitemapEntries } from '@shared/routeManifest';
 
 interface MetaTag {
   name?: string;
@@ -616,30 +623,6 @@ export async function injectMetaTags(html: string, req: Request): Promise<string
   }
 
   return modifiedHtml;
-}
-
-/**
- * Authoritative allowlist of routes the SPA actually renders.
- * Must stay in sync with the <Route> entries in client/src/App.tsx.
- * This is the source of truth for 404 vs. 200 decisions.
- * Static routes come from the single route manifest (shared/routeManifest.ts).
- */
-const KNOWN_ROUTES: ReadonlySet<string> = new Set(getKnownRoutePaths());
-
-/**
- * Returns true when the given URL path corresponds to a real route we serve.
- * Accepts either a bare path ("/about") or a full URL with query/hash; everything
- * after "?" or "#" is ignored, and a single trailing slash is tolerated so that
- * "/about/" still resolves to true (it will be 301-normalized separately).
- */
-export async function isKnownRoute(urlOrPath: string): Promise<boolean> {
-  if (!urlOrPath) return false;
-  // Strip query string and hash before lookup.
-  let path = urlOrPath.split('?')[0].split('#')[0];
-  // Tolerate one trailing slash (real normalization happens via 301 redirect).
-  if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
-  if (KNOWN_ROUTES.has(path)) return true;
-  return Boolean(await getBlogPostFromPath(path));
 }
 
 /**

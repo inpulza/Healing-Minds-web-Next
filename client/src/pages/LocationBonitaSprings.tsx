@@ -60,12 +60,12 @@ const LocationBonitaSprings = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Bonita Springs Location",
+      title: "Serving Bonita Springs from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Bonita Springs, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationBonitaSprings = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Bonita Springs",
+      title: "Atención para Bonita Springs desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Bonita Springs, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -159,9 +159,9 @@ const LocationBonitaSprings = () => {
                   <div className="max-w-sm mx-auto">
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (
-                        <>Your Trusted <span className="font-display italic">Psychiatrist</span> in Bonita Springs, FL</>
+                        <><span className="font-display italic">Psychiatrist</span> Serving Bonita Springs, FL</>
                       ) : (
-                        <>Su <span className="font-display italic">Psiquiatra</span> de Confianza en Bonita Springs, FL</>
+                        <><span className="font-display italic">Psiquiatra</span> para residentes de Bonita Springs, FL</>
                       )}
                     </p>
                   </div>
@@ -235,9 +235,9 @@ const LocationBonitaSprings = () => {
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (
-                        <>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Bonita Springs, FL</span></>
+                        <><span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}<span className="font-display italic text-green-700">Bonita Springs, FL</span></>
                       ) : (
-                        <>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Bonita Springs, FL</span></>
+                        <><span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}<span className="font-display italic text-green-700">Bonita Springs, FL</span></>
                       )}
                     </h1>
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">
@@ -588,8 +588,8 @@ const LocationBonitaSprings = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Turn right (north) on US-41. Pass through Estero and continue toward Naples'
-                        : 'Gire a la derecha (norte) en US-41. Pase por Estero y continúe hacia Naples'}
+                        ? 'Join US-41 southbound and continue toward Naples'
+                        : 'Incorpórese a US-41 en dirección sur y continúe hacia Naples'}
                     </p>
                   </div>
 
@@ -599,8 +599,8 @@ const LocationBonitaSprings = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Our office is on the right at 4760 Tamiami Trl N # 25, just past Wiggins Pass Road'
-                        : 'Nuestra oficina está a la derecha en 4760 Tamiami Trl N # 25, justo después de Wiggins Pass Road'}
+                        ? 'Follow live directions to our only office at 4760 Tamiami Trl N #25'
+                        : 'Siga las indicaciones en vivo hasta nuestra única oficina en 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -608,7 +608,7 @@ const LocationBonitaSprings = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -656,8 +656,8 @@ const LocationBonitaSprings = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Turn right (north) on US-41 Tamiami Trail toward Naples. Pass Germain Arena area'
-                        : 'Gire a la derecha (norte) en US-41 Tamiami Trail hacia Naples. Pase el área de Germain Arena'}
+                        ? 'Join US-41 southbound and continue toward Naples'
+                        : 'Incorpórese a US-41 en dirección sur y continúe hacia Naples'}
                     </p>
                   </div>
 
@@ -667,8 +667,8 @@ const LocationBonitaSprings = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Continue north. Our psychiatric practice is located at 4760 Tamiami Trl N # 25'
-                        : 'Continúe hacia el norte. Nuestra práctica psiquiátrica está ubicada en 4760 Tamiami Trl N # 25'}
+                        ? 'Continue south to our only office at 4760 Tamiami Trl N #25'
+                        : 'Continúe hacia el sur hasta nuestra única oficina en 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -676,7 +676,7 @@ const LocationBonitaSprings = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '20-25 minutes' : '20-25 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -724,8 +724,8 @@ const LocationBonitaSprings = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Merge onto US-41 North (Tamiami Trail) and continue toward Naples'
-                        : 'Incorpórese a US-41 Norte (Tamiami Trail) y continúe hacia Naples'}
+                        ? 'Join US-41 southbound and continue toward Naples'
+                        : 'Incorpórese a US-41 en dirección sur y continúe hacia Naples'}
                     </p>
                   </div>
 
@@ -735,8 +735,8 @@ const LocationBonitaSprings = () => {
                     </div>
                     <p className="text-sm text-gray-700 font-body leading-relaxed">
                       {language === 'en'
-                        ? 'Look for our mental health practice at 4760 Tamiami Trl N # 25, near Wiggins Pass'
-                        : 'Busque nuestra práctica de salud mental en 4760 Tamiami Trl N # 25, cerca de Wiggins Pass'}
+                        ? 'Follow live directions to our only office at 4760 Tamiami Trl N #25'
+                        : 'Siga las indicaciones en vivo hasta nuestra única oficina en 4760 Tamiami Trl N #25'}
                     </p>
                   </div>
                 </div>
@@ -744,7 +744,7 @@ const LocationBonitaSprings = () => {
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                     <Clock className="w-4 h-4" />
-                    <span>{language === 'en' ? '25-30 minutes' : '25-30 minutos'}</span>
+                    <span>{local.duration[language]}</span>
                   </div>
 
                   <Button 
@@ -1061,7 +1061,7 @@ const LocationBonitaSprings = () => {
                       {content.addressTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
+                      4760 Tamiami Trl N #25<br />
                       Naples, FL 34103
                     </p>
                   </div>

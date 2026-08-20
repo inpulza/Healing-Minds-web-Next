@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect, redirect } from "next/navigation";
-import { metadataForPath } from "../_seo/metadata";
+import { getFrozenSeo, metadataForPath } from "../_seo/metadata";
 import RootSlashSeoLinks from "../_seo/root-slash-links";
+import {
+  buildBlogPostStructuredData,
+  buildStaticStructuredData,
+} from "../_seo/structured-data";
+import StructuredDataScript from "../_seo/structured-data-script";
 import PublicPage from "../_routing/public-page";
 import DynamicBlogPost from "../_routing/dynamic-blog-post";
 import { loadPublicBlogPost, loadPublicBlogRedirect, matchBlogPath } from "../_routing/load-public-blog-post";
@@ -85,7 +90,12 @@ export default async function StaticPublicRoute({
       if (target) permanentRedirect(target);
       notFound();
     }
-    return <DynamicBlogPost post={post} />;
+    return (
+      <>
+        <StructuredDataScript data={buildBlogPostStructuredData({ pathname, post })} />
+        <DynamicBlogPost post={post} />
+      </>
+    );
   }
 
   const route = resolvePublicRoute(pathname);
@@ -97,9 +107,18 @@ export default async function StaticPublicRoute({
   if ("redirectTo" in route) redirect(route.redirectTo);
   if (!("page" in route)) notFound();
   if (route.page === "BlogIndex") notFound();
+  const seo = getFrozenSeo(pathname);
 
   return (
     <>
+      <StructuredDataScript
+        data={buildStaticStructuredData({
+          pathname,
+          pageName: route.page,
+          title: seo?.title || pathname,
+          description: seo?.description,
+        })}
+      />
       {route.pathname === "/es" && <RootSlashSeoLinks />}
       <PublicPage page={route.page} locale={route.locale} />
     </>

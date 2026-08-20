@@ -8,7 +8,7 @@ export const hipaaNoticeContent: BilingualPageContent = {
         key: 'address',
         paragraphs: [
           `Healing Minds Psychiatry`,
-          `4760 Tamiami Trl N # 25`,
+          `4760 Tamiami Trl N #25`,
           `Naples, FL - 34103-3025`,
         ],
       },
@@ -147,7 +147,7 @@ export const hipaaNoticeContent: BilingualPageContent = {
         key: 'address',
         paragraphs: [
           `Healing Minds Psychiatry`,
-          `4760 Tamiami Trl N # 25`,
+          `4760 Tamiami Trl N #25`,
           `Naples, FL - 34103-3025`,
         ],
       },

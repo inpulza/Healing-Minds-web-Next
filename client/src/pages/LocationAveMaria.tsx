@@ -60,12 +60,12 @@ const LocationAveMaria = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Ave Maria Location",
+      title: "Serving Ave Maria from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Ave Maria, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationAveMaria = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Ave Maria",
+      title: "Atención para Ave Maria desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Ave Maria, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -162,11 +162,11 @@ const LocationAveMaria = () => {
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic">Psychiatrist</span> in Ave Maria, FL
+                          <span className="font-display italic">Psychiatrist</span> Serving Ave Maria, FL
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic">Psiquiatra</span> de Confianza en Ave Maria, FL
+                          <span className="font-display italic">Psiquiatra</span> para residentes de Ave Maria, FL
                         </>
                       )}
                     </p>
@@ -253,12 +253,12 @@ const LocationAveMaria = () => {
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                          <span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}
                           <span className="font-display italic text-green-700">Ave Maria, FL</span>
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                          <span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}
                           <span className="font-display italic text-green-700">Ave Maria, FL</span>
                         </>
                       )}
@@ -603,8 +603,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Head south on Oil Well Rd toward Immokalee Rd'
-                          : 'Diríjase al sur por Oil Well Rd hacia Immokalee Rd'}
+                          ? 'Open live directions from Ave Maria University to our Naples office'
+                          : 'Abra las indicaciones en vivo desde Ave Maria University hasta nuestra oficina de Naples'}
                       </p>
                     </div>
                     
@@ -614,8 +614,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Take I-75 South to Exit 105 (Immokalee Rd), then turn right'
-                          : 'Tome la I-75 Sur hasta la Salida 105 (Immokalee Rd), luego gire a la derecha'}
+                          ? 'Follow live directions west and south toward Naples'
+                          : 'Siga las indicaciones en vivo hacia el oeste y el sur en dirección a Naples'}
                       </p>
                     </div>
 
@@ -625,8 +625,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Turn right on Tamiami Trail N. Our psychiatric practice is at 4760 Tamiami Trl N # 25'
-                          : 'Gire a la derecha en Tamiami Trail N. Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25'}
+                          ? 'Arrive at our only office, 4760 Tamiami Trl N #25'
+                          : 'Llegue a nuestra única oficina, 4760 Tamiami Trl N #25'}
                       </p>
                     </div>
                   </div>
@@ -634,7 +634,7 @@ const LocationAveMaria = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '22-25 minutes' : '22-25 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -670,8 +670,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Exit the Town Center and head west on Ave Maria Blvd'
-                          : 'Salga del Town Center y diríjase al oeste por Ave Maria Blvd'}
+                          ? 'Open live directions from Ave Maria Town Center to our Naples office'
+                          : 'Abra las indicaciones en vivo desde Ave Maria Town Center hasta nuestra oficina de Naples'}
                       </p>
                     </div>
                     
@@ -681,8 +681,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Continue on Oil Well Rd, then take I-75 South to Exit 105'
-                          : 'Continúe por Oil Well Rd, luego tome la I-75 Sur hasta la Salida 105'}
+                          ? 'Follow the current recommended route toward Park Shore'
+                          : 'Siga la ruta recomendada en ese momento hacia Park Shore'}
                       </p>
                     </div>
 
@@ -692,8 +692,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Turn right on Tamiami Trail N. Our mental health office is at 4760 Tamiami Trl N # 25'
-                          : 'Gire a la derecha en Tamiami Trail N. Nuestra oficina de salud mental está en 4760 Tamiami Trl N # 25'}
+                          ? 'Arrive at our only office, 4760 Tamiami Trl N #25'
+                          : 'Llegue a nuestra única oficina, 4760 Tamiami Trl N #25'}
                       </p>
                     </div>
                   </div>
@@ -701,7 +701,7 @@ const LocationAveMaria = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '20-23 minutes' : '20-23 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -737,8 +737,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'From central Ave Maria, take Oil Well Rd west to I-75 South'
-                          : 'Desde el centro de Ave Maria, tome Oil Well Rd oeste hasta I-75 Sur'}
+                          ? 'Open live directions from central Ave Maria to our Naples office'
+                          : 'Abra las indicaciones en vivo desde el centro de Ave Maria hasta nuestra oficina de Naples'}
                       </p>
                     </div>
                     
@@ -748,8 +748,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Take Exit 105 (Immokalee Rd) and turn right toward Naples'
-                          : 'Tome la Salida 105 (Immokalee Rd) y gire a la derecha hacia Naples'}
+                          ? 'Follow live directions toward Park Shore in Naples'
+                          : 'Siga las indicaciones en vivo hacia Park Shore en Naples'}
                       </p>
                     </div>
 
@@ -759,8 +759,8 @@ const LocationAveMaria = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 with ample parking'
-                          : 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 con amplio estacionamiento'}
+                          ? 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103 with ample parking'
+                          : 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103 con amplio estacionamiento'}
                       </p>
                     </div>
                   </div>
@@ -768,7 +768,7 @@ const LocationAveMaria = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '18-22 minutes' : '18-22 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -1086,7 +1086,7 @@ const LocationAveMaria = () => {
                       {content.addressTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
+                      4760 Tamiami Trl N #25<br />
                       Naples, FL 34103
                     </p>
                   </div>

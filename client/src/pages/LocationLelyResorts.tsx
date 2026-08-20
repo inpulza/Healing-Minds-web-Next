@@ -60,12 +60,12 @@ const LocationLelyResorts = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Lely Resort Location",
+      title: "Serving Lely Resort from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Lely Resort, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationLelyResorts = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Lely Resort",
+      title: "Atención para Lely Resort desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Lely Resort, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -162,11 +162,11 @@ const LocationLelyResorts = () => {
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic">Psychiatrist</span> in Lely Resort, FL
+                          <span className="font-display italic">Psychiatrist</span> Serving Lely Resort, FL
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic">Psiquiatra</span> de Confianza en Lely Resort, FL
+                          <span className="font-display italic">Psiquiatra</span> para residentes de Lely Resort, FL
                         </>
                       )}
                     </p>
@@ -253,12 +253,12 @@ const LocationLelyResorts = () => {
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                          <span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}
                           <span className="font-display italic text-green-700">Lely Resort, FL</span>
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                          <span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}
                           <span className="font-display italic text-green-700">Lely Resort, FL</span>
                         </>
                       )}
@@ -603,8 +603,8 @@ const LocationLelyResorts = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Exit Lely Resort and head north on Santa Barbara Blvd'
-                          : 'Salga de Lely Resort y diríjase al norte por Santa Barbara Blvd'}
+                          ? 'Open live directions from Players Club & Spa to our Naples office'
+                          : 'Abra las indicaciones en vivo desde Players Club & Spa hasta nuestra oficina de Naples'}
                       </p>
                     </div>
                     
@@ -614,8 +614,8 @@ const LocationLelyResorts = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Turn right on Tamiami Trail E and continue north for about 8 miles'
-                          : 'Gire a la derecha en Tamiami Trail E y continúe al norte aproximadamente 8 millas'}
+                          ? 'Follow the current recommended route toward Park Shore'
+                          : 'Siga la ruta recomendada en ese momento hacia Park Shore'}
                       </p>
                     </div>
 
@@ -625,8 +625,8 @@ const LocationLelyResorts = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Our psychiatric practice is at 4760 Tamiami Trl N # 25, on the right side'
-                          : 'Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25, del lado derecho'}
+                          ? 'Arrive at our only office, 4760 Tamiami Trl N #25'
+                          : 'Llegue a nuestra única oficina, 4760 Tamiami Trl N #25'}
                       </p>
                     </div>
                   </div>
@@ -634,7 +634,7 @@ const LocationLelyResorts = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '18-22 minutes' : '18-22 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -692,8 +692,8 @@ const LocationLelyResorts = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Our mental health office is located at 4760 Tamiami Trl N # 25, on the right'
-                          : 'Nuestra oficina de salud mental está ubicada en 4760 Tamiami Trl N # 25, a la derecha'}
+                          ? 'Our mental health office is located at 4760 Tamiami Trl N #25, on the right'
+                          : 'Nuestra oficina de salud mental está ubicada en 4760 Tamiami Trl N #25, a la derecha'}
                       </p>
                     </div>
                   </div>
@@ -701,7 +701,7 @@ const LocationLelyResorts = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '15-18 minutes' : '15-18 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -759,8 +759,8 @@ const LocationLelyResorts = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 with easy parking'
-                          : 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 con estacionamiento fácil'}
+                          ? 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103 with easy parking'
+                          : 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103 con estacionamiento fácil'}
                       </p>
                     </div>
                   </div>
@@ -768,7 +768,7 @@ const LocationLelyResorts = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '12-15 minutes' : '12-15 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -1085,7 +1085,7 @@ const LocationLelyResorts = () => {
                       {content.addressTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
+                      4760 Tamiami Trl N #25<br />
                       Naples, FL 34103
                     </p>
                   </div>

@@ -127,7 +127,7 @@ export const privacyPolicyContent: BilingualPageContent = {
         paragraphs: [
           `If you have any questions about this Privacy Policy, please contact us at:`,
           `Healing Minds Psychiatry`,
-          `4760 Tamiami Trl N # 25`,
+          `4760 Tamiami Trl N #25`,
           `Naples, FL 34103`,
           `Email: info@healingmindsp.com`,
         ],
@@ -260,7 +260,7 @@ export const privacyPolicyContent: BilingualPageContent = {
         paragraphs: [
           `Si tiene alguna pregunta sobre esta Política de Privacidad, puede contactarnos en:`,
           `Healing Minds Psychiatry`,
-          `4760 Tamiami Trl N # 25`,
+          `4760 Tamiami Trl N #25`,
           `Naples, FL 34103`,
           `Correo electrónico: info@healingmindsp.com`,
         ],
