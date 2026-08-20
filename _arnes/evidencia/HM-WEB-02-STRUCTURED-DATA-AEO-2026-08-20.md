@@ -63,3 +63,15 @@ Visible FAQ and service-area copy no longer promises unverified flexible/urgent 
 Before merge: exact-SHA Vercel Preview, 80-URL sitemap crawl with Neon data, crawler-UA matrix, hydrated DOM audit, Schema.org Validator and Google Rich Results Test where accessible, then complete Code Review classification.
 
 After merge: exact production SHA, repeat the same 80-URL crawl and validators, and archive final artifacts outside the repository.
+
+## Preview evidence — PR #31
+
+- Initial commit: `5c9a46e167d21f6e806dad3877b689374f87a39f`.
+- Vercel deployment: `dpl_7y5JwMJPeC2KEpynoKqYD6dRwQxT`, Ready, Preview, official project/team.
+- Raw crawl with Preview database: sitemap 80 URLs; 80 status 200; 80/80 with exactly one JSON-LD block; 0 invalid blocks.
+- Hydrated browser sample: 14/14 with JSON-LD; 0 pages with console errors.
+- Exact-SHA structured-data E2E: 8 PASS and 4 intentional cross-profile skips.
+- Exact-SHA full deployed E2E: 98 PASS, 22 intentional cross-profile skips, 0 failures across 120 cases.
+- GitHub Quality exposed two races in the heading/map smoke itself: a transient lazy-boundary detach during hydration and a circular wait while releasing an intercepted Maps request. The smoke now retries only the transient detach and releases the held route with Playwright's `ignoreErrors` cleanup. The reproduced command completes locally in 18.5 seconds.
+
+The smoke-test repair changes verification code only. A new exact-SHA Preview/Quality run is required after push; the previous Preview evidence remains valid for the unchanged application output but does not substitute for that gate.
