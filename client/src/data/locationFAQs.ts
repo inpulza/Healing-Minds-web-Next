@@ -14,7 +14,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How far is your Naples office from Bonita Springs?",
-        answer: "Our office at 4760 Tamiami Trl N is conveniently located just a short 15-20 minute drive south of Bonita Springs, directly on US-41 (Tamiami Trail). We offer flexible scheduling to accommodate patients traveling from the area."
+        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25, south of Bonita Springs. Travel time varies by starting point and traffic, so check live directions before leaving."
       },
       {
         question: "Do you offer telepsychiatry (Telehealth) for Bonita Springs patients?",
@@ -46,7 +46,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What is the first appointment like for a new patient from Bonita Springs?",
-        answer: "Your first appointment is a comprehensive psychiatric evaluation, either in-person or via telemedicine. It's a 60-minute session to discuss your history, current concerns and goals, and collaborate on an initial treatment plan."
+        answer: "Your first appointment is a comprehensive psychiatric evaluation focused on your history, current concerns and goals. Our office will confirm the appointment length and whether in-person or telehealth is clinically appropriate when scheduling."
       },
       {
         question: "Do you treat Bipolar Disorder?",
@@ -56,7 +56,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Qué tan lejos está su oficina de Naples desde Bonita Springs?",
-        answer: "Nuestra oficina en 4760 Tamiami Trl N está convenientemente ubicada a un corto viaje de 15-20 minutos al sur de Bonita Springs, directamente por la US-41 (Tamiami Trail). Ofrecemos horarios flexibles para acomodar a los pacientes que viajan desde el área."
+        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25, al sur de Bonita Springs. El tiempo varía según el punto de partida y el tráfico; consulte la ruta en vivo antes de salir."
       },
       {
         question: "¿Ofrecen telepsiquiatría (Telehealth) para pacientes de Bonita Springs?",
@@ -88,7 +88,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo es la primera cita para un paciente nuevo de Bonita Springs?",
-        answer: "Su primera cita es una evaluación psiquiátrica integral, ya sea en persona o por telemedicina. Es una sesión de 60 minutos para discutir su historial, preocupaciones actuales y objetivos, y colaborar en un plan de tratamiento inicial."
+        answer: "Su primera cita es una evaluación psiquiátrica integral centrada en su historial, preocupaciones actuales y objetivos. La oficina confirmará la duración y si la modalidad presencial o por telesalud es clínicamente apropiada al programarla."
       },
       {
         question: "¿Tratan el trastorno bipolar (Bipolar Disorder)?",
@@ -101,7 +101,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "Is telepsychiatry the best option for Marco Island patients?",
-        answer: "It's our most popular option for Marco Island residents! Our secure, HIPAA-compliant Telehealth system eliminates the need to drive (and cross the Jolley bridge), allowing you to receive expert psychiatric care and ongoing treatment support from your home."
+        answer: "Telepsychiatry may reduce travel from Marco Island when it is clinically appropriate and the patient is physically located where Dr. Reve is authorized to provide care. Our office confirms eligibility and modality when scheduling."
       },
       {
         question: "How do I get to your Naples office from Marco Island?",
@@ -109,7 +109,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "I'm a seasonal resident (\"snowbird\") on Marco Island. Can you coordinate care with my primary doctor up north?",
-        answer: "Absolutely. We are very experienced in coordinating care for seasonal residents. We handle your psychiatric care while you're in Florida and securely coordinate with your other providers to ensure continuous care."
+        answer: "With the patient's consent, our office can discuss case-by-case coordination and secure record sharing with other providers. Care and telehealth availability depend on where the patient is physically located and applicable licensing rules."
       },
       {
         question: "Does Dr. Reve offer Spanish consultations for the Marco Island community?",
@@ -129,7 +129,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "How does medication management work through telemedicine?",
-        answer: "After your initial evaluation (which can also be virtual), follow-up appointments for medication management are conducted via secure video call. Medication orders are sent electronically to your preferred pharmacy on Marco Island."
+        answer: "Our office confirms whether the initial evaluation and follow-ups should be in person or by secure video based on clinical needs, the patient's physical location and applicable licensing rules. Pharmacy arrangements are confirmed case by case."
       },
       {
         question: "Do you treat PTSD at your clinic?",
@@ -143,7 +143,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Es la telepsiquiatría la mejor opción para los pacientes de Marco Island?",
-        answer: "¡Es nuestra opción más popular para residentes de Marco Island! Nuestro sistema de Telehealth, seguro y compatible con HIPAA, elimina la necesidad de conducir (y cruzar el puente Jolley), permitiéndole recibir atención psiquiátrica experta y apoyo continuo de tratamiento desde su hogar."
+        answer: "La telepsiquiatría puede reducir los viajes desde Marco Island cuando sea clínicamente apropiada y el paciente se encuentre físicamente donde la Dra. Reve esté autorizada a atender. La oficina confirma elegibilidad y modalidad al programar."
       },
       {
         question: "¿Cómo llego a su oficina de Naples desde Marco Island?",
@@ -151,7 +151,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Soy un residente estacional (\"snowbird\") en Marco Island. ¿Pueden coordinar la atención con mi médico de cabecera en el norte?",
-        answer: "Absolutamente. Estamos muy experimentados en la coordinación de la atención para residentes estacionales. Manejamos su cuidado psiquiátrico mientras está en Florida y coordinamos de manera segura con sus otros proveedores para garantizar una atención continua."
+        answer: "Con el consentimiento del paciente, la oficina puede evaluar caso por caso la coordinación y el intercambio seguro de registros con otros proveedores. La atención y la telesalud dependen de dónde esté físicamente el paciente y de las licencias aplicables."
       },
       {
         question: "¿La Dra. Reve ofrece consultas en español para la comunidad de Marco Island?",
@@ -171,7 +171,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo funciona el manejo de medicamentos por telemedicina?",
-        answer: "Después de su evaluación inicial (que también puede ser virtual), las citas de seguimiento para el manejo de medicamentos se realizan por videollamada segura. Las órdenes de medicamentos se envían electrónicamente a su farmacia preferida en Marco Island."
+        answer: "La oficina confirma si la evaluación inicial y los seguimientos deben ser presenciales o por video seguro según las necesidades clínicas, la ubicación física del paciente y las licencias aplicables. Los arreglos con la farmacia se confirman caso por caso."
       },
       {
         question: "¿Tratan el TEPT (PTSD) en su clínica?",
@@ -216,7 +216,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What is a first psychiatric evaluation like?",
-        answer: "It's a comprehensive 60-minute session (virtual or in-person) to understand your complete history, current symptoms, and goals. It's a collaborative conversation to establish an accurate diagnosis and treatment plan."
+        answer: "It's a comprehensive conversation to understand your history, current symptoms and goals. Our office confirms the appointment length and whether in-person or telehealth is clinically appropriate when scheduling."
       },
       {
         question: "Do you treat anxiety disorders, like social anxiety?",
@@ -258,7 +258,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo es una primera evaluación psiquiátrica?",
-        answer: "Es una sesión integral de 60 minutos (virtual o en persona) para comprender su historial completo, sus síntomas actuales y sus objetivos. Es una conversación colaborativa para establecer un diagnóstico preciso y un plan de tratamiento."
+        answer: "Es una conversación integral para comprender su historial, síntomas actuales y objetivos. La oficina confirma la duración y si la modalidad presencial o por telesalud es clínicamente apropiada al programarla."
       },
       {
         question: "¿Tratan los trastornos de ansiedad, como la ansiedad social?",
@@ -295,7 +295,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What is the driving distance from Golden Gate to your office?",
-        answer: "It's typically a 10-15 minute drive from Golden Gate to our Naples office. Take Golden Gate Pkwy west to US-41, then north to our practice at 4760 Tamiami Trl N."
+        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. Travel time from Golden Gate varies by starting point and traffic, so check live directions before leaving."
       },
       {
         question: "Do you offer ADHD evaluations for adults living in Golden Gate?",
@@ -311,7 +311,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What should Golden Gate patients expect for their first appointment?",
-        answer: "Your initial evaluation is a comprehensive 60-minute session to understand your mental health history, current symptoms, and treatment goals. This can be conducted in-person or via secure video call."
+        answer: "Your initial evaluation reviews your mental health history, current symptoms and treatment goals. Our office confirms the length and whether in-person or secure video is clinically appropriate when scheduling."
       }
     ],
     es: [
@@ -337,7 +337,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cuál es la distancia de manejo desde Golden Gate hasta su oficina?",
-        answer: "Típicamente es un viaje de 10-15 minutos desde Golden Gate hasta nuestra oficina en Naples. Tome Golden Gate Pkwy al oeste hasta US-41, luego norte hasta nuestra práctica en 4760 Tamiami Trl N."
+        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25. El tiempo desde Golden Gate varía según el punto de partida y el tráfico; consulte la ruta en vivo antes de salir."
       },
       {
         question: "¿Ofrecen evaluaciones de TDAH para adultos que viven en Golden Gate?",
@@ -353,7 +353,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Qué deben esperar los pacientes de Golden Gate para su primera cita?",
-        answer: "Su evaluación inicial es una sesión integral de 60 minutos para entender su historial de salud mental, síntomas actuales, y objetivos de tratamiento. Esto puede realizarse en persona o por videollamada segura."
+        answer: "Su evaluación inicial revisa su historial de salud mental, síntomas actuales y objetivos de tratamiento. La oficina confirma la duración y si la modalidad presencial o por video seguro es clínicamente apropiada al programarla."
       }
     ]
   },
@@ -398,7 +398,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What's the best way to schedule an appointment from Vanderbilt Beach?",
-        answer: "Simply call our office at (239) 423-0272 or use our online contact form. We offer flexible scheduling including early morning and late afternoon appointments to accommodate beach lifestyle preferences."
+        answer: "Call our office at (239) 423-0272 or use our online contact form. Appointment availability varies, and the office will confirm the available times."
       }
     ],
     es: [
@@ -440,7 +440,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cuál es la mejor manera de programar una cita desde Vanderbilt Beach?",
-        answer: "Simplemente llame a nuestra oficina al (239) 423-0272 o use nuestro formulario de contacto en línea. Ofrecemos horarios flexibles incluyendo citas temprano en la mañana y tarde en la tarde para acomodar las preferencias del estilo de vida playero."
+        answer: "Llame a nuestra oficina al (239) 423-0272 o use nuestro formulario de contacto en línea. La disponibilidad varía y la oficina confirmará los horarios disponibles."
       }
     ]
   },
@@ -449,7 +449,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How far is your Naples office from Fort Myers?",
-        answer: "Our practice is conveniently located about 20-25 minutes north of Fort Myers on US-41 (Tamiami Trail). The drive is straightforward and direct, making it easy for Fort Myers residents to access our services."
+        answer: "Our only physical office is in Naples, south of Fort Myers. Travel time varies by starting point and traffic; patients may also ask whether telehealth is appropriate for their appointment."
       },
       {
         question: "Do you offer telehealth services for Fort Myers patients?",
@@ -477,7 +477,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What should Fort Myers patients expect for their first appointment?",
-        answer: "Your initial psychiatric evaluation is a comprehensive 60-90 minute appointment where we discuss your mental health history, current concerns, and develop a personalized treatment plan. This can be done in-person or via secure video call."
+        answer: "Your initial psychiatric evaluation reviews your mental health history, current concerns, and treatment goals. The office will confirm the appointment length and whether in-person or telehealth is appropriate when you schedule."
       },
       {
         question: "Do you treat anxiety and depression for Fort Myers residents?",
@@ -491,7 +491,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Qué tan lejos está su oficina de Naples desde Fort Myers?",
-        answer: "Nuestra práctica está convenientemente ubicada aproximadamente 20-25 minutos al norte de Fort Myers en US-41 (Tamiami Trail). El viaje es directo y sencillo, facilitando que los residentes de Fort Myers accedan a nuestros servicios."
+        answer: "Nuestra única oficina física está en Naples, al sur de Fort Myers. El tiempo de viaje varía según el punto de partida y el tráfico; también puede consultar si la telesalud es apropiada para su cita."
       },
       {
         question: "¿Ofrecen servicios de telesalud para pacientes de Fort Myers?",
@@ -519,7 +519,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Qué deben esperar los pacientes de Fort Myers para su primera cita?",
-        answer: "Su evaluación psiquiátrica inicial es una cita integral de 60-90 minutos donde discutimos su historial de salud mental, preocupaciones actuales, y desarrollamos un plan de tratamiento personalizado. Esto puede hacerse en persona o por videollamada segura."
+        answer: "Su evaluación psiquiátrica inicial revisa su historial de salud mental, preocupaciones actuales y objetivos de tratamiento. La oficina confirmará la duración y si la modalidad presencial o de telesalud es apropiada cuando programe la cita."
       },
       {
         question: "¿Tratan ansiedad y depresión para residentes de Fort Myers?",
@@ -536,7 +536,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How far is the drive from Immokalee to your Naples office?",
-        answer: "The drive from Immokalee to our Naples office is approximately 45-50 minutes via Immokalee Road (Route 846) west to US-41. We understand it's a longer drive and offer flexible scheduling to accommodate our Immokalee patients."
+        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. The drive from Immokalee is commonly estimated at 50-60 minutes, but it varies by starting point, route and live traffic."
       },
       {
         question: "Do you offer telehealth services for Immokalee residents?",
@@ -568,7 +568,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Can you help coordinate care with community health centers in Immokalee?",
-        answer: "Yes, we work with Healthcare Network and other community providers in Immokalee to ensure coordinated care. We understand the importance of working within the existing healthcare infrastructure serving your community."
+        answer: "With the patient's consent, our office can evaluate case-by-case coordination and secure record sharing with a patient's existing community providers. Call the office to discuss the specific request."
       },
       {
         question: "Do you treat trauma and PTSD for Immokalee residents?",
@@ -578,7 +578,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Qué tan lejos está el viaje desde Immokalee hasta su oficina en Naples?",
-        answer: "El viaje desde Immokalee hasta nuestra oficina en Naples es aproximadamente 45-50 minutos por Immokalee Road (Ruta 846) oeste hasta US-41. Entendemos que es un viaje más largo y ofrecemos horarios flexibles para acomodar a nuestros pacientes de Immokalee."
+        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25. El viaje desde Immokalee suele estimarse en 50-60 minutos, pero varía según el punto de partida, la ruta y el tráfico en vivo."
       },
       {
         question: "¿Ofrecen servicios de telesalud para residentes de Immokalee?",
@@ -610,7 +610,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Pueden ayudar a coordinar atención con centros de salud comunitarios en Immokalee?",
-        answer: "Sí, trabajamos con Healthcare Network y otros proveedores comunitarios en Immokalee para asegurar atención coordinada. Entendemos la importancia de trabajar dentro de la infraestructura de atención médica existente que sirve a su comunidad."
+        answer: "Con el consentimiento del paciente, la oficina puede evaluar caso por caso la coordinación y el intercambio seguro de registros con los proveedores comunitarios actuales del paciente. Llame para comentar la solicitud específica."
       },
       {
         question: "¿Tratan trauma y TEPT para residentes de Immokalee?",
@@ -623,11 +623,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How far is your Naples office from Ave Maria?",
-        answer: "Our office is approximately 35-40 minutes from Ave Maria via Immokalee Road west to US-41 north. We understand it's a drive for Ave Maria students and residents, so we offer flexible scheduling and telehealth options."
+        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. Travel from Ave Maria is commonly estimated at 50-60 minutes, but it varies by starting point, route and live traffic."
       },
       {
         question: "Do you provide telehealth services for Ave Maria University students and residents?",
-        answer: "Yes! We offer secure video consultations that are perfect for busy college students and Ave Maria residents. This eliminates the drive time and allows flexible scheduling around academic commitments."
+        answer: "Secure video consultations may be available when clinically appropriate and when the patient is physically located where Dr. Reve is authorized to provide care. The office confirms eligibility and appointment availability when scheduling."
       },
       {
         question: "Do you treat college students from Ave Maria University?",
@@ -635,7 +635,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What insurance do you accept for Ave Maria University students?",
-        answer: "We accept most major insurance plans including those commonly used by students and university employees. We also work with students on payment plans when needed. Please call to verify your specific coverage."
+        answer: "We accept several major insurance plans. Please call the office to verify your specific coverage and ask about current billing options before scheduling."
       },
       {
         question: "Do you provide ADHD evaluations and treatment for Ave Maria students?",
@@ -647,7 +647,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you coordinate care with Ave Maria University counseling services?",
-        answer: "Yes, we work collaboratively with university counseling centers when appropriate. We believe in coordinated care that may combine our psychiatric medication management with campus counseling services."
+        answer: "With the patient's consent, our office can evaluate case-by-case coordination and secure record sharing with the patient's current counseling provider. No university partnership is implied."
       },
       {
         question: "Can you provide services in Spanish for Ave Maria's diverse community?",
@@ -659,17 +659,17 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you provide crisis support for Ave Maria students?",
-        answer: "While we don't provide 24/7 crisis services, we work closely with emergency resources and can help students access appropriate crisis support when needed. We also provide urgent appointments when possible."
+        answer: "We do not provide 24/7 crisis services. In an emergency, call 911 or 988 or go to the nearest emergency department. Contact the office during published hours for non-emergency scheduling."
       }
     ],
     es: [
       {
         question: "¿Qué tan lejos está su oficina de Naples desde Ave Maria?",
-        answer: "Nuestra oficina está aproximadamente 35-40 minutos desde Ave Maria por Immokalee Road oeste hasta US-41 norte. Entendemos que es un viaje para estudiantes y residentes de Ave Maria, así que ofrecemos horarios flexibles y opciones de telesalud."
+        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25. El viaje desde Ave Maria suele estimarse en 50-60 minutos, pero varía según el punto de partida, la ruta y el tráfico en vivo."
       },
       {
         question: "¿Proporcionan servicios de telesalud para estudiantes y residentes de Ave Maria University?",
-        answer: "¡Sí! Ofrecemos consultas por video seguras que son perfectas para estudiantes universitarios ocupados y residentes de Ave Maria. Esto elimina el tiempo de viaje y permite horarios flexibles alrededor de compromisos académicos."
+        answer: "Las consultas por video seguro pueden estar disponibles cuando sean clínicamente apropiadas y el paciente esté físicamente donde la Dra. Reve esté autorizada a atender. La oficina confirma elegibilidad y disponibilidad al programar."
       },
       {
         question: "¿Tratan estudiantes universitarios de Ave Maria University?",
@@ -677,7 +677,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Qué seguro aceptan para estudiantes de Ave Maria University?",
-        answer: "Aceptamos la mayoría de los principales planes de seguro incluyendo aquellos comúnmente usados por estudiantes y empleados universitarios. También trabajamos con estudiantes en planes de pago cuando sea necesario. Por favor llame para verificar su cobertura específica."
+        answer: "Aceptamos varios planes de seguro principales. Llame a la oficina para verificar su cobertura específica y preguntar por las opciones de facturación vigentes antes de programar."
       },
       {
         question: "¿Proporcionan evaluaciones y tratamiento de TDAH para estudiantes de Ave Maria?",
@@ -689,7 +689,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Coordinan atención con los servicios de consejería de Ave Maria University?",
-        answer: "Sí, trabajamos colaborativamente con centros de consejería universitaria cuando es apropiado. Creemos en atención coordinada que puede combinar nuestro manejo de medicamentos psiquiátricos con servicios de consejería del campus."
+        answer: "Con el consentimiento del paciente, la oficina puede evaluar caso por caso la coordinación y el intercambio seguro de registros con su proveedor actual de consejería. Esto no implica una asociación universitaria."
       },
       {
         question: "¿Pueden proporcionar servicios en español para la comunidad diversa de Ave Maria?",
@@ -701,7 +701,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Proporcionan apoyo de crisis para estudiantes de Ave Maria?",
-        answer: "Aunque no proporcionamos servicios de crisis 24/7, trabajamos estrechamente con recursos de emergencia y podemos ayudar a estudiantes a acceder apoyo de crisis apropiado cuando sea necesario. También proporcionamos citas urgentes cuando es posible."
+        answer: "No proporcionamos servicios de crisis 24/7. En una emergencia, llame al 911 o 988 o acuda al departamento de emergencias más cercano. Contacte la oficina dentro del horario publicado para programación no urgente."
       }
     ]
   },
@@ -746,7 +746,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "What's the parking situation for Lely Resort patients visiting your office?",
-        answer: "We offer free, convenient parking directly at our office location. It's much easier than typical medical appointments, and many Lely Resort patients comment on how convenient and stress-free the parking is."
+        answer: "Parking is available at our Naples office. Check live directions and contact the office if you need accessibility or arrival details before your visit."
       }
     ],
     es: [
@@ -788,7 +788,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cuál es la situación de estacionamiento para pacientes de Lely Resort que visitan su oficina?",
-        answer: "Ofrecemos estacionamiento gratuito y conveniente directamente en nuestra ubicación de oficina. Es mucho más fácil que las citas médicas típicas, y muchos pacientes de Lely Resort comentan sobre qué tan conveniente y libre de estrés es el estacionamiento."
+        answer: "Hay estacionamiento disponible en nuestra oficina de Naples. Consulte la ruta en vivo y contacte la oficina si necesita detalles de accesibilidad o llegada antes de su visita."
       }
     ]
   },
@@ -817,7 +817,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "How do I schedule a telehealth appointment?",
-        answer: "You can schedule online 24/7 through our CharmHealth booking system or call our office at (239) 423-0272. We offer flexible scheduling with same-day appointments often available."
+        answer: "You can request an appointment online through our CharmHealth booking system or call our office at (239) 423-0272. Appointment availability varies, and the office will confirm the available time."
       },
       {
         question: "Is my privacy protected during telehealth sessions?",
@@ -859,7 +859,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo programo una cita de telesalud?",
-        answer: "Puede programar en línea 24/7 a través de nuestro sistema de reservas CharmHealth o llamar a nuestra oficina al (239) 423-0272. Ofrecemos horarios flexibles con citas el mismo día a menudo disponibles."
+        answer: "Puede solicitar una cita en línea a través de nuestro sistema CharmHealth o llamar a nuestra oficina al (239) 423-0272. La disponibilidad varía y la oficina confirmará el horario disponible."
       },
       {
         question: "¿Está protegida mi privacidad durante las sesiones de telesalud?",

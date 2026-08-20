@@ -60,12 +60,12 @@ const LocationImmokalee = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Immokalee Location",
+      title: "Serving Immokalee from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Immokalee, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationImmokalee = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Immokalee",
+      title: "Atención para Immokalee desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Immokalee, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -162,11 +162,11 @@ const LocationImmokalee = () => {
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic">Psychiatrist</span> in Immokalee, FL
+                          <span className="font-display italic">Psychiatrist</span> Serving Immokalee, FL
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic">Psiquiatra</span> de Confianza en Immokalee, FL
+                          <span className="font-display italic">Psiquiatra</span> para residentes de Immokalee, FL
                         </>
                       )}
                     </p>
@@ -253,12 +253,12 @@ const LocationImmokalee = () => {
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                          <span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}
                           <span className="font-display italic text-green-700">Immokalee, FL</span>
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                          <span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}
                           <span className="font-display italic text-green-700">Immokalee, FL</span>
                         </>
                       )}
@@ -626,8 +626,8 @@ const LocationImmokalee = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Follow Immokalee Road west to US-41, turn right (north). Our practice is at 4760 Tamiami Trl N # 25'
-                          : 'Siga Immokalee Road oeste hasta US-41, gire a la derecha (norte). Nuestra práctica está en 4760 Tamiami Trl N # 25'}
+                          ? 'Follow live directions toward Naples and our only office at 4760 Tamiami Trl N #25'
+                          : 'Siga las indicaciones en vivo hacia Naples y nuestra única oficina en 4760 Tamiami Trl N #25'}
                       </p>
                     </div>
                   </div>
@@ -635,7 +635,7 @@ const LocationImmokalee = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '35-40 minutes' : '35-40 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -694,8 +694,8 @@ const LocationImmokalee = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Turn right on US-41 (Tamiami Trail) North. Our psychiatric practice is at 4760 Tamiami Trl N # 25'
-                          : 'Gire a la derecha en US-41 (Tamiami Trail) Norte. Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25'}
+                          ? 'Follow live directions to our only office at 4760 Tamiami Trl N #25'
+                          : 'Siga las indicaciones en vivo hasta nuestra única oficina en 4760 Tamiami Trl N #25'}
                       </p>
                     </div>
                   </div>
@@ -703,7 +703,7 @@ const LocationImmokalee = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '40-45 minutes' : '40-45 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -762,8 +762,8 @@ const LocationImmokalee = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Continue west to US-41, turn right north. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103'
-                          : 'Continúe al oeste hasta US-41, gire a la derecha norte. GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103'}
+                          ? 'Follow live directions to 4760 Tamiami Trail N #25, Naples, FL 34103'
+                          : 'Siga las indicaciones en vivo hasta 4760 Tamiami Trail N #25, Naples, FL 34103'}
                       </p>
                     </div>
                   </div>
@@ -771,7 +771,7 @@ const LocationImmokalee = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '45-50 minutes' : '45-50 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -1101,7 +1101,7 @@ const LocationImmokalee = () => {
                       {content.addressTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
+                      4760 Tamiami Trl N #25<br />
                       Naples, FL 34103
                     </p>
                   </div>

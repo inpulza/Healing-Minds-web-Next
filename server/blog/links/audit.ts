@@ -14,7 +14,7 @@ import {
 } from "@shared/schema";
 import { db } from "../../db";
 import { getActiveBlogRedirect } from "../storage";
-import { isKnownRoute } from "../../utils/html-injection";
+import { isKnownRoute } from "../../routing/is-known-route";
 import { BLOG_LINK_CUTOVER_MARKER_KEY, getBlogLinkConfig } from "./config";
 import {
   isForbiddenExternalHostname,

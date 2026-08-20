@@ -98,7 +98,7 @@ export const cookiePolicyContent: BilingualPageContent = {
         paragraphs: [
           `If you have any questions about our use of cookies, you can contact us at:`,
           `**Healing Minds Psychiatry**`,
-          `4760 Tamiami Trl N # 25`,
+          `4760 Tamiami Trl N #25`,
           `Naples, FL 34103`,
           `Email: info@healingmindsp.com`,
         ],
@@ -202,7 +202,7 @@ export const cookiePolicyContent: BilingualPageContent = {
         paragraphs: [
           `Si tiene alguna pregunta sobre nuestro uso de cookies, puede contactarnos en:`,
           `**Healing Minds Psychiatry**`,
-          `4760 Tamiami Trl N # 25`,
+          `4760 Tamiami Trl N #25`,
           `Naples, FL 34103`,
           `Correo electrónico: info@healingmindsp.com`,
         ],

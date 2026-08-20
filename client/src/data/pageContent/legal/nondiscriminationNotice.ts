@@ -36,7 +36,7 @@ export const nondiscriminationNoticeContent: BilingualPageContent = {
         heading: 'Filing a Grievance With Our Practice',
         paragraphs: [
           'If you believe that Healing Minds Psychiatry has failed to provide these services or has discriminated in any way on the basis of race, color, national origin, age, disability, or sex, you may file a grievance with our office.',
-          'You can file a grievance by phone at [(239) 423-0272](tel:+12394230272), by email at [info@healingmindsp.com](mailto:info@healingmindsp.com), or by mail at 4760 Tamiami Trl N # 25, Naples, FL 34103. If you need help filing a grievance, our office is available to assist you.',
+          'You can file a grievance by phone at [(239) 423-0272](tel:+12394230272), by email at [info@healingmindsp.com](mailto:info@healingmindsp.com), or by mail at 4760 Tamiami Trl N #25, Naples, FL 34103. If you need help filing a grievance, our office is available to assist you.',
         ],
       },
       {
@@ -118,7 +118,7 @@ export const nondiscriminationNoticeContent: BilingualPageContent = {
         heading: 'Presentar una Queja con Nuestra Práctica',
         paragraphs: [
           'Si usted cree que Healing Minds Psychiatry no le ha proporcionado estos servicios o ha discriminado de alguna manera por motivos de raza, color, origen nacional, edad, discapacidad o sexo, puede presentar una queja con nuestra oficina.',
-          'Puede presentar una queja por teléfono al [(239) 423-0272](tel:+12394230272), por correo electrónico a [info@healingmindsp.com](mailto:info@healingmindsp.com), o por correo postal a 4760 Tamiami Trl N # 25, Naples, FL 34103. Si necesita ayuda para presentar una queja, nuestra oficina está disponible para asistirle.',
+          'Puede presentar una queja por teléfono al [(239) 423-0272](tel:+12394230272), por correo electrónico a [info@healingmindsp.com](mailto:info@healingmindsp.com), o por correo postal a 4760 Tamiami Trl N #25, Naples, FL 34103. Si necesita ayuda para presentar una queja, nuestra oficina está disponible para asistirle.',
         ],
       },
       {

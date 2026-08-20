@@ -60,12 +60,12 @@ const LocationGoldenGate = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Golden Gate Location",
+      title: "Serving Golden Gate from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Golden Gate, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationGoldenGate = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Golden Gate",
+      title: "Atención para Golden Gate desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Golden Gate, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -148,7 +148,7 @@ const LocationGoldenGate = () => {
                 <div className="absolute bottom-0 left-0 right-0 z-10 px-4 sm:px-6 py-6 text-center bg-gradient-to-t from-black/60 to-transparent">
                   <div className="max-w-sm mx-auto">
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
-                      {language === 'en' ? (<>Your Trusted <span className="font-display italic">Psychiatrist</span> in Golden Gate, FL</>) : (<>Su <span className="font-display italic">Psiquiatra</span> de Confianza en Golden Gate, FL</>)}
+                      {language === 'en' ? (<><span className="font-display italic">Psychiatrist</span> Serving Golden Gate, FL</>) : (<><span className="font-display italic">Psiquiatra</span> para residentes de Golden Gate, FL</>)}
                     </p>
                   </div>
                 </div>
@@ -173,7 +173,7 @@ const LocationGoldenGate = () => {
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Serving Golden Gate' : 'Sirviendo Golden Gate'}</span></div>
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
-                      {language === 'en' ? (<>Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}<span className="font-display italic text-green-700">Golden Gate, FL</span></>) : (<>Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}<span className="font-display italic text-green-700">Golden Gate, FL</span></>)}
+                      {language === 'en' ? (<><span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}<span className="font-display italic text-green-700">Golden Gate, FL</span></>) : (<><span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}<span className="font-display italic text-green-700">Golden Gate, FL</span></>)}
                     </h1>
                     <p className="text-sm md:text-base leading-relaxed font-body text-green-700 max-w-md mb-6" data-testid="hero-description-desktop">{local.heroDescription[language]}</p>
                     <Button onClick={() => window.location.href = language === 'en' ? '/contact' : '/es/contacto'} className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200" data-testid="button-schedule-consultation-desktop"><Calendar className="w-5 h-5 mr-2" />{language === 'en' ? 'Schedule Consultation' : 'Programar Consulta'}</Button>

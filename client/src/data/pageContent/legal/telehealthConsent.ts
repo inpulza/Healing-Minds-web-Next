@@ -97,7 +97,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'contact',
         heading: 'Questions or Contact',
         paragraphs: [
-          'If you have any questions about telehealth or this consent, please contact us at [(239) 423-0272](tel:+12394230272) or by email at [info@healingmindsp.com](mailto:info@healingmindsp.com). Our office is located at 4760 Tamiami Trl N # 25, Naples, FL 34103. Services are available to adults 18 and older.',
+          'If you have any questions about telehealth or this consent, please contact us at [(239) 423-0272](tel:+12394230272) or by email at [info@healingmindsp.com](mailto:info@healingmindsp.com). Our office is located at 4760 Tamiami Trl N #25, Naples, FL 34103. Services are available to adults 18 and older.',
         ],
       },
     ],
@@ -198,7 +198,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'contact',
         heading: 'Preguntas o Contacto',
         paragraphs: [
-          'Si tiene alguna pregunta sobre la telesalud o este consentimiento, comuníquese con nosotros al [(239) 423-0272](tel:+12394230272) o por correo electrónico a [info@healingmindsp.com](mailto:info@healingmindsp.com). Nuestra oficina está ubicada en 4760 Tamiami Trl N # 25, Naples, FL 34103. Los servicios están disponibles para adultos de 18 años en adelante.',
+          'Si tiene alguna pregunta sobre la telesalud o este consentimiento, comuníquese con nosotros al [(239) 423-0272](tel:+12394230272) o por correo electrónico a [info@healingmindsp.com](mailto:info@healingmindsp.com). Nuestra oficina está ubicada en 4760 Tamiami Trl N #25, Naples, FL 34103. Los servicios están disponibles para adultos de 18 años en adelante.',
         ],
       },
     ],

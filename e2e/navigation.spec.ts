@@ -379,7 +379,7 @@ test("representative EN and ES metadata stays aligned after hydration", async ({
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 
-test("verified social profiles stay consistent in UI, outbound clicks and SSR identity", async ({
+test("verified social profiles stay consistent in UI and the route-owned SSR identity", async ({
   page,
   context,
   isMobile,
@@ -396,7 +396,7 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
   const response = await page.goto("/");
   expect(response?.status()).toBe(200);
   const responseHtml = await response!.text();
-  expect(responseHtml).toContain('id="social-identity-structured-data"');
+  expect(responseHtml).toContain('id="page-structured-data"');
   await rejectInitialConsent(page);
 
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
@@ -408,7 +408,7 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
     "https://www.healingmindsp.com/og-image.png",
   );
 
-  const structuredData = page.locator("#social-identity-structured-data");
+  const structuredData = page.locator("#page-structured-data");
   await expect(structuredData).toHaveCount(1);
   const graph = JSON.parse((await structuredData.textContent()) || "{}") as {
     "@graph"?: Array<{
@@ -425,7 +425,7 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
     }>;
   };
   const organization = graph["@graph"]?.find((node) => node["@id"]?.endsWith("#organization"));
-  const physician = graph["@graph"]?.find((node) => node["@id"]?.endsWith("#physician"));
+  const physician = graph["@graph"]?.find((node) => node["@id"]?.endsWith("#dr-melva-reve"));
   expect(organization?.sameAs).toEqual([
     profiles.facebook,
     profiles.instagram,
@@ -434,11 +434,10 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
   ]);
   expect(physician?.sameAs).toEqual([
     "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
-    profiles.linkedin,
   ]);
-  expect(physician?.address).toEqual({
+  expect(organization?.address).toEqual({
     "@type": "PostalAddress",
-    streetAddress: "4760 Tamiami Trl N # 25",
+    streetAddress: "4760 Tamiami Trl N #25",
     addressLocality: "Naples",
     addressRegion: "FL",
     postalCode: "34103",
@@ -451,7 +450,9 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
   });
   await navigateFromHeader(page, "/about", isMobile);
   await expect(page).toHaveURL(/\/about\/?$/);
-  await expect(page.locator("#social-identity-structured-data")).toHaveCount(0);
+  await expect(page.locator("#page-structured-data")).toHaveCount(1);
+  await expect.poll(() => page.locator("#page-structured-data").textContent()).toContain("AboutPage");
+  await expect.poll(() => page.locator("#page-structured-data").textContent()).not.toContain("MedicalClinic");
   expect(
     await page.evaluate(
       () =>
@@ -463,7 +464,8 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
   await page.getByTestId("logo-link").click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByTestId("hero-title")).toBeVisible();
-  await expect(page.locator("#social-identity-structured-data")).toHaveCount(1);
+  await expect(page.locator("#page-structured-data")).toHaveCount(1);
+  await expect.poll(() => page.locator("#page-structured-data").textContent()).toContain("MedicalClinic");
   expect(
     await page.evaluate(
       () =>
@@ -472,10 +474,11 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
     ),
   ).toBe("home-document");
 
-  // Also cover a cold non-home entry: the root layout starts without the
-  // identity graph, then the home page segment must add it through Next Link.
+  // Also cover a cold non-home entry: every page segment owns one graph and
+  // a Next Link navigation must replace it without reloading the document.
   await page.goto("/about");
-  await expect(page.locator("#social-identity-structured-data")).toHaveCount(0);
+  await expect(page.locator("#page-structured-data")).toHaveCount(1);
+  await expect.poll(() => page.locator("#page-structured-data").textContent()).toContain("AboutPage");
   await expectReactHydrated(page.getByTestId("logo-link"));
   await page.evaluate(() => {
     (window as typeof window & { __identityNavigationSentinel?: string })
@@ -483,7 +486,8 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
   });
   await page.getByTestId("logo-link").click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.locator("#social-identity-structured-data")).toHaveCount(1);
+  await expect(page.locator("#page-structured-data")).toHaveCount(1);
+  await expect.poll(() => page.locator("#page-structured-data").textContent()).toContain("MedicalClinic");
   expect(
     await page.evaluate(
       () =>
@@ -494,7 +498,8 @@ test("verified social profiles stay consistent in UI, outbound clicks and SSR id
 
   await navigateFromHeader(page, "/about", isMobile);
   await expect(page).toHaveURL(/\/about\/?$/);
-  await expect(page.locator("#social-identity-structured-data")).toHaveCount(0);
+  await expect(page.locator("#page-structured-data")).toHaveCount(1);
+  await expect.poll(() => page.locator("#page-structured-data").textContent()).toContain("AboutPage");
 
   await expect(page.getByTestId("linkedin-link")).toHaveAttribute("href", profiles.linkedin);
   await expect(page.getByTestId("facebook-link")).toHaveAttribute("href", profiles.facebook);

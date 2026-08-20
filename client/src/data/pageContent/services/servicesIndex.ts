@@ -16,7 +16,7 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'heroDescription',
         paragraphs: [
-          `Dr. Melva Reve offers evidence-based psychiatric care for anxiety, depression, ADHD, PTSD, and more. Accepting new patients — in-person in Naples and via telehealth throughout Florida.`,
+          `Dr. Melva Reve offers evidence-based psychiatric care for anxiety, depression, ADHD, PTSD, and more, in person in Naples and by telehealth when appropriate throughout Florida.`,
         ],
       },
       {
@@ -101,7 +101,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `Book Your Appointment`,
         paragraphs: [
-          `Schedule online or call (239) 423-0272. New patients typically seen within 1–2 weeks.`,
+          `Schedule online or call (239) 423-0272. Appointment availability varies; the office will confirm the next available time.`,
         ],
       },
       {
@@ -160,7 +160,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `How long does a first psychiatric appointment take?`,
         paragraphs: [
-          `Initial consultations are 40–60 minutes. This comprehensive evaluation covers your mental health history, current symptoms, medications, and treatment goals. Follow-up appointments are typically 20–30 minutes.`,
+          `The initial consultation covers your mental health history, current symptoms, medications, and treatment goals. The office will confirm the appointment length when you schedule.`,
         ],
       },
       {
@@ -184,7 +184,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `How soon can I get an appointment?`,
         paragraphs: [
-          `New patient appointments are typically available within 1–2 weeks. You can book online through our scheduling system or call (239) 423-0272. Telehealth slots often have greater availability.`,
+          `Appointment availability varies. You can request a time online through our scheduling system or call (239) 423-0272, and the office will confirm the next available appointment.`,
         ],
       },
       {
@@ -218,7 +218,7 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'heroDescription',
         paragraphs: [
-          `La Dra. Melva Reve ofrece atención psiquiátrica basada en evidencia para ansiedad, depresión, TDAH, TEPT y más. Aceptando nuevos pacientes — en persona en Naples y por telesalud en toda Florida.`,
+          `La Dra. Melva Reve ofrece atención psiquiátrica basada en evidencia para ansiedad, depresión, TDAH, TEPT y más, en persona en Naples y por telesalud cuando sea apropiado en toda Florida.`,
         ],
       },
       {
@@ -303,7 +303,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `Reservar su Cita`,
         paragraphs: [
-          `Programe en línea o llame al (239) 423-0272. Los nuevos pacientes generalmente son atendidos en 1–2 semanas.`,
+          `Programe en línea o llame al (239) 423-0272. La disponibilidad varía; la oficina confirmará el próximo horario disponible.`,
         ],
       },
       {
@@ -362,7 +362,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `¿Cuánto dura la primera cita psiquiátrica?`,
         paragraphs: [
-          `Las consultas iniciales duran 40–60 minutos. Esta evaluación integral cubre su historial de salud mental, síntomas actuales, medicamentos y objetivos de tratamiento. Las citas de seguimiento suelen durar 20–30 minutos.`,
+          `La consulta inicial cubre su historial de salud mental, síntomas actuales, medicamentos y objetivos de tratamiento. La oficina confirmará la duración de la cita cuando la programe.`,
         ],
       },
       {
@@ -386,7 +386,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `¿Qué tan pronto puedo obtener una cita?`,
         paragraphs: [
-          `Las citas para nuevos pacientes generalmente están disponibles en 1–2 semanas. Puede reservar en línea a través de nuestro sistema de programación o llamar al (239) 423-0272. Los espacios de telesalud suelen tener mayor disponibilidad.`,
+          `La disponibilidad de citas varía. Puede solicitar un horario en línea o llamar al (239) 423-0272, y la oficina confirmará la próxima cita disponible.`,
         ],
       },
       {

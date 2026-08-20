@@ -6,6 +6,7 @@ import southwestFloridaMap from '../assets/southwest-florida-map.webp';
 import southwestFloridaMap400 from '../assets/southwest-florida-map-400w.webp';
 import southwestFloridaMap600 from '../assets/southwest-florida-map-600w.webp';
 import { assetUrl } from '@/lib/asset-url';
+import { practiceProfile } from '@shared/practice-profile';
 
 const ServiceAreas: React.FC = () => {
   const { language } = useLanguage();
@@ -260,7 +261,7 @@ const ServiceAreas: React.FC = () => {
                     {language === 'en' ? 'Main Office Location' : 'Ubicación de Oficina Principal'}
                   </h4>
                   <p className="text-sm sm:text-base text-gray-700 mb-2 leading-relaxed">
-                    4760 Tamiami Trl N # 25, Naples, FL 34103<br />
+                    {practiceProfile.addressDisplay}<br />
                     {language === 'en' 
                       ? 'Serving all surrounding communities' 
                       : 'Sirviendo todas las comunidades circundantes'

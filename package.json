@@ -9,7 +9,7 @@
     "build": "node scripts/verify-public-analytics-config.mjs && next build && node scripts/verify-public-route-bundle-budget.mjs",
     "start": "next start -H 0.0.0.0 -p 3100",
     "check": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test tests/*.test.mjs && tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
     "test:e2e:build": "npm run build && playwright test",
     "test:e2e:deployed": "node scripts/run-deployed-e2e.mjs",

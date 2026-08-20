@@ -60,12 +60,12 @@ const LocationVanderbiltBeach = () => {
 
   const contentData = {
     en: {
-      title: "Visit Our Vanderbilt Beach Location",
+      title: "Serving Vanderbilt Beach from Our Naples Office",
       subtitle: "Your mental health journey starts here, serving Vanderbilt Beach, Florida",
       addressTitle: "Our Address",
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
-      servicesTitle: "Services at This Location",
+      servicesTitle: "Services for This Community",
       insuranceTitle: "Accepted Insurance Plans",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
@@ -96,12 +96,12 @@ const LocationVanderbiltBeach = () => {
       ]
     },
     es: {
-      title: "Visite Nuestra Ubicación en Vanderbilt Beach",
+      title: "Atención para Vanderbilt Beach desde Nuestra Oficina de Naples",
       subtitle: "Su viaje de salud mental comienza aquí, sirviendo a Vanderbilt Beach, Florida",
       addressTitle: "Nuestra Dirección",
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
-      servicesTitle: "Servicios en Esta Ubicación",
+      servicesTitle: "Servicios para Esta Comunidad",
       insuranceTitle: "Planes de Seguro Aceptados",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
@@ -162,11 +162,11 @@ const LocationVanderbiltBeach = () => {
                     <p className="text-2xl sm:text-3xl leading-tight text-white text-center font-body font-bold" data-testid="hero-title-mobile">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic">Psychiatrist</span> in Vanderbilt Beach, FL
+                          <span className="font-display italic">Psychiatrist</span> Serving Vanderbilt Beach, FL
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic">Psiquiatra</span> de Confianza en Vanderbilt Beach, FL
+                          <span className="font-display italic">Psiquiatra</span> para residentes de Vanderbilt Beach, FL
                         </>
                       )}
                     </p>
@@ -253,12 +253,12 @@ const LocationVanderbiltBeach = () => {
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-5" data-testid="hero-title-desktop">
                       {language === 'en' ? (
                         <>
-                          Your Trusted <span className="font-display italic text-green-700">Psychiatrist</span> in{' '}
+                          <span className="font-display italic text-green-700">Psychiatrist</span> Serving{' '}
                           <span className="font-display italic text-green-700">Vanderbilt Beach, FL</span>
                         </>
                       ) : (
                         <>
-                          Su <span className="font-display italic text-green-700">Psiquiatra</span> de Confianza en{' '}
+                          <span className="font-display italic text-green-700">Psiquiatra</span> para residentes de{' '}
                           <span className="font-display italic text-green-700">Vanderbilt Beach, FL</span>
                         </>
                       )}
@@ -625,8 +625,8 @@ const LocationVanderbiltBeach = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Our psychiatric practice is at 4760 Tamiami Trl N # 25, on the right side'
-                          : 'Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N # 25, del lado derecho'}
+                          ? 'Our psychiatric practice is at 4760 Tamiami Trl N #25, on the right side'
+                          : 'Nuestra práctica psiquiátrica está en 4760 Tamiami Trl N #25, del lado derecho'}
                       </p>
                     </div>
                   </div>
@@ -634,7 +634,7 @@ const LocationVanderbiltBeach = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '8-10 minutes' : '8-10 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -692,8 +692,8 @@ const LocationVanderbiltBeach = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'Our mental health office is ahead at 4760 Tamiami Trl N # 25, on the right'
-                          : 'Nuestra oficina de salud mental está adelante en 4760 Tamiami Trl N # 25, a la derecha'}
+                          ? 'Our mental health office is ahead at 4760 Tamiami Trl N #25, on the right'
+                          : 'Nuestra oficina de salud mental está adelante en 4760 Tamiami Trl N #25, a la derecha'}
                       </p>
                     </div>
                   </div>
@@ -701,7 +701,7 @@ const LocationVanderbiltBeach = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '12-15 minutes' : '12-15 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -759,8 +759,8 @@ const LocationVanderbiltBeach = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 with ample parking'
-                          : 'GPS: 4760 Tamiami Trail N # 25, Naples, FL 34103 con amplio estacionamiento'}
+                          ? 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103 with ample parking'
+                          : 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103 con amplio estacionamiento'}
                       </p>
                     </div>
                   </div>
@@ -768,7 +768,7 @@ const LocationVanderbiltBeach = () => {
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-700 font-body text-sm font-medium mb-4">
                       <Clock className="w-4 h-4" />
-                      <span>{language === 'en' ? '5-8 minutes' : '5-8 minutos'}</span>
+                      <span>{local.duration[language]}</span>
                     </div>
 
                     <Button 
@@ -1085,7 +1085,7 @@ const LocationVanderbiltBeach = () => {
                       {content.addressTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      4760 Tamiami Trl N # 25<br />
+                      4760 Tamiami Trl N #25<br />
                       Naples, FL 34103
                     </p>
                   </div>

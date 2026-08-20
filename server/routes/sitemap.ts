@@ -264,7 +264,7 @@ export const generateLlmsTxt = async (req: Request, res: Response) => {
 
   const llmsTxt = `# Healing Minds Psychiatry
 
-> Bilingual (English/Spanish) psychiatry practice led by Dr. Melva Reve in Naples, FL. Expert, compassionate treatment for anxiety, depression, ADHD, PTSD, bipolar disorder, and psychiatric medication management. Telepsychiatry available throughout Florida. Address: 4760 Tamiami Trl N # 25, Naples, FL 34103. Phone: (239) 423-0272.
+> Bilingual (English/Spanish) psychiatry practice led by Dr. Melva Reve in Naples, FL. Expert, compassionate treatment for anxiety, depression, ADHD, PTSD, bipolar disorder, and psychiatric medication management. Telepsychiatry available throughout Florida. Address: 4760 Tamiami Trl N #25, Naples, FL 34103. Phone: (239) 423-0272.
 
 ## Main Pages
 - [Home](${baseUrl}/): Overview of the practice, Dr. Melva Reve, and services

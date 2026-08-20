@@ -77,10 +77,10 @@ const Home = () => {
         <SuspenseWrapper priority="low">
           <LazyForPatients />
         </SuspenseWrapper>
-        <SuspenseWrapper priority="low">
+        <SuspenseWrapper priority="low" preload>
           <LazyFAQ />
         </SuspenseWrapper>
-        <SuspenseWrapper priority="low">
+        <SuspenseWrapper priority="low" preload>
           <LazyContact headingLevel="h2" />
         </SuspenseWrapper>
       </main>

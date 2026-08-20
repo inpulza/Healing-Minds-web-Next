@@ -75,12 +75,12 @@ test("Immokalee content does not promise unpublished evening or weekend availabi
     assert.doesNotMatch(source, /around field hours|scheduled around|adaptad[oa] a horarios del campo|según (?:los )?horarios (?:de trabajo )?en el campo|calendario de cosecha/i);
   }
 
-  assert.match(hyperlocal, /weekday telehealth/i);
-  assert.match(hyperlocal, /telesalud entre semana/i);
+  assert.match(hyperlocal, /telehealth eligibility and availability are confirmed when scheduling/i);
+  assert.match(hyperlocal, /elegibilidad y disponibilidad de telesalud se confirman al programar/i);
   assert.match(faqs, /Monday through Friday, 8:00 AM to 5:00 PM/);
   assert.match(faqs, /lunes a viernes de 8:00 AM a 5:00 PM/);
-  assert.match(immokaleeSeo, /weekday telehealth/i);
-  assert.match(immokaleeSeo, /telesalud entre semana/i);
+  assert.match(immokaleeSeo, /telehealth eligibility and availability confirmed when scheduling/i);
+  assert.match(immokaleeSeo, /elegibilidad y disponibilidad de telesalud confirmadas al programar/i);
 });
 
 test("public clinical eligibility consistently limits services to adults 18 and older", () => {

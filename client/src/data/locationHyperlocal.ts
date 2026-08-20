@@ -41,8 +41,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
         es: 'psiquiatra Lely Resort FL, salud mental Players Club, psiquiatra Stonebridge, psiquiatría jubilados Naples, psiquiatra bilingüe 34113',
       },
       serviceDescription: {
-        en: "Psychiatric care tailored to Lely Resort's active 55+ community in ZIP 34113. Dr. Melva Reve treats anxiety, depression, life-transition adjustment, sleep difficulties, ADHD, PTSD, bipolar disorder and provides medication review for residents of Players Club & Spa, Stonebridge, the Classics, Lakoya, Mustang Island and Lely Country Club. Sessions are bilingual (English/Spanish), with telehealth available between in-person visits.",
-        es: "Atención psiquiátrica adaptada a la comunidad activa 55+ de Lely Resort en el ZIP 34113. La Dra. Melva Reve trata ansiedad, depresión, ajuste a transiciones de vida, problemas del sueño, TDAH, TEPT, trastorno bipolar y revisión de medicamentos para residentes de Players Club & Spa, Stonebridge, the Classics, Lakoya, Mustang Island y Lely Country Club. Sesiones bilingües (inglés/español), con telesalud entre visitas en persona.",
+        en: "Psychiatric care serving Lely Resort's active 55+ community in ZIP 34113 from our only physical office in Naples. Dr. Melva Reve treats anxiety, depression, life-transition adjustment, sleep difficulties, ADHD, PTSD and bipolar disorder and provides medication review. Sessions are bilingual; appointment modality is confirmed when scheduling.",
+        es: "Atención psiquiátrica para la comunidad activa 55+ de Lely Resort en el ZIP 34113 desde nuestra única oficina física en Naples. La Dra. Melva Reve trata ansiedad, depresión, ajuste a transiciones de vida, problemas del sueño, TDAH, TEPT y trastorno bipolar y realiza revisión de medicamentos. Las sesiones son bilingües; la modalidad se confirma al programar.",
       },
     },
     heroDescription: {
@@ -50,8 +50,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: "Atención psiquiátrica bilingüe para la comunidad 55+ de Lely Resort — a unos 15 minutos hacia el norte por US-41 desde Players Club, Stonebridge, the Classics y Lakoya.",
     },
     healingParagraph: {
-      en: "Lely Resort is home to roughly 9,300 residents with a median age in the high 50s and a strong network of master-association communities — Players Club & Spa, Stonebridge, the Classics, Lakoya and Mustang Island among them. Most of our Lely patients reach our Park Shore office in 15–20 minutes via Collier Boulevard and US-41 for their initial evaluation, and continue with secure telehealth visits in between. Care is bilingual (English/Spanish) and oriented to the concerns we hear most often from active retirees: sleep, anxiety after a major life transition, mood changes, careful medication review and adjustment to chronic illness.",
-      es: "Lely Resort tiene aproximadamente 9,300 residentes con una edad mediana cercana a los 60 años y una red sólida de comunidades de asociación maestra — Players Club & Spa, Stonebridge, the Classics, Lakoya y Mustang Island entre ellas. La mayoría de nuestros pacientes de Lely llegan a nuestra oficina de Park Shore en 15–20 minutos por Collier Boulevard y US-41 para la evaluación inicial, y continúan con visitas seguras por telesalud entre consultas. La atención es bilingüe (inglés/español) y se centra en lo que más escuchamos de jubilados activos: sueño, ansiedad tras una transición vital, cambios de ánimo, revisión cuidadosa de medicamentos y ajuste a enfermedades crónicas.",
+      en: "Lely Resort is home to roughly 9,300 residents with a median age in the high 50s and a strong network of master-association communities. Our only physical office is in Park Shore, commonly estimated at 15–20 minutes away depending on origin and traffic. The office confirms whether in-person or telehealth care is clinically appropriate when scheduling. Care is bilingual and oriented to sleep, anxiety, mood changes and careful medication review.",
+      es: "Lely Resort tiene aproximadamente 9,300 residentes con una edad mediana cercana a los 60 años y una red sólida de comunidades de asociación maestra. Nuestra única oficina física está en Park Shore, a unos 15–20 minutos según el origen y el tráfico. La oficina confirma si la atención presencial o por telesalud es clínicamente apropiada al programar. La atención es bilingüe y se centra en sueño, ansiedad, cambios de ánimo y revisión cuidadosa de medicamentos.",
     },
     servicesIntro: {
       en: "Whether you're navigating a recent move, retirement, the loss of a spouse, or simply want a careful second look at your psychiatric medications, the services below are the ones our Lely Resort patients ask about most.",
@@ -77,8 +77,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     },
     duration: { en: '15-20 minutes', es: '15-20 minutos' },
     bottomNote: {
-      en: "Serving Lely Resort residents — including Players Club & Spa, Stonebridge, the Classics and Lakoya — with in-person visits at our Park Shore office and secure telehealth follow-up. Call (239) 423-0272 for directions or scheduling.",
-      es: "Atendiendo a residentes de Lely Resort — incluyendo Players Club & Spa, Stonebridge, the Classics y Lakoya — con visitas en persona en Park Shore y telesalud segura para seguimiento. Llame al (239) 423-0272.",
+      en: "Serving Lely Resort residents from our only physical office in Park Shore. Appointment modality and telehealth eligibility are confirmed when scheduling. Call (239) 423-0272.",
+      es: "Atendiendo a residentes de Lely Resort desde nuestra única oficina física en Park Shore. La modalidad y elegibilidad para telesalud se confirman al programar. Llame al (239) 423-0272.",
     },
     featureBadges: [
       { en: '55+ Community Focus', es: 'Enfoque en Comunidad 55+' },
@@ -123,29 +123,29 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
         es: 'Psiquiatra para Vanderbilt Beach, FL — Continuidad de Atención para Snowbirds | Healing Minds',
       },
       description: {
-        en: "Psychiatric care for Vanderbilt Beach (ZIP 34108) — short drive down Vanderbilt Beach Rd to our Park Shore office. Coordinated continuity of care for seasonal residents, with telehealth when you return north.",
-        es: "Atención psiquiátrica para Vanderbilt Beach (ZIP 34108) — corto trayecto por Vanderbilt Beach Rd hasta nuestra oficina de Park Shore. Continuidad coordinada para residentes estacionales, con telesalud cuando regresan al norte.",
+        en: "Psychiatric care for Vanderbilt Beach (ZIP 34108), with one physical office in Park Shore. Telehealth may be available only when clinically appropriate and when the patient is physically located where Dr. Reve is authorized to provide care.",
+        es: "Atención psiquiátrica para Vanderbilt Beach (ZIP 34108), con una única oficina física en Park Shore. La telesalud puede estar disponible solo cuando sea clínicamente apropiada y el paciente esté físicamente donde la Dra. Reve esté autorizada a atender.",
       },
       keywords: {
         en: 'psychiatrist Vanderbilt Beach FL, snowbird psychiatrist Naples, seasonal mental health 34108, telepsychiatry Park Shore',
         es: 'psiquiatra Vanderbilt Beach FL, psiquiatra snowbird Naples, salud mental estacional 34108, telepsiquiatría Park Shore',
       },
       serviceDescription: {
-        en: "Psychiatric care for Vanderbilt Beach (ZIP 34108) residents, where roughly 44.6% of housing is seasonal. Dr. Melva Reve provides anxiety and depression treatment, ADHD evaluation, medication management, sleep care and trauma-informed support — with explicit coordination with northern providers so seasonal patients are not left without care between Florida and home.",
-        es: "Atención psiquiátrica para residentes de Vanderbilt Beach (ZIP 34108), donde aproximadamente el 44.6% de la vivienda es estacional. La Dra. Melva Reve brinda tratamiento de ansiedad y depresión, evaluación de TDAH, manejo de medicamentos, cuidado del sueño y apoyo informado en trauma — con coordinación explícita con proveedores del norte para que los pacientes estacionales no queden sin atención entre Florida y su lugar de origen.",
+        en: "Psychiatric care for Vanderbilt Beach (ZIP 34108) residents, where roughly 44.6% of housing is seasonal. Dr. Melva Reve provides anxiety and depression treatment, ADHD evaluation, medication management, sleep care and trauma-informed support. With patient consent, coordination with another provider can be evaluated case by case.",
+        es: "Atención psiquiátrica para residentes de Vanderbilt Beach (ZIP 34108), donde aproximadamente el 44.6% de la vivienda es estacional. La Dra. Melva Reve brinda tratamiento de ansiedad y depresión, evaluación de TDAH, manejo de medicamentos, cuidado del sueño y apoyo informado en trauma. Con consentimiento del paciente, la coordinación con otro proveedor puede evaluarse caso por caso.",
       },
     },
     heroDescription: {
-      en: "Psychiatric care for Vanderbilt Beach — a short drive east on Vanderbilt Beach Rd to US-41, with telehealth continuity when you head back north.",
-      es: "Atención psiquiátrica para Vanderbilt Beach — corto trayecto al este por Vanderbilt Beach Rd hasta US-41, con telesalud cuando regrese al norte.",
+      en: "Psychiatric care serving Vanderbilt Beach from our only physical office in Park Shore, with telehealth eligibility confirmed according to clinical need, patient location and applicable licensing.",
+      es: "Atención psiquiátrica para residentes de Vanderbilt Beach desde nuestra única oficina física en Park Shore, con elegibilidad para telesalud confirmada según necesidad clínica, ubicación del paciente y licencias aplicables.",
     },
     healingParagraph: {
-      en: "Vanderbilt Beach (ZIP 34108) has a small year-round core of about 1,400 residents, a median age near 69 and roughly 44.6% of housing units used seasonally. Many of our patients here split the year between Naples and a home up north, so we build the care plan around that reality: a thorough in-person evaluation at our Park Shore office (10–15 minutes via Vanderbilt Beach Rd and US-41), structured medication management, and secure telehealth follow-ups that travel with you. We routinely send written summaries to your primary doctor or therapist so nothing is lost between the seasons.",
-      es: "Vanderbilt Beach (ZIP 34108) tiene un núcleo permanente de unos 1,400 residentes, una edad mediana cercana a los 69 y aproximadamente 44.6% de viviendas estacionales. Muchos de nuestros pacientes aquí dividen el año entre Naples y otra casa en el norte, así que diseñamos el plan en torno a esa realidad: una evaluación inicial en persona en Park Shore (10–15 minutos por Vanderbilt Beach Rd y US-41), manejo estructurado de medicamentos y seguimientos seguros por telesalud que viajan con usted. Enviamos resúmenes escritos a su médico de cabecera o terapeuta para que nada se pierda entre temporadas.",
+      en: "Vanderbilt Beach (ZIP 34108) has a small year-round core of about 1,400 residents, a median age near 69 and roughly 44.6% of housing units used seasonally. Our only physical office is in Park Shore, commonly estimated at 10–15 minutes away depending on origin and traffic. The office confirms appointment modality and telehealth eligibility case by case; secure record sharing with another provider requires patient consent.",
+      es: "Vanderbilt Beach (ZIP 34108) tiene un núcleo permanente de unos 1,400 residentes, una edad mediana cercana a los 69 y aproximadamente 44.6% de viviendas estacionales. Nuestra única oficina física está en Park Shore, a unos 10–15 minutos según el origen y el tráfico. La oficina confirma la modalidad y elegibilidad para telesalud caso por caso; compartir registros con otro proveedor requiere consentimiento del paciente.",
     },
     servicesIntro: {
-      en: "The services below are the ones our Vanderbilt Beach patients use most — typically a careful first evaluation in season, then medication management and follow-up care that continues by secure video when you travel.",
-      es: "Los servicios a continuación son los que más utilizan nuestros pacientes de Vanderbilt Beach — usualmente una primera evaluación cuidadosa en temporada, y luego manejo de medicamentos y seguimiento que continúa por video seguro cuando viaja.",
+      en: "The services below are available to Vanderbilt Beach residents. The office confirms whether each appointment should be in person or by secure video based on clinical need, patient location and applicable licensing.",
+      es: "Los servicios a continuación están disponibles para residentes de Vanderbilt Beach. La oficina confirma si cada cita debe ser presencial o por video seguro según necesidad clínica, ubicación del paciente y licencias aplicables.",
     },
     routeIntro: {
       en: "From most Vanderbilt Beach addresses our Park Shore office is a 10–15 minute drive south down US-41, after a short east-bound stretch on Vanderbilt Beach Rd.",
@@ -167,33 +167,33 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     },
     duration: { en: '10-15 minutes', es: '10-15 minutos' },
     bottomNote: {
-      en: "Serving Vanderbilt Beach with a snowbird-friendly model: in-person visits during the season, secure telehealth and written records sent to your northern provider when you travel. Call (239) 423-0272.",
-      es: "Atendiendo a Vanderbilt Beach con un modelo amigable para snowbirds: visitas presenciales en temporada, telesalud segura y resúmenes enviados a su proveedor del norte cuando viaja. (239) 423-0272.",
+      en: "Serving Vanderbilt Beach from our Naples office. Appointment modality, telehealth eligibility and any provider coordination are confirmed case by case. Call (239) 423-0272.",
+      es: "Atendiendo a Vanderbilt Beach desde nuestra oficina de Naples. La modalidad, elegibilidad para telesalud y cualquier coordinación con proveedores se confirman caso por caso. (239) 423-0272.",
     },
     featureBadges: [
       { en: 'Snowbird Continuity', es: 'Continuidad para Snowbirds' },
       { en: '10-15 Min on US-41', es: '10-15 Min por US-41' },
-      { en: 'Records Sent North', es: 'Resúmenes Enviados al Norte' },
-      { en: 'Seasonal Scheduling', es: 'Agenda Estacional' },
-      { en: 'Telehealth Anywhere', es: 'Telesalud en Cualquier Lugar' },
+      { en: 'Consent-Based Coordination', es: 'Coordinación con Consentimiento' },
+      { en: 'Naples Office', es: 'Oficina en Naples' },
+      { en: 'Telehealth Eligibility Confirmed', es: 'Elegibilidad de Telesalud Confirmada' },
       { en: 'Bilingual Care', es: 'Atención Bilingüe' },
     ],
     serviceNotes: {
       en: [
         "Often tied to the back-and-forth of seasonal living between Naples and a home up north.",
-        "We coordinate with your northern provider so care doesn't lapse when you travel.",
-        "Adult ADHD evaluations scheduled within your Florida season.",
-        "Trauma-informed care with secure video that follows you between residences.",
-        "Mood stabilization with written summaries sent to your home-state psychiatrist.",
-        "Refill and monitoring plans built around the months you spend away from Florida.",
+        "Provider coordination can be evaluated case by case with patient consent.",
+        "Adult ADHD evaluations with modality confirmed when scheduling.",
+        "Trauma-informed care with telehealth eligibility based on patient location and licensing.",
+        "Secure record sharing is available only with patient consent.",
+        "Refill and monitoring plans are confirmed according to clinical and legal requirements.",
       ],
       es: [
         "A menudo ligada al ir y venir de la vida estacional entre Naples y otra casa en el norte.",
-        "Coordinamos con su proveedor del norte para que la atención no se interrumpa al viajar.",
-        "Evaluaciones de TDAH para adultos programadas dentro de su temporada en Florida.",
-        "Atención informada en trauma con video seguro que le acompaña entre residencias.",
-        "Estabilización del ánimo con resúmenes enviados a su psiquiatra en su estado de origen.",
-        "Planes de resurtido y monitoreo pensados para los meses fuera de Florida.",
+        "La coordinación con otro proveedor puede evaluarse caso por caso con consentimiento.",
+        "Evaluaciones de TDAH para adultos con modalidad confirmada al programar.",
+        "Atención informada en trauma con elegibilidad para telesalud según ubicación y licencias.",
+        "El intercambio seguro de registros requiere consentimiento del paciente.",
+        "Los planes de resurtido y monitoreo se confirman según requisitos clínicos y legales.",
       ],
     },
     neighborhoods: {
@@ -201,8 +201,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: ['Vanderbilt Beach', 'Pelican Bay', 'Connors at Vanderbilt Beach', 'Baker-Carroll Point', 'Regatta', 'The Dunes', 'Naples Park (norte)'],
     },
     localContext: {
-      en: "About 44.6% of housing in Vanderbilt Beach (ZIP 34108) is seasonal, so many of our patients here split the year between Naples and a home up north. Our Park Shore office is a 10–15 minute drive down US-41, and we build each plan around snowbird continuity — an in-person evaluation in season, then secure telehealth and written summaries sent to your home-state provider.",
-      es: "Cerca del 44.6% de la vivienda en Vanderbilt Beach (ZIP 34108) es estacional, por lo que muchos de nuestros pacientes dividen el año entre Naples y otra casa en el norte. Nuestra oficina de Park Shore queda a 10–15 minutos por US-41, y diseñamos cada plan para la continuidad del snowbird — una evaluación en persona en temporada y luego telesalud segura con resúmenes enviados a su proveedor de origen.",
+      en: "About 44.6% of housing in Vanderbilt Beach (ZIP 34108) is seasonal. Our only physical office is in Park Shore, commonly estimated at 10–15 minutes away depending on origin and traffic. Appointment modality, telehealth eligibility and consent-based record sharing are confirmed case by case.",
+      es: "Cerca del 44.6% de la vivienda en Vanderbilt Beach (ZIP 34108) es estacional. Nuestra única oficina física está en Park Shore, a unos 10–15 minutos según el origen y el tráfico. La modalidad, elegibilidad para telesalud y el intercambio de registros con consentimiento se confirman caso por caso.",
     },
   },
 
@@ -299,12 +299,12 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
   estero: {
     seo: {
       title: {
-        en: 'Psychiatrist Serving Estero, FL — Naples Office Off I-75 Exit 123 | Healing Minds',
-        es: 'Psiquiatra para Estero, FL — Oficina en Naples cerca del Exit 123 de la I-75 | Healing Minds',
+        en: 'Psychiatrist Serving Estero, FL — Naples Office & Telehealth | Healing Minds',
+        es: 'Psiquiatra para Estero, FL — Oficina en Naples y Telesalud | Healing Minds',
       },
       description: {
-        en: "Psychiatric care for Estero (ZIP 33928) — about 25–30 minutes via I-75 south to Exit 116/Pine Ridge, then US-41. Bilingual care, medication management and telehealth for the 65+ majority and the working families of Estero's planned communities.",
-        es: "Atención psiquiátrica para Estero (ZIP 33928) — unos 25–30 minutos por I-75 sur hasta el Exit 116/Pine Ridge y luego US-41. Atención bilingüe, manejo de medicamentos y telesalud para la mayoría 65+ y las familias trabajadoras de Estero.",
+        en: "Psychiatric care for Estero (ZIP 33928) — about 25–30 minutes south toward our Naples office; check live directions and traffic before traveling. Bilingual care, medication management and telehealth for the 65+ majority and the working families of Estero's planned communities.",
+        es: "Atención psiquiátrica para Estero (ZIP 33928) — unos 25–30 minutos hacia el sur hasta nuestra oficina de Naples; consulte la ruta y el tráfico en vivo antes de viajar. Atención bilingüe, manejo de medicamentos y telesalud para la mayoría 65+ y las familias trabajadoras de Estero.",
       },
       keywords: {
         en: 'psychiatrist Estero FL, mental health Estero 33928, Coconut Point psychiatrist, retirement community mental health Estero',
@@ -320,8 +320,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: "Atención psiquiátrica para Estero — 25–30 minutos al sur por I-75, con telesalud para que el viaje no sea obligatorio en cada cita.",
     },
     healingParagraph: {
-      en: "Estero (ZIP 33928) is a Lee County village of roughly 39,000 residents, about 51.9% of whom are 65 or older. Daily life here is shaped by dozens of planned communities — Pelican Sound, Grandezza, the Brooks, Wildcat Run, West Bay Club and Miromar Lakes among them — and by Coconut Point as the main commercial hub. Most of our Estero patients reach our Park Shore office via I-75 south to Exit 116 (Pine Ridge Rd) in 25–30 minutes for an in-person evaluation, then continue with secure telehealth visits so the drive isn't required every time.",
-      es: "Estero (ZIP 33928) es un poblado del condado de Lee con cerca de 39,000 residentes, de los cuales aproximadamente el 51.9% tiene 65 años o más. La vida diaria está marcada por decenas de comunidades planificadas — Pelican Sound, Grandezza, the Brooks, Wildcat Run, West Bay Club y Miromar Lakes entre ellas — y por Coconut Point como centro comercial principal. La mayoría de nuestros pacientes de Estero llegan a Park Shore por I-75 sur hasta el Exit 116 (Pine Ridge Rd) en 25–30 minutos para la evaluación inicial, y continúan con telesalud segura para evitar el viaje en cada consulta.",
+      en: "Estero (ZIP 33928) is a Lee County village of roughly 39,000 residents, about 51.9% of whom are 65 or older. Daily life here is shaped by dozens of planned communities — Pelican Sound, Grandezza, the Brooks, Wildcat Run, West Bay Club and Miromar Lakes among them — and by Coconut Point as the main commercial hub. Most of our Estero patients reach our Park Shore office by traveling south toward Naples in about 25–30 minutes, depending on the starting point and live traffic, then continue with secure telehealth visits so the drive isn't required every time.",
+      es: "Estero (ZIP 33928) es un poblado del condado de Lee con cerca de 39,000 residentes, de los cuales aproximadamente el 51.9% tiene 65 años o más. La vida diaria está marcada por decenas de comunidades planificadas — Pelican Sound, Grandezza, the Brooks, Wildcat Run, West Bay Club y Miromar Lakes entre ellas — y por Coconut Point como centro comercial principal. La mayoría de nuestros pacientes de Estero llega a Park Shore viajando hacia el sur en dirección a Naples en unos 25–30 minutos, según el punto de partida y el tráfico en vivo, y continúa con telesalud segura para evitar el viaje en cada consulta.",
     },
     servicesIntro: {
       en: "These are the services our Estero patients use most — built around the realities of an active 65+ majority and the busy seasonal calendar of Coconut Point and the planned communities.",
@@ -333,16 +333,16 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     },
     routeSteps: {
       en: [
-        "Take I-75 south from Estero (Exit 123 Corkscrew Rd or Exit 128 Alico Rd entrance)",
-        "Continue ~17 miles into Collier County",
-        "Take Exit 116 onto Pine Ridge Rd west toward US-41",
-        "Turn left (south) on US-41 to 4760 Tamiami Trl N #25 in Park Shore",
+        "Travel south from Estero toward Naples",
+        "Follow live directions into Collier County",
+        "Continue toward Park Shore using the current recommended route",
+        "Arrive at 4760 Tamiami Trl N #25 in Park Shore",
       ],
       es: [
-        "Tome la I-75 al sur desde Estero (Exit 123 Corkscrew Rd o Exit 128 Alico Rd)",
-        "Continúe ~17 millas hasta el condado de Collier",
-        "Tome el Exit 116 hacia Pine Ridge Rd al oeste hasta US-41",
-        "Gire a la izquierda (sur) en US-41 hasta 4760 Tamiami Trl N #25 en Park Shore",
+        "Viaje hacia el sur desde Estero en dirección a Naples",
+        "Siga las indicaciones en vivo hasta el condado de Collier",
+        "Continúe hacia Park Shore por la ruta recomendada en ese momento",
+        "Llegue a 4760 Tamiami Trl N #25 en Park Shore",
       ],
     },
     duration: { en: '25-30 minutes', es: '25-30 minutos' },
@@ -406,33 +406,33 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       },
     },
     heroDescription: {
-      en: "Bilingual psychiatric care for Fort Myers — about 40–45 minutes south on I-75 for the first visit, with telehealth for follow-ups.",
-      es: "Atención psiquiátrica bilingüe para Fort Myers — unos 40–45 minutos al sur por I-75 para la primera visita, y telesalud para seguimientos.",
+      en: "Bilingual psychiatric care serving Fort Myers from our only physical office in Naples; appointment modality is confirmed when scheduling.",
+      es: "Atención psiquiátrica bilingüe para residentes de Fort Myers desde nuestra única oficina física en Naples; la modalidad se confirma al programar.",
     },
     healingParagraph: {
-      en: "The Fort Myers / Lee County metro has roughly 975,000 residents — younger and more diverse than Naples, with a median age near 49 and about 17.9% foreign-born. Many of our Fort Myers patients drive about 40–45 minutes south on I-75 to our Park Shore office for an in-person evaluation, then switch to secure telehealth for ongoing visits. Bilingual care (English/Spanish), structured medication management and clear written records make the longer initial drive worthwhile.",
-      es: "El área metropolitana de Fort Myers / condado de Lee tiene aproximadamente 975,000 habitantes — más joven y diversa que Naples, con edad mediana cerca de 49 y alrededor de 17.9% nacidos en el extranjero. Muchos de nuestros pacientes de Fort Myers conducen 40–45 minutos al sur por I-75 hasta Park Shore para una evaluación inicial, y luego pasan a telesalud segura para visitas continuas. Atención bilingüe (inglés/español), manejo estructurado de medicamentos y registros claros hacen que el primer trayecto valga la pena.",
+      en: "The Fort Myers / Lee County metro has roughly 975,000 residents — younger and more diverse than Naples, with a median age near 49 and about 17.9% foreign-born. Our only physical office is in Park Shore, commonly estimated at 40–45 minutes south depending on origin and traffic. The office confirms whether in-person or telehealth care is clinically and legally appropriate for each appointment.",
+      es: "El área metropolitana de Fort Myers / condado de Lee tiene aproximadamente 975,000 habitantes — más joven y diversa que Naples, con edad mediana cerca de 49 y alrededor de 17.9% nacidos en el extranjero. Nuestra única oficina física está en Park Shore, a unos 40–45 minutos al sur según el origen y el tráfico. La oficina confirma si la atención presencial o por telesalud es clínica y legalmente apropiada para cada cita.",
     },
     servicesIntro: {
-      en: "These are the services our Fort Myers patients ask about most — typically combining one in-person visit with ongoing telehealth follow-up.",
-      es: "Estos son los servicios que más nos consultan los pacientes de Fort Myers — usualmente una visita en persona combinada con seguimiento por telesalud.",
+      en: "These services are available to Fort Myers residents, with appointment modality confirmed according to clinical need, patient location and applicable licensing.",
+      es: "Estos servicios están disponibles para residentes de Fort Myers, con modalidad confirmada según necesidad clínica, ubicación del paciente y licencias aplicables.",
     },
     routeIntro: {
-      en: "From Fort Myers our Park Shore office is about 40–45 minutes south on I-75. We typically suggest scheduling the first visit mid-morning to avoid peak traffic.",
-      es: "Desde Fort Myers, nuestra oficina de Park Shore queda a unos 40–45 minutos al sur por I-75. Sugerimos programar la primera visita a media mañana para evitar tráfico.",
+      en: "From Fort Myers our Park Shore office is about 40–45 minutes south on I-75 in typical conditions. Check live directions because the starting point and traffic can change the estimate.",
+      es: "Desde Fort Myers, nuestra oficina de Park Shore queda a unos 40–45 minutos al sur por I-75 en condiciones típicas. Consulte indicaciones en vivo porque el punto de partida y el tráfico pueden cambiar la estimación.",
     },
     routeSteps: {
       en: [
         "Take I-75 south from Fort Myers",
         "Continue ~30 miles into Collier County",
-        "Take Exit 116 onto Pine Ridge Rd west toward US-41",
-        "Turn left (south) on US-41 to 4760 Tamiami Trl N #25 in Park Shore",
+        "Follow live directions toward Park Shore in Naples",
+        "Arrive at 4760 Tamiami Trl N #25",
       ],
       es: [
         "Tome la I-75 al sur desde Fort Myers",
         "Continúe ~30 millas hacia el condado de Collier",
-        "Tome el Exit 116 a Pine Ridge Rd al oeste hasta US-41",
-        "Gire a la izquierda (sur) en US-41 hasta 4760 Tamiami Trl N #25 en Park Shore",
+        "Siga las indicaciones en vivo hacia Park Shore en Naples",
+        "Llegue a 4760 Tamiami Trl N #25",
       ],
     },
     duration: { en: '40-45 minutes', es: '40-45 minutos' },
@@ -451,7 +451,7 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     serviceNotes: {
       en: [
         "Care for a younger, more diverse Lee County population, in English or Spanish.",
-        "Comprehensive plans combining one in-person visit with ongoing telehealth.",
+        "Appointment modality confirmed according to clinical need and applicable licensing.",
         "Adult ADHD evaluations for busy Fort Myers professionals and parents.",
         "Trauma-informed care by secure video, so the I-75 drive is rarely required.",
         "Mood stabilization with clear written records you can share with local providers.",
@@ -471,8 +471,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: ['Downtown River District', 'McGregor', 'Gateway', 'Fort Myers Beach', 'Cape Coral (cercano)', 'Lehigh Acres', 'San Carlos Park', 'Whiskey Creek'],
     },
     localContext: {
-      en: "The Fort Myers / Lee County metro has roughly 975,000 residents — younger and more diverse than Naples, with about 17.9% foreign-born. Many patients make one 40–45 minute drive south on I-75 for an in-person evaluation, then switch to secure telehealth for ongoing visits, with bilingual care and written records throughout.",
-      es: "El área metropolitana de Fort Myers / condado de Lee tiene aproximadamente 975,000 habitantes — más joven y diversa que Naples, con cerca del 17.9% nacidos en el extranjero. Muchos pacientes hacen un viaje de 40–45 minutos al sur por I-75 para la evaluación inicial y luego pasan a telesalud segura para visitas continuas, con atención bilingüe y registros escritos en todo momento.",
+      en: "The Fort Myers / Lee County metro has roughly 975,000 residents — younger and more diverse than Naples, with about 17.9% foreign-born. Our only physical office is in Naples, commonly estimated at 40–45 minutes south depending on origin and traffic. The office confirms appointment modality and any consent-based record coordination case by case.",
+      es: "El área metropolitana de Fort Myers / condado de Lee tiene aproximadamente 975,000 habitantes — más joven y diversa que Naples, con cerca del 17.9% nacidos en el extranjero. Nuestra única oficina física está en Naples, a unos 40–45 minutos al sur según el origen y el tráfico. La oficina confirma caso por caso la modalidad y cualquier coordinación de registros con consentimiento.",
     },
   },
 
@@ -500,12 +500,12 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: "Atención psiquiátrica para Marco Island — 25–30 minutos al norte por Collier Blvd y el puente Jolley, o evítelo con telesalud segura.",
     },
     healingParagraph: {
-      en: "Marco Island (ZIP 34145) has a permanent population near 16,600 that nearly doubles in winter, a median age close to 67.7 and an 89.9% homeownership rate. The drive to our Park Shore office is straightforward — north on Collier Blvd (CR-951), across the Jolley Bridge and onto US-41 — typically 25 to 30 minutes. We design care around the bridge: a thorough first evaluation in person, then secure telehealth for medication management and follow-ups so most visits don't require leaving the island.",
-      es: "Marco Island (ZIP 34145) tiene una población permanente cerca de 16,600 que casi se duplica en invierno, edad mediana cerca de 67.7 y un 89.9% de propietarios. El trayecto a nuestra oficina de Park Shore es directo — al norte por Collier Blvd (CR-951), cruzando el puente Jolley y subiendo por US-41 — usualmente 25 a 30 minutos. Diseñamos la atención teniendo en cuenta el puente: una primera evaluación cuidadosa en persona y luego telesalud segura para manejo de medicamentos y seguimientos, evitando salir de la isla en la mayoría de visitas.",
+      en: "Marco Island (ZIP 34145) has a permanent population near 16,600 that nearly doubles in winter, a median age close to 67.7 and an 89.9% homeownership rate. Our only physical office is in Park Shore, commonly estimated at 25–30 minutes north depending on origin and traffic. The office confirms whether in-person or telehealth care is clinically and legally appropriate for each appointment.",
+      es: "Marco Island (ZIP 34145) tiene una población permanente cerca de 16,600 que casi se duplica en invierno, edad mediana cerca de 67.7 y un 89.9% de propietarios. Nuestra única oficina física está en Park Shore, a unos 25–30 minutos al norte según el origen y el tráfico. La oficina confirma si la atención presencial o por telesalud es clínica y legalmente apropiada para cada cita.",
     },
     servicesIntro: {
-      en: "These are the services our Marco Island patients use most — combining a careful first visit on the mainland with telehealth that keeps you on the island the rest of the time.",
-      es: "Estos son los servicios que más usan nuestros pacientes de Marco Island — combinando una primera visita cuidadosa en tierra firme con telesalud que le permite quedarse en la isla el resto del tiempo.",
+      en: "These services are available to Marco Island residents. The office confirms appointment modality according to clinical need, patient location and applicable licensing.",
+      es: "Estos servicios están disponibles para residentes de Marco Island. La oficina confirma la modalidad según necesidad clínica, ubicación del paciente y licencias aplicables.",
     },
     routeIntro: {
       en: "From Marco Island our Park Shore office is 25–30 minutes north — Collier Blvd, the Jolley Bridge, and then US-41.",
@@ -561,8 +561,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: ['Old Marco', 'área de Tigertail Beach', 'Hideaway Beach', 'Marco Shores', 'Smokehouse Bay', 'Key Marco', 'Caxambas'],
     },
     localContext: {
-      en: "Marco Island (ZIP 34145) has a permanent population near 16,600 that nearly doubles in winter, with a median age close to 67.7. Because reaching our Park Shore office means Collier Blvd and the Jolley Bridge (25–30 minutes), we design care around the bridge — a thorough first evaluation in person, then secure telehealth that keeps most visits on the island.",
-      es: "Marco Island (ZIP 34145) tiene una población permanente cerca de 16,600 que casi se duplica en invierno, con edad mediana cercana a 67.7. Como llegar a nuestra oficina de Park Shore implica Collier Blvd y el puente Jolley (25–30 minutos), diseñamos la atención teniendo en cuenta el puente — una primera evaluación cuidadosa en persona y luego telesalud segura que mantiene la mayoría de las visitas en la isla.",
+      en: "Marco Island (ZIP 34145) has a permanent population near 16,600 that nearly doubles in winter, with a median age close to 67.7. Our only physical office is in Park Shore, commonly estimated at 25–30 minutes away depending on origin and traffic. The office confirms appointment modality and telehealth eligibility case by case.",
+      es: "Marco Island (ZIP 34145) tiene una población permanente cerca de 16,600 que casi se duplica en invierno, con edad mediana cercana a 67.7. Nuestra única oficina física está en Park Shore, a unos 25–30 minutos según el origen y el tráfico. La oficina confirma caso por caso la modalidad y elegibilidad para telesalud.",
     },
   },
 
@@ -663,33 +663,33 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
         es: 'Psiquiatra Bilingüe para Immokalee, FL — Atención por Telesalud o CR-846 | Healing Minds',
       },
       description: {
-        en: "Bilingual psychiatric care for Immokalee (ZIP 34142) — Spanish-speaking psychiatrist, weekday telehealth options for agricultural workers, and in-person visits at our Park Shore office in Naples.",
-        es: "Atención psiquiátrica bilingüe para Immokalee (ZIP 34142) — psiquiatra que habla español, opciones de telesalud entre semana para trabajadores del campo, y visitas presenciales en Park Shore, Naples.",
+        en: "Bilingual psychiatric care serving Immokalee (ZIP 34142) from our only physical office in Naples, with telehealth eligibility and availability confirmed when scheduling.",
+        es: "Atención psiquiátrica bilingüe para residentes de Immokalee (ZIP 34142) desde nuestra única oficina física en Naples, con elegibilidad y disponibilidad de telesalud confirmadas al programar.",
       },
       keywords: {
         en: 'psychiatrist Immokalee FL, bilingual mental health Immokalee, Spanish psychiatrist 34142, agricultural worker mental health Collier',
         es: 'psiquiatra Immokalee FL, salud mental bilingüe Immokalee, psiquiatra en español 34142, salud mental trabajadores agrícolas Collier',
       },
       serviceDescription: {
-        en: "Bilingual psychiatric care for Immokalee (ZIP 34142), a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic and roughly 21.9% as Black, with a median age near 30 and a sizable agricultural workforce. Dr. Melva Reve, fluent in Spanish, offers evaluation and treatment for anxiety, depression, PTSD, ADHD, bipolar disorder and medication management, with telehealth available during published weekday office hours.",
-        es: "Atención psiquiátrica bilingüe para Immokalee (ZIP 34142), comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano y aproximadamente el 21.9% como afroamericano, con edad mediana cerca de 30 y una fuerza laboral agrícola importante. La Dra. Melva Reve, fluida en español, ofrece evaluación y tratamiento para ansiedad, depresión, TEPT, TDAH, trastorno bipolar y manejo de medicamentos, con telesalud disponible dentro del horario de oficina publicado entre semana.",
+        en: "Bilingual psychiatric care for Immokalee (ZIP 34142), a community of roughly 25,000 in eastern Collier County with a sizable agricultural workforce. Dr. Melva Reve, fluent in Spanish, offers evaluation and treatment for anxiety, depression, PTSD, ADHD, bipolar disorder and medication management. Telehealth eligibility and availability are confirmed when scheduling.",
+        es: "Atención psiquiátrica bilingüe para Immokalee (ZIP 34142), comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier con una fuerza laboral agrícola importante. La Dra. Melva Reve, fluida en español, ofrece evaluación y tratamiento para ansiedad, depresión, TEPT, TDAH, trastorno bipolar y manejo de medicamentos. La elegibilidad y disponibilidad de telesalud se confirman al programar.",
       },
     },
     heroDescription: {
-      en: "Bilingual psychiatric care for Immokalee — Spanish-speaking sessions, weekday telehealth, and in-person visits at our Naples office.",
-      es: "Atención psiquiátrica bilingüe para Immokalee — sesiones en español, telesalud entre semana, y visitas presenciales en nuestra oficina de Naples.",
+      en: "Bilingual psychiatric care serving Immokalee from our only physical office in Naples; telehealth eligibility and availability are confirmed when scheduling.",
+      es: "Atención psiquiátrica bilingüe para residentes de Immokalee desde nuestra única oficina física en Naples; la elegibilidad y disponibilidad de telesalud se confirman al programar.",
     },
     healingParagraph: {
-      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic, around 21.9% as Black, and the median age is near 30. The local agricultural economy — Immokalee tomato production accounts for roughly 90% of US winter tomatoes — sets the rhythm of family life. We offer sessions in Spanish and weekday telehealth during published office hours, with in-person visits available at our Park Shore office (about 50–60 minutes via CR-846).",
-      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano, alrededor del 21.9% como afroamericano, y la edad mediana es cercana a 30. La economía agrícola local — Immokalee produce aproximadamente el 90% de los tomates de invierno de EE.UU. — marca el ritmo familiar. Ofrecemos sesiones en español y telesalud entre semana dentro del horario de oficina publicado, con visitas presenciales disponibles en nuestra oficina de Park Shore (aproximadamente 50–60 minutos por CR-846).",
+      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic, around 21.9% as Black, and the median age is near 30. We offer sessions in Spanish from our only physical office in Park Shore, commonly estimated at 50–60 minutes away depending on origin and traffic. Telehealth eligibility and availability are confirmed when scheduling.",
+      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano, alrededor del 21.9% como afroamericano, y la edad mediana es cercana a 30. Ofrecemos sesiones en español desde nuestra única oficina física en Park Shore, a unos 50–60 minutos según el origen y el tráfico. La elegibilidad y disponibilidad de telesalud se confirman al programar.",
     },
     servicesIntro: {
-      en: "These are the services our Immokalee patients ask about most — in Spanish or English, by telehealth when getting time off work is hard, in person when it isn't.",
-      es: "Estos son los servicios que más nos consultan los pacientes de Immokalee — en español o inglés, por telesalud cuando es difícil pedir tiempo libre, en persona cuando no lo es.",
+      en: "These services are available to Immokalee residents in Spanish or English. The office confirms appointment modality, telehealth eligibility and availability when scheduling.",
+      es: "Estos servicios están disponibles para residentes de Immokalee en español o inglés. La oficina confirma la modalidad, elegibilidad para telesalud y disponibilidad al programar.",
     },
     routeIntro: {
-      en: "From Immokalee our Park Shore office is about 50–60 minutes west via CR-846 (Immokalee Rd) — a long drive, which is why we lean heavily on telehealth between visits.",
-      es: "Desde Immokalee, nuestra oficina de Park Shore queda a 50–60 minutos al oeste por CR-846 (Immokalee Rd) — un trayecto largo, por lo que usamos telesalud entre visitas siempre que se pueda.",
+      en: "From Immokalee our Park Shore office is commonly estimated at 50–60 minutes away depending on origin, route and traffic. Telehealth eligibility and availability are confirmed when scheduling.",
+      es: "Desde Immokalee, nuestra oficina de Park Shore queda a unos 50–60 minutos según el origen, la ruta y el tráfico. La elegibilidad y disponibilidad de telesalud se confirman al programar.",
     },
     routeSteps: {
       en: [
@@ -707,33 +707,33 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
     },
     duration: { en: '50-60 minutes', es: '50-60 minutos' },
     bottomNote: {
-      en: "Serving Immokalee (ZIP 34142) with bilingual psychiatric care — Spanish-language sessions, weekday telehealth during published office hours, and in-person visits at our Naples office. Call (239) 423-0272.",
-      es: "Atendiendo a Immokalee (ZIP 34142) con atención psiquiátrica bilingüe — sesiones en español, telesalud entre semana dentro del horario de oficina publicado, y visitas presenciales en nuestra oficina de Naples. (239) 423-0272.",
+      en: "Serving Immokalee (ZIP 34142) with bilingual psychiatric care from our only physical office in Naples. Telehealth eligibility and availability are confirmed when scheduling. Call (239) 423-0272.",
+      es: "Atendiendo a Immokalee (ZIP 34142) con atención psiquiátrica bilingüe desde nuestra única oficina física en Naples. La elegibilidad y disponibilidad de telesalud se confirman al programar. (239) 423-0272.",
     },
     featureBadges: [
       { en: 'Sessions in Spanish', es: 'Sesiones en Español' },
-      { en: 'Weekday Telehealth', es: 'Telesalud Entre Semana' },
+      { en: 'Telehealth Eligibility Confirmed', es: 'Elegibilidad de Telesalud Confirmada' },
       { en: 'Call to Check Availability', es: 'Llame para Consultar Disponibilidad' },
-      { en: 'One In-Person Visit', es: 'Una Visita en Persona' },
+      { en: 'Naples Office', es: 'Oficina en Naples' },
       { en: 'Culturally Sensitive Care', es: 'Atención Culturalmente Sensible' },
       { en: 'Most Major Insurance', es: 'Mayoría de Seguros' },
     ],
     serviceNotes: {
       en: [
-        "Offered in Spanish, with weekday telehealth during published office hours.",
+        "Offered in Spanish, with telehealth eligibility and availability confirmed when scheduling.",
         "Care for Immokalee's young, hardworking agricultural community.",
         "Evaluations for adults 18 and older, with available weekday times confirmed when scheduling.",
         "Trauma-informed, confidential care in Spanish, by secure video when needed.",
-        "Long-term mood stabilization with telehealth between the longer in-person visits.",
-        "Refills sent to your Immokalee pharmacy, with weekday follow-ups by video when appropriate.",
+        "Long-term mood stabilization with appointment modality confirmed case by case.",
+        "Refill and follow-up arrangements confirmed according to clinical and legal requirements.",
       ],
       es: [
-        "Ofrecida en español, con telesalud entre semana dentro del horario de oficina publicado.",
+        "Ofrecida en español, con elegibilidad y disponibilidad de telesalud confirmadas al programar.",
         "Atención para la joven y trabajadora comunidad agrícola de Immokalee.",
         "Evaluaciones para adultos de 18 años en adelante, con horarios disponibles entre semana confirmados al programar.",
         "Atención confidencial e informada en trauma en español, por video seguro cuando se necesite.",
-        "Estabilización del ánimo a largo plazo con telesalud entre las visitas presenciales más largas.",
-        "Resurtidos enviados a su farmacia de Immokalee, con seguimientos entre semana por video cuando sea apropiado.",
+        "Estabilización del ánimo a largo plazo con modalidad confirmada caso por caso.",
+        "Los arreglos de resurtido y seguimiento se confirman según requisitos clínicos y legales.",
       ],
     },
     neighborhoods: {
@@ -741,8 +741,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: ['Centro de Immokalee', 'corredor de Main St (SR-29)', 'Lake Trafford', 'Farm Worker Village', 'Eden Park', 'área de Carson Rd'],
     },
     localContext: {
-      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic and the median age is near 30. With a large agricultural workforce setting the rhythm of family life, we offer Spanish-language sessions and weekday telehealth during published office hours, with in-person visits available at our Naples office about 50–60 minutes away via CR-846.",
-      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano y la edad mediana es cercana a 30. Con una gran fuerza laboral agrícola marcando el ritmo familiar, ofrecemos sesiones en español y telesalud entre semana dentro del horario de oficina publicado, con visitas presenciales disponibles en nuestra oficina de Naples a unos 50–60 minutos por CR-846.",
+      en: "Immokalee (ZIP 34142) is a community of roughly 25,000 in eastern Collier County where about 73.2% of residents identify as Hispanic and the median age is near 30. We offer Spanish-language sessions from our only physical office in Naples, commonly estimated at 50–60 minutes away depending on origin and traffic. Telehealth eligibility and availability are confirmed when scheduling.",
+      es: "Immokalee (ZIP 34142) es una comunidad de aproximadamente 25,000 habitantes en el este del condado de Collier donde cerca del 73.2% se identifica como hispano y la edad mediana es cercana a 30. Ofrecemos sesiones en español desde nuestra única oficina física en Naples, a unos 50–60 minutos según el origen y el tráfico. La elegibilidad y disponibilidad de telesalud se confirman al programar.",
     },
   },
 
@@ -753,77 +753,77 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
         es: 'Psiquiatra para Ave Maria, FL — Atención para Familias Universitarias | Healing Minds',
       },
       description: {
-        en: "Psychiatric care for Ave Maria, FL — a planned community of roughly 7,500 around Ave Maria University. Bilingual telehealth and in-person visits at our Naples office, ~50–60 minutes west via Oil Well Rd and I-75.",
-        es: "Atención psiquiátrica para Ave Maria, FL — comunidad planificada de cerca de 7,500 habitantes alrededor de Ave Maria University. Telesalud bilingüe y visitas presenciales en Naples, ~50–60 minutos al oeste por Oil Well Rd y la I-75.",
+        en: "Psychiatric care serving Ave Maria, FL, from our only physical office in Naples, commonly estimated at 50–60 minutes away depending on origin and traffic. Telehealth eligibility is confirmed when scheduling.",
+        es: "Atención psiquiátrica para residentes de Ave Maria, FL, desde nuestra única oficina física en Naples, a unos 50–60 minutos según el origen y el tráfico. La elegibilidad para telesalud se confirma al programar.",
       },
       keywords: {
         en: 'psychiatrist Ave Maria FL, Ave Maria University mental health, college student psychiatrist Naples, family psychiatry Ave Maria',
         es: 'psiquiatra Ave Maria FL, salud mental Ave Maria University, psiquiatra estudiantes universitarios Naples, psiquiatría familias Ave Maria',
       },
       serviceDescription: {
-        en: "Psychiatric care for Ave Maria, a planned community of roughly 7,500 founded in 2005 around Ave Maria University in eastern Collier County. Dr. Melva Reve provides bilingual evaluation and treatment for college-age anxiety and depression, ADHD, postpartum and family-stage care, PTSD and medication management — with telehealth that fits the academic calendar.",
-        es: "Atención psiquiátrica para Ave Maria, comunidad planificada de aproximadamente 7,500 habitantes fundada en 2005 alrededor de Ave Maria University en el este del condado de Collier. La Dra. Melva Reve ofrece evaluación y tratamiento bilingüe para ansiedad y depresión universitarias, TDAH, atención postparto y de etapa familiar, TEPT y manejo de medicamentos — con telesalud adaptada al calendario académico.",
+        en: "Psychiatric care for Ave Maria, a planned community of roughly 7,500 founded in 2005 around Ave Maria University in eastern Collier County. Dr. Melva Reve provides bilingual evaluation and treatment for college-age anxiety and depression, ADHD, postpartum and family-stage care, PTSD and medication management. Appointment modality is confirmed when scheduling.",
+        es: "Atención psiquiátrica para Ave Maria, comunidad planificada de aproximadamente 7,500 habitantes fundada en 2005 alrededor de Ave Maria University en el este del condado de Collier. La Dra. Melva Reve ofrece evaluación y tratamiento bilingüe para ansiedad y depresión universitarias, TDAH, atención postparto y de etapa familiar, TEPT y manejo de medicamentos. La modalidad se confirma al programar.",
       },
     },
     heroDescription: {
-      en: "Psychiatric care for Ave Maria — bilingual support for university students and young families, in person in Naples or by secure telehealth.",
-      es: "Atención psiquiátrica para Ave Maria — apoyo bilingüe para estudiantes universitarios y familias jóvenes, en persona en Naples o por telesalud segura.",
+      en: "Psychiatric care serving Ave Maria from our only physical office in Naples, with appointment modality and telehealth eligibility confirmed when scheduling.",
+      es: "Atención psiquiátrica para residentes de Ave Maria desde nuestra única oficina física en Naples, con modalidad y elegibilidad para telesalud confirmadas al programar.",
     },
     healingParagraph: {
-      en: "Ave Maria is a planned community of roughly 7,500 in eastern Collier County, founded in 2005 around Ave Maria University. The town profile skews young — university students, faculty families, and a high share of growing families with school-age children. We offer bilingual sessions, careful ADHD evaluations and college-age anxiety and depression care, with telehealth that respects exam weeks and academic breaks. The drive to our Park Shore office is about 50–60 minutes via Oil Well Rd and I-75, so most ongoing care happens by secure video.",
-      es: "Ave Maria es una comunidad planificada de aproximadamente 7,500 habitantes en el este del condado de Collier, fundada en 2005 alrededor de Ave Maria University. El perfil del pueblo es joven — estudiantes universitarios, familias del profesorado y una proporción alta de familias en crecimiento con niños en edad escolar. Ofrecemos sesiones bilingües, evaluaciones cuidadosas de TDAH y atención de ansiedad y depresión en edad universitaria, con telesalud que respeta semanas de exámenes y recesos académicos. El trayecto a Park Shore es de aproximadamente 50–60 minutos por Oil Well Rd y la I-75, por lo que la mayor parte del seguimiento es por video seguro.",
+      en: "Ave Maria is a planned community of roughly 7,500 in eastern Collier County, founded in 2005 around Ave Maria University. We offer bilingual sessions, careful ADHD evaluations and college-age anxiety and depression care from our only physical office in Park Shore, commonly estimated at 50–60 minutes away depending on origin and traffic. Appointment modality and telehealth eligibility are confirmed when scheduling.",
+      es: "Ave Maria es una comunidad planificada de aproximadamente 7,500 habitantes en el este del condado de Collier, fundada en 2005 alrededor de Ave Maria University. Ofrecemos sesiones bilingües, evaluaciones cuidadosas de TDAH y atención de ansiedad y depresión en edad universitaria desde nuestra única oficina física en Park Shore, a unos 50–60 minutos según el origen y el tráfico. La modalidad y elegibilidad para telesalud se confirman al programar.",
     },
     servicesIntro: {
       en: "These are the services Ave Maria families and students ask about most — anxiety and depression, ADHD evaluation, medication management, and care that fits the academic calendar.",
       es: "Estos son los servicios que más nos consultan familias y estudiantes de Ave Maria — ansiedad y depresión, evaluación de TDAH, manejo de medicamentos y atención adaptada al calendario académico.",
     },
     routeIntro: {
-      en: "From Ave Maria our Park Shore office is about 50–60 minutes west via Oil Well Rd and I-75. Most ongoing care happens by telehealth.",
-      es: "Desde Ave Maria, nuestra oficina queda a 50–60 minutos al oeste por Oil Well Rd y la I-75. La mayor parte del seguimiento se hace por telesalud.",
+      en: "From Ave Maria our Park Shore office is commonly estimated at 50–60 minutes away depending on origin, route and traffic. Appointment modality is confirmed when scheduling.",
+      es: "Desde Ave Maria, nuestra oficina de Park Shore queda a unos 50–60 minutos según el origen, la ruta y el tráfico. La modalidad se confirma al programar.",
     },
     routeSteps: {
       en: [
         "Head west on Oil Well Rd (CR-858) from Ave Maria",
-        "Continue ~16 miles to I-75 at Exit 111 (Immokalee Rd)",
-        "Take I-75 south briefly, then exit onto Pine Ridge Rd west (Exit 116)",
-        "Turn left (south) on US-41 to 4760 Tamiami Trl N #25 in Park Shore",
+        "Follow live directions west and south toward Naples",
+        "Continue toward Park Shore using the current recommended route",
+        "Arrive at 4760 Tamiami Trl N #25",
       ],
       es: [
         "Diríjase al oeste por Oil Well Rd (CR-858) desde Ave Maria",
-        "Continúe ~16 millas hasta la I-75 en el Exit 111 (Immokalee Rd)",
-        "Tome la I-75 al sur brevemente, luego salga en Pine Ridge Rd al oeste (Exit 116)",
-        "Gire a la izquierda (sur) en US-41 hasta 4760 Tamiami Trl N #25 en Park Shore",
+        "Siga las indicaciones en vivo hacia el oeste y el sur en dirección a Naples",
+        "Continúe hacia Park Shore por la ruta recomendada en ese momento",
+        "Llegue a 4760 Tamiami Trl N #25",
       ],
     },
     duration: { en: '50-60 minutes', es: '50-60 minutos' },
     bottomNote: {
-      en: "Serving Ave Maria with care that fits university and family life — bilingual sessions, telehealth that respects the academic calendar, and an in-person Park Shore office when an extended visit is needed. Call (239) 423-0272.",
-      es: "Atendiendo a Ave Maria con atención adaptada a la vida universitaria y familiar — sesiones bilingües, telesalud que respeta el calendario académico, y oficina presencial en Park Shore cuando se necesita una visita extendida. (239) 423-0272.",
+      en: "Serving Ave Maria with bilingual psychiatric care from our only physical office in Park Shore. Appointment modality, telehealth eligibility and availability are confirmed when scheduling. Call (239) 423-0272.",
+      es: "Atendiendo a Ave Maria con atención psiquiátrica bilingüe desde nuestra única oficina física en Park Shore. La modalidad, elegibilidad para telesalud y disponibilidad se confirman al programar. (239) 423-0272.",
     },
     featureBadges: [
       { en: 'University-Family Focus', es: 'Enfoque Universitario y Familiar' },
-      { en: 'Fits the Academic Calendar', es: 'Adaptada al Calendario Académico' },
-      { en: 'Telehealth-First Care', es: 'Atención por Telesalud' },
+      { en: 'Availability Confirmed', es: 'Disponibilidad Confirmada' },
+      { en: 'Telehealth Eligibility Confirmed', es: 'Elegibilidad de Telesalud Confirmada' },
       { en: 'Bilingual (EN/ES)', es: 'Bilingüe (EN/ES)' },
       { en: 'College-Age Care', es: 'Atención para Edad Universitaria' },
       { en: 'ADHD Evaluations', es: 'Evaluaciones de TDAH' },
     ],
     serviceNotes: {
       en: [
-        "College-age anxiety care with telehealth that respects exam weeks.",
+        "College-age anxiety care with appointment modality confirmed when scheduling.",
         "Support for university students, faculty families and young parents.",
         "Careful adult ADHD evaluations — a frequent request from Ave Maria students.",
-        "Trauma-informed care by secure video that fits academic schedules.",
+        "Trauma-informed care with telehealth eligibility confirmed when scheduling.",
         "Long-term mood stabilization that continues through academic breaks.",
-        "Medication management mostly by telehealth, with a Naples visit when needed.",
+        "Medication management with appointment modality confirmed case by case.",
       ],
       es: [
-        "Atención de ansiedad universitaria con telesalud que respeta las semanas de exámenes.",
+        "Atención de ansiedad universitaria con modalidad confirmada al programar.",
         "Apoyo para estudiantes universitarios, familias del profesorado y padres jóvenes.",
         "Evaluaciones cuidadosas de TDAH para adultos — una solicitud frecuente de estudiantes de Ave Maria.",
-        "Atención informada en trauma por video seguro que se adapta a horarios académicos.",
+        "Atención informada en trauma con elegibilidad para telesalud confirmada al programar.",
         "Estabilización del ánimo a largo plazo que continúa durante los recesos académicos.",
-        "Manejo de medicamentos principalmente por telesalud, con una visita a Naples cuando se necesite.",
+        "Manejo de medicamentos con modalidad confirmada caso por caso.",
       ],
     },
     neighborhoods: {
@@ -831,8 +831,8 @@ export const cityHyperlocal: Record<string, CityHyperlocal> = {
       es: ['Ave Maria University', 'Maple Ridge', 'Del Webb Naples', 'La Piazza / Town Center', 'Avalon Park', 'Coquina at Maple Ridge', 'Emerson Park'],
     },
     localContext: {
-      en: "Ave Maria is a planned community of roughly 7,500 in eastern Collier County, founded in 2005 around Ave Maria University. With a young profile of students, faculty families and growing families, we offer bilingual sessions, careful ADHD evaluations, and college-age anxiety and depression care — with telehealth that respects the academic calendar, since the drive to Park Shore runs about 50–60 minutes via Oil Well Rd and I-75.",
-      es: "Ave Maria es una comunidad planificada de aproximadamente 7,500 habitantes en el este del condado de Collier, fundada en 2005 alrededor de Ave Maria University. Con un perfil joven de estudiantes, familias del profesorado y familias en crecimiento, ofrecemos sesiones bilingües, evaluaciones cuidadosas de TDAH y atención de ansiedad y depresión en edad universitaria — con telesalud que respeta el calendario académico, ya que el viaje a Park Shore es de unos 50–60 minutos por Oil Well Rd y la I-75.",
+      en: "Ave Maria is a planned community of roughly 7,500 in eastern Collier County, founded in 2005 around Ave Maria University. We offer bilingual sessions, careful ADHD evaluations and college-age anxiety and depression care from our only physical office in Park Shore, commonly estimated at 50–60 minutes away depending on origin and traffic. Appointment modality and telehealth eligibility are confirmed when scheduling.",
+      es: "Ave Maria es una comunidad planificada de aproximadamente 7,500 habitantes en el este del condado de Collier, fundada en 2005 alrededor de Ave Maria University. Ofrecemos sesiones bilingües, evaluaciones cuidadosas de TDAH y atención de ansiedad y depresión en edad universitaria desde nuestra única oficina física en Park Shore, a unos 50–60 minutos según el origen y el tráfico. La modalidad y elegibilidad para telesalud se confirman al programar.",
     },
   },
 };

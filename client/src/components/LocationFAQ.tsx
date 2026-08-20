@@ -51,6 +51,8 @@ const LocationFAQ = ({ locationFAQs, title, description }: LocationFAQProps) => 
             >
               <button
                 onClick={() => setOpenItem(openItem === index ? null : index)}
+                aria-expanded={openItem === index}
+                aria-controls={`location-faq-answer-panel-${index}`}
                 className="w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-left flex items-center justify-between hover:bg-green-50 transition-colors duration-200"
                 data-testid={`location-faq-question-${index}`}
               >
@@ -72,8 +74,11 @@ const LocationFAQ = ({ locationFAQs, title, description }: LocationFAQProps) => 
                 </div>
               </button>
               
-              {openItem === index && (
-                <div className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
+              <div
+                id={`location-faq-answer-panel-${index}`}
+                hidden={openItem !== index}
+                className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6"
+              >
                   <div className="pt-2 border-t border-green-100">
                     <p 
                       className="text-gray-600 font-body leading-relaxed text-lg"
@@ -83,7 +88,6 @@ const LocationFAQ = ({ locationFAQs, title, description }: LocationFAQProps) => 
                     </p>
                   </div>
                 </div>
-              )}
             </div>
           ))}
         </div>

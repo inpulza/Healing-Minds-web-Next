@@ -1,22 +1,23 @@
 // Structured content data for the psychiatry practice website
 // This centralizes all content for easier maintenance and potential CMS integration
 
+import { practiceProfile } from "@shared/practice-profile";
+
 export const practiceInfo = {
-  name: "Healing Minds Psychiatry",
+  name: practiceProfile.name,
   doctorName: "Dr. Melva Reve",
   credentials: "MD, Psychiatry",
-  phone: "(239) 423-0272",
-  email: "info@healingmindsp.com",
+  phone: practiceProfile.phoneDisplay,
+  email: practiceProfile.email,
   address: {
-    street: "4760 Tamiami Trl N # 25",
-    city: "Naples",
-    state: "FL",
-    zip: "34103",
-    full: "4760 Tamiami Trl N # 25, Naples, FL 34103",
+    street: practiceProfile.address.streetAddress,
+    city: practiceProfile.address.addressLocality,
+    state: practiceProfile.address.addressRegion,
+    zip: practiceProfile.address.postalCode,
+    full: `${practiceProfile.address.streetAddress}, ${practiceProfile.address.addressLocality}, ${practiceProfile.address.addressRegion} ${practiceProfile.address.postalCode}`,
   },
-  hours: "Monday - Friday: 8:00 AM - 5:00 PM",
-  googleMapsUrl:
-    "https://www.google.com/maps/dir/?api=1&destination=Healing+Minds+Psychiatry,4760+Tamiami+Trl+N+%23+25,Naples,FL+34103",
+  hours: practiceProfile.hoursDisplay,
+  googleMapsUrl: practiceProfile.bookingDirectionsUrl,
   emergencyNumbers: [
     { number: "911", description: "Emergency services" },
     { number: "988", description: "Suicide & Crisis Lifeline" },
@@ -189,7 +190,7 @@ export const faqData = {
     {
       question: "How soon can I get an appointment?",
       answer:
-        "We typically offer new patient appointments within 1-2 weeks. Urgent cases can often be accommodated sooner. Call us to discuss your specific needs and timeline.",
+        "Appointment availability varies. Call the office or request a time online, and the team will confirm the next available appointment.",
     },
     {
       question: "Do you offer telehealth appointments?",
@@ -221,7 +222,7 @@ export const faqData = {
     {
       question: "¿Qué tan pronto puedo conseguir una cita?",
       answer:
-        "Típicamente ofrecemos citas para pacientes nuevos dentro de 1-2 semanas. Los casos urgentes a menudo pueden ser acomodados antes. Llámenos para discutir sus necesidades específicas y cronograma.",
+        "La disponibilidad de citas varía. Llame a la oficina o solicite un horario en línea, y el equipo confirmará la próxima cita disponible.",
     },
     {
       question: "¿Ofrecen citas de telesalud?",

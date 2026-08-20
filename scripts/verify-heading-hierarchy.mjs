@@ -74,15 +74,27 @@ try {
       1,
       `${label}: lazy Contact did not mount after the bounded scroll sweep`,
     );
-    await contactTitle.scrollIntoViewIfNeeded();
-    await contactTitle.waitFor({ state: "visible", timeout: 2_000 });
-    return contactTitle;
+    // React can replace the just-mounted lazy boundary while hydration settles.
+    // Resolve the locator again inside a bounded retry instead of treating that
+    // short detach as a product failure.
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      try {
+        await contactTitle.scrollIntoViewIfNeeded({ timeout: 1_000 });
+        await contactTitle.waitFor({ state: "visible", timeout: 1_000 });
+        return contactTitle;
+      } catch (error) {
+        if (!/not attached|detached/i.test(error.message)) throw error;
+        await page.waitForTimeout(100);
+      }
+    }
+    throw new Error(`${label}: Contact detached repeatedly while hydration settled`);
   };
 
   for (const pathname of ["/", "/es"]) {
     for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
       const page = await browser.newPage({ viewport });
       try {
+        console.log(`[heading-smoke] checking ${pathname} at ${viewport.width}px`);
         const response = await openWhenReady(page, pathname);
         assert.equal(response.status(), 200);
         const contactTitle = await revealLazyContact(
@@ -103,6 +115,7 @@ try {
   for (const pathname of ["/contact", "/es/contacto"]) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     try {
+      console.log(`[heading-smoke] checking ${pathname}`);
       const response = await openWhenReady(page, pathname);
       assert.equal(response.status(), 200);
       const contactTitle = page.getByTestId("contact-title");
@@ -119,6 +132,7 @@ try {
   for (const [pathname, loadingText] of [["/", "Loading map..."], ["/es", "Cargando mapa..."]]) {
     const mapPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     try {
+      console.log(`[heading-smoke] checking map load on ${pathname}`);
       const response = await openWhenReady(mapPage, pathname);
       assert.equal(response.status(), 200);
       await revealLazyContact(mapPage, `${pathname} map smoke`);
@@ -138,6 +152,7 @@ try {
     await route.abort();
   });
   try {
+    console.log("[heading-smoke] checking held-map fallback");
     const response = await openWhenReady(fallbackPage, "/");
     assert.equal(response.status(), 200);
     await revealLazyContact(fallbackPage, "/ held-map smoke");
@@ -158,7 +173,7 @@ try {
     );
   } finally {
     releaseHeldMap?.();
-    await fallbackPage.unrouteAll({ behavior: "wait" });
+    await fallbackPage.unrouteAll({ behavior: "ignoreErrors" });
     await fallbackPage.close();
   }
 

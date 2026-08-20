@@ -6,6 +6,8 @@ import {
   parseBlogArchivePage,
 } from "@shared/blog-archive";
 import type { BlogLanguage } from "@/pages/BlogIndex";
+import { buildBlogIndexStructuredData } from "../_seo/structured-data";
+import StructuredDataScript from "../_seo/structured-data-script";
 import DynamicBlogIndex from "./dynamic-blog-index";
 import { loadPublicBlogArchive } from "./load-public-blog-index";
 
@@ -23,10 +25,10 @@ function archiveRequest(language: BlogLanguage, searchParams: BlogIndexSearchPar
   };
 }
 
-export function blogIndexMetadata(
+function blogIndexSeoDetails(
   language: BlogLanguage,
   searchParams: BlogIndexSearchParams,
-): Metadata {
+) {
   const request = archiveRequest(language, searchParams);
   const canonicalPath = buildBlogArchiveHref({
     archivePath: request.path,
@@ -46,6 +48,14 @@ export function blogIndexMetadata(
   const description = language === "es"
     ? "Articulos educativos de Healing Minds Psychiatry sobre salud mental y atencion psiquiatrica en Naples y Florida."
     : "Educational articles from Healing Minds Psychiatry about mental health and psychiatric care in Naples and Florida.";
+  return { request, canonicalPath, canonical, title, description };
+}
+
+export function blogIndexMetadata(
+  language: BlogLanguage,
+  searchParams: BlogIndexSearchParams,
+): Metadata {
+  const { request, canonical, title, description } = blogIndexSeoDetails(language, searchParams);
   const unfilteredAlternates = request.category
     ? undefined
     : {
@@ -88,5 +98,19 @@ export async function BlogIndexPage({
     }));
   }
 
-  return <DynamicBlogIndex language={language} initialArchive={archive} />;
+  const seo = blogIndexSeoDetails(language, searchParams);
+  return (
+    <>
+      <StructuredDataScript
+        data={buildBlogIndexStructuredData({
+          language,
+          canonicalPath: seo.canonicalPath,
+          title: seo.title,
+          description: seo.description,
+          archive,
+        })}
+      />
+      <DynamicBlogIndex language={language} initialArchive={archive} />
+    </>
+  );
 }
