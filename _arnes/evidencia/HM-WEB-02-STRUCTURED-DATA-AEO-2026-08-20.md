@@ -123,3 +123,9 @@ Final settled local evidence, superseding earlier local counts:
 - `git diff --check`: PASS; line-ending warnings only.
 
 Preview and Production evidence must be appended outside this local-only checkpoint after the exact committed SHAs are deployed and verified.
+
+## Protected Preview authentication gate — 2026-08-21
+
+The first PR #33 deployed run exposed a harness boundary, not a site defect: Playwright page routes carried the Vercel OIDC credential, while standalone `APIRequestContext` calls received Vercel's `/sso-api` HTML. That produced false symptoms such as zero JSON-LD blocks, zero sitemap URLs and non-JSON review responses.
+
+The shared Preview helper now authenticates both browser and request clients only for the allowlisted Healing Minds Preview host. It keeps redirects scoped, retries one transient route fetch, never logs the token and requires demonstrated React hydration before an FAQ click. A focused deployed rerun passed 6/6, including all 28 FAQ routes on desktop and mobile. The full exact-SHA deployed matrix remains the merge gate.

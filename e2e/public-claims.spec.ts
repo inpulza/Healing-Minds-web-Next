@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { authenticateProtectedPreview, finishProtectedPreview } from "./preview-auth";
+import {
+  authenticateProtectedPreview,
+  finishProtectedPreview,
+  protectedPreviewHeaders,
+} from "./preview-auth";
 
 const forbiddenPublicClaim = /Real stories from patients|Historias reales de pacientes|15\+|(?:over|more than)\s+15\s+years|(?:m[aá]s de|durante m[aá]s de)\s+15\s+a[nñ]os|Professional Certification|Certificaci[oó]n Profesional|Specialized Training in Cultural Competency|Entrenamiento Especializado en Competencia Cultural|native Spanish|natively in both|espa[nñ]ol nativo|hablante nativa de espa[nñ]ol|hija de inmigrantes|daughter of immigrants/i;
 const forbiddenCaliforniaFinancialClaim = /\b(?:direct|cash)[ -]?pay\b|\bno insurance\b|\bno (?:paperwork|claims|prior authorizations?)\b|\bclear pricing?\b|\bprice is clear\b|\bno surprises\b|\bpago directo\b|\bsin seguros?\b|\bsin (?:tr[aá]mites|reclamos|autorizaciones previas?)\b|\bprecio (?:es )?claro\b|\bsin sorpresas\b/i;
@@ -116,7 +120,9 @@ for (const route of ["/", "/es"] as const) {
       if (message.type() === "error") runtimeErrors.push(message.text());
     });
 
-    const reviewsResponse = await page.request.get("/api/reviews");
+    const reviewsResponse = await page.request.get("/api/reviews", {
+      headers: protectedPreviewHeaders(),
+    });
     const reviewsPayload = await reviewsResponse.json();
     const response = await page.goto(route, { waitUntil: "domcontentloaded" });
     expect(response?.status()).toBe(200);

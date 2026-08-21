@@ -1,4 +1,17 @@
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import {
+  authenticateProtectedPreview,
+  finishProtectedPreview,
+  protectedPreviewHeaders,
+} from "./preview-auth";
+
+test.beforeEach(async ({ page }) => {
+  await authenticateProtectedPreview(page);
+});
+
+test.afterEach(async ({ page }) => {
+  await finishProtectedPreview(page);
+});
 
 const userAgents = {
   normal: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140 Safari/537.36",
@@ -95,7 +108,7 @@ async function expectReactHydrated(page: Page) {
 
 async function fetchHtml(request: APIRequestContext, url: string, userAgent?: string) {
   const response = await request.get(url, {
-    headers: userAgent ? { "user-agent": userAgent } : undefined,
+    headers: protectedPreviewHeaders(userAgent ? { "user-agent": userAgent } : {}),
   });
   expect(response.status(), url).toBe(200);
   return response.text();
@@ -191,6 +204,7 @@ test("all 28 FAQ graphs match initial HTML and a hydrated accordion click", asyn
     }
 
     await page.goto(pathname, { waitUntil: "domcontentloaded" });
+    await expectReactHydrated(page);
     const faq = faqs[1];
     const question = page.locator('button[aria-expanded]').filter({ hasText: faq.name }).first();
     await expect(question, `${pathname}: hydrated FAQ trigger`).toBeVisible();

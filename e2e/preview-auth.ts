@@ -11,6 +11,14 @@ const previewCredential = deploymentUrl && protectedPreviewHost.test(deploymentU
       : null
   : null;
 
+export function protectedPreviewHeaders(
+  headers: Record<string, string> = {},
+): Record<string, string> {
+  return previewCredential
+    ? { ...headers, [previewCredential.name]: previewCredential.value }
+    : headers;
+}
+
 export async function authenticateProtectedPreview(
   page: Page,
   headers: Record<string, string> = {},
@@ -25,21 +33,25 @@ export async function authenticateProtectedPreview(
   if (!previewCredential && !hasHeaders) return;
 
   await page.route(`${deploymentOrigin}/**`, async route => {
-    let response;
-    try {
-      response = await route.fetch({
-        headers: {
-          ...(await route.request().allHeaders()),
-          ...headers,
-          ...(previewCredential ? { [previewCredential.name]: previewCredential.value } : {}),
-        },
-        maxRedirects: 0,
-      });
-    } catch {
-      const pathname = new URL(route.request().url()).pathname;
-      throw new Error(`Preview authentication fetch failed for ${pathname}.`);
+    const authenticatedHeaders = {
+      ...(await route.request().allHeaders()),
+      ...protectedPreviewHeaders(headers),
+    };
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
+      try {
+        const response = await route.fetch({
+          headers: authenticatedHeaders,
+          maxRedirects: 0,
+        });
+        await route.fulfill({ response });
+        return;
+      } catch {
+        if (attempt === 2) {
+          const pathname = new URL(route.request().url()).pathname;
+          throw new Error(`Preview authentication fetch failed for ${pathname}.`);
+        }
+      }
     }
-    await route.fulfill({ response });
   });
 }
 
