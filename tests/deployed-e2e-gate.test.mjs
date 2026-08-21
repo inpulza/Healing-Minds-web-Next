@@ -90,6 +90,14 @@ test("archive and admin E2E reuse origin-scoped Preview authentication", () => {
   }
 });
 
+test("archive E2E separates Preview fixtures from the public Production boundary", () => {
+  const spec = fs.readFileSync("e2e/blog-archive.spec.ts", "utf8");
+  assert.match(spec, /isPublicProductionTarget/);
+  assert.match(spec, /deterministic archive fixture is intentionally unavailable in Production/);
+  assert.match(spec, /Production keeps the deterministic blog archive fixture private/);
+  assert.match(spec, /expect\(response\.status\(\)\)\.toBe\(404\)/);
+});
+
 test("analytics Preview audit validates auth scope and sitewide TikTok shutdown", () => {
   const audit = fs.readFileSync("scripts/audit-analytics-preview.mjs", "utf8");
   const hostValidation = audit.indexOf('healingMindsImmutablePreviewHost.test');

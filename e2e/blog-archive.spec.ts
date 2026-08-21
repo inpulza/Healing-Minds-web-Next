@@ -1,6 +1,12 @@
 import { expect, test, type Page } from "@playwright/test";
 import { authenticateProtectedPreview, finishProtectedPreview } from "./preview-auth";
 
+const deployedHostname = process.env.E2E_BASE_URL
+  ? new URL(process.env.E2E_BASE_URL).hostname.toLowerCase()
+  : null;
+const isPublicProductionTarget = deployedHostname === "www.healingmindsp.com"
+  || deployedHostname === "healingmindsp.com";
+
 test.afterEach(async ({ page }) => {
   await finishProtectedPreview(page);
 });
@@ -25,6 +31,7 @@ async function articleHrefs(page: Page, language: "en" | "es"): Promise<string[]
 }
 
 test("the bilingual archive paginates 10+ posts without duplicates and keeps filters crawlable", async ({ page }) => {
+  test.skip(isPublicProductionTarget, "The deterministic archive fixture is intentionally unavailable in Production");
   const runtimeErrors = collectRuntimeErrors(page);
   await authenticateProtectedPreview(page, { "x-e2e-blog-fixtures": "1" });
 
@@ -74,4 +81,12 @@ test("the bilingual archive paginates 10+ posts without duplicates and keeps fil
   await expect(page.getByText("Todavia no hay articulos publicados.", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Todos los Articulos", exact: true })).toBeVisible();
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
+});
+
+test("Production keeps the deterministic blog archive fixture private", async ({ request }) => {
+  test.skip(!isPublicProductionTarget, "Production-only fixture boundary");
+  const response = await request.get("/e2e-fixtures/blog-archive?language=en", {
+    headers: { "x-e2e-blog-fixtures": "1" },
+  });
+  expect(response.status()).toBe(404);
 });
