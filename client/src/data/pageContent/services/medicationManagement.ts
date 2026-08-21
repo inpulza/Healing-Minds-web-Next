@@ -6,12 +6,12 @@ export const medicationManagementContent: BilingualPageContent = {
     sections: [
       {
         key: 'hero-tagline',
-        paragraphs: ['Expert Medication Care'],
+        paragraphs: ['Medication Evaluation and Monitoring'],
       },
       {
         key: 'hero-description',
         paragraphs: [
-          'Expert psychiatric medication management for optimal mental health outcomes. Dr. Melva Reve provides comprehensive medication evaluation, monitoring, and adjustment to ensure safe, effective treatment tailored to your individual needs.',
+          'Psychiatric medication management may include individualized evaluation, discussion of options and monitoring when clinically appropriate. Response, risks and side effects vary by person.',
         ],
       },
       {
@@ -19,48 +19,48 @@ export const medicationManagementContent: BilingualPageContent = {
         heading: 'Medication Management',
         bullets: [
           'Evidence-based pharmacotherapy practices',
-          'Comprehensive safety monitoring',
+          'Safety considerations reviewed during care',
           'Personalized treatment plans',
-          'Regular medication reviews',
+          'Review frequency based on clinical needs',
         ],
       },
       {
         key: 'hero-quick-stats',
         bullets: [
-          'Expert evaluation and monitoring',
-          'Insurance accepted',
+          'Individualized evaluation and monitoring',
+          'Confirm plan participation before booking',
           'Bilingual consultations',
         ],
       },
       {
         key: 'benefits-badge',
-        paragraphs: ['Expert Care'],
+        paragraphs: ['Individualized Care'],
       },
       {
         key: 'benefits',
-        heading: 'Benefits of Expert **Medication Management**',
+        heading: '**Medication Evaluation and Monitoring**',
       },
       {
         key: 'benefits-stat',
-        paragraphs: ['98%', 'Patient satisfaction with medication optimization'],
+        paragraphs: ['Individual', 'Medication response varies by person'],
       },
       {
         key: 'benefits-intro',
         paragraphs: [
-          'Professional medication management ensures safe, effective treatment with personalized care and ongoing monitoring for optimal mental health outcomes.',
+          'Medication management uses individualized assessment. Options, monitoring and follow-up depend on clinical judgment and each patient’s circumstances.',
         ],
       },
       {
         key: 'benefits-cta',
-        paragraphs: ['Schedule Consultation'],
+        paragraphs: ['Request Consultation'],
       },
       {
         key: 'benefits-grid',
         bullets: [
-          'Expert evaluation and monitoring',
-          'Personalized medication plans',
-          'Regular safety assessments',
-          'Side effect management',
+          'Individualized clinical evaluation',
+          'Medication options discussed when appropriate',
+          'Risks and side effects reviewed',
+          'Monitoring based on clinical needs',
         ],
       },
       {
@@ -69,20 +69,20 @@ export const medicationManagementContent: BilingualPageContent = {
       },
       {
         key: 'who',
-        heading: 'Who Benefits from **Medication Management**?',
+        heading: 'When **Medication Management** May Be Discussed',
         paragraphs: [
-          'Our comprehensive medication management ensures optimal treatment outcomes through careful monitoring, adjustment, and personalized care for each patient.',
+          'A psychiatric evaluation can determine whether medication review or monitoring is appropriate. No particular medication, dose or response is promised.',
         ],
       },
       {
         key: 'who-candidates',
-        heading: 'Ideal Candidates',
+        heading: 'Topics to Discuss',
         level: 3,
         bullets: [
           'Multiple psychiatric medications',
           'Complex medication interactions',
-          'Side effect management needed',
-          'Treatment optimization required',
+          'Questions about possible side effects',
+          'Questions about the current treatment plan',
         ],
       },
       {
@@ -90,23 +90,23 @@ export const medicationManagementContent: BilingualPageContent = {
         heading: 'Key Considerations',
         level: 3,
         bullets: [
-          'Regular monitoring required',
-          'Lab work may be necessary',
-          'Medication compliance essential',
-          'Follow-up appointments needed',
+          'Monitoring needs vary by medication and patient',
+          'Lab work may be discussed when clinically indicated',
+          'Follow prescribing instructions and raise concerns with the treating professional',
+          'The office confirms follow-up recommendations case by case',
         ],
       },
       {
         key: 'who-cta',
-        paragraphs: ['Start Medication Management'],
+        paragraphs: ['Request a Medication Review'],
       },
       {
         key: 'who-stat-1',
-        paragraphs: ['95%', 'Medication adherence improvement'],
+        paragraphs: ['Individual', 'Monitoring is based on clinical needs'],
       },
       {
         key: 'who-stat-2',
-        paragraphs: ['24/7', 'Emergency consultation available'],
+        paragraphs: ['Office hours', 'For emergencies, call 911 or 988'],
       },
       {
         key: 'process',
@@ -122,18 +122,18 @@ export const medicationManagementContent: BilingualPageContent = {
       },
       {
         key: 'process-step-2',
-        heading: 'Medication Selection',
+        heading: 'Discussion of Options',
         level: 3,
         paragraphs: [
-          'Evidence-based medication choice considering your specific diagnosis, medical history, and treatment goals.',
+          'Medication and non-medication options may be discussed based on the evaluation, medical history and treatment goals.',
         ],
       },
       {
         key: 'process-step-3',
-        heading: 'Treatment Initiation',
+        heading: 'If Medication Is Prescribed',
         level: 3,
         paragraphs: [
-          'Starting medication with careful dosing strategy, clear instructions, and side effect monitoring plan.',
+          'The treating professional explains the prescription, relevant risks and follow-up recommendations. Medication and dose remain matters of clinical judgment.',
         ],
       },
       {
@@ -141,15 +141,15 @@ export const medicationManagementContent: BilingualPageContent = {
         heading: 'Regular Monitoring',
         level: 3,
         paragraphs: [
-          'Scheduled follow-up appointments to assess effectiveness, monitor side effects, and adjust dosages as needed.',
+          'Follow-up may be recommended to review response, questions and possible side effects. Timing is confirmed case by case.',
         ],
       },
       {
         key: 'process-step-5',
-        heading: 'Optimization',
+        heading: 'Ongoing Review',
         level: 3,
         paragraphs: [
-          'Fine-tuning medication regimen based on your response, lifestyle factors, and treatment goals.',
+          'Any change to a medication regimen is considered by the treating professional based on the patient’s response and circumstances.',
         ],
       },
       {
@@ -157,30 +157,30 @@ export const medicationManagementContent: BilingualPageContent = {
         heading: 'Long-term Management',
         level: 3,
         paragraphs: [
-          'Ongoing medication management with regular reviews, preventive care, and coordination with other providers.',
+          'Continued medication review and coordination with other providers may be discussed when clinically appropriate and with required consent.',
         ],
       },
       {
         key: 'why',
-        heading: 'Why Choose Dr. Reve for **Medication Management**',
+        heading: '**Medication Management** at Healing Minds Psychiatry',
       },
       {
         key: 'why-benefits',
         bullets: [
-          'Experienced psychiatrist with medication expertise',
-          'Comprehensive medication monitoring and adjustments',
+          'Licensed psychiatrist providing individualized medication evaluation and monitoring',
+          'Medication options and monitoring needs discussed during care',
           'Bilingual services in English and Spanish',
-          'Insurance coverage assistance',
-          'Regular follow-up and safety monitoring',
+          'Insurance questions reviewed case by case',
+          'Follow-up recommendations based on clinical needs',
           'Convenient scheduling and [accessible Naples, FL location](/locations/psychiatrist-naples)',
         ],
       },
       {
         key: 'why-card',
-        heading: 'Ready to Optimize Your Medications?',
+        heading: 'Would You Like a Medication Review?',
         level: 3,
         paragraphs: [
-          'Take control of your mental health with expert medication management. Schedule a consultation to review your current medications.',
+          'Request a consultation to discuss your current medications, questions and treatment goals. The office confirms availability.',
         ],
       },
       {
@@ -194,18 +194,18 @@ export const medicationManagementContent: BilingualPageContent = {
     sections: [
       {
         key: 'hero-tagline',
-        paragraphs: ['Cuidado Experto de Medicación'],
+        paragraphs: ['Evaluación y Monitoreo de Medicación'],
       },
       {
         key: 'hero-description',
         paragraphs: [
-          'Manejo experto de medicación psiquiátrica para resultados óptimos de salud mental. La Dra. Melva Reve brinda evaluación, monitoreo y ajuste integral de medicamentos para asegurar tratamiento seguro y efectivo adaptado a sus necesidades individuales.',
+          'El manejo de medicamentos psiquiátricos puede incluir evaluación individualizada, conversación sobre opciones y monitoreo cuando sea clínicamente apropiado. La respuesta, los riesgos y los efectos secundarios varían según la persona.',
         ],
       },
       {
         key: 'hero-special-note',
         paragraphs: [
-          '**El manejo adecuado de medicamentos es fundamental para el éxito del tratamiento.** Nuestra experiencia garantiza que reciba la medicación correcta, en la dosis adecuada, con monitoreo continuo para optimizar su bienestar y minimizar efectos secundarios.',
+          'La evaluación no promete un medicamento, una dosis ni un resultado específico. Las opciones, los riesgos y el seguimiento se revisan según el criterio clínico y las circunstancias de cada paciente.',
         ],
       },
       {
@@ -213,48 +213,48 @@ export const medicationManagementContent: BilingualPageContent = {
         heading: 'Manejo de Medicamentos',
         bullets: [
           'Prácticas de farmacoterapia basadas en evidencia',
-          'Monitoreo integral de seguridad',
+          'Consideraciones de seguridad revisadas durante la atención',
           'Planes de tratamiento personalizados',
-          'Revisiones regulares de medicación',
+          'Frecuencia de revisión según la necesidad clínica',
         ],
       },
       {
         key: 'hero-quick-stats',
         bullets: [
-          'Evaluación y monitoreo experto',
-          'Se acepta seguro',
+          'Evaluación y monitoreo individualizados',
+          'Confirme la participación antes de reservar',
           'Consultas bilingües',
         ],
       },
       {
         key: 'benefits-badge',
-        paragraphs: ['Atención Experta'],
+        paragraphs: ['Atención Individualizada'],
       },
       {
         key: 'benefits',
-        heading: 'Beneficios del **Manejo Experto** de Medicamentos',
+        heading: '**Evaluación y Monitoreo de Medicamentos**',
       },
       {
         key: 'benefits-stat',
-        paragraphs: ['98%', 'Satisfacción del paciente con optimización de medicamentos'],
+        paragraphs: ['Individual', 'La respuesta a medicamentos varía según la persona'],
       },
       {
         key: 'benefits-intro',
         paragraphs: [
-          'El manejo profesional de medicamentos asegura tratamiento seguro y efectivo con atención personalizada y monitoreo continuo para resultados óptimos de salud mental.',
+          'El manejo de medicamentos utiliza evaluación individualizada. Las opciones, el monitoreo y el seguimiento dependen del criterio clínico y de las circunstancias de cada paciente.',
         ],
       },
       {
         key: 'benefits-cta',
-        paragraphs: ['Programar Consulta'],
+        paragraphs: ['Solicitar Consulta'],
       },
       {
         key: 'benefits-grid',
         bullets: [
-          'Evaluación y monitoreo experto',
-          'Planes de medicación personalizados',
-          'Evaluaciones regulares de seguridad',
-          'Manejo de efectos secundarios',
+          'Evaluación clínica individualizada',
+          'Opciones de medicación discutidas cuando corresponda',
+          'Revisión de riesgos y posibles efectos secundarios',
+          'Monitoreo según las necesidades clínicas',
         ],
       },
       {
@@ -263,20 +263,20 @@ export const medicationManagementContent: BilingualPageContent = {
       },
       {
         key: 'who',
-        heading: '¿Quién se Beneficia del **Manejo de Medicamentos**?',
+        heading: 'Cuándo Puede Considerarse el **Manejo de Medicamentos**',
         paragraphs: [
-          'Nuestro manejo integral de medicamentos asegura resultados óptimos de tratamiento a través de monitoreo cuidadoso, ajustes y atención personalizada para cada paciente.',
+          'Una evaluación psiquiátrica puede determinar si corresponde revisar o monitorear medicamentos. No se promete un medicamento, una dosis ni una respuesta específica.',
         ],
       },
       {
         key: 'who-candidates',
-        heading: 'Candidatos Ideales',
+        heading: 'Temas para Conversar',
         level: 3,
         bullets: [
           'Múltiples medicamentos psiquiátricos',
           'Interacciones medicamentosas complejas',
-          'Necesita manejo de efectos secundarios',
-          'Requiere optimización del tratamiento',
+          'Preguntas sobre posibles efectos secundarios',
+          'Preguntas sobre el plan de tratamiento actual',
         ],
       },
       {
@@ -284,23 +284,23 @@ export const medicationManagementContent: BilingualPageContent = {
         heading: 'Consideraciones Clave',
         level: 3,
         bullets: [
-          'Monitoreo regular requerido',
-          'Trabajo de laboratorio puede ser necesario',
-          'Cumplimiento de medicación esencial',
-          'Citas de seguimiento necesarias',
+          'Las necesidades de monitoreo varían según el medicamento y la persona',
+          'Pueden discutirse análisis cuando estén clínicamente indicados',
+          'Siga las indicaciones de prescripción y consulte sus inquietudes con el profesional tratante',
+          'La oficina confirma las recomendaciones de seguimiento caso por caso',
         ],
       },
       {
         key: 'who-cta',
-        paragraphs: ['Iniciar Manejo de Medicamentos'],
+        paragraphs: ['Solicitar Revisión de Medicamentos'],
       },
       {
         key: 'who-stat-1',
-        paragraphs: ['95%', 'Mejora en adherencia a medicación'],
+        paragraphs: ['Individual', 'El monitoreo depende de las necesidades clínicas'],
       },
       {
         key: 'who-stat-2',
-        paragraphs: ['24/7', 'Consulta de emergencia disponible'],
+        paragraphs: ['Horario de oficina', 'Para emergencias, llame al 911 o al 988'],
       },
       {
         key: 'process',
@@ -316,18 +316,18 @@ export const medicationManagementContent: BilingualPageContent = {
       },
       {
         key: 'process-step-2',
-        heading: 'Selección de Medicación',
+        heading: 'Conversación sobre Opciones',
         level: 3,
         paragraphs: [
-          'Elección de medicamento basada en evidencia considerando su diagnóstico específico, historia médica y objetivos de tratamiento.',
+          'Pueden discutirse opciones con y sin medicamentos según la evaluación, la historia médica y los objetivos de tratamiento.',
         ],
       },
       {
         key: 'process-step-3',
-        heading: 'Inicio del Tratamiento',
+        heading: 'Si se Receta un Medicamento',
         level: 3,
         paragraphs: [
-          'Inicio de medicación con estrategia de dosis cuidadosa, instrucciones claras y plan de monitoreo de efectos secundarios.',
+          'El profesional tratante explica la receta, los riesgos relevantes y las recomendaciones de seguimiento. El medicamento y la dosis dependen del criterio clínico.',
         ],
       },
       {
@@ -335,15 +335,15 @@ export const medicationManagementContent: BilingualPageContent = {
         heading: 'Monitoreo Regular',
         level: 3,
         paragraphs: [
-          'Citas de seguimiento programadas para evaluar efectividad, monitorear efectos secundarios y ajustar dosis según sea necesario.',
+          'Puede recomendarse seguimiento para revisar la respuesta, las preguntas y los posibles efectos secundarios. La frecuencia se confirma caso por caso.',
         ],
       },
       {
         key: 'process-step-5',
-        heading: 'Optimización',
+        heading: 'Revisión Continua',
         level: 3,
         paragraphs: [
-          'Ajuste fino del régimen de medicación basado en su respuesta, factores de estilo de vida y objetivos de tratamiento.',
+          'Todo cambio en un régimen de medicación lo considera el profesional tratante según la respuesta y las circunstancias del paciente.',
         ],
       },
       {
@@ -351,30 +351,30 @@ export const medicationManagementContent: BilingualPageContent = {
         heading: 'Manejo a Largo Plazo',
         level: 3,
         paragraphs: [
-          'Manejo continuo de medicación con revisiones regulares, atención preventiva y coordinación con otros proveedores.',
+          'La revisión continua de medicamentos y la coordinación con otros proveedores pueden discutirse cuando sea clínicamente apropiado y con el consentimiento requerido.',
         ],
       },
       {
         key: 'why',
-        heading: 'Por Qué Elegir a la Dra. Reve para **Manejo de Medicamentos**',
+        heading: '**Manejo de Medicamentos** en Healing Minds Psychiatry',
       },
       {
         key: 'why-benefits',
         bullets: [
-          'Psiquiatra con licencia y experiencia en medicamentos',
-          'Monitoreo integral y ajustes de medicación',
+          'Psiquiatra con licencia que brinda evaluación y monitoreo individualizado de medicamentos',
+          'Opciones y necesidades de monitoreo discutidas durante la atención',
           'Servicios bilingües en inglés y español',
-          'Asistencia con cobertura de seguro',
-          'Seguimiento regular y monitoreo de seguridad',
+          'Las preguntas de seguro se revisan caso por caso',
+          'Recomendaciones de seguimiento según la necesidad clínica',
           'Horarios convenientes y [ubicación accesible en Naples, FL](/es/ubicaciones/psiquiatra-naples)',
         ],
       },
       {
         key: 'why-card',
-        heading: '¿Listo para Optimizar sus Medicamentos?',
+        heading: '¿Desea Solicitar una Revisión de Medicamentos?',
         level: 3,
         paragraphs: [
-          'Toma control de tu salud mental con manejo experto de medicamentos. Programa una consulta para revisar tus medicamentos actuales.',
+          'Solicite una consulta para conversar sobre sus medicamentos actuales, preguntas y objetivos de tratamiento. La oficina confirma la disponibilidad.',
         ],
       },
       {

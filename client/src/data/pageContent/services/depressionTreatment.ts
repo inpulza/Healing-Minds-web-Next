@@ -18,7 +18,7 @@ export const depressionTreatmentContent: BilingualPageContent = {
         key: 'hero-facts',
         heading: 'Depression Facts',
         bullets: [
-          '8.3% of adults experience major depression',
+          'Depression can affect mood, sleep, energy, and concentration',
           'Depression is highly treatable',
           'Recovery is possible with proper care',
           'Available in Spanish and English',
@@ -27,8 +27,8 @@ export const depressionTreatmentContent: BilingualPageContent = {
       {
         key: 'hero-quick-stats',
         bullets: [
-          'Same-week appointments',
-          'Insurance accepted',
+          'Availability confirmed by the office',
+          'Confirm plan participation before booking',
           'Bilingual services',
         ],
       },
@@ -68,11 +68,11 @@ export const depressionTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'approach-stat-1',
-        paragraphs: ['80%', 'Treatment success rate'],
+        paragraphs: ['Individual', 'Treatment response varies by person'],
       },
       {
         key: 'approach-stat-2',
-        paragraphs: ['15+', 'Years experience'],
+        paragraphs: ['ME165518', 'Active Florida medical license'],
       },
       {
         key: 'approach-intro',
@@ -100,7 +100,7 @@ export const depressionTreatmentContent: BilingualPageContent = {
         bullets: [
           'Thorough evaluation to understand your unique depression symptoms and contributing factors.',
           'Careful selection and monitoring of antidepressant medications tailored to your needs.',
-          'Coordination with therapy services for optimal treatment outcomes.',
+          'With patient consent, coordination with an outside therapist may be discussed case by case.',
           'Guidance on sleep, exercise, nutrition, and stress management techniques.',
           'Available support during difficult periods with safety planning when needed.',
           'Ongoing monitoring and adjustment of treatment to maintain wellness.',
@@ -115,7 +115,7 @@ export const depressionTreatmentContent: BilingualPageContent = {
         heading: 'Specialized Expertise',
         level: 3,
         paragraphs: [
-          'Dr. Melva Reve specializes in treating various forms of depression including major depression, seasonal affective disorder, and postpartum depression.',
+          'Dr. Melva Reve evaluates adults with depression symptoms and develops treatment plans based on each person’s clinical needs.',
         ],
       },
       {
@@ -146,8 +146,8 @@ export const depressionTreatmentContent: BilingualPageContent = {
       {
         key: 'practice-features',
         bullets: [
-          'Same-Week Appointments Available',
-          'Insurance Plans Accepted',
+          'Appointment Availability Confirmed by Office',
+          'Verify Benefits Before Booking',
           'Confidential & Safe Environment',
         ],
       },
@@ -180,7 +180,7 @@ export const depressionTreatmentContent: BilingualPageContent = {
         key: 'hero-facts',
         heading: 'Datos sobre Depresión',
         bullets: [
-          '8.3% de adultos experimentan depresión mayor',
+          'La depresión puede afectar el ánimo, sueño, energía y concentración',
           'La depresión es altamente tratable',
           'La recuperación es posible con atención adecuada',
           'Disponible en español e inglés',
@@ -189,8 +189,8 @@ export const depressionTreatmentContent: BilingualPageContent = {
       {
         key: 'hero-quick-stats',
         bullets: [
-          'Citas en la misma semana',
-          'Se acepta seguro',
+          'Disponibilidad confirmada por la oficina',
+          'Confirme la participación antes de reservar',
           'Servicios bilingües',
         ],
       },
@@ -230,11 +230,11 @@ export const depressionTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'approach-stat-1',
-        paragraphs: ['80%', 'Tasa de éxito del tratamiento'],
+        paragraphs: ['Individual', 'La respuesta al tratamiento varía según la persona'],
       },
       {
         key: 'approach-stat-2',
-        paragraphs: ['15+', 'Años de experiencia'],
+        paragraphs: ['ME165518', 'Licencia médica activa de Florida'],
       },
       {
         key: 'approach-intro',
@@ -262,7 +262,7 @@ export const depressionTreatmentContent: BilingualPageContent = {
         bullets: [
           'Evaluación exhaustiva para entender sus síntomas únicos de depresión y factores contribuyentes.',
           'Selección cuidadosa y monitoreo de medicamentos antidepresivos adaptados a sus necesidades.',
-          'Coordinación con servicios de terapia para resultados óptimos de tratamiento.',
+          'Con consentimiento del paciente, la coordinación con un terapeuta externo puede discutirse caso por caso.',
           'Orientación sobre sueño, ejercicio, nutrición y técnicas de manejo del estrés.',
           'Apoyo disponible durante períodos difíciles con planificación de seguridad cuando sea necesario.',
           'Monitoreo continuo y ajuste del tratamiento para mantener el bienestar.',
@@ -277,7 +277,7 @@ export const depressionTreatmentContent: BilingualPageContent = {
         heading: 'Experiencia Especializada',
         level: 3,
         paragraphs: [
-          'La Dra. Melva Reve se especializa en tratar varias formas de depresión incluyendo depresión mayor, trastorno afectivo estacional y depresión posparto.',
+          'La Dra. Melva Reve evalúa a adultos con síntomas de depresión y desarrolla planes según las necesidades clínicas de cada persona.',
         ],
       },
       {
@@ -308,9 +308,9 @@ export const depressionTreatmentContent: BilingualPageContent = {
       {
         key: 'practice-features',
         bullets: [
-          'Citas en la Misma Semana Disponibles',
-          'Se Aceptan Planes de Seguro',
-          'Ambiente Confidencial y Seguro',
+          'Disponibilidad de Citas Confirmada por la Oficina',
+          'Verifique Beneficios Antes de Reservar',
+          'Salvaguardas Razonables de Privacidad y Seguridad',
         ],
       },
       {

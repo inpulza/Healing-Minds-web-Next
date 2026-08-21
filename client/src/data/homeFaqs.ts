@@ -18,7 +18,7 @@ export const homeFaqs: Record<"en" | "es", readonly HomeFaqItem[]> = {
     {
       question: "Is my information kept confidential?",
       answer:
-        "Yes, absolutely. All information shared in our sessions is strictly confidential and protected by HIPAA laws. Information is only shared with your written consent or in rare cases required by law for safety reasons.",
+        "Health information is handled under applicable medical privacy laws and the practice privacy notice. Disclosure may occur with authorization or when otherwise permitted or required by law.",
     },
     {
       question: "How do I know if I need medication?",
@@ -28,7 +28,7 @@ export const homeFaqs: Record<"en" | "es", readonly HomeFaqItem[]> = {
     {
       question: "Do you accept insurance?",
       answer:
-        "We accept most major insurance plans. Our staff will verify your benefits and explain your coverage before your first appointment. We also offer flexible payment options for those without insurance coverage.",
+        "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific mental-health, telehealth and cost-sharing benefits directly with your insurer. Self-pay or financial options may be evaluated case by case.",
     },
     {
       question: "How often will I need to come in for appointments?",
@@ -50,7 +50,7 @@ export const homeFaqs: Record<"en" | "es", readonly HomeFaqItem[]> = {
     {
       question: "¿Se mantiene confidencial mi información?",
       answer:
-        "Sí, absolutamente. Toda la información compartida en nuestras sesiones es estrictamente confidencial y está protegida por las leyes HIPAA. La información solo se comparte con su consentimiento por escrito o en casos raros requeridos por ley por razones de seguridad.",
+        "La información de salud se maneja conforme a las leyes aplicables de privacidad médica y al aviso de privacidad de la práctica. Puede divulgarse con autorización o cuando la ley lo permita o exija.",
     },
     {
       question: "¿Cómo sé si necesito medicación?",
@@ -60,7 +60,7 @@ export const homeFaqs: Record<"en" | "es", readonly HomeFaqItem[]> = {
     {
       question: "¿Aceptan seguro médico?",
       answer:
-        "Aceptamos la mayoría de los planes de seguro principales. Nuestro personal verificará sus beneficios y explicará su cobertura antes de su primera cita. También ofrecemos opciones de pago flexibles para aquellos sin cobertura de seguro.",
+        "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique directamente con su aseguradora sus beneficios de salud mental, telesalud y costos compartidos. Las opciones de pago privado o ayuda financiera pueden evaluarse caso por caso.",
     },
     {
       question: "¿Con qué frecuencia necesitaré venir a las citas?",

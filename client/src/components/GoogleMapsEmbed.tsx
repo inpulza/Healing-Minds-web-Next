@@ -97,8 +97,8 @@ const GoogleMapsEmbed = ({
         <h3>{title || defaultTitle}</h3>
         <p>
           {language === 'en' 
-            ? 'Interactive Google Maps showing our office location at 4760 Tamiami Trail North, Suite 25, Naples, Florida 34103. You can zoom, pan, and get directions from this map.'
-            : 'Mapa interactivo de Google Maps que muestra la ubicación de nuestra oficina en 4760 Tamiami Trail North, Suite 25, Naples, Florida 34103. Puede hacer zoom, desplazarse y obtener direcciones desde este mapa.'
+            ? 'Interactive Google Maps showing our office location at 4760 Tamiami Trail North #25, Naples, Florida 34103. You can zoom, pan, and get directions from this map.'
+            : 'Mapa interactivo de Google Maps que muestra la ubicación de nuestra oficina en 4760 Tamiami Trail North #25, Naples, Florida 34103. Puede hacer zoom, desplazarse y obtener direcciones desde este mapa.'
           }
         </p>
       </div>

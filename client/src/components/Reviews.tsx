@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Card } from '@/components/ui/card';
-import { Star, Shield, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import type { ReviewsResponse } from '@shared/schema';
 
@@ -20,6 +20,17 @@ const Reviews = () => {
 
   const reviews = reviewsData?.data?.reviews || [];
   const stats = reviewsData?.data?.stats || { averageRating: 0, totalReviews: 0 };
+
+  const formatAbsoluteDate = (value: Date | string) => {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return new Intl.DateTimeFormat(language === 'es' ? 'es-US' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'UTC',
+    }).format(date);
+  };
   
   // Mobile carousel auto-scroll logic with scroll sync
   useEffect(() => {
@@ -125,16 +136,15 @@ const Reviews = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-bold text-green-800 mb-6" data-testid="reviews-title">
-            {language === 'en' ? 'What our ' : 'Lo que dicen nuestros '}
+            {language === 'en' ? 'Public ' : ''}
             <span className="font-display italic text-green-700">
-              {language === 'en' ? 'patients' : 'pacientes'}
+              {language === 'en' ? 'Reviews' : 'Reseñas Públicas'}
             </span>
-            {language === 'en' ? ' say' : ''}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="reviews-description">
             {language === 'en'
-              ? 'Real stories from patients who have found hope and healing through Dr. Reve\'s compassionate care.'
-              : 'Historias reales de pacientes que han encontrado esperanza y sanación a través del cuidado compasivo de la Dra. Reve.'
+              ? 'Reviews retrieved through our public review feed. Individual experiences and outcomes vary.'
+              : 'Reseñas obtenidas a través de nuestro canal público de reseñas. Las experiencias y los resultados individuales varían.'
             }
           </p>
           
@@ -153,6 +163,12 @@ const Reviews = () => {
               }
             </div>
           </div>
+          {reviewsData?.data?.fetchedAt && (
+            <p className="mt-3 text-sm text-gray-500" data-testid="reviews-updated-at">
+              {language === 'en' ? 'Review data updated ' : 'Datos de reseñas actualizados el '}
+              {formatAbsoluteDate(reviewsData.data.fetchedAt)}
+            </p>
+          )}
         </div>
 
         {/* Desktop Grid Layout (3x3) */}
@@ -163,18 +179,10 @@ const Reviews = () => {
               className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden"
               data-testid={`review-card-desktop-${index}`}
             >
-              {/* Verified Badge */}
-              <div className="absolute top-4 right-4">
-                <div className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
-                  <Shield className="w-3 h-3" />
-                  <span>{language === 'en' ? 'Verified' : 'Verificado'}</span>
-                </div>
-              </div>
-              
               {/* Rating */}
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex">{renderStars(review.rating)}</div>
-                <span className="text-sm text-gray-500">{review.date}</span>
+                <span className="text-sm text-gray-500">{formatAbsoluteDate(review.createdAt)}</span>
               </div>
               
               {/* Review Content */}
@@ -188,7 +196,7 @@ const Reviews = () => {
                   {review.image ? (
                     <img 
                       src={review.image} 
-                      alt={`Patient testimonial photo from ${review.name} - Healing Minds Psychiatry review`}
+                      alt={`Public reviewer profile image for ${review.name}`}
                       className="w-10 h-10 rounded-full object-cover"
                       loading="lazy"
                     />
@@ -202,23 +210,10 @@ const Reviews = () => {
                   <div>
                     <p className="font-semibold text-gray-900">{review.name}</p>
                     <p className="text-sm text-gray-500">
-                      {language === 'en' ? 'Patient' : 'Paciente'}
+                      {language === 'en' ? 'Public reviewer' : 'Autor de reseña pública'}
                     </p>
                   </div>
                 </div>
-                
-                {/* View on Google Button */}
-                <a 
-                  href="https://g.page/r/CX_IlTO2gnY7EBM/review"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium transition-colors duration-200 hover:scale-105"
-                  aria-label={language === 'en' ? 'View this review on Google' : 'Ver esta reseña en Google'}
-                  data-testid={`button-view-google-desktop-${index}`}
-                >
-                  <ExternalLink className="w-3 h-3" />
-                  <span>{language === 'en' ? 'View on Google' : 'Ver en Google'}</span>
-                </a>
               </div>
             </Card>
           ))}
@@ -240,18 +235,10 @@ const Reviews = () => {
                 className="min-w-[280px] sm:min-w-[320px] w-[280px] sm:w-[320px] bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 snap-center flex-shrink-0 relative overflow-hidden"
                 data-testid={`review-card-mobile-${index}`}
               >
-                {/* Verified Badge */}
-                <div className="absolute top-4 right-4">
-                  <div className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
-                    <Shield className="w-3 h-3" />
-                    <span>{language === 'en' ? 'Verified' : 'Verificado'}</span>
-                  </div>
-                </div>
-                
                 {/* Rating */}
                 <div className="flex items-center gap-2 mb-4">
                   <div className="flex">{renderStars(review.rating)}</div>
-                  <span className="text-sm text-gray-500">{review.date}</span>
+                  <span className="text-sm text-gray-500">{formatAbsoluteDate(review.createdAt)}</span>
                 </div>
                 
                 {/* Review Content */}
@@ -265,7 +252,7 @@ const Reviews = () => {
                     {review.image ? (
                       <img 
                         src={review.image} 
-                        alt={`Patient testimonial photo from ${review.name} - Healing Minds Psychiatry review`}
+                        alt={`Public reviewer profile image for ${review.name}`}
                         className="w-10 h-10 rounded-full object-cover"
                         loading="lazy"
                       />
@@ -279,23 +266,10 @@ const Reviews = () => {
                     <div>
                       <p className="font-semibold text-gray-900">{review.name}</p>
                       <p className="text-sm text-gray-500">
-                        {language === 'en' ? 'Patient' : 'Paciente'}
+                        {language === 'en' ? 'Public reviewer' : 'Autor de reseña pública'}
                       </p>
                     </div>
                   </div>
-                  
-                  {/* View on Google Button */}
-                  <a 
-                    href="https://g.page/r/CX_IlTO2gnY7EBM/review"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium transition-colors duration-200 hover:scale-105"
-                    aria-label={language === 'en' ? 'View this review on Google' : 'Ver esta reseña en Google'}
-                    data-testid={`button-view-google-mobile-${index}`}
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                    <span>{language === 'en' ? 'View on Google' : 'Ver en Google'}</span>
-                  </a>
                 </div>
               </Card>
             ))}
@@ -348,11 +322,11 @@ const Reviews = () => {
             className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 border border-gray-200 shadow-sm hover:shadow-lg hover:bg-white transition-all duration-300 hover:-translate-y-1"
             data-testid="button-google-review"
           >
-            <Star className="w-5 h-5 text-yellow-400 fill-current" />
+            <ExternalLink className="w-5 h-5 text-blue-600" />
             <span className="text-gray-700 font-medium">
               {language === 'en' 
-                ? 'Click here - Leave us a review on Google' 
-                : 'Click aquí - Déjanos una reseña en Google'
+                ? 'Leave a review on Google'
+                : 'Dejar una reseña en Google'
               }
             </span>
           </a>

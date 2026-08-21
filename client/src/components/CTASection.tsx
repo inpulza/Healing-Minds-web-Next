@@ -37,8 +37,8 @@ const CTASection = () => {
           
           <p className="text-green-200 text-sm max-w-2xl mx-auto">
             {language === 'en'
-              ? 'All consultations are completely confidential and protected by medical privacy laws. Your privacy and well-being are our highest priorities.'
-              : 'Todas las consultas son completamente confidenciales y están protegidas por las leyes de privacidad médica. Tu privacidad y bienestar son nuestras máximas prioridades.'
+              ? 'Consultations use privacy safeguards and are governed by applicable medical privacy laws. Review the practice privacy notice and consent documents for details.'
+              : 'Las consultas utilizan medidas de privacidad y se rigen por las leyes aplicables de privacidad médica. Consulte el aviso de privacidad y los documentos de consentimiento para conocer los detalles.'
             }
           </p>
         </div>

@@ -212,15 +212,20 @@ const ServiciosEspanol = () => {
                     className="w-full text-left px-6 py-5 flex items-start justify-between gap-4 hover:bg-green-50 transition-colors"
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     aria-expanded={openFaq === i}
+                    aria-controls={`services-faq-answer-${i}`}
+                    data-testid={`faq-question-${i}`}
                   >
                     <span className="font-semibold text-green-900 text-base leading-snug">{faq.q}</span>
                     <ChevronDown className={`w-5 h-5 text-green-700 flex-shrink-0 mt-0.5 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
                   </button>
-                  {openFaq === i && (
-                    <div className="px-6 pb-5 text-gray-700 text-sm leading-relaxed border-t border-green-50 pt-4">
+                    <div
+                      id={`services-faq-answer-${i}`}
+                      aria-hidden={openFaq !== i}
+                      className={`px-6 pb-5 text-gray-700 text-sm leading-relaxed border-t border-green-50 pt-4 ${openFaq === i ? 'block' : 'hidden'}`}
+                      data-testid={`faq-answer-${i}`}
+                    >
                       {faq.a}
                     </div>
-                  )}
                 </div>
               ))}
             </div>

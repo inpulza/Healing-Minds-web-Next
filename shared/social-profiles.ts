@@ -6,9 +6,11 @@ export type SocialProfileKey = keyof typeof socialProfiles;
 
 export const organizationSocialProfileUrls = [
   socialProfiles.facebook.url,
-  socialProfiles.instagram.url,
-  socialProfiles.tiktok.url,
   socialProfiles.youtube.url,
 ] as const;
 
-export const physicianSocialProfileUrls = [socialProfiles.linkedin.url] as const;
+export const physicianSocialProfileUrls = [
+  socialProfiles.linkedin.url,
+  socialProfiles.instagram.url,
+  socialProfiles.tiktok.url,
+] as const;

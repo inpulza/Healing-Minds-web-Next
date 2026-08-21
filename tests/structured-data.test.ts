@@ -61,7 +61,7 @@ test("all 74 static public pages receive a valid, unique WebPage graph", () => {
   }
 });
 
-test("home exposes one verified practice, one Person and one WebSite", () => {
+test("home exposes one verified practice and one normalized Person", () => {
   for (const pathname of ["/", "/es"]) {
     const graph = staticGraph(pathname);
     const [practice] = nodesOfType(graph, "MedicalClinic");
@@ -79,8 +79,40 @@ test("home exposes one verified practice, one Person and one WebSite", () => {
     assert.equal((practice.geo as Node).latitude, 26.2044881);
     assert.equal((practice.geo as Node).longitude, -81.7995047);
     assert.equal(practice.hasMap, "https://www.google.com/maps?cid=4284755814550718591");
-    assert.equal(nodesOfType(graph, "Person").length, 1);
-    assert.equal(nodesOfType(graph, "WebSite").length, 1);
+    assert.deepEqual(practice.sameAs, [
+      "https://www.facebook.com/profile.php?id=61578845287836",
+      "https://www.youtube.com/@healingmindsp",
+    ]);
+    assert.deepEqual((practice.contactPoint as Node).availableLanguage, ["en", "es"]);
+    const [physician] = nodesOfType(graph, "Person");
+    assert.ok(physician, pathname);
+    assert.equal(physician.name, "Melva Reve");
+    assert.equal(physician.honorificPrefix, "Dr.");
+    assert.equal(physician.honorificSuffix, "MD");
+    assert.equal(physician.jobTitle, pathname === "/es" ? "Psiquiatra" : "Psychiatrist");
+    assert.deepEqual(physician.knowsLanguage, ["en", "es"]);
+    assert.deepEqual(physician.sameAs, [
+      "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
+      "https://www.linkedin.com/in/melva-reve-2549a9120",
+      "https://www.instagram.com/melvareve_md/",
+      "https://www.tiktok.com/@melvareve_md",
+    ]);
+  }
+
+  const [website] = nodesOfType(staticGraph("/"), "WebSite");
+  assert.ok(website);
+  assert.equal(website.url, "https://www.healingmindsp.com/");
+  assert.equal(nodesOfType(staticGraph("/es"), "WebSite").length, 0);
+});
+
+test("about pages are eligible ProfilePage documents about the physician", () => {
+  for (const pathname of ["/about", "/es/acerca-de"]) {
+    const graph = staticGraph(pathname);
+    const [page] = nodesOfType(graph, "ProfilePage");
+    assert.ok(page, pathname);
+    assert.ok(schemaTypes(page).includes("AboutPage"), pathname);
+    assert.equal((page.mainEntity as Node)["@id"], practiceProfile.physicianId);
+    assert.equal(nodesOfType(graph, "Person").length, 1, pathname);
   }
 });
 
@@ -179,7 +211,7 @@ test("service, telepsychiatry and FAQ coverage follows the visible route content
   }
 });
 
-test("blog indexes and articles expose CollectionPage, Blog and BlogPosting", () => {
+test("blog indexes describe a collection without incomplete BlogPosting nodes", () => {
   const posts = Object.values(blogSnapshot);
   const enPosts = posts.filter((post) => post.language === "en").map((post) => ({
     ...post,
@@ -203,8 +235,16 @@ test("blog indexes and articles expose CollectionPage, Blog and BlogPosting", ()
   });
   assert.equal(nodesOfType(index, "CollectionPage").length, 1);
   assert.equal(nodesOfType(index, "Blog").length, 1);
-  assert.equal(nodesOfType(index, "BlogPosting").length, enPosts.length);
+  assert.equal(nodesOfType(index, "BlogPosting").length, 0);
+  const [list] = nodesOfType(index, "ItemList");
+  assert.ok(list);
+  assert.deepEqual(
+    (list.itemListElement as Node[]).map((item) => item.item),
+    enPosts.map((post) => `${practiceProfile.siteUrl}/blog/${post.slug}`),
+  );
+});
 
+test("article pages expose complete BlogPosting authors", () => {
   for (const [pathname, post] of Object.entries(blogSnapshot)) {
     const graph = buildBlogPostStructuredData({ pathname, post });
     const [article] = nodesOfType(graph, "BlogPosting");
@@ -213,6 +253,10 @@ test("blog indexes and articles expose CollectionPage, Blog and BlogPosting", ()
     assert.equal((article.publisher as Node)["@id"], practiceProfile.organizationId);
     assert.equal((article.author as Node)["@id"], practiceProfile.physicianId);
     assert.equal(nodesOfType(graph, "Person").length, 1);
+    const [person] = nodesOfType(graph, "Person");
+    assert.equal(person.name, "Melva Reve");
+    assert.equal(person.honorificSuffix, "MD");
+    assert.equal(person.jobTitle, post.language === "es" ? "Psiquiatra" : "Psychiatrist");
   }
 });
 

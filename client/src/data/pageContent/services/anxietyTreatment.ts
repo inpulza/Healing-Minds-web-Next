@@ -18,17 +18,17 @@ export const anxietyTreatmentContent: BilingualPageContent = {
         key: 'hero-facts',
         heading: 'Anxiety Facts',
         bullets: [
-          '19.1% of adults experience anxiety disorders',
+          'Anxiety disorders can affect daily functioning',
           'Highly treatable with proper care',
-          'Insurance coverage available',
+          'Insurance participation varies by plan',
           'Bilingual care in Spanish/English',
         ],
       },
       {
         key: 'hero-quick-stats',
         bullets: [
-          'Same-week appointments',
-          'Insurance accepted',
+          'Availability confirmed by the office',
+          'Confirm plan participation before booking',
           'Bilingual services',
           'Evidence-based treatment',
         ],
@@ -43,7 +43,7 @@ export const anxietyTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'symptoms-stat',
-        paragraphs: ['40M+', 'Adults affected by anxiety disorders annually'],
+        paragraphs: ['Individual', 'Symptoms and severity vary by person'],
       },
       {
         key: 'symptoms-intro',
@@ -106,7 +106,7 @@ export const anxietyTreatmentContent: BilingualPageContent = {
         heading: 'Professional Expertise',
         level: 3,
         paragraphs: [
-          'Over 15 years of specialized experience in treating anxiety disorders with evidence-based approaches.',
+          'Care focused on anxiety disorders using evidence-informed approaches and individualized planning.',
         ],
       },
       {
@@ -136,8 +136,8 @@ export const anxietyTreatmentContent: BilingualPageContent = {
       {
         key: 'practice-features',
         bullets: [
-          'Flexible Scheduling Available',
-          'Most Insurance Plans Accepted',
+          'Appointment Availability Confirmed by Office',
+          'Verify Benefits Before Booking',
           'Telehealth Options Available',
         ],
       },
@@ -170,17 +170,17 @@ export const anxietyTreatmentContent: BilingualPageContent = {
         key: 'hero-facts',
         heading: 'Datos sobre Ansiedad',
         bullets: [
-          '19.1% de adultos experimentan trastornos de ansiedad',
+          'Los trastornos de ansiedad pueden afectar el funcionamiento diario',
           'Altamente tratable con atención adecuada',
-          'Cobertura de seguro disponible',
+          'La participación varía según el plan',
           'Atención bilingüe en español/inglés',
         ],
       },
       {
         key: 'hero-quick-stats',
         bullets: [
-          'Citas la misma semana',
-          'Se acepta seguro',
+          'Disponibilidad confirmada por la oficina',
+          'Confirme la participación antes de reservar',
           'Servicios bilingües',
           'Tratamiento basado en evidencia',
         ],
@@ -195,7 +195,7 @@ export const anxietyTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'symptoms-stat',
-        paragraphs: ['40M+', 'Adultos afectados por trastornos de ansiedad anualmente'],
+        paragraphs: ['Individual', 'Los síntomas y su intensidad varían según la persona'],
       },
       {
         key: 'symptoms-intro',
@@ -258,7 +258,7 @@ export const anxietyTreatmentContent: BilingualPageContent = {
         heading: 'Experiencia Profesional',
         level: 3,
         paragraphs: [
-          'Más de 15 años de experiencia especializada en el tratamiento de trastornos de ansiedad con enfoques basados en evidencia.',
+          'Atención enfocada en trastornos de ansiedad con enfoques informados por la evidencia y planificación individualizada.',
         ],
       },
       {
@@ -288,8 +288,8 @@ export const anxietyTreatmentContent: BilingualPageContent = {
       {
         key: 'practice-features',
         bullets: [
-          'Horarios Flexibles Disponibles',
-          'Se Aceptan Mayoría de Seguros',
+          'Disponibilidad de Citas Confirmada por la Oficina',
+          'Verifique Beneficios Antes de Reservar',
           'Opciones de Telesalud Disponibles',
         ],
       },

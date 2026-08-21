@@ -77,12 +77,48 @@ test("active UI and schema sources cannot reintroduce stale social profiles", ()
 
   assert.match(source, /page-structured-data/);
   assert.match(source, /organizationSocialProfileUrls/);
+  assert.match(source, /physicianSocialProfileUrls/);
   assert.match(source, /favicon-512\.png/);
   assert.match(source, /https:\/\/schema\.org\/Psychiatric/);
   assert.match(source, /npiregistry\.cms\.hhs\.gov\/provider-view\/1417786278/);
   assert.match(source, /npiregistry\.cms\.hhs\.gov\/provider-view\/1982233631/);
   assert.match(source, /4760 Tamiami Trl N #25/);
   assert.match(source, /4284755814550718591/);
+});
+
+test("schema sameAs profiles are assigned to the entity named by the current handle", () => {
+  const source = fs.readFileSync(
+    path.join(process.cwd(), "shared", "social-profiles.ts"),
+    "utf8",
+  );
+
+  assert.match(
+    source,
+    /organizationSocialProfileUrls\s*=\s*\[\s*socialProfiles\.facebook\.url,\s*socialProfiles\.youtube\.url,\s*\]/s,
+  );
+  assert.match(
+    source,
+    /physicianSocialProfileUrls\s*=\s*\[\s*socialProfiles\.linkedin\.url,\s*socialProfiles\.instagram\.url,\s*socialProfiles\.tiktok\.url,\s*\]/s,
+  );
+});
+
+test("every sameAs URL has a dated, renewable source record", () => {
+  const profiles = JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), "shared", "social-profiles.json"), "utf8"),
+  );
+  const registry = JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), "shared", "public-claims-sources.json"), "utf8"),
+  );
+
+  for (const profile of Object.values(profiles)) {
+    const source = registry.find((entry) => entry.sourceUrl === profile.url);
+    assert.ok(source, `${profile.url}: missing source record`);
+    assert.match(source.id, /^social-/);
+    assert.match(source.verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
+    assert.match(source.reverifyBy, /^\d{4}-\d{2}-\d{2}$/);
+    assert.ok(source.reverifyBy > source.verifiedAt, `${source.id}: reverifyBy must be later`);
+    assert.match(source.claim, /self-declares/i);
+  }
 });
 
 test("structured data is owned by public page segments, not the persistent layout", () => {

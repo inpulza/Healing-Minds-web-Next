@@ -77,15 +77,11 @@ const BillingPolicy = () => {
 
               <div className="space-y-6">
                 <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">{s('credit-card').heading}</h2>
-                <p className="text-gray-700 dark:text-gray-300">
-                  <RichText text={s('credit-card').paragraphs![0]} />
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  <RichText text={s('credit-card').paragraphs![1]} />
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  <RichText text={s('credit-card').paragraphs![2]} />
-                </p>
+                {s('credit-card').paragraphs!.map((paragraph, index) => (
+                  <p key={index} className="text-gray-700 dark:text-gray-300">
+                    <RichText text={paragraph} />
+                  </p>
+                ))}
               </div>
 
               <div className="space-y-6">

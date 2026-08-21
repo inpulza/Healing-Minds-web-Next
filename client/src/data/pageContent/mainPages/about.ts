@@ -24,7 +24,7 @@ export const aboutContent: BilingualPageContent = {
       },
       {
         key: 'heroBadges',
-        bullets: ['15+ years experience', 'Bilingual', 'Licensed Psychiatrist'],
+        bullets: ['Doctor of Medicine (MD)', 'Active Florida License ME165518', 'Adult Psychiatry Focus'],
       },
       {
         key: 'heroCta',
@@ -53,39 +53,38 @@ export const aboutContent: BilingualPageContent = {
       {
         key: 'biography',
         paragraphs: [
-          'My passion for **psychiatry** was born from a deep conviction: we all deserve to live with **mental clarity**, **emotional peace**, and renewed hope. For over **15 years**, I have had the privilege of accompanying people in their most vulnerable moments and witnessing their incredible transformations through **evidence-based treatment** and **compassionate care**.',
-          'As the daughter of immigrants and a **native Spanish speaker**, I deeply understand the unique challenges **Latino families** face when seeking **mental health care**. **Language barriers**, cultural differences, and stigma should not prevent someone from receiving the care they deserve. My **bilingual practice** ensures that every patient feels heard, understood, and respected in their preferred language, creating a bridge of trust that is essential for effective **psychiatric treatment**.',
+          'My work in **psychiatry** is guided by a deep conviction: everyone deserves care that supports **mental clarity**, **emotional well-being**, and renewed hope through an individualized, evidence-informed approach.',
+          'I provide **bilingual psychiatric care in English and Spanish** so patients can discuss their concerns, questions, and treatment in their preferred language. **Language barriers** and stigma should not prevent someone from receiving the care they deserve. My goal is for every patient to feel heard, understood, and respected throughout treatment.',
           'My philosophy is simple but powerful: **healing happens in relationship**. You are not a diagnosis; you are a complete person with a unique story, innate strengths, and unlimited potential for growth. My job is to walk with you on that journey toward **wellness** and **recovery**.',
           "My approach combines the latest advances in **psychiatric medicine** with time-honored principles of **therapeutic alliance**. Whether you're struggling with **anxiety**, **depression**, **ADHD**, **PTSD**, or **bipolar disorder**, I believe in creating a safe space where vulnerability becomes strength and challenges become opportunities for growth.",
-          "In my practice in **Naples, Florida**, I've witnessed countless stories of transformation. From the anxious professional who learned to manage their stress, to the mother who overcame postpartum depression, to the adult who found their voice again after trauma - each journey reminds me why I chose this calling. My commitment extends beyond traditional **medication management** to include **psychoeducation**, **lifestyle interventions**, and collaborative care planning that empowers you to be an active participant in your healing.",
+          'In my practice in **Naples, Florida**, care may include **medication management**, **psychoeducation**, discussion of lifestyle factors, and collaborative planning based on each person’s needs and goals.',
           "Every session is an opportunity to reclaim your narrative, to rediscover your resilience, and to build the life you deserve. My role as your **psychiatrist** is not just to diagnose and treat, but to walk alongside you as you navigate the path toward **mental wellness**, **emotional balance**, and renewed hope. Together, we'll create a treatment plan that honors your unique circumstances, respects your cultural background, and aligns with your personal goals for recovery and growth.",
         ],
       },
       {
         key: 'credentialsHeading',
         level: 3,
-        heading: 'Credentials and Training',
+        heading: 'Credentials and Focus Areas',
       },
       {
         key: 'credCertification',
         level: 3,
-        heading: 'Professional Certification',
-        paragraphs: ['Specializing in Adult Psychiatry'],
+        heading: 'Florida Medical License',
+        paragraphs: ['Active Florida medical license ME165518'],
       },
       {
         key: 'credEducation',
         level: 3,
-        heading: 'Medical Education',
+        heading: 'Medical Degree',
         paragraphs: [
           'Doctor of Medicine (M.D.)',
           'Psychiatric Residency Training',
-          'Specialized Training in Cultural Competency',
         ],
       },
       {
         key: 'credSpecialization',
         level: 3,
-        heading: 'Areas of Specialization',
+        heading: 'Areas of Focus',
         bullets: [
           'Anxiety Disorders',
           'Depression',
@@ -98,7 +97,7 @@ export const aboutContent: BilingualPageContent = {
         key: 'credLanguages',
         level: 3,
         heading: 'Languages',
-        paragraphs: ['Spanish (native)', 'English (fluent)'],
+        paragraphs: ['Bilingual care in English and Spanish'],
       },
       {
         key: 'processHeading',
@@ -175,7 +174,7 @@ export const aboutContent: BilingualPageContent = {
       },
       {
         key: 'heroBadges',
-        bullets: ['15+ años experiencia', 'Bilingüe', 'Psiquiatra Licenciada'],
+        bullets: ['Doctora en Medicina (MD)', 'Licencia Activa de Florida ME165518', 'Enfoque en Psiquiatría de Adultos'],
       },
       {
         key: 'heroCta',
@@ -204,39 +203,38 @@ export const aboutContent: BilingualPageContent = {
       {
         key: 'biography',
         paragraphs: [
-          'Mi pasión por la **psiquiatría** nació de una profunda convicción: todos merecemos vivir con **claridad mental**, **paz emocional** y esperanza renovada. Durante más de **15 años**, he tenido el privilegio de acompañar a personas en sus momentos más vulnerables y ser testigo de sus increíbles transformaciones a través del **tratamiento basado en evidencia** y **cuidado compasivo**.',
-          'Como hija de inmigrantes y **hablante nativa de español**, entiendo profundamente los desafíos únicos que enfrentan las **familias latinas** al buscar **atención de salud mental**. La **barrera del idioma**, las diferencias culturales y el estigma no deberían impedir que alguien reciba el cuidado que merece. Mi **práctica bilingüe** asegura que cada paciente se sienta escuchado, entendido y respetado en su idioma preferido, creando un puente de confianza que es esencial para un **tratamiento psiquiátrico** efectivo.',
+          'Mi trabajo en **psiquiatría** se guía por una convicción profunda: todas las personas merecen atención que apoye la **claridad mental**, el **bienestar emocional** y la esperanza renovada mediante un enfoque individualizado e informado por la evidencia.',
+          'Ofrezco **atención psiquiátrica bilingüe en inglés y español** para que los pacientes puedan hablar sobre sus inquietudes, preguntas y tratamiento en su idioma preferido. La **barrera del idioma** y el estigma no deberían impedir que alguien reciba el cuidado que merece. Mi objetivo es que cada paciente se sienta escuchado, entendido y respetado durante su tratamiento.',
           'Mi filosofía es simple pero poderosa: **la sanación sucede en relación**. No eres un diagnóstico; eres una persona completa con una historia única, fortalezas innatas y un potencial ilimitado para el crecimiento. Mi trabajo es caminar contigo en ese viaje hacia el **bienestar** y la **recuperación**.',
           'Mi enfoque combina los últimos avances en **medicina psiquiátrica** con principios consagrados de **alianza terapéutica**. Ya sea que estés luchando con **ansiedad**, **depresión**, **TDAH**, **TEPT** o **trastorno bipolar**, creo en crear un espacio seguro donde la vulnerabilidad se convierte en fortaleza y los desafíos se convierten en oportunidades de crecimiento.',
-          'En mi práctica en **Naples, Florida**, he sido testigo de innumerables historias de transformación. Desde el profesional ansioso que aprendió a manejar su estrés, hasta la madre que superó la depresión posparto, hasta la persona adulta que encontró su voz nuevamente después del trauma - cada viaje me recuerda por qué elegí esta vocación. Mi compromiso se extiende más allá del tradicional **manejo de medicamentos** para incluir **psicoeducación**, **intervenciones de estilo de vida** y planificación de cuidado colaborativo que te empodera a ser un participante activo en tu sanación.',
+          'En mi práctica en **Naples, Florida**, la atención puede incluir **manejo de medicamentos**, **psicoeducación**, conversación sobre factores de estilo de vida y planificación colaborativa según las necesidades y metas de cada persona.',
           'Cada sesión es una oportunidad para reclamar tu narrativa, redescubrir tu resistencia y construir la vida que mereces. Mi papel como tu **psiquiatra** no es solo diagnosticar y tratar, sino caminar a tu lado mientras navegas el camino hacia el **bienestar mental**, el **equilibrio emocional** y la esperanza renovada. Juntos, crearemos un plan de tratamiento que honre tus circunstancias únicas, respete tu trasfondo cultural y se alinee con tus metas personales de recuperación y crecimiento.',
         ],
       },
       {
         key: 'credentialsHeading',
         level: 3,
-        heading: 'Credenciales y Formación',
+        heading: 'Credenciales y Áreas de Enfoque',
       },
       {
         key: 'credCertification',
         level: 3,
-        heading: 'Certificación Profesional',
-        paragraphs: ['Especializada en Psiquiatría de Adultos'],
+        heading: 'Licencia Médica de Florida',
+        paragraphs: ['Licencia médica activa de Florida ME165518'],
       },
       {
         key: 'credEducation',
         level: 3,
-        heading: 'Educación Médica',
+        heading: 'Título Médico',
         paragraphs: [
           'Doctora en Medicina (M.D.)',
           'Residencia en Psiquiatría',
-          'Entrenamiento Especializado en Competencia Cultural',
         ],
       },
       {
         key: 'credSpecialization',
         level: 3,
-        heading: 'Áreas de Especialización',
+        heading: 'Áreas de Enfoque',
         bullets: [
           'Trastornos de Ansiedad',
           'Depresión',
@@ -249,7 +247,7 @@ export const aboutContent: BilingualPageContent = {
         key: 'credLanguages',
         level: 3,
         heading: 'Idiomas',
-        paragraphs: ['Español (nativo)', 'Inglés (fluido)'],
+        paragraphs: ['Atención bilingüe en inglés y español'],
       },
       {
         key: 'processHeading',

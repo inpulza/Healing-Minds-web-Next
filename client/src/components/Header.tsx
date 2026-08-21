@@ -337,7 +337,7 @@ const Header = () => {
                 <div className="w-5 h-5 lg:w-6 lg:h-6 min-w-[1.25rem] lg:min-w-[1.5rem] min-h-[1.25rem] lg:min-h-[1.5rem] rounded-full flex items-center justify-center transition-all duration-300 bg-green-500 flex-shrink-0">
                   <ArrowRight className="w-3 h-3 text-white" />
                 </div>
-                <span>{language === 'en' ? 'Book Now' : 'Reservar Ahora'}</span>
+                <span>{language === 'en' ? 'Request Appointment' : 'Solicitar Cita'}</span>
               </Button>
             </Link>
           </div>

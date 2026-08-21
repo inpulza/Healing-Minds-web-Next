@@ -9,7 +9,7 @@ import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
-import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
+import { practiceInfo, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -66,7 +66,7 @@ const LocationImmokalee = () => {
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
       servicesTitle: "Services for This Community",
-      insuranceTitle: "Accepted Insurance Plans",
+      insuranceTitle: "Insurance and Billing Questions",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
       bookNow: "Book Appointment",
@@ -74,8 +74,8 @@ const LocationImmokalee = () => {
       callNow: "Call Now",
       features: [
         {
-          title: "Convenient Location",
-          description: "Easily accessible from Immokalee with ample parking available"
+          title: "Naples Office Access",
+          description: "Check parking and access details when scheduling"
         },
         {
           title: "Modern Facilities", 
@@ -92,7 +92,7 @@ const LocationImmokalee = () => {
         "PTSD & Trauma Therapy",
         "Bipolar Disorder Treatment",
         "Medication Management",
-        "Telehealth Consultations"
+        "Telehealth by Request"
       ]
     },
     es: {
@@ -102,7 +102,7 @@ const LocationImmokalee = () => {
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
       servicesTitle: "Servicios para Esta Comunidad",
-      insuranceTitle: "Planes de Seguro Aceptados",
+      insuranceTitle: "Preguntas sobre Seguro y Facturación",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
       bookNow: "Reservar Cita",
@@ -110,8 +110,8 @@ const LocationImmokalee = () => {
       callNow: "Llamar Ahora",
       features: [
         {
-          title: "Ubicación Conveniente",
-          description: "Fácil acceso desde Immokalee con amplio estacionamiento disponible"
+          title: "Acceso a la Oficina de Naples",
+          description: "Confirme estacionamiento y acceso al programar"
         },
         {
           title: "Instalaciones Modernas",
@@ -128,7 +128,7 @@ const LocationImmokalee = () => {
         "Terapia de TEPT y Trauma", 
         "Tratamiento de Trastorno Bipolar",
         "Manejo de Medicamentos",
-        "Consultas de Telesalud"
+        "Telesalud por Solicitud"
       ]
     }
   };
@@ -228,7 +228,7 @@ const LocationImmokalee = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? '15+ Years Experience' : '15+ Años de Experiencia'}
+                          {language === 'en' ? 'Active Florida License ME165518' : 'Licencia Activa de Florida ME165518'}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
@@ -305,9 +305,9 @@ const LocationImmokalee = () => {
                   
                   {/* Key Stats */}
                   <div className="mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">15+</div>
+                    <div className="text-2xl sm:text-3xl font-bold mb-2 text-green-600">ME165518</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Years serving the Southwest Florida community with excellence' : 'Años sirviendo a la comunidad del Suroeste de Florida con excelencia'}
+                      {language === 'en' ? 'Active Florida medical license' : 'Licencia médica activa de Florida'}
                     </div>
                   </div>
 
@@ -421,8 +421,8 @@ const LocationImmokalee = () => {
                   id: 'anxiety',
                   title: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad',
                   description: language === 'en' 
-                    ? 'Expert care for panic attacks, social anxiety, and generalized anxiety disorder with evidence-based treatments.'
-                    : 'Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada con tratamientos basados en evidencia.',
+                    ? 'Psychiatric evaluation and individualized treatment planning for adults with anxiety symptoms.'
+                    : 'Evaluación psiquiátrica y planificación individualizada para adultos con síntomas de ansiedad.',
                   icon: Brain,
                   link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
                 },
@@ -430,8 +430,8 @@ const LocationImmokalee = () => {
                   id: 'depression',
                   title: language === 'en' ? 'Depression Treatment' : 'Tratamiento de Depresión',
                   description: language === 'en'
-                    ? 'Comprehensive care for major depression with personalized treatment plans and ongoing support.'
-                    : 'Atención integral para depresión mayor con planes de tratamiento personalizados y apoyo continuo.',
+                    ? 'Psychiatric evaluation and individualized treatment planning for adults with depression symptoms.'
+                    : 'Evaluación psiquiátrica y planificación individualizada para adultos con síntomas de depresión.',
                   icon: Sun,
                   link: language === 'en' ? '/services/depression-treatment' : '/es/servicios/tratamiento-depresion'
                 },
@@ -439,8 +439,8 @@ const LocationImmokalee = () => {
                   id: 'adhd',
                   title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
                   description: language === 'en'
-                    ? 'Specialized evaluation and treatment for adults 18 and older to improve focus and daily functioning.'
-                    : 'Evaluación especializada y tratamiento para adultos de 18 años en adelante para mejorar el enfoque y funcionamiento diario.',
+                    ? 'Psychiatric ADHD evaluation and individualized treatment planning for adults 18 and older.'
+                    : 'Evaluación psiquiátrica de TDAH y planificación individualizada para adultos de 18 años en adelante.',
                   icon: Smile,
                   link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
                 },
@@ -457,8 +457,8 @@ const LocationImmokalee = () => {
                   id: 'bipolar',
                   title: language === 'en' ? 'Bipolar Treatment' : 'Tratamiento Bipolar',
                   description: language === 'en'
-                    ? 'Expert mood stabilization to help achieve emotional balance and prevent future episodes.'
-                    : 'Estabilización experta del ánimo para lograr equilibrio emocional y prevenir episodios futuros.',
+                    ? 'Psychiatric evaluation and individualized treatment planning for adults with bipolar disorder.'
+                    : 'Evaluación psiquiátrica y planificación individualizada para adultos con trastorno bipolar.',
                   icon: Heart,
                   link: language === 'en' ? '/services/bipolar-treatment' : '/es/servicios/tratamiento-bipolar'
                 },
@@ -466,8 +466,8 @@ const LocationImmokalee = () => {
                   id: 'medication-management',
                   title: language === 'en' ? 'Medication Management' : 'Manejo de Medicamentos',
                   description: language === 'en'
-                    ? 'Expert psychiatric medication evaluation, monitoring, and adjustment with comprehensive safety assessments.'
-                    : 'Evaluación, monitoreo y ajuste experto de medicamentos psiquiátricos con evaluaciones de seguridad integrales.',
+                    ? 'Medication history, possible benefits, risks, side effects and monitoring needs are reviewed individually.'
+                    : 'El historial de medicamentos, posibles beneficios, riesgos, efectos secundarios y monitoreo se revisan individualmente.',
                   icon: User,
                   link: language === 'en' ? '/services/medication-management' : '/es/servicios/manejo-medicamentos'
                 }
@@ -802,8 +802,8 @@ const LocationImmokalee = () => {
                           </h4>
                           <p className="text-sm text-gray-600 font-body">
                             {language === 'en'
-                              ? 'Straight route via Immokalee Road and US-41 makes accessing specialized psychiatric care convenient from rural Immokalee'
-                              : 'Ruta directa vía Immokalee Road y US-41 hace conveniente el acceso a atención psiquiátrica especializada desde la zona rural de Immokalee'}
+                              ? 'Our only physical office is in Naples. Check live directions and traffic before traveling from Immokalee.'
+                              : 'Nuestra única oficina física está en Naples. Consulte la ruta en vivo y el tráfico antes de viajar desde Immokalee.'}
                           </p>
                         </div>
                       </div>
@@ -812,12 +812,12 @@ const LocationImmokalee = () => {
                         <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                         <div>
                           <h4 className="font-semibold text-green-800 mb-1">
-                            {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                            {language === 'en' ? 'Parking and Access Details' : 'Detalles de Estacionamiento y Acceso'}
                           </h4>
                           <p className="text-sm text-gray-600 font-body">
                             {language === 'en'
-                              ? 'Free, convenient parking available for all Immokalee patients visiting our mental health facility'
-                              : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Immokalee que visiten nuestras instalaciones de salud mental'}
+                              ? 'Check parking and access details with the office when scheduling your visit'
+                              : 'Confirme con la oficina los detalles de estacionamiento y acceso al programar su visita'}
                           </p>
                         </div>
                       </div>
@@ -846,8 +846,8 @@ const LocationImmokalee = () => {
                           </h4>
                           <p className="text-sm text-gray-600 font-body">
                             {language === 'en'
-                              ? 'Culturally sensitive psychiatric care available in both English and Spanish for our diverse Immokalee community'
-                              : 'Atención psiquiátrica culturalmente sensible disponible en inglés y español para nuestra diversa comunidad de Immokalee'}
+                              ? 'Bilingual psychiatric appointments may be requested in English or Spanish; the office confirms availability when scheduling.'
+                              : 'Se pueden solicitar citas psiquiátricas bilingües en inglés o español; la oficina confirma disponibilidad al programar.'}
                           </p>
                         </div>
                       </div>
@@ -874,9 +874,9 @@ const LocationImmokalee = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Community</span> Involvement in Immokalee</>
+                    <><span className="font-display italic text-green-700">Independent Local</span> Resources in Immokalee</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Immokalee</>
+                    <><span className="font-display italic text-green-700">Recursos Locales</span> Independientes en Immokalee</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -885,8 +885,8 @@ const LocationImmokalee = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Mental health is fundamental to building a thriving community. We proudly support Immokalee through our psychiatric care services and by recognizing the vital organizations that strengthen our rural community fabric.'
-                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Immokalee a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad rural.'}
+                  ? 'These independent local resources provide community information and services in Immokalee. Listings are informational only and do not imply partnership, endorsement, or referral.'
+                  : 'Estos recursos locales independientes ofrecen información y servicios comunitarios en Immokalee. La lista es solo informativa y no implica colaboración, respaldo ni referido.'}
               </p>
             </div>
             
@@ -903,8 +903,8 @@ const LocationImmokalee = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'For over 55 years, RCMA has provided comprehensive services to farmworker families in Immokalee. They operate childcare centers, charter schools, and community programs that serve over 7,000 children and families annually, promoting education, health, and economic stability.'
-                    : 'Por más de 55 años, RCMA ha proporcionado servicios integrales a familias de trabajadores agrícolas en Immokalee. Operan centros de cuidado infantil, escuelas charter y programas comunitarios que sirven a más de 7,000 niños y familias anualmente, promoviendo educación, salud y estabilidad económica.'}
+                    ? 'Education and community services for farmworker families offered by RCMA.'
+                    : 'Servicios educativos y comunitarios para familias de trabajadores agrícolas ofrecidos por RCMA.'}
                 </p>
 
                 <a
@@ -975,8 +975,8 @@ const LocationImmokalee = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Providing affordable housing solutions and comprehensive family support services to the Immokalee community. Their programs include housing assistance, family counseling, and community development initiatives that create stability and opportunity for local families.'
-                    : 'Proporcionando soluciones de vivienda asequible y servicios integrales de apoyo familiar a la comunidad de Immokalee. Sus programas incluyen asistencia de vivienda, consejería familiar e iniciativas de desarrollo comunitario que crean estabilidad y oportunidades para familias locales.'}
+                    ? 'Housing and family-support resources offered by Immokalee Housing & Family Services.'
+                    : 'Recursos de vivienda y apoyo familiar ofrecidos por Immokalee Housing & Family Services.'}
                 </p>
 
                 <a
@@ -993,7 +993,7 @@ const LocationImmokalee = () => {
                       <ArrowRight className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-left leading-tight flex-1 py-2">
-                      {language === 'en' ? 'Support Their Mission' : 'Apoyar Su Misión'}
+                      {language === 'en' ? 'Visit Official Site' : 'Visitar Sitio Oficial'}
                     </span>
                   </Button>
                 </a>
@@ -1011,12 +1011,12 @@ const LocationImmokalee = () => {
                   <Heart className="w-8 h-8 text-green-700" />
                 </div>
                 <h3 className="text-xl font-display font-bold mb-3 text-green-800">
-                  {language === 'en' ? 'Supporting Our Immokalee Community' : 'Apoyando Nuestra Comunidad de Immokalee'}
+                  {language === 'en' ? 'Psychiatric Care for Immokalee' : 'Atención Psiquiátrica para Immokalee'}
                 </h3>
                 <p className="text-gray-700 font-body leading-relaxed max-w-2xl mx-auto">
                   {language === 'en'
-                    ? 'Mental health is strengthened through community connection. We encourage our Immokalee patients to engage with local organizations that promote wellness, support, and community involvement.'
-                    : 'La salud mental se fortalece a través de la conexión comunitaria. Alentamos a nuestros pacientes de Immokalee a participar con organizaciones locales que promueven el bienestar, apoyo e involucramiento comunitario.'}
+                    ? 'Healing Minds provides psychiatric care for Immokalee adults from its Naples office. Patients may request telepsychiatry; the office confirms availability, clinical suitability, physical location and licensing case by case.'
+                    : 'Healing Minds ofrece atención psiquiátrica para adultos de Immokalee desde su oficina de Naples. Se puede solicitar telepsiquiatría; la oficina confirma disponibilidad, adecuación clínica, ubicación física y licencias caso por caso.'}
                 </p>
                 
                 {/* CTA Button - Added to complete the Bottom CTA section */}
@@ -1116,8 +1116,7 @@ const LocationImmokalee = () => {
                       {content.contactTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      Phone: (239) 423-0272<br />
-                      Fax: (239) 330-2073
+                      Phone: (239) 423-0272
                     </p>
                   </div>
                 </div>
@@ -1158,7 +1157,7 @@ const LocationImmokalee = () => {
                   <div className="text-center space-y-4">
                     <VideoIcon className="w-8 h-8 text-blue-600 mx-auto" />
                     <h3 className="text-lg font-bold text-blue-800">
-                      {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+                      {language === 'en' ? 'Request Telehealth' : 'Solicitar Telesalud'}
                     </h3>
                     <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
                   </div>

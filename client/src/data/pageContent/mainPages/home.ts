@@ -49,21 +49,21 @@ export const homeContent: BilingualPageContent = {
           'Trauma-Informed Care',
           'Medication Management',
           'Psychoeducation',
-          'Crisis Intervention',
+          'Psychiatric Evaluation',
           'Stress Management',
         ],
       },
       {
         key: 'insuranceHeading',
-        heading: 'Insurance **Plans** Accepted',
+        heading: 'Insurance & **Billing**',
         paragraphs: [
-          'We work with most major insurance providers to make quality mental health care accessible and affordable for our patients.',
+          'Participation and benefits vary by plan and service. Confirm current participation with our office and verify your specific benefits with your insurer before booking.',
         ],
       },
       {
         key: 'insuranceNote',
         paragraphs: [
-          "Don't see your insurance? Contact us to verify coverage for your specific plan.",
+          'Telehealth benefits must be verified separately. Self-pay or financial options may be evaluated case by case.',
         ],
       },
     ],
@@ -102,21 +102,21 @@ export const homeContent: BilingualPageContent = {
           'Atención Informada por Trauma',
           'Manejo de Medicamentos',
           'Psicoeducación',
-          'Intervención de Crisis',
+          'Evaluación Psiquiátrica',
           'Manejo del Estrés',
         ],
       },
       {
         key: 'insuranceHeading',
-        heading: '**Planes** de Seguro Aceptados',
+        heading: 'Seguro y **Facturación**',
         paragraphs: [
-          'Trabajamos con la mayoría de los principales proveedores de seguros para hacer que la atención de salud mental de calidad sea accesible y asequible para nuestros pacientes.',
+          'La participación y los beneficios varían según el plan y el servicio. Confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos con su aseguradora antes de reservar.',
         ],
       },
       {
         key: 'insuranceNote',
         paragraphs: [
-          '¿No ve su seguro? Contáctenos para verificar la cobertura de su plan específico.',
+          'Los beneficios de telesalud deben verificarse por separado. Las opciones de pago privado o ayuda financiera pueden evaluarse caso por caso.',
         ],
       },
     ],

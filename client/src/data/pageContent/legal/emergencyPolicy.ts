@@ -64,7 +64,7 @@ export const emergencyPolicyContent: BilingualPageContent = {
         key: 'action-4',
         paragraphs: [
           `4. David Lawrence Center (Collier County)`,
-          `Call **(239) 455-8500** for local crisis intervention services available 24/7.`,
+          `Call the crisis line at **(239) 352-4357 (239-DLC-HELP)**. Confirm current service details on the official emergency mental health services page.`,
         ],
       },
       {
@@ -163,7 +163,7 @@ export const emergencyPolicyContent: BilingualPageContent = {
         key: 'action-4',
         paragraphs: [
           `4. David Lawrence Center (Condado de Collier)`,
-          `Llame al **(239) 455-8500** para servicios locales de intervención en crisis disponibles 24/7.`,
+          `Llame a la línea de crisis al **(239) 352-4357 (239-DLC-HELP)**. Confirme los detalles vigentes del servicio en la página oficial de servicios de emergencia de salud mental.`,
         ],
       },
       {

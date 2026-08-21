@@ -22,7 +22,7 @@ export const contactContent: BilingualPageContent = {
       },
       {
         key: 'emailSubtext',
-        paragraphs: ['We respond within 24 hours'],
+        paragraphs: ['Response times vary; the office reviews messages during published business hours'],
       },
       {
         key: 'addressSubtext',
@@ -30,7 +30,15 @@ export const contactContent: BilingualPageContent = {
       },
       {
         key: 'insuranceLabel',
-        paragraphs: ['Insurance We Accept'],
+        paragraphs: ['Insurance and billing questions'],
+      },
+      {
+        key: 'insuranceDescription',
+        paragraphs: ['Participation and benefits vary by plan and service. Confirm current participation with our office and verify your specific benefits with your insurer before booking.'],
+      },
+      {
+        key: 'insuranceNote',
+        paragraphs: ['Self-pay or financial options may be evaluated case by case.'],
       },
       {
         key: 'infoTitle',
@@ -45,7 +53,7 @@ export const contactContent: BilingualPageContent = {
         bullets: [
           'Emergency services',
           'Suicide & Crisis Lifeline',
-          'David Lawrence Center 24-Hour Line',
+          'David Lawrence Centers Crisis Line',
         ],
       },
       {
@@ -67,7 +75,7 @@ export const contactContent: BilingualPageContent = {
       {
         key: 'formConsent',
         paragraphs: [
-          '* Required fields. By submitting this form, you consent to us contacting you about your inquiry. Your information is kept confidential and secure.',
+          '* Required fields. By submitting this form, you consent to us contacting you about your inquiry. We apply reasonable privacy and security safeguards under applicable policies and law.',
         ],
       },
       {
@@ -79,7 +87,7 @@ export const contactContent: BilingualPageContent = {
         level: 3,
         heading: 'Find Us on the **Map**',
         paragraphs: [
-          'Visit our Naples office conveniently located on Tamiami Trail. Easy access with ample parking available.',
+          'Visit our Naples office on Tamiami Trail. Check parking and access details when scheduling.',
         ],
       },
     ],
@@ -93,7 +101,7 @@ export const contactContent: BilingualPageContent = {
       },
       {
         key: 'emailSubtext',
-        paragraphs: ['Respondemos dentro de 24 horas'],
+        paragraphs: ['Los tiempos de respuesta varían; la oficina revisa los mensajes durante el horario publicado'],
       },
       {
         key: 'addressSubtext',
@@ -101,7 +109,15 @@ export const contactContent: BilingualPageContent = {
       },
       {
         key: 'insuranceLabel',
-        paragraphs: ['Seguros que Aceptamos'],
+        paragraphs: ['Preguntas sobre seguro y facturación'],
+      },
+      {
+        key: 'insuranceDescription',
+        paragraphs: ['La participación y los beneficios varían según el plan y el servicio. Confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos con su aseguradora antes de reservar.'],
+      },
+      {
+        key: 'insuranceNote',
+        paragraphs: ['Las opciones de pago privado o ayuda financiera pueden evaluarse caso por caso.'],
       },
       {
         key: 'infoTitle',
@@ -116,7 +132,7 @@ export const contactContent: BilingualPageContent = {
         bullets: [
           'Servicios de emergencia',
           'Línea de Vida de Suicidio y Crisis',
-          'Línea 24 Horas del Centro David Lawrence',
+          'Línea de Crisis de David Lawrence Centers',
         ],
       },
       {
@@ -138,7 +154,7 @@ export const contactContent: BilingualPageContent = {
       {
         key: 'formConsent',
         paragraphs: [
-          '* Campos requeridos. Al enviar este formulario, usted consiente que lo contactemos sobre su consulta. Su información se mantiene confidencial y segura.',
+          '* Campos requeridos. Al enviar este formulario, usted consiente que lo contactemos sobre su consulta. Aplicamos salvaguardas razonables de privacidad y seguridad conforme a políticas y leyes aplicables.',
         ],
       },
       {
@@ -150,7 +166,7 @@ export const contactContent: BilingualPageContent = {
         level: 3,
         heading: 'Encuéntranos en el **Mapa**',
         paragraphs: [
-          'Visite nuestra oficina de Naples convenientemente ubicada en Tamiami Trail. Fácil acceso con amplio estacionamiento disponible.',
+          'Visite nuestra oficina de Naples en Tamiami Trail. Confirme estacionamiento y acceso al programar.',
         ],
       },
     ],

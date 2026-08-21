@@ -18,7 +18,7 @@ export const patientRightsContent: BilingualPageContent = {
         ],
         bullets: [
           '**Respectful Treatment:** Receive respectful, compassionate, and dignified care at all times, regardless of race, national origin, religion, disability, or payment source.',
-          '**Complete Confidentiality:** Have your medical information kept confidential in accordance with HIPAA and Florida law. Florida provides enhanced privacy protections for mental health records, requiring your express written consent for most disclosures.',
+          '**Confidentiality under applicable law:** Have your medical information handled in accordance with applicable medical privacy law and the practice privacy notice. Florida law may provide additional protections for mental health records.',
           '**Informed Consent:** Receive clear, understandable information about your diagnosis, treatment options, risks and benefits of medications, and alternative treatments before giving consent.',
           '**Active Participation:** Participate actively in decisions about your treatment plan and have your preferences considered.',
           '**Right to Refuse Treatment:** Refuse any recommended treatment, including experimental procedures, with an understanding of the medical consequences of your decision.',
@@ -90,7 +90,7 @@ export const patientRightsContent: BilingualPageContent = {
         ],
         bullets: [
           '**Trato Respetuoso:** Recibir un trato respetuoso, compasivo y digno en todo momento, independientemente de su raza, origen nacional, religión, discapacidad o forma de pago.',
-          '**Confidencialidad Completa:** Mantener su información médica confidencial de acuerdo con HIPAA y la ley de Florida. Florida proporciona protecciones de privacidad mejoradas para registros de salud mental, requiriendo su consentimiento escrito expreso para la mayoría de las divulgaciones.',
+          '**Confidencialidad conforme a la ley aplicable:** Su información médica se maneja conforme a las leyes aplicables de privacidad médica y al aviso de privacidad de la práctica. La ley de Florida puede otorgar protecciones adicionales a los registros de salud mental.',
           '**Consentimiento Informado:** Recibir información clara y comprensible sobre su diagnóstico, opciones de tratamiento, riesgos y beneficios de los medicamentos, y tratamientos alternativos antes de dar su consentimiento.',
           '**Participación Activa:** Participar activamente en las decisiones sobre su plan de tratamiento y que sus preferencias sean consideradas.',
           '**Derecho a Rechazar Tratamiento:** Rechazar cualquier tratamiento recomendado, incluidos los procedimientos experimentales, comprendiendo las consecuencias médicas de su decisión.',

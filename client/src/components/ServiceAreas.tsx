@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from '@/lib/navigation';
 import { useLanguage } from '../contexts/LanguageContext';
-import { MapPin, Navigation, Clock, Users } from 'lucide-react';
+import { MapPin, Navigation, ClipboardCheck } from 'lucide-react';
 import southwestFloridaMap from '../assets/southwest-florida-map.webp';
 import southwestFloridaMap400 from '../assets/southwest-florida-map-400w.webp';
 import southwestFloridaMap600 from '../assets/southwest-florida-map-600w.webp';
@@ -17,56 +17,49 @@ const ServiceAreas: React.FC = () => {
   const serviceAreas = [
     {
       name: 'Naples, FL',
-      population: '22,088',
-      distance: language === 'en' ? 'Main Office' : 'Oficina Principal',
-      coordinates: [26.1420, -81.7948] as [number, number],
+      status: language === 'en' ? 'Only physical office' : 'Única oficina física',
+      detail: language === 'en' ? 'Naples location' : 'Ubicación en Naples',
       isMainOffice: true,
       path: locationPath('psychiatrist-naples', 'psiquiatra-naples')
     },
     {
-      name: 'Marco Island, FL', 
-      population: '17,963',
-      distance: language === 'en' ? '20 min drive' : '20 min en auto',
-      coordinates: [25.9412, -81.7273] as [number, number],
+      name: 'Marco Island, FL',
+      status: language === 'en' ? 'Community information' : 'Información comunitaria',
+      detail: language === 'en' ? 'Office confirms options' : 'La oficina confirma opciones',
       isMainOffice: false,
       path: locationPath('psychiatrist-marco-island', 'psiquiatra-marco-island')
     },
     {
       name: 'Bonita Springs, FL',
-      population: '57,755', 
-      distance: language === 'en' ? '25 min drive' : '25 min en auto',
-      coordinates: [26.3398, -81.7787] as [number, number],
+      status: language === 'en' ? 'Community information' : 'Información comunitaria',
+      detail: language === 'en' ? 'Office confirms options' : 'La oficina confirma opciones',
       isMainOffice: false,
       path: locationPath('psychiatrist-bonita-springs', 'psiquiatra-bonita-springs')
     },
     {
       name: 'Estero, FL',
-      population: '36,939',
-      distance: language === 'en' ? '30 min drive' : '30 min en auto',
-      coordinates: [26.4376, -81.8067] as [number, number],
+      status: language === 'en' ? 'Community information' : 'Información comunitaria',
+      detail: language === 'en' ? 'Office confirms options' : 'La oficina confirma opciones',
       isMainOffice: false,
       path: locationPath('psychiatrist-estero', 'psiquiatra-estero')
     }
   ];
 
-  // Center coordinates for Southwest Florida view
-  const mapCenter: [number, number] = [26.1420, -81.7948]; // Naples center
-
   const stats = [
     {
-      icon: Users,
-      value: '150,000+',
-      label: language === 'en' ? 'Residents Served' : 'Residentes'
-    },
-    {
       icon: MapPin,
-      value: '4',
-      label: language === 'en' ? 'Service Areas' : 'Áreas'
+      value: '1',
+      label: language === 'en' ? 'Physical office' : 'Oficina física'
     },
     {
-      icon: Clock,
-      value: '30min',
-      label: language === 'en' ? 'Max Drive Time' : 'Tiempo Máx'
+      icon: Navigation,
+      value: '4',
+      label: language === 'en' ? 'Community guides' : 'Guías comunitarias'
+    },
+    {
+      icon: ClipboardCheck,
+      value: language === 'en' ? 'By request' : 'A solicitud',
+      label: language === 'en' ? 'Telehealth review' : 'Revisión de telesalud'
     }
   ];
 
@@ -76,14 +69,14 @@ const ServiceAreas: React.FC = () => {
         <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4 sm:mb-6" data-testid="service-areas-title">
             {language === 'en' 
-              ? <>Serving <span className="font-display italic text-green-700">Southwest</span> Florida</>
-              : <>Sirviendo el <span className="font-display italic text-green-700">Suroeste</span> de Florida</>
+              ? <>Information for <span className="font-display italic text-green-700">Southwest</span> Florida</>
+              : <>Información para el <span className="font-display italic text-green-700">Suroeste</span> de Florida</>
             }
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed" data-testid="service-areas-description">
             {language === 'en'
-              ? 'Quality psychiatric care delivered across Collier County and surrounding areas. We bring professional mental health services to your community.'
-              : 'Atención psiquiátrica de calidad entregada en el Condado de Collier y áreas circundantes. Llevamos servicios profesionales de salud mental a su comunidad.'
+              ? 'Healing Minds Psychiatry has one physical office in Naples. These pages explain how residents of nearby communities can request care; travel, availability and telehealth eligibility are confirmed case by case.'
+              : 'Healing Minds Psychiatry tiene una sola oficina física en Naples. Estas páginas explican cómo los residentes de comunidades cercanas pueden solicitar atención; el traslado, la disponibilidad y la elegibilidad para telesalud se confirman caso por caso.'
             }
           </p>
         </div>
@@ -117,7 +110,9 @@ const ServiceAreas: React.FC = () => {
                       ${assetUrl(southwestFloridaMap)} 800w
                     `}
                     sizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"
-                    alt="Southwest Florida service area map showing Naples, Marco Island, Bonita Springs, and Estero with psychiatric care coverage locations"
+                    alt={language === 'en'
+                      ? 'Map of Southwest Florida showing the Naples office and selected nearby communities'
+                      : 'Mapa del suroeste de Florida con la oficina de Naples y comunidades cercanas seleccionadas'}
                     className="w-full h-full object-cover rounded-xl sm:rounded-2xl"
                     width={800}
                     height={600}
@@ -176,7 +171,7 @@ const ServiceAreas: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Service Coverage Circle around Naples */}
+                  {/* Visual reference around the Naples office */}
                   <div className="absolute" style={{top: '68%', left: '37%', transform: 'translate(-50%, -50%)'}}>
                     <div className="w-32 h-32 sm:w-44 sm:h-44 lg:w-52 lg:h-52 rounded-full bg-green-500 bg-opacity-10 border border-green-400 border-opacity-20"></div>
                   </div>
@@ -211,7 +206,7 @@ const ServiceAreas: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                   <span className="text-sm font-medium text-gray-700">
-                    {language === 'en' ? 'Service Areas' : 'Áreas de Servicio'}
+                    {language === 'en' ? 'Nearby communities' : 'Comunidades cercanas'}
                   </span>
                 </div>
               </div>
@@ -235,14 +230,16 @@ const ServiceAreas: React.FC = () => {
                       <div>
                         <h4 className="text-base sm:text-lg font-bold text-green-800 mb-1">{area.name}</h4>
                         <p className="text-sm sm:text-base text-gray-600">
-                          {language === 'en' ? `Population: ${area.population}` : `Población: ${area.population}`}
+                          {area.status}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm sm:text-base font-semibold text-green-600">{area.distance}</div>
+                      <div className="text-sm sm:text-base font-semibold text-green-600">{area.detail}</div>
                       <div className="text-xs sm:text-sm text-gray-500">
-                        {language === 'en' ? 'from office' : 'desde oficina'}
+                        {area.isMainOffice
+                          ? (language === 'en' ? 'verified location' : 'ubicación verificada')
+                          : (language === 'en' ? 'case by case' : 'caso por caso')}
                       </div>
                     </div>
                   </div>
@@ -263,14 +260,14 @@ const ServiceAreas: React.FC = () => {
                   <p className="text-sm sm:text-base text-gray-700 mb-2 leading-relaxed">
                     {practiceProfile.addressDisplay}<br />
                     {language === 'en' 
-                      ? 'Serving all surrounding communities' 
-                      : 'Sirviendo todas las comunidades circundantes'
+                      ? 'Information for nearby communities'
+                      : 'Información para comunidades cercanas'
                     }
                   </p>
                   <p className="text-xs sm:text-sm text-gray-600">
                     {language === 'en'
-                      ? 'Telehealth services available for all service areas'
-                      : 'Servicios de telesalud disponibles para todas las áreas de servicio'
+                      ? 'Telehealth may be requested. The office confirms patient location, licensing, clinical suitability and availability for each appointment.'
+                      : 'Puede solicitarse telesalud. La oficina confirma la ubicación del paciente, la licencia aplicable, la idoneidad clínica y la disponibilidad para cada cita.'
                     }
                   </p>
                 </div>

@@ -16,7 +16,7 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'heroDescription',
         paragraphs: [
-          `Dr. Melva Reve offers evidence-based psychiatric care for anxiety, depression, ADHD, PTSD, and more, in person in Naples and by telehealth when appropriate throughout Florida.`,
+          `Dr. Melva Reve offers psychiatric care for anxiety, depression, ADHD, PTSD, and more at the Naples office. Patients may request telehealth; the office confirms availability, clinical suitability, physical location and applicable licensing case by case.`,
         ],
       },
       {
@@ -28,7 +28,7 @@ export const servicesIndexContent: BilingualPageContent = {
         bullets: [
           `Naples, FL 34103`,
           `Mon–Fri, flexible hours`,
-          `In-person & telehealth`,
+          `In-person care; telehealth by request`,
           `Bilingual EN/ES`,
         ],
       },
@@ -66,26 +66,26 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'approach-4',
         level: 3,
-        heading: `In-Person & Telehealth Options`,
+        heading: `In-Person Care and Telehealth Requests`,
         paragraphs: [
-          `Flexible care delivery — visit our Naples office or connect securely online. Telehealth is available across Florida for maximum convenience.`,
+          `Visit the Naples office or request a secure video appointment. The office confirms availability, clinical suitability, physical location and applicable licensing case by case.`,
         ],
       },
       {
         key: 'insuranceHeading',
         heading: `Insurance & **Getting Started**`,
         paragraphs: [
-          `We accept most major insurance plans and verify your benefits before your first appointment so there are no billing surprises. Self-pay rates and payment plans are available for uninsured patients.`,
+          `Participation and benefits vary by plan and service. Confirm current participation with our office and verify your specific benefits, including telehealth, with your insurer before booking.`,
         ],
       },
       {
         key: 'insuranceBullets',
         bullets: [
-          `Medicare accepted`,
-          `Most major commercial insurance plans`,
-          `Telehealth appointments covered by most plans`,
+          `Participation varies by plan and service`,
+          `Confirm current participation with the office`,
+          `Verify telehealth benefits with your insurer`,
           `Good Faith Estimates provided for self-pay`,
-          `Flexible payment plans available`,
+          `Financial options may be evaluated case by case`,
         ],
       },
       {
@@ -107,9 +107,9 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'expect-2',
         level: 3,
-        heading: `Initial Evaluation (40–60 min)`,
+        heading: `Initial Evaluation`,
         paragraphs: [
-          `A comprehensive assessment of your mental health history, current symptoms, medications, and treatment goals.`,
+          `A comprehensive assessment of your mental health history, current symptoms, medications, and treatment goals. The office confirms appointment length when scheduling.`,
         ],
       },
       {
@@ -123,9 +123,9 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'expect-4',
         level: 3,
-        heading: `Ongoing Follow-Up Care`,
+        heading: `Follow-Up When Clinically Appropriate`,
         paragraphs: [
-          `Regular 20–30 min follow-up appointments to monitor progress, adjust treatment, and support your recovery.`,
+          `If follow-up is recommended, the office confirms availability, modality and appointment length when scheduling.`,
         ],
       },
       {
@@ -144,7 +144,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `What psychiatric conditions do you treat at Healing Minds?`,
         paragraphs: [
-          `Dr. Melva Reve provides expert care for anxiety disorders, depression, ADHD in adults 18 and older, PTSD, bipolar disorder, and medication management. Each treatment plan is personalized to your symptoms, history, and goals.`,
+          `Dr. Melva Reve evaluates anxiety disorders, depression, ADHD in adults 18 and older, PTSD and bipolar disorder, and provides medication management. Treatment planning follows the individual clinical assessment.`,
         ],
       },
       {
@@ -152,7 +152,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `Do you accept insurance for psychiatric services?`,
         paragraphs: [
-          `Yes. We accept most major insurance plans including Medicare, Aetna, Cigna, United Healthcare, and others. Self-pay rates and flexible payment plans are also available. We verify your benefits before the first appointment.`,
+          `Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your mental-health, telehealth and cost-sharing benefits directly with your insurer. Self-pay or financial options may be evaluated case by case.`,
         ],
       },
       {
@@ -168,7 +168,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `Is telehealth available for psychiatric care?`,
         paragraphs: [
-          `Yes. Healing Minds offers secure, HIPAA-compliant telehealth appointments throughout Florida. Telehealth is especially convenient for follow-up visits, medication management, and patients outside the Naples area.`,
+          `You may request telehealth through a secure video platform. The office confirms availability, clinical suitability, patient location and applicable licensing requirements case by case.`,
         ],
       },
       {
@@ -191,7 +191,7 @@ export const servicesIndexContent: BilingualPageContent = {
         key: 'ctaHeading',
         heading: `Serving Naples and **Southwest Florida**`,
         paragraphs: [
-          `Healing Minds Psychiatry serves patients from Naples, Bonita Springs, Marco Island, Estero, Fort Myers, and surrounding communities in Collier and Lee counties. Telehealth extends our reach to all of Florida.`,
+          `Healing Minds Psychiatry has one physical office in Naples and serves adults from surrounding communities. Patients may request telehealth; the office confirms clinical suitability, physical location, licensing and availability case by case.`,
         ],
       },
       {
@@ -218,7 +218,7 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'heroDescription',
         paragraphs: [
-          `La Dra. Melva Reve ofrece atención psiquiátrica basada en evidencia para ansiedad, depresión, TDAH, TEPT y más, en persona en Naples y por telesalud cuando sea apropiado en toda Florida.`,
+          `La Dra. Melva Reve ofrece atención psiquiátrica para ansiedad, depresión, TDAH, TEPT y más en la oficina de Naples. Los pacientes pueden solicitar telesalud; la oficina confirma disponibilidad, adecuación clínica, ubicación física y licencias aplicables caso por caso.`,
         ],
       },
       {
@@ -229,8 +229,8 @@ export const servicesIndexContent: BilingualPageContent = {
         key: 'quickInfo',
         bullets: [
           `Naples, FL 34103`,
-          `Lun–Vie, horarios flexibles`,
-          `Presencial y telesalud`,
+          `Lun–Vie, disponibilidad confirmada por la oficina`,
+          `Atención presencial; telesalud por solicitud`,
           `Bilingüe EN/ES`,
         ],
       },
@@ -268,26 +268,26 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'approach-4',
         level: 3,
-        heading: `Opciones Presenciales y de Telesalud`,
+        heading: `Atención Presencial y Solicitudes de Telesalud`,
         paragraphs: [
-          `Atención flexible: visite nuestra oficina en Naples o conéctese de forma segura en línea. La telesalud está disponible en toda Florida para máxima conveniencia.`,
+          `Puede solicitar una cita presencial en Naples o por video seguro. La oficina confirma modalidad, ubicación, licencias, adecuación clínica y disponibilidad caso por caso.`,
         ],
       },
       {
         key: 'insuranceHeading',
         heading: `Seguro y **Cómo Comenzar**`,
         paragraphs: [
-          `Aceptamos la mayoría de los planes de seguro principales y verificamos sus beneficios antes de su primera cita para que no haya sorpresas de facturación. Las tarifas de pago personal y los planes de pago están disponibles para pacientes sin seguro.`,
+          `La participación y los beneficios varían según el plan y el servicio. Confirme la participación vigente con nuestra oficina y verifique con su aseguradora sus beneficios específicos, incluida la telesalud, antes de reservar.`,
         ],
       },
       {
         key: 'insuranceBullets',
         bullets: [
-          `Se acepta Medicare`,
-          `La mayoría de los planes de seguro comerciales principales`,
-          `Citas de telesalud cubiertas por la mayoría de los planes`,
+          `La participación varía según el plan y el servicio`,
+          `Confirme la participación vigente con la oficina`,
+          `Verifique los beneficios de telesalud con su aseguradora`,
           `Estimados de buena fe para pago personal`,
-          `Planes de pago flexibles disponibles`,
+          `Las opciones financieras pueden evaluarse caso por caso`,
         ],
       },
       {
@@ -309,9 +309,9 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'expect-2',
         level: 3,
-        heading: `Evaluación Inicial (40–60 min)`,
+        heading: `Evaluación Inicial`,
         paragraphs: [
-          `Una evaluación integral de su historial de salud mental, síntomas actuales, medicamentos y objetivos de tratamiento.`,
+          `Una evaluación integral de su historial de salud mental, síntomas actuales, medicamentos y objetivos de tratamiento. La oficina confirma la duración al programar.`,
         ],
       },
       {
@@ -325,9 +325,9 @@ export const servicesIndexContent: BilingualPageContent = {
       {
         key: 'expect-4',
         level: 3,
-        heading: `Atención de Seguimiento Continua`,
+        heading: `Seguimiento Cuando Sea Clínicamente Apropiado`,
         paragraphs: [
-          `Citas de seguimiento regulares de 20–30 min para monitorear el progreso, ajustar el tratamiento y apoyar su recuperación.`,
+          `Si se recomienda seguimiento, la oficina confirma disponibilidad, modalidad y duración al programar.`,
         ],
       },
       {
@@ -346,7 +346,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `¿Qué condiciones psiquiátricas trata Healing Minds?`,
         paragraphs: [
-          `La Dra. Melva Reve ofrece atención experta para trastornos de ansiedad, depresión, TDAH en adultos de 18 años en adelante, TEPT, trastorno bipolar y manejo de medicamentos. Cada plan de tratamiento es personalizado según sus síntomas, historial y objetivos.`,
+          `La Dra. Melva Reve evalúa trastornos de ansiedad, depresión, TDAH en adultos de 18 años en adelante, TEPT y trastorno bipolar, y ofrece manejo de medicamentos. La planificación sigue la evaluación clínica individual.`,
         ],
       },
       {
@@ -354,7 +354,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `¿Aceptan seguro médico para servicios psiquiátricos?`,
         paragraphs: [
-          `Sí. Aceptamos la mayoría de los planes de seguro principales, incluyendo Medicare, Aetna, Cigna, United Healthcare y otros. También hay tarifas de pago personal y planes de pago flexibles disponibles. Verificamos sus beneficios antes de la primera cita.`,
+          `La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique directamente con su aseguradora los beneficios de salud mental, telesalud y costos compartidos. Las opciones de pago privado o ayuda financiera pueden evaluarse caso por caso.`,
         ],
       },
       {
@@ -370,7 +370,7 @@ export const servicesIndexContent: BilingualPageContent = {
         level: 3,
         heading: `¿Está disponible la telesalud para atención psiquiátrica?`,
         paragraphs: [
-          `Sí. Healing Minds ofrece citas de telesalud seguras y conformes con HIPAA en toda Florida. La telesalud es especialmente conveniente para citas de seguimiento, manejo de medicamentos y pacientes fuera del área de Naples.`,
+          `Puede solicitar telesalud mediante una plataforma de video segura. La oficina confirma disponibilidad, adecuación clínica, ubicación del paciente y requisitos de licencia aplicables caso por caso.`,
         ],
       },
       {
@@ -393,7 +393,7 @@ export const servicesIndexContent: BilingualPageContent = {
         key: 'ctaHeading',
         heading: `Atendiendo Naples y el **Suroeste de Florida**`,
         paragraphs: [
-          `Healing Minds Psychiatry atiende a pacientes de Naples, Bonita Springs, Marco Island, Estero, Fort Myers y comunidades cercanas en los condados de Collier y Lee. La telesalud extiende nuestro alcance a toda Florida.`,
+          `Healing Minds Psychiatry atiende a adultos de Naples y comunidades cercanas de los condados de Collier y Lee. Los adultos en Florida pueden solicitar telesalud; la oficina confirma elegibilidad y disponibilidad caso por caso.`,
         ],
       },
       {

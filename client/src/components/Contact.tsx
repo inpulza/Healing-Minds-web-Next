@@ -12,23 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import CharmHealthBooking from '@/components/CharmHealthBooking';
 import GoogleMapsEmbed from '@/components/GoogleMapsEmbed';
-import OptimizedImage from '@/components/OptimizedImage';
-import { Phone, Mail, MapPin, AlertTriangle } from 'lucide-react';
+import { Phone, Mail, MapPin, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { practiceProfile } from '@shared/practice-profile';
-import aetnaLogo from '../assets/insurance-aetna.webp';
-import ambetterLogo from '../assets/insurance-ambetter.webp';
-import cignaLogo from '../assets/insurance-cigna.webp';
-import medicareLogo from '../assets/insurance-medicare.webp';
-import firstHealthLogo from '../assets/insurance-first-health.webp';
-import medicaidLogo from '../assets/insurance-medicaid.webp';
-import floridaMedicaidLogo from '../assets/insurance-florida-medicaid.webp';
-import champvaLogo from '../assets/insurance-champva.webp';
-import sunshineHealthLogo from '../assets/insurance-sunshine.webp';
-import avmedLogo from '../assets/insurance-avmed.webp';
-import wellcareLogo from '../assets/insurance-wellcare.webp';
-import doctorsHealthcareLogo from '@assets/3_1755868276797.webp';
-import unitedHealthcareLogo from '@assets/8_1755868276798.webp';
-import oscarLogo from '@assets/10_1755868276798.webp';
 import { contactContent } from '@/data/pageContent/mainPages/contact';
 import { renderRichText } from '@/components/RichText';
 
@@ -155,8 +140,8 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
       toast({
         title: language === 'en' ? 'Success!' : '¡Éxito!',
         description: language === 'en' 
-          ? 'Thank you for your message! We will get back to you within 24 hours.'
-          : '¡Gracias por su mensaje! Le responderemos dentro de 24 horas.',
+          ? 'Thank you for your message. The office will review it during published business hours. For an emergency, call 911 or 988.'
+          : 'Gracias por su mensaje. La oficina lo revisará durante el horario publicado. En una emergencia, llame al 911 o al 988.',
       });
 
       // Reset form
@@ -210,23 +195,6 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
     }
   ];
 
-  const insuranceLogos = [
-    { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
-    { src: unitedHealthcareLogo, alt: 'United Healthcare', name: 'United Healthcare' },
-    { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
-    { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
-    { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
-    { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' },
-    { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
-    { src: oscarLogo, alt: 'Oscar Health', name: 'Oscar' },
-    { src: wellcareLogo, alt: 'WellCare', name: 'WellCare' },
-    { src: sunshineHealthLogo, alt: 'Sunshine Health', name: 'Sunshine Health' },
-    { src: avmedLogo, alt: 'AvMed', name: 'AvMed' },
-    { src: doctorsHealthcareLogo, alt: 'Doctors Healthcare Plans', name: 'Doctors Healthcare' },
-    { src: champvaLogo, alt: 'CHAMPVA', name: 'CHAMPVA' },
-    { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' }
-  ];
-
   return (
     <section id="contact" className="pt-12 pb-20 bg-green-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-7 lg:px-8">
@@ -239,30 +207,20 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
           </p>
         </div>
 
-        {/* Insurance Section */}
-        <div className="mb-12">
-          <p className="text-center text-xs text-gray-500 mb-4 font-body uppercase tracking-wide">
+        {/* Insurance and billing guidance */}
+        <div className="mb-12 mx-auto max-w-4xl rounded-2xl border border-green-100 bg-white p-6 sm:p-8" data-testid="contact-insurance-billing-guidance">
+          <div className="flex items-center justify-center gap-3 text-center">
+            <ShieldCheck className="h-6 w-6 text-green-700" aria-hidden="true" />
+            <p className="text-sm font-semibold text-green-900 font-body uppercase tracking-wide">
             {section('insuranceLabel').paragraphs![0]}
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
-            {insuranceLogos.map((logo, index) => (
-              <div 
-                key={index} 
-                className="flex items-center justify-center"
-                data-testid={`contact-insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-              >
-                <OptimizedImage
-                  src={logo.src}
-                  alt={logo.alt}
-                  className="h-12 sm:h-14 md:h-16 w-auto object-contain filter grayscale opacity-70"
-                  width={114}
-                  height={64}
-                  priority={false}
-                  sizes="(max-width: 639px) 86px, (max-width: 767px) 100px, 114px"
-                />
-              </div>
-            ))}
+            </p>
           </div>
+          <p className="mt-3 text-center text-sm leading-relaxed text-gray-600">
+            {section('insuranceDescription').paragraphs![0]}
+          </p>
+          <p className="mt-2 text-center text-sm leading-relaxed text-gray-600">
+            {section('insuranceNote').paragraphs![0]}
+          </p>
         </div>
 
         <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-10 lg:gap-12">
@@ -334,7 +292,7 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
                   <div className="space-y-1 text-sm">
                     <div><strong>911</strong> - {section('emergency').bullets![0]}</div>
                     <div><strong>988</strong> - {section('emergency').bullets![1]}</div>
-                    <div><strong>(239) 455-8500</strong> - {section('emergency').bullets![2]}</div>
+                    <div><strong>(239) 352-4357</strong> - {section('emergency').bullets![2]}</div>
                   </div>
                 </div>
               </div>

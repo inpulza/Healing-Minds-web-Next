@@ -140,8 +140,8 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
       toast({
         title: language === 'en' ? 'Success!' : '¡Éxito!',
         description: language === 'en' 
-          ? 'Thank you for your message! We will get back to you within 24 hours.'
-          : '¡Gracias por su mensaje! Le responderemos dentro de 24 horas.',
+          ? 'Thank you for your message. The office will review it during published business hours. For an emergency, call 911 or 988.'
+          : 'Gracias por su mensaje. La oficina lo revisará durante el horario publicado. En una emergencia, llame al 911 o al 988.',
       });
 
       // Reset form

@@ -9,3 +9,4 @@ export const staticReviews = snapshot.reviews.map((review) => ({
 }));
 
 export const staticStats = snapshot.stats;
+export const staticReviewsFetchedAt = snapshot.fetchedAt;

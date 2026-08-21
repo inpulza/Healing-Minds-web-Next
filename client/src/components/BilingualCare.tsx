@@ -11,7 +11,7 @@ const BilingualCare = () => {
 
   const features = [
     {
-      title: language === 'en' ? 'Native Spanish and English' : 'Español e Inglés Nativo',
+      title: language === 'en' ? 'Bilingual Care in English and Spanish' : 'Atención Bilingüe en Inglés y Español',
       description: language === 'en' 
         ? 'Consultations conducted in both Spanish and English for optimal communication'
         : 'Consultas realizadas tanto en español como en inglés para una comunicación óptima',
@@ -60,8 +60,8 @@ const BilingualCare = () => {
             
             <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed font-body" data-testid="bilingual-description">
               {language === 'en' 
-                ? 'Dr. Reve understands that mental health care is most effective when provided in your native language. As a fluent Spanish speaker, she offers comprehensive psychiatric services to the Hispanic community in Naples with cultural sensitivity and understanding.'
-                : 'La Dra. Reve entiende que la atención de salud mental es más efectiva cuando se proporciona en su idioma nativo. Como hablante fluida de español, ofrece servicios psiquiátricos integrales a la comunidad hispana en Naples con sensibilidad y comprensión cultural.'
+                ? 'Dr. Reve provides bilingual psychiatric care in English and Spanish, so patients can discuss their concerns and treatment in their preferred language.'
+                : 'La Dra. Reve ofrece atención psiquiátrica bilingüe en inglés y español para que los pacientes puedan hablar sobre sus inquietudes y tratamiento en su idioma preferido.'
               }
             </p>
             

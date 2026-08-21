@@ -428,12 +428,13 @@ test("verified social profiles stay consistent in UI and the route-owned SSR ide
   const physician = graph["@graph"]?.find((node) => node["@id"]?.endsWith("#dr-melva-reve"));
   expect(organization?.sameAs).toEqual([
     profiles.facebook,
-    profiles.instagram,
-    profiles.tiktok,
     profiles.youtube,
   ]);
   expect(physician?.sameAs).toEqual([
     "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
+    profiles.linkedin,
+    profiles.instagram,
+    profiles.tiktok,
   ]);
   expect(organization?.address).toEqual({
     "@type": "PostalAddress",
@@ -825,78 +826,20 @@ test("route scroll respects reduced motion without a smooth-scroll runtime", asy
     .toBe("smooth");
 });
 
-test("mobile home buffers one responsive logo without blanking the active slide", async ({
+test("mobile home shows neutral insurance guidance without carrier imagery", async ({
   page,
   isMobile,
 }) => {
-  test.skip(!isMobile, "mobile carousel contract");
+  test.skip(!isMobile, "mobile insurance guidance contract");
   const runtimeErrors = collectUnexpectedRuntimeErrors(page);
-
-  let releaseSecondLogo!: () => void;
-  const secondLogoGate = new Promise<void>((resolve) => {
-    releaseSecondLogo = resolve;
-  });
-  let delayedSecondLogo = false;
-  await page.route("**/_next/image?**", async (route) => {
-    const decodedUrl = decodeURIComponent(route.request().url());
-    if (decodedUrl.includes("8_1755868276798")) {
-      delayedSecondLogo = true;
-      await secondLogoGate;
-      await route.fulfill({
-        status: 200,
-        contentType: "image/webp",
-        body: "invalid-image",
-      });
-      return;
-    }
-    await route.fallback();
-  });
 
   await page.goto("/");
   await rejectInitialConsent(page);
-
-  const carousel = page.getByTestId("mobile-insurance-carousel");
-  await carousel.scrollIntoViewIfNeeded();
-  await expect(carousel).toBeVisible();
-  await expect
-    .poll(() =>
-      carousel.locator('[data-active="true"] img').evaluate((image) =>
-        image.complete && image.naturalWidth > 0 && Number(getComputedStyle(image).opacity) > 0.99,
-      ),
-    )
-    .toBe(true);
-  await expect(carousel.locator('[data-active="true"] img')).toHaveAttribute(
-    "src",
-    /\/_next\/image\?/,
-  );
-
-  const activeLogo = carousel.locator('[data-active="true"]');
-  const firstLogoTestId = await activeLogo.getAttribute("data-testid");
-  try {
-    await expect.poll(() => delayedSecondLogo).toBe(true);
-    await expect(carousel.locator("img")).toHaveCount(2);
-    await page.waitForTimeout(2_250);
-    await expect(activeLogo).toHaveAttribute("data-testid", firstLogoTestId!);
-    await expect
-      .poll(() =>
-        activeLogo.locator("img").evaluate((image) =>
-          image.complete && image.naturalWidth > 0 && Number(getComputedStyle(image).opacity) > 0.99,
-        ),
-      )
-      .toBe(true);
-  } finally {
-    releaseSecondLogo();
-  }
-
-  await expect
-    .poll(() => activeLogo.getAttribute("data-testid"), { timeout: 5_000 })
-    .toBe("insurance-logo-medicare");
-  await expect
-    .poll(() => carousel.locator("img").count())
-    .toBeLessThanOrEqual(3);
-  await expect
-    .poll(() => activeLogo.locator("img").evaluate((image) => image.naturalWidth))
-    .toBeGreaterThan(0);
+  const guidance = page.getByTestId("insurance-billing-guidance");
+  await guidance.scrollIntoViewIfNeeded();
+  await expect(guidance).toBeVisible();
+  await expect(guidance.locator("img")).toHaveCount(0);
+  await expect(guidance).toContainText(/participation and benefits vary/i);
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 
@@ -995,38 +938,26 @@ test("mobile location hero is present before hydration chunks finish", async ({
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 
-test("mobile insurance srcsets cover the rendered width at the device DPR", async ({
+test("contact and location insurance guidance contain no carrier images", async ({
   page,
   isMobile,
 }) => {
-  test.skip(!isMobile, "mobile responsive image contract");
+  test.skip(!isMobile, "mobile insurance guidance contract");
   const runtimeErrors = collectUnexpectedRuntimeErrors(page);
-
-  const expectEnoughPixels = async (image: Locator, sizes: string) => {
-    await expect(image).toHaveAttribute("sizes", sizes);
-    await expect.poll(() => image.evaluate((element) => element.naturalWidth)).toBeGreaterThan(0);
-    const measurement = await image.evaluate((element) => ({
-      candidateWidth: Number(new URL(element.currentSrc).searchParams.get("w")),
-      requiredWidth: Math.ceil(element.getBoundingClientRect().width * window.devicePixelRatio),
-    }));
-    expect(measurement.candidateWidth).toBeGreaterThanOrEqual(measurement.requiredWidth);
-  };
 
   await page.goto("/contact");
   await rejectInitialConsent(page);
-  const contactLogo = page.getByTestId("contact-insurance-logo-aetna").locator("img");
-  await contactLogo.scrollIntoViewIfNeeded();
-  await expectEnoughPixels(
-    contactLogo,
-    "(max-width: 639px) 86px, (max-width: 767px) 100px, 114px",
-  );
+  const contactGuidance = page.getByTestId("contact-insurance-billing-guidance");
+  await contactGuidance.scrollIntoViewIfNeeded();
+  await expect(contactGuidance).toBeVisible();
+  await expect(contactGuidance.locator("img")).toHaveCount(0);
 
   await page.goto("/locations/psychiatrist-fort-myers");
   await rejectInitialConsent(page);
-  const locationCarousel = page.getByTestId("mobile-location-insurance-carousel");
-  await locationCarousel.scrollIntoViewIfNeeded();
-  const locationLogo = locationCarousel.locator('[data-active="true"] img');
-  await expectEnoughPixels(locationLogo, "256px");
+  const locationGuidance = page.getByTestId("location-insurance-billing-guidance");
+  await locationGuidance.scrollIntoViewIfNeeded();
+  await expect(locationGuidance).toBeVisible();
+  await expect(locationGuidance.locator("img")).toHaveCount(0);
 
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
@@ -1383,7 +1314,7 @@ test.describe("server-rendered SEO without JavaScript", () => {
     ]) {
       const goldenGate = await page.goto(path, { waitUntil: "domcontentloaded" });
       expect(goldenGate?.status()).toBe(200);
-      await expect(page.getByText("Golden Gate Estates Area Civic Association", { exact: true })).toHaveCount(path.startsWith("/es/") ? 0 : 1);
+      await expect(page.getByText("Golden Gate Estates Area Civic Association", { exact: true })).toHaveCount(0);
       await expect(page.locator('a[href="https://ggeaca.org/"]')).toHaveCount(0);
       await expect(page.getByTestId("link-civic-association")).toHaveCount(0);
     }

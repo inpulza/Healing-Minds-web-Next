@@ -9,7 +9,7 @@ import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
-import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
+import { practiceInfo, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -66,7 +66,7 @@ const LocationVanderbiltBeach = () => {
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
       servicesTitle: "Services for This Community",
-      insuranceTitle: "Accepted Insurance Plans",
+      insuranceTitle: "Insurance and Billing Questions",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
       bookNow: "Book Appointment",
@@ -75,7 +75,7 @@ const LocationVanderbiltBeach = () => {
       features: [
         {
           title: "Convenient Location",
-          description: "Easily accessible from Vanderbilt Beach with ample parking available"
+          description: "Check parking and access details when scheduling"
         },
         {
           title: "Modern Facilities", 
@@ -102,7 +102,7 @@ const LocationVanderbiltBeach = () => {
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
       servicesTitle: "Servicios para Esta Comunidad",
-      insuranceTitle: "Planes de Seguro Aceptados",
+      insuranceTitle: "Preguntas sobre Seguro y Facturación",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
       bookNow: "Reservar Cita",
@@ -111,7 +111,7 @@ const LocationVanderbiltBeach = () => {
       features: [
         {
           title: "Ubicación Conveniente",
-          description: "Fácil acceso desde Vanderbilt Beach con amplio estacionamiento disponible"
+          description: "Confirme estacionamiento y acceso al programar"
         },
         {
           title: "Instalaciones Modernas",
@@ -228,7 +228,7 @@ const LocationVanderbiltBeach = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? '15+ Years Experience' : '15+ Años de Experiencia'}
+                          {language === 'en' ? 'Active Florida License ME165518' : 'Licencia Activa de Florida ME165518'}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
@@ -305,9 +305,9 @@ const LocationVanderbiltBeach = () => {
                   
                   {/* Key Stats */}
                   <div className="mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">15+</div>
+                    <div className="text-2xl sm:text-3xl font-bold mb-2 text-green-600">ME165518</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Years serving the Southwest Florida community with excellence' : 'Años sirviendo a la comunidad del Suroeste de Florida con excelencia'}
+                      {language === 'en' ? 'Active Florida medical license' : 'Licencia médica activa de Florida'}
                     </div>
                   </div>
 
@@ -759,8 +759,8 @@ const LocationVanderbiltBeach = () => {
                       </div>
                       <p className="text-sm text-gray-700 font-body leading-relaxed">
                         {language === 'en'
-                          ? 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103 with ample parking'
-                          : 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103 con amplio estacionamiento'}
+                          ? 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103. Check parking and access details when scheduling.'
+                          : 'GPS: 4760 Tamiami Trail N #25, Naples, FL 34103. Confirme estacionamiento y acceso al programar.'}
                       </p>
                     </div>
                   </div>
@@ -809,12 +809,12 @@ const LocationVanderbiltBeach = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                          {language === 'en' ? 'Parking and Access Details' : 'Detalles de Estacionamiento y Acceso'}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Free, convenient parking available for all Vanderbilt Beach patients visiting our facility'
-                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Vanderbilt Beach que visiten nuestras instalaciones'}
+                            ? 'Check parking and access details with the office when scheduling your visit'
+                            : 'Confirme con la oficina los detalles de estacionamiento y acceso al programar su visita'}
                         </p>
                       </div>
                     </div>
@@ -871,9 +871,9 @@ const LocationVanderbiltBeach = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Community</span> Involvement in Vanderbilt Beach</>
+                    <><span className="font-display italic text-green-700">Independent Local</span> Resources in Vanderbilt Beach</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Vanderbilt Beach</>
+                    <><span className="font-display italic text-green-700">Recursos Locales</span> Independientes en Vanderbilt Beach</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -882,8 +882,8 @@ const LocationVanderbiltBeach = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Mental health is fundamental to building a thriving community. We proudly support Vanderbilt Beach through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
-                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Vanderbilt Beach a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+                  ? 'These independent local resources provide community information and services in Vanderbilt Beach. Listings are informational only and do not imply partnership, endorsement, or referral.'
+                  : 'Estos recursos locales independientes ofrecen información y servicios comunitarios en Vanderbilt Beach. La lista es solo informativa y no implica colaboración, respaldo ni referido.'}
               </p>
             </div>
             
@@ -900,8 +900,8 @@ const LocationVanderbiltBeach = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Community advocacy organization preserving quality of life in Vanderbilt Beach through active resident engagement and environmental stewardship. They work tirelessly to maintain the character and natural beauty of our coastal community while advocating for responsible development.'
-                    : 'Organización de defensa comunitaria que preserva la calidad de vida en Vanderbilt Beach a través del compromiso activo de los residentes y la administración ambiental. Trabajan incansablemente para mantener el carácter y la belleza natural de nuestra comunidad costera mientras abogan por el desarrollo responsable.'}
+                    ? 'Resident information, civic updates, and environmental-stewardship resources from the Vanderbilt Beach Residents Association.'
+                    : 'Información para residentes, novedades cívicas y recursos de cuidado ambiental de Vanderbilt Beach Residents Association.'}
                 </p>
 
                 <a
@@ -936,8 +936,8 @@ const LocationVanderbiltBeach = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Supporting Collier County nonprofits and community initiatives that serve Vanderbilt Beach and surrounding areas. Their philanthropic leadership helps address critical community needs through strategic grants and partnerships that enhance quality of life for all residents.'
-                    : 'Apoyando organizaciones sin fines de lucro e iniciativas comunitarias del Condado de Collier que sirven a Vanderbilt Beach y áreas circundantes. Su liderazgo filantrópico ayuda a abordar las necesidades críticas de la comunidad a través de subvenciones estratégicas y asociaciones que mejoran la calidad de vida de todos los residentes.'}
+                    ? 'Information about local grantmaking and nonprofit resources from the Collier Community Foundation.'
+                    : 'Información sobre subvenciones locales y recursos para organizaciones sin fines de lucro de Collier Community Foundation.'}
                 </p>
 
                 <a
@@ -954,7 +954,7 @@ const LocationVanderbiltBeach = () => {
                       <ArrowRight className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-left leading-tight flex-1 py-2">
-                      {language === 'en' ? 'Learn About Their Impact' : 'Conocer Su Impacto'}
+                      {language === 'en' ? 'Visit Official Site' : 'Visitar Sitio Oficial'}
                     </span>
                   </Button>
                 </a>
@@ -972,8 +972,8 @@ const LocationVanderbiltBeach = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Municipal Services Taxing Unit managing landscaping and community improvements throughout Vanderbilt Beach area. They maintain the beautiful streetscapes, parks, and public spaces that make our community a peaceful and welcoming place for residents and visitors alike.'
-                    : 'Unidad de Servicios Municipales que gestiona paisajismo y mejoras comunitarias en toda el área de Vanderbilt Beach. Mantienen los hermosos paisajes urbanos, parques y espacios públicos que hacen de nuestra comunidad un lugar pacífico y acogedor para residentes y visitantes por igual.'}
+                    ? 'Official county information about public landscaping and community-improvement services in Vanderbilt Beach.'
+                    : 'Información oficial del condado sobre paisajismo público y servicios de mejora comunitaria en Vanderbilt Beach.'}
                 </p>
 
                 <a
@@ -1001,8 +1001,8 @@ const LocationVanderbiltBeach = () => {
             <div className="mt-16 text-center">
               <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Just as these organizations strengthen our Vanderbilt Beach community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
-                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Vanderbilt Beach, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+                  ? 'Healing Minds provides psychiatric care for adults in Vanderbilt Beach through telepsychiatry and appointments at our Naples office.'
+                  : 'Healing Minds ofrece atención psiquiátrica para adultos de Vanderbilt Beach mediante telepsiquiatría y citas en nuestra oficina de Naples.'}
               </p>
               <Button 
                 className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
@@ -1100,8 +1100,7 @@ const LocationVanderbiltBeach = () => {
                       {content.contactTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      Phone: (239) 423-0272<br />
-                      Fax: (239) 330-2073
+                      Phone: (239) 423-0272
                     </p>
                   </div>
                 </div>
@@ -1142,7 +1141,7 @@ const LocationVanderbiltBeach = () => {
                   <div className="text-center space-y-4">
                     <VideoIcon className="w-8 h-8 text-blue-600 mx-auto" />
                     <h3 className="text-lg font-bold text-blue-800">
-                      {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+                      {language === 'en' ? 'Request Telehealth' : 'Solicitar Telesalud'}
                     </h3>
                     <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
                   </div>

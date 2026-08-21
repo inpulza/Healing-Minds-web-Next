@@ -835,7 +835,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         metaTags: [
           {
             name: 'description',
-            content: 'Meet Dr. Melva Reve, expert psychiatrist in Naples, FL. University of Miami trained, fluent in English & Spanish. Expert in anxiety, depression, ADHD treatment.'
+            content: 'Meet Dr. Melva Reve, MD, a psychiatrist in Naples, FL with active Florida medical license ME165518 and focus areas including anxiety, depression and ADHD.'
           },
           {
             property: 'og:title',
@@ -866,7 +866,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         metaTags: [
           {
             name: 'description',
-            content: 'Contact Healing Minds Psychiatry in Naples, FL. Schedule appointment with Dr. Melva Reve. Phone (239) 423-0272. 4760 Tamiami Trl N # 25, Naples FL 34103.'
+            content: 'Contact Healing Minds Psychiatry in Naples, FL. Schedule appointment with Dr. Melva Reve. Phone (239) 423-0272. 4760 Tamiami Trl N #25, Naples FL 34103.'
           },
           {
             property: 'og:title',
@@ -1146,7 +1146,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         metaTags: [
           {
             name: 'description',
-            content: 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N # 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
+            content: 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N #25. Expert psychiatric care for anxiety, depression, ADHD, PTSD. Call (239) 423-0272 to schedule.'
           },
           {
             name: 'keywords', 
@@ -1158,7 +1158,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
           },
           {
             property: 'og:description',
-            content: 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N # 25. Expert psychiatric care for anxiety, depression, ADHD, PTSD.'
+            content: 'Visit Dr. Melva Reve in Naples, FL at 4760 Tamiami Trl N #25. Expert psychiatric care for anxiety, depression, ADHD, PTSD.'
           },
           {
             property: 'og:url',
@@ -1642,7 +1642,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         metaTags: [
           {
             name: 'description',
-            content: 'Conozca a la Dra. Melva Reve, psiquiatra con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.'
+            content: 'Conozca a la Dra. Melva Reve, MD, psiquiatra en Naples con licencia médica activa de Florida ME165518, atención bilingüe y áreas de enfoque clínico.'
           },
           {
             property: 'og:title',
@@ -1767,7 +1767,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         metaTags: [
           {
             name: 'description',
-            content: 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N # 25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
+            content: 'Visite a la Dra. Melva Reve en Naples, FL en 4760 Tamiami Trl N #25. Atención psiquiátrica experta para ansiedad, depresión, TDAH, TEPT. Llame (239) 423-0272.'
           },
           {
             property: 'og:title',
@@ -1796,9 +1796,9 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
       return {
         canonical: `${baseUrl}/telepsychiatry-florida`,
         metaTags: [
-          { name: 'description', content: 'Telepsychiatry throughout Florida with Dr. Melva Reve. Secure HIPAA-compliant virtual psychiatric care for anxiety, depression, ADHD and more. Call (239) 423-0272.' },
+          { name: 'description', content: 'Request telepsychiatry with Dr. Melva Reve while located in Florida. The office confirms availability, clinical suitability and licensing requirements case by case. Call (239) 423-0272.' },
           { property: 'og:title', content: 'Telepsychiatry in Florida - Dr. Melva Reve | Healing Minds' },
-          { property: 'og:description', content: 'Bilingual virtual psychiatric care anywhere in Florida. Same quality as in-person, from the comfort of your home.' },
+          { property: 'og:description', content: 'Bilingual psychiatric care through a secure video platform when clinically appropriate. The office confirms eligibility and modality case by case.' },
           { property: 'og:url', content: `${baseUrl}/telepsychiatry-florida` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/telepsychiatry-florida` },
           { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/telepsiquiatria-florida` },
@@ -1809,9 +1809,9 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
       return {
         canonical: `${baseUrl}/es/telepsiquiatria-florida`,
         metaTags: [
-          { name: 'description', content: 'Telepsiquiatría en toda Florida con la Dra. Melva Reve. Atención psiquiátrica virtual segura, conforme con HIPAA, para ansiedad, depresión, TDAH y más. Llame (239) 423-0272.' },
+          { name: 'description', content: 'Solicite telepsiquiatría con la Dra. Melva Reve mientras se encuentra en Florida. La oficina confirma disponibilidad, adecuación clínica y requisitos de licencia caso por caso. Llame (239) 423-0272.' },
           { property: 'og:title', content: 'Telepsiquiatría en Florida - Dra. Melva Reve | Healing Minds' },
-          { property: 'og:description', content: 'Atención psiquiátrica virtual bilingüe en cualquier lugar de Florida. La misma calidad que en persona, desde la comodidad de su hogar.' },
+          { property: 'og:description', content: 'Atención psiquiátrica bilingüe mediante una plataforma de video segura cuando sea clínicamente apropiada. La oficina confirma elegibilidad y modalidad caso por caso.' },
           { property: 'og:url', content: `${baseUrl}/es/telepsiquiatria-florida` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/telepsychiatry-florida` },
           { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/telepsiquiatria-florida` },
@@ -1826,9 +1826,9 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         schema: getCaliforniaServiceSchema(baseUrl, 'en'),
         metaTags: [
           { name: 'robots', content: 'noindex, follow' },
-          { name: 'description', content: 'A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.' },
+          { name: 'description', content: 'Bilingual telepsychiatry information for California adults. The office confirms clinician, price, modality, availability and eligibility before booking.' },
           { property: 'og:title', content: 'Online Psychiatrist in Spanish | California | Healing Minds' },
-          { property: 'og:description', content: 'A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.' },
+          { property: 'og:description', content: 'Bilingual telepsychiatry information for adults in California. The office confirms appointment details before booking.' },
           { property: 'og:url', content: `${baseUrl}/psychiatrist-california` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/psychiatrist-california` },
           { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/psiquiatra-california` },
@@ -1842,9 +1842,9 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
         schema: getCaliforniaServiceSchema(baseUrl, 'es'),
         metaTags: [
           { name: 'robots', content: 'noindex, follow' },
-          { name: 'description', content: 'Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.' },
+          { name: 'description', content: 'Información de telepsiquiatría bilingüe para adultos en California. La oficina confirma profesional, precio, pago, modalidad, disponibilidad y elegibilidad.' },
           { property: 'og:title', content: 'Psiquiatra Online en Español | California | Healing Minds' },
-          { property: 'og:description', content: 'Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.' },
+          { property: 'og:description', content: 'Información de telepsiquiatría bilingüe para adultos en California. La oficina confirma los detalles de la cita antes de reservar.' },
           { property: 'og:url', content: `${baseUrl}/es/psiquiatra-california` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/psychiatrist-california` },
           { rel: 'alternate', hreflang: 'es', href: `${baseUrl}/es/psiquiatra-california` },
@@ -1856,7 +1856,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
       return {
         canonical: `${baseUrl}/billing-policy`,
         metaTags: [
-          { name: 'description', content: 'Billing and payment policy for Healing Minds Psychiatry. Insurance accepted, copayments, self-pay rates, credit card fees and payment plans. Naples, FL.' },
+          { name: 'description', content: 'Billing and payment policy for Healing Minds Psychiatry. Plan verification, copayments, self-pay, credit card fees and case-by-case financial options. Naples, FL.' },
           { property: 'og:title', content: 'Billing and Payment Policy - Healing Minds Psychiatry' },
           { property: 'og:url', content: `${baseUrl}/billing-policy` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/billing-policy` },
@@ -1868,7 +1868,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
       return {
         canonical: `${baseUrl}/cancellation-policy`,
         metaTags: [
-          { name: 'description', content: 'Cancellation and no-show policy for Healing Minds Psychiatry. 24-hour notice required, $50 late fee, medical emergency exceptions. Naples, FL.' },
+          { name: 'description', content: 'Current written cancellation and no-show terms for Healing Minds Psychiatry appointments in Naples, FL.' },
           { property: 'og:title', content: 'Cancellation and No-Show Policy - Healing Minds Psychiatry' },
           { property: 'og:url', content: `${baseUrl}/cancellation-policy` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/cancellation-policy` },
@@ -1905,7 +1905,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
       return {
         canonical: `${baseUrl}/es/politica-facturacion`,
         metaTags: [
-          { name: 'description', content: 'Política de facturación y pago de Healing Minds Psychiatry. Seguros aceptados, copagos, tarifas particulares, cargos por tarjeta y planes de pago. Naples, FL.' },
+          { name: 'description', content: 'Política de facturación y pago de Healing Minds Psychiatry. Verificación del plan, copagos, pago privado, cargos por tarjeta y opciones financieras caso por caso. Naples, FL.' },
           { property: 'og:title', content: 'Política de Facturación y Pago - Healing Minds Psychiatry' },
           { property: 'og:url', content: `${baseUrl}/es/politica-facturacion` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/billing-policy` },
@@ -1917,7 +1917,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
       return {
         canonical: `${baseUrl}/es/politica-cancelacion`,
         metaTags: [
-          { name: 'description', content: 'Política de cancelación y citas perdidas de Healing Minds Psychiatry. Aviso de 24 horas requerido, cargo de $50, excepciones por emergencia médica. Naples, FL.' },
+          { name: 'description', content: 'Términos escritos vigentes de cancelación y no asistencia para citas de Healing Minds Psychiatry en Naples, FL.' },
           { property: 'og:title', content: 'Política de Cancelación y Citas Perdidas - Healing Minds Psychiatry' },
           { property: 'og:url', content: `${baseUrl}/es/politica-cancelacion` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/cancellation-policy` },
@@ -2025,7 +2025,7 @@ async function getPageMetaData(url: string, baseUrl: string): Promise<PageMeta |
       return {
         canonical: `${baseUrl}/nondiscrimination-notice`,
         metaTags: [
-          { name: 'description', content: 'Nondiscrimination notice of Healing Minds Psychiatry. Free language assistance and aids for people with disabilities. How to file a civil rights complaint.' },
+          { name: 'description', content: 'Nondiscrimination notice of Healing Minds Psychiatry, including how to request accessibility or language assistance and file a civil rights complaint.' },
           { property: 'og:title', content: 'Nondiscrimination Notice - Healing Minds Psychiatry' },
           { property: 'og:url', content: `${baseUrl}/nondiscrimination-notice` },
           { rel: 'alternate', hreflang: 'en', href: `${baseUrl}/nondiscrimination-notice` },
@@ -2198,8 +2198,8 @@ function getCaliforniaServiceSchema(baseUrl: string, lang: 'en' | 'es') {
       : 'Atención Psiquiátrica Online en Español para California',
     "serviceType": lang === 'en' ? 'Telepsychiatry' : 'Telepsiquiatría',
     "description": lang === 'en'
-      ? 'Psychiatric evaluation and treatment follow-up for adults by video call, in Spanish, for patients located in California. Anxiety, depression and ADHD. Direct pay.'
-      : 'Evaluación psiquiátrica y seguimiento del tratamiento para adultos por videollamada, en español, para pacientes en California. Ansiedad, depresión y TDAH. Pago directo.',
+      ? 'Bilingual telepsychiatry information for California adults. The office confirms clinician, price, modality, availability and eligibility before booking.'
+      : 'Información de telepsiquiatría bilingüe para adultos en California. La oficina confirma profesional, precio, pago, modalidad, disponibilidad y elegibilidad.',
     "url": `${baseUrl}${path}`,
     "areaServed": {
       "@type": "State",
@@ -2444,7 +2444,7 @@ function getFAQPageSchema(baseUrl: string) {
         "name": "Is my information kept confidential?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, absolutely. All information shared in our sessions is strictly confidential and protected by HIPAA laws. Information is only shared with your written consent or in rare cases required by law for safety reasons."
+          "text": "Health information is handled under applicable medical privacy laws and the practice privacy notice. Disclosure may occur with authorization or when otherwise permitted or required by law."
         }
       },
       {
@@ -2460,7 +2460,7 @@ function getFAQPageSchema(baseUrl: string) {
         "name": "Do you accept insurance?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We accept most major insurance plans including Aetna, Cigna, United Healthcare, Humana, Medicare, and Tricare. Our staff will verify your benefits and explain your coverage before your first appointment. We also offer flexible payment options for those without insurance coverage."
+          "text": "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer. Self-pay or financial options may be evaluated case by case."
         }
       },
       {
@@ -2476,7 +2476,7 @@ function getFAQPageSchema(baseUrl: string) {
         "name": "Do you offer telepsychiatry services?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, we offer comprehensive telepsychiatry services throughout Florida. Virtual sessions provide the same quality care as in-person visits, with the convenience of attending from your home. We use a secure, HIPAA-compliant platform for all telehealth appointments."
+          "text": "You may request telepsychiatry while physically located where Dr. Reve is authorized to provide care. The office confirms availability, clinical suitability and modality case by case, and confirmed video visits use a secure video platform."
         }
       }
     ]
@@ -2509,11 +2509,11 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "width": "800",
       "height": "800"
     },
-    "description": "Healing Minds Psychiatry, led by Dr. Melva Reve, provides compassionate mental health care in Naples, FL. Expert treatment for anxiety, depression, ADHD, PTSD, and bipolar disorder. Bilingual services in English and Spanish. Telepsychiatry available throughout Florida.",
+    "description": "Healing Minds Psychiatry provides psychiatric care for adults in Naples, FL. Services are available in English and Spanish; telepsychiatry eligibility and availability are confirmed case by case.",
     "slogan": "Compassionate Mental Health Care in Naples, FL",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "4760 Tamiami Trl N # 25",
+      "streetAddress": "4760 Tamiami Trl N #25",
       "addressLocality": "Naples",
       "addressRegion": "FL",
       "postalCode": "34103",
@@ -2521,8 +2521,8 @@ function getMedicalBusinessSchema(baseUrl: string) {
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": 26.2044803,
-      "longitude": -81.8021344
+      "latitude": 26.2044881,
+      "longitude": -81.7995047
     },
     "telephone": "+1-239-423-0272",
     "email": "info@healingmindsp.com",
@@ -2601,16 +2601,11 @@ function getMedicalBusinessSchema(baseUrl: string) {
         "name": "Florida"
       }
     ],
-    "paymentAccepted": ["Insurance", "Credit Card", "Cash"],
     "currenciesAccepted": "USD",
-    "priceRange": "$$",
-    "isAcceptingNewPatients": true,
     "sameAs": [
-      "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
-      "https://www.yelp.com/biz/healing-minds-psychiatry-naples",
       ...organizationSocialProfileUrls
     ],
-    "hasMap": "https://www.google.com/maps/place/Healing+Minds+Psychiatry/@26.2044803,-81.8021344,17z",
+    "hasMap": "https://www.google.com/maps?cid=4284755814550718591",
     "founder": {
       "@type": "Physician",
       "@id": `${baseUrl}/#physician`,
@@ -2627,13 +2622,12 @@ function getMedicalBusinessSchema(baseUrl: string) {
       "email": "info@healingmindsp.com",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "4760 Tamiami Trl N # 25",
+        "streetAddress": "4760 Tamiami Trl N #25",
         "addressLocality": "Naples",
         "addressRegion": "FL",
         "postalCode": "34103",
         "addressCountry": "US"
       },
-      "priceRange": "$$",
       "medicalSpecialty": "Psychiatry",
       "identifier": {
         "@type": "PropertyValue",
@@ -2661,7 +2655,7 @@ function getMedicalBusinessSchema(baseUrl: string) {
       },
       "workLocation": {
         "@type": "PostalAddress",
-        "streetAddress": "4760 Tamiami Trl N # 25",
+        "streetAddress": "4760 Tamiami Trl N #25",
         "addressLocality": "Naples",
         "addressRegion": "FL",
         "postalCode": "34103",
@@ -3024,7 +3018,7 @@ async function getStaticPageBody(path: string, baseUrl: string): Promise<string 
   <header><a href="/">Healing Minds Psychiatry</a></header>
   <section>
     <h1>Online Psychiatrist in Spanish for California</h1>
-    <p>Psychiatric care with Dr. Melva Reve, a psychiatrist and native Spanish speaker, by video call for adults located in California. Evaluation and treatment follow-up for anxiety, depression, and ADHD. Direct pay, clear pricing, no insurance. Not for emergencies: call 988 or 911 in a crisis.</p>
+    <p>Bilingual telepsychiatry information for California adults. The office confirms clinician, price, modality, availability and eligibility before booking. The patient must be physically located where the clinician is authorized. Not for emergencies: call 988 or 911 in a crisis.</p>
   </section>
   <nav aria-label="Quick Links"><ul>
     <li><a href="/">Home</a></li>
@@ -3038,7 +3032,7 @@ async function getStaticPageBody(path: string, baseUrl: string): Promise<string 
   <header><a href="/es">Healing Minds Psychiatry</a></header>
   <section>
     <h1>Psiquiatra Online en Espa&ntilde;ol para California</h1>
-    <p>Atenci&oacute;n psiqui&aacute;trica con la Dra. Melva Reve, m&eacute;dica psiquiatra y hablante nativa de espa&ntilde;ol, por videollamada para adultos en California. Evaluaci&oacute;n y seguimiento del tratamiento para ansiedad, depresi&oacute;n y TDAH. Pago directo, precio claro, sin seguros. No es para emergencias: llame al 988 o al 911 en una crisis.</p>
+    <p>Informaci&oacute;n de telepsiquiatr&iacute;a biling&uuml;e para adultos en California. La oficina confirma precio, m&eacute;todo de pago, disponibilidad, profesional, modalidad y elegibilidad antes de reservar. El paciente debe estar f&iacute;sicamente donde la profesional est&eacute; autorizada. No es para emergencias: llame al 988 o al 911 en una crisis.</p>
   </section>
   <nav aria-label="Enlaces R&aacute;pidos"><ul>
     <li><a href="/es">Inicio</a></li>

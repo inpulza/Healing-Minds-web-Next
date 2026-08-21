@@ -36,7 +36,7 @@ const DoctorSection = () => {
               </h2>
               
               <div className="mb-6 sm:mb-8">
-                <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600" data-testid="patient-count">15+</div>
+                <div className="text-2xl sm:text-3xl font-bold mb-2 text-green-600" data-testid="patient-count">ME165518</div>
                 <div className="text-gray-600 font-body text-sm sm:text-base" data-testid="patient-label">
                   {s('yearsLabel').paragraphs![0]}
                 </div>
@@ -62,7 +62,7 @@ const DoctorSection = () => {
               <div className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden">
                 <Image
                   src={assetUrl(doctorImage)}
-                  alt="Dr. Melva Reve, MD - Engaged in consultation with a patient, demonstrating compassionate psychiatric care approach"
+                  alt="Dr. Melva Reve, MD, seated indoors with another adult"
                   className="w-full h-full object-cover"
                   width={800}
                   height={800}

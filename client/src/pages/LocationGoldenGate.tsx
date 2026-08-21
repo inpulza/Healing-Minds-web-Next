@@ -9,7 +9,7 @@ import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
-import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
+import { practiceInfo, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -66,7 +66,7 @@ const LocationGoldenGate = () => {
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
       servicesTitle: "Services for This Community",
-      insuranceTitle: "Accepted Insurance Plans",
+      insuranceTitle: "Insurance and Billing Questions",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
       bookNow: "Book Appointment",
@@ -75,7 +75,7 @@ const LocationGoldenGate = () => {
       features: [
         {
           title: "Convenient Location",
-          description: "Easily accessible from Golden Gate with ample parking available"
+          description: "Check parking and access details when scheduling"
         },
         {
           title: "Modern Facilities", 
@@ -102,7 +102,7 @@ const LocationGoldenGate = () => {
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
       servicesTitle: "Servicios para Esta Comunidad",
-      insuranceTitle: "Planes de Seguro Aceptados",
+      insuranceTitle: "Preguntas sobre Seguro y Facturación",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
       bookNow: "Reservar Cita",
@@ -111,7 +111,7 @@ const LocationGoldenGate = () => {
       features: [
         {
           title: "Ubicación Conveniente",
-          description: "Fácil acceso desde Golden Gate con amplio estacionamiento disponible"
+          description: "Confirme estacionamiento y acceso al programar"
         },
         {
           title: "Instalaciones Modernas",
@@ -168,7 +168,7 @@ const LocationGoldenGate = () => {
                 <div className="relative h-full flex items-start px-8 sm:px-12 lg:px-16 pt-12">
                   <div className="max-w-2xl text-left">
                     <div className="flex flex-wrap gap-2 mb-6">
-                      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? '15+ Years Experience' : '15+ Años de Experiencia'}</span></div>
+                      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Active Florida License ME165518' : 'Licencia Activa de Florida ME165518'}</span></div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Bilingual Care' : 'Atención Bilingüe'}</span></div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100"><div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><CheckCircle className="w-3 h-3 text-green-600" /></div><span className="text-gray-700 font-body font-medium text-xs sm:text-sm">{language === 'en' ? 'Serving Golden Gate' : 'Sirviendo Golden Gate'}</span></div>
                     </div>
@@ -204,9 +204,9 @@ const LocationGoldenGate = () => {
                   
                   {/* Key Stats */}
                   <div className="mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">15+</div>
+                    <div className="text-2xl sm:text-3xl font-bold mb-2 text-green-600">ME165518</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Years serving the Southwest Florida community with excellence' : 'Años sirviendo a la comunidad del Suroeste de Florida con excelencia'}
+                      {language === 'en' ? 'Active Florida medical license' : 'Licencia médica activa de Florida'}
                     </div>
                   </div>
 
@@ -527,12 +527,12 @@ const LocationGoldenGate = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                          {language === 'en' ? 'Parking and Access Details' : 'Detalles de Estacionamiento y Acceso'}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Free, convenient parking available for all Golden Gate patients visiting our facility'
-                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Golden Gate que visiten nuestras instalaciones'}
+                            ? 'Check parking and access details with the office when scheduling your visit'
+                            : 'Confirme con la oficina los detalles de estacionamiento y acceso al programar su visita'}
                         </p>
                       </div>
                     </div>
@@ -589,9 +589,9 @@ const LocationGoldenGate = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Community</span> Involvement in Golden Gate</>
+                    <><span className="font-display italic text-green-700">Independent Local</span> Resources in Golden Gate</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Golden Gate</>
+                    <><span className="font-display italic text-green-700">Recursos Locales</span> Independientes en Golden Gate</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -600,30 +600,12 @@ const LocationGoldenGate = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Mental health is fundamental to building a thriving community. We proudly support Golden Gate through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
-                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Golden Gate a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+                  ? 'These independent local resources provide community information and services in Golden Gate. Listings are informational only and do not imply partnership, endorsement, or referral.'
+                  : 'Estos recursos locales independientes ofrecen información y servicios comunitarios en Golden Gate. La lista es solo informativa y no implica colaboración, respaldo ni referido.'}
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-              {/* Golden Gate Estates Area Civic Association */}
-              <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
-                  <Shield className="w-6 h-6 text-green-800" />
-                </div>
-                
-                <h3 className="text-2xl font-display font-bold mb-4 text-green-800">
-                  {language === 'en' ? 'Golden Gate Estates Area Civic Association' : 'Asociación Cívica de Golden Gate Estates'}
-                </h3>
-                
-                <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
-                  {language === 'en'
-                    ? 'Community advocacy organization focused on understanding the Golden Gate Estates Master Plan and supporting local residents\' needs. They work tirelessly to ensure residents have a voice in local planning and development decisions that affect their community.'
-                    : 'Organización de defensa comunitaria enfocada en comprender el Plan Maestro de Golden Gate Estates y apoyar las necesidades de los residentes locales. Trabajan incansablemente para asegurar que los residentes tengan voz en las decisiones de planificación y desarrollo local que afectan su comunidad.'}
-                </p>
-
-              </div>
-
               {/* Golden Gate Community Center */}
               <div className="rounded-2xl sm:rounded-3xl p-8 transition-all duration-300 hover:shadow-lg flex flex-col h-full bg-green-50 border border-green-100">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-green-100">
@@ -636,8 +618,8 @@ const LocationGoldenGate = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Full-service community center offering recreation facilities, skate park, BMX track, gymnasium, and programs for all ages in Golden Gate. This vital community hub provides space for residents to connect, stay active, and build lasting relationships.'
-                    : 'Centro comunitario de servicio completo que ofrece instalaciones recreativas, parque de patinaje, pista BMX, gimnasio y programas para todas las edades en Golden Gate. Este centro comunitario vital proporciona espacio para que los residentes se conecten, se mantengan activos y construyan relaciones duraderas.'}
+                    ? 'Official information about recreation facilities and community programs at Golden Gate Community Center.'
+                    : 'Información oficial sobre instalaciones recreativas y programas comunitarios de Golden Gate Community Center.'}
                 </p>
 
                 <a
@@ -672,8 +654,8 @@ const LocationGoldenGate = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Local government services and community resources supporting Golden Gate residents through various programs and initiatives. From public safety to social services, the county works to enhance quality of life for all residents.'
-                    : 'Servicios de gobierno local y recursos comunitarios que apoyan a los residentes de Golden Gate a través de varios programas e iniciativas. Desde seguridad pública hasta servicios sociales, el condado trabaja para mejorar la calidad de vida de todos los residentes.'}
+                    ? 'Official Collier County information about local government services and public resources.'
+                    : 'Información oficial del Condado de Collier sobre servicios del gobierno local y recursos públicos.'}
                 </p>
 
                 <a
@@ -701,8 +683,8 @@ const LocationGoldenGate = () => {
             <div className="mt-16 text-center">
               <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Just as these organizations strengthen our Golden Gate community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
-                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Golden Gate, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+                  ? 'Healing Minds provides psychiatric care for adults in Golden Gate through telepsychiatry and appointments at our Naples office.'
+                  : 'Healing Minds ofrece atención psiquiátrica para adultos de Golden Gate mediante telepsiquiatría y citas en nuestra oficina de Naples.'}
               </p>
               <Link href={language === 'en' ? '/contact' : '/es/contacto'}>
                 <Button 
@@ -835,7 +817,7 @@ const LocationGoldenGate = () => {
                   <div className="text-center space-y-4">
                     <VideoIcon className="w-8 h-8 text-blue-600 mx-auto" />
                     <h3 className="text-lg font-bold text-blue-800">
-                      {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+                      {language === 'en' ? 'Request Telehealth' : 'Solicitar Telesalud'}
                     </h3>
                     <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
                   </div>

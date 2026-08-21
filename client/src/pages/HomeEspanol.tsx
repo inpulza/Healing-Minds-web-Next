@@ -9,7 +9,6 @@ import {
   LazyServices,
   LazyBilingualCare,
   LazyServiceAreas,
-  LazyTestimonials,
   LazyReviews,
   LazyForPatients,
   LazyFAQ,
@@ -69,9 +68,6 @@ const HomeEspanol = () => {
         
         <SuspenseWrapper priority="medium">
           <LazyReviews />
-        </SuspenseWrapper>
-        <SuspenseWrapper priority="medium">
-          <LazyTestimonials />
         </SuspenseWrapper>
         <SuspenseWrapper priority="medium" preload>
           <LazyFAQ />

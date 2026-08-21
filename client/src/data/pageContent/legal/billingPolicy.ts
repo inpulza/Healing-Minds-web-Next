@@ -7,59 +7,57 @@ export const billingPolicyContent: BilingualPageContent = {
       {
         key: 'intro',
         paragraphs: [
-          `Our goal is to be transparent about our rates and billing policies so you can focus on your well-being. We are committed to providing clear information about all costs associated with your care.`,
+          `Ask the office for the current written rates and billing terms that apply to a proposed service before scheduling. Insurer and patient responsibilities remain subject to the plan, written disclosures and applicable law.`,
         ],
       },
       {
         key: 'insurance',
         heading: `Insurance Coverage`,
         paragraphs: [
-          `We accept a variety of major insurance plans. It is the patient's responsibility to verify coverage and benefits with their insurance provider before the appointment. Our team can assist you with this process if needed.`,
-          `Please contact our office to confirm whether we accept your specific insurance plan and to understand your coverage details, including deductibles and out-of-pocket maximums.`,
+          `Participation and benefits vary by plan, product, service and appointment modality. Before booking, contact our office to confirm current participation for your specific plan.`,
+          `You should also verify mental-health and telehealth benefits, deductibles, copays, coinsurance and other out-of-pocket terms directly with your insurer. Information from the office is not a guarantee of payment by the insurer.`,
         ],
       },
       {
         key: 'copayments',
         heading: `Copayments`,
         paragraphs: [
-          `All copayments required by your insurance must be paid at the time of service. We accept credit cards, debit cards, cash, and checks.`,
+          `Your insurer and the office can confirm any copayment, its timing and the payment methods currently accepted. Request the applicable terms in writing before payment.`,
         ],
       },
       {
         key: 'self-pay',
         heading: `Self-Pay Patients`,
         paragraphs: [
-          `We offer competitive rates for patients who do not use insurance. Please contact our office for an updated list of our consultation fees and service rates. We are happy to provide a good faith estimate of costs for scheduled services upon request.`,
+          `Contact the office for current written self-pay fees. A Good Faith Estimate is provided when required by applicable law; ask whether it applies to the proposed service.`,
         ],
       },
       {
         key: 'late-fees',
         heading: `Late Cancellation Fees`,
         paragraphs: [
-          `As detailed in our [Cancellation Policy](/cancellation-policy), a $50.00 fee will be charged for late cancellations or no-shows.`,
+          `The current written [Cancellation Policy](/cancellation-policy) governs. Ask the office to confirm any applicable fee in writing before scheduling.`,
         ],
       },
       {
         key: 'credit-card',
-        heading: `Credit Card Processing Fee`,
+        heading: `Payment Methods and Processing Fees`,
         paragraphs: [
-          `Please be aware that all payments made by credit card, including cancellation fees, are subject to a **non-refundable 3% processing fee** on the total amount. This fee is charged by our payment processing provider to cover transaction costs.`,
-          `**Example:** A $50.00 charge will result in a total of $51.50 (including the 3% processing fee).`,
-          `**How to Avoid This Fee:** You may pay with cash, check, or debit card to avoid the credit card processing fee.`,
+          `Ask the office to confirm in writing the payment methods currently accepted and any processing fee that may apply. Any fee remains subject to disclosure requirements and applicable law.`,
         ],
       },
       {
         key: 'claims',
         heading: `Insurance Claims Processing`,
         paragraphs: [
-          `We will submit claims to your insurance company on your behalf. Please note that insurance processing times vary by provider, typically ranging from 2-6 weeks. Any remaining balance after insurance payment is your responsibility and must be paid within 30 days of billing.`,
+          `If the office confirms that a claim can be submitted for your plan and service, processing and payment decisions remain subject to the insurer's rules. Any patient responsibility will be addressed according to the applicable plan information and billing statement.`,
         ],
       },
       {
         key: 'payment-plans',
-        heading: `Payment Plans and Financial Assistance`,
+        heading: `Billing Arrangements`,
         paragraphs: [
-          `If you are experiencing financial hardship, please speak with our billing department. We may be able to arrange a payment plan or discuss other options to help make your care more affordable.`,
+          `Do not assume that a payment plan or financial-assistance program is available. Ask the office whether any current billing arrangement applies and request its terms in writing.`,
         ],
       },
       {
@@ -73,7 +71,7 @@ export const billingPolicyContent: BilingualPageContent = {
         key: 'acknowledgment',
         heading: `Policy Acknowledgment`,
         paragraphs: [
-          `By receiving services at Healing Minds Psychiatry, you acknowledge and agree to our Billing and Payment Policy.`,
+          `The written billing terms disclosed for a service govern, subject to the applicable plan and law. Ask the office about any term you do not understand before accepting it.`,
         ],
       },
     ],
@@ -84,59 +82,57 @@ export const billingPolicyContent: BilingualPageContent = {
       {
         key: 'intro',
         paragraphs: [
-          `Nuestro objetivo es ser transparentes sobre nuestras tarifas y políticas de facturación para que usted pueda centrarse en su bienestar. Nos comprometemos a proporcionar información clara sobre todos los costos asociados con su atención.`,
+          `Solicite a la oficina las tarifas y los términos de facturación vigentes por escrito para el servicio propuesto antes de programar. Las responsabilidades de la aseguradora y del paciente siguen sujetas al plan, las divulgaciones escritas y la ley aplicable.`,
         ],
       },
       {
         key: 'insurance',
         heading: `Seguros Médicos`,
         paragraphs: [
-          `Aceptamos una variedad de los principales planes de seguro. Es responsabilidad del paciente verificar su cobertura y beneficios con su proveedor de seguros antes de la cita. Nuestro equipo puede asistirle en este proceso si lo necesita.`,
-          `Por favor, contacte nuestra oficina para confirmar si aceptamos su plan de seguro específico y para entender los detalles de su cobertura, incluyendo deducibles y máximos de gastos de bolsillo.`,
+          `La participación y los beneficios varían según el plan, producto, servicio y modalidad de la cita. Antes de reservar, contacte nuestra oficina para confirmar la participación vigente para su plan específico.`,
+          `También debe verificar directamente con su aseguradora los beneficios de salud mental y telesalud, deducibles, copagos, coaseguro y otros costos de bolsillo. La información de la oficina no garantiza el pago por parte de la aseguradora.`,
         ],
       },
       {
         key: 'copayments',
         heading: `Copagos`,
         paragraphs: [
-          `Todos los copagos requeridos por su seguro deben ser pagados en el momento del servicio. Aceptamos tarjetas de crédito, tarjetas de débito, efectivo y cheques.`,
+          `Su aseguradora y la oficina pueden confirmar cualquier copago, cuándo corresponde y los métodos de pago aceptados actualmente. Solicite los términos aplicables por escrito antes del pago.`,
         ],
       },
       {
         key: 'self-pay',
         heading: `Pacientes de Pago Privado (Self-Pay)`,
         paragraphs: [
-          `Ofrecemos tarifas competitivas para pacientes que no utilizan seguro. Por favor, contacte nuestra oficina para obtener una lista actualizada de nuestras tarifas de consulta y servicios. Con gusto proporcionamos un estimado de buena fe de los costos para servicios programados cuando lo solicite.`,
+          `Contacte la oficina para obtener las tarifas vigentes de pago privado por escrito. Se proporciona un Estimado de Buena Fe cuando lo exige la ley aplicable; pregunte si corresponde al servicio propuesto.`,
         ],
       },
       {
         key: 'late-fees',
         heading: `Cargos por Cancelación Tardía`,
         paragraphs: [
-          `Como se detalla en nuestra [Política de Cancelación](/es/politica-cancelacion), se aplicará un cargo de $50.00 por cancelaciones tardías o ausencias.`,
+          `Rige la [Política de Cancelación](/es/politica-cancelacion) escrita vigente. Pida a la oficina que confirme por escrito cualquier cargo aplicable antes de programar.`,
         ],
       },
       {
         key: 'credit-card',
-        heading: `Tarifa de Procesamiento de Tarjeta de Crédito`,
+        heading: `Métodos de Pago y Cargos de Procesamiento`,
         paragraphs: [
-          `Por favor, tenga en cuenta que todos los pagos realizados con tarjeta de crédito, incluyendo los cargos por cancelación, están sujetos a una **tarifa de procesamiento no reembolsable del 3%** sobre el monto total. Este cargo es aplicado por nuestro proveedor de procesamiento de pagos para cubrir los costos de transacción.`,
-          `**Ejemplo:** Un cargo de $50.00 resultará en un total de $51.50 (incluyendo la tarifa de procesamiento del 3%).`,
-          `**Cómo Evitar Esta Tarifa:** Puede pagar con efectivo, cheque o tarjeta de débito para evitar la tarifa de procesamiento de tarjeta de crédito.`,
+          `Pida a la oficina que confirme por escrito los métodos de pago aceptados actualmente y cualquier cargo de procesamiento que pudiera corresponder. Todo cargo está sujeto a los requisitos de divulgación y la ley aplicable.`,
         ],
       },
       {
         key: 'claims',
         heading: `Procesamiento de Reclamos de Seguro`,
         paragraphs: [
-          `Enviaremos los reclamos a su compañía de seguros en su nombre. Tenga en cuenta que los tiempos de procesamiento de seguros varían según el proveedor, típicamente oscilando entre 2-6 semanas. Cualquier saldo restante después del pago del seguro es su responsabilidad y debe pagarse dentro de los 30 días de la facturación.`,
+          `Si la oficina confirma que puede presentarse un reclamo para su plan y servicio, el procesamiento y las decisiones de pago siguen sujetos a las reglas de la aseguradora. Cualquier responsabilidad del paciente se tratará según la información aplicable del plan y el estado de cuenta.`,
         ],
       },
       {
         key: 'payment-plans',
-        heading: `Planes de Pago y Asistencia Financiera`,
+        heading: `Acuerdos de Facturación`,
         paragraphs: [
-          `Si está experimentando dificultades financieras, por favor hable con nuestro departamento de facturación. Es posible que podamos organizar un plan de pago o discutir otras opciones para ayudar a que su atención sea más asequible.`,
+          `No suponga que existe un plan de pago o un programa de ayuda financiera. Pregunte a la oficina si corresponde algún acuerdo de facturación vigente y solicite sus términos por escrito.`,
         ],
       },
       {
@@ -150,7 +146,7 @@ export const billingPolicyContent: BilingualPageContent = {
         key: 'acknowledgment',
         heading: `Reconocimiento de la Política`,
         paragraphs: [
-          `Al recibir servicios en Healing Minds Psychiatry, usted reconoce y acepta nuestra Política de Facturación y Pagos.`,
+          `Rigen los términos de facturación escritos divulgados para un servicio, sujetos al plan y la ley aplicables. Consulte con la oficina cualquier término que no comprenda antes de aceptarlo.`,
         ],
       },
     ],

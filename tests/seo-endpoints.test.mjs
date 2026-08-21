@@ -58,7 +58,8 @@ test("Fort Myers directions consistently send patients south to the Naples offic
   assert.match(page, /I-75 Sur hacia Naples/);
   assert.match(page, /local\.duration\[language\]/);
   assert.doesNotMatch(page, /(?:north|norte)[^\n]{0,80}(?:Naples|4760)|(?:10|12|15)-20 minutes/i);
-  assert.match(hyperlocal, /40–45 minutes south on I-75/);
+  assert.match(hyperlocal, /duration: \{ en: '40-45 minutes', es: '40-45 minutos' \}/);
+  assert.match(hyperlocal, /I-75 connects Fort Myers with our Park Shore office to the south/);
   assert.doesNotMatch(hyperlocal, /scheduling the first visit mid-morning|programar la primera visita a media mañana/i);
 });
 

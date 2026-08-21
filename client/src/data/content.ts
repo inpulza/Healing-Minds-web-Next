@@ -22,16 +22,10 @@ export const practiceInfo = {
     { number: "911", description: "Emergency services" },
     { number: "988", description: "Suicide & Crisis Lifeline" },
     {
-      number: "(239) 455-8500",
-      description: "David Lawrence Center 24-Hour Line",
+      number: "(239) 352-4357",
+      description: "David Lawrence Centers Crisis Line",
     },
   ],
-};
-
-export const stats = {
-  experience: "15+",
-  successRate: "98%",
-  rating: "4.9/5",
 };
 
 export const serviceAreas = [
@@ -43,27 +37,16 @@ export const serviceAreas = [
   "Collier County",
 ];
 
-export const acceptedInsurance = [
-  "Most major insurance plans",
-  "Aetna",
-  "Cigna",
-  "UnitedHealthcare",
-  "Medicare",
-  "Medicaid",
-];
-
 export const credentials = {
   en: [
-    "MD from University of Miami Miller School of Medicine",
-    // "Board Certified by American Board of Psychiatry and Neurology",
-    "Member of American Psychiatric Association",
-    "Fluent in English and Spanish",
+    "Doctor of Medicine (MD)",
+    "Active Florida Medical License ME165518",
+    "Adult psychiatry focus",
   ],
   es: [
-    "MD de la Escuela de Medicina Miller de la Universidad de Miami",
-    // "Certificada por la Junta Americana de Psiquiatría y Neurología",
-    "Miembro de la Asociación Psiquiátrica Americana",
-    "Fluida en inglés y español",
+    "Doctora en Medicina (MD)",
+    "Licencia Médica Activa de Florida ME165518",
+    "Enfoque en psiquiatría de adultos",
   ],
 };
 
@@ -124,67 +107,6 @@ export const services = {
   },
 };
 
-export const testimonials = {
-  en: [
-    {
-      name: "J.D.",
-      location: "Patient",
-      quote:
-        "Dr. Reve created a safe space for me to truly open up. Her guidance has been invaluable on my journey to understanding myself better.",
-      rating: 5,
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    },
-    {
-      name: "A.S.",
-      location: "Patient",
-      quote:
-        "I was hesitant to start medication, but Dr. Reve's collaborative and informative approach made me feel confident and cared for. It's been life-changing.",
-      rating: 5,
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b332c83c?w=150&h=150&fit=crop&crop=face",
-    },
-    {
-      name: "M.R.",
-      location: "Patient",
-      quote:
-        "The level of empathy and professionalism is unmatched. I finally feel like I have a true partner in my mental health care.",
-      rating: 5,
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    },
-  ],
-  es: [
-    {
-      name: "J.D.",
-      location: "Paciente",
-      quote:
-        "La Dra. Reve creó un espacio seguro para que pudiera abrirme de verdad. Su orientación ha sido invaluable en mi viaje hacia comprender mejor a mí mismo.",
-      rating: 5,
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    },
-    {
-      name: "A.S.",
-      location: "Paciente",
-      quote:
-        "Tenía dudas sobre empezar medicación, pero el enfoque colaborativo e informativo de la Dra. Reve me hizo sentir confiado y cuidado. Ha sido un cambio de vida.",
-      rating: 5,
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b332c83c?w=150&h=150&fit=crop&crop=face",
-    },
-    {
-      name: "M.R.",
-      location: "Paciente",
-      quote:
-        "El nivel de empatía y profesionalismo no tiene comparación. Finalmente siento que tengo un verdadero compañero en mi cuidado de salud mental.",
-      rating: 5,
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    },
-  ],
-};
-
 export const faqData = {
   en: [
     {
@@ -210,12 +132,12 @@ export const faqData = {
     {
       question: "What insurance plans do you accept?",
       answer:
-        "We accept most major insurance plans including Aetna, Cigna, UnitedHealthcare, Medicare, and Medicaid. We verify benefits before your first appointment.",
+        "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer.",
     },
     {
       question: "What is the cost of treatment?",
       answer:
-        "Costs vary depending on your insurance coverage and treatment needs. We offer transparent pricing and will discuss all costs before beginning treatment. Self-pay options and payment plans are available.",
+        "Costs vary based on the service and any applicable insurance benefits. Confirm participation with our office and verify benefits with your insurer before booking. Self-pay or financial options may be evaluated case by case.",
     },
   ],
   es: [
@@ -242,12 +164,12 @@ export const faqData = {
     {
       question: "¿Qué planes de seguro aceptan?",
       answer:
-        "Aceptamos la mayoría de los planes de seguro principales, incluyendo Aetna, Cigna, UnitedHealthcare, Medicare y Medicaid. Verificamos beneficios antes de su primera cita.",
+        "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora.",
     },
     {
       question: "¿Cuál es el costo del tratamiento?",
       answer:
-        "Los costos varían dependiendo de su cobertura de seguro y necesidades de tratamiento. Ofrecemos precios transparentes y discutiremos todos los costos antes de comenzar el tratamiento. Opciones de pago por cuenta propia y planes de pago están disponibles.",
+        "Los costos varían según el servicio y los beneficios de seguro aplicables. Confirme la participación con nuestra oficina y verifique los beneficios con su aseguradora antes de reservar. Las opciones de pago privado o ayuda financiera pueden evaluarse caso por caso.",
     },
   ],
 };
@@ -255,7 +177,7 @@ export const faqData = {
 export const bilingualFeatures = {
   en: [
     {
-      title: "Native Spanish Fluency",
+      title: "Bilingual Care in English and Spanish",
       description:
         "Consultations conducted entirely in Spanish for optimal communication",
     },
@@ -272,7 +194,7 @@ export const bilingualFeatures = {
   ],
   es: [
     {
-      title: "Fluidez Nativa en Español",
+      title: "Atención Bilingüe en Inglés y Español",
       description:
         "Consultas realizadas completamente en español para una comunicación óptima",
     },
@@ -292,14 +214,14 @@ export const bilingualFeatures = {
 export const treatmentExpectations = {
   en: [
     {
-      title: "Initial Consultation (40-60 minutes)",
+      title: "Initial Consultation",
       description:
-        "Comprehensive evaluation of your mental health history, current symptoms, and treatment goals.",
+        "Comprehensive evaluation of your mental health history, current symptoms, and treatment goals. The office confirms the appointment length when scheduling.",
     },
     {
-      title: "Follow-up Appointments (20-30 minutes)",
+      title: "Follow-up Appointments",
       description:
-        "Regular check-ins to monitor progress, adjust medications, and provide ongoing support.",
+        "Regular check-ins to monitor progress, adjust medications, and provide ongoing support. The office confirms the appointment length when scheduling.",
     },
     {
       title: "Treatment Planning",
@@ -309,19 +231,19 @@ export const treatmentExpectations = {
     {
       title: "Between Sessions",
       description:
-        "24/7 on-call support for urgent situations and medication adjustments as needed.",
+        "For non-urgent questions, use the secure patient portal or contact the office during published hours. In an emergency, call 911 or 988.",
     },
   ],
   es: [
     {
-      title: "Consulta Inicial (40-60 minutos)",
+      title: "Consulta Inicial",
       description:
-        "Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento.",
+        "Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento. La oficina confirma la duración de la cita al programar.",
     },
     {
-      title: "Citas de Seguimiento (20-30 minutos)",
+      title: "Citas de Seguimiento",
       description:
-        "Controles regulares para monitorear el progreso, ajustar medicamentos y brindar apoyo continuo.",
+        "Controles regulares para monitorear el progreso, ajustar medicamentos y brindar apoyo continuo. La oficina confirma la duración de la cita al programar.",
     },
     {
       title: "Planificación del Tratamiento",
@@ -331,7 +253,7 @@ export const treatmentExpectations = {
     {
       title: "Entre Sesiones",
       description:
-        "Soporte de guardia 24/7 para situaciones urgentes y ajustes de medicación según sea necesario.",
+        "Para preguntas no urgentes, use el portal seguro del paciente o contacte la oficina durante el horario publicado. En una emergencia, llame al 911 o al 988.",
     },
   ],
 };
@@ -343,14 +265,14 @@ export const seoContent = {
       title:
         "Dr. Melva Reve - Compassionate Psychiatric Care in Naples, FL | Healing Minds",
       description:
-        "Expert psychiatric care for adults in Naples, FL. Dr. Melva Reve offers bilingual treatment for anxiety, depression, ADHD, and PTSD. 15+ years experience. Book your consultation today.",
+        "Psychiatric care for adults in Naples, FL. Dr. Melva Reve, MD, holds active Florida medical license ME165518 and focuses on anxiety, depression, ADHD, and PTSD.",
       keywords:
         "psychiatrist Naples FL, psychiatric care Naples, anxiety treatment Naples, depression treatment Naples, bilingual psychiatrist, Spanish speaking psychiatrist Naples",
     },
     about: {
       title: "About Dr. Melva Reve - Psychiatrist in Naples, FL",
       description:
-        "Learn about Dr. Melva Reve, a psychiatrist with 15+ years of experience serving Naples, FL. Bilingual care with cultural sensitivity.",
+        "Meet Dr. Melva Reve, MD, a Naples psychiatrist with active Florida medical license ME165518, bilingual care and defined clinical focus areas.",
       keywords:
         "Dr Melva Reve Naples, psychiatrist biography, psychiatrist Naples, bilingual psychiatrist FL",
     },
@@ -375,7 +297,7 @@ export const seoContent = {
       title:
         "Dra. Melva Reve - Atención Psiquiátrica Compasiva en Naples, FL | Healing Minds",
       description:
-        "Atención psiquiátrica experta para adultos en Naples, FL. La Dra. Melva Reve ofrece tratamiento bilingüe para ansiedad, depresión, TDAH y TEPT. Más de 15 años de experiencia. Reserve su consulta hoy.",
+        "Atención psiquiátrica para adultos en Naples, FL. La Dra. Melva Reve, MD, tiene licencia médica activa de Florida ME165518 y se enfoca en ansiedad, depresión, TDAH y TEPT.",
       keywords:
         "psiquiatra Naples FL, atención psiquiátrica Naples, tratamiento ansiedad Naples, tratamiento depresión Naples, psiquiatra bilingüe, psiquiatra español Naples",
     },
@@ -383,7 +305,7 @@ export const seoContent = {
       title:
         "Acerca de la Dra. Melva Reve - Psiquiatra en Naples, FL",
       description:
-        "Conozca a la Dra. Melva Reve, psiquiatra con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.",
+        "Conozca a la Dra. Melva Reve, MD, psiquiatra en Naples con licencia médica activa de Florida ME165518, atención bilingüe y áreas de enfoque clínico.",
       keywords:
         "Dra Melva Reve Naples, biografía psiquiatra, psiquiatra con licencia Naples, psiquiatra bilingüe FL",
     },

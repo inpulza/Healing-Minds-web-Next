@@ -99,16 +99,16 @@ const Footer = () => {
               </Link>
             </div>
 
-            {/* Telehealth Booking */}
+            {/* Telehealth appointment request */}
             <div className="mb-8 p-4 bg-green-800/30 rounded-lg border border-green-700">
               <h2 className="text-base font-body font-semibold text-white mb-2 flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+                {language === 'en' ? 'Request a Telehealth Appointment' : 'Solicitar una Cita de Telesalud'}
               </h2>
               <p className="text-green-200 text-sm mb-3">
                 {language === 'en' 
-                  ? 'Schedule secure online consultations with Dr. Melva Reve'
-                  : 'Programe consultas seguras en línea con la Dra. Melva Reve'
+                  ? 'Submit an appointment request for office review and confirmation'
+                  : 'Envíe una solicitud de cita para revisión y confirmación de la oficina'
                 }
               </p>
               <Button
@@ -121,7 +121,7 @@ const Footer = () => {
                 className="bg-green-700 hover:bg-green-600 text-white text-sm font-semibold"
                 data-testid="footer-telehealth-button"
               >
-                {language === 'en' ? 'Schedule Now' : 'Programar Ahora'}
+                {language === 'en' ? 'Request Online' : 'Solicitar en Línea'}
               </Button>
             </div>
 

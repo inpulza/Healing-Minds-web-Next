@@ -75,3 +75,57 @@ After merge: exact production SHA, repeat the same 80-URL crawl and validators, 
 - GitHub Quality exposed two races in the heading/map smoke itself: a transient lazy-boundary detach during hydration and a circular wait while releasing an intercepted Maps request. The smoke now retries only the transient detach and releases the held route with Playwright's `ignoreErrors` cleanup. The reproduced command completes locally in 18.5 seconds.
 
 The smoke-test repair changes verification code only. A new exact-SHA Preview/Quality run is required after push; the previous Preview evidence remains valid for the unchanged application output but does not substitute for that gate.
+
+## Post-hardening local evidence — 2026-08-21
+
+The final hardening removed or qualified public statements that could not be demonstrated from a dated primary or operational source: named insurance participation, fixed visit durations, same-week or flexible availability, 24/7 clinic support, guaranteed telehealth modality or clinician, absolute privacy/security, patient-frequency claims, fabricated testimonials, unverified credentials, stale demographic statistics, promotional parking claims and implied local partnerships.
+
+`shared/public-claims-sources.json` is the versioned provenance and freshness registry for the facts that remain. It includes Florida ME165518, California A198275 with its renewal deadline, NPPES organization/person records, the canonical Google Business Profile/Maps identity, Larkin psychiatry residency evidence, David Lawrence Centers crisis/general contact distinction and dated social-profile checks. Tests fail when a renewable record expires.
+
+The first complete browser run exposed a real SSR omission: React did not serialize closed FAQ answer branches implemented with the HTML `hidden` attribute in every active page variant. All six accordion implementations now keep the answer nodes in initial HTML with CSS visibility plus `aria-hidden`, while preserving real hydrated toggles. The final browser contract enumerates 28 canonical FAQ routes EN/ES and compares every question and answer across JSON-LD, initial HTML and a real click in Desktop Chrome and Pixel 7.
+
+Final local gates on the settled tree:
+
+- TypeScript: PASS.
+- Unit and contract tests: 173/173 PASS (162 `.mjs` + 11 TypeScript).
+- Next production build: PASS; 87 generated pages.
+- Bundle budgets: `/` 668.9/750 KiB; catch-all 779.6/850 KiB.
+- Focused FAQ browser gate: 2/2 PASS, covering all 28 routes in both viewports.
+- Full Playwright matrix: 124 PASS, 22 intentional cross-profile skips, 0 failures across 146 cases.
+- `git diff --check`: PASS; line-ending warnings only.
+
+Deployment evidence remains deliberately pending until the final judge returns PASS and the exact tree is committed. The required order remains branch → PR → exact-SHA Preview → review classification → squash merge → exact-SHA Production verification. The remote branch must not be deleted.
+
+## Final false-green closure — 2026-08-21
+
+The independent judge did not accept the earlier green suites as proof of factual accuracy. It found three classes of blind spot after the initial hardening:
+
+1. Lazy hydrated content was missing from source-only guards: `ServiceAreas` still exposed unsupported population/reach/travel metrics and blanket telehealth availability.
+2. Legal and conversion copy conflated the practice, clinician and website: practice-level licensure, website-request consent, a confirmed clinician/modality, and CharmHealth as a clinical video platform.
+3. Image alternatives acted as hidden marketing copy: they asserted a secure platform, active treatment and a named treating physician even though the visual UI had already been made conservative.
+
+The final contract now checks each layer separately: source files, initial SSR HTML, lazy DOM after real scrolling, hydrated interaction, metadata and JSON-LD. The remediation uses one Naples physical office, request-only telehealth wording, treating-professional licensure at the patient's physical location, documented clinical consent under applicable law, and purely visual localized image alternatives.
+
+Official legal citations were added to the dated source registry:
+
+- Florida Statutes Section 456.47: https://leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0400-0499%2F0456%2FSections%2F0456.47.html
+- California Business and Professions Code Section 2290.5: https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=2290.5
+
+Final settled local evidence, superseding earlier local counts:
+
+- Independent judge: PASS for PR/deployment, followed by the required global E2E.
+- TypeScript: PASS.
+- Unit/contracts: 181/181 PASS (170 `.mjs` + 11 TypeScript).
+- Next production build: PASS; 87 generated pages.
+- Bundle budgets: `/` 669.0/750 KiB; catch-all 779.8/850 KiB.
+- Focused public-claims E2E: 44/44 PASS.
+- Full Playwright matrix: 148 PASS, 22 intentional cross-profile skips, 0 failures across 170 cases.
+- `git diff --check`: PASS; line-ending warnings only.
+
+Preview and Production evidence must be appended outside this local-only checkpoint after the exact committed SHAs are deployed and verified.
+
+## Protected Preview authentication gate — 2026-08-21
+
+The first PR #33 deployed run exposed a harness boundary, not a site defect: Playwright page routes carried the Vercel OIDC credential, while standalone `APIRequestContext` calls received Vercel's `/sso-api` HTML. That produced false symptoms such as zero JSON-LD blocks, zero sitemap URLs and non-JSON review responses.
+
+The shared Preview helper now authenticates both browser and request clients only for the allowlisted Healing Minds Preview host. It keeps redirects scoped, retries one transient route fetch, never logs the token and requires demonstrated React hydration before an FAQ click. A focused deployed rerun passed 6/6, including all 28 FAQ routes on desktop and mobile. The full exact-SHA deployed matrix remains the merge gate.

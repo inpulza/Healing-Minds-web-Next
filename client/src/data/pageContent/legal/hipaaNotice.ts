@@ -27,7 +27,7 @@ export const hipaaNoticeContent: BilingualPageContent = {
         key: 'uses-disclosures',
         heading: `USES AND DISCLOSURES OF PROTECTED HEALTH INFORMATION`,
         paragraphs: [
-          `The providers of this clinic keep a record of the healthcare services we provide. You may ask to see and copy that record (copy charges may apply, per New York State law).`,
+          `The providers of this clinic keep a record of the healthcare services we provide. You may ask to see and copy that record; fees permitted by applicable law may apply.`,
           `Your protected health information may be used and disclosed by your physician, our office staff and others outside of our office that are involved in your care and treatment for the purpose of providing health care services to you, to pay your healthcare bills, to support the operation of the physician's practice, and other uses required by law.`,
         ],
       },
@@ -166,7 +166,7 @@ export const hipaaNoticeContent: BilingualPageContent = {
         key: 'uses-disclosures',
         heading: `USOS Y DIVULGACIONES DE INFORMACIÓN DE SALUD PROTEGIDA`,
         paragraphs: [
-          `Los proveedores de esta clínica mantienen un registro de los servicios de atención médica que proporcionamos. Puede pedir ver y copiar ese registro (pueden aplicar cargos por copia, según la ley del estado de Nueva York).`,
+          `Los proveedores de esta clínica mantienen un registro de los servicios de atención médica que proporcionamos. Puede pedir ver y copiar ese registro; pueden aplicarse cargos permitidos por la ley aplicable.`,
           `Su información de salud protegida puede ser utilizada y divulgada por su médico, nuestro personal de oficina y otros fuera de nuestra oficina que estén involucrados en su atención y tratamiento con el propósito de brindarle servicios de atención médica, pagar sus facturas de atención médica, apoyar la operación de la práctica del médico y otros usos requeridos por ley.`,
         ],
       },

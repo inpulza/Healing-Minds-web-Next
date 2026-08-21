@@ -79,8 +79,8 @@ test("Immokalee content does not promise unpublished evening or weekend availabi
   assert.match(hyperlocal, /elegibilidad y disponibilidad de telesalud se confirman al programar/i);
   assert.match(faqs, /Monday through Friday, 8:00 AM to 5:00 PM/);
   assert.match(faqs, /lunes a viernes de 8:00 AM a 5:00 PM/);
-  assert.match(immokaleeSeo, /telehealth eligibility and availability confirmed when scheduling/i);
-  assert.match(immokaleeSeo, /elegibilidad y disponibilidad de telesalud confirmadas al programar/i);
+  assert.match(immokaleeSeo, /telehealth may be requested and is confirmed case by case/i);
+  assert.match(immokaleeSeo, /la telesalud puede solicitarse y se confirma caso por caso/i);
 });
 
 test("public clinical eligibility consistently limits services to adults 18 and older", () => {

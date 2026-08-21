@@ -106,7 +106,9 @@ const breadcrumbLabels: Record<string, { en: string; es: string }> = {
 };
 
 function canonicalUrl(pathname: string): string {
-  return `${practiceProfile.siteUrl}${pathname === "/" ? "" : pathname}`;
+  return pathname === "/"
+    ? practiceProfile.canonicalHomeUrl
+    : `${practiceProfile.siteUrl}${pathname}`;
 }
 
 function absoluteUrl(value: string | null | undefined): string | undefined {
@@ -198,21 +200,22 @@ export function buildPracticeNode(): JsonLdNode {
   };
 }
 
-export function buildPhysicianPersonNode(): JsonLdNode {
+export function buildPhysicianPersonNode(locale: "en" | "es" = "en"): JsonLdNode {
   return {
     "@type": "Person",
     "@id": practiceProfile.physicianId,
-    name: practiceProfile.physician.professionalName,
+    name: practiceProfile.physician.name,
     alternateName: practiceProfile.physician.legalName,
     honorificPrefix: practiceProfile.physician.honorificPrefix,
-    jobTitle: practiceProfile.physician.jobTitle,
+    honorificSuffix: practiceProfile.physician.honorificSuffix,
+    jobTitle: practiceProfile.physician.jobTitle[locale],
     url: practiceProfile.physician.profileUrl,
     image: practiceProfile.imageUrl,
     knowsLanguage: [...practiceProfile.physician.languages],
     knowsAbout: "Psychiatry",
     identifier: physicianIdentifier(),
     worksFor: { "@id": practiceProfile.organizationId },
-    sameAs: [practiceProfile.physician.npiUrl],
+    sameAs: [...practiceProfile.physician.sameAs],
   };
 }
 
@@ -234,7 +237,7 @@ function websiteNode(): JsonLdNode {
   return {
     "@type": "WebSite",
     "@id": practiceProfile.websiteId,
-    url: practiceProfile.siteUrl,
+    url: practiceProfile.canonicalHomeUrl,
     name: practiceProfile.name,
     inLanguage: ["en-US", "es-US"],
     publisher: { "@id": practiceProfile.organizationId },
@@ -471,11 +474,13 @@ function staticPageTypes(
   const base = pathname === "/services" || pathname === "/es/servicios"
     ? "CollectionPage"
     : pathname === "/about" || pathname === "/es/acerca-de"
-      ? "AboutPage"
+      ? ["AboutPage", "ProfilePage"]
       : pathname === "/contact" || pathname === "/es/contacto"
         ? "ContactPage"
         : "WebPage";
-  return faqs.length ? [base, "FAQPage"] : base;
+  return faqs.length
+    ? [...(Array.isArray(base) ? base : [base]), "FAQPage"]
+    : base;
 }
 
 export function buildStaticStructuredData({
@@ -490,6 +495,7 @@ export function buildStaticStructuredData({
   const breadcrumb = breadcrumbNode(pathname, title);
   const service = serviceNode(pathname, title, description, location);
   const isHome = pathname === "/" || pathname === "/es";
+  const isDomainHome = pathname === "/";
   const isAbout = pathname === "/about" || pathname === "/es/acerca-de";
   const isContact = pathname === "/contact" || pathname === "/es/contacto";
   const isNaples = location === "naples";
@@ -520,9 +526,9 @@ export function buildStaticStructuredData({
 
   const graph: JsonLdNode[] = [pageNode];
   if (breadcrumb) graph.push(breadcrumb);
-  if (isHome) graph.push(websiteNode());
+  if (isDomainHome) graph.push(websiteNode());
   if (isHome || isContact || isNaples) graph.push(buildPracticeNode());
-  if (isHome || isAbout || isContact || isNaples) graph.push(buildPhysicianPersonNode());
+  if (isHome || isAbout || isContact || isNaples) graph.push(buildPhysicianPersonNode(locale));
   if (isServicesIndex) graph.push(servicesItemList(pathname));
   if (service) graph.push(service);
 
@@ -580,18 +586,9 @@ export function buildBlogIndexStructuredData({
   const breadcrumb = blogBreadcrumb(canonicalPath, title);
   const blogId = `${canonical}#blog`;
   const listId = `${canonical}#articles`;
-  const articleNodes = archive.data.map((post) => {
+  const articleUrls = archive.data.map((post) => {
     const path = post.language === "es" ? `/es/blog/${post.slug}` : `/blog/${post.slug}`;
-    return {
-      "@type": "BlogPosting",
-      "@id": `${canonicalUrl(path)}#article`,
-      url: canonicalUrl(path),
-      headline: post.title,
-      description: post.excerpt || undefined,
-      datePublished: post.publishedAt || undefined,
-      image: absoluteUrl(post.featuredImage),
-      inLanguage: post.language === "es" ? "es-US" : "en-US",
-    };
+    return canonicalUrl(path);
   });
   const pageNode: JsonLdNode = {
     "@type": "CollectionPage",
@@ -613,22 +610,21 @@ export function buildBlogIndexStructuredData({
     description,
     inLanguage: language === "es" ? "es-US" : "en-US",
     publisher: { "@id": practiceProfile.organizationId },
-    blogPost: articleNodes.map((node) => ({ "@id": node["@id"] })),
     mainEntity: { "@id": listId },
   };
   const listNode: JsonLdNode = {
     "@type": "ItemList",
     "@id": listId,
     numberOfItems: archive.data.length,
-    itemListElement: articleNodes.map((node, index) => ({
+    itemListElement: articleUrls.map((url, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      item: { "@id": node["@id"] },
+      item: url,
     })),
   };
   return {
     "@context": "https://schema.org",
-    "@graph": [pageNode, breadcrumb, blogNode, listNode, ...articleNodes],
+    "@graph": [pageNode, breadcrumb, blogNode, listNode],
   };
 }
 
@@ -683,7 +679,7 @@ export function buildBlogPostStructuredData({
     isAccessibleForFree: true,
   };
   const graph: JsonLdNode[] = [pageNode, breadcrumb, articleNode, publisherNode()];
-  if (authorIsPhysician) graph.push(buildPhysicianPersonNode());
+  if (authorIsPhysician) graph.push(buildPhysicianPersonNode(post.language));
   return { "@context": "https://schema.org", "@graph": graph };
 }
 

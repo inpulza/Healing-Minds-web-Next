@@ -1,60 +1,30 @@
+import { CircleDollarSign, Phone, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
-import OptimizedImage from './OptimizedImage';
-import MobileInsuranceCarousel from './MobileInsuranceCarousel';
 import { homeContent } from '@/data/pageContent/mainPages/home';
 import { renderRichText } from '@/components/RichText';
-
-// Import insurance logos - WebP optimized using full path (70% size reduction, same visual quality)
-import aetnaLogo from '../assets/insurance-aetna.webp';           // 38KB vs 110KB PNG
-import ambetterLogo from '../assets/insurance-ambetter.webp';     // 26KB vs 57KB PNG
-import cignaLogo from '../assets/insurance-cigna.webp';           // 65KB vs 173KB PNG
-import medicareLogo from '../assets/insurance-medicare.webp';     // 45KB vs 134KB PNG
-import firstHealthLogo from '../assets/insurance-first-health.webp'; // 48KB vs 107KB PNG
-import medicaidLogo from '../assets/insurance-medicaid.webp';     // 70KB vs 173KB PNG
-import floridaMedicaidLogo from '../assets/insurance-florida-medicaid.webp'; // 59KB vs 133KB PNG
-import champvaLogo from '../assets/insurance-champva.webp';       // 36KB vs 95KB PNG
-import sunshineHealthLogo from '../assets/insurance-sunshine.webp'; // 44KB vs 116KB PNG
-import avmedLogo from '../assets/insurance-avmed.webp';           // 39KB vs 91KB PNG
-import wellcareLogo from '../assets/insurance-wellcare.webp';     // 30KB vs 67KB PNG
-// Additional WebP optimized logos
-import doctorsHealthcareLogo from '@assets/3_1755868276797.webp';  // 77KB vs 197KB PNG
-import unitedHealthcareLogo from '@assets/8_1755868276798.webp';   // 71KB vs 173KB PNG
-import oscarLogo from '@assets/10_1755868276798.webp';              // 39KB vs 91KB PNG
+import { Link } from '@/lib/navigation';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
   const content = homeContent[language];
   const section = (key: string) => content.sections.find((x) => x.key === key)!;
-  
-  // Insurance logos use optimized eager/lazy loading strategy to avoid network contention
 
-  const insuranceLogos = [
-    { src: aetnaLogo, alt: 'Aetna Insurance', name: 'Aetna' },
-    { src: unitedHealthcareLogo, alt: 'United Healthcare', name: 'United Healthcare' },
-    { src: medicareLogo, alt: 'Medicare', name: 'Medicare' },
-    { src: medicaidLogo, alt: 'Medicaid', name: 'Medicaid' },
-    { src: cignaLogo, alt: 'Cigna Healthcare', name: 'Cigna' },
-    { src: ambetterLogo, alt: 'Ambetter Health', name: 'Ambetter' },
-    { src: firstHealthLogo, alt: 'First Health', name: 'First Health' },
-    { src: oscarLogo, alt: 'Oscar Health', name: 'Oscar' },
-    { src: wellcareLogo, alt: 'WellCare', name: 'WellCare' },
-    { src: sunshineHealthLogo, alt: 'Sunshine Health', name: 'Sunshine Health' },
-    { src: avmedLogo, alt: 'AvMed', name: 'AvMed' },
-    { src: doctorsHealthcareLogo, alt: 'Doctors Healthcare Plans', name: 'Doctors Healthcare' },
-    { src: champvaLogo, alt: 'CHAMPVA', name: 'CHAMPVA' },
-    { src: floridaMedicaidLogo, alt: 'Florida Medicaid', name: 'Florida Medicaid' }
-  ];
-
-  // Split logos into three rows for brick layout
-  const firstRow = insuranceLogos.slice(0, 5);   // First 5 logos
-  const secondRow = insuranceLogos.slice(5, 10); // Next 5 logos
-  const thirdRow = insuranceLogos.slice(10);     // Remaining logos
+  const steps = language === 'en'
+    ? [
+        { icon: Phone, title: 'Ask the office', description: 'Confirm current participation for your specific plan before booking.' },
+        { icon: ShieldCheck, title: 'Verify with your insurer', description: 'Benefits, deductibles, copays and telehealth coverage vary by plan and service.' },
+        { icon: CircleDollarSign, title: 'Discuss billing options', description: 'Self-pay or financial options may be evaluated case by case.' },
+      ]
+    : [
+        { icon: Phone, title: 'Consulte con la oficina', description: 'Confirme la participación vigente para su plan específico antes de reservar.' },
+        { icon: ShieldCheck, title: 'Verifique con su aseguradora', description: 'Los beneficios, deducibles, copagos y la cobertura de telesalud varían según el plan y el servicio.' },
+        { icon: CircleDollarSign, title: 'Consulte opciones de facturación', description: 'Las opciones de pago privado o ayuda financiera pueden evaluarse caso por caso.' },
+      ];
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 bg-white">
+    <section className="py-8 sm:py-12 lg:py-16 bg-white" data-testid="insurance-billing-guidance">
       <div className="max-w-[85%] lg:max-w-[90%] mx-auto px-2">
-        {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-green-800 mb-4">
             {renderRichText(section('insuranceHeading').heading!, undefined, 'font-display italic text-green-700')}
           </h2>
@@ -63,112 +33,25 @@ const InsuranceLogos = () => {
           </p>
         </div>
 
-        {/* Responsive Insurance Layout */}
         <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
-          
-          {/* Mobile Layout - Auto Slider */}
-          <MobileInsuranceCarousel
-            logos={insuranceLogos}
-            testId="mobile-insurance-carousel"
-          />
-
-          {/* Desktop Layout - Three Rows Brick Style */}
-          <div className="hidden md:flex flex-col items-center gap-4 lg:gap-6">
-            
-            {/* First Row */}
-            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
-              {firstRow.map((logo, index) => (
-                <div 
-                  key={index} 
-                  className="group flex items-center justify-center"
-                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <OptimizedImage
-                    src={logo.src}
-                    alt={logo.alt}
-                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
-                    width={144}
-                    height={112}
-                    priority={false}
-                    sizes="(max-width: 1024px) 144px, 208px"
-                    style={{
-                      aspectRatio: '13/9',
-                      minWidth: '144px',
-                      minHeight: '112px',
-                      containIntrinsicSize: '144px 112px',
-                      contentVisibility: index < 2 ? 'visible' : 'auto',
-                      willChange: 'auto'
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            
-            {/* Second Row - Offset */}
-            <div className="flex flex-wrap justify-center gap-4 lg:gap-8" style={{ marginLeft: 'clamp(2rem, 6vw, 4rem)' }}>
-              {secondRow.map((logo, index) => (
-                <div 
-                  key={index + firstRow.length} 
-                  className="group flex items-center justify-center"
-                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <OptimizedImage
-                    src={logo.src}
-                    alt={logo.alt}
-                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
-                    width={144}
-                    height={112}
-                    priority={false}
-                    sizes="(max-width: 1024px) 144px, 208px"
-                    style={{
-                      aspectRatio: '13/9',
-                      minWidth: '144px',
-                      minHeight: '112px',
-                      containIntrinsicSize: '144px 112px',
-                      contentVisibility: 'auto',
-                      willChange: 'auto'
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            
-            {/* Third Row */}
-            <div className="flex flex-wrap justify-center gap-4 lg:gap-8">
-              {thirdRow.map((logo, index) => (
-                <div 
-                  key={index + firstRow.length + secondRow.length} 
-                  className="group flex items-center justify-center"
-                  data-testid={`insurance-logo-${logo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  <OptimizedImage
-                    src={logo.src}
-                    alt={logo.alt}
-                    className="w-36 h-28 lg:w-52 lg:h-36 object-contain transition-all duration-300 hover:scale-105 filter grayscale hover:grayscale-0"
-                    width={144}
-                    height={112}
-                    priority={false}
-                    sizes="(max-width: 1024px) 144px, 208px"
-                    style={{
-                      aspectRatio: '13/9',
-                      minWidth: '144px',
-                      minHeight: '112px',
-                      containIntrinsicSize: '144px 112px',
-                      contentVisibility: 'auto',
-                      willChange: 'auto'
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            
+          <div className="grid gap-5 md:grid-cols-3">
+            {steps.map(({ icon: Icon, title, description }) => (
+              <div key={title} className="rounded-2xl bg-white p-6 text-center shadow-sm">
+                <Icon className="mx-auto mb-4 h-7 w-7 text-green-700" aria-hidden="true" />
+                <h3 className="mb-2 font-body text-lg font-semibold text-green-900">{title}</h3>
+                <p className="font-body text-sm leading-relaxed text-gray-600">{description}</p>
+              </div>
+            ))}
           </div>
-          
-          {/* Bottom Note */}
+
           <div className="text-center mt-8 pt-6 border-t border-gray-200">
-            <p className="text-sm text-gray-500 font-body">
-              {section('insuranceNote').paragraphs![0]}
-            </p>
+            <p className="text-sm text-gray-600 font-body mb-3">{section('insuranceNote').paragraphs![0]}</p>
+            <Link
+              href={language === 'en' ? '/billing-policy' : '/es/politica-facturacion'}
+              className="font-body text-sm font-semibold text-green-800 underline underline-offset-4 hover:text-green-700"
+            >
+              {language === 'en' ? 'Review billing policy' : 'Revisar la política de facturación'}
+            </Link>
           </div>
         </div>
       </div>

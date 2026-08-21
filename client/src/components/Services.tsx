@@ -12,8 +12,8 @@ const Services = () => {
       id: 'anxiety',
       title: language === 'en' ? 'Anxiety Treatment' : 'Tratamiento de Ansiedad',
       description: language === 'en' 
-        ? 'Expert care for panic attacks, social anxiety, and generalized anxiety disorder. Evidence-based treatment with compassionate support for lasting relief.'
-        : 'Atención experta para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada. Tratamiento basado en evidencia con apoyo compasivo para alivio duradero.',
+        ? 'Psychiatric evaluation and individualized treatment planning for panic attacks, social anxiety, and generalized anxiety disorder.'
+        : 'Evaluación psiquiátrica y planificación individualizada del tratamiento para ataques de pánico, ansiedad social y trastorno de ansiedad generalizada.',
       icon: Brain,
       featured: true,
       link: language === 'en' ? '/services/anxiety-treatment' : '/es/servicios/tratamiento-ansiedad'
@@ -32,8 +32,8 @@ const Services = () => {
       id: 'adhd',
       title: language === 'en' ? 'ADHD Treatment' : 'Tratamiento de TDAH',
       description: language === 'en'
-        ? 'Specialized evaluation and treatment for adults 18 and older with ADHD. Improve focus, organization, and daily functioning with expert psychiatric care.'
-        : 'Evaluación especializada y tratamiento para adultos de 18 años en adelante con TDAH. Mejore el enfoque, organización y funcionamiento diario con atención psiquiátrica experta.',
+        ? 'Psychiatric ADHD evaluation and individualized treatment planning for adults 18 and older.'
+        : 'Evaluación psiquiátrica de TDAH y planificación individualizada del tratamiento para adultos de 18 años en adelante.',
       icon: Smile,
       featured: false,
       link: language === 'en' ? '/services/adhd-treatment' : '/es/servicios/tratamiento-adhd'
@@ -42,8 +42,8 @@ const Services = () => {
       id: 'ptsd',
       title: language === 'en' ? 'PTSD Treatment' : 'Tratamiento de TEPT',
       description: language === 'en'
-        ? 'Trauma-informed psychiatric care for post-traumatic stress disorder. Safe, culturally sensitive treatment to help you reclaim your life from trauma.'
-        : 'Atención psiquiátrica informada en trauma para trastorno de estrés postraumático. Tratamiento seguro y culturalmente sensible para ayudarle a reclamar su vida del trauma.',
+        ? 'Trauma-informed psychiatric evaluation and individualized treatment planning for post-traumatic stress disorder.'
+        : 'Evaluación psiquiátrica informada en trauma y planificación individualizada del tratamiento para el trastorno de estrés postraumático.',
       icon: Leaf,
       featured: false,
       link: language === 'en' ? '/services/ptsd-treatment' : '/es/servicios/tratamiento-tept'

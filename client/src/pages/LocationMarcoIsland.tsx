@@ -9,7 +9,7 @@ import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
-import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
+import { practiceInfo, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -66,7 +66,7 @@ const LocationMarcoIsland = () => {
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
       servicesTitle: "Services for This Community",
-      insuranceTitle: "Accepted Insurance Plans",
+      insuranceTitle: "Insurance and Billing Questions",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
       bookNow: "Book Appointment",
@@ -75,7 +75,7 @@ const LocationMarcoIsland = () => {
       features: [
         {
           title: "Convenient Location",
-          description: "Easily accessible from Marco Island with ample parking available"
+          description: "Check parking and access details when scheduling"
         },
         {
           title: "Modern Facilities", 
@@ -102,7 +102,7 @@ const LocationMarcoIsland = () => {
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
       servicesTitle: "Servicios para Esta Comunidad",
-      insuranceTitle: "Planes de Seguro Aceptados",
+      insuranceTitle: "Preguntas sobre Seguro y Facturación",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
       bookNow: "Reservar Cita",
@@ -111,7 +111,7 @@ const LocationMarcoIsland = () => {
       features: [
         {
           title: "Ubicación Conveniente",
-          description: "Fácil acceso desde Marco Island con amplio estacionamiento disponible"
+          description: "Confirme estacionamiento y acceso al programar"
         },
         {
           title: "Instalaciones Modernas",
@@ -228,7 +228,7 @@ const LocationMarcoIsland = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? '15+ Years Experience' : '15+ Años de Experiencia'}
+                          {language === 'en' ? 'Active Florida License ME165518' : 'Licencia Activa de Florida ME165518'}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
@@ -305,9 +305,9 @@ const LocationMarcoIsland = () => {
                   
                   {/* Key Stats */}
                   <div className="mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">15+</div>
+                    <div className="text-2xl sm:text-3xl font-bold mb-2 text-green-600">ME165518</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Years serving the Southwest Florida community with excellence' : 'Años sirviendo a la comunidad del Suroeste de Florida con excelencia'}
+                      {language === 'en' ? 'Active Florida medical license' : 'Licencia médica activa de Florida'}
                     </div>
                   </div>
 
@@ -769,12 +769,12 @@ const LocationMarcoIsland = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                          {language === 'en' ? 'Parking and Access Details' : 'Detalles de Estacionamiento y Acceso'}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Free, convenient parking available for all Marco Island patients visiting our mental health facility'
-                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Marco Island que visiten nuestras instalaciones de salud mental'}
+                            ? 'Check parking and access details with the office when scheduling your visit'
+                            : 'Confirme con la oficina los detalles de estacionamiento y acceso al programar su visita'}
                         </p>
                       </div>
                     </div>
@@ -831,9 +831,9 @@ const LocationMarcoIsland = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Community</span> Involvement in Marco Island</>
+                    <><span className="font-display italic text-green-700">Independent Local</span> Resources in Marco Island</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Marco Island</>
+                    <><span className="font-display italic text-green-700">Recursos Locales</span> Independientes en Marco Island</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -842,8 +842,8 @@ const LocationMarcoIsland = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Mental health is fundamental to building a thriving community. We proudly support Marco Island through our psychiatric care services and by recognizing the vital organizations that strengthen our island community fabric.'
-                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Marco Island a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad isleña.'}
+                  ? 'These independent local resources provide community information and services in Marco Island. Listings are informational only and do not imply partnership, endorsement, or referral.'
+                  : 'Estos recursos locales independientes ofrecen información y servicios comunitarios en Marco Island. La lista es solo informativa y no implica colaboración, respaldo ni referido.'}
               </p>
             </div>
             
@@ -860,8 +860,8 @@ const LocationMarcoIsland = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Home to the world-famous Key Marco Cat artifact on loan from the Smithsonian. This 6-inch-tall half-cat, half-human figure was carved by Calusa Native Americans 500-1500 years ago, representing the rich cultural heritage of our island community and the importance of preserving history for mental wellness.'
-                    : 'Hogar del mundialmente famoso artefacto Key Marco Cat prestado por el Smithsonian. Esta figura de 6 pulgadas de alto, mitad gato, mitad humano, fue tallada por los nativos americanos Calusa hace 500-1500 años, representando el rico patrimonio cultural de nuestra comunidad isleña y la importancia de preservar la historia para el bienestar mental.'}
+                    ? 'Local history, exhibitions, and visitor information from the Marco Island Historical Museum.'
+                    : 'Historia local, exhibiciones e información para visitantes del Marco Island Historical Museum.'}
                 </p>
 
                 <a
@@ -896,8 +896,8 @@ const LocationMarcoIsland = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Bringing wide variety of arts through exhibitions and educational programs for adults and children. With monthly exhibits and receptions, this center fosters creative expression and community connection - essential elements for mental health and well-being in our island community.'
-                    : 'Aportando una amplia variedad de artes a través de exposiciones y programas educativos para adultos y niños. Con exposiciones y recepciones mensuales, este centro fomenta la expresión creativa y la conexión comunitaria - elementos esenciales para la salud mental y el bienestar en nuestra comunidad isleña.'}
+                    ? 'Exhibitions and arts-education programs offered by the Marco Island Center for the Arts.'
+                    : 'Exhibiciones y programas de educación artística ofrecidos por Marco Island Center for the Arts.'}
                 </p>
 
                 <a
@@ -932,8 +932,8 @@ const LocationMarcoIsland = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'With around 2,700-3,000 members, this major nonprofit supports the Marco Island Branch Library and all ten Collier County libraries. They bring educational programs, training, and new technology including a recent $100,000 donation for eBooks, supporting community learning and mental enrichment.'
-                    : 'Con alrededor de 2,700-3,000 miembros, esta importante organización sin fines de lucro apoya la Biblioteca de Marco Island y las diez bibliotecas del Condado de Collier. Aportan programas educativos, capacitación y nueva tecnología incluyendo una donación reciente de $100,000 para eBooks, apoyando el aprendizaje comunitario y el enriquecimiento mental.'}
+                    ? 'Library-support and educational resources from Friends of the Library of Collier County.'
+                    : 'Recursos educativos y de apoyo a bibliotecas de Friends of the Library of Collier County.'}
                 </p>
 
                 <a
@@ -950,7 +950,7 @@ const LocationMarcoIsland = () => {
                       <ArrowRight className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-left leading-tight flex-1 py-2">
-                      {language === 'en' ? 'Support Their Mission' : 'Apoyar Su Misión'}
+                      {language === 'en' ? 'Visit Official Site' : 'Visitar Sitio Oficial'}
                     </span>
                   </Button>
                 </a>
@@ -961,8 +961,8 @@ const LocationMarcoIsland = () => {
             <div className="mt-16 text-center">
               <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Just as these organizations strengthen our Marco Island community, we are committed to supporting your mental health journey with compassionate and professional psychiatric care.'
-                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Marco Island, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+                  ? 'Healing Minds provides psychiatric care for adults in Marco Island through telepsychiatry and appointments at our Naples office.'
+                  : 'Healing Minds ofrece atención psiquiátrica para adultos de Marco Island mediante telepsiquiatría y citas en nuestra oficina de Naples.'}
               </p>
               <Button 
                 className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
@@ -1060,8 +1060,7 @@ const LocationMarcoIsland = () => {
                       {content.contactTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      Phone: (239) 423-0272<br />
-                      Fax: (239) 330-2073
+                      Phone: (239) 423-0272
                     </p>
                   </div>
                 </div>
@@ -1102,7 +1101,7 @@ const LocationMarcoIsland = () => {
                   <div className="text-center space-y-4">
                     <VideoIcon className="w-8 h-8 text-blue-600 mx-auto" />
                     <h3 className="text-lg font-bold text-blue-800">
-                      {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+                      {language === 'en' ? 'Request Telehealth' : 'Solicitar Telesalud'}
                     </h3>
                     <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
                   </div>

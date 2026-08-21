@@ -7,44 +7,43 @@ export const cancellationPolicyContent: BilingualPageContent = {
       {
         key: 'intro',
         paragraphs: [
-          `At Healing Minds Psychiatry, we are committed to providing exceptional and timely care to all of our patients. When you schedule an appointment, we reserve that time exclusively for you. Late cancellations and absences prevent us from being able to offer that space to another patient who needs it.`,
-          `For this reason, we maintain a strict **24 business hours cancellation policy**.`,
+          `Contact the office promptly if you need to cancel or reschedule an appointment. The office will provide the current cancellation and no-show terms in writing and can confirm them before an appointment is accepted.`,
         ],
       },
       {
         key: 'requirement',
         heading: `Cancellation Requirement`,
         paragraphs: [
-          `We ask that if you need to cancel or reschedule your appointment, you do so with at least **24 business hours' notice**. This allows us to offer the space to someone else on our waiting list.`,
+          `The required notice period, if any, is the period disclosed in the current written terms provided by the office. Ask the office to confirm it for your appointment.`,
         ],
       },
       {
         key: 'fee',
         heading: `Late Cancellation or No-Show Fee`,
         bullets: [
-          `Cancellations made with **less than 24 business hours' notice** prior to the scheduled appointment time will be subject to a late cancellation fee of **$50.00**.`,
-          `Patients who **fail to show up** for their appointment without notifying the clinic will also be subject to a **$50.00** fee.`,
+          `A late-cancellation or no-show fee applies only if it was disclosed and acknowledged in writing and is permitted by applicable law.`,
+          `Ask the office to confirm the current fee, if any, before scheduling.`,
         ],
       },
       {
         key: 'confirmation',
         heading: `Appointment Confirmation`,
         paragraphs: [
-          `As a courtesy, our system or staff may attempt to contact you to confirm your appointment. However, **it is the patient's responsibility to remember, attend, or cancel their appointment on time**. Failure to receive a confirmation call or message does not exempt you from this policy.`,
+          `The office will explain any reminder or confirmation process that applies to your appointment. Contact the office directly if you are unsure whether an appointment or cancellation was received.`,
         ],
       },
       {
         key: 'exceptions',
         heading: `Policy Exceptions`,
         paragraphs: [
-          `We understand that serious and unavoidable medical emergencies can occur. Exceptions to this policy for documented emergencies will be considered on a case-by-case basis, at the clinic's discretion.`,
+          `Questions about emergencies or other exceptions are reviewed under the current written policy and applicable law. Contact the office for the terms that apply to your circumstances.`,
         ],
       },
       {
         key: 'acknowledgment',
         heading: `Policy Acknowledgment`,
         paragraphs: [
-          `By scheduling an appointment with Healing Minds Psychiatry, you acknowledge and agree to the terms of our Cancellation and No-Show Policy.`,
+          `The cancellation and no-show terms disclosed and acknowledged in writing for your appointment govern, subject to applicable law.`,
         ],
       },
     ],
@@ -55,44 +54,43 @@ export const cancellationPolicyContent: BilingualPageContent = {
       {
         key: 'intro',
         paragraphs: [
-          `En Healing Minds Psychiatry, nos comprometemos a proporcionar una atención excepcional y oportuna a todos nuestros pacientes. Cuando usted agenda una cita, reservamos ese tiempo exclusivamente para usted. Las cancelaciones tardías y las ausencias impiden que podamos ofrecer ese espacio a otro paciente que lo necesite.`,
-          `Por esta razón, mantenemos una estricta **política de cancelación de 24 horas hábiles**.`,
+          `Contacte la oficina lo antes posible si necesita cancelar o reprogramar una cita. La oficina proporcionará por escrito los términos vigentes de cancelación y no asistencia y puede confirmarlos antes de aceptar una cita.`,
         ],
       },
       {
         key: 'requirement',
         heading: `Requisito de Cancelación`,
         paragraphs: [
-          `Le pedimos que, si necesita cancelar o reprogramar su cita, lo haga con al menos **24 horas hábiles de antelación**. Esto nos permite ofrecer el espacio a otra persona en nuestra lista de espera.`,
+          `El plazo de aviso requerido, si lo hay, es el indicado en los términos escritos vigentes proporcionados por la oficina. Pida a la oficina que lo confirme para su cita.`,
         ],
       },
       {
         key: 'fee',
         heading: `Cargo por Cancelación Tardía o No Asistencia`,
         bullets: [
-          `Las cancelaciones realizadas con **menos de 24 horas hábiles** de antelación a la hora de la cita programada estarán sujetas a un cargo por cancelación tardía de **$50.00**.`,
-          `Los pacientes que **no se presenten** a su cita sin notificar a la clínica también estarán sujetos a un cargo de **$50.00**.`,
+          `Un cargo por cancelación tardía o no asistencia se aplica únicamente si fue divulgado y aceptado por escrito y está permitido por la ley aplicable.`,
+          `Pida a la oficina que confirme el cargo vigente, si lo hay, antes de programar.`,
         ],
       },
       {
         key: 'confirmation',
         heading: `Confirmación de Citas`,
         paragraphs: [
-          `Como cortesía, nuestro sistema o personal puede intentar contactarlo para confirmar su cita. Sin embargo, **es responsabilidad del paciente recordar, asistir o cancelar su cita a tiempo**. El no recibir una llamada o mensaje de confirmación no exime de la aplicación de esta política.`,
+          `La oficina explicará cualquier proceso de recordatorio o confirmación que corresponda a su cita. Contacte directamente a la oficina si no sabe si se recibió una cita o cancelación.`,
         ],
       },
       {
         key: 'exceptions',
         heading: `Excepciones a la Política`,
         paragraphs: [
-          `Entendemos que pueden ocurrir emergencias médicas graves e inevitables. Las excepciones a esta política por emergencias documentadas se considerarán caso por caso, a discreción de la clínica.`,
+          `Las preguntas sobre emergencias u otras excepciones se revisan conforme a la política escrita vigente y la ley aplicable. Contacte la oficina para conocer los términos que correspondan a sus circunstancias.`,
         ],
       },
       {
         key: 'acknowledgment',
         heading: `Reconocimiento de la Política`,
         paragraphs: [
-          `Al agendar una cita con Healing Minds Psychiatry, usted reconoce y acepta los términos de nuestra Política de Cancelación y No Asistencia.`,
+          `Rigen los términos de cancelación y no asistencia divulgados y aceptados por escrito para su cita, sujetos a la ley aplicable.`,
         ],
       },
     ],

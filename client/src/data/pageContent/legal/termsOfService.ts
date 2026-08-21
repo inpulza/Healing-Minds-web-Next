@@ -33,14 +33,14 @@ export const termsOfServiceContent: BilingualPageContent = {
       {
         key: '3',
         heading: `3. Telehealth Services`,
-        paragraphs: [`This Website offers the ability to schedule and access remote healthcare services ("Telehealth").`],
+        paragraphs: [`This Website lets you request information or an appointment. A request does not guarantee a telehealth visit; the office confirms the treating professional, patient location, licensing, clinical suitability and availability before an appointment.`],
       },
       {
         key: '3a',
         heading: `Telehealth Consent:`,
         level: 3,
         paragraphs: [
-          `By requesting and using our Telehealth services, you consent to receiving medical care through telecommunications technologies. You acknowledge that Florida law permits a provider-patient relationship to be established through Telehealth. You understand that there are inherent limitations to Telehealth, including the inability to perform a complete physical examination. By using these services, you accept the associated risks and limitations.`,
+          `Submitting a website request does not establish a provider-patient relationship or constitute clinical consent. Before telehealth care begins, the treating professional confirms authorization to practice where the patient is physically located and obtains and documents consent as required by applicable law.`,
         ],
       },
       {
@@ -48,7 +48,7 @@ export const termsOfServiceContent: BilingualPageContent = {
         heading: `Third-Party Platforms:`,
         level: 3,
         paragraphs: [
-          `Our Telehealth services are provided through a third-party platform, Charm Health. Use of such platform is subject to Charm Health's terms and privacy policy, in addition to ours. We are not responsible for the operation, security, or availability of third-party platforms.`,
+          `If a third-party video platform is confirmed for an appointment, that platform's terms and privacy policy also apply. The office provides current platform and access details before the visit. Charm Health is linked from this Website as an appointment-request portal; the Website does not represent it as the clinical video platform.`,
         ],
       },
       {
@@ -150,14 +150,14 @@ export const termsOfServiceContent: BilingualPageContent = {
       {
         key: '3',
         heading: `3. Servicios de Telesalud`,
-        paragraphs: [`Este Sitio Web ofrece la posibilidad de programar y acceder a servicios de atención médica a distancia ("Telesalud").`],
+        paragraphs: [`Este Sitio Web permite solicitar información o una cita. La solicitud no garantiza una consulta de telesalud; la oficina confirma el profesional tratante, la ubicación del paciente, la licencia aplicable, la idoneidad clínica y la disponibilidad antes de una cita.`],
       },
       {
         key: '3a',
         heading: `Consentimiento para Telesalud:`,
         level: 3,
         paragraphs: [
-          `Al solicitar y utilizar nuestros servicios de Telesalud, usted consiente en recibir atención médica a través de tecnologías de telecomunicaciones. Usted reconoce que la ley de Florida permite que se establezca una relación proveedor-paciente a través de la Telesalud. Usted entiende que existen limitaciones inherentes a la Telesalud, incluyendo la imposibilidad de realizar un examen físico completo. Al utilizar estos servicios, usted acepta los riesgos y limitaciones asociados.`,
+          `Enviar una solicitud en el sitio web no establece una relación entre profesional y paciente ni constituye consentimiento clínico. Antes de comenzar la atención por telesalud, el profesional tratante confirma que está autorizado para ejercer donde el paciente se encuentra físicamente y obtiene y documenta el consentimiento según lo exija la ley aplicable.`,
         ],
       },
       {
@@ -165,7 +165,7 @@ export const termsOfServiceContent: BilingualPageContent = {
         heading: `Plataformas de Terceros:`,
         level: 3,
         paragraphs: [
-          `Nuestros servicios de Telesalud se proporcionan a través de una plataforma de terceros, Charm Health. El uso de dicha plataforma está sujeto a los términos y la política de privacidad de Charm Health, además de los nuestros. No somos responsables de la operación, seguridad o disponibilidad de plataformas de terceros.`,
+          `Si se confirma una plataforma de video de terceros para una cita, también se aplican los términos y la política de privacidad de esa plataforma. La oficina proporciona los datos vigentes de la plataforma y de acceso antes de la consulta. Charm Health aparece enlazado en este Sitio Web como portal para solicitar citas; el Sitio Web no lo presenta como la plataforma clínica de video.`,
         ],
       },
       {

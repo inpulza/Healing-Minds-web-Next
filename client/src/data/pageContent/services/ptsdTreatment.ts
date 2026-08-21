@@ -18,9 +18,9 @@ export const ptsdTreatmentContent: BilingualPageContent = {
         key: 'hero-facts',
         heading: 'PTSD Facts',
         bullets: [
-          '3.5% of adults experience PTSD annually',
+          'PTSD symptoms can affect daily functioning and relationships',
           'Trauma-informed care is essential',
-          'Recovery is possible with treatment',
+          'Treatment goals and response vary by person',
           'Cultural competency matters',
         ],
       },
@@ -29,7 +29,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
         bullets: [
           'Trauma-informed assessment',
           'Evidence-based therapy coordination',
-          'Crisis safety planning',
+          'Safety planning during scheduled care; not emergency services',
         ],
       },
       {
@@ -43,7 +43,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'approach-intro',
         paragraphs: [
-          'PTSD treatment requires specialized expertise addressing trauma, symptoms, and recovery with evidence-based approaches and cultural sensitivity.',
+          'PTSD care begins with an individual clinical evaluation and may include trauma-informed planning based on symptoms, needs and cultural context.',
         ],
       },
       {
@@ -52,7 +52,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
           'Comprehensive Assessment',
           'Medication Management',
           'Therapy Coordination',
-          'Crisis Safety Planning',
+          'Safety Planning During Scheduled Care; Not Emergency Services',
         ],
       },
       {
@@ -60,7 +60,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
         bullets: [
           'Thorough evaluation of trauma history and personalized treatment plans.',
           'Evidence-based medications for PTSD symptoms and sleep disturbances.',
-          'Collaborative care with specialized trauma therapists for EMDR and CPT.',
+          'With patient consent, coordination with an outside therapist may be discussed case by case.',
           'Personalized safety plans for managing flashbacks and panic attacks.',
         ],
       },
@@ -70,11 +70,11 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'approach-stat-1',
-        paragraphs: ['90%', 'Recovery with treatment'],
+        paragraphs: ['Individual', 'Treatment goals and response vary by person'],
       },
       {
         key: 'approach-stat-2',
-        paragraphs: ['24/7', 'Crisis support available'],
+        paragraphs: ['Office hours', 'For emergencies, call 911 or 988'],
       },
       {
         key: 'symptoms',
@@ -110,7 +110,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'trauma-intro',
         paragraphs: [
-          'We provide specialized care for various forms of trauma, using evidence-based approaches tailored to each individual experience.',
+          'We provide psychiatric evaluation and individualized treatment planning for adults with trauma-related symptoms.',
         ],
       },
       {
@@ -127,7 +127,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'trauma-descriptions',
         bullets: [
-          'Specialized care for veterans and military personnel dealing with combat-related PTSD.',
+          'Psychiatric evaluation and treatment planning for veterans and military personnel with combat-related symptoms.',
           'Compassionate treatment addressing the long-term effects of childhood trauma.',
           'Support for trauma resulting from car accidents and traffic incidents.',
           'Sensitive, trauma-informed care for survivors of sexual violence.',
@@ -142,12 +142,12 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'why-benefits',
         bullets: [
-          'Experienced psychiatrist with specialized trauma training',
+          'Licensed psychiatrist providing trauma-informed evaluation and planning',
           'Bilingual services in English and Spanish',
           'Trauma-informed care approach',
           'Collaborative treatment with specialized therapists',
-          'Insurance accepted and affordable payment options',
-          'Same-week appointment availability at [our Naples, FL office](/locations/psychiatrist-naples)',
+          'Confirm plan participation; financial options may be evaluated case by case',
+          'Appointment availability confirmed by [our Naples, FL office](/locations/psychiatrist-naples)',
         ],
       },
       {
@@ -184,16 +184,16 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'hero-special-note',
         paragraphs: [
-          '**El trauma no define quién es usted.** La recuperación es posible con el apoyo adecuado. Nuestro enfoque respeta su cultura y experiencias, ofreciendo un espacio seguro para sanar sin juicio ni estigma.',
+          '**El trauma no define quién es usted.** La evaluación y los objetivos de atención se individualizan según sus síntomas, experiencias y contexto cultural.',
         ],
       },
       {
         key: 'hero-facts',
         heading: 'Datos sobre TEPT',
         bullets: [
-          '3.5% de adultos experimentan TEPT anualmente',
+          'Los síntomas de TEPT pueden afectar el funcionamiento diario y las relaciones',
           'La atención informada en trauma es esencial',
-          'La recuperación es posible con tratamiento',
+          'Los objetivos y la respuesta al tratamiento varían según la persona',
           'La competencia cultural importa',
         ],
       },
@@ -202,7 +202,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
         bullets: [
           'Evaluación informada en trauma',
           'Coordinación de terapia basada en evidencia',
-          'Planificación de seguridad en crisis',
+          'Planificación de seguridad durante la atención programada; no son servicios de emergencia',
         ],
       },
       {
@@ -216,7 +216,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'approach-intro',
         paragraphs: [
-          'El tratamiento de PTSD requiere experiencia especializada que aborde el trauma, síntomas y recuperación con enfoques basados en evidencia y sensibilidad cultural.',
+          'La atención de TEPT comienza con una evaluación clínica individual y puede incluir planificación informada en trauma según los síntomas, necesidades y contexto cultural.',
         ],
       },
       {
@@ -233,7 +233,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
         bullets: [
           'Evaluación completa del historial de trauma y planes personalizados.',
           'Medicamentos basados en evidencia para síntomas de TEPT y sueño.',
-          'Atención colaborativa con terapeutas especializados en EMDR y TCC.',
+          'Con consentimiento del paciente, la coordinación con un terapeuta externo puede discutirse caso por caso.',
           'Planes personalizados para manejar flashbacks y ataques de pánico.',
         ],
       },
@@ -243,11 +243,11 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'approach-stat-1',
-        paragraphs: ['90%', 'Recuperación con tratamiento'],
+        paragraphs: ['Individual', 'Los objetivos y la respuesta varían según la persona'],
       },
       {
         key: 'approach-stat-2',
-        paragraphs: ['24/7', 'Apoyo de crisis disponible'],
+        paragraphs: ['Horario de oficina', 'Para emergencias, llame al 911 o al 988'],
       },
       {
         key: 'symptoms',
@@ -283,7 +283,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'trauma-intro',
         paragraphs: [
-          'Proporcionamos atención especializada para varias formas de trauma, usando enfoques basados en evidencia adaptados a cada experiencia individual.',
+          'Brindamos evaluación psiquiátrica y planificación individualizada para adultos con síntomas relacionados con trauma.',
         ],
       },
       {
@@ -300,7 +300,7 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'trauma-descriptions',
         bullets: [
-          'Atención especializada para veteranos y personal militar con PTSD relacionado al combate.',
+          'Evaluación psiquiátrica y planificación del tratamiento para veteranos y personal militar con síntomas relacionados con combate.',
           'Tratamiento compasivo que aborda los efectos a largo plazo del trauma infantil.',
           'Apoyo para trauma resultante de accidentes automovilísticos e incidentes de tráfico.',
           'Atención sensible e informada por trauma para sobrevivientes de violencia sexual.',
@@ -315,12 +315,12 @@ export const ptsdTreatmentContent: BilingualPageContent = {
       {
         key: 'why-benefits',
         bullets: [
-          'Psiquiatra con licencia y entrenamiento especializado en trauma',
+          'Psiquiatra con licencia que brinda evaluación y planificación informadas en trauma',
           'Servicios bilingües en inglés y español',
           'Enfoque de atención informada en trauma',
           'Tratamiento colaborativo con terapeutas especializados',
-          'Se acepta seguro y opciones de pago accesibles',
-          'Disponibilidad de citas en la misma semana en [nuestra oficina en Naples, FL](/es/ubicaciones/psiquiatra-naples)',
+          'Confirme la participación; las opciones financieras pueden evaluarse caso por caso',
+          'Disponibilidad de citas confirmada por [nuestra oficina en Naples, FL](/es/ubicaciones/psiquiatra-naples)',
         ],
       },
       {

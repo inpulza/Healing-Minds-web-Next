@@ -36,16 +36,16 @@ export const forPatientsSectionContent: BilingualPageContent = {
       {
         key: 'insuranceFeatures',
         bullets: [
-          `Most major insurance plans accepted`,
-          `Self-pay options available`,
-          `Telehealth appointments covered`,
-          `Flexible payment plans`,
+          `Participation varies by plan and service`,
+          `Confirm current participation with the office`,
+          `Verify benefits and telehealth coverage with your insurer`,
+          `Financial options may be evaluated case by case`,
         ],
       },
       {
         key: 'insuranceNote',
         paragraphs: [
-          `We verify insurance benefits before your first appointment. Please bring your insurance card and a valid ID to your visit.`,
+          `Before booking, confirm participation with our office and verify your plan's benefits, cost sharing and telehealth terms directly with your insurer.`,
         ],
       },
       {
@@ -55,16 +55,16 @@ export const forPatientsSectionContent: BilingualPageContent = {
       {
         key: 'expectations',
         bullets: [
-          `Initial Consultation (40-60 minutes)`,
-          `Follow-up Appointments (20-30 minutes)`,
+          `Initial Consultation`,
+          `Follow-up Appointments`,
           `Treatment Planning`,
           `Between Sessions`,
         ],
         paragraphs: [
-          `Comprehensive evaluation of your mental health history, current symptoms, and treatment goals.`,
-          `Regular check-ins to monitor progress, adjust medications, and provide ongoing support.`,
+          `Comprehensive evaluation of your mental health history, current symptoms, and treatment goals. The office confirms the appointment length when scheduling.`,
+          `Regular check-ins to monitor progress, adjust medications, and provide ongoing support. The office confirms the appointment length when scheduling.`,
           `Collaborative approach to developing a personalized treatment plan that fits your lifestyle and goals.`,
-          `24/7 on-call support for urgent situations and medication adjustments as needed.`,
+          `For non-urgent questions, use the secure patient portal or contact the office during published hours. In an emergency, call 911 or 988.`,
         ],
       },
       {
@@ -82,7 +82,7 @@ export const forPatientsSectionContent: BilingualPageContent = {
           `Telehealth Consent`,
         ],
         paragraphs: [
-          `24-hour notice required`,
+          `Current written terms confirmed by the office`,
           `Insurance & payment information`,
           `Crisis & emergency resources`,
           `Your rights & responsibilities`,
@@ -108,16 +108,16 @@ export const forPatientsSectionContent: BilingualPageContent = {
       {
         key: 'insuranceFeatures',
         bullets: [
-          `Se aceptan la mayoría de los planes de seguro principales`,
-          `Opciones de pago por cuenta propia disponibles`,
-          `Citas de telesalud cubiertas`,
-          `Planes de pago flexibles`,
+          `La participación varía según el plan y el servicio`,
+          `Confirme la participación vigente con la oficina`,
+          `Verifique beneficios y cobertura de telesalud con su aseguradora`,
+          `Las opciones financieras pueden evaluarse caso por caso`,
         ],
       },
       {
         key: 'insuranceNote',
         paragraphs: [
-          `Verificamos los beneficios del seguro antes de su primera cita. Por favor traiga su tarjeta de seguro y una identificación válida a su visita.`,
+          `Antes de reservar, confirme la participación con nuestra oficina y verifique directamente con su aseguradora los beneficios, costos compartidos y condiciones de telesalud de su plan.`,
         ],
       },
       {
@@ -127,16 +127,16 @@ export const forPatientsSectionContent: BilingualPageContent = {
       {
         key: 'expectations',
         bullets: [
-          `Consulta Inicial (40-60 minutos)`,
-          `Citas de Seguimiento (20-30 minutos)`,
+          `Consulta Inicial`,
+          `Citas de Seguimiento`,
           `Planificación del Tratamiento`,
           `Entre Sesiones`,
         ],
         paragraphs: [
-          `Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento.`,
-          `Controles regulares para monitorear el progreso, ajustar medicamentos y brindar apoyo continuo.`,
+          `Evaluación integral de su historial de salud mental, síntomas actuales y objetivos de tratamiento. La oficina confirma la duración de la cita al programar.`,
+          `Controles regulares para monitorear el progreso, ajustar medicamentos y brindar apoyo continuo. La oficina confirma la duración de la cita al programar.`,
           `Enfoque colaborativo para desarrollar un plan de tratamiento personalizado que se ajuste a su estilo de vida y objetivos.`,
-          `Soporte de guardia 24/7 para situaciones urgentes y ajustes de medicación según sea necesario.`,
+          `Para preguntas no urgentes, use el portal seguro del paciente o contacte la oficina durante el horario publicado. En una emergencia, llame al 911 o al 988.`,
         ],
       },
       {
@@ -154,7 +154,7 @@ export const forPatientsSectionContent: BilingualPageContent = {
           `Consentimiento de Telesalud`,
         ],
         paragraphs: [
-          `Aviso de 24 horas requerido`,
+          `Términos escritos vigentes confirmados por la oficina`,
           `Información de seguro y pagos`,
           `Recursos de crisis y emergencia`,
           `Sus derechos y responsabilidades`,
@@ -172,12 +172,12 @@ export const doctorSectionContent: BilingualPageContent = {
     sections: [
       {
         key: 'yearsLabel',
-        paragraphs: [`Years of experience`],
+        paragraphs: [`Active Florida medical license`],
       },
       {
         key: 'description',
         paragraphs: [
-          `We provide compassionate care and advanced treatments tailored to your needs. Experience convenient access to mental healthcare.`,
+          `We provide individualized psychiatric evaluation and treatment planning, with appointment options confirmed by the office.`,
         ],
       },
       {
@@ -191,12 +191,12 @@ export const doctorSectionContent: BilingualPageContent = {
     sections: [
       {
         key: 'yearsLabel',
-        paragraphs: [`Años de experiencia`],
+        paragraphs: [`Licencia médica activa de Florida`],
       },
       {
         key: 'description',
         paragraphs: [
-          `Brindamos atención compasiva y tratamientos avanzados adaptados a sus necesidades. Experimente un acceso conveniente a la atención de salud mental.`,
+          `Brindamos evaluación psiquiátrica y planificación individualizada del tratamiento, con opciones de cita confirmadas por la oficina.`,
         ],
       },
       {
