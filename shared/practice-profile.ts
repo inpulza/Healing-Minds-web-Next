@@ -1,9 +1,13 @@
-import { organizationSocialProfileUrls } from "./social-profiles";
+import {
+  organizationSocialProfileUrls,
+  physicianSocialProfileUrls,
+} from "./social-profiles";
 
 const siteUrl = "https://www.healingmindsp.com";
 
 export const practiceProfile = {
   siteUrl,
+  canonicalHomeUrl: `${siteUrl}/`,
   name: "Healing Minds Psychiatry",
   legalName: "VIDAL HEALING MINDS CORP",
   description:
@@ -43,15 +47,23 @@ export const practiceProfile = {
   imageUrl: `${siteUrl}/doctor-profile-v2.webp`,
   sameAs: [...organizationSocialProfileUrls],
   physician: {
-    professionalName: "Dr. Melva Reve, MD",
+    name: "Melva Reve",
     legalName: "Melva Rosa Reve Urgelles",
     honorificPrefix: "Dr.",
-    jobTitle: "Psychiatrist",
+    honorificSuffix: "MD",
+    jobTitle: {
+      en: "Psychiatrist",
+      es: "Psiquiatra",
+    },
     npi: "1982233631",
     npiUrl: "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
     floridaLicense: "ME165518",
     profileUrl: `${siteUrl}/about`,
-    languages: ["English", "Spanish"],
+    languages: ["en", "es"],
+    sameAs: [
+      "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
+      ...physicianSocialProfileUrls,
+    ],
   },
 } as const;
 

@@ -15,31 +15,31 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'what-is',
         heading: 'What Telehealth Is at This Practice',
         paragraphs: [
-          'Healing Minds Psychiatry is a telepsychiatry practice led by Dr. Melva Reve, a psychiatrist. Telehealth means that your psychiatric evaluation and follow-up appointments are conducted remotely through a secure, real-time video connection rather than a traditional in-person office visit. This allows you to receive care from a private location of your choosing.',
+          'Healing Minds Psychiatry offers telepsychiatry appointments when the office and treating professional confirm that this modality is appropriate. Telehealth uses a real-time video platform rather than an in-person visit. Platform, privacy and access details are subject to the practice Privacy Notice and the limitations described below.',
         ],
       },
       {
         key: 'legal-basis',
         heading: 'Legal Basis for Telehealth',
         paragraphs: [
-          'Consent to receive care by telehealth is provided in accordance with Florida Statutes Section 456.47 and California Business and Professions Code Section 2290.5. Under these laws, a valid provider-patient relationship may be established and maintained through telehealth. Our practice is licensed to provide telepsychiatry in the states of Florida and California.',
+          'Telehealth consent and documentation are handled under applicable law, including Florida Statutes Section 456.47 and California Business and Professions Code Section 2290.5 when applicable. The treating professional must be authorized to practice where the patient is physically located, and the office confirms eligibility before the appointment. A website request does not by itself establish a provider-patient relationship or replace documented clinical consent.',
         ],
       },
       {
         key: 'benefits',
-        heading: 'Expected Benefits',
+        heading: 'Potential Benefits',
         bullets: [
-          '**Access:** Reach a psychiatrist without the need to travel to an office.',
-          '**Convenience:** Attend appointments from a private, comfortable setting that fits your schedule.',
-          '**Continuity:** Maintain consistent follow-up care and medication management over time.',
-          '**Care in your language:** Receive services in English or Spanish with a bilingual provider.',
+          '**Access:** A confirmed video visit may reduce the need to travel to an office.',
+          '**Convenience:** A video appointment may offer flexibility when clinically and operationally appropriate.',
+          '**Follow-up:** Telehealth follow-up may be offered when the treating professional considers it appropriate.',
+          '**Language:** English or Spanish services may be requested; the office confirms availability.',
         ],
       },
       {
         key: 'limitations',
         heading: 'Limitations and Risks',
         paragraphs: [
-          'While telehealth is safe and effective for many people, it has limitations that you should understand:',
+          'Telehealth may be appropriate for some visits and has limitations and risks that you should understand:',
         ],
         bullets: [
           '**No complete physical examination:** A telehealth visit does not allow for a full, hands-on physical examination.',
@@ -59,7 +59,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'responsibilities',
         heading: 'Your Responsibilities',
         bullets: [
-          '**Location:** You must be physically located in Florida or California at the time of your visit, and you agree to state your location at the start of each session.',
+          '**Location:** You agree to state your physical location at the start of each session. The treating professional must be authorized to practice in that location, and the office confirms eligibility before the appointment.',
           '**Identity verification:** You agree to verify your identity as requested at the beginning of your appointment.',
           '**Private setting:** You are responsible for finding a private, quiet space where your session cannot be overheard.',
           '**Adequate connection:** You are responsible for having a device and an internet connection adequate for a video visit.',
@@ -69,7 +69,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'confidentiality',
         heading: 'Confidentiality',
         paragraphs: [
-          'Your telehealth sessions receive the same HIPAA privacy protections as in-person care. Sessions are not recorded. We use secure technology and reasonable safeguards to protect the confidentiality of your information.',
+          'Health information is handled under applicable privacy law and the practice Privacy Notice. The practice uses reasonable administrative and technical safeguards, but electronic communications carry privacy and security risks. Ask the office about the current platform and recording practices before consenting.',
         ],
       },
       {
@@ -90,7 +90,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'acknowledgment',
         heading: 'Acknowledgment',
         paragraphs: [
-          'By scheduling and attending a telehealth visit with Healing Minds Psychiatry, you confirm that you have read and understood this consent. A formal consent is also completed as part of your intake paperwork.',
+          'Before telehealth care begins, the treating professional obtains and documents consent as required by applicable law. Scheduling or submitting a website request does not substitute for that clinical consent.',
         ],
       },
       {
@@ -116,31 +116,31 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'what-is',
         heading: 'Qué es la Telesalud en Esta Práctica',
         paragraphs: [
-          'Healing Minds Psychiatry es una práctica de telepsiquiatría dirigida por la Dra. Melva Reve, psiquiatra. La telesalud significa que su evaluación psiquiátrica y sus citas de seguimiento se realizan de forma remota a través de una conexión de video segura y en tiempo real, en lugar de una visita tradicional en persona. Esto le permite recibir atención desde un lugar privado de su elección.',
+          'Healing Minds Psychiatry ofrece citas de telepsiquiatría cuando la oficina y el profesional tratante confirman que esta modalidad es apropiada. La telesalud usa una plataforma de video en tiempo real en lugar de una visita presencial. La plataforma, la privacidad y el acceso están sujetos al Aviso de Privacidad de la práctica y a las limitaciones descritas a continuación.',
         ],
       },
       {
         key: 'legal-basis',
         heading: 'Base Legal de la Telesalud',
         paragraphs: [
-          'El consentimiento para recibir atención por telesalud se otorga de acuerdo con los Estatutos de Florida, Sección 456.47, y el Código de Negocios y Profesiones de California, Sección 2290.5. Conforme a estas leyes, se puede establecer y mantener una relación válida entre proveedor y paciente a través de la telesalud. Nuestra práctica cuenta con licencia para brindar telepsiquiatría en los estados de Florida y California.',
+          'El consentimiento y la documentación para la telesalud se gestionan conforme a la ley aplicable, incluidos los Estatutos de Florida, Sección 456.47, y el Código de Negocios y Profesiones de California, Sección 2290.5, cuando correspondan. El profesional tratante debe estar autorizado para ejercer donde el paciente se encuentre físicamente, y la oficina confirma la elegibilidad antes de la cita. Una solicitud en el sitio web no establece por sí sola una relación entre profesional y paciente ni sustituye el consentimiento clínico documentado.',
         ],
       },
       {
         key: 'benefits',
-        heading: 'Beneficios Esperados',
+        heading: 'Posibles Beneficios',
         bullets: [
-          '**Acceso:** Comuníquese con una psiquiatra sin necesidad de trasladarse a una oficina.',
-          '**Comodidad:** Asista a sus citas desde un entorno privado y cómodo que se ajuste a su horario.',
-          '**Continuidad:** Mantenga una atención de seguimiento constante y un manejo de medicamentos a lo largo del tiempo.',
-          '**Atención en su idioma:** Reciba servicios en inglés o español con una proveedora bilingüe.',
+          '**Acceso:** Una visita por video confirmada puede reducir la necesidad de trasladarse a una oficina.',
+          '**Comodidad:** Una cita por video puede ofrecer flexibilidad cuando sea clínica y operativamente apropiada.',
+          '**Seguimiento:** Puede ofrecerse seguimiento por telesalud cuando el profesional tratante lo considere apropiado.',
+          '**Idioma:** Pueden solicitarse servicios en inglés o español; la oficina confirma la disponibilidad.',
         ],
       },
       {
         key: 'limitations',
         heading: 'Limitaciones y Riesgos',
         paragraphs: [
-          'Si bien la telesalud es segura y eficaz para muchas personas, tiene limitaciones que usted debe comprender:',
+          'La telesalud puede ser apropiada para algunas visitas y tiene limitaciones y riesgos que usted debe comprender:',
         ],
         bullets: [
           '**Sin examen físico completo:** Una consulta por telesalud no permite realizar un examen físico completo ni presencial.',
@@ -160,7 +160,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'responsibilities',
         heading: 'Sus Responsabilidades',
         bullets: [
-          '**Ubicación:** Usted debe encontrarse físicamente en Florida o California al momento de su consulta, y acepta indicar su ubicación al inicio de cada sesión.',
+          '**Ubicación:** Usted acepta indicar su ubicación física al inicio de cada sesión. El profesional tratante debe estar autorizado para ejercer en esa ubicación, y la oficina confirma la elegibilidad antes de la cita.',
           '**Verificación de identidad:** Usted acepta verificar su identidad según se le solicite al comienzo de su cita.',
           '**Entorno privado:** Usted es responsable de encontrar un espacio privado y tranquilo donde su sesión no pueda ser escuchada por otras personas.',
           '**Conexión adecuada:** Usted es responsable de contar con un dispositivo y una conexión a internet adecuados para una videoconsulta.',
@@ -170,7 +170,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'confidentiality',
         heading: 'Confidencialidad',
         paragraphs: [
-          'Sus sesiones de telesalud reciben las mismas protecciones de privacidad de HIPAA que la atención en persona. Las sesiones no se graban. Utilizamos tecnología segura y medidas de protección razonables para resguardar la confidencialidad de su información.',
+          'La información de salud se maneja conforme a la ley de privacidad aplicable y al Aviso de Privacidad de la práctica. La práctica usa medidas administrativas y técnicas razonables, pero las comunicaciones electrónicas conllevan riesgos de privacidad y seguridad. Consulte con la oficina sobre la plataforma y las prácticas de grabación vigentes antes de consentir.',
         ],
       },
       {
@@ -191,7 +191,7 @@ export const telehealthConsentContent: BilingualPageContent = {
         key: 'acknowledgment',
         heading: 'Reconocimiento',
         paragraphs: [
-          'Al programar y asistir a una consulta por telesalud con Healing Minds Psychiatry, usted confirma que ha leído y comprendido este consentimiento. Un consentimiento formal también se completa como parte de su documentación de admisión.',
+          'Antes de comenzar la atención por telesalud, el profesional tratante obtiene y documenta el consentimiento según lo exija la ley aplicable. Programar o enviar una solicitud en el sitio web no sustituye ese consentimiento clínico.',
         ],
       },
       {

@@ -25,8 +25,8 @@ const TelehealthSection = () => {
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed">
             {language === 'en'
-              ? 'Professional psychiatric care available throughout Florida via secure telehealth sessions. No travel required - connect with Dr. Melva Reve from the comfort of your home.'
-              : 'Atención psiquiátrica profesional disponible en toda Florida a través de sesiones seguras de telesalud. No se requiere viajar - conéctese con la Dra. Melva Reve desde la comodidad de su hogar.'
+              ? 'Adults in Florida may request a telehealth appointment. The office confirms the treating professional, patient location, licensing, clinical suitability and availability.'
+              : 'Los adultos en Florida pueden solicitar una cita de telesalud. La oficina confirma el profesional tratante, ubicación del paciente, licencias, adecuación clínica y disponibilidad.'
             }
           </p>
         </div>
@@ -37,18 +37,18 @@ const TelehealthSection = () => {
             {[
               {
                 icon: Users,
-                value: '22M+',
-                label: language === 'en' ? 'Florida Residents' : 'Residentes de FL'
+                value: 'Florida',
+                label: language === 'en' ? 'Patient Location Required' : 'Ubicación del Paciente Requerida'
               },
               {
                 icon: VideoIcon,
-                value: '24/7',
-                label: language === 'en' ? 'Online Scheduling' : 'Programación Online'
+                value: 'Office',
+                label: language === 'en' ? 'Confirms Availability' : 'Confirma Disponibilidad'
               },
               {
                 icon: Monitor,
-                value: '100%',
-                label: language === 'en' ? 'Secure Platform' : 'Plataforma Segura'
+                value: 'Secure',
+                label: language === 'en' ? 'Video Platform' : 'Plataforma de Video'
               }
             ].map((stat, index) => (
               <div key={index} className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100">
@@ -95,7 +95,7 @@ const TelehealthSection = () => {
                   <div className="bg-white bg-opacity-95 rounded-lg shadow-lg px-3 py-2 border border-blue-200">
                     <div className="flex items-center gap-2 text-xs text-blue-700 font-medium">
                       <VideoIcon className="w-3 h-3" />
-                      <span>{language === 'en' ? 'Statewide Coverage' : 'Cobertura Estatal'}</span>
+                      <span>{language === 'en' ? 'Florida Eligibility' : 'Elegibilidad en Florida'}</span>
                     </div>
                   </div>
                 </div>
@@ -126,12 +126,12 @@ const TelehealthSection = () => {
               {[
                 {
                   title: language === 'en' ? 'Secure Video Sessions' : 'Sesiones de Video Seguras',
-                  description: language === 'en' ? 'HIPAA-compliant platform' : 'Plataforma compatible con HIPAA',
+                  description: language === 'en' ? 'Secure video platform' : 'Plataforma de video segura',
                   icon: VideoIcon
                 },
                 {
-                  title: language === 'en' ? 'Real-time Scheduling' : 'Programación en Tiempo Real',
-                  description: language === 'en' ? '24/7 online booking' : 'Reserva online 24/7',
+                  title: language === 'en' ? 'Appointment Requests' : 'Solicitudes de Cita',
+                  description: language === 'en' ? 'Availability confirmed by the office' : 'Disponibilidad confirmada por la oficina',
                   icon: Clock
                 },
                 {
@@ -145,8 +145,8 @@ const TelehealthSection = () => {
                   icon: Users
                 },
                 {
-                  title: language === 'en' ? 'Insurance Accepted' : 'Seguros Aceptados',
-                  description: language === 'en' ? 'Most major plans accepted' : 'Se aceptan la mayoría de planes principales',
+                  title: language === 'en' ? 'Insurance Verification' : 'Verificación de Seguro',
+                  description: language === 'en' ? 'Confirm plan and telehealth benefits' : 'Confirme el plan y los beneficios de telesalud',
                   icon: Shield
                 }
               ].map((feature, index) => {
@@ -176,12 +176,12 @@ const TelehealthSection = () => {
             <div className="text-center">
               <VideoIcon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
               <h3 className="text-2xl sm:text-3xl font-bold text-blue-800 mb-3">
-                {language === 'en' ? 'Book Your Telehealth Session' : 'Reserve su Sesión de Telesalud'}
+                {language === 'en' ? 'Request a Telehealth Appointment' : 'Solicite una Cita de Telesalud'}
               </h3>
               <p className="text-lg sm:text-xl text-blue-700 mb-6">
                 {language === 'en' 
-                  ? 'Schedule with Dr. Melva Reve from anywhere in Florida'
-                  : 'Programe con la Dra. Melva Reve desde cualquier lugar de Florida'
+                  ? 'The office confirms the professional, eligibility, modality and availability'
+                  : 'La oficina confirma el profesional, elegibilidad, modalidad y disponibilidad'
                 }
               </p>
               <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />

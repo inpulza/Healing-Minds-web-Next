@@ -586,6 +586,8 @@ const AdhdTreatment = () => {
                     onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
                     className="w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-left flex items-center justify-between hover:bg-green-50 transition-colors duration-200"
                     data-testid={`faq-question-${index}`}
+                    aria-expanded={openFAQ === index}
+                    aria-controls={`adhd-faq-answer-${index}`}
                   >
                     <h3 className="text-lg sm:text-xl font-display font-semibold text-gray-900 pr-4 sm:pr-8">
                       {faq.question}
@@ -605,8 +607,11 @@ const AdhdTreatment = () => {
                     </div>
                   </button>
                   
-                  {openFAQ === index && (
-                    <div className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6">
+                    <div
+                      id={`adhd-faq-answer-${index}`}
+                      hidden={openFAQ !== index}
+                      className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6"
+                    >
                       <div className="pt-2 border-t border-green-100">
                         <p 
                           className="text-gray-600 font-body leading-relaxed text-lg"
@@ -616,7 +621,6 @@ const AdhdTreatment = () => {
                         </p>
                       </div>
                     </div>
-                  )}
                 </div>
               ))}
             </div>

@@ -9,7 +9,6 @@ import {
   LazyServices,
   LazyBilingualCare,
   LazyServiceAreas,
-  LazyTestimonials,
   LazyReviews,
   LazyForPatients,
   LazyFAQ,

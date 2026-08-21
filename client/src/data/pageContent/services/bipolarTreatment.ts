@@ -18,9 +18,9 @@ export const bipolarTreatmentContent: BilingualPageContent = {
         key: 'hero-facts',
         heading: 'Bipolar Facts',
         bullets: [
-          '2.8% of adults have bipolar disorder',
-          'Mood stabilizers are highly effective',
-          'Early treatment improves outcomes',
+          'Bipolar disorder can affect mood, energy, and daily functioning',
+          'Medication decisions require individual evaluation',
+          'Treatment response varies by person',
           'Cultural sensitivity in treatment',
         ],
       },
@@ -29,7 +29,7 @@ export const bipolarTreatmentContent: BilingualPageContent = {
         bullets: [
           'Mood stabilizer management',
           'Episode prevention planning',
-          'Crisis intervention support',
+          'Safety planning during scheduled care; not emergency services',
         ],
       },
       {
@@ -81,11 +81,11 @@ export const bipolarTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'approach-stat-1',
-        paragraphs: ['85%', 'Achieve mood stability'],
+        paragraphs: ['Individual', 'Care goals and response vary by person'],
       },
       {
         key: 'approach-stat-2',
-        paragraphs: ['24/7', 'Crisis support available'],
+        paragraphs: ['Office hours', 'For emergencies, call 911 or 988'],
       },
       {
         key: 'symptoms',
@@ -167,12 +167,12 @@ export const bipolarTreatmentContent: BilingualPageContent = {
       {
         key: 'why-benefits',
         bullets: [
-          'Experienced psychiatrist with mood disorder expertise',
+          'Licensed psychiatrist providing individualized evaluation and planning',
           'Bilingual services in English and Spanish',
           'Evidence-based medication management',
           'Collaborative approach with therapists and support teams',
           'Regular monitoring and adjustment of treatment plans',
-          'Insurance accepted and flexible scheduling at [our Naples, FL location](/locations/psychiatrist-naples)',
+          'Confirm insurance participation and appointment availability with [our Naples office](/locations/psychiatrist-naples) before booking',
         ],
       },
       {
@@ -205,16 +205,16 @@ export const bipolarTreatmentContent: BilingualPageContent = {
       {
         key: 'hero-special-note',
         paragraphs: [
-          '**El trastorno bipolar es una condición médica tratable.** Con el tratamiento adecuado, puede lograr estabilidad del ánimo y vivir una vida plena. Ofrecemos atención especializada que comprende su cultura y necesidades.',
+          '**El trastorno bipolar es una condición médica que requiere evaluación individual.** El plan puede abordar la estabilidad del ánimo y el funcionamiento diario según sus necesidades clínicas y culturales.',
         ],
       },
       {
         key: 'hero-facts',
         heading: 'Datos sobre Bipolar',
         bullets: [
-          '2.8% de adultos tienen trastorno bipolar',
-          'Los estabilizadores del ánimo son muy efectivos',
-          'El tratamiento temprano mejora resultados',
+          'El trastorno bipolar puede afectar el ánimo, energía y funcionamiento diario',
+          'Las decisiones sobre medicamentos requieren evaluación individual',
+          'La respuesta al tratamiento varía según la persona',
           'Sensibilidad cultural en el tratamiento',
         ],
       },
@@ -223,7 +223,7 @@ export const bipolarTreatmentContent: BilingualPageContent = {
         bullets: [
           'Manejo de estabilizadores del ánimo',
           'Planificación de prevención de episodios',
-          'Apoyo en intervención de crisis',
+          'Planificación de seguridad durante la atención programada; no son servicios de emergencia',
         ],
       },
       {
@@ -275,11 +275,11 @@ export const bipolarTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'approach-stat-1',
-        paragraphs: ['85%', 'Logran estabilidad del ánimo'],
+        paragraphs: ['Individual', 'Los objetivos y la respuesta varían según la persona'],
       },
       {
         key: 'approach-stat-2',
-        paragraphs: ['24/7', 'Apoyo de crisis disponible'],
+        paragraphs: ['Horario de oficina', 'Para emergencias, llame al 911 o al 988'],
       },
       {
         key: 'symptoms',
@@ -361,12 +361,12 @@ export const bipolarTreatmentContent: BilingualPageContent = {
       {
         key: 'why-benefits',
         bullets: [
-          'Psiquiatra con licencia y experiencia en trastornos del ánimo',
+          'Psiquiatra con licencia que brinda evaluación y planificación individualizadas',
           'Servicios bilingües en inglés y español',
           'Manejo de medicamentos basado en evidencia',
           'Enfoque colaborativo con terapeutas y equipos de apoyo',
           'Monitoreo regular y ajuste de planes de tratamiento',
-          'Se acepta seguro y horarios flexibles en [nuestra ubicación en Naples, FL](/es/ubicaciones/psiquiatra-naples)',
+          'Confirme la participación del seguro y la disponibilidad de citas con [nuestra oficina de Naples](/es/ubicaciones/psiquiatra-naples) antes de reservar',
         ],
       },
       {

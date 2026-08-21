@@ -52,8 +52,8 @@ const PsiquiatraCalifornia = () => {
         ? 'Online Psychiatrist in Spanish | California | Healing Minds'
         : 'Psiquiatra Online en Español | California | Healing Minds',
       description: language === 'en'
-        ? 'A psychiatrist who sees you in Spanish from home, anywhere in California. Anxiety, depression and ADHD. Direct pay, clear pricing, no insurance.'
-        : 'Psiquiatra que te atiende en español desde tu casa, en California. Ansiedad, depresión y TDAH. Pago directo, precio claro, sin seguros.',
+        ? 'Bilingual telepsychiatry information for California adults. The office confirms clinician, price, modality, availability and eligibility before booking.'
+        : 'Información de telepsiquiatría bilingüe para adultos en California. La oficina confirma profesional, precio, pago, modalidad, disponibilidad y elegibilidad.',
       keywords: language === 'en'
         ? 'online psychiatrist California, Spanish speaking psychiatrist California, telepsychiatry California, virtual psychiatrist California'
         : 'psiquiatra online California, psiquiatra en español California, telepsiquiatría California, psiquiatra virtual California',
@@ -86,59 +86,59 @@ const PsiquiatraCalifornia = () => {
   const content = {
     en: {
       hero: {
-        subtitle: "Psychiatric care with Dr. Melva Reve, from the comfort of your home.",
-        description: "Finding help for anxiety, depression, or ADHD is hard enough. Finding a psychiatrist who also understands you in your language should not be the hard part. Dr. Melva Reve is a psychiatrist and a native Spanish speaker. Not an app, not a chatbot: a doctor who sees you by video call, evaluates you, and follows up on your treatment."
+        subtitle: "Request a bilingual online psychiatric appointment from California.",
+        description: "Adults in California may request a psychiatric appointment in English or Spanish. Before booking, the office confirms the treating professional, price, modality, availability, patient location, licensing and clinical eligibility."
       },
       benefits: {
         items: [
           {
             title: "Care in Your Language, for Real",
-            description: "Not a translator or an interpreter. Dr. Reve is a native Spanish speaker and the daughter of immigrants. She understands how hard it can be to talk about mental health in a Latino family."
+            description: "Bilingual care is available directly in English and Spanish, so you can discuss mental health concerns and treatment in your preferred language."
           },
           {
-            title: "A Doctor, Not an App",
-            description: "Dr. Reve is a psychiatrist. She can evaluate you, diagnose you, and follow up on your treatment. You always talk to her, not a different assistant every time."
+            title: "Treating Professional Confirmed",
+            description: "The office confirms the treating professional, appointment type and clinical eligibility before booking."
           },
           {
-            title: "You Know What You Will Pay",
-            description: "Direct pay, no insurance in between. No authorizations, no billing surprises, no finding out halfway through that your plan does not cover what you need. You confirm the exact price before you book."
+            title: "Price Confirmed Before Booking",
+            description: "The office confirms price, payment method and any applicable coverage details before you book."
           },
           {
-            title: "From Your Home, No Commute",
-            description: "No traffic, no waiting rooms, no taking the day off. A video call from wherever you are, in a private space, at the time you booked."
+            title: "Video Modality Confirmed Case by Case",
+            description: "The office confirms whether video care is appropriate and available. The patient must join from a private location while physically located where the clinician is authorized to provide care."
           }
         ]
       },
       coverage: {
-        description: "Dr. Reve sees patients by video call throughout the entire state of California. It does not matter if you are in Los Angeles, San Diego, the Central Valley, or anywhere else: you only need to be in California at the time of your appointment."
+        description: "The patient must be physically located where the confirmed treating professional is authorized to provide care. The office confirms California eligibility, availability and clinical suitability before each video appointment."
       },
       process: {
         description: "Getting started is simple and straightforward.",
         steps: [
           {
             number: "1",
-            title: "Book Your Appointment",
-            description: "Choose a day and time online, or call us."
+            title: "Request an Appointment",
+            description: "Request a day and time online, or call us. The office confirms availability and modality."
           },
           {
             number: "2",
-            title: "Receive Your Link",
-            description: "You will get a private, secure video call link by email."
+            title: "Receive Access Instructions",
+            description: "If a video visit is confirmed, the office provides secure access instructions before the appointment."
           },
           {
             number: "3",
-            title: "Talk to Dr. Reve",
-            description: "At your appointment time, join from your phone or computer. In Spanish or English, whichever you prefer."
+            title: "Attend the Confirmed Appointment",
+            description: "Follow the access instructions provided by the office and contact the office if you have trouble joining. Sessions may be requested in Spanish or English."
           },
           {
             number: "4",
             title: "Continue Your Treatment",
-            description: "Schedule your follow-up appointments and keep your treatment on track."
+            description: "If follow-up is recommended, the office confirms the professional, modality and availability for each appointment."
           }
         ]
       },
       services: {
-        description: "Psychiatric evaluation and treatment follow-up for adults, by video call.",
+        description: "Psychiatric evaluation and possible treatment follow-up for adults; the office confirms whether video modality is appropriate and available.",
         list: [
           {
             title: "Initial Psychiatric Evaluation",
@@ -150,7 +150,7 @@ const PsiquiatraCalifornia = () => {
           },
           {
             title: "Depression",
-            description: "Psychiatric care for depression, with continuous follow-up on your progress."
+            description: "Evaluation and treatment options for depression are discussed case by case."
           },
           {
             title: "Adult ADHD",
@@ -158,77 +158,77 @@ const PsiquiatraCalifornia = () => {
           },
           {
             title: "Treatment Follow-Up",
-            description: "Regular appointments to review how you are doing and adjust whatever is needed."
+            description: "If follow-up is recommended, the office confirms the professional, modality and availability for each appointment."
           }
         ]
       },
       pricing: {
-        description: "In California, appointments are direct pay. We do not work with insurance, and that has an advantage: you know exactly what you will pay before you book. No prior authorizations. No surprise copays. No calls to your insurer. Write to us on WhatsApp and we will confirm the exact price before you book.",
+        description: "Before booking, the office confirms the price, payment method, availability, treating professional, modality and eligibility for the requested appointment.",
         rows: [
-          { label: "Initial consultation (complete evaluation)", price: "60-minute video call" },
-          { label: "Follow-up consultation", price: "30-minute video call" }
+          { label: "Initial consultation (complete evaluation)", price: "Length confirmed before booking" },
+          { label: "Follow-up consultation", price: "Length confirmed before booking" }
         ],
-        note: "What does \"cash pay\" or direct pay mean? It is the term used in the United States for appointments paid directly to the practice, without going through health insurance. It does not mean paying in physical cash: you simply pay for your appointment like any other professional service, with no insurance claims and no prior authorizations."
+        note: "Coverage and payment arrangements vary. Confirm all financial and scheduling details with the office and, when applicable, your insurer before booking."
       },
       cta: {
-        description: "Book your first appointment with Dr. Reve and take the first step, in your language."
+        description: "Request an appointment in English or Spanish; the office confirms the professional and booking details."
       }
     },
     es: {
       hero: {
-        subtitle: "Atención psiquiátrica con la Dra. Melva Reve, desde la comodidad de tu casa.",
-        description: "Buscar ayuda para la ansiedad, la depresión o el TDAH ya cuesta bastante. Encontrar una psiquiatra que además te entienda en tu idioma no debería ser lo difícil. La Dra. Melva Reve es médica psiquiatra y habla español de forma nativa. No es una aplicación ni un chat: es una doctora que te atiende por videollamada, te evalúa y da seguimiento a tu tratamiento."
+        subtitle: "Solicita una cita psiquiátrica online bilingüe desde California.",
+        description: "Los adultos en California pueden solicitar una cita psiquiátrica en inglés o español. Antes de reservar, la oficina confirma el profesional tratante, precio, modalidad, disponibilidad, ubicación del paciente, licencias y elegibilidad clínica."
       },
       benefits: {
         items: [
           {
             title: "Te Atiende en Tu Idioma, de Verdad",
-            description: "No es un traductor ni un intérprete. La Dra. Reve es hablante nativa de español e hija de inmigrantes. Entiende lo que cuesta hablar de salud mental en una familia latina."
+            description: "La atención bilingüe está disponible directamente en inglés y español para que puedas hablar sobre salud mental y tratamiento en tu idioma preferido."
           },
           {
-            title: "Una Doctora, No una Aplicación",
-            description: "La Dra. Reve es médica psiquiatra. Puede evaluarte, diagnosticarte y hacer el seguimiento de tu tratamiento. Hablas siempre con ella, no con un asistente distinto cada vez."
+            title: "Profesional Tratante Confirmado",
+            description: "La oficina confirma el profesional tratante, el tipo de cita y la elegibilidad clínica antes de reservar."
           },
           {
-            title: "Sabes lo que Vas a Pagar",
-            description: "Pago directo, sin seguros de por medio. Sin autorizaciones, sin sorpresas en la factura, sin descubrir a mitad de camino que tu plan no cubre lo que necesitas. Confirmas el precio exacto antes de reservar."
+            title: "Precio Confirmado Antes de Reservar",
+            description: "La oficina confirma el precio, el método de pago y cualquier detalle de cobertura aplicable antes de reservar."
           },
           {
-            title: "Desde Tu Casa, Sin Desplazarte",
-            description: "Sin tráfico, sin salas de espera, sin pedir el día libre. Una videollamada desde donde estés, en un espacio privado, a la hora que hayas reservado."
+            title: "Modalidad por Video Confirmada Caso por Caso",
+            description: "La oficina confirma si la atención por video es apropiada y está disponible. El paciente debe conectarse desde un lugar privado y estar físicamente donde la profesional esté autorizada para brindar atención."
           }
         ]
       },
       coverage: {
-        description: "La Dra. Reve atiende por videollamada a pacientes de todo el estado de California. Da igual si estás en Los Ángeles, en San Diego, en el Valle Central o en cualquier otro punto: solo necesitas estar en California en el momento de la cita."
+        description: "El paciente debe estar físicamente donde el profesional tratante confirmado esté autorizado para brindar atención. La oficina confirma la elegibilidad en California, disponibilidad y adecuación clínica antes de cada cita por video."
       },
       process: {
         description: "Comenzar es simple y directo.",
         steps: [
           {
             number: "1",
-            title: "Reserva Tu Cita",
-            description: "Elige día y hora desde la web, o llama por teléfono."
+            title: "Solicita una Cita",
+            description: "Solicita día y hora desde la web o por teléfono. La oficina confirma la disponibilidad y modalidad."
           },
           {
             number: "2",
-            title: "Recibe Tu Enlace",
-            description: "Te llega por correo un enlace privado y seguro para la videollamada."
+            title: "Recibe Instrucciones de Acceso",
+            description: "Si se confirma una visita por video, la oficina proporciona instrucciones de acceso seguro antes de la cita."
           },
           {
             number: "3",
-            title: "Habla con la Dra. Reve",
-            description: "A la hora de tu cita, entras desde el móvil o el ordenador. En español o en inglés, como prefieras."
+            title: "Asiste a la Cita Confirmada",
+            description: "Sigue las instrucciones de acceso de la oficina y contáctala si tienes problemas para conectarte. Las sesiones pueden solicitarse en español o inglés."
           },
           {
             number: "4",
             title: "Continúa Tu Tratamiento",
-            description: "Agenda tus citas de seguimiento y mantén tu tratamiento al día."
+            description: "Si se recomienda seguimiento, la oficina confirma el profesional, la modalidad y la disponibilidad para cada cita."
           }
         ]
       },
       services: {
-        description: "Evaluación psiquiátrica y seguimiento del tratamiento para adultos, por videollamada.",
+        description: "Evaluación psiquiátrica y posible seguimiento para adultos; la oficina confirma si la modalidad por video es apropiada y está disponible.",
         list: [
           {
             title: "Evaluación Psiquiátrica Inicial",
@@ -240,7 +240,7 @@ const PsiquiatraCalifornia = () => {
           },
           {
             title: "Depresión",
-            description: "Atención psiquiátrica para la depresión, con seguimiento continuo de tu evolución."
+            description: "Las opciones de evaluación y tratamiento para la depresión se analizan caso por caso."
           },
           {
             title: "TDAH en Adultos",
@@ -248,20 +248,20 @@ const PsiquiatraCalifornia = () => {
           },
           {
             title: "Seguimiento del Tratamiento",
-            description: "Citas periódicas para revisar cómo vas y ajustar lo que haga falta."
+            description: "Si se recomienda seguimiento, la oficina confirma los detalles de cada cita caso por caso."
           }
         ]
       },
       pricing: {
-        description: "En California la consulta es de pago directo. No trabajamos con seguros, y eso tiene una ventaja: sabes exactamente lo que vas a pagar antes de reservar. Sin autorizaciones previas. Sin copagos sorpresa. Sin llamadas a tu aseguradora. Escríbenos por WhatsApp y te confirmamos el precio exacto antes de reservar.",
+        description: "Antes de reservar, la oficina confirma el precio, el método de pago, la disponibilidad, el profesional tratante, la modalidad y la elegibilidad para la cita solicitada.",
         rows: [
-          { label: "Primera consulta (evaluación completa)", price: "Videollamada de 60 minutos" },
-          { label: "Consulta de seguimiento", price: "Videollamada de 30 minutos" }
+          { label: "Primera consulta (evaluación completa)", price: "Duración confirmada antes de reservar" },
+          { label: "Consulta de seguimiento", price: "Duración confirmada antes de reservar" }
         ],
-        note: "¿Qué significa \"cash pay\" o pago directo? Es el término que se usa en Estados Unidos para las consultas que se pagan directamente a la práctica, sin pasar por un seguro médico. No significa pagar en efectivo: simplemente pagas tu cita como cualquier otro servicio profesional, sin reclamos a aseguradoras ni autorizaciones previas."
+        note: "La cobertura y los acuerdos de pago varían. Confirma todos los detalles financieros y de programación con la oficina y, cuando corresponda, con tu aseguradora antes de reservar."
       },
       cta: {
-        description: "Reserva tu primera consulta con la Dra. Reve y da el primer paso, en tu idioma."
+        description: "Solicita una cita en inglés o español; la oficina confirma el profesional y los detalles de reserva."
       }
     }
   };
@@ -269,29 +269,29 @@ const PsiquiatraCalifornia = () => {
   const currentContent = content[language];
 
   const benefitAltTexts = language === 'en' ? [
-    "Dr. Melva Reve providing psychiatric care in Spanish by video call for patients in California",
-    "A licensed physician, not an app - direct psychiatric care by video call",
-    "Clear direct-pay pricing for online psychiatric consultations, no insurance paperwork",
-    "Patient attending an online psychiatric appointment from home in California"
+    "Adult using a laptop for a private video conversation",
+    "Licensed-clinician themed illustration for an online appointment",
+    "Appointment details confirmed by the office before booking",
+    "Adult seated at home using a laptop"
   ] : [
-    "Dra. Melva Reve brindando atención psiquiátrica en español por videollamada para pacientes en California",
-    "Una médica con licencia, no una aplicación - atención psiquiátrica directa por videollamada",
-    "Precio claro de pago directo para consultas psiquiátricas online, sin trámites de seguros",
-    "Paciente en una cita psiquiátrica online desde su casa en California"
+    "Persona adulta usando una computadora portátil para una conversación privada por video",
+    "Ilustración de una profesional con licencia para una cita online",
+    "Detalles de la cita confirmados por la oficina antes de reservar",
+    "Persona adulta sentada en casa usando una computadora portátil"
   ];
 
   const serviceAltTexts = language === 'en' ? [
     "Initial psychiatric evaluation by video call - online mental health assessment in Spanish",
     "Online evaluation and follow-up for anxiety disorders and panic attacks",
-    "Online psychiatric care for depression with continuous follow-up",
+    "Online psychiatric evaluation and treatment options for depression",
     "Adult ADHD evaluation and treatment follow-up by video call",
-    "Regular follow-up appointments to review and adjust psychiatric treatment"
+    "Follow-up appointments confirmed case by case when clinically appropriate"
   ] : [
     "Evaluación psiquiátrica inicial por videollamada - evaluación de salud mental online en español",
     "Evaluación y seguimiento online para trastornos de ansiedad y ataques de pánico",
-    "Atención psiquiátrica online para la depresión con seguimiento continuo",
+    "Evaluación psiquiátrica online y opciones de tratamiento para la depresión",
     "Evaluación de TDAH en adultos y seguimiento del tratamiento por videollamada",
-    "Citas periódicas de seguimiento para revisar y ajustar el tratamiento psiquiátrico"
+    "Citas de seguimiento confirmadas caso por caso cuando sean clínicamente apropiadas"
   ];
 
   const benefitImages = [continuityCareImg, securePrivateImg, convenientSchedulingImg, accessFromHomeImg];
@@ -312,15 +312,15 @@ const PsiquiatraCalifornia = () => {
                   colorScheme="green"
                   heroImage={californiaHeroBg}
                   heroImageAlt={language === 'en'
-                    ? 'Dr. Melva Reve providing secure online psychiatric consultations by video call in Spanish'
-                    : 'Dra. Melva Reve brindando consultas psiquiátricas seguras en línea por videollamada en español'}
+                     ? 'Adult using a laptop for a private video conversation'
+                    : 'Persona adulta usando una computadora portátil para una conversación privada por video'}
                   heroBadges={
                     <div className="flex flex-wrap gap-3">
                       {[
                         { en: 'In Spanish', es: 'En Español', icon: 'check' },
                         { en: 'Video Appointment', es: 'Consulta por Video', icon: 'video' },
                         { en: 'Adults 18+', es: 'Adultos 18+', icon: 'check' },
-                        { en: 'Direct Pay', es: 'Pago Directo', icon: 'check' }
+                        { en: 'Details Confirmed Before Booking', es: 'Detalles Confirmados Antes de Reservar', icon: 'check' }
                       ].map((item, index) => (
                         <div key={index} className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
                           <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -369,9 +369,9 @@ const PsiquiatraCalifornia = () => {
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4">
                 {language === 'en' ? (
-                  <>Care Throughout <span className="font-display italic text-green-700">California</span></>
+                  <>California <span className="font-display italic text-green-700">Eligibility</span></>
                 ) : (
-                  <>Atención en <span className="font-display italic text-green-700">Todo California</span></>
+                  <>Elegibilidad en <span className="font-display italic text-green-700">California</span></>
                 )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto font-body leading-relaxed mb-8">
@@ -386,28 +386,28 @@ const PsiquiatraCalifornia = () => {
                     es: 'Médica Psiquiatra'
                   },
                   {
-                    en: 'California Licensed Psychiatrist · A198275',
-                    es: 'Psiquiatra con Licencia en California · A198275'
+                    en: 'California Physician and Surgeon License · A198275',
+                    es: 'Licencia médica de California · A198275'
                   },
                   {
                     en: 'In Spanish',
                     es: 'En Español'
                   },
                   {
-                    en: 'From Your Home',
-                    es: 'Desde Tu Casa'
+                    en: 'Video May Be Offered',
+                    es: 'Puede Ofrecerse Video'
                   },
                   {
-                    en: 'Confidential',
-                    es: 'Confidencial'
+                    en: 'Privacy Safeguards',
+                    es: 'Salvaguardas de Privacidad'
                   },
                   {
                     en: 'Adults 18+',
                     es: 'Adultos 18+'
                   },
                   {
-                    en: 'All of California',
-                    es: 'Todo California'
+                    en: 'California Eligibility Confirmed',
+                    es: 'Elegibilidad en California Confirmada'
                   }
                 ].map((item, index) => (
                   <div key={index} className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100" data-testid={`feature-tag-${index}`}>
@@ -427,15 +427,15 @@ const PsiquiatraCalifornia = () => {
                   <img
                     src={assetUrl(californiaMap)}
                     alt={language === 'en'
-                      ? 'California state map - online psychiatric care available throughout the state'
-                      : 'Mapa del estado de California - atención psiquiátrica online disponible en todo el estado'}
+                      ? 'Map of California used to explain location and licensing eligibility'
+                      : 'Mapa de California usado para explicar elegibilidad por ubicación y licencias'}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-green-500 bg-opacity-5"></div>
                   <div className="absolute bottom-4 left-4 bg-white bg-opacity-95 rounded-lg shadow-lg px-4 py-3 border border-green-200">
                     <div className="flex items-center gap-2 text-sm text-green-700 font-medium">
                       <VideoIcon className="w-4 h-4" />
-                      <span>{language === 'en' ? 'Available Statewide' : 'Disponible en Todo el Estado'}</span>
+                      <span>{language === 'en' ? 'Eligibility Confirmed by Office' : 'Elegibilidad Confirmada por la Oficina'}</span>
                     </div>
                   </div>
                 </div>
@@ -579,9 +579,9 @@ const PsiquiatraCalifornia = () => {
             <div className="text-center mt-8">
               <p className="text-gray-600 font-body mb-6">
                 {language === 'en' ? (
-                  <><span className="font-bold text-green-700">1 in 5</span> adults in the U.S. experiences a mental health condition each year. You are not alone.</>
+                  <>Adults may request an evaluation when mental health symptoms affect daily life.</>
                 ) : (
-                  <><span className="font-bold text-green-700">1 de cada 5</span> adultos en EE. UU. experimenta un problema de salud mental cada año. No estás solo.</>
+                  <>Los adultos pueden solicitar una evaluación cuando los síntomas de salud mental afectan la vida diaria.</>
                 )}
               </p>
               <Button
@@ -740,9 +740,9 @@ const PsiquiatraCalifornia = () => {
             <div className="text-center mb-10">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4" data-testid="pricing-title">
                 {language === 'en' ? (
-                  <>Clear <span className="font-display italic text-green-700">Pricing</span>, No Insurance</>
+                  <>Scheduling and <span className="font-display italic text-green-700">Payment</span> Details</>
                 ) : (
-                  <>Precio <span className="font-display italic text-green-700">Claro</span>, Sin Seguros</>
+                  <>Detalles de <span className="font-display italic text-green-700">Programación y Pago</span></>
                 )}
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 font-body leading-relaxed" data-testid="pricing-description">
@@ -817,8 +817,8 @@ const PsiquiatraCalifornia = () => {
             <div className="flex flex-wrap justify-center gap-3 mb-5">
               {[
                 {
-                  en: 'HIPAA-Compliant Platform',
-                  es: 'Plataforma Compatible con HIPAA'
+                  en: 'Secure Video Platform',
+                  es: 'Plataforma de Video Segura'
                 },
                 {
                   en: 'Clinical Evaluations Only · Not an Online Pharmacy',
@@ -867,7 +867,7 @@ const PsiquiatraCalifornia = () => {
                 data-testid="cta-schedule-button"
               >
                 <Calendar className="w-5 h-5 mr-2 inline" />
-                {language === 'en' ? 'Book Your Appointment' : 'Agenda Tu Cita'}
+                {language === 'en' ? 'Request an Appointment' : 'Solicitar una Cita'}
               </Button>
               <Button
                 onClick={() => {

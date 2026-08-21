@@ -64,8 +64,8 @@ const FAQ = () => {
               
               <div
                 id={`faq-answer-panel-${index}`}
-                hidden={openItem !== index}
-                className="px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6"
+                aria-hidden={openItem !== index}
+                className={`px-4 sm:px-6 lg:px-8 pb-5 sm:pb-6 ${openItem === index ? 'block' : 'hidden'}`}
               >
                   <div className="pt-2 border-t border-green-100">
                     <p 

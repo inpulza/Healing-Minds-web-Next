@@ -17,8 +17,8 @@ const CancellationPolicy = () => {
         ? 'Cancellation & No-Show Policy | Healing Minds Psychiatry'
         : 'Política de Cancelación y No Asistencia | Healing Minds Psychiatry',
       description: language === 'en'
-        ? 'Please review our 24-hour cancellation and no-show policy for appointments at Healing Minds Psychiatry in Naples, FL.'
-        : 'Por favor revise nuestra política de cancelación de 24 horas y no asistencia para citas en Healing Minds Psychiatry en Naples, FL.',
+        ? 'Review the current written cancellation and no-show terms for appointments at Healing Minds Psychiatry in Naples, FL.'
+        : 'Revise los términos escritos vigentes de cancelación y no asistencia para citas en Healing Minds Psychiatry en Naples, FL.',
       keywords: language === 'en'
         ? 'cancellation policy, no-show policy, appointment cancellation, late cancellation fee, psychiatry appointments Naples'
         : 'política cancelación, política no asistencia, cancelación citas, cargo cancelación tardía, citas psiquiatría Naples',
@@ -39,13 +39,11 @@ const CancellationPolicy = () => {
           <div className="prose prose-lg max-w-none dark:prose-invert" data-testid="cancellation-policy-content">
             <div className="space-y-8">
               <div className="space-y-6">
-                <p className="text-gray-700 dark:text-gray-300">
-                  {s('intro').paragraphs![0]}
-                </p>
-
-                <p className="text-gray-700 dark:text-gray-300">
-                  <RichText text={s('intro').paragraphs![1]} />
-                </p>
+                {s('intro').paragraphs!.map((paragraph, index) => (
+                  <p key={index} className="text-gray-700 dark:text-gray-300">
+                    <RichText text={paragraph} />
+                  </p>
+                ))}
               </div>
 
               <div className="space-y-6">

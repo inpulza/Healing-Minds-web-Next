@@ -49,8 +49,8 @@ const AnxietyTreatment = () => {
         ? 'Anxiety Treatment Naples FL - Expert Psychiatric Care | Dr. Melva Reve'
         : 'Tratamiento para la Ansiedad Naples FL - Atención Psiquiátrica Experta | Dra. Melva Reve',
       description: language === 'en'
-        ? 'Expert anxiety treatment in Naples, FL. Dr. Melva Reve offers comprehensive care for panic attacks, social anxiety, generalized anxiety disorder. Bilingual psychiatrist. Insurance accepted.'
-        : 'Tratamiento experto para la ansiedad en Naples, FL. La Dra. Melva Reve ofrece atención integral para ataques de pánico, ansiedad social, trastorno de ansiedad generalizada. Psiquiatra bilingüe. Se acepta seguro.',
+        ? 'Expert anxiety treatment in Naples, FL. Dr. Melva Reve offers comprehensive care for panic attacks, social anxiety, generalized anxiety disorder. Bilingual psychiatrist. Confirm insurance participation before booking.'
+        : 'Tratamiento experto para la ansiedad en Naples, FL. La Dra. Melva Reve ofrece atención integral para ataques de pánico, ansiedad social, trastorno de ansiedad generalizada. Psiquiatra bilingüe. Confirme la participación del seguro antes de reservar.',
       keywords: language === 'en'
         ? 'anxiety treatment Naples FL, panic attacks Naples, social anxiety Naples, anxiety psychiatrist Naples, generalized anxiety disorder Naples, anxiety medication Naples'
         : 'tratamiento ansiedad Naples FL, ataques de pánico Naples, ansiedad social Naples, psiquiatra ansiedad Naples, trastorno ansiedad generalizada Naples, medicamento ansiedad Naples',

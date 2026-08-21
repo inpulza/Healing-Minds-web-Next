@@ -11,42 +11,42 @@ import type { BilingualPageContent } from '../types';
 
 export const telepsychiatryFloridaContent: BilingualPageContent = {
   en: {
-    title: 'Expert Psychiatric Care from Anywhere in Florida',
+    title: 'Request Telepsychiatry in Florida',
     sections: [
       {
         key: 'hero-badges',
-        bullets: ['Telehealth Available', 'Available 24/7', 'Mobile Friendly'],
+        bullets: ['Telehealth Requests Available', 'Availability Confirmed by Office', 'Mobile Friendly'],
       },
       {
         key: 'hero-description',
         paragraphs: [
-          'Connect with Dr. Melva Reve from the comfort of your home. Professional psychiatric care designed to eliminate distance barriers, wherever you are in Florida.',
+          'Request a video visit with Dr. Melva Reve from your home. The office confirms availability, clinical suitability, patient location and licensing requirements case by case.',
         ],
       },
       {
         key: 'coverage-heading',
-        heading: 'Statewide Coverage',
+        heading: 'Florida Telehealth Eligibility',
       },
       {
         key: 'coverage-description',
         paragraphs: [
-          'Dr. Melva Reve is licensed to provide telepsychiatry services throughout the entire state of Florida.',
+          'Dr. Melva Reve holds a Florida medical license. The office confirms whether telepsychiatry is appropriate and permitted for each appointment based on clinical needs and the patient’s physical location.',
         ],
       },
       {
         key: 'coverage-feature-tags',
         bullets: [
-          '15+ Years Experience',
+          'Active Florida License ME165518',
           'Expert Psychiatrist',
           'Bilingual Services',
-          'Statewide Coverage',
-          'HIPAA Compliant',
+          'Eligibility Confirmed Case by Case',
+          'Privacy Practices Reviewed',
           'Secure Platform',
         ],
       },
       {
         key: 'coverage-map-badge',
-        paragraphs: ['Available Statewide'],
+        paragraphs: ['Florida Location Required'],
       },
       {
         key: 'benefits-heading',
@@ -54,30 +54,30 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
       },
       {
         key: 'benefit-access',
-        heading: 'Access from Anywhere in Florida',
+        heading: 'Request Care While Located in Florida',
         paragraphs: [
-          "Whether you're in Miami, Orlando, Tampa, or a rural community, connect with an expert psychiatrist without the need to travel.",
+          'The office verifies your physical location, applicable licensing requirements and clinical suitability before confirming a video appointment.',
         ],
       },
       {
         key: 'benefit-convenient',
         heading: 'Convenient & Time-Saving',
         paragraphs: [
-          'No traffic, no waiting rooms. Our virtual appointments fit your schedule, allowing you to receive care efficiently from home.',
+          'A confirmed video appointment may reduce travel. Appointment time and modality are confirmed by the office when scheduling.',
         ],
       },
       {
         key: 'benefit-secure',
-        heading: '100% Private & Secure',
+        heading: 'Privacy-Conscious Video Visits',
         paragraphs: [
-          'HIPAA-compliant platform ensures your sessions are completely confidential and encrypted. Your privacy is our priority.',
+          'Video visits use a secure video platform. Privacy practices and consent are reviewed before care; no internet transmission can be described as risk-free.',
         ],
       },
       {
         key: 'benefit-continuity',
         heading: 'Continuity of Care',
         paragraphs: [
-          'Perfect for seasonal residents, college students, or anyone traveling within Florida. Your treatment never gets interrupted.',
+          'Patients may discuss continuity needs with the office. Modality, availability and any coordination with another provider are evaluated case by case and require patient consent where applicable.',
         ],
       },
       {
@@ -92,28 +92,28 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
         key: 'process-step-1',
         heading: 'Book Your Appointment',
         paragraphs: [
-          'Call us or use our online booking portal to schedule your first virtual consultation.',
+          'Call us or use the online portal to request an appointment. The office confirms availability and modality.',
         ],
       },
       {
         key: 'process-step-2',
-        heading: 'Receive Secure Link',
+        heading: 'Receive Access Instructions',
         paragraphs: [
-          "You'll get a confirmation email with a unique, HIPAA-compliant video session link.",
+          'If a video visit is confirmed, the office will provide secure access instructions before the appointment.',
         ],
       },
       {
         key: 'process-step-3',
         heading: 'Connect with Dr. Reve',
         paragraphs: [
-          'At your appointment time, click the link from any device and meet with Dr. Reve in English or Spanish.',
+          'Follow the access instructions provided by the office. Contact the office if you have trouble joining.',
         ],
       },
       {
         key: 'process-step-4',
         heading: 'Ongoing Care',
         paragraphs: [
-          'Schedule follow-up appointments as needed and receive continuous psychiatric support, all from the comfort of home.',
+          'Request follow-up appointments as needed. The office confirms the appropriate modality for each visit.',
         ],
       },
       {
@@ -123,7 +123,7 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
       {
         key: 'services-description',
         paragraphs: [
-          'Our virtual platform allows us to offer our full range of diagnostic and psychiatric services for adults (18+).',
+          'For adults 18 and older, the office determines which diagnostic and psychiatric services are clinically appropriate for video visits case by case.',
         ],
       },
       {
@@ -176,7 +176,7 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
         key: 'compliance-badges',
         bullets: [
           'Florida Licensed Psychiatrist · ME165518',
-          'HIPAA-Compliant Platform',
+          'Secure Video Platform',
           'Clinical Evaluations Only · Not an Online Pharmacy',
         ],
       },
@@ -196,47 +196,47 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
       },
       {
         key: 'cta-button',
-        bullets: ['Schedule Now'],
+        bullets: ['Request Appointment'],
       },
     ],
   },
   es: {
-    title: 'Atención Psiquiátrica Experta desde Cualquier Lugar de Florida',
+    title: 'Solicite Telepsiquiatría en Florida',
     sections: [
       {
         key: 'hero-badges',
-        bullets: ['Telesalud Disponible', 'Disponible 24/7', 'Móvil Amigable'],
+        bullets: ['Solicitudes de Telesalud Disponibles', 'Disponibilidad Confirmada por la Oficina', 'Acceso Móvil'],
       },
       {
         key: 'hero-description',
         paragraphs: [
-          'Conéctese con la Dra. Melva Reve desde la comodidad de su hogar. Atención psiquiátrica profesional diseñada para eliminar barreras de distancia, esté donde esté en Florida.',
+          'Solicite una visita por video con la Dra. Melva Reve desde su hogar. La oficina confirma la disponibilidad, adecuación clínica, ubicación del paciente y requisitos de licencia caso por caso.',
         ],
       },
       {
         key: 'coverage-heading',
-        heading: 'Cobertura Estatal',
+        heading: 'Elegibilidad para Telesalud en Florida',
       },
       {
         key: 'coverage-description',
         paragraphs: [
-          'La Dra. Melva Reve tiene licencia para proporcionar servicios de telepsiquiatría en todo el estado de Florida.',
+          'La Dra. Melva Reve tiene licencia médica de Florida. La oficina confirma si la telepsiquiatría es apropiada y está permitida para cada cita según las necesidades clínicas y la ubicación física del paciente.',
         ],
       },
       {
         key: 'coverage-feature-tags',
         bullets: [
-          '15+ Años de Experiencia',
+          'Licencia Activa de Florida ME165518',
           'Psiquiatra Experta',
           'Servicios Bilingües',
-          'Cobertura Estatal',
-          'Compatible con HIPAA',
+          'Elegibilidad Confirmada Caso por Caso',
+          'Prácticas de Privacidad Revisadas',
           'Plataforma Segura',
         ],
       },
       {
         key: 'coverage-map-badge',
-        paragraphs: ['Disponible en Todo el Estado'],
+        paragraphs: ['Ubicación en Florida Requerida'],
       },
       {
         key: 'benefits-heading',
@@ -244,30 +244,30 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
       },
       {
         key: 'benefit-access',
-        heading: 'Acceso desde Cualquier Lugar de Florida',
+        heading: 'Solicite Atención Mientras Está en Florida',
         paragraphs: [
-          'Ya sea que esté en Miami, Orlando, Tampa o una comunidad rural, conéctese con una psiquiatra con licencia sin necesidad de viajar.',
+          'La oficina verifica su ubicación física, los requisitos de licencia aplicables y la adecuación clínica antes de confirmar una cita por video.',
         ],
       },
       {
         key: 'benefit-convenient',
         heading: 'Conveniente y Ahorra Tiempo',
         paragraphs: [
-          'Sin tráfico, sin salas de espera. Nuestras citas virtuales se adaptan a su horario, permitiéndole recibir atención eficientemente desde casa.',
+          'Una cita por video confirmada puede reducir desplazamientos. La oficina confirma el horario y la modalidad al programar.',
         ],
       },
       {
         key: 'benefit-secure',
-        heading: '100% Privado y Seguro',
+        heading: 'Visitas por Video con Medidas de Privacidad',
         paragraphs: [
-          'Plataforma compatible con HIPAA garantiza que sus sesiones sean completamente confidenciales y encriptadas. Su privacidad es nuestra prioridad.',
+          'Las visitas usan una plataforma de video segura. Las prácticas de privacidad y el consentimiento se revisan antes de la atención; ninguna transmisión por internet puede describirse como libre de riesgo.',
         ],
       },
       {
         key: 'benefit-continuity',
         heading: 'Continuidad de la Atención',
         paragraphs: [
-          'Perfecto para residentes estacionales, estudiantes universitarios o cualquiera que viaje dentro de Florida. Su tratamiento nunca se interrumpe.',
+          'Los pacientes pueden discutir sus necesidades de continuidad con la oficina. La modalidad, disponibilidad y cualquier coordinación con otro proveedor se evalúan caso por caso y requieren consentimiento cuando corresponda.',
         ],
       },
       {
@@ -282,28 +282,28 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
         key: 'process-step-1',
         heading: 'Reserve su Cita',
         paragraphs: [
-          'Llámenos o use nuestro portal de reservas en línea para programar su primera consulta virtual.',
+          'Llámenos o use el portal en línea para solicitar una cita. La oficina confirma la disponibilidad y modalidad.',
         ],
       },
       {
         key: 'process-step-2',
-        heading: 'Reciba Enlace Seguro',
+        heading: 'Reciba Instrucciones de Acceso',
         paragraphs: [
-          'Recibirá un correo de confirmación con un enlace único de sesión de video compatible con HIPAA.',
+          'Si se confirma una visita por video, la oficina proporcionará instrucciones de acceso seguro antes de la cita.',
         ],
       },
       {
         key: 'process-step-3',
         heading: 'Conéctese con la Dra. Reve',
         paragraphs: [
-          'A la hora de su cita, haga clic en el enlace desde cualquier dispositivo y reúnase con la Dra. Reve en inglés o español.',
+          'Siga las instrucciones de acceso proporcionadas por la oficina. Contacte la oficina si tiene problemas para conectarse.',
         ],
       },
       {
         key: 'process-step-4',
         heading: 'Atención Continua',
         paragraphs: [
-          'Programe citas de seguimiento según sea necesario y reciba apoyo psiquiátrico continuo, todo desde la comodidad de su hogar.',
+          'Solicite citas de seguimiento según sea necesario. La oficina confirma la modalidad apropiada para cada visita.',
         ],
       },
       {
@@ -313,7 +313,7 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
       {
         key: 'services-description',
         paragraphs: [
-          'Nuestra plataforma virtual nos permite ofrecer nuestra gama completa de servicios de diagnóstico y atención psiquiátrica para adultos (18+).',
+          'Para adultos de 18 años en adelante, la oficina determina caso por caso qué servicios diagnósticos y psiquiátricos son clínicamente apropiados por video.',
         ],
       },
       {
@@ -366,7 +366,7 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
         key: 'compliance-badges',
         bullets: [
           'Psiquiatra con Licencia en Florida · ME165518',
-          'Plataforma Compatible con HIPAA',
+          'Plataforma de Video Segura',
           'Solo Evaluaciones Clínicas · No es Farmacia en Línea',
         ],
       },
@@ -386,7 +386,7 @@ export const telepsychiatryFloridaContent: BilingualPageContent = {
       },
       {
         key: 'cta-button',
-        bullets: ['Programar Ahora'],
+        bullets: ['Solicitar Cita'],
       },
     ],
   },

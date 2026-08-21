@@ -9,7 +9,7 @@ import LocationFAQ from '@/components/LocationFAQ';
 import { locationFAQs } from '@/data/locationFAQs';
 import { updateSEO } from '@/utils/seo';
 import { cityHyperlocal } from '@/data/locationHyperlocal';
-import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
+import { practiceInfo, serviceAreas } from '@/data/content';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import WellnessIcon from '@/components/WellnessIcon';
@@ -66,7 +66,7 @@ const LocationBonitaSprings = () => {
       contactTitle: "Contact Information", 
       hoursTitle: "Office Hours",
       servicesTitle: "Services for This Community",
-      insuranceTitle: "Accepted Insurance Plans",
+      insuranceTitle: "Insurance and Billing Questions",
       areaTitle: "Areas We Serve",
       mapTitle: "Find Us on the Map",
       bookNow: "Book Appointment",
@@ -75,7 +75,7 @@ const LocationBonitaSprings = () => {
       features: [
         {
           title: "Convenient Location",
-          description: "Easily accessible from Bonita Springs with ample parking available"
+          description: "Check parking and access details when scheduling"
         },
         {
           title: "Modern Facilities", 
@@ -102,7 +102,7 @@ const LocationBonitaSprings = () => {
       contactTitle: "Información de Contacto",
       hoursTitle: "Horarios de Oficina", 
       servicesTitle: "Servicios para Esta Comunidad",
-      insuranceTitle: "Planes de Seguro Aceptados",
+      insuranceTitle: "Preguntas sobre Seguro y Facturación",
       areaTitle: "Áreas que Servimos",
       mapTitle: "Encuéntrenos en el Mapa",
       bookNow: "Reservar Cita",
@@ -111,7 +111,7 @@ const LocationBonitaSprings = () => {
       features: [
         {
           title: "Ubicación Conveniente",
-          description: "Fácil acceso desde Bonita Springs con amplio estacionamiento disponible"
+          description: "Confirme estacionamiento y acceso al programar"
         },
         {
           title: "Instalaciones Modernas",
@@ -213,7 +213,7 @@ const LocationBonitaSprings = () => {
                           <CheckCircle className="w-3 h-3 text-green-600" />
                         </div>
                         <span className="text-gray-700 font-body font-medium text-xs sm:text-sm">
-                          {language === 'en' ? '15+ Years Experience' : '15+ Años de Experiencia'}
+                          {language === 'en' ? 'Active Florida License ME165518' : 'Licencia Activa de Florida ME165518'}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-200 border border-green-100">
@@ -278,9 +278,9 @@ const LocationBonitaSprings = () => {
                   
                   {/* Key Stats */}
                   <div className="mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl font-bold mb-2 text-green-600">15+</div>
+                    <div className="text-2xl sm:text-3xl font-bold mb-2 text-green-600">ME165518</div>
                     <div className="text-gray-600 font-body text-sm sm:text-base">
-                      {language === 'en' ? 'Years serving the Southwest Florida community with excellence' : 'Años sirviendo a la comunidad del Suroeste de Florida con excelencia'}
+                      {language === 'en' ? 'Active Florida medical license' : 'Licencia médica activa de Florida'}
                     </div>
                   </div>
 
@@ -785,12 +785,12 @@ const LocationBonitaSprings = () => {
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h4 className="font-semibold text-green-800 mb-1">
-                          {language === 'en' ? 'Ample Parking' : 'Amplio Estacionamiento'}
+                          {language === 'en' ? 'Parking and Access Details' : 'Detalles de Estacionamiento y Acceso'}
                         </h4>
                         <p className="text-sm text-gray-600 font-body">
                           {language === 'en'
-                            ? 'Free, convenient parking available for all Bonita Springs patients visiting our facility'
-                            : 'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Bonita Springs que visiten nuestras instalaciones'}
+                            ? 'Check parking and access details with the office when scheduling your visit'
+                            : 'Confirme con la oficina los detalles de estacionamiento y acceso al programar su visita'}
                         </p>
                       </div>
                     </div>
@@ -847,9 +847,9 @@ const LocationBonitaSprings = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Community</span> Involvement in Bonita Springs</>
+                    <><span className="font-display italic text-green-700">Independent Local</span> Resources in Bonita Springs</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Bonita Springs</>
+                    <><span className="font-display italic text-green-700">Recursos Locales</span> Independientes en Bonita Springs</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -858,8 +858,8 @@ const LocationBonitaSprings = () => {
               </div>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Mental health is fundamental to building a thriving community. We proudly support Bonita Springs through our psychiatric care services and by recognizing the vital organizations that strengthen our local community fabric.'
-                  : 'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Bonita Springs a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que fortalecen el tejido de nuestra comunidad local.'}
+                  ? 'These independent local resources provide community information and services in Bonita Springs. Listings are informational only and do not imply partnership, endorsement, or referral.'
+                  : 'Estos recursos locales independientes ofrecen información y servicios comunitarios en Bonita Springs. La lista es solo informativa y no implica colaboración, respaldo ni referido.'}
               </p>
             </div>
             
@@ -876,8 +876,8 @@ const LocationBonitaSprings = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Supporting arts education and cultural enrichment in our community. Home to the renowned Bonita Springs National Art Festival, Arts Bonita has provided over $150,000 in scholarships and served more than 15,000 young people through their educational programs.'
-                    : 'Apoyando la educación artística y el enriquecimiento cultural en nuestra comunidad. Hogar del reconocido Festival Nacional de Arte de Bonita Springs, Arts Bonita ha proporcionado más de $150,000 en becas y ha servido a más de 15,000 jóvenes a través de sus programas educativos.'}
+                  ? 'Arts education, exhibitions, and cultural programs offered by Arts Bonita.'
+                  : 'Educación artística, exhibiciones y programas culturales ofrecidos por Arts Bonita.'}
                 </p>
 
                 <a
@@ -912,8 +912,8 @@ const LocationBonitaSprings = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'For over 39 years, this vital organization has provided emergency assistance and food bank services to families in need. Their dedication to supporting our community during challenging times aligns with our commitment to mental health and overall well-being.'
-                    : 'Por más de 39 años, esta organización vital ha proporcionado asistencia de emergencia y servicios de banco de alimentos a familias necesitadas. Su dedicación a apoyar a nuestra comunidad durante tiempos difíciles se alinea con nuestro compromiso con la salud mental y el bienestar general.'}
+                  ? 'Emergency assistance and food-support resources for local residents in need.'
+                  : 'Recursos de asistencia de emergencia y apoyo alimentario para residentes locales que los necesiten.'}
                 </p>
 
                 <a
@@ -948,8 +948,8 @@ const LocationBonitaSprings = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'This grassroots organization began in Bonita Springs city park, providing lunch services and community outreach to those in need. Their compassionate approach to community care reflects the same values we bring to mental health treatment - meeting people where they are with dignity and respect.'
-                    : 'Esta organización de base comenzó en el parque de la ciudad de Bonita Springs, proporcionando servicios de almuerzo y divulgación comunitaria a quienes lo necesitan. Su enfoque compasivo hacia el cuidado comunitario refleja los mismos valores que aportamos al tratamiento de salud mental: encontrar a las personas donde están con dignidad y respeto.'}
+                  ? 'Food assistance and community outreach resources offered by Café of Life.'
+                  : 'Recursos de asistencia alimentaria y alcance comunitario ofrecidos por Café of Life.'}
                 </p>
 
                 <a
@@ -966,7 +966,7 @@ const LocationBonitaSprings = () => {
                       <ArrowRight className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-left leading-tight flex-1 py-2">
-                      {language === 'en' ? 'Support Their Mission' : 'Apoyar Su Misión'}
+                      {language === 'en' ? 'Visit Official Site' : 'Visitar Sitio Oficial'}
                     </span>
                   </Button>
                 </a>
@@ -977,8 +977,8 @@ const LocationBonitaSprings = () => {
             <div className="mt-16 text-center">
               <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto font-body leading-relaxed">
                 {language === 'en'
-                  ? 'Just as these organizations strengthen our Bonita Springs community, we are committed to supporting your mental health journey with compassionate, professional psychiatric care.'
-                  : 'Así como estas organizaciones fortalecen nuestra comunidad de Bonita Springs, estamos comprometidos a apoyar su viaje de salud mental con atención psiquiátrica compasiva y profesional.'}
+                  ? 'Healing Minds provides psychiatric care for adults in Bonita Springs through telepsychiatry and appointments at our Naples office.'
+                  : 'Healing Minds ofrece atención psiquiátrica para adultos de Bonita Springs mediante telepsiquiatría y citas en nuestra oficina de Naples.'}
               </p>
               <Button 
                 className="group inline-flex items-center justify-center gap-3 rounded-full text-base font-semibold transition-all duration-300 bg-green-700 text-white hover:bg-green-800 px-8 py-6"
@@ -1076,8 +1076,7 @@ const LocationBonitaSprings = () => {
                       {content.contactTitle}
                     </h3>
                     <p className="text-gray-600 font-body leading-relaxed">
-                      Phone: (239) 423-0272<br />
-                      Fax: (239) 330-2073
+                      Phone: (239) 423-0272
                     </p>
                   </div>
                 </div>
@@ -1118,7 +1117,7 @@ const LocationBonitaSprings = () => {
                   <div className="text-center space-y-4">
                     <VideoIcon className="w-8 h-8 text-blue-600 mx-auto" />
                     <h3 className="text-lg font-bold text-blue-800">
-                      {language === 'en' ? 'Book Telehealth' : 'Reservar Telesalud'}
+                      {language === 'en' ? 'Request Telehealth' : 'Solicitar Telesalud'}
                     </h3>
                     <CharmHealthBooking variant="compact" showDescription={false} className="justify-center" />
                   </div>

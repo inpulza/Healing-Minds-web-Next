@@ -1,0 +1,109 @@
+[
+  {
+    "id": "florida-license-me165518",
+    "claim": "Florida medical license ME165518 was listed as active for Melva Rosa Reve Urgelles.",
+    "sourceUrl": "https://mqa-internet.doh.state.fl.us/MQASearchServices/HealthCareProviders",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19",
+    "expiresAt": "2028-01-31"
+  },
+  {
+    "id": "california-license-a198275",
+    "claim": "California license A198275 was listed for Reve Urgelles Melva as Physician and Surgeon, Renewed and Current.",
+    "sourceUrl": "https://search.dca.ca.gov/profile/800/8002/198275/A",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-10-15",
+    "expiresAt": "2026-10-31"
+  },
+  {
+    "id": "nppes-organization-1417786278",
+    "claim": "NPPES organization record for VIDAL HEALING MINDS CORP, NPI 1417786278.",
+    "sourceUrl": "https://npiregistry.cms.hhs.gov/provider-view/1417786278",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "nppes-person-1982233631",
+    "claim": "NPPES individual record for Melva Rosa Reve Urgelles, NPI 1982233631.",
+    "sourceUrl": "https://npiregistry.cms.hhs.gov/provider-view/1982233631",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "google-business-profile-cid-4284755814550718591",
+    "claim": "Google Maps business profile used to cross-check the published Naples NAP, office hours, and map coordinates.",
+    "sourceUrl": "https://www.google.com/maps?cid=4284755814550718591",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "larkin-psychiatry-alumni-2023-2024",
+    "claim": "Larkin Community Hospital Psychiatry alumni page lists Melva Reve Urgelles in the 2023-2024 class.",
+    "sourceUrl": "https://www.graduatemedicaleducation.org/our-alumni-psychiatry/",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2027-08-21"
+  },
+  {
+    "id": "david-lawrence-centers-general-information",
+    "claim": "David Lawrence Centers lists 239-455-8500 as its general information number, not the crisis line.",
+    "sourceUrl": "https://davidlawrencecenters.org/",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "david-lawrence-centers-crisis-line",
+    "claim": "David Lawrence Centers lists 239-352-4357 (239-DLC-HELP) for crisis support.",
+    "sourceUrl": "https://davidlawrencecenters.org/emergency-mental-health-services/",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "florida-telehealth-statute-456-47",
+    "claim": "Florida Statutes Section 456.47 supplies the current statutory framework cited by the telehealth consent copy.",
+    "sourceUrl": "https://leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0400-0499%2F0456%2FSections%2F0456.47.html",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "california-telehealth-code-2290-5",
+    "claim": "California Business and Professions Code Section 2290.5 supplies the current statutory framework cited by the telehealth consent copy.",
+    "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=2290.5",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "social-facebook-healing-minds",
+    "claim": "The Healing Minds public site self-declares this Facebook URL as an organization profile; the live profile returned HTTP 200 and displayed the Healing Minds Psychiatry identity when checked.",
+    "sourceUrl": "https://www.facebook.com/profile.php?id=61578845287836",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "social-youtube-healing-minds",
+    "claim": "The Healing Minds public site self-declares this YouTube URL as an organization profile; the live channel returned HTTP 200 and displayed the Healing Minds handle when checked.",
+    "sourceUrl": "https://www.youtube.com/@healingmindsp",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "social-linkedin-melva-reve",
+    "claim": "The Healing Minds public site self-declares this LinkedIn URL as Dr. Melva Reve's profile; LinkedIn returned anti-automation status 999, so the response is not treated as proof that the profile is broken or as independent proof of ownership.",
+    "sourceUrl": "https://www.linkedin.com/in/melva-reve-2549a9120",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "social-instagram-melvareve-md",
+    "claim": "The Healing Minds public site self-declares this Instagram handle as Dr. Melva Reve's profile; Instagram returned rate-limit status 429, so the response is not treated as proof that the profile is broken or as independent proof of ownership.",
+    "sourceUrl": "https://www.instagram.com/melvareve_md/",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  },
+  {
+    "id": "social-tiktok-melvareve-md",
+    "claim": "The Healing Minds public site self-declares this TikTok handle as Dr. Melva Reve's profile; TikTok returned HTTP 200 with a generic response, which confirms reachability but not independent ownership.",
+    "sourceUrl": "https://www.tiktok.com/@melvareve_md",
+    "verifiedAt": "2026-08-21",
+    "reverifyBy": "2026-11-19"
+  }
+]

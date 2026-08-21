@@ -52,7 +52,7 @@ const MobileToolbar = () => {
   const buttons = [
     {
       icon: Calendar,
-      label: language === 'en' ? 'Book Now' : 'Reservar Ahora',
+      label: language === 'en' ? 'Request' : 'Solicitar',
       onClick: handleBookingClick,
       testId: 'mobile-button-book'
     },
@@ -94,8 +94,8 @@ const MobileToolbar = () => {
                 className="flex flex-col items-center justify-center p-2 text-green-700 hover:text-green-800 active:text-green-900 transition-colors duration-200 active:scale-95"
                 data-testid={button.testId}
                 aria-label={`${button.label}: ${
-                  button.label === 'Book Now' || button.label === 'Reservar Ahora'
-                    ? (language === 'en' ? 'telehealth appointment' : 'cita de telesalud')
+                  button.label === 'Request' || button.label === 'Solicitar'
+                    ? (language === 'en' ? 'telehealth appointment request' : 'solicitud de cita de telesalud')
                     : button.label === 'Call Now' || button.label === 'Llamar Ahora'
                       ? '(239) 423-0272'
                       : button.label === 'WhatsApp'

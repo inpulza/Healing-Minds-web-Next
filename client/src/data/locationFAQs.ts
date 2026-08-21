@@ -18,31 +18,31 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you offer telepsychiatry (Telehealth) for Bonita Springs patients?",
-        answer: "Absolutely! We understand your time is valuable. We offer secure and comprehensive virtual appointments for all Bonita Springs residents, allowing you to receive expert care from Dr. Reve from the comfort of your home."
+        answer: "Patients in Bonita Springs may request a secure video appointment. The office confirms availability, patient location, licensing and clinical suitability when scheduling."
       },
       {
         question: "Is Healing Minds Psychiatry a mental health provider for the Bonita Springs National Art Festival community?",
         answer: "We strongly support Bonita Springs' vibrant artistic community. While we are not an official festival partner, we offer accessible mental health care year-round to support the wellbeing of artists, visitors, and Bonita Springs residents."
       },
       {
-        question: "Do you accept common health insurance in the Bonita Springs area, like Cigna or Aetna?",
-        answer: "Yes. We accept most major insurance plans found in Southwest Florida, including Aetna, Cigna, Medicare, and Florida Medicaid. We recommend calling our office to verify your specific coverage."
+        question: "How do I confirm insurance for care serving Bonita Springs?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific mental-health, telehealth and cost-sharing benefits directly with your insurer."
       },
       {
         question: "Do you provide depression treatment in Bonita Springs?",
-        answer: "Yes, we treat many Bonita Springs patients for depression. Dr. Reve specializes in creating comprehensive plans that may include medication management and therapeutic coordination to help you regain balance."
+        answer: "Dr. Reve evaluates adults with depression symptoms and develops an individualized plan. Medication management or coordination with another provider may be discussed when clinically appropriate and, for coordination, with patient consent."
       },
       {
         question: "Does Dr. Melva Reve speak Spanish?",
-        answer: "Yes, Dr. Reve is fully bilingual (English/Spanish), offering compassionate and culturally sensitive psychiatric care to the Spanish-speaking community of Bonita Springs."
+        answer: "Yes. Psychiatric appointments with Dr. Reve are available in English or Spanish."
       },
       {
         question: "Do you offer ADHD evaluations for adults near Bonita Springs?",
-        answer: "Yes, one of our main specialties is diagnosing and treating ADHD in adults. Our Naples office is fully equipped for comprehensive evaluations for patients coming from Bonita Springs."
+        answer: "Yes. Dr. Reve conducts psychiatric ADHD evaluations for adults and develops the plan from each patient's clinical findings."
       },
       {
         question: "What is your approach to medication management?",
-        answer: "Our approach is collaborative and vigilant. We believe in using the minimum effective dose to maximize your quality of life and minimize side effects, with regular check-ups (virtual or in-person)."
+        answer: "Medication decisions are individualized. Dr. Reve reviews possible benefits, risks, side effects and monitoring needs; the office confirms whether follow-up is in person or by video case by case."
       },
       {
         question: "What is the first appointment like for a new patient from Bonita Springs?",
@@ -50,7 +50,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you treat Bipolar Disorder?",
-        answer: "Yes, Dr. Reve has extensive experience in accurate diagnosis and long-term management of bipolar disorder (Types I and II), focusing on mood stabilization through expert medication management."
+        answer: "Dr. Reve evaluates and treats bipolar disorder in adults. Diagnosis, medication options and follow-up plans are individualized after clinical assessment."
       }
     ],
     es: [
@@ -60,31 +60,31 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Ofrecen telepsiquiatría (Telehealth) para pacientes de Bonita Springs?",
-        answer: "¡Absolutamente! Entendemos que su tiempo es valioso. Ofrecemos citas virtuales seguras y completas para todos los residentes de Bonita Springs, permitiéndole recibir atención experta de la Dra. Reve desde la comodidad de su hogar."
+        answer: "Los pacientes de Bonita Springs pueden solicitar una cita por video seguro. La oficina confirma disponibilidad, ubicación del paciente, licencias y adecuación clínica al programar."
       },
       {
         question: "¿Es Healing Minds Psychiatry un proveedor de salud mental para la comunidad del Bonita Springs National Art Festival?",
         answer: "Apoyamos firmemente la vibrante comunidad artística de Bonita Springs. Si bien no somos un socio oficial del festival, ofrecemos atención de salud mental accesible durante todo el año para apoyar el bienestar de los artistas, visitantes y residentes de Bonita Springs."
       },
       {
-        question: "¿Aceptan seguros médicos comunes en el área de Bonita Springs, como Cigna o Aetna?",
-        answer: "Sí. Aceptamos la mayoría de los principales planes de seguro que se encuentran en el suroeste de Florida, incluidos Aetna, Cigna, Medicare y Medicaid de Florida. Le recomendamos llamar a nuestra oficina para verificar su cobertura específica."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Bonita Springs?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique directamente con su aseguradora sus beneficios de salud mental, telesalud y costos compartidos."
       },
       {
         question: "¿Proporcionan tratamiento de depresión en Bonita Springs?",
-        answer: "Sí, tratamos a muchos pacientes de Bonita Springs para la depresión. La Dra. Reve se especializa en crear planes integrales que pueden incluir manejo de medicamentos y coordinación terapéutica para ayudarlo a recuperar el equilibrio."
+        answer: "La Dra. Reve evalúa y trata la depresión en adultos. El plan puede incluir manejo de medicamentos y, con consentimiento, conversación sobre coordinación con otro profesional caso por caso."
       },
       {
         question: "¿La Dra. Melva Reve habla español?",
-        answer: "Sí, la Dra. Reve es completamente bilingüe (inglés/español), y ofrece atención psiquiátrica compasiva y culturalmente sensible a la comunidad hispanohablante de Bonita Springs."
+        answer: "Sí. Las citas psiquiátricas con la Dra. Reve están disponibles en inglés o español."
       },
       {
         question: "¿Ofrecen evaluaciones de TDAH (ADHD) para adultos cerca de Bonita Springs?",
-        answer: "Sí, una de nuestras especialidades principales es el diagnóstico y tratamiento del TDAH en adultos. Nuestra oficina de Naples está totalmente equipada para evaluaciones completas para pacientes que vienen de Bonita Springs."
+        answer: "Sí. La Dra. Reve realiza evaluaciones psiquiátricas de TDAH en adultos y desarrolla el plan según los hallazgos clínicos de cada paciente."
       },
       {
         question: "¿Cuál es su enfoque para el manejo de medicamentos (medication management)?",
-        answer: "Nuestro enfoque es colaborativo y vigilante. Creemos en usar la dosis mínima efectiva para maximizar su calidad de vida y minimizar los efectos secundarios, con chequeos regulares (virtuales o en persona)."
+        answer: "Las decisiones sobre medicamentos son individualizadas. La Dra. Reve revisa posibles beneficios, riesgos, efectos secundarios y necesidades de monitoreo; la oficina confirma caso por caso si el seguimiento es presencial o por video."
       },
       {
         question: "¿Cómo es la primera cita para un paciente nuevo de Bonita Springs?",
@@ -92,7 +92,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Tratan el trastorno bipolar (Bipolar Disorder)?",
-        answer: "Sí, la Dra. Reve tiene una amplia experiencia en el diagnóstico preciso y el manejo a largo plazo del trastorno bipolar (Tipos I y II), centrándose en la estabilización del estado de ánimo a través de un manejo de medicamentos experto."
+        answer: "La Dra. Reve evalúa y trata el trastorno bipolar en adultos. El diagnóstico, las opciones de medicamentos y el seguimiento se individualizan después de la evaluación clínica."
       }
     ]
   },
@@ -105,7 +105,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "How do I get to your Naples office from Marco Island?",
-        answer: "It's a straightforward northbound drive. Simply take Collier Blvd (CR 951) north, turn onto US-41 (Tamiami Trail N) and continue to our Park Shore office. Parking is free and easy."
+        answer: "Take Collier Boulevard (CR 951) north, turn onto US-41 (Tamiami Trail N) and continue to our Park Shore office. Check current directions and confirm parking or accessibility details with the office before your visit."
       },
       {
         question: "I'm a seasonal resident (\"snowbird\") on Marco Island. Can you coordinate care with my primary doctor up north?",
@@ -113,15 +113,15 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Does Dr. Reve offer Spanish consultations for the Marco Island community?",
-        answer: "Yes. Dr. Reve is fully bilingual (English/Spanish) and takes pride in serving Marco Island's diverse community with culturally sensitive care, both in-person and virtually."
+        answer: "Yes. Psychiatric appointments with Dr. Reve are available in English or Spanish. The office confirms appointment modality case by case."
       },
       {
         question: "Do you offer anxiety treatment for Marco Island patients?",
         answer: "Yes, we treat a wide range of anxiety disorders. We understand the unique lifestyle pressures and offer medication management plans and coping strategies for Marco Island residents."
       },
       {
-        question: "Do you accept Medicare for Marco Island residents?",
-        answer: "Yes, we accept Medicare, as well as other major plans such as Aetna and Cigna. Please call to verify your plan."
+        question: "How do I confirm insurance for care serving Marco Island?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer."
       },
       {
         question: "What mental health services do you offer related to events like the Marco Island Seafood & Music Festival?",
@@ -133,11 +133,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you treat PTSD at your clinic?",
-        answer: "Yes. We offer confidential, trauma-informed psychiatric care for PTSD. Both our Naples office and our virtual sessions are safe spaces to seek treatment."
+        answer: "Yes. We offer trauma-informed psychiatric evaluation and treatment for PTSD. The office confirms whether an in-person or secure video appointment is clinically appropriate."
       },
       {
         question: "What age should patients be for ADHD treatment?",
-        answer: "Our practice specializes in treating ADHD in adults 18 and older. We conduct comprehensive evaluations for adults who may have been late-diagnosed or undiagnosed."
+        answer: "Dr. Reve conducts psychiatric ADHD evaluations for adults 18 and older and discusses treatment options based on the individual findings."
       }
     ],
     es: [
@@ -147,7 +147,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo llego a su oficina de Naples desde Marco Island?",
-        answer: "Es un viaje sencillo hacia el norte. Simplemente tome Collier Blvd (CR 951) hacia el norte, gire en la US-41 (Tamiami Trail N) y continúe hasta nuestra oficina en Park Shore. El estacionamiento es gratuito y fácil."
+        answer: "Tome Collier Boulevard (CR 951) hacia el norte, gire en US-41 (Tamiami Trail N) y continúe hasta nuestra oficina en Park Shore. Consulte indicaciones actuales y confirme con la oficina los detalles de estacionamiento o accesibilidad antes de su visita."
       },
       {
         question: "Soy un residente estacional (\"snowbird\") en Marco Island. ¿Pueden coordinar la atención con mi médico de cabecera en el norte?",
@@ -155,15 +155,15 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿La Dra. Reve ofrece consultas en español para la comunidad de Marco Island?",
-        answer: "Sí. La Dra. Reve es completamente bilingüe (inglés/español) y se enorgullece de servir a la diversa comunidad de Marco Island con atención culturalmente sensible, tanto en persona como virtualmente."
+        answer: "Sí. Las citas psiquiátricas con la Dra. Reve están disponibles en inglés o español. La oficina confirma la modalidad caso por caso."
       },
       {
         question: "¿Ofrecen tratamiento para la ansiedad (anxiety treatment) para pacientes de Marco Island?",
         answer: "Sí, tratamos una amplia gama de trastornos de ansiedad. Entendemos las presiones únicas del estilo de vida y ofrecemos planes de manejo de medicamentos y estrategias de afrontamiento para residentes de Marco Island."
       },
       {
-        question: "¿Aceptan Medicare para residentes de Marco Island?",
-        answer: "Sí, aceptamos Medicare, así como otros planes principales, como Aetna y Cigna. Por favor llame para verificar su plan."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Marco Island?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora."
       },
       {
         question: "¿Qué servicios de salud mental ofrecen relacionados con eventos como el Marco Island Seafood & Music Festival?",
@@ -175,11 +175,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Tratan el TEPT (PTSD) en su clínica?",
-        answer: "Sí. Ofrecemos atención psiquiátrica confidencial e informada en trauma para el TEPT. Tanto nuestra oficina de Naples como nuestras sesiones virtuales son espacios seguros para buscar tratamiento."
+        answer: "Sí. Ofrecemos evaluación y tratamiento psiquiátrico informado en trauma para el TEPT. La oficina confirma si una cita presencial o por video seguro es clínicamente apropiada."
       },
       {
         question: "¿Qué edad deben tener los pacientes para el tratamiento de TDAH?",
-        answer: "Nuestra práctica se especializa en el tratamiento de TDAH en adultos de 18 años en adelante. Realizamos evaluaciones integrales para adultos que pueden haber sido diagnosticados tarde o no diagnosticados."
+        answer: "La Dra. Reve realiza evaluaciones psiquiátricas de TDAH para adultos de 18 años en adelante y conversa sobre opciones de tratamiento según los hallazgos individuales."
       }
     ]
   },
@@ -188,31 +188,31 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How far is your Naples office from Estero, near FGCU?",
-        answer: "We are conveniently located directly south on US-41 (Tamiami Trail). From the Coconut Point Mall area or FGCU, it's typically an easy 25-30 minute drive to our Park Shore office."
+        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. Travel from Estero varies by starting point and traffic, so check live directions before leaving."
       },
       {
         question: "Do you offer telepsychiatry services for FGCU students or Estero residents?",
-        answer: "Yes. Our Telehealth service is a perfect solution for busy college students and Estero residents with busy schedules. We offer secure virtual appointments for medication management and consultations."
+        answer: "FGCU students and Estero residents may request a secure video appointment for psychiatric evaluation or medication management. The office confirms availability and clinical suitability when scheduling."
       },
       {
         question: "I'm moving to Estero for college. Can you take over my ADHD management?",
-        answer: "Absolutely. We specialize in transitioning ADHD care from adolescence to adulthood. We can coordinate with your previous psychiatrist to ensure seamless continuity of your care while residing in Estero."
+        answer: "The office can discuss whether adult ADHD care is appropriate and whether coordination with a previous psychiatrist may be considered. Any coordination is evaluated case by case and requires the patient’s consent."
       },
       {
         question: "Is depression treatment different for young adults in the Estero area?",
-        answer: "Treatment is always personalized. For our college-age patients in the Estero area, we focus on medication management that supports academic and social demands, addressing unique stressors of that life stage."
+        answer: "Dr. Reve evaluates depression in adults and individualizes treatment options after clinical assessment. Medication benefits, risks and monitoring are reviewed case by case."
       },
       {
-        question: "What insurance do you accept that's common in Estero?",
-        answer: "We accept major commercial insurance plans used by Estero employers, such as Aetna and Cigna, as well as Medicare and Florida Medicaid. Call to verify your coverage."
+        question: "How do I confirm insurance for care serving Estero?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer."
       },
       {
         question: "Does Dr. Reve speak Spanish?",
-        answer: "Yes, Dr. Reve is fully bilingual, providing expert care in both English and Spanish for Estero's diverse community."
+        answer: "Yes. Psychiatric appointments with Dr. Reve are available in English or Spanish."
       },
       {
         question: "Do you visit Koreshan State Park? Do you support local Estero events?",
-        answer: "As Southwest Florida community enthusiasts, we value unique local landmarks like Koreshan State Park. We are committed to the overall wellbeing of the Estero community and support local mental health initiatives."
+        answer: "Koreshan State Park is a local Estero landmark. Healing Minds provides psychiatric services from its Naples office and does not claim an official relationship with the park or local events."
       },
       {
         question: "What is a first psychiatric evaluation like?",
@@ -220,37 +220,37 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you treat anxiety disorders, like social anxiety?",
-        answer: "Yes. Anxiety treatment is one of our main specialties. We offer medication management and strategies for generalized anxiety, panic disorders, and social anxiety."
+        answer: "Yes. Dr. Reve evaluates anxiety symptoms in adults and discusses treatment options, which may include medication management when clinically appropriate."
       },
       {
         question: "Do you treat Bipolar Disorder?",
-        answer: "Yes, Dr. Reve offers expert diagnosis and long-term medication management for Bipolar Disorder (Types I and II), focused on mood stabilization."
+        answer: "Dr. Reve evaluates and treats bipolar disorder in adults. Diagnosis, medication options and follow-up plans are individualized after clinical assessment."
       }
     ],
     es: [
       {
         question: "¿Qué tan lejos está su oficina de Naples desde Estero, cerca de FGCU?",
-        answer: "Estamos convenientemente ubicados directamente al sur por la US-41 (Tamiami Trail). Desde el área de Coconut Point Mall o FGCU, generalmente es un viaje fácil de 25-30 minutos hasta nuestra oficina en Park Shore."
+        answer: "US-41 (Tamiami Trail) conecta Estero con nuestra oficina de Park Shore hacia el sur. Consulte indicaciones y tráfico actuales antes de viajar."
       },
       {
         question: "¿Ofrecen servicios de telepsiquiatría para estudiantes de FGCU o residentes de Estero?",
-        answer: "Sí. Nuestro servicio de Telehealth es una solución perfecta para los estudiantes universitarios y residentes de Estero con agendas ocupadas. Ofrecemos citas virtuales seguras para manejo de medicamentos y consultas."
+        answer: "Los estudiantes de FGCU y residentes de Estero pueden solicitar una cita por video seguro para evaluación psiquiátrica o manejo de medicamentos. La oficina confirma disponibilidad y adecuación clínica al programar."
       },
       {
         question: "Me mudo a Estero por la universidad. ¿Pueden hacerse cargo de mi manejo de TDAH (ADHD)?",
-        answer: "Absolutamente. Nos especializamos en la transición de la atención del TDAH de la adolescencia a la edad adulta. Podemos coordinarnos con su psiquiatra anterior para garantizar una continuidad perfecta de su atención mientras reside en Estero."
+        answer: "La oficina puede discutir si la atención de TDAH en adultos es apropiada y si puede considerarse coordinación con un psiquiatra anterior. Toda coordinación se evalúa caso por caso y requiere el consentimiento del paciente."
       },
       {
         question: "¿El tratamiento de la depresión es diferente para los adultos jóvenes en el área de Estero?",
-        answer: "El tratamiento siempre se personaliza. Para nuestros pacientes en edad universitaria del área de Estero, nos enfocamos en el manejo de medicamentos que respalde las demandas académicas y sociales, abordando factores estresantes únicos de esa etapa de la vida."
+        answer: "La Dra. Reve evalúa la depresión en adultos e individualiza las opciones de tratamiento después de la evaluación clínica. Los beneficios, riesgos y monitoreo de medicamentos se revisan caso por caso."
       },
       {
-        question: "¿Qué seguros aceptan que sean comunes en Estero?",
-        answer: "Aceptamos los principales planes de seguro comerciales utilizados por los empleadores en Estero, como Aetna y Cigna, así como Medicare y Medicaid de Florida. Llame para verificar su cobertura."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Estero?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora."
       },
       {
         question: "¿La Dra. Reve habla español?",
-        answer: "Sí, la Dra. Reve es completamente bilingüe, brindando atención experta tanto en inglés como en español para la diversa comunidad de Estero."
+        answer: "Sí. Las citas psiquiátricas con la Dra. Reve están disponibles en inglés o español."
       },
       {
         question: "¿Visitan el Koreshan State Park? ¿Apoyan los eventos locales de Estero?",
@@ -262,11 +262,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Tratan los trastornos de ansiedad, como la ansiedad social?",
-        answer: "Sí. El tratamiento de la ansiedad es una de nuestras principales especialidades. Ofrecemos manejo de medicamentos y estrategias para la ansiedad generalizada, los trastornos de pánico y la ansiedad social."
+        answer: "Sí. La Dra. Reve evalúa síntomas de ansiedad en adultos y conversa sobre opciones de tratamiento, que pueden incluir manejo de medicamentos cuando sea clínicamente apropiado."
       },
       {
         question: "¿Tratan el Trastorno Bipolar?",
-        answer: "Sí, la Dra. Reve ofrece diagnóstico experto y manejo de medicamentos a largo plazo para el Trastorno Bipolar (Tipos I y II), enfocado en la estabilización del estado de ánimo."
+        answer: "La Dra. Reve evalúa y trata el trastorno bipolar en adultos. El diagnóstico, las opciones de medicamentos y el seguimiento se individualizan después de la evaluación clínica."
       }
     ]
   },
@@ -275,23 +275,23 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "Is your Naples clinic accessible from Golden Gate?",
-        answer: "Yes, we are very close. Our office on Tamiami Trail N (US-41) is just a short drive west on Golden Gate Pkwy. It's a convenient option for in-person appointments."
+        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. Travel from Golden Gate varies by starting point and traffic, so check live directions before leaving."
       },
       {
         question: "Do you offer telepsychiatry for Golden Gate residents?",
-        answer: "Absolutely! Many of our Golden Gate patients prefer the convenience of virtual appointments. We offer secure, HIPAA-compliant video consultations for medication management and follow-ups."
+        answer: "You may request a visit through a secure video platform. The office confirms availability, clinical suitability, patient location and applicable licensing requirements case by case."
       },
       {
-        question: "What insurance plans do you accept for Golden Gate patients?",
-        answer: "We accept most major insurance plans commonly used in the Golden Gate area, including Aetna, Cigna, Medicare, Florida Medicaid, and many others. Please call to verify your specific plan."
+        question: "How do I confirm insurance for care serving Golden Gate?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer."
       },
       {
         question: "Do you provide Spanish-speaking services for Golden Gate residents?",
-        answer: "Yes, Dr. Reve is fully bilingual (English/Spanish) and provides culturally sensitive psychiatric care to Golden Gate's diverse Hispanic community."
+        answer: "Yes. Psychiatric appointments with Dr. Reve are available in English or Spanish."
       },
       {
         question: "Do you treat anxiety and depression for Golden Gate patients?",
-        answer: "Yes, anxiety and depression treatment are our primary specialties. We provide comprehensive care including medication management and therapeutic support for Golden Gate residents."
+        answer: "Dr. Reve evaluates and treats anxiety and depression in adults. Treatment options are discussed after an individual psychiatric assessment."
       },
       {
         question: "What is the driving distance from Golden Gate to your office?",
@@ -299,11 +299,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you offer ADHD evaluations for adults living in Golden Gate?",
-        answer: "Yes, adult ADHD evaluation and treatment is one of our specialties. We conduct comprehensive assessments for Golden Gate residents who suspect they may have undiagnosed ADHD."
+        answer: "Yes. Dr. Reve conducts psychiatric ADHD evaluations for adults and develops the plan from each patient's clinical findings."
       },
       {
         question: "How does medication management work for Golden Gate patients?",
-        answer: "We offer both in-person and virtual medication management appointments. Regular monitoring ensures optimal treatment while minimizing side effects, with medication orders sent to your preferred Golden Gate area pharmacy."
+        answer: "Medication management may be available in person or by secure video when clinically appropriate. Benefits, risks, monitoring and pharmacy arrangements are reviewed for each patient."
       },
       {
         question: "Do you treat PTSD and trauma for Golden Gate residents?",
@@ -317,23 +317,23 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Su clínica de Naples es accesible desde Golden Gate?",
-        answer: "Sí, estamos muy cerca. Nuestra oficina en Tamiami Trail N (US-41) está a solo un corto viaje al oeste por Golden Gate Pkwy. Es una opción conveniente para citas en persona."
+        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25. El viaje desde Golden Gate varía según el punto de partida y el tráfico; consulte la ruta en vivo antes de salir."
       },
       {
         question: "¿Ofrecen telepsiquiatría para residentes de Golden Gate?",
-        answer: "¡Absolutamente! Muchos de nuestros pacientes de Golden Gate prefieren la conveniencia de las citas virtuales. Ofrecemos consultas por video seguras y compatibles con HIPAA para manejo de medicamentos y seguimientos."
+        answer: "Puede solicitar una visita mediante una plataforma de video segura. La oficina confirma disponibilidad, adecuación clínica, ubicación del paciente y requisitos de licencia aplicables caso por caso."
       },
       {
-        question: "¿Qué planes de seguro aceptan para pacientes de Golden Gate?",
-        answer: "Aceptamos la mayoría de los principales planes de seguro comúnmente usados en el área de Golden Gate, incluyendo Aetna, Cigna, Medicare, Medicaid de Florida, y muchos otros. Por favor llame para verificar su plan específico."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Golden Gate?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora."
       },
       {
         question: "¿Proporcionan servicios en español para residentes de Golden Gate?",
-        answer: "Sí, la Dra. Reve es completamente bilingüe (inglés/español) y proporciona atención psiquiátrica culturalmente sensible a la diversa comunidad hispana de Golden Gate."
+        answer: "Sí. Las citas psiquiátricas con la Dra. Reve están disponibles en inglés o español."
       },
       {
         question: "¿Tratan ansiedad y depresión para pacientes de Golden Gate?",
-        answer: "Sí, el tratamiento de ansiedad y depresión son nuestras especialidades principales. Proporcionamos atención integral incluyendo manejo de medicamentos y apoyo terapéutico para residentes de Golden Gate."
+        answer: "La Dra. Reve evalúa y trata ansiedad y depresión en adultos. Las opciones de tratamiento se conversan después de una evaluación psiquiátrica individual."
       },
       {
         question: "¿Cuál es la distancia de manejo desde Golden Gate hasta su oficina?",
@@ -341,11 +341,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Ofrecen evaluaciones de TDAH para adultos que viven en Golden Gate?",
-        answer: "Sí, la evaluación y tratamiento de TDAH en adultos es una de nuestras especialidades. Realizamos evaluaciones completas para residentes de Golden Gate que sospechan que pueden tener TDAH no diagnosticado."
+        answer: "Sí. La Dra. Reve realiza evaluaciones psiquiátricas de TDAH en adultos y desarrolla el plan según los hallazgos clínicos de cada paciente."
       },
       {
         question: "¿Cómo funciona el manejo de medicamentos para pacientes de Golden Gate?",
-        answer: "Ofrecemos citas de manejo de medicamentos tanto en persona como virtuales. El monitoreo regular asegura un tratamiento óptimo mientras minimiza los efectos secundarios, con órdenes de medicamentos enviadas a su farmacia preferida en el área de Golden Gate."
+        answer: "El manejo de medicamentos puede estar disponible en persona o por video seguro cuando sea clínicamente apropiado. Beneficios, riesgos, monitoreo y arreglos con la farmacia se revisan para cada paciente."
       },
       {
         question: "¿Tratan TEPT y trauma para residentes de Golden Gate?",
@@ -362,39 +362,39 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How close is your Naples office to Vanderbilt Beach?",
-        answer: "We're very close! Our office at 4760 Tamiami Trl N is just a few minutes drive from Vanderbilt Beach. Many of our patients enjoy the convenience of combining their appointment with a peaceful beach visit."
+        answer: "Our only office is at 4760 Tamiami Trl N #25, Naples, FL 34103. Travel time from Vanderbilt Beach varies by starting point and traffic, so check current directions before leaving."
       },
       {
         question: "Do you offer telehealth services for Vanderbilt Beach residents?",
-        answer: "Yes! We offer secure video consultations that are perfect for busy Vanderbilt Beach residents. You can receive expert psychiatric care from the comfort of your beachside home."
+        answer: "Vanderbilt Beach residents may request a secure video appointment. The office confirms availability, patient location, licensing and clinical suitability when scheduling."
       },
       {
-        question: "What insurance do you accept for Vanderbilt Beach area patients?",
-        answer: "We accept most major insurance plans common in the Vanderbilt Beach area, including Medicare, Aetna, and Cigna. Please call to verify coverage for your specific plan."
+        question: "How do I confirm insurance for care serving Vanderbilt Beach?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer."
       },
       {
         question: "Do you provide bilingual services for the Vanderbilt Beach community?",
-        answer: "Yes, Dr. Reve is fully bilingual (English/Spanish) and provides culturally sensitive care to Vanderbilt Beach's diverse community, including seasonal residents."
+        answer: "Yes. Psychiatric appointments with Dr. Reve are available in English or Spanish."
       },
       {
         question: "Do you treat seasonal depression or beach lifestyle-related mental health concerns?",
-        answer: "Yes, we understand the unique mental health aspects of beach community living, including seasonal patterns and lifestyle transitions. We provide comprehensive care for all types of depression and anxiety."
+        answer: "Dr. Reve evaluates anxiety, depression and stress related to life transitions. Symptoms and treatment options are assessed individually."
       },
       {
         question: "Can you coordinate care for snowbirds who split time between Vanderbilt Beach and up north?",
-        answer: "Absolutely! We specialize in coordinating care for seasonal residents. We can work with your northern providers to ensure seamless psychiatric care year-round."
+        answer: "You may discuss continuity needs with the office. Coordination with another provider may be evaluated case by case and requires the patient’s consent; availability and licensing requirements still apply."
       },
       {
         question: "Do you offer ADHD treatment for adults living near Vanderbilt Beach?",
-        answer: "Yes, adult ADHD diagnosis and treatment is one of our specialties. We provide comprehensive evaluations and ongoing medication management for Vanderbilt Beach area residents."
+        answer: "Yes. Dr. Reve conducts psychiatric ADHD evaluations for adults and discusses ongoing treatment options based on the individual assessment."
       },
       {
         question: "How does parking work at your office for Vanderbilt Beach patients?",
-        answer: "We offer free, convenient parking right at our office location. It's much easier than beach parking, and you're just minutes away from Vanderbilt Beach before or after your appointment!"
+        answer: "Contact the office before your visit to confirm current parking, arrival or accessibility details."
       },
       {
         question: "Do you treat anxiety related to lifestyle changes or retirement in the Vanderbilt Beach area?",
-        answer: "Yes, we frequently help patients navigate life transitions including retirement, relocation to beach communities, and seasonal lifestyle changes. These transitions can bring unique stressors that we address with comprehensive care."
+        answer: "Dr. Reve can evaluate anxiety or mood symptoms related to retirement, relocation and other life transitions. Care is individualized after clinical assessment."
       },
       {
         question: "What's the best way to schedule an appointment from Vanderbilt Beach?",
@@ -404,19 +404,19 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Qué tan cerca está su oficina de Naples a Vanderbilt Beach?",
-        answer: "¡Estamos muy cerca! Nuestra oficina en 4760 Tamiami Trl N está a solo unos minutos en coche de Vanderbilt Beach. Muchos de nuestros pacientes disfrutan la conveniencia de combinar su cita con una visita tranquila a la playa."
+        answer: "Nuestra única oficina está en 4760 Tamiami Trl N #25, Naples, FL 34103. El tiempo de viaje desde Vanderbilt Beach varía según el punto de partida y el tráfico; consulte indicaciones actuales antes de salir."
       },
       {
         question: "¿Ofrecen servicios de telesalud para residentes de Vanderbilt Beach?",
-        answer: "¡Sí! Ofrecemos consultas por video seguras que son perfectas para residentes ocupados de Vanderbilt Beach. Puede recibir atención psiquiátrica experta desde la comodidad de su hogar junto a la playa."
+        answer: "Los residentes de Vanderbilt Beach pueden solicitar una cita por video seguro. La oficina confirma disponibilidad, ubicación del paciente, licencias y adecuación clínica al programar."
       },
       {
-        question: "¿Qué seguro aceptan para pacientes del área de Vanderbilt Beach?",
-        answer: "Aceptamos la mayoría de los principales planes de seguro comunes en el área de Vanderbilt Beach, incluyendo Medicare, Aetna y Cigna. Por favor llame para verificar la cobertura de su plan específico."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Vanderbilt Beach?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora."
       },
       {
         question: "¿Proporcionan servicios bilingües para la comunidad de Vanderbilt Beach?",
-        answer: "Sí, la Dra. Reve es completamente bilingüe (inglés/español) y proporciona atención culturalmente sensible a la diversa comunidad de Vanderbilt Beach, incluyendo residentes estacionales."
+        answer: "Sí. Las citas psiquiátricas con la Dra. Reve están disponibles en inglés o español."
       },
       {
         question: "¿Tratan depresión estacional o problemas de salud mental relacionados con el estilo de vida playero?",
@@ -424,19 +424,19 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Pueden coordinar atención para snowbirds que dividen el tiempo entre Vanderbilt Beach y el norte?",
-        answer: "¡Absolutamente! Nos especializamos en coordinar atención para residentes estacionales. Podemos trabajar con sus proveedores del norte para asegurar atención psiquiátrica continua durante todo el año."
+        answer: "Puede discutir sus necesidades de continuidad con la oficina. La coordinación con otro proveedor puede evaluarse caso por caso y requiere el consentimiento del paciente; también aplican disponibilidad y requisitos de licencia."
       },
       {
         question: "¿Ofrecen tratamiento de TDAH para adultos que viven cerca de Vanderbilt Beach?",
-        answer: "Sí, el diagnóstico y tratamiento de TDAH en adultos es una de nuestras especialidades. Proporcionamos evaluaciones completas y manejo continuo de medicamentos para residentes del área de Vanderbilt Beach."
+        answer: "Sí. La Dra. Reve realiza evaluaciones psiquiátricas de TDAH en adultos y conversa sobre opciones de tratamiento continuo según la evaluación individual."
       },
       {
         question: "¿Cómo funciona el estacionamiento en su oficina para pacientes de Vanderbilt Beach?",
-        answer: "Ofrecemos estacionamiento gratuito y conveniente directamente en nuestra ubicación de oficina. ¡Es mucho más fácil que el estacionamiento de la playa, y está a solo minutos de Vanderbilt Beach antes o después de su cita!"
+        answer: "Contacte la oficina antes de su visita para confirmar detalles actuales de estacionamiento, llegada o accesibilidad."
       },
       {
         question: "¿Tratan ansiedad relacionada con cambios de estilo de vida o jubilación en el área de Vanderbilt Beach?",
-        answer: "Sí, frecuentemente ayudamos a pacientes a navegar transiciones de vida incluyendo jubilación, reubicación a comunidades playeras, y cambios de estilo de vida estacionales. Estas transiciones pueden traer factores estresantes únicos que abordamos con atención integral."
+        answer: "La Dra. Reve puede evaluar síntomas de ansiedad o ánimo relacionados con jubilación, reubicación y otras transiciones de vida. La atención se individualiza después de la evaluación clínica."
       },
       {
         question: "¿Cuál es la mejor manera de programar una cita desde Vanderbilt Beach?",
@@ -453,27 +453,27 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you offer telehealth services for Fort Myers patients?",
-        answer: "Absolutely! We provide secure video consultations that eliminate the need to drive to Naples. Many Fort Myers patients prefer the convenience of receiving expert psychiatric care from home."
+        answer: "Fort Myers patients may request a secure video appointment. The office confirms availability, patient location, licensing and clinical suitability when scheduling."
       },
       {
         question: "What mental health services do you provide for Fort Myers residents?",
         answer: "We offer comprehensive psychiatric care including anxiety treatment, depression management, ADHD evaluation and treatment, PTSD therapy, bipolar disorder treatment, and psychiatric medication management for Fort Myers residents."
       },
       {
-        question: "Do you accept insurance commonly used in Fort Myers?",
-        answer: "Yes, we accept most major insurance plans common in the Fort Myers area, including Aetna, Cigna, Medicare, Florida Medicaid, and many others. Please call to verify your specific plan."
+        question: "How do I confirm insurance for care serving Fort Myers?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer."
       },
       {
         question: "Does Dr. Reve provide services in Spanish for Fort Myers patients?",
-        answer: "Yes, Dr. Reve is fully bilingual (English/Spanish) and provides culturally sensitive psychiatric care to Fort Myers' diverse community, including comprehensive services in Spanish."
+        answer: "Yes. Psychiatric appointments with Dr. Reve are available in English or Spanish."
       },
       {
         question: "Can you help with ADHD evaluations for Fort Myers adults?",
-        answer: "Absolutely! Adult ADHD evaluation and treatment is one of our primary specialties. We provide thorough assessments for Fort Myers residents who may have undiagnosed or undertreated ADHD."
+        answer: "Yes. Dr. Reve conducts psychiatric ADHD evaluations for adults and develops the plan from each patient's clinical findings."
       },
       {
         question: "How do you coordinate care with other providers in Fort Myers?",
-        answer: "We work closely with primary care physicians, therapists, and other healthcare providers in the Fort Myers area to ensure comprehensive, coordinated mental health care for our patients."
+        answer: "With patient consent, the office can discuss whether coordination or record sharing with another provider is appropriate. Any coordination is evaluated case by case and no local-provider relationship is implied."
       },
       {
         question: "What should Fort Myers patients expect for their first appointment?",
@@ -481,11 +481,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you treat anxiety and depression for Fort Myers residents?",
-        answer: "Yes, anxiety and depression treatment are our core specialties. We provide evidence-based medication management and work with local Fort Myers therapists to provide comprehensive care."
+        answer: "The practice evaluates adults with anxiety and depression and may discuss medication management when clinically appropriate. With patient consent, the office can evaluate coordination with another provider case by case."
       },
       {
         question: "How does medication management work for Fort Myers patients?",
-        answer: "We provide ongoing medication management with regular follow-up appointments (in-person or virtual). Medication orders can be sent directly to your preferred pharmacy in the Fort Myers area, making the process seamless."
+        answer: "Medication management follow-up may be in person or by secure video when clinically appropriate. The office confirms modality and pharmacy arrangements case by case."
       }
     ],
     es: [
@@ -495,27 +495,27 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Ofrecen servicios de telesalud para pacientes de Fort Myers?",
-        answer: "¡Absolutamente! Proporcionamos consultas por video seguras que eliminan la necesidad de conducir a Naples. Muchos pacientes de Fort Myers prefieren la conveniencia de recibir atención psiquiátrica experta desde casa."
+        answer: "Los pacientes de Fort Myers pueden solicitar una cita por video seguro. La oficina confirma disponibilidad, ubicación del paciente, licencias y adecuación clínica al programar."
       },
       {
         question: "¿Qué servicios de salud mental proporcionan para residentes de Fort Myers?",
         answer: "Ofrecemos atención psiquiátrica integral incluyendo tratamiento de ansiedad, manejo de depresión, evaluación y tratamiento de TDAH, terapia de TEPT, tratamiento de trastorno bipolar, y manejo de medicamentos psiquiátricos para residentes de Fort Myers."
       },
       {
-        question: "¿Aceptan seguro comúnmente usado en Fort Myers?",
-        answer: "Sí, aceptamos la mayoría de los principales planes de seguro comunes en el área de Fort Myers, incluyendo Aetna, Cigna, Medicare, Medicaid de Florida, y muchos otros. Por favor llame para verificar su plan específico."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Fort Myers?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora."
       },
       {
         question: "¿La Dra. Reve proporciona servicios en español para pacientes de Fort Myers?",
-        answer: "Sí, la Dra. Reve es completamente bilingüe (inglés/español) y proporciona atención psiquiátrica culturalmente sensible a la diversa comunidad de Fort Myers, incluyendo servicios completos en español."
+        answer: "Sí. Las citas psiquiátricas con la Dra. Reve están disponibles en inglés o español."
       },
       {
         question: "¿Pueden ayudar con evaluaciones de TDAH para adultos de Fort Myers?",
-        answer: "¡Absolutamente! La evaluación y tratamiento de TDAH en adultos es una de nuestras especialidades principales. Proporcionamos evaluaciones completas para residentes de Fort Myers que pueden tener TDAH no diagnosticado o tratado inadecuadamente."
+        answer: "Sí. La Dra. Reve realiza evaluaciones psiquiátricas de TDAH en adultos y desarrolla el plan según los hallazgos clínicos de cada paciente."
       },
       {
         question: "¿Cómo coordinan la atención con otros proveedores en Fort Myers?",
-        answer: "Trabajamos estrechamente con médicos de atención primaria, terapeutas, y otros proveedores de atención médica en el área de Fort Myers para asegurar atención integral y coordinada de salud mental para nuestros pacientes."
+        answer: "Con consentimiento del paciente, la oficina puede discutir si la coordinación o el intercambio de registros con otro proveedor es apropiado. Toda coordinación se evalúa caso por caso y no implica una relación con proveedores locales."
       },
       {
         question: "¿Qué deben esperar los pacientes de Fort Myers para su primera cita?",
@@ -523,11 +523,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Tratan ansiedad y depresión para residentes de Fort Myers?",
-        answer: "Sí, el tratamiento de ansiedad y depresión son nuestras especialidades principales. Proporcionamos manejo de medicamentos basado en evidencia y trabajamos con terapeutas locales de Fort Myers para proporcionar atención integral."
+        answer: "La Dra. Reve evalúa y trata ansiedad y depresión en adultos. Con consentimiento del paciente, puede conversar sobre coordinación con otro profesional caso por caso, sin implicar una relación establecida."
       },
       {
         question: "¿Cómo funciona el manejo de medicamentos para pacientes de Fort Myers?",
-        answer: "Proporcionamos manejo continuo de medicamentos con citas regulares de seguimiento (en persona o virtuales). Las órdenes de medicamentos pueden enviarse directamente a su farmacia preferida en el área de Fort Myers, haciendo el proceso sin problemas."
+        answer: "El seguimiento del manejo de medicamentos puede ser presencial o por video seguro cuando sea clínicamente apropiado. La oficina confirma la modalidad y los arreglos con la farmacia caso por caso."
       }
     ]
   },
@@ -536,27 +536,27 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How far is the drive from Immokalee to your Naples office?",
-        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. The drive from Immokalee is commonly estimated at 50-60 minutes, but it varies by starting point, route and live traffic."
+        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. Travel from Immokalee varies by starting point, route and live traffic; check current directions before leaving."
       },
       {
         question: "Do you offer telehealth services for Immokalee residents?",
-        answer: "Yes! We strongly recommend our secure video consultation services for Immokalee residents. This eliminates the long drive and allows you to receive expert psychiatric care from your home or workplace."
+        answer: "Immokalee residents may request a secure video appointment. The office confirms availability, patient location, licensing and clinical suitability when scheduling."
       },
       {
         question: "Do you provide mental health services in Spanish for the Immokalee community?",
-        answer: "Absolutely! Dr. Reve is fully bilingual (English/Spanish) and understands the cultural needs of Immokalee's predominantly Hispanic community. We provide culturally sensitive psychiatric care in Spanish."
+        answer: "Yes. Psychiatric appointments with Dr. Reve are available in English or Spanish."
       },
       {
-        question: "What insurance do you accept for Immokalee agricultural workers?",
-        answer: "We accept Medicaid, Medicare, and many commercial insurance plans. We understand that many Immokalee residents work in agriculture and may have specific insurance needs - please call to discuss your coverage options."
+        question: "How do I confirm insurance for care serving Immokalee?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer."
       },
       {
-        question: "Do you understand the mental health challenges faced by agricultural workers in Immokalee?",
-        answer: "Yes, we recognize the unique stressors faced by agricultural workers including seasonal employment, physical demands, and immigration concerns. We provide compassionate, non-judgmental care that addresses these specific challenges."
+        question: "Do you provide psychiatric services to adults in Immokalee?",
+        answer: "Yes. Dr. Reve provides psychiatric evaluation and treatment for adults in Immokalee. Care is individualized after clinical assessment and appointments are available in English or Spanish."
       },
       {
         question: "Can you help with work-related stress and anxiety for Immokalee workers?",
-        answer: "Absolutely. We treat anxiety, depression, and stress-related conditions that may stem from challenging work conditions, seasonal employment patterns, and other occupational stressors common in agricultural work."
+        answer: "Dr. Reve can evaluate anxiety, depression and stress-related symptoms in adults. Symptoms and treatment options are assessed individually."
       },
       {
         question: "What weekday appointment options are available for Immokalee patients?",
@@ -564,7 +564,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "How do you handle language barriers or cultural concerns for Immokalee patients?",
-        answer: "Dr. Reve speaks fluent Spanish and has extensive experience working with Hispanic communities. We provide culturally competent care and understand the importance of family involvement in mental health decisions."
+        answer: "Dr. Reve speaks Spanish, and appointments may be conducted in English or Spanish. Family involvement is discussed with the patient and requires appropriate consent."
       },
       {
         question: "Can you help coordinate care with community health centers in Immokalee?",
@@ -572,29 +572,29 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you treat trauma and PTSD for Immokalee residents?",
-        answer: "Yes, we provide trauma-informed psychiatric care for PTSD, including trauma that may result from difficult working conditions, immigration experiences, or other life stressors. We offer compassionate, confidential treatment."
+        answer: "Yes. Dr. Reve provides trauma-informed psychiatric evaluation and treatment for PTSD in adults. The treatment plan is individualized after clinical assessment."
       }
     ],
     es: [
       {
         question: "¿Qué tan lejos está el viaje desde Immokalee hasta su oficina en Naples?",
-        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25. El viaje desde Immokalee suele estimarse en 50-60 minutos, pero varía según el punto de partida, la ruta y el tráfico en vivo."
+        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25. El viaje desde Immokalee varía según el punto de partida, la ruta y el tráfico en vivo; consulte indicaciones actuales antes de salir."
       },
       {
         question: "¿Ofrecen servicios de telesalud para residentes de Immokalee?",
-        answer: "¡Sí! Recomendamos enérgicamente nuestros servicios de consulta por video segura para residentes de Immokalee. Esto elimina el viaje largo y le permite recibir atención psiquiátrica experta desde su casa o lugar de trabajo."
+        answer: "Los residentes de Immokalee pueden solicitar una cita por video seguro. La oficina confirma disponibilidad, ubicación del paciente, licencias y adecuación clínica al programar."
       },
       {
         question: "¿Proporcionan servicios de salud mental en español para la comunidad de Immokalee?",
-        answer: "¡Absolutamente! La Dra. Reve es completamente bilingüe (inglés/español) y entiende las necesidades culturales de la comunidad predominantemente hispana de Immokalee. Proporcionamos atención psiquiátrica culturalmente sensible en español."
+        answer: "Sí. Las citas psiquiátricas con la Dra. Reve están disponibles en inglés o español."
       },
       {
-        question: "¿Qué seguro aceptan para trabajadores agrícolas de Immokalee?",
-        answer: "Aceptamos Medicaid, Medicare, y muchos planes de seguro comerciales. Entendemos que muchos residentes de Immokalee trabajan en agricultura y pueden tener necesidades específicas de seguro - por favor llame para discutir sus opciones de cobertura."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Immokalee?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora."
       },
       {
-        question: "¿Entienden los desafíos de salud mental que enfrentan los trabajadores agrícolas en Immokalee?",
-        answer: "Sí, reconocemos los factores estresantes únicos que enfrentan los trabajadores agrícolas incluyendo empleo estacional, demandas físicas, y preocupaciones de inmigración. Proporcionamos atención compasiva y sin prejuicios que aborda estos desafíos específicos."
+        question: "¿Proporcionan servicios psiquiátricos a adultos en Immokalee?",
+        answer: "Sí. La Dra. Reve proporciona evaluación y tratamiento psiquiátrico para adultos en Immokalee. La atención se individualiza después de la evaluación clínica y las citas están disponibles en inglés o español."
       },
       {
         question: "¿Pueden ayudar con estrés y ansiedad relacionados al trabajo para trabajadores de Immokalee?",
@@ -606,7 +606,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Cómo manejan las barreras del idioma o preocupaciones culturales para pacientes de Immokalee?",
-        answer: "La Dra. Reve habla español con fluidez y tiene amplia experiencia trabajando con comunidades hispanas. Proporcionamos atención culturalmente competente y entendemos la importancia de la participación familiar en las decisiones de salud mental."
+        answer: "La Dra. Reve habla español y las citas pueden realizarse en inglés o español. La participación familiar se conversa con el paciente y requiere el consentimiento correspondiente."
       },
       {
         question: "¿Pueden ayudar a coordinar atención con centros de salud comunitarios en Immokalee?",
@@ -614,7 +614,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Tratan trauma y TEPT para residentes de Immokalee?",
-        answer: "Sí, proporcionamos atención psiquiátrica informada en trauma para TEPT, incluyendo trauma que puede resultar de condiciones de trabajo difíciles, experiencias de inmigración, u otros factores estresantes de la vida. Ofrecemos tratamiento compasivo y confidencial."
+        answer: "Sí. La Dra. Reve proporciona evaluación y tratamiento psiquiátrico informado en trauma para el TEPT en adultos. El plan se individualiza después de la evaluación clínica."
       }
     ]
   },
@@ -623,7 +623,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How far is your Naples office from Ave Maria?",
-        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. Travel from Ave Maria is commonly estimated at 50-60 minutes, but it varies by starting point, route and live traffic."
+        answer: "Our only office is in Naples at 4760 Tamiami Trl N #25. Travel from Ave Maria varies by starting point, route and live traffic; check current directions before leaving."
       },
       {
         question: "Do you provide telehealth services for Ave Maria University students and residents?",
@@ -631,19 +631,19 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Do you treat college students from Ave Maria University?",
-        answer: "Absolutely! We have extensive experience working with college students and young adults. We understand the unique mental health challenges of university life, including academic stress, social pressures, and life transitions."
+        answer: "Dr. Reve evaluates and treats adults, including college students, for concerns such as anxiety, depression, ADHD and stress related to life transitions. Care is based on an individual assessment."
       },
       {
-        question: "What insurance do you accept for Ave Maria University students?",
-        answer: "We accept several major insurance plans. Please call the office to verify your specific coverage and ask about current billing options before scheduling."
+        question: "How do I confirm insurance for care serving Ave Maria?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer."
       },
       {
         question: "Do you provide ADHD evaluations and treatment for Ave Maria students?",
-        answer: "Yes, ADHD evaluation and treatment is one of our specialties. Many college students seek diagnosis for the first time when academic demands increase. We provide comprehensive evaluations and ongoing treatment."
+        answer: "Yes. Dr. Reve conducts psychiatric ADHD evaluations for adults, including college students, and discusses treatment options based on the individual findings."
       },
       {
         question: "Can you help with anxiety and depression related to college life in Ave Maria?",
-        answer: "Absolutely. We frequently treat anxiety and depression in college students, including academic anxiety, social anxiety, adjustment disorders, and depression. We understand the unique pressures of university life."
+        answer: "Dr. Reve can evaluate anxiety, depression and stress related to college life in adults. Symptoms and treatment options are assessed individually."
       },
       {
         question: "Do you coordinate care with Ave Maria University counseling services?",
@@ -651,11 +651,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Can you provide services in Spanish for Ave Maria's diverse community?",
-        answer: "Yes, Dr. Reve is fully bilingual (English/Spanish) and provides culturally sensitive care to Ave Maria's diverse student body and resident community, including Spanish-speaking families."
+        answer: "Yes. Psychiatric appointments with Dr. Reve are available in English or Spanish."
       },
       {
         question: "What should Ave Maria students expect for their first appointment?",
-        answer: "Your initial evaluation focuses on understanding your academic and personal stressors, mental health history, and treatment goals. We tailor our approach to the unique needs of college students and young adults."
+        answer: "The initial evaluation reviews current concerns, psychiatric history and treatment goals. The plan is individualized from the clinical assessment."
       },
       {
         question: "Do you provide crisis support for Ave Maria students?",
@@ -665,7 +665,7 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Qué tan lejos está su oficina de Naples desde Ave Maria?",
-        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25. El viaje desde Ave Maria suele estimarse en 50-60 minutos, pero varía según el punto de partida, la ruta y el tráfico en vivo."
+        answer: "Nuestra única oficina está en Naples, en 4760 Tamiami Trl N #25. El viaje desde Ave Maria varía según el punto de partida, la ruta y el tráfico en vivo; consulte indicaciones actuales antes de salir."
       },
       {
         question: "¿Proporcionan servicios de telesalud para estudiantes y residentes de Ave Maria University?",
@@ -673,19 +673,19 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Tratan estudiantes universitarios de Ave Maria University?",
-        answer: "¡Absolutamente! Tenemos amplia experiencia trabajando con estudiantes universitarios y adultos jóvenes. Entendemos los desafíos únicos de salud mental de la vida universitaria, incluyendo estrés académico, presiones sociales, y transiciones de vida."
+        answer: "La Dra. Reve evalúa y trata a adultos, incluidos estudiantes universitarios, por inquietudes como ansiedad, depresión, TDAH y estrés relacionado con transiciones de vida. La atención se basa en una evaluación individual."
       },
       {
-        question: "¿Qué seguro aceptan para estudiantes de Ave Maria University?",
-        answer: "Aceptamos varios planes de seguro principales. Llame a la oficina para verificar su cobertura específica y preguntar por las opciones de facturación vigentes antes de programar."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Ave Maria?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora."
       },
       {
         question: "¿Proporcionan evaluaciones y tratamiento de TDAH para estudiantes de Ave Maria?",
-        answer: "Sí, la evaluación y tratamiento de TDAH es una de nuestras especialidades. Muchos estudiantes universitarios buscan diagnóstico por primera vez cuando las demandas académicas aumentan. Proporcionamos evaluaciones completas y tratamiento continuo."
+        answer: "Sí. La Dra. Reve realiza evaluaciones psiquiátricas de TDAH en adultos, incluidos estudiantes universitarios, y conversa sobre opciones de tratamiento según los hallazgos individuales."
       },
       {
         question: "¿Pueden ayudar con ansiedad y depresión relacionadas a la vida universitaria en Ave Maria?",
-        answer: "Absolutamente. Frecuentemente tratamos ansiedad y depresión en estudiantes universitarios, incluyendo ansiedad académica, ansiedad social, trastornos de adaptación, y depresión. Entendemos las presiones únicas de la vida universitaria."
+        answer: "La Dra. Reve puede evaluar ansiedad, depresión y estrés relacionado con la vida universitaria en adultos. Los síntomas y opciones de tratamiento se evalúan de forma individual."
       },
       {
         question: "¿Coordinan atención con los servicios de consejería de Ave Maria University?",
@@ -693,11 +693,11 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Pueden proporcionar servicios en español para la comunidad diversa de Ave Maria?",
-        answer: "Sí, la Dra. Reve es completamente bilingüe (inglés/español) y proporciona atención culturalmente sensible al diverso cuerpo estudiantil de Ave Maria y la comunidad residente, incluyendo familias de habla hispana."
+        answer: "Sí. Las citas psiquiátricas con la Dra. Reve están disponibles en inglés o español."
       },
       {
         question: "¿Qué deben esperar los estudiantes de Ave Maria para su primera cita?",
-        answer: "Su evaluación inicial se enfoca en entender sus factores estresantes académicos y personales, historial de salud mental, y objetivos de tratamiento. Adaptamos nuestro enfoque a las necesidades únicas de estudiantes universitarios y adultos jóvenes."
+        answer: "La evaluación inicial revisa las inquietudes actuales, el historial psiquiátrico y los objetivos de tratamiento. El plan se individualiza a partir de la evaluación clínica."
       },
       {
         question: "¿Proporcionan apoyo de crisis para estudiantes de Ave Maria?",
@@ -710,39 +710,39 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "How close is your Naples office to Lely Resort?",
-        answer: "We're very conveniently located for Lely Resort residents! Our office is just about 15-20 minutes north on US-41 (Tamiami Trail). Many of our Lely Resort patients appreciate the short, easy drive."
+        answer: "Our only office is at 4760 Tamiami Trl N #25, Naples, FL 34103. Travel time from Lely Resort varies by starting point and traffic, so check current directions before leaving."
       },
       {
         question: "Do you offer telehealth services for Lely Resort residents?",
-        answer: "Absolutely! We provide secure video consultations that are popular with our Lely Resort patients. This allows you to receive expert psychiatric care from your resort home without the drive."
+        answer: "Lely Resort residents may request a secure video appointment. The office confirms availability, patient location, licensing and clinical suitability when scheduling."
       },
       {
         question: "What mental health services do you provide for Lely Resort residents?",
-        answer: "We offer comprehensive psychiatric care including anxiety treatment, depression management, ADHD evaluation, PTSD treatment, bipolar disorder care, and medication management specifically tailored for Lely Resort residents."
+        answer: "Services for adults include psychiatric evaluation and treatment for anxiety, depression, ADHD, PTSD and bipolar disorder, as well as medication management. The plan is individualized after assessment."
       },
       {
-        question: "Do you accept Medicare and other insurance common in Lely Resort?",
-        answer: "Yes, we accept Medicare, Medicare Advantage plans, and most major commercial insurance plans common among Lely Resort residents. Please call to verify your specific plan coverage."
+        question: "How do I confirm insurance for care serving Lely Resort?",
+        answer: "Participation and benefits vary by plan and service. Before booking, confirm current participation with our office and verify your specific benefits directly with your insurer."
       },
       {
         question: "Can you coordinate care for seasonal residents who split time between Lely Resort and up north?",
-        answer: "Absolutely! We specialize in coordinating psychiatric care for seasonal residents. We can work with your northern healthcare providers to ensure continuous mental health care year-round."
+        answer: "You may discuss continuity needs with the office. Coordination with another provider may be evaluated case by case and requires the patient’s consent; availability and licensing requirements still apply."
       },
       {
         question: "Do you understand the mental health needs of retirees in resort communities like Lely?",
-        answer: "Yes, we have extensive experience working with retirees and understand the unique aspects of retirement mental health, including life transitions, social changes, and health concerns common in resort retirement communities."
+        answer: "Dr. Reve can evaluate anxiety, mood symptoms and other psychiatric concerns related to retirement or life transitions. Care is individualized after clinical assessment."
       },
       {
         question: "Do you treat age-related depression and anxiety for Lely Resort residents?",
-        answer: "Absolutely. We provide specialized care for depression and anxiety that may arise during retirement years, including adjustment to retirement, health-related anxiety, and social isolation concerns."
+        answer: "The practice evaluates adults with depression or anxiety symptoms, including concerns related to retirement, health changes or social isolation. Treatment planning is individualized after evaluation."
       },
       {
         question: "Can you help with medication management for complex medical conditions common in Lely Resort?",
-        answer: "Yes, we carefully coordinate psychiatric medications with other medications you may be taking for medical conditions. We work closely with your primary care physicians and specialists to ensure safe, effective treatment."
+        answer: "Medication history and possible interactions are reviewed during clinical care. With patient consent, coordination with another clinician may be evaluated case by case when appropriate."
       },
       {
         question: "Do you provide couples counseling referrals for Lely Resort residents?",
-        answer: "While we focus on psychiatric medication management, we work with excellent couples therapists in the Naples area and can provide referrals when relationship counseling would be beneficial alongside psychiatric care."
+        answer: "The practice focuses on psychiatric care. You may ask whether an outside counseling referral could be appropriate; any referral is discussed case by case and does not imply an ongoing affiliation."
       },
       {
         question: "What's the parking situation for Lely Resort patients visiting your office?",
@@ -752,39 +752,39 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿Qué tan cerca está su oficina de Naples a Lely Resort?",
-        answer: "¡Estamos muy convenientemente ubicados para residentes de Lely Resort! Nuestra oficina está a solo unos 15-20 minutos al norte en US-41 (Tamiami Trail). Muchos de nuestros pacientes de Lely Resort aprecian el viaje corto y fácil."
+        answer: "Nuestra única oficina está en 4760 Tamiami Trl N #25, Naples, FL 34103. El viaje desde Lely Resort varía según el punto de partida y el tráfico; consulte indicaciones actuales antes de salir."
       },
       {
         question: "¿Ofrecen servicios de telesalud para residentes de Lely Resort?",
-        answer: "¡Absolutamente! Proporcionamos consultas por video seguras que son populares con nuestros pacientes de Lely Resort. Esto le permite recibir atención psiquiátrica experta desde su hogar en el resort sin el viaje."
+        answer: "Los residentes de Lely Resort pueden solicitar una cita por video seguro. La oficina confirma disponibilidad, ubicación del paciente, licencias y adecuación clínica al programar."
       },
       {
         question: "¿Qué servicios de salud mental proporcionan para residentes de Lely Resort?",
         answer: "Ofrecemos atención psiquiátrica integral incluyendo tratamiento de ansiedad, manejo de depresión, evaluación de TDAH, tratamiento de TEPT, atención de trastorno bipolar, y manejo de medicamentos específicamente adaptado para residentes de Lely Resort."
       },
       {
-        question: "¿Aceptan Medicare y otros seguros comunes en Lely Resort?",
-        answer: "Sí, aceptamos Medicare, planes Medicare Advantage, y la mayoría de los principales planes de seguro comerciales comunes entre residentes de Lely Resort. Por favor llame para verificar la cobertura de su plan específico."
+        question: "¿Cómo confirmo el seguro para la atención que sirve a Lely Resort?",
+        answer: "La participación y los beneficios varían según el plan y el servicio. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique sus beneficios específicos directamente con su aseguradora."
       },
       {
         question: "¿Pueden coordinar atención para residentes estacionales que dividen el tiempo entre Lely Resort y el norte?",
-        answer: "¡Absolutamente! Nos especializamos en coordinar atención psiquiátrica para residentes estacionales. Podemos trabajar con sus proveedores de atención médica del norte para asegurar atención continua de salud mental durante todo el año."
+        answer: "Puede discutir sus necesidades de continuidad con la oficina. La coordinación con otro proveedor puede evaluarse caso por caso y requiere el consentimiento del paciente; también aplican disponibilidad y requisitos de licencia."
       },
       {
         question: "¿Entienden las necesidades de salud mental de jubilados en comunidades de resort como Lely?",
-        answer: "Sí, tenemos amplia experiencia trabajando con jubilados y entendemos los aspectos únicos de la salud mental en la jubilación, incluyendo transiciones de vida, cambios sociales, y preocupaciones de salud comunes en comunidades de jubilación de resort."
+        answer: "La Dra. Reve puede evaluar ansiedad, síntomas del ánimo y otras inquietudes psiquiátricas relacionadas con jubilación o transiciones de vida. La atención se individualiza después de la evaluación clínica."
       },
       {
         question: "¿Tratan depresión y ansiedad relacionadas con la edad para residentes de Lely Resort?",
-        answer: "Absolutamente. Proporcionamos atención especializada para depresión y ansiedad que pueden surgir durante los años de jubilación, incluyendo adaptación a la jubilación, ansiedad relacionada con la salud, y preocupaciones de aislamiento social."
+        answer: "La práctica evalúa a adultos con síntomas de depresión o ansiedad, incluidas preocupaciones relacionadas con jubilación, cambios de salud o aislamiento social. La planificación se individualiza después de la evaluación."
       },
       {
         question: "¿Pueden ayudar con manejo de medicamentos para condiciones médicas complejas comunes en Lely Resort?",
-        answer: "Sí, coordinamos cuidadosamente los medicamentos psiquiátricos con otros medicamentos que pueda estar tomando para condiciones médicas. Trabajamos estrechamente con sus médicos de atención primaria y especialistas para asegurar tratamiento seguro y efectivo."
+        answer: "El historial de medicamentos y las posibles interacciones se revisan durante la atención clínica. Con consentimiento del paciente, la coordinación con otro profesional puede evaluarse caso por caso cuando sea apropiado."
       },
       {
         question: "¿Proporcionan referencias de consejería de parejas para residentes de Lely Resort?",
-        answer: "Aunque nos enfocamos en manejo de medicamentos psiquiátricos, trabajamos con excelentes terapeutas de parejas en el área de Naples y podemos proporcionar referencias cuando la consejería de relaciones sería beneficiosa junto con la atención psiquiátrica."
+        answer: "La práctica se enfoca en atención psiquiátrica. Puede preguntar si una referencia externa de consejería sería apropiada; toda referencia se discute caso por caso y no implica una afiliación continua."
       },
       {
         question: "¿Cuál es la situación de estacionamiento para pacientes de Lely Resort que visitan su oficina?",
@@ -797,23 +797,23 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "What is telepsychiatry and how does it work?",
-        answer: "Telepsychiatry is psychiatric care delivered through secure video sessions. You meet with Dr. Reve virtually from your home or private space using a HIPAA-compliant platform. It's just as effective as in-person visits for psychiatric evaluations, therapy, and ongoing treatment."
+        answer: "Telepsychiatry is psychiatric care delivered through a secure video platform. The office confirms whether video is clinically appropriate and permitted based on your needs, physical location and applicable licensing requirements."
       },
       {
         question: "Do I need any special equipment for telehealth sessions?",
-        answer: "All you need is a device with a camera and microphone (smartphone, tablet, or computer), a stable internet connection, and a private space. We use CharmHealth's secure platform that works directly in your web browser - no downloads required."
+        answer: "A device with a camera and microphone, an internet connection and a private space may be needed. If a video visit is confirmed, the office will provide the platform and access requirements before the appointment."
       },
       {
-        question: "Is telepsychiatry as effective as in-person appointments?",
-        answer: "Yes! Research shows telepsychiatry is equally effective for most psychiatric conditions including anxiety, depression, ADHD, PTSD, and bipolar disorder. Dr. Reve can assess symptoms and provide comprehensive psychiatric care virtually."
+        question: "How is suitability for telepsychiatry determined?",
+        answer: "Video care is not appropriate for every person, condition or appointment. Dr. Reve and the office confirm clinical suitability, patient location and applicable licensing requirements case by case."
       },
       {
         question: "What types of psychiatric conditions can be treated via telehealth?",
-        answer: "Dr. Reve treats a wide range of conditions virtually, including anxiety, depression, ADHD, PTSD, bipolar disorder, and other mental health concerns. Virtual sessions offer the same comprehensive evaluation and ongoing psychiatric support as in-person visits."
+        answer: "Some evaluations and follow-up care may be appropriate by video. Dr. Reve determines the appropriate setting after considering the clinical need, patient location and applicable licensing requirements."
       },
       {
         question: "What areas of Florida does Dr. Reve serve through telehealth?",
-        answer: "Dr. Reve provides telepsychiatry services to patients throughout the entire state of Florida. As long as you are physically located in Florida during the appointment, you can receive care from anywhere in the state."
+        answer: "The patient must be physically located where Dr. Reve is authorized to provide care. The office confirms location, licensing requirements, availability and clinical suitability before each video appointment."
       },
       {
         question: "How do I schedule a telehealth appointment?",
@@ -821,41 +821,41 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "Is my privacy protected during telehealth sessions?",
-        answer: "Yes, completely. We use a HIPAA-compliant, encrypted video platform that meets all federal privacy standards. Your session is confidential and secure, just like in-person visits."
+        answer: "Video visits use a secure video platform. The practice privacy notice and consent documents explain how health information is handled and the limits that apply to electronic communications."
       },
       {
         question: "Does insurance cover telepsychiatry services?",
-        answer: "Most insurance plans now cover telepsychiatry the same as in-person visits. We accept Aetna, Cigna, Medicare, and most major insurance plans. Contact us to verify your specific coverage."
+        answer: "Telepsychiatry benefits vary by plan, service and patient location. Before booking, confirm current participation with our office and verify telehealth benefits and cost sharing directly with your insurer."
       },
       {
         question: "Can I switch between telehealth and in-person visits?",
-        answer: "Yes! Many patients prefer a hybrid approach - some appointments virtual, others in-person at our Naples office. You can choose what works best for your schedule and needs."
+        answer: "You may ask about in-person and video options. The office and Dr. Reve confirm the appropriate modality for each appointment based on clinical needs, patient location and applicable requirements."
       },
       {
         question: "What if I have technical issues during my telehealth appointment?",
-        answer: "Our team is here to help! We provide technical support and can troubleshoot any issues. If needed, we can switch to a phone call to ensure you receive your care without interruption."
+        answer: "Contact the office if you have trouble joining. The office or clinician will advise whether the appointment can proceed, needs to be rescheduled or requires another approved arrangement."
       }
     ],
     es: [
       {
         question: "¿Qué es la telepsiquiatría y cómo funciona?",
-        answer: "La telepsiquiatría es atención psiquiátrica brindada a través de sesiones de video seguras. Se reúne con la Dra. Reve virtualmente desde su hogar o espacio privado usando una plataforma compatible con HIPAA. Es tan efectiva como las visitas en persona para evaluaciones psiquiátricas, terapia y tratamiento continuo."
+        answer: "La telepsiquiatría es atención psiquiátrica brindada mediante una plataforma de video segura. La oficina confirma si el video es clínicamente apropiado y está permitido según sus necesidades, ubicación física y requisitos de licencia aplicables."
       },
       {
         question: "¿Necesito algún equipo especial para las sesiones de telesalud?",
-        answer: "Todo lo que necesita es un dispositivo con cámara y micrófono (teléfono inteligente, tableta o computadora), una conexión a internet estable y un espacio privado. Usamos la plataforma segura CharmHealth que funciona directamente en su navegador web - no se requieren descargas."
+        answer: "Puede necesitar un dispositivo con cámara y micrófono, conexión a internet y un espacio privado. Si se confirma una visita por video, la oficina proporcionará los requisitos de plataforma y acceso antes de la cita."
       },
       {
-        question: "¿Es la telepsiquiatría tan efectiva como las citas en persona?",
-        answer: "¡Sí! La investigación muestra que la telepsiquiatría es igualmente efectiva para la mayoría de las condiciones psiquiátricas incluyendo ansiedad, depresión, TDAH, TEPT y trastorno bipolar. La Dra. Reve puede evaluar síntomas y proporcionar atención psiquiátrica integral virtualmente."
+        question: "¿Cómo se determina si la telepsiquiatría es apropiada?",
+        answer: "La atención por video no es apropiada para todas las personas, condiciones o citas. La Dra. Reve y la oficina confirman caso por caso la adecuación clínica, ubicación del paciente y requisitos de licencia aplicables."
       },
       {
         question: "¿Qué tipos de condiciones psiquiátricas se pueden tratar por telesalud?",
-        answer: "La Dra. Reve trata una amplia gama de condiciones virtualmente, incluyendo ansiedad, depresión, TDAH, TEPT, trastorno bipolar y otras afecciones de salud mental. Las sesiones virtuales ofrecen la misma evaluación integral y apoyo psiquiátrico continuo que las visitas en persona."
+        answer: "Algunas evaluaciones y seguimientos pueden ser apropiados por video. La Dra. Reve determina el entorno apropiado tras considerar la necesidad clínica, ubicación del paciente y requisitos de licencia aplicables."
       },
       {
         question: "¿Qué áreas de Florida atiende la Dra. Reve a través de telesalud?",
-        answer: "La Dra. Reve proporciona servicios de telepsiquiatría a pacientes en todo el estado de Florida. Siempre que esté físicamente ubicado en Florida durante la cita, puede recibir atención desde cualquier lugar del estado."
+        answer: "El paciente debe estar físicamente donde la Dra. Reve esté autorizada para brindar atención. La oficina confirma la ubicación, requisitos de licencia, disponibilidad y adecuación clínica antes de cada cita por video."
       },
       {
         question: "¿Cómo programo una cita de telesalud?",
@@ -863,19 +863,19 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
       },
       {
         question: "¿Está protegida mi privacidad durante las sesiones de telesalud?",
-        answer: "Sí, completamente. Usamos una plataforma de video encriptada compatible con HIPAA que cumple con todos los estándares federales de privacidad. Su sesión es confidencial y segura, igual que las visitas en persona."
+        answer: "Las visitas usan una plataforma de video segura. El aviso de privacidad y los documentos de consentimiento explican cómo se maneja la información de salud y los límites aplicables a las comunicaciones electrónicas."
       },
       {
         question: "¿El seguro cubre los servicios de telepsiquiatría?",
-        answer: "La mayoría de los planes de seguro ahora cubren la telepsiquiatría igual que las visitas en persona. Aceptamos Aetna, Cigna, Medicare y la mayoría de los principales planes de seguro. Contáctenos para verificar su cobertura específica."
+        answer: "Los beneficios de telepsiquiatría varían según el plan, el servicio y la ubicación del paciente. Antes de reservar, confirme la participación vigente con nuestra oficina y verifique directamente con su aseguradora los beneficios de telesalud y costos compartidos."
       },
       {
         question: "¿Puedo alternar entre visitas de telesalud y en persona?",
-        answer: "¡Sí! Muchos pacientes prefieren un enfoque híbrido - algunas citas virtuales, otras en persona en nuestra oficina de Naples. Puede elegir lo que funcione mejor para su horario y necesidades."
+        answer: "Puede preguntar por opciones presenciales y por video. La oficina y la Dra. Reve confirman la modalidad apropiada para cada cita según las necesidades clínicas, ubicación del paciente y requisitos aplicables."
       },
       {
         question: "¿Qué pasa si tengo problemas técnicos durante mi cita de telesalud?",
-        answer: "¡Nuestro equipo está aquí para ayudar! Proporcionamos soporte técnico y podemos solucionar cualquier problema. Si es necesario, podemos cambiar a una llamada telefónica para asegurar que reciba su atención sin interrupción."
+        answer: "Contacte la oficina si tiene problemas para conectarse. La oficina o la profesional indicará si la cita puede continuar, debe reprogramarse o requiere otra alternativa aprobada."
       }
     ]
   },
@@ -884,43 +884,43 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     en: [
       {
         question: "Does the doctor speak Spanish?",
-        answer: "Yes. Spanish is her native language. Your entire appointment can be in Spanish, from start to finish."
+        answer: "Yes. Bilingual care is available in English and Spanish. Your entire appointment can be in Spanish, from start to finish."
       },
       {
         question: "Can I be seen if I live in California?",
-        answer: "Yes, as long as you are physically in California during the appointment. It is a legal requirement: telehealth care is governed by the state where the patient is located."
+        answer: "The patient must be physically located where Dr. Reve is authorized to provide care. The office confirms California eligibility, availability and clinical suitability before the appointment."
       },
       {
         question: "Do you accept health insurance?",
-        answer: "Not in California. Appointments are direct pay. In exchange, the price is clear from the start and there is no paperwork or prior authorizations."
+        answer: "Coverage and payment arrangements vary. Before booking, confirm participation, benefits and costs with the office and your insurer."
       },
       {
         question: "How much does it cost?",
-        answer: "Appointments are direct pay, with no insurance in between. Write to us on WhatsApp and we will confirm the exact price before you book, so there are no surprises."
+        answer: "Before booking, the office confirms the price, payment method, availability, treating professional, modality and eligibility for the requested appointment."
       },
       {
         question: "How does payment work?",
-        answer: "You pay for your appointment directly to the practice. \"Cash pay\" does not mean paying in physical cash: it is simply the term used in the United States for care paid without health insurance, with no claims and no prior authorizations."
+        answer: "Payment arrangements vary. The office confirms the accepted payment method and applicable financial details before booking."
       },
       {
         question: "What do I need for the video call?",
-        answer: "A phone, tablet, or computer with a camera and microphone, an internet connection, and a place where you can talk privately. Nothing needs to be installed."
+        answer: "A device with a camera and microphone, an internet connection and a private place may be needed. If video is confirmed, the office provides the access requirements before the appointment."
       },
       {
         question: "What happens at the first appointment?",
-        answer: "It is a complete psychiatric evaluation, a 60-minute video call. Dr. Reve talks with you about what you are going through, your history and your symptoms, answers your questions, and explains the next steps of your treatment. Follow-up appointments last 30 minutes."
+        answer: "The initial evaluation reviews what you are experiencing, your history, symptoms and possible next steps. The office confirms appointment length and modality when scheduling; follow-up needs are determined individually."
       },
       {
         question: "Do you see minors?",
         answer: "No. Appointments are for adults 18 and older only."
       },
       {
-        question: "Is it the same as going in person?",
-        answer: "For most cases, yes. Psychiatric evaluation and follow-up work just as well by video call, and you do not have to travel."
+        question: "How is video care compared with an in-person visit?",
+        answer: "Video and in-person visits are different care settings. Dr. Reve determines which setting is clinically appropriate for each appointment based on individual needs and applicable requirements."
       },
       {
         question: "Is the video call private?",
-        answer: "Yes. Appointments take place on a secure medical platform and your information is protected by medical privacy laws (HIPAA), just like an in-person visit."
+        answer: "Appointments use a secure video platform. The practice privacy notice and consent documents explain how your information is handled and the limits of electronic communication."
       },
       {
         question: "What if I have an emergency?",
@@ -930,43 +930,43 @@ export const locationFAQs: Record<string, BilingualLocationFAQs> = {
     es: [
       {
         question: "¿La doctora habla español?",
-        answer: "Sí. El español es su lengua materna. Toda la consulta puede ser en español, de principio a fin."
+        answer: "Sí. La atención bilingüe está disponible en español e inglés. Toda la consulta puede ser en español, de principio a fin."
       },
       {
         question: "¿Puedo atenderme si vivo en California?",
-        answer: "Sí, siempre que estés físicamente en California durante la cita. Es un requisito legal: la atención médica a distancia se rige por el estado donde está el paciente."
+        answer: "El paciente debe estar físicamente donde la Dra. Reve esté autorizada para brindar atención. La oficina confirma la elegibilidad en California, disponibilidad y adecuación clínica antes de la cita."
       },
       {
         question: "¿Aceptan seguro médico?",
-        answer: "En California no. La consulta es de pago directo. A cambio, el precio es claro desde el principio y no hay trámites ni autorizaciones."
+        answer: "La cobertura y los arreglos de pago varían. Antes de reservar, confirme la participación, los beneficios y los costos con la oficina y su aseguradora."
       },
       {
         question: "¿Cuánto cuesta?",
-        answer: "La consulta es de pago directo, sin seguros de por medio. Escríbenos por WhatsApp y te confirmamos el precio exacto antes de reservar, sin sorpresas."
+        answer: "Antes de reservar, la oficina confirma el precio, método de pago, disponibilidad, profesional, modalidad y elegibilidad para la cita solicitada."
       },
       {
         question: "¿Cómo funciona el pago?",
-        answer: "Pagas tu consulta directamente a la práctica. \"Cash pay\" no significa pagar en efectivo: es simplemente el término que se usa en Estados Unidos para la atención que se paga sin seguro médico, sin reclamos ni autorizaciones previas."
+        answer: "Los arreglos de pago varían. La oficina confirma el método de pago aceptado y los detalles financieros aplicables antes de reservar."
       },
       {
         question: "¿Qué necesito para la videollamada?",
-        answer: "Un móvil, tablet u ordenador con cámara y micrófono, conexión a internet y un sitio donde puedas hablar tranquilo. No hace falta instalar nada."
+        answer: "Puede necesitar un dispositivo con cámara y micrófono, conexión a internet y un lugar privado. Si se confirma el video, la oficina proporciona los requisitos de acceso antes de la cita."
       },
       {
         question: "¿Qué pasa en la primera consulta?",
-        answer: "Es una evaluación psiquiátrica completa, una videollamada de 60 minutos. La Dra. Reve conversa contigo sobre lo que estás pasando, tu historia y tus síntomas, responde tus preguntas y te explica los siguientes pasos de tu tratamiento. Las consultas de seguimiento duran 30 minutos."
+        answer: "La evaluación inicial revisa lo que está experimentando, su historia, síntomas y posibles próximos pasos. La oficina confirma la duración y modalidad al programar; las necesidades de seguimiento se determinan individualmente."
       },
       {
         question: "¿Atienden a menores de edad?",
         answer: "No. La consulta es solo para adultos a partir de 18 años."
       },
       {
-        question: "¿Es lo mismo que ir en persona?",
-        answer: "Para la mayoría de los casos, sí. La evaluación psiquiátrica y el seguimiento funcionan igual de bien por videollamada, y así no tienes que desplazarte."
+        question: "¿Cómo se compara la atención por video con una visita presencial?",
+        answer: "El video y la atención presencial son entornos distintos. La Dra. Reve determina cuál es clínicamente apropiado para cada cita según las necesidades individuales y requisitos aplicables."
       },
       {
         question: "¿La videollamada es privada?",
-        answer: "Sí. La consulta se realiza en una plataforma médica segura y tu información está protegida por las leyes de privacidad médica (HIPAA), igual que una visita en persona."
+        answer: "La consulta usa una plataforma de video segura. El aviso de privacidad y los documentos de consentimiento explican cómo se maneja su información y los límites de la comunicación electrónica."
       },
       {
         question: "¿Y si tengo una urgencia?",

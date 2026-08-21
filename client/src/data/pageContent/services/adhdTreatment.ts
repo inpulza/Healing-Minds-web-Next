@@ -6,20 +6,20 @@ export const adhdTreatmentContent: BilingualPageContent = {
     sections: [
       {
         key: 'hero-tagline',
-        paragraphs: ['Focus & Success'],
+        paragraphs: ['Adult ADHD Evaluation'],
       },
       {
         key: 'hero-description',
         paragraphs: [
-          'Unlock your potential with expert ADHD treatment. Dr. Melva Reve provides comprehensive evaluation and personalized treatment for adults 18+ with attention deficit hyperactivity disorder.',
+          'Dr. Melva Reve provides psychiatric evaluation and individualized treatment planning for adults 18+ with attention deficit hyperactivity disorder.',
         ],
       },
       {
         key: 'hero-facts',
         heading: 'ADHD Facts',
         bullets: [
-          '4.4% of adults have ADHD',
-          'Highly treatable with proper care',
+          'ADHD symptoms can continue into adulthood',
+          'Treatment options depend on an individual evaluation',
           'Affects focus, organization, and impulse control',
           'Bilingual evaluation available',
         ],
@@ -49,7 +49,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'identification-p2',
         paragraphs: [
-          'Living with undiagnosed or untreated ADHD in adulthood can affect your professional career, personal relationships, and self-esteem. But there is a path to clarity and control. At Healing Minds Psychiatry, we understand the nuances of ADHD in adults and offer a compassionate and effective approach to help you thrive.',
+          'Symptoms associated with ADHD can affect work, relationships and daily routines. A psychiatric evaluation can review those concerns, consider other possible explanations and discuss treatment options appropriate to the individual.',
         ],
       },
       {
@@ -67,7 +67,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
         bullets: [
           'Complete and Accurate Evaluation',
           'Personalized Treatment Plans',
-          'Effective Medication Management',
+          'Medication Options When Appropriate',
           'Daily Life Strategies and Skills',
         ],
       },
@@ -75,9 +75,9 @@ export const adhdTreatmentContent: BilingualPageContent = {
         key: 'process-step-descriptions',
         bullets: [
           'The first step is a comprehensive diagnostic evaluation. We use standardized tools and detailed clinical interview to confirm ADHD diagnosis, rule out other conditions, and thoroughly understand how it affects you daily.',
-          'Your treatment plan is unique. While medication can be a very effective tool, we believe in a multifaceted approach. We combine medication management with practical strategies and supportive therapy for sustainable results.',
-          'When medication is appropriate, Dr. Reve works with you to find the optimal type and dose across all approved ADHD treatment options. We provide careful monitoring to maximize benefits and minimize side effects, adjusting the plan as needed.',
-          'We equip you with practical tools to manage ADHD symptoms. This includes organization techniques, time management, focus improvement, and strategies for dealing with impulsivity, enabling you to succeed both at work and at home.',
+          'Your treatment plan is individualized. Medication, practical strategies and outside supportive therapy may be discussed when clinically appropriate.',
+          'When medication is clinically appropriate, Dr. Reve discusses options, risks and possible side effects. No medication, dose, benefit or response is guaranteed.',
+          'Practical strategies for organization, time management, attention and impulsivity may be discussed as part of an individualized plan.',
         ],
       },
       {
@@ -90,11 +90,11 @@ export const adhdTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'adult-stat-1',
-        paragraphs: ['4.4%', 'Adults have ADHD'],
+        paragraphs: ['Adults', 'Evaluation considers symptoms across settings'],
       },
       {
         key: 'adult-stat-2',
-        paragraphs: ['85%', 'Treatment success rate'],
+        paragraphs: ['Individual', 'Treatment response varies by person'],
       },
       {
         key: 'adult-intro',
@@ -107,7 +107,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
         heading: 'Bilingual Care (English & Spanish)',
         level: 3,
         paragraphs: [
-          'Dr. Reve is fully bilingual, offering evaluations and treatments in both English and Spanish. This eliminates language barriers and ensures accessible mental health care for the entire Naples community.',
+          'Psychiatric services may be provided in English or Spanish. Confirm language preference and appointment availability with the office.',
         ],
       },
       {
@@ -117,7 +117,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'adult-quote',
         paragraphs: [
-          '"Throughout my career, I have seen firsthand how an ADHD diagnosis in adulthood can be both challenging and revelatory. My passion, especially here in the Naples community, is to offer a safe and bilingual space where my patients not only receive treatment, but also rediscover their strengths and learn to thrive."',
+          'Evaluation and treatment planning are individualized; response to any treatment varies by person.',
         ],
       },
       {
@@ -237,7 +237,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'cta',
-        heading: 'Take the First Step to **Regain Your Focus**',
+        heading: 'Request an **Adult ADHD Evaluation**',
       },
       {
         key: 'cta-badge',
@@ -246,12 +246,12 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'cta-intro',
         paragraphs: [
-          "Don't let ADHD define your potential. With the right support and strategy, you can learn to manage your symptoms and use your strengths to achieve your goals. If you're ready to take control, our team in Naples is here to help you.",
+          'If attention, organization or impulsivity concerns are affecting daily life, you may request an evaluation. The office confirms availability and the clinician determines appropriate next steps.',
         ],
       },
       {
         key: 'cta-highlight',
-        paragraphs: ['Call now to schedule your confidential evaluation.'],
+        paragraphs: ['Call the office to request an evaluation.'],
       },
       {
         key: 'cta-call',
@@ -268,7 +268,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'approach-intro',
         paragraphs: [
-          'Dr. Melva Reve uses a multi-faceted approach to ADHD treatment, combining medication management with behavioral strategies and family support.',
+          'ADHD treatment planning may include medication discussion, practical strategies, outside therapy or family education when clinically appropriate.',
         ],
       },
       {
@@ -281,7 +281,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'approach-footer-expert',
-        paragraphs: ['Expert Care'],
+        paragraphs: ['Individualized Care'],
       },
       {
         key: 'approach-treatments',
@@ -297,12 +297,12 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'approach-treatment-descriptions',
         bullets: [
-          'Detailed evaluation using standardized tools and clinical interview to accurately diagnose ADHD and rule out other conditions.',
-          'Careful selection and monitoring of ADHD medications across all approved treatment classes, tailored to individual needs.',
-          'Teaching practical skills for organization, time management, and focus improvement that work alongside medication.',
-          'Supporting families with understanding ADHD and implementing effective strategies at home and school.',
-          'Guidance on appropriate accommodations for school or workplace to optimize success and performance.',
-          'Regular monitoring and adjustment of treatment as life circumstances and needs change over time.',
+          'Clinical evaluation may include standardized tools and an interview to assess symptoms and consider other conditions.',
+          'Medication options, risks and monitoring may be discussed when clinically appropriate; no particular medication or response is promised.',
+          'Practical skills for organization, time management and attention may be discussed as part of the plan.',
+          'Family education or outside supportive services may be discussed when appropriate and with consent.',
+          'Patients may discuss questions about school or workplace accommodations with the appropriate professionals.',
+          'Follow-up recommendations depend on clinical needs and may change over time.',
         ],
       },
       {
@@ -325,10 +325,10 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'faq-answers',
         bullets: [
-          'The first and most important step is to seek a complete professional evaluation with a qualified psychiatrist, like Dr. Reve. An accurate diagnosis is fundamental to creating an effective treatment plan.',
-          'Not necessarily. While medications are highly effective for many adults, they are not the only option. The best approach often combines therapy, behavioral strategies, and, if appropriate, medication. The plan is personalized for you.',
-          'Therapy can provide you with invaluable tools to better manage time, improve your organizational and communication skills, and understand how ADHD influences your interactions. This can lead to reduced stress and healthier, more productive relationships.',
-          'Yes, at Healing Minds Psychiatry we offer telepsychiatry services from [our Naples, FL practice](/locations/psychiatrist-naples). This allows you to receive expert care and follow-up from the comfort of your home, as long as you are located within the state of Florida.',
+          'A psychiatric evaluation can review symptoms, history and other possible explanations before treatment options are discussed.',
+          'Not necessarily. Medication is not the only option. Therapy, behavioral strategies and medication may be discussed when appropriate, and the plan is individualized.',
+          'Therapy or practical strategies may be discussed to address organization, communication and other concerns. Suitability and response vary by person.',
+          'Adults in Florida may request telepsychiatry from [our Naples, FL practice](/locations/psychiatrist-naples). The office confirms the treating professional, patient location, licensing, clinical suitability and availability for each appointment.',
         ],
       },
     ],
@@ -338,26 +338,26 @@ export const adhdTreatmentContent: BilingualPageContent = {
     sections: [
       {
         key: 'hero-tagline',
-        paragraphs: ['Enfoque y Éxito'],
+        paragraphs: ['Evaluación de TDAH en Adultos'],
       },
       {
         key: 'hero-description',
         paragraphs: [
-          'Desbloquee su potencial con tratamiento experto de TDAH. La Dra. Melva Reve brinda evaluación integral y tratamiento personalizado para adultos 18+ con trastorno por déficit de atención e hiperactividad.',
+          'La Dra. Melva Reve brinda evaluación psiquiátrica y planificación individualizada del tratamiento para adultos de 18 años o más con trastorno por déficit de atención e hiperactividad.',
         ],
       },
       {
         key: 'hero-special-note',
         paragraphs: [
-          '**El TDAH no es una limitación, es una diferencia en el funcionamiento del cerebro.** Con el tratamiento adecuado, puede aprovechar sus fortalezas únicas y alcanzar su máximo potencial. Ofrecemos evaluación y tratamiento especializado.',
+          'Una evaluación puede revisar los síntomas, la historia clínica y otras posibles explicaciones antes de discutir opciones de tratamiento. La respuesta al tratamiento varía según la persona.',
         ],
       },
       {
         key: 'hero-facts',
         heading: 'Datos sobre TDAH',
         bullets: [
-          '4.4% de adultos tienen TDAH',
-          'Altamente tratable con atención adecuada',
+          'Los síntomas de TDAH pueden continuar en la adultez',
+          'Las opciones de tratamiento dependen de una evaluación individual',
           'Afecta enfoque, organización y control de impulsos',
           'Evaluación bilingüe disponible',
         ],
@@ -387,7 +387,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'identification-p2',
         paragraphs: [
-          'Vivir con TDAH no diagnosticado o no tratado en la edad adulta puede afectar tu carrera profesional, tus relaciones personales y tu autoestima. Pero hay un camino hacia la claridad y el control. En Healing Minds Psychiatry, entendemos los matices del TDAH en adultos y ofrecemos un enfoque compasivo y efectivo para ayudarte a prosperar.',
+          'Los síntomas asociados con el TDAH pueden afectar el trabajo, las relaciones y las rutinas diarias. Una evaluación psiquiátrica puede revisar esas inquietudes, considerar otras posibles explicaciones y discutir opciones apropiadas para cada persona.',
         ],
       },
       {
@@ -405,7 +405,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
         bullets: [
           'Evaluación Completa y Precisa',
           'Planes de Tratamiento Personalizados',
-          'Manejo Efectivo de Medicamentos',
+          'Opciones de Medicación Cuando Correspondan',
           'Estrategias y Habilidades para el Día a Día',
         ],
       },
@@ -413,9 +413,9 @@ export const adhdTreatmentContent: BilingualPageContent = {
         key: 'process-step-descriptions',
         bullets: [
           'El primer paso es una evaluación diagnóstica exhaustiva. Utilizamos herramientas estandarizadas y una entrevista clínica detallada para confirmar el diagnóstico de TDAH, descartar otras condiciones y comprender a fondo cómo te afecta en tu día a día.',
-          'Tu plan de tratamiento es único. Si bien la medicación puede ser una herramienta muy eficaz, creemos en un enfoque multifacético. Combinamos el manejo de medicamentos con estrategias prácticas y terapia de apoyo para ofrecerte resultados sostenibles.',
-          'Cuando la medicación es apropiada, la Dra. Reve trabaja contigo para encontrar el tipo y la dosis óptima entre todas las opciones de tratamiento aprobadas para el TDAH. Realizamos un seguimiento cuidadoso para maximizar los beneficios y minimizar los efectos secundarios, ajustando el plan según sea necesario.',
-          'Te equipamos con herramientas prácticas para manejar los síntomas del TDAH. Esto incluye técnicas de organización, gestión del tiempo, mejora del enfoque y estrategias para afrontar la impulsividad, permitiéndote tener éxito tanto en el trabajo como en casa.',
+          'El plan de tratamiento es individualizado. La medicación, las estrategias prácticas y la terapia de apoyo externa pueden discutirse cuando sean clínicamente apropiadas.',
+          'Cuando la medicación es clínicamente apropiada, la Dra. Reve conversa sobre opciones, riesgos y posibles efectos secundarios. No se garantiza un medicamento, una dosis, un beneficio ni una respuesta.',
+          'Pueden discutirse estrategias prácticas de organización, manejo del tiempo, atención e impulsividad como parte de un plan individualizado.',
         ],
       },
       {
@@ -428,11 +428,11 @@ export const adhdTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'adult-stat-1',
-        paragraphs: ['4.4%', 'Adultos tienen TDAH'],
+        paragraphs: ['Adultos', 'La evaluación considera síntomas en distintos entornos'],
       },
       {
         key: 'adult-stat-2',
-        paragraphs: ['85%', 'Tasa de éxito del tratamiento'],
+        paragraphs: ['Individual', 'La respuesta al tratamiento varía según la persona'],
       },
       {
         key: 'adult-intro',
@@ -445,7 +445,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
         heading: 'Atención Bilingüe (Inglés y Español)',
         level: 3,
         paragraphs: [
-          'La Dra. Reve es completamente bilingüe, ofreciendo evaluaciones y tratamientos tanto en inglés como en español. Esto elimina las barreras del idioma y asegura un cuidado de salud mental accesible para toda la comunidad de Naples.',
+          'Los servicios psiquiátricos pueden brindarse en inglés o español. Confirme su preferencia de idioma y la disponibilidad de la cita con la oficina.',
         ],
       },
       {
@@ -455,7 +455,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'adult-quote',
         paragraphs: [
-          '"A lo largo de mi carrera, he visto de primera mano cómo un diagnóstico de TDAH en la etapa adulta puede ser tanto un desafío como una revelación. Mi pasión, especialmente aquí en la comunidad de Naples, es ofrecer un espacio seguro y bilingüe donde mis pacientes no solo reciben un tratamiento, sino que también redescubren sus fortalezas y aprenden a prosperar."',
+          'La evaluación y la planificación del tratamiento son individualizadas; la respuesta a cualquier tratamiento varía según la persona.',
         ],
       },
       {
@@ -575,7 +575,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'cta',
-        heading: 'Da el Primer Paso para Recuperar tu **Enfoque**',
+        heading: 'Solicite una **Evaluación de TDAH en Adultos**',
       },
       {
         key: 'cta-badge',
@@ -584,12 +584,12 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'cta-intro',
         paragraphs: [
-          'No dejes que el TDAH defina tu potencial. Con el apoyo y la estrategia adecuados, puedes aprender a manejar tus síntomas y utilizar tus fortalezas para alcanzar tus metas. Si estás listo para tomar el control, nuestro equipo en Naples está aquí para ayudarte.',
+          'Si las dificultades de atención, organización o impulsividad afectan la vida diaria, puede solicitar una evaluación. La oficina confirma la disponibilidad y el profesional determina los próximos pasos apropiados.',
         ],
       },
       {
         key: 'cta-highlight',
-        paragraphs: ['Llama ahora para agendar tu evaluación confidencial.'],
+        paragraphs: ['Llame a la oficina para solicitar una evaluación.'],
       },
       {
         key: 'cta-call',
@@ -606,7 +606,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'approach-intro',
         paragraphs: [
-          'La Dra. Melva Reve usa un enfoque multifacético para el tratamiento del TDAH, combinando manejo de medicamentos con estrategias conductuales y apoyo familiar.',
+          'La planificación del tratamiento del TDAH puede incluir conversación sobre medicamentos, estrategias prácticas, terapia externa o educación familiar cuando sea clínicamente apropiado.',
         ],
       },
       {
@@ -619,7 +619,7 @@ export const adhdTreatmentContent: BilingualPageContent = {
       },
       {
         key: 'approach-footer-expert',
-        paragraphs: ['Atención Experta'],
+        paragraphs: ['Atención Individualizada'],
       },
       {
         key: 'approach-treatments',
@@ -635,12 +635,12 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'approach-treatment-descriptions',
         bullets: [
-          'Evaluación detallada usando herramientas estandarizadas y entrevista clínica para diagnosticar TDAH con precisión y descartar otras condiciones.',
-          'Selección cuidadosa y monitoreo de medicamentos para TDAH en todas las clases de tratamiento aprobadas, adaptados a necesidades individuales.',
-          'Enseñar habilidades prácticas para organización, manejo del tiempo y mejora del enfoque que funcionan junto con medicamentos.',
-          'Apoyar a las familias con la comprensión del TDAH e implementar estrategias efectivas en casa y la escuela.',
-          'Orientación sobre acomodaciones apropiadas para la escuela o lugar de trabajo para optimizar el éxito y rendimiento.',
-          'Monitoreo regular y ajuste del tratamiento según cambien las circunstancias de vida y necesidades con el tiempo.',
+          'La evaluación clínica puede incluir herramientas estandarizadas y una entrevista para valorar síntomas y considerar otras condiciones.',
+          'Las opciones de medicación, sus riesgos y el monitoreo pueden discutirse cuando sea clínicamente apropiado; no se promete un medicamento ni una respuesta particular.',
+          'Pueden discutirse habilidades prácticas de organización, manejo del tiempo y atención como parte del plan.',
+          'La educación familiar o los servicios externos de apoyo pueden discutirse cuando corresponda y con consentimiento.',
+          'Los pacientes pueden consultar con los profesionales apropiados sus preguntas sobre acomodaciones escolares o laborales.',
+          'Las recomendaciones de seguimiento dependen de las necesidades clínicas y pueden cambiar con el tiempo.',
         ],
       },
       {
@@ -663,10 +663,10 @@ export const adhdTreatmentContent: BilingualPageContent = {
       {
         key: 'faq-answers',
         bullets: [
-          'El primer y más importante paso es buscar una evaluación profesional completa con un psiquiatra cualificado, como la Dra. Reve. Un diagnóstico preciso es fundamental para crear un plan de tratamiento efectivo.',
-          'No necesariamente. Si bien los medicamentos son altamente efectivos para muchos adultos, no son la única opción. El mejor enfoque a menudo combina terapia, estrategias de comportamiento y, si es apropiado, medicación. El plan se personaliza para ti.',
-          'La terapia puede proporcionarte herramientas invaluables para gestionar mejor el tiempo, mejorar tus habilidades de organización y comunicación, y comprender cómo el TDAH influye en tus interacciones. Esto puede conducir a una reducción del estrés y a relaciones más saludables y productivas.',
-          'Sí, en Healing Minds Psychiatry ofrecemos servicios de telepsiquiatría desde [nuestra práctica en Naples, FL](/es/ubicaciones/psiquiatra-naples). Esto te permite recibir atención experta y seguimiento desde la comodidad de tu hogar, siempre que te encuentres en el estado de Florida.',
+          'Una evaluación psiquiátrica puede revisar los síntomas, la historia y otras posibles explicaciones antes de discutir opciones de tratamiento.',
+          'No necesariamente. Los medicamentos no son la única opción. La terapia, estrategias de comportamiento y medicación pueden discutirse cuando sean apropiadas, y el plan es individualizado.',
+          'La terapia o las estrategias prácticas pueden discutirse para abordar la organización, la comunicación y otras inquietudes. La idoneidad y la respuesta varían según la persona.',
+          'Los adultos en Florida pueden solicitar telepsiquiatría desde [nuestra práctica en Naples, FL](/es/ubicaciones/psiquiatra-naples). La oficina confirma el profesional tratante, ubicación del paciente, licencias, adecuación clínica y disponibilidad para cada cita.',
         ],
       },
     ],

@@ -14,8 +14,8 @@ const AboutPage = () => {
         ? 'About Dr. Melva Reve - Psychiatrist in Naples, FL'
         : 'Acerca de la Dra. Melva Reve - Psiquiatra en Naples, FL',
       description: language === 'en'
-        ? 'Learn about Dr. Melva Reve, a psychiatrist with 15+ years of experience serving Naples, FL. Bilingual care with cultural sensitivity.'
-        : 'Conozca a la Dra. Melva Reve, psiquiatra con más de 15 años de experiencia sirviendo Naples, FL. Atención bilingüe con sensibilidad cultural.',
+        ? 'Meet Dr. Melva Reve, MD, a Naples psychiatrist with active Florida medical license ME165518, bilingual care and defined clinical focus areas.'
+        : 'Conozca a la Dra. Melva Reve, MD, psiquiatra en Naples con licencia médica activa de Florida ME165518, atención bilingüe y áreas de enfoque clínico.',
       keywords: language === 'en'
         ? 'Dr Melva Reve Naples, psychiatrist biography, psychiatrist Naples, bilingual psychiatrist FL'
         : 'Dra Melva Reve Naples, biografía psiquiatra, psiquiatra con licencia Naples, psiquiatra bilingüe FL',

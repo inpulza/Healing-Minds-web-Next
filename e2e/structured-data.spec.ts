@@ -22,6 +22,65 @@ function graphTypes(block: unknown): string[] {
   return graph.flatMap((node) => Array.isArray(node["@type"]) ? node["@type"] : node["@type"] || []);
 }
 
+type FaqEntity = {
+  name: string;
+  acceptedAnswer: { text: string };
+};
+
+const faqRoutePaths = [
+  "/", "/es",
+  "/services", "/es/servicios",
+  "/for-patients", "/es/para-pacientes",
+  "/services/adhd-treatment", "/es/servicios/tratamiento-adhd",
+  "/telepsychiatry-florida", "/es/telepsiquiatria-florida",
+  "/locations/psychiatrist-bonita-springs", "/es/ubicaciones/psiquiatra-bonita-springs",
+  "/locations/psychiatrist-marco-island", "/es/ubicaciones/psiquiatra-marco-island",
+  "/locations/psychiatrist-estero", "/es/ubicaciones/psiquiatra-estero",
+  "/locations/psychiatrist-golden-gate", "/es/ubicaciones/psiquiatra-golden-gate",
+  "/locations/psychiatrist-vanderbilt-beach", "/es/ubicaciones/psiquiatra-vanderbilt-beach",
+  "/locations/psychiatrist-fort-myers", "/es/ubicaciones/psiquiatra-fort-myers",
+  "/locations/psychiatrist-immokalee", "/es/ubicaciones/psiquiatra-immokalee",
+  "/locations/psychiatrist-ave-maria", "/es/ubicaciones/psiquiatra-ave-maria",
+  "/locations/psychiatrist-lely-resort", "/es/ubicaciones/psiquiatra-lely-resort",
+] as const;
+
+function faqEntities(block: unknown): FaqEntity[] {
+  const graph = (block as { "@graph"?: Array<Record<string, unknown>> })["@graph"] || [];
+  const faqPage = graph.find((node) => {
+    const type = node["@type"];
+    return Array.isArray(type) ? type.includes("FAQPage") : type === "FAQPage";
+  });
+  return (faqPage?.mainEntity as FaqEntity[] | undefined) || [];
+}
+
+function decodeHtmlEntities(value: string): string {
+  const named: Record<string, string> = {
+    amp: "&", apos: "'", gt: ">", lt: "<", nbsp: " ", quot: '"',
+  };
+  return value
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(Number.parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, decimal) => String.fromCodePoint(Number.parseInt(decimal, 10)))
+    .replace(/&([a-z]+);/gi, (entity, name) => named[name.toLowerCase()] ?? entity);
+}
+
+function normalizedText(value: string): string {
+  return decodeHtmlEntities(value)
+    .replace(/\[([^\]]+)]\([^)]+\)/g, "$1")
+    .replace(/\*\*/g, "")
+    .replace(/\s+/g, " ")
+    .replace(/\s+([.,;:!?])/g, "$1")
+    .trim();
+}
+
+function initialHtmlText(html: string): string {
+  return normalizedText(
+    html
+      .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]+>/g, " "),
+  );
+}
+
 async function expectReactHydrated(page: Page) {
   const toggle = page.getByTestId("mobile-menu-toggle");
   await expect.poll(
@@ -76,6 +135,29 @@ test("initial HTML exposes the verified home facts and one JSON-LD graph", async
   expect(html).toContain("Monday - Friday: 8:00 AM - 5:00 PM");
   expect(htmlWithoutScripts.match(/data-testid="faq-answer-\d+"/g)).toHaveLength(6);
   expect(htmlWithoutScripts).toContain("The office will confirm the appointment length when you schedule.");
+  const graph = (blocks[0] as { "@graph": Array<Record<string, unknown>> })["@graph"];
+  const website = graph.find((node) => node["@type"] === "WebSite");
+  const physician = graph.find((node) => node["@type"] === "Person");
+  expect(website?.url).toBe("https://www.healingmindsp.com/");
+  expect(physician).toMatchObject({
+    name: "Melva Reve",
+    honorificPrefix: "Dr.",
+    honorificSuffix: "MD",
+    jobTitle: "Psychiatrist",
+    knowsLanguage: ["en", "es"],
+  });
+});
+
+test("localized home and blog indexes avoid unsupported duplicate entities", async ({ request }) => {
+  const esHome = jsonLdBlocks(await fetchHtml(request, "/es"));
+  expect(graphTypes(esHome[0])).not.toContain("WebSite");
+
+  for (const pathname of ["/blog", "/es/blog"]) {
+    const blocks = jsonLdBlocks(await fetchHtml(request, pathname));
+    const types = graphTypes(blocks[0]);
+    expect(types).toEqual(expect.arrayContaining(["CollectionPage", "Blog", "ItemList"]));
+    expect(types).not.toContain("BlogPosting");
+  }
 });
 
 test("location FAQ answers are present in SSR before JavaScript", async ({ request }, testInfo) => {
@@ -84,6 +166,43 @@ test("location FAQ answers are present in SSR before JavaScript", async ({ reque
   const htmlWithoutScripts = html.replace(/<script\b[\s\S]*?<\/script>/gi, "");
   expect(htmlWithoutScripts.match(/data-testid="location-faq-answer-\d+"/g)).toHaveLength(10);
   expect(htmlWithoutScripts).toContain("Our only physical office is in Naples, south of Fort Myers.");
+});
+
+test("all 28 FAQ graphs match initial HTML and a hydrated accordion click", async ({ request, page }) => {
+  test.setTimeout(180_000);
+  expect(faqRoutePaths).toHaveLength(28);
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+
+  for (const pathname of faqRoutePaths) {
+    const html = await fetchHtml(request, pathname);
+    const blocks = jsonLdBlocks(html);
+    expect(blocks, pathname).toHaveLength(1);
+    const faqs = faqEntities(blocks[0]);
+    expect(faqs.length, `${pathname}: FAQPage mainEntity`).toBeGreaterThan(1);
+
+    const sourceText = initialHtmlText(html);
+    for (const faq of faqs) {
+      expect(sourceText, `${pathname}: SSR question`).toContain(normalizedText(faq.name));
+      expect(sourceText, `${pathname}: SSR answer`).toContain(normalizedText(faq.acceptedAnswer.text));
+    }
+
+    await page.goto(pathname, { waitUntil: "domcontentloaded" });
+    const faq = faqs[1];
+    const question = page.locator('button[aria-expanded]').filter({ hasText: faq.name }).first();
+    await expect(question, `${pathname}: hydrated FAQ trigger`).toBeVisible();
+    if (await question.getAttribute("aria-expanded") === "true") await question.click();
+    await question.click();
+    await expect(question).toHaveAttribute("aria-expanded", "true");
+    await expect.poll(
+      async () => normalizedText(await question.locator("xpath=..").innerText()),
+      { message: `${pathname}: visible answer must match JSON-LD` },
+    ).toContain(normalizedText(faq.acceptedAnswer.text));
+    expect(errors.splice(0), `${pathname}: console/page errors`).toEqual([]);
+  }
 });
 
 test("all required crawlers receive the same SSR graph", async ({ request }, testInfo) => {
@@ -132,7 +251,7 @@ test("hydrated navigation replaces the route graph without duplicates or console
   await navigateFromHeader(page, "/about", isMobile);
   await expect(page).toHaveURL(/\/about$/);
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
-  await expect.poll(() => page.locator("#page-structured-data").textContent()).toContain("AboutPage");
+  await expect.poll(() => page.locator("#page-structured-data").textContent()).toContain("ProfilePage");
   await expect.poll(() => page.locator("#page-structured-data").textContent()).not.toContain("MedicalClinic");
 
   await page.getByTestId("logo-link").click();

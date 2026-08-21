@@ -49,34 +49,37 @@ const CharmHealthBooking = ({
 
   const content = {
     en: {
-      title: "Book Telehealth Appointment",
-      subtitle: "Schedule online consultation with Dr. Melva Reve",
-      description: "Access professional psychiatric care from anywhere in Florida through secure telehealth sessions using CharmHealth platform.",
+      title: "Request a Telehealth Appointment",
+      subtitle: "Submit an online appointment request for office review",
+      description: "Request a telehealth appointment through CharmHealth. The office confirms the treating professional, patient location, licensing, clinical suitability and availability before booking.",
       features: [
-        "Real-time availability",
-        "Secure video sessions", 
+        "Availability confirmed by the office",
+        "Video may be offered after office confirmation",
         "Medication management",
-        "24/7 scheduling access"
+        "Appointment requests reviewed by the office"
       ],
-      button: "Schedule Now",
-      badge: "Telehealth Available"
+      button: "Request Online",
+      badge: "Office Confirmation Required"
     },
     es: {
-      title: "Reservar Cita de Telesalud",
-      subtitle: "Programe consulta en línea con la Dra. Melva Reve",
-      description: "Acceda a atención psiquiátrica profesional desde cualquier lugar de Florida a través de sesiones seguras de telesalud usando la plataforma CharmHealth.",
+      title: "Solicitar una Cita de Telesalud",
+      subtitle: "Envíe una solicitud de cita en línea para revisión de la oficina",
+      description: "Solicite una cita de telesalud mediante CharmHealth. La oficina confirma el profesional tratante, ubicación del paciente, licencias, adecuación clínica y disponibilidad antes de reservar.",
       features: [
-        "Disponibilidad en tiempo real",
-        "Sesiones de video seguras",
+        "Disponibilidad confirmada por la oficina",
+        "Puede ofrecerse video después de la confirmación de la oficina",
         "Manejo de medicamentos", 
-        "Acceso de programación 24/7"
+        "Solicitudes de cita revisadas por la oficina"
       ],
-      button: "Programar Ahora",
-      badge: "Telesalud Disponible"
+      button: "Solicitar en Línea",
+      badge: "Requiere Confirmación de la Oficina"
     }
   };
 
   const currentContent = content[language];
+  const defaultHeroAlt = language === 'en'
+    ? 'Dr. Melva Reve in a medical office'
+    : 'Dra. Melva Reve en una oficina médica';
 
   if (variant === 'compact') {
     return (
@@ -110,7 +113,7 @@ const CharmHealthBooking = ({
           <div className="relative aspect-[4/5]">
             <img 
               src={heroImage || assetUrl(telehealthHeroBg)}
-              alt={heroImageAlt || "Dr. Melva Reve providing secure telehealth psychiatric consultations from modern medical office in Florida"}
+              alt={heroImageAlt || defaultHeroAlt}
               className="absolute inset-0 w-full h-full object-cover"
               style={{ objectPosition: '75% top' }}
             />
@@ -155,7 +158,7 @@ const CharmHealthBooking = ({
         <div className="hidden md:block relative aspect-[18/9]">
           <img 
             src={heroImage || assetUrl(telehealthHeroBg)}
-            alt={heroImageAlt || "Professional telehealth psychiatric care - Dr. Melva Reve's secure virtual consultation platform in Florida"}
+            alt={heroImageAlt || defaultHeroAlt}
             className="absolute inset-0 w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/15 to-transparent"></div>

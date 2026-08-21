@@ -34,7 +34,7 @@ export const forPatientsContent: BilingualPageContent = {
       },
       {
         key: 'heroActions',
-        bullets: [`Book an Appointment`, `(239) 423-0272`],
+        bullets: [`Request an Appointment`, `(239) 423-0272`],
       },
       {
         key: 'checklistHeading',
@@ -56,7 +56,7 @@ export const forPatientsContent: BilingualPageContent = {
           `Medical history summary (relevant diagnoses, hospitalizations)`,
           `List of current concerns and symptoms you'd like to discuss`,
           `Emergency contact information`,
-          `Payment method for copay or self-pay balance`,
+          `Questions about insurance, self-pay fees or current billing terms`,
         ],
       },
       {
@@ -66,49 +66,49 @@ export const forPatientsContent: BilingualPageContent = {
       {
         key: 'telehealthIntro',
         paragraphs: [
-          `Secure video visits are available throughout Florida. Here's how to prepare for your online appointment.`,
+          `Adults in Florida may request a video visit. The office confirms modality, location, licensing, clinical suitability and availability case by case. Privacy practices are described in the practice Privacy Notice.`,
         ],
       },
       {
         key: 'telehealthSteps',
         bullets: [
-          `Book a telehealth slot`,
+          `Request telehealth`,
           `Receive your link`,
           `Test your setup`,
           `Join on time`,
           `After your visit`,
         ],
         paragraphs: [
-          `Select "telehealth" when booking online or mention it when calling (239) 423-0272.`,
-          `A secure video link will be emailed to you 24 hours before your appointment. Check your spam folder.`,
+          `Request telehealth when booking online or by calling (239) 423-0272. The office confirms modality and eligibility case by case.`,
+          `If a video visit is confirmed, the office will provide access instructions and identify the current platform before the appointment.`,
           `Use a device with a working camera and microphone. A quiet, private space works best. Chrome or Safari browsers recommended.`,
-          `Click the link 5 minutes early. You may be placed in a virtual waiting room until Dr. Reve is ready.`,
-          `Any prescriptions are sent electronically to your pharmacy. Follow-up instructions will be provided by secure message.`,
+          `Follow the access instructions provided by the office and contact the office if you have trouble joining.`,
+          `If a prescription is issued, the office will explain how it will be sent. The office will also confirm any follow-up instructions and communication channel.`,
         ],
       },
       {
         key: 'verificationHeading',
-        heading: `Insurance Verification Process`,
+        heading: `Insurance and Billing Check`,
       },
       {
         key: 'verificationIntro',
         paragraphs: [
-          `We verify your insurance benefits before your first visit so you know exactly what to expect.`,
+          `Participation and benefits vary by plan and service. Confirm details with both our office and your insurer before booking.`,
         ],
       },
       {
         key: 'verificationCards',
         bullets: [
-          `Book Your Appointment`,
-          `We Contact Your Insurer`,
-          `You Receive a Summary`,
-          `No Billing Surprises`,
+          `Share Your Plan Details`,
+          `Confirm Participation`,
+          `Verify Your Benefits`,
+          `Review Billing Options`,
         ],
         paragraphs: [
-          `Schedule online or call. Provide your insurance ID and group number when booking.`,
-          `Our team calls your insurance company to verify coverage, deductibles, and copay amounts for mental health services.`,
-          `Before your visit, we share what your insurance will cover and your estimated out-of-pocket responsibility.`,
-          `Arrive knowing your costs. If you're self-pay, a Good Faith Estimate is provided per federal requirements.`,
+          `Call the office before booking and have your plan details available.`,
+          `Ask whether the practice currently participates with your specific plan and service.`,
+          `Confirm mental-health, telehealth, deductible and cost-sharing details directly with your insurer.`,
+          `Ask the office for current written self-pay and billing terms. Do not assume a payment plan or financial-assistance program is available. A Good Faith Estimate is provided when required by applicable law.`,
         ],
       },
       {
@@ -146,11 +146,11 @@ export const forPatientsContent: BilingualPageContent = {
           `Bring your insurance card, photo ID, a list of current medications, and a summary of the symptoms or concerns you want to discuss. Arriving 5–10 minutes early helps with intake paperwork. For telehealth, test your camera and microphone the day before.`,
           `Appointment availability varies. Call (239) 423-0272 or request a time online, and the office will confirm the next available appointment.`,
           `Yes. We welcome patients transferring from another provider. Please bring your prior records, a list of current medications, and any relevant diagnostic history to your first appointment. We can also request records on your behalf with a signed release.`,
-          `Please provide at least 24 business hours' notice to avoid a $50 late cancellation or no-show fee. We understand emergencies happen — genuine medical emergencies are always excepted. See our Cancellation Policy for full details.`,
-          `Not always. The first appointment is an evaluation. Dr. Reve will discuss all treatment options — which may or may not include medication — and will collaborate with you on the best approach for your specific situation.`,
-          `Absolutely. All patient information is protected under HIPAA and Florida's enhanced mental health privacy statutes. Your records are never shared without your written consent, except in specific legally defined circumstances such as imminent safety risks.`,
+          `Contact the office promptly if you need to cancel or reschedule. The current written Cancellation Policy states the notice period, any fee and any applicable exceptions; ask the office to confirm the terms for your appointment.`,
+          `Not necessarily. The first appointment is an evaluation. Treatment options may or may not include medication, and any prescription or dose depends on clinical judgment.`,
+          `Health information is handled under applicable medical privacy laws and the practice privacy notice. Disclosure may occur with authorization or when otherwise permitted or required by law.`,
           `Yes, with your consent. A family member or support person may be present during part or all of your appointment. Please let the front desk know in advance, especially for telehealth visits where space logistics may differ.`,
-          `Non-urgent questions can be sent through the secure patient portal. For medication concerns that cannot wait, please call the office at (239) 423-0272. In a psychiatric emergency, please call 911 or 988 (Suicide & Crisis Lifeline).`,
+          `For non-urgent questions, use the patient portal or other contact method confirmed by the office. For medication concerns that cannot wait, call the office at (239) 423-0272. In a psychiatric emergency, call 911 or 988 (Suicide & Crisis Lifeline).`,
         ],
       },
       {
@@ -165,7 +165,7 @@ export const forPatientsContent: BilingualPageContent = {
       },
       {
         key: 'ctaButtons',
-        bullets: [`Book Your Appointment`, `Explore Our Services`],
+        bullets: [`Request an Appointment`, `Explore Our Services`],
       },
     ],
   },
@@ -184,7 +184,7 @@ export const forPatientsContent: BilingualPageContent = {
       },
       {
         key: 'heroActions',
-        bullets: [`Reservar Cita`, `(239) 423-0272`],
+        bullets: [`Solicitar Cita`, `(239) 423-0272`],
       },
       {
         key: 'checklistHeading',
@@ -206,7 +206,7 @@ export const forPatientsContent: BilingualPageContent = {
           `Resumen del historial médico (diagnósticos relevantes, hospitalizaciones)`,
           `Lista de preocupaciones y síntomas actuales que desea discutir`,
           `Información de contacto de emergencia`,
-          `Método de pago para copago o saldo de pago personal`,
+          `Preguntas sobre seguro, tarifas de pago privado o términos vigentes de facturación`,
         ],
       },
       {
@@ -216,49 +216,49 @@ export const forPatientsContent: BilingualPageContent = {
       {
         key: 'telehealthIntro',
         paragraphs: [
-          `Las visitas por video seguro están disponibles en toda Florida. Así es como prepararse para su cita en línea.`,
+          `Los adultos en Florida pueden solicitar una visita por video. La oficina confirma modalidad, ubicación, licencias, adecuación clínica y disponibilidad caso por caso. Las prácticas de privacidad se describen en el Aviso de Privacidad de la práctica.`,
         ],
       },
       {
         key: 'telehealthSteps',
         bullets: [
-          `Reserve un horario de telesalud`,
+          `Solicite telesalud`,
           `Reciba su enlace`,
           `Pruebe su configuración`,
           `Únase a tiempo`,
           `Después de su visita`,
         ],
         paragraphs: [
-          `Seleccione "telesalud" al reservar en línea o menciónelo al llamar al (239) 423-0272.`,
-          `Un enlace de video seguro será enviado por correo electrónico 24 horas antes de su cita. Revise su carpeta de spam.`,
+          `Solicite telesalud al reservar en línea o al llamar al (239) 423-0272. La oficina confirma la modalidad y elegibilidad caso por caso.`,
+          `Si se confirma una visita por video, la oficina proporcionará instrucciones de acceso e identificará la plataforma vigente antes de la cita.`,
           `Use un dispositivo con cámara y micrófono funcionando. Un espacio tranquilo y privado es lo mejor. Se recomiendan los navegadores Chrome o Safari.`,
-          `Haga clic en el enlace 5 minutos antes. Puede ser colocado en una sala de espera virtual hasta que la Dra. Reve esté lista.`,
-          `Las recetas se envían electrónicamente a su farmacia. Las instrucciones de seguimiento se proporcionarán por mensaje seguro.`,
+          `Siga las instrucciones de acceso proporcionadas por la oficina y contacte la oficina si tiene problemas para conectarse.`,
+          `Si se emite una receta, la oficina explicará cómo se enviará. La oficina también confirmará las instrucciones de seguimiento y el canal de comunicación.`,
         ],
       },
       {
         key: 'verificationHeading',
-        heading: `Proceso de Verificación de Seguro`,
+        heading: `Revisión de Seguro y Facturación`,
       },
       {
         key: 'verificationIntro',
         paragraphs: [
-          `Verificamos sus beneficios de seguro antes de su primera visita para que sepa exactamente qué esperar.`,
+          `La participación y los beneficios varían según el plan y el servicio. Confirme los detalles con nuestra oficina y su aseguradora antes de reservar.`,
         ],
       },
       {
         key: 'verificationCards',
         bullets: [
-          `Reserve su Cita`,
-          `Contactamos a su Asegurador`,
-          `Usted Recibe un Resumen`,
-          `Sin Sorpresas de Facturación`,
+          `Comparta los Datos de su Plan`,
+          `Confirme la Participación`,
+          `Verifique sus Beneficios`,
+          `Revise Opciones de Facturación`,
         ],
         paragraphs: [
-          `Programe en línea o llame. Proporcione su ID de seguro y número de grupo al reservar.`,
-          `Nuestro equipo llama a su compañía de seguros para verificar cobertura, deducibles y montos de copago para servicios de salud mental.`,
-          `Antes de su visita, compartimos lo que cubrirá su seguro y su responsabilidad estimada de gastos de bolsillo.`,
-          `Llegue sabiendo sus costos. Si es pago personal, se proporciona un Estimado de Buena Fe según los requisitos federales.`,
+          `Llame a la oficina antes de reservar y tenga disponibles los datos de su plan.`,
+          `Pregunte si la práctica participa actualmente con su plan y servicio específicos.`,
+          `Confirme directamente con su aseguradora los beneficios de salud mental y telesalud, el deducible y los costos compartidos.`,
+          `Solicite a la oficina los términos vigentes de pago privado y facturación por escrito. No suponga que existe un plan de pago o un programa de ayuda financiera. Se proporciona un Estimado de Buena Fe cuando lo exige la ley aplicable.`,
         ],
       },
       {
@@ -296,11 +296,11 @@ export const forPatientsContent: BilingualPageContent = {
           `Traiga su tarjeta de seguro, identificación con foto, una lista de medicamentos actuales y un resumen de los síntomas o preocupaciones que desea discutir. Llegar 5–10 minutos antes ayuda con los trámites de ingreso. Para telesalud, pruebe su cámara y micrófono el día anterior.`,
           `La disponibilidad de citas varía. Llame al (239) 423-0272 o solicite un horario en línea, y la oficina confirmará la próxima cita disponible.`,
           `Sí. Damos la bienvenida a pacientes que se transfieren de otro proveedor. Traiga sus registros anteriores, una lista de medicamentos actuales y cualquier historial diagnóstico relevante a su primera cita. También podemos solicitar registros en su nombre con una autorización firmada.`,
-          `Por favor proporcione al menos 24 horas hábiles de aviso para evitar un cargo de $50 por cancelación tardía o ausencia. Entendemos que ocurren emergencias — las emergencias médicas genuinas siempre están exceptuadas.`,
-          `No necesariamente. La primera cita es una evaluación. La Dra. Reve discutirá todas las opciones de tratamiento — que pueden o no incluir medicamentos — y colaborará con usted en el mejor enfoque para su situación específica.`,
-          `Absolutamente. Toda la información del paciente está protegida bajo HIPAA y los estatutos mejorados de privacidad de salud mental de Florida. Sus registros nunca se comparten sin su consentimiento escrito, excepto en circunstancias legales específicamente definidas.`,
+          `Contacte la oficina lo antes posible si necesita cancelar o reprogramar. La Política de Cancelación escrita vigente indica el plazo de aviso, cualquier cargo y las excepciones aplicables; pida a la oficina que confirme los términos para su cita.`,
+          `No necesariamente. La primera cita es una evaluación. Las opciones pueden incluir o no medicamentos, y toda receta o dosis depende del criterio clínico.`,
+          `La información de salud se maneja conforme a las leyes aplicables de privacidad médica y al aviso de privacidad de la práctica. Puede divulgarse con autorización o cuando la ley lo permita o exija.`,
           `Sí, con su consentimiento. Un familiar o persona de apoyo puede estar presente durante parte o toda su cita. Por favor informe a la recepción con anticipación, especialmente para visitas de telesalud.`,
-          `Las preguntas no urgentes se pueden enviar a través del portal de pacientes seguro. Para preocupaciones sobre medicamentos que no pueden esperar, llame a la oficina al (239) 423-0272. En una emergencia psiquiátrica, llame al 911 o al 988.`,
+          `Para preguntas no urgentes, use el portal de pacientes u otro método de contacto confirmado por la oficina. Para inquietudes sobre medicamentos que no pueden esperar, llame a la oficina al (239) 423-0272. En una emergencia psiquiátrica, llame al 911 o al 988.`,
         ],
       },
       {
@@ -315,7 +315,7 @@ export const forPatientsContent: BilingualPageContent = {
       },
       {
         key: 'ctaButtons',
-        bullets: [`Reservar su Cita`, `Explorar Nuestros Servicios`],
+        bullets: [`Solicitar una Cita`, `Explorar Nuestros Servicios`],
       },
     ],
   },

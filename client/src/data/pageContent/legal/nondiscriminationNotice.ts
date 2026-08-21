@@ -21,22 +21,22 @@ export const nondiscriminationNoticeContent: BilingualPageContent = {
       },
       {
         key: 'free-aids',
-        heading: 'Free Aids, Services, and Language Assistance',
+        heading: 'Communication Assistance and Accessibility Requests',
         paragraphs: [
-          'We provide free aids and services to people with disabilities to help them communicate effectively with us, such as:',
-          'We also provide free language assistance services to people whose primary language is not English. Care at our practice is available natively in both English and Spanish. If you need any of these services, ask by phone at [(239) 423-0272](tel:+12394230272) or by email at [info@healingmindsp.com](mailto:info@healingmindsp.com).',
+          'You may request communication assistance, an accessible format or language support. Contact the office by phone at [(239) 423-0272](tel:+12394230272) or by email at [info@healingmindsp.com](mailto:info@healingmindsp.com).',
+          'The office will explain the arrangements currently available and any obligations under applicable law. English or Spanish service may be requested; language, format, timing and any cost are confirmed for the specific request.',
         ],
         bullets: [
-          '**Qualified Interpreters:** Communication support for people who are deaf, hard of hearing, or who have other communication needs.',
-          '**Accessible Formats:** Written information provided in other formats when reasonably possible.',
+          '**Communication requests:** Ask about arrangements for deaf, hard-of-hearing or other communication needs.',
+          '**Accessible formats:** Ask whether written information can be provided in another format.',
         ],
       },
       {
         key: 'grievance',
         heading: 'Filing a Grievance With Our Practice',
         paragraphs: [
-          'If you believe that Healing Minds Psychiatry has failed to provide these services or has discriminated in any way on the basis of race, color, national origin, age, disability, or sex, you may file a grievance with our office.',
-          'You can file a grievance by phone at [(239) 423-0272](tel:+12394230272), by email at [info@healingmindsp.com](mailto:info@healingmindsp.com), or by mail at 4760 Tamiami Trl N #25, Naples, FL 34103. If you need help filing a grievance, our office is available to assist you.',
+          'If you believe Healing Minds Psychiatry has discriminated or has not handled an accommodation request as required by applicable law, you may file a grievance with our office.',
+          'You can file a grievance by phone at [(239) 423-0272](tel:+12394230272), by email at [info@healingmindsp.com](mailto:info@healingmindsp.com), or by mail at 4760 Tamiami Trl N #25, Naples, FL 34103. Contact the office to ask about current filing instructions or available assistance.',
         ],
       },
       {
@@ -103,22 +103,22 @@ export const nondiscriminationNoticeContent: BilingualPageContent = {
       },
       {
         key: 'free-aids',
-        heading: 'Ayudas, Servicios y Asistencia con el Idioma Gratuitos',
+        heading: 'Solicitudes de Asistencia de Comunicación y Accesibilidad',
         paragraphs: [
-          'Proporcionamos ayudas y servicios gratuitos a las personas con discapacidades para ayudarlas a comunicarse eficazmente con nosotros, tales como:',
-          'También proporcionamos servicios gratuitos de asistencia con el idioma a las personas cuyo idioma principal no es el inglés. La atención en nuestra práctica está disponible de forma nativa tanto en inglés como en español. Si necesita alguno de estos servicios, solicítelo por teléfono al [(239) 423-0272](tel:+12394230272) o por correo electrónico a [info@healingmindsp.com](mailto:info@healingmindsp.com).',
+          'Puede solicitar asistencia de comunicación, un formato accesible o apoyo de idioma. Contacte la oficina por teléfono al [(239) 423-0272](tel:+12394230272) o por correo electrónico a [info@healingmindsp.com](mailto:info@healingmindsp.com).',
+          'La oficina explicará los arreglos disponibles actualmente y las obligaciones conforme a la ley aplicable. Puede solicitar servicio en inglés o español; el idioma, formato, plazo y cualquier costo se confirman para la solicitud específica.',
         ],
         bullets: [
-          '**Intérpretes Calificados:** Apoyo de comunicación para personas sordas, con dificultades auditivas o con otras necesidades de comunicación.',
-          '**Formatos Accesibles:** Información escrita proporcionada en otros formatos cuando sea razonablemente posible.',
+          '**Solicitudes de comunicación:** Pregunte por arreglos para personas sordas, con dificultades auditivas u otras necesidades de comunicación.',
+          '**Formatos accesibles:** Pregunte si la información escrita puede proporcionarse en otro formato.',
         ],
       },
       {
         key: 'grievance',
         heading: 'Presentar una Queja con Nuestra Práctica',
         paragraphs: [
-          'Si usted cree que Healing Minds Psychiatry no le ha proporcionado estos servicios o ha discriminado de alguna manera por motivos de raza, color, origen nacional, edad, discapacidad o sexo, puede presentar una queja con nuestra oficina.',
-          'Puede presentar una queja por teléfono al [(239) 423-0272](tel:+12394230272), por correo electrónico a [info@healingmindsp.com](mailto:info@healingmindsp.com), o por correo postal a 4760 Tamiami Trl N #25, Naples, FL 34103. Si necesita ayuda para presentar una queja, nuestra oficina está disponible para asistirle.',
+          'Si cree que Healing Minds Psychiatry ha discriminado o no ha gestionado una solicitud de adaptación según lo exige la ley aplicable, puede presentar una queja ante nuestra oficina.',
+          'Puede presentar una queja por teléfono al [(239) 423-0272](tel:+12394230272), por correo electrónico a [info@healingmindsp.com](mailto:info@healingmindsp.com), o por correo postal a 4760 Tamiami Trl N #25, Naples, FL 34103. Contacte la oficina para preguntar por las instrucciones vigentes o la asistencia disponible.',
         ],
       },
       {

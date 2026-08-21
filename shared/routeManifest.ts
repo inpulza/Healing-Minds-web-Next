@@ -22,10 +22,14 @@ export interface BilingualRouteEntry {
   /**
    * Whether the pair is listed in the static part of sitemap.xml.
    * Blog index pages are added dynamically by sitemap.ts (inSitemap: false here).
-   * California pages are noindex and must NEVER be in the sitemap.
+   * California campaign pages remain noindex and excluded from the sitemap
+   * unless a later commercial/indexing decision explicitly changes both.
    */
   inSitemap: boolean;
-  /** Pages served with noindex meta (California landings pending license verification). */
+  /**
+   * Pages served with noindex meta. California license A198275 was verified
+   * 2026-08-21 and expires 2026-10-31; revalidate before that expiration date.
+   */
   noindex?: boolean;
   /**
    * false = the pair exists only for language-switch mapping; there is no real
@@ -87,8 +91,10 @@ export const ROUTE_MANIFEST: readonly BilingualRouteEntry[] = [
   // ---- Routed but NOT in the static sitemap --------------------------------
   // Blog index pages: sitemap.ts adds them dynamically together with posts.
   { en: '/blog', es: '/es/blog', changefreq: 'weekly', priority: '0.7', inSitemap: false, routed: true },
-  // California landings: noindex until Jordan verifies the MBC license.
-  // They must NEVER appear in the sitemap while noindex is true.
+  // California campaign landings: A198275 verified 2026-08-21, expires 2026-10-31
+  // (provenance: shared/public-claims-sources.json).
+  // noindex is intentional; revalidate the license before expiry, and do not add
+  // these routes to the sitemap without a separate commercial/indexing decision.
   { en: '/psychiatrist-california', es: '/es/psiquiatra-california', changefreq: 'monthly', priority: '0.5', inSitemap: false, noindex: true, routed: true },
 
   // ---- Mapping-only pairs (no real route in App.tsx) -----------------------

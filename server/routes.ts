@@ -8,7 +8,7 @@ import { getClientIp } from "./utils/client-ip";
 import { generateSitemap, generateRobotsTxt, generateLlmsTxt } from "./routes/sitemap";
 import { MetricoolService } from "./services/metricool";
 import { reviewsCache } from "./cache/reviews-cache";
-import { staticReviews, staticStats } from "./data/static-reviews";
+import { staticReviews, staticReviewsFetchedAt, staticStats } from "./data/static-reviews";
 import { emailService } from "./services/email";
 import { injectMetaTags } from "./utils/html-injection";
 import { isKnownRoute } from "./routing/is-known-route";
@@ -452,6 +452,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const stats = metricoolService.calculateStats(reviews);
 
         const reviewsData = {
+          fetchedAt: new Date().toISOString(),
           stats,
           reviews: transformedReviews,
         };
@@ -465,6 +466,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log("📋 Using static reviews as fallback due to API error:", apiError);
         
         const fallbackData = {
+          fetchedAt: staticReviewsFetchedAt,
           stats: staticStats,
           reviews: staticReviews,
         };
@@ -495,6 +497,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(200).json({ 
           success: true, 
           data: { 
+            fetchedAt: cachedData.fetchedAt,
             averageRating: cachedData.stats.averageRating,
             totalReviews: cachedData.stats.totalReviews 
           }
@@ -508,6 +511,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.status(200).json({ 
           success: true, 
           data: { 
+            fetchedAt: new Date().toISOString(),
             averageRating: stats.averageRating,
             totalReviews: stats.totalReviews 
           }
@@ -517,6 +521,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.status(200).json({ 
           success: true, 
           data: { 
+            fetchedAt: staticReviewsFetchedAt,
             averageRating: staticStats.averageRating,
             totalReviews: staticStats.totalReviews 
           },

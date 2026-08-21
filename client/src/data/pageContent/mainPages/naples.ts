@@ -17,7 +17,7 @@ export const naplesLocationContent: BilingualPageContent = {
       },
       {
         key: 'hero-badges',
-        bullets: ['15+ Years Experience', 'Bilingual Care', 'Modern Facilities'],
+        bullets: ['Active Florida License ME165518', 'Bilingual Care', 'Modern Facilities'],
       },
       {
         key: 'labels',
@@ -40,7 +40,7 @@ export const naplesLocationContent: BilingualPageContent = {
       },
       {
         key: 'banner-stat',
-        paragraphs: ['15+', 'Years serving the Naples community with excellence'],
+        paragraphs: ['ME165518', 'Active Florida medical license'],
       },
       {
         key: 'banner-body',
@@ -51,7 +51,7 @@ export const naplesLocationContent: BilingualPageContent = {
       {
         key: 'banner-features',
         bullets: [
-          'Easy Parking Available',
+          'Check Parking and Access Details When Scheduling',
           'Accessible Location',
           'Private & Confidential',
           'Modern Facilities',
@@ -177,9 +177,9 @@ export const naplesLocationContent: BilingualPageContent = {
       },
       {
         key: 'access-parking',
-        heading: 'Ample Parking',
+        heading: 'Parking and Access Details',
         paragraphs: [
-          'Free, convenient parking available for all Naples patients visiting our facility',
+          'Check parking and access details with the office when scheduling your visit',
         ],
       },
       {
@@ -204,19 +204,19 @@ export const naplesLocationContent: BilingualPageContent = {
       },
       {
         key: 'community-heading',
-        heading: 'Community Involvement in Naples',
+        heading: 'Independent Local Resources in Naples',
       },
       {
         key: 'community-intro',
         paragraphs: [
-          'Mental health is fundamental to building a thriving community. We proudly support Naples through our psychiatric care services and by recognizing the vital organizations that enhance our vibrant city.',
+          'These independent local resources provide community information and services in Naples. Listings are informational only and do not imply partnership, endorsement, or referral.',
         ],
       },
       {
         key: 'community-botanical',
         heading: 'Naples Botanical Garden',
         paragraphs: [
-          'A 170-acre world-class botanical paradise that promotes the connection between people and plants. Their therapeutic gardens, wellness programs, and mindfulness initiatives support mental health and community well-being, serving over 400,000 visitors annually.',
+          'Garden, conservation, education, and visitor information from Naples Botanical Garden.',
         ],
         bullets: ['Visit Botanical Garden'],
       },
@@ -224,7 +224,7 @@ export const naplesLocationContent: BilingualPageContent = {
         key: 'community-unitedway',
         heading: 'United Way of Collier County',
         paragraphs: [
-          'For over 50 years, United Way has strengthened our Naples community by funding programs that address critical needs. They support mental health initiatives, education, and family stability programs that create lasting change for over 75,000 residents annually.',
+          'Community-support information and 2-1-1 resource navigation from United Way of Collier and the Keys.',
         ],
         bullets: ['Learn About Their Mission'],
       },
@@ -232,9 +232,9 @@ export const naplesLocationContent: BilingualPageContent = {
         key: 'community-graceplace',
         heading: 'Grace Place for Children & Families',
         paragraphs: [
-          'Dedicated to breaking the cycle of poverty through education, family support, and community engagement. Their comprehensive programs provide academic support, family counseling, and mental health resources to over 500 children and families in Naples.',
+          'Education and family-support resources offered by Grace Place for Children & Families.',
         ],
-        bullets: ['Support Their Mission'],
+        bullets: ['Visit Official Site'],
       },
       {
         key: 'video-heading',
@@ -259,7 +259,7 @@ export const naplesLocationContent: BilingualPageContent = {
       {
         key: 'cta-finePrint',
         paragraphs: [
-          'All consultations are completely confidential and protected by medical privacy laws. Your privacy and well-being are our highest priorities.',
+          'Consultations use privacy safeguards and are governed by applicable medical privacy laws. Review the practice privacy notice and consent documents for details.',
         ],
       },
       {
@@ -283,7 +283,7 @@ export const naplesLocationContent: BilingualPageContent = {
       },
       {
         key: 'hero-badges',
-        bullets: ['15+ Años de Experiencia', 'Atención Bilingüe', 'Instalaciones Modernas'],
+        bullets: ['Licencia Activa de Florida ME165518', 'Atención Bilingüe', 'Instalaciones Modernas'],
       },
       {
         key: 'labels',
@@ -306,7 +306,7 @@ export const naplesLocationContent: BilingualPageContent = {
       },
       {
         key: 'banner-stat',
-        paragraphs: ['15+', 'Años sirviendo a la comunidad de Naples con excelencia'],
+        paragraphs: ['ME165518', 'Licencia médica activa de Florida'],
       },
       {
         key: 'banner-body',
@@ -317,7 +317,7 @@ export const naplesLocationContent: BilingualPageContent = {
       {
         key: 'banner-features',
         bullets: [
-          'Estacionamiento Fácil Disponible',
+          'Confirme Estacionamiento y Acceso al Programar',
           'Ubicación Accesible',
           'Privado y Confidencial',
           'Instalaciones Modernas',
@@ -443,9 +443,9 @@ export const naplesLocationContent: BilingualPageContent = {
       },
       {
         key: 'access-parking',
-        heading: 'Amplio Estacionamiento',
+        heading: 'Detalles de Estacionamiento y Acceso',
         paragraphs: [
-          'Estacionamiento gratuito y conveniente disponible para todos los pacientes de Naples que visiten nuestras instalaciones',
+          'Confirme con la oficina los detalles de estacionamiento y acceso al programar su visita',
         ],
       },
       {
@@ -470,19 +470,19 @@ export const naplesLocationContent: BilingualPageContent = {
       },
       {
         key: 'community-heading',
-        heading: 'Participación Comunitaria en Naples',
+        heading: 'Recursos Locales Independientes en Naples',
       },
       {
         key: 'community-intro',
         paragraphs: [
-          'La salud mental es fundamental para construir una comunidad próspera. Apoyamos con orgullo a Naples a través de nuestros servicios de atención psiquiátrica y reconociendo las organizaciones vitales que mejoran nuestra ciudad vibrante.',
+          'Estos recursos locales independientes ofrecen información y servicios comunitarios en Naples. La lista es solo informativa y no implica colaboración, respaldo ni referido.',
         ],
       },
       {
         key: 'community-botanical',
         heading: 'Naples Botanical Garden',
         paragraphs: [
-          'Un paraíso botánico de clase mundial de 170 acres que promueve la conexión entre las personas y las plantas. Sus jardines terapéuticos, programas de bienestar e iniciativas de mindfulness apoyan la salud mental y el bienestar comunitario, sirviendo a más de 400,000 visitantes anualmente.',
+          'Información sobre jardines, conservación, educación y visitas de Naples Botanical Garden.',
         ],
         bullets: ['Visitar Jardín Botánico'],
       },
@@ -490,7 +490,7 @@ export const naplesLocationContent: BilingualPageContent = {
         key: 'community-unitedway',
         heading: 'United Way of Collier County',
         paragraphs: [
-          'Por más de 50 años, United Way ha fortalecido nuestra comunidad de Naples financiando programas que abordan necesidades críticas. Apoyan iniciativas de salud mental, educación y programas de estabilidad familiar que crean cambios duraderos para más de 75,000 residentes anualmente.',
+          'Información de apoyo comunitario y navegación de recursos 2-1-1 de United Way of Collier and the Keys.',
         ],
         bullets: ['Conocer Su Misión'],
       },
@@ -498,9 +498,9 @@ export const naplesLocationContent: BilingualPageContent = {
         key: 'community-graceplace',
         heading: 'Grace Place for Children & Families',
         paragraphs: [
-          'Dedicados a romper el ciclo de pobreza a través de educación, apoyo familiar y participación comunitaria. Sus programas integrales proporcionan apoyo académico, consejería familiar y recursos de salud mental a más de 500 niños y familias en Naples.',
+          'Recursos educativos y de apoyo familiar ofrecidos por Grace Place for Children & Families.',
         ],
-        bullets: ['Apoyar Su Misión'],
+        bullets: ['Visitar Sitio Oficial'],
       },
       {
         key: 'video-heading',
@@ -525,7 +525,7 @@ export const naplesLocationContent: BilingualPageContent = {
       {
         key: 'cta-finePrint',
         paragraphs: [
-          'Todas las consultas son completamente confidenciales y están protegidas por las leyes de privacidad médica. Tu privacidad y bienestar son nuestras máximas prioridades.',
+          'Las consultas utilizan medidas de privacidad y se rigen por las leyes aplicables de privacidad médica. Consulte el aviso de privacidad y los documentos de consentimiento para conocer los detalles.',
         ],
       },
       {

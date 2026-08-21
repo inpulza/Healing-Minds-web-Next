@@ -9,7 +9,7 @@ import CompactVideoCarousel from '@/components/CompactVideoCarousel';
 import Reviews from '@/components/Reviews';
 import GoogleMapsEmbed from '@/components/GoogleMapsEmbed';
 import { updateSEO } from '@/utils/seo';
-import { practiceInfo, acceptedInsurance, serviceAreas } from '@/data/content';
+import { practiceInfo, serviceAreas } from '@/data/content';
 import { naplesLocationContent } from '@/data/pageContent/mainPages/naples';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -709,9 +709,9 @@ const LocationNaples = () => {
                 </WellnessIcon>
                 <h2 className="text-4xl lg:text-5xl font-body font-bold text-green-800">
                   {language === 'en' ? (
-                    <><span className="font-display italic text-green-700">Community</span> Involvement in Naples</>
+                    <><span className="font-display italic text-green-700">Independent Local</span> Resources in Naples</>
                   ) : (
-                    <><span className="font-display italic text-green-700">Participación</span> Comunitaria en Naples</>
+                    <><span className="font-display italic text-green-700">Recursos Locales</span> Independientes en Naples</>
                   )}
                 </h2>
                 <WellnessIcon size="md" color="blue" className="opacity-70">
@@ -736,8 +736,8 @@ const LocationNaples = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'A 170-acre world-class botanical paradise that promotes the connection between people and plants. Their therapeutic gardens, wellness programs, and mindfulness initiatives support mental health and community well-being, serving over 400,000 visitors annually.'
-                    : 'Un paraíso botánico de clase mundial de 170 acres que promueve la conexión entre las personas y las plantas. Sus jardines terapéuticos, programas de bienestar e iniciativas de mindfulness apoyan la salud mental y el bienestar comunitario, sirviendo a más de 400,000 visitantes anualmente.'}
+                    ? 'Garden, conservation, education, and visitor information from Naples Botanical Garden.'
+                    : 'Información sobre jardines, conservación, educación y visitas de Naples Botanical Garden.'}
                 </p>
 
                 <a
@@ -808,8 +808,8 @@ const LocationNaples = () => {
                 
                 <p className="text-base font-body leading-relaxed mb-6 flex-grow text-gray-600">
                   {language === 'en'
-                    ? 'Dedicated to breaking the cycle of poverty through education, family support, and community engagement. Their comprehensive programs provide academic support, family counseling, and mental health resources to over 500 children and families in Naples.'
-                    : 'Dedicados a romper el ciclo de pobreza a través de educación, apoyo familiar y participación comunitaria. Sus programas integrales proporcionan apoyo académico, consejería familiar y recursos de salud mental a más de 500 niños y familias en Naples.'}
+                    ? 'Education and family-support resources offered by Grace Place for Children & Families.'
+                    : 'Recursos educativos y de apoyo familiar ofrecidos por Grace Place for Children & Families.'}
                 </p>
 
                 <a
@@ -826,7 +826,7 @@ const LocationNaples = () => {
                       <ArrowRight className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-left leading-tight flex-1 py-2">
-                      {language === 'en' ? 'Support Their Mission' : 'Apoyar Su Misión'}
+                      {language === 'en' ? 'Visit Official Site' : 'Visitar Sitio Oficial'}
                     </span>
                   </Button>
                 </a>
@@ -891,8 +891,8 @@ const LocationNaples = () => {
               
               <p className="text-green-200 text-sm max-w-2xl mx-auto">
                 {language === 'en'
-                  ? 'All consultations are completely confidential and protected by medical privacy laws. Your privacy and well-being are our highest priorities.'
-                  : 'Todas las consultas son completamente confidenciales y están protegidas por las leyes de privacidad médica. Tu privacidad y bienestar son nuestras máximas prioridades.'
+                  ? 'Consultations use privacy safeguards and are governed by applicable medical privacy laws. Review the practice privacy notice and consent documents for details.'
+                  : 'Las consultas utilizan medidas de privacidad y se rigen por las leyes aplicables de privacidad médica. Consulte el aviso de privacidad y los documentos de consentimiento para conocer los detalles.'
                 }
               </p>
             </div>

@@ -790,6 +790,7 @@ export const reviewsStatsSchema = z.object({
 });
 
 export const reviewsResponseSchema = z.object({
+  fetchedAt: z.string().datetime({ offset: true }),
   stats: reviewsStatsSchema,
   reviews: z.array(reviewSchema),
 });

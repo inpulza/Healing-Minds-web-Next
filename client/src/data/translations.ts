@@ -13,7 +13,7 @@ export const translations = {
     'nav.services': 'Services',
     'nav.forPatients': 'For Patients',
     'nav.contact': 'Contact',
-    'nav.bookNow': 'Book Now',
+    'nav.bookNow': 'Request Appointment',
 
     // Hero Section
     'hero.title': 'Find Your Path to Clarity',
@@ -24,16 +24,16 @@ export const translations = {
 
     // Stats
     'stats.experience': 'Years of Experience',
-    'stats.successRate': 'Patient Success Rate',
+    'stats.successRate': 'Personalized Care',
     'stats.rating': 'Positive Reviews',
 
     // About
     'about.title': 'About Dr. Melva Reve',
-    'about.description1': 'Dr. Melva Reve is a psychiatrist with over 15 years of experience providing compassionate mental health care to adults in Naples, Florida, and surrounding areas. She specializes in treating anxiety disorders, depression, ADHD, PTSD, and other psychiatric conditions.',
+    'about.description1': 'Dr. Melva Reve is a physician and psychiatrist providing mental health care to adults in Naples, Florida, and surrounding areas, with focus areas that include anxiety, depression, ADHD, PTSD, and other psychiatric conditions.',
     'about.description2': 'As a bilingual practitioner fluent in both English and Spanish, Dr. Reve is uniquely positioned to serve the diverse community of Southwest Florida with culturally sensitive care that respects individual backgrounds and experiences.',
-    'about.credential1': 'MD from University of Miami Miller School of Medicine',
+    'about.credential1': 'Doctor of Medicine (MD)',
     // 'about.credential2': 'Board Certified by American Board of Psychiatry and Neurology',
-    'about.credential3': 'Member of American Psychiatric Association',
+    'about.credential3': 'Active Florida Medical License ME165518',
     'about.credential4': 'Fluent in English and Spanish',
     'about.scheduleConsultation': 'Schedule Consultation',
 
@@ -76,7 +76,7 @@ export const translations = {
     'nav.services': 'Servicios',
     'nav.forPatients': 'Para Pacientes',
     'nav.contact': 'Contacto',
-    'nav.bookNow': 'Reservar Cita',
+    'nav.bookNow': 'Solicitar Cita',
 
     // Hero Section
     'hero.title': 'Encuentra tu Camino hacia la Claridad',
@@ -87,16 +87,16 @@ export const translations = {
 
     // Stats
     'stats.experience': 'Años de Experiencia',
-    'stats.successRate': 'Tasa de Éxito del Paciente',
+    'stats.successRate': 'Atención Personalizada',
     'stats.rating': 'Reseñas Positivas',
 
     // About
     'about.title': 'Acerca de la Dra. Melva Reve',
-    'about.description1': 'La Dra. Melva Reve es una psiquiatra con más de 15 años de experiencia brindando atención compasiva de salud mental a adultos en Naples, Florida, y áreas circundantes. Se especializa en el tratamiento de trastornos de ansiedad, depresión, TDAH, TEPT y otras condiciones psiquiátricas.',
+    'about.description1': 'La Dra. Melva Reve es médica y psiquiatra que brinda atención de salud mental a adultos en Naples, Florida, y áreas circundantes, con áreas de enfoque que incluyen ansiedad, depresión, TDAH, TEPT y otras condiciones psiquiátricas.',
     'about.description2': 'Como profesional bilingüe que habla inglés y español con fluidez, la Dra. Reve está en una posición única para servir a la diversa comunidad del suroeste de Florida con atención culturalmente sensible que respeta los antecedentes y experiencias individuales.',
-    'about.credential1': 'MD de la Escuela de Medicina Miller de la Universidad de Miami',
+    'about.credential1': 'Doctora en Medicina (MD)',
     // 'about.credential2': 'Certificada por la Junta Americana de Psiquiatría y Neurología',
-    'about.credential3': 'Miembro de la Asociación Psiquiátrica Americana',
+    'about.credential3': 'Licencia Médica Activa de Florida ME165518',
     'about.credential4': 'Fluida en inglés y español',
     'about.scheduleConsultation': 'Programar Consulta',
 

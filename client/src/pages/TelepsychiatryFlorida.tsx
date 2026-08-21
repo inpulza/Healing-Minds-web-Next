@@ -53,8 +53,8 @@ const TelepsychiatryFlorida = () => {
         ? 'Telepsychiatry Florida | Online Psychiatrist (Bilingual) | Healing Minds'
         : 'Telepsiquiatría Florida | Psiquiatra Online (Bilingüe) | Healing Minds',
       description: language === 'en'
-        ? 'Access an expert psychiatrist from anywhere in Florida. Dr. Melva Reve offers expert telepsychiatry for anxiety, depression & ADHD. Secure & confidential. Book online.'
-        : 'Acceda a una psiquiatra con licencia desde cualquier lugar de Florida. La Dra. Melva Reve ofrece telepsiquiatría experta para ansiedad, depresión y TDAH. Segura y confidencial. Reserve en línea.',
+        ? 'Florida adults may request telepsychiatry for anxiety, depression or ADHD. The office confirms the professional, location, licensing, suitability and availability.'
+        : 'Los adultos en Florida pueden solicitar telepsiquiatría para ansiedad, depresión o TDAH. La oficina confirma profesional, ubicación, licencias, adecuación y disponibilidad.',
       keywords: language === 'en'
         ? 'telepsychiatry Florida, online psychiatrist Florida, telehealth psychiatry FL, virtual psychiatrist Florida, telepsiquiatria Florida'
         : 'telepsiquiatría Florida, psiquiatra online Florida, telepsiquiatría FL, psiquiatra virtual Florida',
@@ -85,6 +85,36 @@ const TelepsychiatryFlorida = () => {
   const benefitSections = ['benefit-access', 'benefit-convenient', 'benefit-secure', 'benefit-continuity'].map(s);
   const processSteps = ['process-step-1', 'process-step-2', 'process-step-3', 'process-step-4'].map(s);
   const serviceSections = ['service-evaluation', 'service-anxiety-depression', 'service-adhd', 'service-ptsd', 'service-bipolar', 'service-medication'].map(s);
+  const benefitAltTexts = language === 'en'
+    ? [
+        'Adult using a laptop at home',
+        'Calendar and clock beside a laptop',
+        'Video-call interface displayed on a laptop',
+        'Person reviewing notes beside a laptop',
+      ]
+    : [
+        'Persona adulta usando una computadora portátil en casa',
+        'Calendario y reloj junto a una computadora portátil',
+        'Interfaz de videollamada en una computadora portátil',
+        'Persona revisando notas junto a una computadora portátil',
+      ];
+  const serviceAltTexts = language === 'en'
+    ? [
+        'Clinician reviewing an evaluation form',
+        'Calm indoor scene representing anxiety and depression care',
+        'Desk materials representing attention and planning',
+        'Quiet supportive setting representing trauma care',
+        'Balanced stones representing mood stability',
+        'Medication bottles and a clinical notebook',
+      ]
+    : [
+        'Profesional clínico revisando un formulario de evaluación',
+        'Escena interior tranquila que representa atención para ansiedad y depresión',
+        'Materiales de escritorio que representan atención y planificación',
+        'Entorno tranquilo de apoyo que representa atención relacionada con trauma',
+        'Piedras equilibradas que representan estabilidad del estado de ánimo',
+        'Frascos de medicamentos y una libreta clínica',
+      ];
 
   return (
     <div className="min-h-screen">
@@ -131,12 +161,12 @@ const TelepsychiatryFlorida = () => {
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-body font-bold text-green-800 text-left">
                       {language === 'en' ? (
                         <>
-                          Expert <span className="font-display italic text-green-700">Psychiatric Care</span> from Anywhere in{' '}
+                          Request <span className="font-display italic text-green-700">Telepsychiatry</span> in{' '}
                           <span className="font-display italic text-green-700">Florida</span>
                         </>
                       ) : (
                         <>
-                          Atención <span className="font-display italic text-green-700">Psiquiátrica Experta</span> desde Cualquier Lugar de{' '}
+                          Solicite <span className="font-display italic text-green-700">Telepsiquiatría</span> en{' '}
                           <span className="font-display italic text-green-700">Florida</span>
                         </>
                       )}
@@ -159,7 +189,7 @@ const TelepsychiatryFlorida = () => {
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-body font-bold text-green-800 mb-4">
                 {language === 'en' ? (
-                  <>Statewide <span className="font-display italic text-green-700">Coverage</span></>
+                  <>Florida <span className="font-display italic text-green-700">Eligibility</span></>
                 ) : (
                   <>Cobertura <span className="font-display italic text-green-700">Estatal</span></>
                 )}
@@ -187,7 +217,7 @@ const TelepsychiatryFlorida = () => {
                 <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
                   <img 
                     src={assetUrl(floridaMap)}
-                    alt="Florida State Map - Telepsychiatry Services Available Statewide"
+                    alt="Map of Florida used to explain location and licensing eligibility"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-green-500 bg-opacity-5"></div>
@@ -224,12 +254,6 @@ const TelepsychiatryFlorida = () => {
                   <div className="flex">
                     {benefitSections.map((benefit, index) => {
                       const benefitImages = [assetUrl(accessFromHomeImg), assetUrl(convenientSchedulingImg), assetUrl(securePrivateImg), assetUrl(continuityCareImg)];
-                      const benefitAltTexts = [
-                        "Patient accessing telepsychiatry services from home in Florida - Dr. Melva Reve",
-                        "Convenient online psychiatry scheduling - time-saving telehealth appointments in Florida",
-                        "Secure and private HIPAA-compliant telepsychiatry platform for mental health care",
-                        "Continuity of psychiatric care through telehealth - consistent treatment in Florida"
-                      ];
                       return (
                         <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
                           <div className="bg-white rounded-2xl overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
@@ -279,12 +303,6 @@ const TelepsychiatryFlorida = () => {
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {benefitSections.map((benefit, index) => {
                   const benefitImages = [assetUrl(accessFromHomeImg), assetUrl(convenientSchedulingImg), assetUrl(securePrivateImg), assetUrl(continuityCareImg)];
-                  const benefitAltTexts = [
-                    "Patient accessing telepsychiatry services from home in Florida - Dr. Melva Reve",
-                    "Convenient online psychiatry scheduling - time-saving telehealth appointments in Florida",
-                    "Secure and private HIPAA-compliant telepsychiatry platform for mental health care",
-                    "Continuity of psychiatric care through telehealth - consistent treatment in Florida"
-                  ];
                   return (
                     <div key={index} className="bg-white rounded-2xl overflow-hidden border border-green-100 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`benefit-${index}`}>
                       {/* Benefit Image */}
@@ -380,14 +398,6 @@ const TelepsychiatryFlorida = () => {
                                               assetUrl(bipolarTreatmentImg),
                                               assetUrl(medicationManagementImg)
                                             ];
-                      const serviceAltTexts = [
-                        "Initial psychiatric evaluation via telepsychiatry - Dr. Melva Reve conducting online mental health assessment in Florida",
-                        "Online anxiety and depression treatment through telehealth - virtual psychiatric care in Florida",
-                        "ADHD evaluation and management via telepsychiatry - online focus and attention disorder treatment",
-                        "PTSD and trauma therapy through telehealth - secure online psychiatric treatment in Florida",
-                        "Bipolar disorder treatment via telepsychiatry - mood stabilization through virtual psychiatric care",
-                        "Ongoing psychiatric care through telehealth - continuous mental health support in Florida"
-                      ];
                       return (
                         <div key={index} className="flex-[0_0_100%] min-w-0 px-2">
                           <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
@@ -444,14 +454,6 @@ const TelepsychiatryFlorida = () => {
                                           assetUrl(bipolarTreatmentImg),
                                           assetUrl(medicationManagementImg)
                                         ];
-                  const serviceAltTexts = [
-                    "Initial psychiatric evaluation via telepsychiatry - Dr. Melva Reve conducting online mental health assessment in Florida",
-                    "Online anxiety and depression treatment through telehealth - virtual psychiatric care in Florida",
-                    "ADHD evaluation and management via telepsychiatry - online focus and attention disorder treatment",
-                    "PTSD and trauma therapy through telehealth - secure online psychiatric treatment in Florida",
-                    "Bipolar disorder treatment via telepsychiatry - mood stabilization through virtual psychiatric care",
-                    "Ongoing psychiatric care through telehealth - continuous mental health support in Florida"
-                  ];
                   return (
                     <div key={index} className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300" data-testid={`service-${index}`}>
                       {/* Service Image */}
