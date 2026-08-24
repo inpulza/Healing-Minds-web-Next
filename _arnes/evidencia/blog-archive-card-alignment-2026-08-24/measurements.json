@@ -1,0 +1,206 @@
+[
+  {
+    "language": "en",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "filename": "en-blog-cards-390x844.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 390,
+      "scrollWidth": 390
+    },
+    "firstRowCards": 1,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "en",
+    "viewport": {
+      "width": 1024,
+      "height": 900
+    },
+    "filename": "en-blog-cards-1024x900.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 1024,
+      "scrollWidth": 1024
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "en",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "filename": "en-blog-cards-1280x900.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "en",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "filename": "en-blog-cards-1440x900.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "en",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "filename": "en-blog-cards-1920x1080.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 1920,
+      "scrollWidth": 1920
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "en",
+    "viewport": {
+      "width": 3440,
+      "height": 1440
+    },
+    "filename": "en-blog-cards-3440x1440.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 3440,
+      "scrollWidth": 3440
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "es",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "filename": "es-blog-cards-390x844.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 390,
+      "scrollWidth": 390
+    },
+    "firstRowCards": 1,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "es",
+    "viewport": {
+      "width": 1024,
+      "height": 900
+    },
+    "filename": "es-blog-cards-1024x900.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 1024,
+      "scrollWidth": 1024
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "es",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "filename": "es-blog-cards-1280x900.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "es",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "filename": "es-blog-cards-1440x900.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 1440,
+      "scrollWidth": 1440
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "es",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "filename": "es-blog-cards-1920x1080.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 1920,
+      "scrollWidth": 1920
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  },
+  {
+    "language": "es",
+    "viewport": {
+      "width": 3440,
+      "height": 1440
+    },
+    "filename": "es-blog-cards-3440x1440.png",
+    "runtimeErrors": [],
+    "layout": {
+      "innerWidth": 3440,
+      "scrollWidth": 3440
+    },
+    "firstRowCards": 3,
+    "ctaTopSpread": 0,
+    "bottomInsetSpread": 0,
+    "metadataRowsSeparated": true
+  }
+]
