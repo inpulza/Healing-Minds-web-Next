@@ -257,32 +257,37 @@ const BlogPost = ({ initialPost }: BlogPostProps) => {
             </section>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-              <img
-                src={post.featuredImage || assetUrl(doctorConsultation)}
-                alt={post.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
-                className="mx-auto w-full max-w-4xl aspect-[16/9] object-cover rounded-lg mb-10"
-              />
+              <div className="mx-auto max-w-[1048px]" data-testid="blog-post-article-grid">
+                <img
+                  src={post.featuredImage || assetUrl(doctorConsultation)}
+                  alt={post.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
+                  className="mb-10 aspect-[16/9] w-full rounded-lg object-cover"
+                  data-testid="blog-post-featured-image"
+                />
 
-              {showToc && (
-                <nav className="mb-8 rounded-lg bg-green-50 p-4 lg:hidden" aria-label={text.contents}>
-                  <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-green-950">
-                    <List className="h-4 w-4" />
-                    {text.contents}
-                  </div>
-                  <ul className="space-y-2">
-                    {headings.map(heading => (
-                      <li key={heading.id} className={heading.level === 3 ? 'pl-4' : ''}>
-                        <a href={`#${heading.id}`} className="text-sm text-gray-700 hover:text-green-800">
-                          {heading.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              )}
+                {showToc && (
+                  <nav className="mb-8 rounded-lg bg-green-50 p-4 lg:hidden" aria-label={text.contents}>
+                    <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-green-950">
+                      <List className="h-4 w-4" />
+                      {text.contents}
+                    </div>
+                    <ul className="space-y-2">
+                      {headings.map(heading => (
+                        <li key={heading.id} className={heading.level === 3 ? 'pl-4' : ''}>
+                          <a href={`#${heading.id}`} className="text-sm text-gray-700 hover:text-green-800">
+                            {heading.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                )}
 
-              <div className="grid gap-12 lg:grid-cols-[minmax(0,760px)_240px] lg:justify-center">
-                <div>
+                <div
+                  className="grid gap-12 lg:grid-cols-[minmax(0,760px)_240px]"
+                  data-testid="blog-post-body-layout"
+                >
+                  <div data-testid="blog-post-main-column">
                   <div
                     className="blog-article"
                     dangerouslySetInnerHTML={{ __html: processedContent }}
@@ -350,25 +355,26 @@ const BlogPost = ({ initialPost }: BlogPostProps) => {
                   )}
                 </div>
 
-                {showToc && (
-                  <aside className="hidden lg:block">
-                    <nav className="sticky top-28 rounded-lg bg-green-50 p-4" aria-label={text.contents}>
-                      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-green-950">
-                        <List className="h-4 w-4" />
-                        {text.contents}
-                      </div>
-                      <ul className="space-y-2">
-                        {headings.map(heading => (
-                          <li key={heading.id} className={heading.level === 3 ? 'pl-4' : ''}>
-                            <a href={`#${heading.id}`} className="text-sm leading-snug text-gray-700 hover:text-green-800">
-                              {heading.text}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </nav>
-                  </aside>
-                )}
+                  {showToc && (
+                    <aside className="hidden lg:block" data-testid="blog-post-desktop-toc">
+                      <nav className="sticky top-28 rounded-lg bg-green-50 p-4" aria-label={text.contents}>
+                        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-green-950">
+                          <List className="h-4 w-4" />
+                          {text.contents}
+                        </div>
+                        <ul className="space-y-2">
+                          {headings.map(heading => (
+                            <li key={heading.id} className={heading.level === 3 ? 'pl-4' : ''}>
+                              <a href={`#${heading.id}`} className="text-sm leading-snug text-gray-700 hover:text-green-800">
+                                {heading.text}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </nav>
+                    </aside>
+                  )}
+                </div>
               </div>
             </div>
           </article>
