@@ -291,12 +291,16 @@ const BlogIndex = ({
                 )}
 
                 {regularPosts.length > 0 && (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  <div className="grid items-stretch md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     {regularPosts.map(post => {
                   const postPath = getBlogPostPath(post);
                   return (
-                    <Card key={post.id} className="overflow-hidden border-green-100 rounded-lg shadow-sm transition-shadow hover:shadow-md">
-                      <Link href={postPath} aria-label={`${text.read}: ${post.title}`}>
+                    <Card
+                      key={post.id}
+                      data-blog-card="regular"
+                      className="flex min-w-0 flex-col overflow-hidden border-green-100 rounded-lg shadow-sm transition-shadow hover:shadow-md"
+                    >
+                      <Link href={postPath} aria-label={`${text.read}: ${post.title}`} className="block shrink-0">
                         <img
                           src={post.featuredImage || assetUrl(doctorConsultation)}
                           alt={post.featuredImageAlt || 'Healing Minds Psychiatry consultation'}
@@ -304,32 +308,47 @@ const BlogIndex = ({
                           loading="lazy"
                         />
                       </Link>
-                      <div className="p-6">
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-                          <span className="text-green-800 font-semibold">{post.category?.name || text.fallbackCategory}</span>
-                          {post.publishedAt && (
-                            <span className="inline-flex items-center gap-1">
-                              <Calendar className="w-4 h-4" />
-                              {formatDate(post.publishedAt, language)}
+                      <div className="flex min-w-0 flex-1 flex-col p-6">
+                        <div className="mb-4 space-y-2 text-sm text-gray-600">
+                          <div
+                            data-blog-card-meta-primary
+                            className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-2 gap-y-1"
+                          >
+                            <span className="min-w-0 break-words font-semibold text-green-800">
+                              {post.category?.name || text.fallbackCategory}
                             </span>
-                          )}
-                          <span className="inline-flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            {post.readingTime || 5} {text.minuteLabel}
-                          </span>
+                            {post.publishedAt && (
+                              <span className="inline-flex shrink-0 items-center gap-1 text-right">
+                                <Calendar className="w-4 h-4" />
+                                {formatDate(post.publishedAt, language)}
+                              </span>
+                            )}
+                          </div>
+                          <div data-blog-card-meta-reading className="flex items-center">
+                            <span className="inline-flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              {post.readingTime || 5} {text.minuteLabel}
+                            </span>
+                          </div>
                         </div>
-                        <h2 className="text-2xl font-body font-bold text-green-950 mb-3 leading-tight">
+                        <h2 data-blog-card-title className="text-2xl font-body font-bold text-green-950 mb-3 leading-tight">
                           <Link href={postPath} className="hover:text-green-700 transition-colors">
                             {post.title}
                           </Link>
                         </h2>
-                        {post.excerpt && <p className="text-gray-700 leading-relaxed mb-6">{post.excerpt}</p>}
-                        <Link href={postPath}>
-                          <Button className="bg-green-800 hover:bg-green-700 text-white rounded-full px-5">
-                            {text.read}
-                            <ArrowRight className="w-4 h-4 ml-2" />
+                        {post.excerpt && (
+                          <p data-blog-card-excerpt className="text-gray-700 leading-relaxed">
+                            {post.excerpt}
+                          </p>
+                        )}
+                        <div data-blog-card-cta className="mt-auto pt-6">
+                          <Button asChild className="bg-green-800 hover:bg-green-700 text-white rounded-full px-5">
+                            <Link href={postPath}>
+                              {text.read}
+                              <ArrowRight className="w-4 h-4 ml-2" />
+                            </Link>
                           </Button>
-                        </Link>
+                        </div>
                       </div>
                     </Card>
                   );

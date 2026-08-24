@@ -21,22 +21,58 @@ const categoryDefinitions = {
   ],
 } as const;
 
+function fixtureCopy(language: BlogLanguage, number: number) {
+  const lengthVariant = number % 3;
+  if (language === "es") {
+    if (lengthVariant === 1) {
+      return {
+        title: `Guia breve de bienestar ${number}`,
+        excerpt: "Una vista previa breve para comparar la alineacion.",
+      };
+    }
+    if (lengthVariant === 2) {
+      return {
+        title: `Como preparar una conversacion sobre salud mental con preguntas claras ${number}`,
+        excerpt: "Una explicacion de longitud media que permite comprobar el ritmo visual de la tarjeta en espanol.",
+      };
+    }
+    return {
+      title: `Pasos practicos para comprender opciones de atencion y preparar el seguimiento con tranquilidad ${number}`,
+      excerpt: "Una vista previa deliberadamente mas extensa que ocupa varias lineas, mantiene el contenido legible y pone a prueba la posicion estable del boton al final de cada tarjeta.",
+    };
+  }
+
+  if (lengthVariant === 1) {
+    return {
+      title: `A short wellness guide ${number}`,
+      excerpt: "A brief preview used to compare card alignment.",
+    };
+  }
+  if (lengthVariant === 2) {
+    return {
+      title: `How to prepare clear questions for a mental health conversation ${number}`,
+      excerpt: "A medium-length explanation that helps verify the visual rhythm of the archive card.",
+    };
+  }
+  return {
+    title: `Practical steps for understanding care options and preparing a thoughtful follow-up ${number}`,
+    excerpt: "A deliberately longer preview that spans several lines, keeps the content readable, and tests whether every call to action stays anchored at the bottom of its card.",
+  };
+}
+
 function fixturePosts(language: BlogLanguage): BlogPostListItem[] {
   const total = language === "es" ? 12 : 14;
   const categories = categoryDefinitions[language];
   return Array.from({ length: total }, (_, index) => {
-    const category = index < 10 ? categories[0] : categories[1];
+    const category = index === 3 || index > 10 ? categories[1] : categories[0];
     const number = index + 1;
+    const content = fixtureCopy(language, number);
     return {
       id: (language === "es" ? 2000 : 1000) + number,
       slug: `${language}-archive-fixture-${number}`,
       language,
-      title: language === "es"
-        ? `Articulo de prueba ${number}`
-        : `Archive fixture article ${number}`,
-      excerpt: language === "es"
-        ? "Contenido editorial de prueba para verificar el archivo bilingue."
-        : "Editorial fixture content used to verify the bilingual archive.",
+      title: content.title,
+      excerpt: content.excerpt,
       category: { ...category },
       readingTime: 5 + (index % 4),
       publishedAt: new Date(Date.UTC(2026, 6, 31 - index)).toISOString(),
