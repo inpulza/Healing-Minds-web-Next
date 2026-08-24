@@ -562,6 +562,38 @@ test("frozen blog routes share their exact published hero image", async ({ page 
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", image);
   await expect(page.locator('meta[name="twitter:image"]')).toHaveCount(1);
   await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute("content", image);
+
+  const featuredImage = page.getByTestId("blog-post-featured-image");
+  const bodyLayout = page.getByTestId("blog-post-body-layout");
+  const mainColumn = page.getByTestId("blog-post-main-column");
+  const desktopToc = page.getByTestId("blog-post-desktop-toc");
+  await expect(featuredImage).toBeVisible();
+  await expect(bodyLayout).toBeVisible();
+  await expect(mainColumn).toBeVisible();
+  await featuredImage.evaluate((element: HTMLImageElement) => element.decode());
+  const geometry = await page.evaluate((hasDesktopToc) => {
+    const imageRect = document.querySelector<HTMLElement>("[data-testid='blog-post-featured-image']")!
+      .getBoundingClientRect();
+    const bodyRect = document.querySelector<HTMLElement>("[data-testid='blog-post-body-layout']")!
+      .getBoundingClientRect();
+    const mainRect = document.querySelector<HTMLElement>("[data-testid='blog-post-main-column']")!
+      .getBoundingClientRect();
+    const tocRect = hasDesktopToc
+      ? document.querySelector<HTMLElement>("[data-testid='blog-post-desktop-toc']")!
+        .getBoundingClientRect()
+      : null;
+    return {
+      imageLeft: imageRect.left,
+      imageRight: imageRect.right,
+      bodyLeft: tocRect ? mainRect.left : bodyRect.left,
+      bodyRight: tocRect ? tocRect.right : bodyRect.right,
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: window.innerWidth,
+    };
+  }, await desktopToc.isVisible());
+  expect(Math.abs(geometry.imageLeft - geometry.bodyLeft)).toBeLessThanOrEqual(1);
+  expect(Math.abs(geometry.imageRight - geometry.bodyRight)).toBeLessThanOrEqual(1);
+  expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth);
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 
