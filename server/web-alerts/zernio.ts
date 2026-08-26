@@ -1,7 +1,7 @@
 export const HEALING_MINDS_TEMPLATE = {
   name: "healing_minds_new_web_lead_v1",
   category: "UTILITY",
-  language: "en_US",
+  language: "en",
   body: [
     "New Healing Minds Psychiatry web form received.",
     "",
@@ -10,7 +10,7 @@ export const HEALING_MINDS_TEMPLATE = {
     "Reason: {{3}}",
     "Note: {{4}}",
     "",
-    "Call the client.",
+    "Please call the client as soon as posible",
   ].join("\n"),
   parameterContract: ["BODY:1", "BODY:2", "BODY:3", "BODY:4"],
 } as const;

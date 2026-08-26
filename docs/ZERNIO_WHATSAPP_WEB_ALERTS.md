@@ -31,7 +31,7 @@ Excepción temporal: retirar la credencial directa de Healing Minds y migrar el 
 
 - Nombre: `healing_minds_new_web_lead_v1`
 - Categoría: `UTILITY`
-- Idioma de Meta/Zernio: `en_US`
+- Idioma de Meta/Zernio: `en`
 - Componentes: solo `BODY`; sin header, media ni botones
 - Privacidad: `healthcare_operational`
 
@@ -45,7 +45,7 @@ Phone: {{2}}
 Reason: {{3}}
 Note: {{4}}
 
-Call the client.
+Please call the client as soon as posible
 ```
 
 Orden cerrado de variables:
@@ -56,6 +56,8 @@ Orden cerrado de variables:
 | `{{2}}` | Teléfono enviado por el paciente | `+1 305 555 0134` |
 | `{{3}}` | Razón fija resuelta en servidor | `Contact` o `Consultation` |
 | `{{4}}` | Nota del paciente | `Please call tomorrow morning.` |
+
+El cierre conserva literalmente `posible` porque corresponde a la revisión ya aprobada por Meta/Zernio y Jordan autorizó el 26 de agosto de 2026 usarla tal cual para este piloto.
 
 La plantilla cubre Contact EN/ES y Consultation modal EN/ES porque los cuatro parámetros existen y mantienen el mismo orden en ambos. El navegador no puede aportar nombre de plantilla, idioma, cuenta, tenant ni receptor.
 
@@ -89,7 +91,7 @@ El comando consulta `GET /v1/whatsapp/templates`, nunca imprime la API key ni el
 - nombre `healing_minds_new_web_lead_v1`;
 - estado `APPROVED`;
 - categoría `UTILITY`;
-- idioma `en_US`;
+- idioma `en`;
 - texto exacto;
 - cuatro parámetros en orden `BODY:1`, `BODY:2`, `BODY:3`, `BODY:4`;
 - un único componente `BODY`, sin header, footer, media, botones ni variables extra.
@@ -98,7 +100,7 @@ El envío normal ejecuta el mismo preflight antes de cada alerta del piloto. Est
 
 ## Datos que faltan de Jordan
 
-- Confirmar que el idioma operativo interno será inglés `en_US`.
+- El idioma operativo interno quedó confirmado como inglés `en` por la plantilla aprobada.
 - Crear/enviar a aprobación la plantilla exacta y confirmar cuando figure `APPROVED`.
 - Validar qué `ZERNIO_ACCOUNT_ID` corresponde al número empresarial de Inpulza.
 - Proporcionar la API key únicamente en Vercel o en una terminal segura, nunca por chat/PR.
