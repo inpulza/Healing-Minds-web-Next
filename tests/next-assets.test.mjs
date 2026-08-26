@@ -12,6 +12,10 @@ const locationInsuranceLogos = fs.readFileSync(
   path.join(process.cwd(), "client", "src", "components", "LocationInsuranceLogos.tsx"),
   "utf8",
 );
+const acceptedInsuranceGallery = fs.readFileSync(
+  path.join(process.cwd(), "client", "src", "components", "AcceptedInsuranceGallery.tsx"),
+  "utf8",
+);
 
 test("the shared image component sends local assets through the Next responsive optimizer", () => {
   assert.match(source, /import Image, \{ type ImageProps \} from ['"]next\/image['"]/);
@@ -31,13 +35,17 @@ test("the shared image component reveals assets that completed before hydration"
   assert.match(source, /opacity: priority \|\| isLoaded \? 1 : 0/);
 });
 
-test("insurance guidance no longer renders carrier images", () => {
+test("insurance guidance renders the shared approved gallery without duplicating asset registries", () => {
   for (const [name, content] of [
     ["contact", contact],
     ["location guidance", locationInsuranceLogos],
   ]) {
-    assert.doesNotMatch(content, /assets\/insurance-|MobileInsuranceCarousel|<OptimizedImage|<img\b/i, name);
+    assert.match(content, /AcceptedInsuranceGallery/, name);
+    assert.doesNotMatch(content, /assets\/insurance-|@assets\//i, name);
   }
+  assert.match(acceptedInsuranceGallery, /acceptedInsurancePlans/);
+  assert.match(acceptedInsuranceGallery, /MobileInsuranceCarousel/);
+  assert.match(acceptedInsuranceGallery, /<OptimizedImage/);
   assert.match(contact, /contact-insurance-billing-guidance/);
   assert.match(locationInsuranceLogos, /location-insurance-billing-guidance/);
 });

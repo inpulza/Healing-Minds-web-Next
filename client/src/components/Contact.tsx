@@ -16,6 +16,7 @@ import { Phone, Mail, MapPin, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { practiceProfile } from '@shared/practice-profile';
 import { contactContent } from '@/data/pageContent/mainPages/contact';
 import { renderRichText } from '@/components/RichText';
+import AcceptedInsuranceGallery from '@/components/AcceptedInsuranceGallery';
 
 interface FormData {
   firstName: string;
@@ -208,12 +209,12 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
         </div>
 
         {/* Insurance and billing guidance */}
-        <div className="mb-12 mx-auto max-w-4xl rounded-2xl border border-green-100 bg-white p-6 sm:p-8" data-testid="contact-insurance-billing-guidance">
+        <div className="mb-12 mx-auto max-w-4xl scroll-mt-24 rounded-2xl border border-green-100 bg-white p-6 sm:scroll-mt-28 sm:p-8 lg:scroll-mt-32" data-testid="contact-insurance-billing-guidance">
           <div className="flex items-center justify-center gap-3 text-center">
             <ShieldCheck className="h-6 w-6 text-green-700" aria-hidden="true" />
-            <p className="text-sm font-semibold text-green-900 font-body uppercase tracking-wide">
-            {section('insuranceLabel').paragraphs![0]}
-            </p>
+            <h2 className="text-sm font-semibold text-green-900 font-body uppercase tracking-wide">
+              {section('insuranceLabel').paragraphs![0]}
+            </h2>
           </div>
           <p className="mt-3 text-center text-sm leading-relaxed text-gray-600">
             {section('insuranceDescription').paragraphs![0]}
@@ -221,6 +222,15 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
           <p className="mt-2 text-center text-sm leading-relaxed text-gray-600">
             {section('insuranceNote').paragraphs![0]}
           </p>
+          <h3 className="mb-4 mt-6 text-center font-body text-base font-semibold text-green-900">
+            {language === 'en' ? 'Accepted insurance plans' : 'Planes de seguro aceptados'}
+          </h3>
+          <AcceptedInsuranceGallery
+            compact
+            testId="contact-accepted-insurance-gallery"
+            testIdPrefix="contact-insurance-logo"
+            mobileTestId="mobile-contact-insurance-carousel"
+          />
         </div>
 
         <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-10 lg:gap-12">

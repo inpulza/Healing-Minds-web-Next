@@ -1,6 +1,6 @@
 # LEDGER — registro de secciones
 
-APROBADO_SPECS: no
+APROBADO_SPECS: sí
 <!-- El humano cambia "no" por "sí" tras revisar los specs (checkpoint fase 2→3). -->
 
 Estados: ⬜ pendiente | 🔧 en construcción | 🔎 en verificación | ✅ verificada (solo el auditor) | ⛔ bloqueada (decide humano)
@@ -11,7 +11,7 @@ Toda fila necesita sus 7 barras `|` (una al final también) o NO se lee.
 | id | seccion | estado | spec | codigo | evidencia |
 |----|---------|--------|------|--------|-----------|
 | hero | Hero principal | 🔎 | spec/hero.md | client/src/components/Hero.tsx | evidencia/visual/PRIORITY-AUDIT.md |
-| insurance-plans | Planes de seguro | 🔎 | spec/insurance-plans.md | client/src/components/InsuranceLogos.tsx | evidencia/asset-audit.json |
+| insurance-plans | Planes de seguro | ✅ | spec/insurance-plans.md | client/src/components/InsuranceLogos.tsx | BITACORA.md |
 | telehealth-services | Servicios de telehealth | 🔎 | spec/telehealth-services.md | client/src/components/TelehealthSection.tsx | evidencia/visual/PRIORITY-AUDIT.md |
 | doctor-profile | Presentación profesional | 🔎 | spec/doctor-profile.md | client/src/components/DoctorSection.tsx | evidencia/visual/PRIORITY-AUDIT.md |
 | mental-health-services | Servicios de salud mental | 🔎 | spec/mental-health-services.md | client/src/components/Services.tsx | evidencia/content-parity.json |
