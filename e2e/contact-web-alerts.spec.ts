@@ -1,4 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
+import { authenticateProtectedPreview, finishProtectedPreview } from "./preview-auth";
+
+test.beforeEach(async ({ page }) => {
+  await authenticateProtectedPreview(page);
+});
+
+test.afterEach(async ({ page }) => {
+  await finishProtectedPreview(page);
+});
 
 function collectRuntimeErrors(page: Page): string[] {
   const errors: string[] = [];
