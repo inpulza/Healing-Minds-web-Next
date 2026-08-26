@@ -36,6 +36,13 @@
       "when": 1785795158480,
       "tag": "0004_bilingual_translation_siblings",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1787764591179,
+      "tag": "0005_durable_web_alert_outbox",
+      "breakpoints": true
     }
   ]
 }

@@ -23,6 +23,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:verify": "node scripts/verify-migration-pglite.mjs",
+    "zernio:preflight": "tsx scripts/zernio-web-alerts-preflight.ts",
+    "zernio:status": "tsx scripts/zernio-web-alerts-status.ts",
     "blob:verify": "node --env-file=.env.local --import tsx scripts/verify-vercel-blob.ts",
     "blog:seed": "tsx scripts/seed-blog.ts",
     "blog:image-check": "tsx scripts/blog-image-guards.ts",

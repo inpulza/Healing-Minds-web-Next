@@ -40,6 +40,7 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
     preferredLanguage: 'english',
     message: ''
   });
+  const submissionIdRef = useRef<string>(crypto.randomUUID());
   // Honeypot fields: hidden from real users, only bots fill them.
   const [honeypot, setHoneypot] = useState({
     website: '',
@@ -98,6 +99,8 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          formKey: 'consultation_modal',
+          submissionId: submissionIdRef.current,
           ...formData,
           ...honeypot,
           formStartedAt: formStartedAtRef.current,
@@ -154,6 +157,7 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
         message: ''
       });
       setHoneypot({ website: '', url: '', homepage: '', companyWebsite: '' });
+      submissionIdRef.current = crypto.randomUUID();
 
       // Close modal after successful submission
       onClose();

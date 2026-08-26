@@ -62,6 +62,25 @@ try {
   const contactResult = await db.query("select count(*)::int as total from contact_messages");
   if (Number(contactResult.rows[0]?.total) !== 1) throw new Error("Contact insert smoke test failed");
 
+  const contactId = await db.query("select id from contact_messages limit 1");
+  const leadId = String(contactId.rows[0]?.id || "");
+  await db.query(
+    `insert into web_alert_outbox (dedupe_key, tenant_id, form_key, lead_id, status)
+     values ('healing-minds:contact_page:migration-check', 'healing-minds', 'contact_page', $1, 'disabled')`,
+    [leadId],
+  );
+  let duplicateWebAlertRejected = false;
+  try {
+    await db.query(
+      `insert into web_alert_outbox (dedupe_key, tenant_id, form_key, lead_id)
+       values ('healing-minds:contact_page:migration-check', 'healing-minds', 'contact_page', $1)`,
+      [leadId],
+    );
+  } catch {
+    duplicateWebAlertRejected = true;
+  }
+  if (!duplicateWebAlertRejected) throw new Error("Web alert dedupe key must be unique");
+
   await db.exec(`insert into blog_posts (title, slug) values ('Image job migration check', 'image-job-migration-check')`);
   const translationGroup = await db.query(`select translation_group_id from blog_posts where id = 1`);
   const translationGroupId = String(translationGroup.rows[0]?.translation_group_id || "");
@@ -208,6 +227,7 @@ try {
     foreignKeys,
     orderedBlogTags: "pass",
     contactInsert: "pass",
+    webAlertDurableDedupe: "pass",
     imageJobIdempotency: "pass",
     imageJobSingleOpenPost: "pass",
     imageJobUniqueSlot: "pass",

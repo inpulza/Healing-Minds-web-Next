@@ -57,6 +57,7 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
   });
   // Timestamp when the form first mounted, used to reject instant bot submissions.
   const formStartedAtRef = useRef<number>(Date.now());
+  const submissionIdRef = useRef<string>(crypto.randomUUID());
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -99,6 +100,8 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          formKey: 'contact_page',
+          submissionId: submissionIdRef.current,
           ...formData,
           ...honeypot,
           formStartedAt: formStartedAtRef.current,
@@ -156,6 +159,7 @@ const Contact = ({ headingLevel = 'h1' }: ContactProps) => {
       });
       setHoneypot({ website: '', url: '', homepage: '', companyWebsite: '' });
       formStartedAtRef.current = Date.now();
+      submissionIdRef.current = crypto.randomUUID();
 
     } catch (error) {
       console.error('Error submitting form:', error);
