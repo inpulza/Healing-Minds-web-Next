@@ -120,6 +120,27 @@ test("Home, Contact and location sections all mount the shared accepted-plan gal
   }
 });
 
+test("reduced-motion mobile visitors receive every approved logo as a static accessible list", () => {
+  const carousel = readFileSync(
+    join(root, "client/src/components/MobileInsuranceCarousel.tsx"),
+    "utf8",
+  );
+  const reducedMotionBranch = carousel.match(
+    /if \(prefersReducedMotion\) \{([\s\S]+?)\n  \}\n\n  const nextIndex/,
+  )?.[1] ?? "";
+
+  assert.match(reducedMotionBranch, /data-reduced-motion="static"/);
+  assert.match(reducedMotionBranch, /logos\.map\(\(logo, index\) =>/);
+  assert.match(reducedMotionBranch, /alt=\{logo\.alt\}/);
+  assert.doesNotMatch(reducedMotionBranch, /aria-hidden/);
+});
+
+test("deployed gallery SSR requests include the origin-scoped Preview credential", () => {
+  const deployedSpec = readFileSync(join(root, "e2e/insurance-removal.spec.ts"), "utf8");
+
+  assert.match(deployedSpec, /request\.get\(pathname, \{\s*headers: protectedPreviewHeaders\(\),/);
+});
+
 test("required English and Spanish journeys use the conservative verification contract", () => {
   const requiredFiles = [
     "client/src/data/pageContent/mainPages/home.ts",

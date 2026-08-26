@@ -100,6 +100,41 @@ export default function MobileInsuranceCarousel({
 
   if (logos.length === 0) return null;
 
+  if (prefersReducedMotion) {
+    return (
+      <div
+        className="grid grid-cols-2 gap-6 px-2 md:hidden"
+        data-testid={testId}
+        data-reduced-motion="static"
+      >
+        {logos.map((logo, index) => (
+          <div
+            key={logo.name}
+            className="flex min-h-28 items-center justify-center"
+            data-testid={logoTestId(logoTestIdPrefix, logo.name)}
+          >
+            <OptimizedImage
+              src={logo.src}
+              alt={logo.alt}
+              className="h-24 w-auto object-contain filter grayscale"
+              width={192}
+              height={96}
+              priority={false}
+              sizes="(max-width: 767px) 45vw, 192px"
+              onReady={() => loadedIndexesRef.current.add(index)}
+              onFailure={() => {
+                loadedIndexesRef.current.delete(index);
+                if (failedIndexesRef.current.has(index)) return;
+                failedIndexesRef.current.add(index);
+                setFailedIndexes(new Set(failedIndexesRef.current));
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   const nextIndex = findNextCandidate(
     activeIndex,
     logos.length,

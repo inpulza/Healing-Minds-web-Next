@@ -1,5 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
-import { authenticateProtectedPreview, finishProtectedPreview } from "./preview-auth";
+import {
+  authenticateProtectedPreview,
+  finishProtectedPreview,
+  protectedPreviewHeaders,
+} from "./preview-auth";
 
 const affectedRoutes = [
   "/",
@@ -116,7 +120,9 @@ test("approved galleries and conservative guidance are visible on home, contact,
   ] as const;
 
   for (const [pathname, guidanceTestId, galleryTestId] of galleryRoutes) {
-    const initialResponse = await request.get(pathname);
+    const initialResponse = await request.get(pathname, {
+      headers: protectedPreviewHeaders(),
+    });
     expect(initialResponse.status(), `${pathname} initial HTML`).toBe(200);
     const initialHtml = await initialResponse.text();
     expect(initialHtml, `${pathname} SSR guidance`).toContain(`data-testid="${guidanceTestId}"`);
@@ -160,18 +166,23 @@ test("approved galleries and conservative guidance are visible on home, contact,
   }
 });
 
-test("the mobile logo carousel stops automatically for reduced-motion users", async ({ page }) => {
+test("reduced-motion users can inspect every approved mobile logo without animation", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await rejectConsentIfVisible(page);
 
   const carousel = page.getByTestId("mobile-insurance-carousel");
-  const activeLogo = carousel.locator('[data-active="true"]');
-  await expect(activeLogo).toHaveCount(1);
-  const initialTestId = await activeLogo.getAttribute("data-testid");
-
-  await page.waitForTimeout(2_500);
-  await expect(carousel.locator('[data-active="true"]')).toHaveAttribute("data-testid", initialTestId ?? "");
+  await expect(carousel).toHaveAttribute("data-reduced-motion", "static");
+  const logoItems = carousel.locator('[data-testid^="insurance-logo-"]');
+  await expect(logoItems).toHaveCount(approvedPlanCount);
+  for (let index = 0; index < approvedPlanCount; index += 1) {
+    const item = logoItems.nth(index);
+    await item.scrollIntoViewIfNeeded();
+    const image = item.locator("img");
+    await expect(image).toBeVisible();
+    await expect.poll(() => image.evaluate((logo: HTMLImageElement) => logo.naturalWidth)).toBeGreaterThan(0);
+  }
   await expect(carousel.getByRole("button", { name: "Pause logo rotation" })).toHaveCount(0);
 });
 
