@@ -32,6 +32,16 @@ Este documento regulariza el contrato medido después de que la implementación 
 - Auditorías de soporte: `_arnes/evidencia/content-parity.json`, `_arnes/evidencia/seo-parity.json` y `_arnes/evidencia/asset-audit.json`.
 - El copy no se reescribe ni se reemplaza por contenido inventado.
 
+### Contrato clínico aprobado para HM Web 03
+
+Jordan confirmó el 2026-08-26 que la restauración debe mostrar exactamente estos catorce planes: Aetna, United Healthcare, Medicare, Medicaid, Cigna, Ambetter, First Health, Oscar, WellCare, Sunshine Health, AvMed, Doctors Healthcare Plans, CHAMPVA y Florida Medicaid.
+
+- La lista vive en una única fuente canónica compartida por Home, Contact y locations.
+- Home EN/ES, Contact EN/ES y todas las locations EN/ES montan su galería correspondiente.
+- El bloque prudente sobre participación, beneficios, facturación y verificación con la oficina y la aseguradora se conserva junto a la galería; no la sustituye.
+- Florida Blue, Blue Cross Blue Shield y BCBS permanecen ausentes de texto, nombres accesibles, assets públicos, requests, FAQs, JSON-LD, HTML SSR, DOM hidratado y bundles.
+- No se añade ningún otro plan por inferencia.
+
 ## Interacciones y animación
 
 - El estado comparable se captura tras recorrer el scroll, volver al inicio y esperar settlement.
@@ -50,3 +60,4 @@ Este documento regulariza el contrato medido después de que la implementación 
 - Configurar Resend o cambiar DNS.
 - Declarar la sección `✅` desde la sesión constructora.
 - Sustituir raws, graders, `aggregate.json` o informe firmado por resúmenes page-level.
+- Cambiar la lista clínica sin una nueva confirmación explícita.

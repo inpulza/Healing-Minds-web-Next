@@ -11,10 +11,13 @@ export type MobileInsuranceLogo = {
 type MobileInsuranceCarouselProps = {
   logos: MobileInsuranceLogo[];
   testId?: string;
+  logoTestIdPrefix?: string;
+  pauseLabel?: string;
+  resumeLabel?: string;
 };
 
-const logoTestId = (name: string) =>
-  `insurance-logo-${name.toLowerCase().replace(/\s+/g, '-')}`;
+const logoTestId = (prefix: string, name: string) =>
+  `${prefix}-${name.toLowerCase().replace(/\s+/g, '-')}`;
 
 const findNextCandidate = (
   activeIndex: number,
@@ -32,9 +35,14 @@ const findNextCandidate = (
 export default function MobileInsuranceCarousel({
   logos,
   testId,
+  logoTestIdPrefix = 'insurance-logo',
+  pauseLabel = 'Pause logos',
+  resumeLabel = 'Resume logos',
 }: MobileInsuranceCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [previousIndex, setPreviousIndex] = useState<number | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [failedIndexes, setFailedIndexes] = useState<ReadonlySet<number>>(
     () => new Set(),
   );
@@ -44,6 +52,17 @@ export default function MobileInsuranceCarousel({
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncPreference = () => setPrefersReducedMotion(mediaQuery.matches);
+
+    syncPreference();
+    mediaQuery.addEventListener('change', syncPreference);
+    return () => mediaQuery.removeEventListener('change', syncPreference);
+  }, []);
+
+  useEffect(() => {
+    if (isPaused || prefersReducedMotion) return undefined;
+
     const interval = window.setInterval(() => {
       if (logos.length < 2) return;
 
@@ -77,9 +96,44 @@ export default function MobileInsuranceCarousel({
       clearInterval(interval);
       if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
     };
-  }, [logos.length]);
+  }, [isPaused, logos.length, prefersReducedMotion]);
 
   if (logos.length === 0) return null;
+
+  if (prefersReducedMotion) {
+    return (
+      <div
+        className="grid grid-cols-2 gap-6 px-2 md:hidden"
+        data-testid={testId}
+        data-reduced-motion="static"
+      >
+        {logos.map((logo, index) => (
+          <div
+            key={logo.name}
+            className="flex min-h-28 items-center justify-center"
+            data-testid={logoTestId(logoTestIdPrefix, logo.name)}
+          >
+            <OptimizedImage
+              src={logo.src}
+              alt={logo.alt}
+              className="h-24 w-auto object-contain filter grayscale"
+              width={192}
+              height={96}
+              priority={false}
+              sizes="(max-width: 767px) 45vw, 192px"
+              onReady={() => loadedIndexesRef.current.add(index)}
+              onFailure={() => {
+                loadedIndexesRef.current.delete(index);
+                if (failedIndexesRef.current.has(index)) return;
+                failedIndexesRef.current.add(index);
+                setFailedIndexes(new Set(failedIndexesRef.current));
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   const nextIndex = findNextCandidate(
     activeIndex,
@@ -105,7 +159,7 @@ export default function MobileInsuranceCarousel({
                 className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 motion-reduce:transition-none ${
                   isActive ? 'z-10 opacity-100' : 'z-0 opacity-0'
                 }`}
-                data-testid={logoTestId(logo.name)}
+                data-testid={logoTestId(logoTestIdPrefix, logo.name)}
                 data-active={isActive ? 'true' : 'false'}
                 aria-hidden={!isActive}
               >
@@ -131,8 +185,8 @@ export default function MobileInsuranceCarousel({
         </div>
       </div>
 
-      <div className="flex justify-center mt-6">
-        <div className="flex gap-2">
+      <div className="mt-6 flex flex-col items-center gap-4">
+        <div className="flex gap-2" aria-hidden="true">
           {logos.map((logo, index) => (
             <div
               key={logo.name}
@@ -142,6 +196,16 @@ export default function MobileInsuranceCarousel({
             />
           ))}
         </div>
+        {!prefersReducedMotion && logos.length > 1 ? (
+          <button
+            type="button"
+            className="text-sm font-medium text-green-800 underline underline-offset-4"
+            aria-pressed={isPaused}
+            onClick={() => setIsPaused((paused) => !paused)}
+          >
+            {isPaused ? resumeLabel : pauseLabel}
+          </button>
+        ) : null}
       </div>
     </div>
   );

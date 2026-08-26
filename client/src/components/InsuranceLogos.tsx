@@ -3,6 +3,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { homeContent } from '@/data/pageContent/mainPages/home';
 import { renderRichText } from '@/components/RichText';
 import { Link } from '@/lib/navigation';
+import AcceptedInsuranceGallery from '@/components/AcceptedInsuranceGallery';
 
 const InsuranceLogos = () => {
   const { language } = useLanguage();
@@ -22,7 +23,7 @@ const InsuranceLogos = () => {
       ];
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 bg-white" data-testid="insurance-billing-guidance">
+    <section className="scroll-mt-24 bg-white py-8 sm:scroll-mt-28 sm:py-12 lg:scroll-mt-32 lg:py-16" data-testid="insurance-billing-guidance">
       <div className="max-w-[85%] lg:max-w-[90%] mx-auto px-2">
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-green-800 mb-4">
@@ -34,6 +35,17 @@ const InsuranceLogos = () => {
         </div>
 
         <div className="bg-gray-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100">
+          <div className="mb-8 border-b border-gray-200 pb-8">
+            <h3 className="mb-5 text-center font-body text-xl font-semibold text-green-900 sm:text-2xl">
+              {language === 'en' ? 'Accepted insurance plans' : 'Planes de seguro aceptados'}
+            </h3>
+            <AcceptedInsuranceGallery
+              testId="accepted-insurance-gallery"
+              testIdPrefix="insurance-logo"
+              mobileTestId="mobile-insurance-carousel"
+            />
+          </div>
+
           <div className="grid gap-5 md:grid-cols-3">
             {steps.map(({ icon: Icon, title, description }) => (
               <div key={title} className="rounded-2xl bg-white p-6 text-center shadow-sm">

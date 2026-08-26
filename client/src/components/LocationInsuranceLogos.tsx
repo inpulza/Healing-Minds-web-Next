@@ -1,6 +1,7 @@
 import { CircleDollarSign, Phone, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Link } from '@/lib/navigation';
+import AcceptedInsuranceGallery from '@/components/AcceptedInsuranceGallery';
 
 const LocationInsuranceLogos = () => {
   const { language } = useLanguage();
@@ -17,7 +18,7 @@ const LocationInsuranceLogos = () => {
       ];
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 bg-[#f0fdf4]" data-testid="location-insurance-billing-guidance">
+    <section className="scroll-mt-24 bg-[#f0fdf4] py-8 sm:scroll-mt-28 sm:py-12 lg:scroll-mt-32 lg:py-16" data-testid="location-insurance-billing-guidance">
       <div className="max-w-[85%] lg:max-w-[90%] mx-auto px-2">
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-body font-bold text-green-800 mb-4">
@@ -35,6 +36,17 @@ const LocationInsuranceLogos = () => {
         </div>
 
         <div className="rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-100 bg-white">
+          <div className="mb-8 border-b border-gray-200 pb-8">
+            <h3 className="mb-5 text-center font-body text-xl font-semibold text-green-900 sm:text-2xl">
+              {language === 'en' ? 'Accepted insurance plans' : 'Planes de seguro aceptados'}
+            </h3>
+            <AcceptedInsuranceGallery
+              testId="location-accepted-insurance-gallery"
+              testIdPrefix="location-insurance-logo"
+              mobileTestId="mobile-location-insurance-carousel"
+            />
+          </div>
+
           <div className="grid gap-5 md:grid-cols-3">
             {items.map(({ icon: Icon, title, description }) => (
               <div key={title} className="rounded-2xl bg-gray-50 p-6 text-center">

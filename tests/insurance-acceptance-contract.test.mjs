@@ -6,17 +6,15 @@ import test from "node:test";
 const root = resolve(import.meta.dirname, "..");
 const publicSourceRoots = ["app", "client", "public", "server", "shared"];
 const textExtensions = new Set([".css", ".html", ".js", ".json", ".jsx", ".mjs", ".ts", ".tsx"]);
-const unsupportedCarrierPattern = /\b(?:Aetna|Cigna|United\s*Healthcare|UHC|Medicare(?:\s+Advantage)?|Medicaid|WellCare|Ambetter|AvMed|CHAMPVA|Sunshine\s+Health|First\s+Health|Oscar\s+Health|Doctors\s+Healthcare|TRICARE|Florida\s*Blue|Blue\s*Cross\s*Blue\s*Shield)\b/i;
+const unsupportedCarrierPattern = /\b(?:Florida\s*Blue|Blue\s*Cross(?:\s*Blue\s*Shield)?|BCBS)\b/i;
+const retiredAssetPattern = /(?:6_1755868276798|florida[-_ ]?blue|blue[-_ ]?cross(?:[-_ ]?blue[-_ ]?shield)?|bcbs)/i;
 const unsupportedBroadClaimPatterns = [
   /\b(?:most|several|major)\s+(?:major\s+)?(?:commercial\s+)?insurance\s+plans?\b/i,
-  /\binsurance\s+(?:plans?\s+)?accepted\b/i,
-  /\baccepted\s+insurance\b/i,
   /\btele(?:health|psychiatry)[^.!?\n]{0,80}\bcovered\b/i,
   /\bcovered[^.!?\n]{0,80}\b(?:same as|like)\s+in-person\b/i,
   /\b(?:flexible\s+)?payment\s+plans?\s+(?:are\s+)?available\b/i,
   /\bla mayor[ií]a de (?:los )?(?:principales )?planes de seguro\b/i,
   /\bse aceptan? (?:la mayor[ií]a de )?(?:los )?(?:principales )?planes? de seguro\b/i,
-  /\bseguros? (?:m[eé]dicos )?aceptados\b/i,
   /\btele(?:salud|psiquiatr[ií]a)[^.!?\n]{0,80}\bcubiert[ao]s?\b/i,
   /\bplanes? de pago (?:flexibles )?(?:est[aá]n )?disponibles\b/i,
 ];
@@ -37,7 +35,7 @@ function publicTextFiles() {
   });
 }
 
-test("unverified carrier names and broad acceptance promises are absent from public sources", () => {
+test("Florida Blue, BCBS and unverified broad promises are absent from public sources", () => {
   const violations = [];
 
   for (const file of publicTextFiles()) {
@@ -55,6 +53,22 @@ test("unverified carrier names and broad acceptance promises are absent from pub
   assert.deepEqual(violations, []);
 });
 
+test("retired Florida Blue assets cannot be imported or allowlisted for deployment", () => {
+  const deploymentConfig = readFileSync(join(root, ".vercelignore"), "utf8");
+  assert.doesNotMatch(deploymentConfig, retiredAssetPattern);
+
+  const deployableAssetRoots = ["public", "client/src/assets", "attached_assets"];
+  const retiredPaths = deployableAssetRoots.flatMap((sourceRoot) => {
+    const absoluteRoot = join(root, sourceRoot);
+    if (!existsSync(absoluteRoot)) return [];
+    return walk(absoluteRoot)
+      .map((file) => relative(root, file))
+      .filter((file) => retiredAssetPattern.test(file));
+  });
+
+  assert.deepEqual(retiredPaths, []);
+});
+
 test("the legacy renderer cannot reintroduce stale local or billing claims", () => {
   const legacy = readFileSync(join(root, "server", "utils", "html-injection.ts"), "utf8");
 
@@ -64,17 +78,67 @@ test("the legacy renderer cannot reintroduce stale local or billing claims", () 
   assert.match(legacy, /google\.com\/maps\?cid=4284755814550718591/);
 });
 
-test("public insurance sections cannot import or render carrier logos", () => {
-  const files = [
-    "client/src/components/InsuranceLogos.tsx",
-    "client/src/components/LocationInsuranceLogos.tsx",
-    "client/src/components/Contact.tsx",
+test("the canonical registry contains exactly the fourteen approved plans", () => {
+  const registry = readFileSync(join(root, "client/src/data/acceptedInsurancePlans.ts"), "utf8");
+  const names = [...registry.matchAll(/name: '([^']+)'/g)].map((match) => match[1]);
+
+  assert.deepEqual(names, [
+    "Aetna",
+    "United Healthcare",
+    "Medicare",
+    "Medicaid",
+    "Cigna",
+    "Ambetter",
+    "First Health",
+    "Oscar",
+    "WellCare",
+    "Sunshine Health",
+    "AvMed",
+    "Doctors Healthcare Plans",
+    "CHAMPVA",
+    "Florida Medicaid",
+  ]);
+  assert.doesNotMatch(registry, unsupportedCarrierPattern);
+  assert.doesNotMatch(registry, retiredAssetPattern);
+});
+
+test("Home, Contact and location sections all mount the shared accepted-plan gallery", () => {
+  const components = [
+    ["client/src/components/InsuranceLogos.tsx", /<AcceptedInsuranceGallery[\s\S]+testId="accepted-insurance-gallery"/],
+    ["client/src/components/LocationInsuranceLogos.tsx", /<AcceptedInsuranceGallery[\s\S]+testId="location-accepted-insurance-gallery"/],
+    ["client/src/components/Contact.tsx", /<AcceptedInsuranceGallery[\s\S]+testId="contact-accepted-insurance-gallery"/],
   ];
 
-  for (const file of files) {
+  for (const [file, pattern] of components) {
     const content = readFileSync(join(root, file), "utf8");
-    assert.doesNotMatch(content, /assets\/insurance-|MobileInsuranceCarousel|<OptimizedImage|<img\b/i, file);
+    assert.match(content, pattern, file);
   }
+
+  for (const page of ["Home.tsx", "HomeEspanol.tsx"]) {
+    const content = readFileSync(join(root, "client/src/pages", page), "utf8");
+    assert.match(content, /<InsuranceLogos\s*\/>/, page);
+  }
+});
+
+test("reduced-motion mobile visitors receive every approved logo as a static accessible list", () => {
+  const carousel = readFileSync(
+    join(root, "client/src/components/MobileInsuranceCarousel.tsx"),
+    "utf8",
+  );
+  const reducedMotionBranch = carousel.match(
+    /if \(prefersReducedMotion\) \{([\s\S]+?)\n  \}\n\n  const nextIndex/,
+  )?.[1] ?? "";
+
+  assert.match(reducedMotionBranch, /data-reduced-motion="static"/);
+  assert.match(reducedMotionBranch, /logos\.map\(\(logo, index\) =>/);
+  assert.match(reducedMotionBranch, /alt=\{logo\.alt\}/);
+  assert.doesNotMatch(reducedMotionBranch, /aria-hidden/);
+});
+
+test("deployed gallery SSR requests include the origin-scoped Preview credential", () => {
+  const deployedSpec = readFileSync(join(root, "e2e/insurance-removal.spec.ts"), "utf8");
+
+  assert.match(deployedSpec, /request\.get\(pathname, \{\s*headers: protectedPreviewHeaders\(\),/);
 });
 
 test("required English and Spanish journeys use the conservative verification contract", () => {
@@ -99,7 +163,7 @@ test("required English and Spanish journeys use the conservative verification co
   assert.match(combined, /opciones[^.]+pueden evaluarse caso por caso/i);
 });
 
-test("all physical-office and service-area pages render neutral billing guidance", () => {
+test("all physical-office and service-area pages render insurance plans and neutral billing guidance", () => {
   const locationPages = [
     "LocationNaples.tsx",
     "LocationBonitaSprings.tsx",

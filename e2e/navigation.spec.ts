@@ -858,7 +858,7 @@ test("route scroll respects reduced motion without a smooth-scroll runtime", asy
     .toBe("smooth");
 });
 
-test("mobile home shows neutral insurance guidance without carrier imagery", async ({
+test("mobile home combines neutral guidance with the approved insurance gallery", async ({
   page,
   isMobile,
 }) => {
@@ -870,7 +870,11 @@ test("mobile home shows neutral insurance guidance without carrier imagery", asy
   const guidance = page.getByTestId("insurance-billing-guidance");
   await guidance.scrollIntoViewIfNeeded();
   await expect(guidance).toBeVisible();
-  await expect(guidance.locator("img")).toHaveCount(0);
+  const gallery = page.getByTestId("accepted-insurance-gallery");
+  await expect(gallery).toBeVisible();
+  await gallery.scrollIntoViewIfNeeded();
+  await expect(gallery).toHaveAttribute("data-plan-count", "14");
+  await expect.poll(() => gallery.locator("img").count()).toBeGreaterThanOrEqual(2);
   await expect(guidance).toContainText(/participation and benefits vary/i);
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
@@ -970,7 +974,7 @@ test("mobile location hero is present before hydration chunks finish", async ({
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
 
-test("contact and location insurance guidance contain no carrier images", async ({
+test("contact and location insurance guidance include their approved galleries", async ({
   page,
   isMobile,
 }) => {
@@ -982,14 +986,22 @@ test("contact and location insurance guidance contain no carrier images", async 
   const contactGuidance = page.getByTestId("contact-insurance-billing-guidance");
   await contactGuidance.scrollIntoViewIfNeeded();
   await expect(contactGuidance).toBeVisible();
-  await expect(contactGuidance.locator("img")).toHaveCount(0);
+  const contactGallery = page.getByTestId("contact-accepted-insurance-gallery");
+  await expect(contactGallery).toBeVisible();
+  await contactGallery.scrollIntoViewIfNeeded();
+  await expect(contactGallery).toHaveAttribute("data-plan-count", "14");
+  await expect.poll(() => contactGallery.locator("img").count()).toBeGreaterThanOrEqual(2);
 
   await page.goto("/locations/psychiatrist-fort-myers");
   await rejectInitialConsent(page);
   const locationGuidance = page.getByTestId("location-insurance-billing-guidance");
   await locationGuidance.scrollIntoViewIfNeeded();
   await expect(locationGuidance).toBeVisible();
-  await expect(locationGuidance.locator("img")).toHaveCount(0);
+  const locationGallery = page.getByTestId("location-accepted-insurance-gallery");
+  await expect(locationGallery).toBeVisible();
+  await locationGallery.scrollIntoViewIfNeeded();
+  await expect(locationGallery).toHaveAttribute("data-plan-count", "14");
+  await expect.poll(() => locationGallery.locator("img").count()).toBeGreaterThanOrEqual(2);
 
   expect(runtimeErrors, runtimeErrors.join("\n\n")).toEqual([]);
 });
