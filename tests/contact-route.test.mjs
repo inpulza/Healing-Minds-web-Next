@@ -13,7 +13,10 @@ test("contact submissions are owned by a Next Route Handler and persisted durabl
   assert.match(source, /insertContactMessageSchema\.parse/);
   assert.match(source, /contactMessages/);
   assert.match(source, /db\.transaction/);
-  assert.match(source, /tx\.insert\(contactMessages\)/);
+  assert.match(source, /tx[\s\S]*?\.insert\(contactMessages\)/);
+  assert.match(source, /submission\.submissionId\s*\|\|\s*randomUUID\(\)/);
+  assert.match(source, /onConflictDoNothing\(\{\s*target:\s*contactMessages\.id\s*\}\)/);
+  assert.match(source, /duplicate:\s*true/);
   assert.match(source, /tx\.insert\(webAlertOutbox\)/);
   assert.match(source, /after\(async \(\) =>/);
   assert.ok(

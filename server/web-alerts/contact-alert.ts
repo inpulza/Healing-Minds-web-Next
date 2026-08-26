@@ -51,7 +51,24 @@ export async function dispatchContactWebAlert(
     return { status: "disabled" };
   }
 
-  if (!await dependencies.store.acquire(input.outboxId)) return { status: "duplicate" };
+  const attempt = await dependencies.store.acquire(input.outboxId);
+  if (attempt === null) return { status: "duplicate" };
+
+  const completeProviderOutcome = async (
+    outcome: { status: WebAlertStatus; errorCode?: string; messageId?: string },
+  ): Promise<ContactAlertResult> => {
+    const exhausted = outcome.status === "pending" && attempt >= 5;
+    const status = exhausted ? "failed" : outcome.status;
+    const errorCode = exhausted
+      ? `retry_exhausted_${outcome.errorCode || "transient"}`.slice(0, 100)
+      : outcome.errorCode;
+    await dependencies.store.complete(input.outboxId, {
+      status,
+      zernioMessageId: outcome.messageId,
+      lastErrorCode: errorCode,
+    });
+    return { status, errorCode };
+  };
 
   const configErrors = validateZernioConfig(config);
   if (configErrors.length) {
@@ -65,11 +82,7 @@ export async function dispatchContactWebAlert(
 
   const preflight = await preflightZernioTemplate(config, fetcher);
   if (preflight.status !== "sent") {
-    await dependencies.store.complete(input.outboxId, {
-      status: preflight.status,
-      lastErrorCode: preflight.errorCode,
-    });
-    return { status: preflight.status, errorCode: preflight.errorCode };
+    return completeProviderOutcome(preflight);
   }
 
   const outcome = await sendZernioTemplate(config, [
@@ -78,12 +91,7 @@ export async function dispatchContactWebAlert(
     REASON_BY_FORM[input.formKey],
     input.lead.message.trim(),
   ], fetcher);
-  await dependencies.store.complete(input.outboxId, {
-    status: outcome.status,
-    zernioMessageId: outcome.messageId,
-    lastErrorCode: outcome.errorCode,
-  });
-  return { status: outcome.status, errorCode: outcome.errorCode };
+  return completeProviderOutcome(outcome);
 }
 
 export async function processPendingContactWebAlerts(

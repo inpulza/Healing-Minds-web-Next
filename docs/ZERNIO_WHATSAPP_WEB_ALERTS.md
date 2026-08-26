@@ -1,6 +1,6 @@
 # Healing Minds Psychiatry: piloto de alertas web por WhatsApp
 
-Estado: preparado, apagado y sin envíos reales. La activación requiere aprobación de Jordan, plantilla `APPROVED`, receptor de prueba confirmado, migración aplicada y preflight exitoso.
+Estado: piloto validado con un lead ficticio y recepción confirmada por Jordan. La activación de Production fue aprobada el 26 de agosto de 2026 y sigue sujeta al preflight, al SHA exacto y a la observación operativa de 48 horas.
 
 ## Inventario verificable de formularios
 
@@ -20,10 +20,15 @@ No se encontró un gateway central de alertas disponible dentro de la fuente de 
 3. La fila de `web_alert_outbox` usa la clave única `healing-minds:<formKey>:<leadId>` y ya existe antes de responder al navegador.
 4. Si el interruptor está apagado, la fila queda `disabled` y no existe ninguna llamada a Zernio.
 5. Si está encendido, consulta primero la plantilla en Zernio. Solo un contrato exacto y `APPROVED` permite intentar el envío.
-6. Zernio se procesa después de construir la respuesta del formulario. Un cron protegido recupera filas `pending` tras fallos transitorios de preflight, con máximo cinco intentos y espera mínima de cinco minutos.
+6. Zernio se procesa después de construir la respuesta del formulario. Un cron protegido recupera filas `pending` tras fallos transitorios de preflight, con máximo cinco intentos y espera mínima de cinco minutos. El quinto fallo pasa a `failed`; no queda una fila agotada aparentando estar pendiente.
 7. El resultado queda `sent`, `failed`, `pending` o `unknown`. Los estados ambiguos `unknown` no se reintentan automáticamente. Ningún fallo cambia el éxito del formulario ya persistido.
+8. Cada intento del navegador conserva un `submissionId` UUID hasta recibir éxito. Repetir el mismo POST devuelve el lead ya creado y no repite persistencia, emails ni WhatsApp.
 
 La outbox no guarda nombre, teléfono, email ni nota. Conserva únicamente identificadores técnicos, estado, intentos, código de error seguro e identificador de mensaje de Zernio. El worker recupera los datos del lead desde la misma base solo durante el intento.
+
+`POST /v1/inbox/conversations` no documenta una clave de idempotencia. Por ello, un `5xx`, timeout o error de red durante el envío queda `unknown` y no se reintenta automáticamente: la prioridad es evitar una segunda alerta si Zernio o Meta ya aceptaron la primera. Un `429` explícito sí queda `pending`; los fallos de preflight son seguros de reintentar porque ocurren antes del envío.
+
+El cron registra únicamente `tenantId` y conteos por estado cuando aparecen `failed` o `unknown`; nunca incluye el payload, nombre, teléfono, email, nota, secretos ni headers.
 
 Excepción temporal: retirar la credencial directa de Healing Minds y migrar el adaptador al gateway central antes de incorporar un tercer cliente o, como máximo, el 26 de noviembre de 2026. El evento y la outbox están encapsulados para que esa migración no cambie los formularios.
 
@@ -98,26 +103,27 @@ El comando consulta `GET /v1/whatsapp/templates`, nunca imprime la API key ni el
 
 El envío normal ejecuta el mismo preflight antes de cada alerta del piloto. Esto prioriza seguridad sobre una llamada adicional y puede migrarse después a un cache/gateway controlado.
 
-## Datos que faltan de Jordan
+## Decisiones confirmadas por Jordan
 
-- El idioma operativo interno quedó confirmado como inglés `en` por la plantilla aprobada.
-- Crear/enviar a aprobación la plantilla exacta y confirmar cuando figure `APPROVED`.
-- Validar qué `ZERNIO_ACCOUNT_ID` corresponde al número empresarial de Inpulza.
-- Proporcionar la API key únicamente en Vercel o en una terminal segura, nunca por chat/PR.
-- Confirmar el número E.164 interno de prueba de Inpulza y, más adelante, el receptor interno de Healing Minds con consentimiento.
+- Idioma operativo interno: inglés `en`, según la plantilla aprobada.
+- Plantilla exacta: `APPROVED`; el preflight real pasó.
+- Cuenta emisora: número empresarial de Inpulza conectado a Zernio.
+- Receptor: WhatsApp de la clínica publicado en el botón flotante, confirmado por Jordan.
+- API key: cargada exclusivamente como secreto sensible de Vercel.
+- Prueba controlada: un lead ficticio recibido correctamente en el WhatsApp de la clínica.
 
 La migración `0005_durable_web_alert_outbox.sql` ya se aplicó de forma aditiva al Neon compartido por Preview/Production el 26 de agosto de 2026. No activó Zernio ni modificó leads existentes.
 
-## Checklist de futura prueba autorizada
+## Checklist de activación y observación
 
-- [ ] Plantilla exacta en `APPROVED` y preflight PASS.
-- [ ] Preview ligado al SHA exacto del PR.
+- [x] Plantilla exacta en `APPROVED` y preflight PASS.
+- [x] Preview ligado al SHA exacto del PR.
 - [x] Migración `0005` aplicada.
-- [ ] `ZERNIO_RECIPIENT_E164` apunta solo al número interno de prueba de Inpulza.
-- [ ] `ZERNIO_WHATSAPP_ENABLED=true` únicamente en Preview durante la ventana de prueba.
-- [ ] Enviar un lead ficticio rotulado desde Contact y comprobar DB + email + un WhatsApp.
-- [ ] Reprocesar el mismo `leadId` y comprobar que no aparece un segundo WhatsApp.
-- [ ] Simular rechazo/timeout y comprobar que el formulario sigue mostrando éxito.
-- [ ] Revisar outbox sin datos personales: `sent`, `failed`, `pending`, `unknown`.
-- [ ] Volver inmediatamente `ZERNIO_WHATSAPP_ENABLED=false` al terminar.
-- [ ] No activar Production hasta decisión expresa de Jordan.
+- [x] `ZERNIO_RECIPIENT_E164` apunta al WhatsApp interno confirmado de Healing Minds.
+- [x] La ventana de Preview se activó solo para la prueba y volvió a `false`.
+- [x] Lead ficticio rotulado comprobado en DB, Zernio y WhatsApp.
+- [x] Dedupe del mismo lead y concurrencia cubiertas automáticamente.
+- [x] Rechazo, timeout, red y `5xx` no rompen el formulario ni provocan reintentos ambiguos.
+- [x] Outbox revisada sin datos personales.
+- [x] Jordan aprobó fusionar y activar Production.
+- [ ] Observar durante 48 horas con `npm run zernio:status` y revisar cualquier `failed` o `unknown` antes de ampliar el piloto.

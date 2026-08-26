@@ -31,12 +31,13 @@ const lead = {
 
 class FakeStore implements WebAlertStore {
   readonly completions: Array<{ id: string; input: WebAlertCompletion }> = [];
-  readonly acquired = new Set<string>();
+  readonly attempts = new Map<string, number>();
 
-  async acquire(id: string): Promise<boolean> {
-    if (this.acquired.has(id)) return false;
-    this.acquired.add(id);
-    return true;
+  async acquire(id: string): Promise<number | null> {
+    const attempts = this.attempts.get(id) || 0;
+    if (attempts > 0) return null;
+    this.attempts.set(id, attempts + 1);
+    return attempts + 1;
   }
 
   async complete(id: string, input: WebAlertCompletion): Promise<void> {
@@ -89,6 +90,19 @@ test("the browser contract accepts only the two closed form keys", () => {
   };
   assert.equal(contactFormRequestSchema.parse({ ...base, formKey: "contact_page" }).formKey, "contact_page");
   assert.equal(contactFormRequestSchema.parse({ ...base, formKey: "consultation_modal" }).formKey, "consultation_modal");
+  assert.equal(
+    contactFormRequestSchema.parse({
+      ...base,
+      formKey: "contact_page",
+      submissionId: "10c4c6dd-f57b-4a16-a279-df3b1fb15b87",
+    }).submissionId,
+    "10c4c6dd-f57b-4a16-a279-df3b1fb15b87",
+  );
+  assert.throws(() => contactFormRequestSchema.parse({
+    ...base,
+    formKey: "contact_page",
+    submissionId: "not-a-uuid",
+  }));
   assert.throws(() => contactFormRequestSchema.parse({ ...base, formKey: "attacker_template" }));
 });
 
@@ -199,8 +213,26 @@ test("the real lead id is a durable idempotency key", async () => {
   assert.equal(calls.filter((call) => call.url.includes("/inbox/conversations")).length, 1);
 });
 
+test("concurrent workers can send the same outbox row only once", async () => {
+  const store = new FakeStore();
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  const dependencies = { store, config: enabledConfig, fetcher: successfulFetcher(calls) };
+  const input = {
+    outboxId: "concurrent-outbox",
+    leadId: "concurrent-lead",
+    formKey: "contact_page" as const,
+    lead,
+  };
+  const outcomes = await Promise.all([
+    dispatchContactWebAlert(input, dependencies),
+    dispatchContactWebAlert(input, dependencies),
+  ]);
+  assert.deepEqual(outcomes.map((result) => result.status).sort(), ["duplicate", "sent"]);
+  assert.equal(calls.filter((call) => call.url.includes("/inbox/conversations")).length, 1);
+});
+
 test("provider failures are classified without throwing away the lead flow", async () => {
-  for (const [providerStatus, expected] of [[422, "failed"], [429, "pending"], [503, "pending"]] as const) {
+  for (const [providerStatus, expected] of [[422, "failed"], [429, "pending"], [503, "unknown"]] as const) {
     const store = new FakeStore();
     let call = 0;
     const fetcher = (async () => {
@@ -231,4 +263,24 @@ test("provider failures are classified without throwing away the lead flow", asy
   );
   assert.equal(result.status, "unknown");
   assert.equal(store.completions[0].input.status, "unknown");
+});
+
+test("the fifth transient failure becomes an operational failure instead of a stuck pending row", async () => {
+  const store = new FakeStore();
+  store.attempts.set("outbox-exhausted", 4);
+  store.acquire = async (id: string) => {
+    const next = (store.attempts.get(id) || 0) + 1;
+    store.attempts.set(id, next);
+    return next;
+  };
+  const fetcher = (async () => new Response(JSON.stringify({ code: "rate_limited" }), {
+    status: 429,
+  })) as typeof fetch;
+  const result = await dispatchContactWebAlert(
+    { outboxId: "outbox-exhausted", leadId: "lead-exhausted", formKey: "contact_page", lead },
+    { store, config: enabledConfig, fetcher },
+  );
+  assert.equal(result.status, "failed");
+  assert.equal(result.errorCode, "retry_exhausted_preflight_rate_limited");
+  assert.equal(store.completions[0].input.status, "failed");
 });

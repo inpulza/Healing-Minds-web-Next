@@ -735,6 +735,9 @@ export const HONEYPOT_FIELDS = ["website", "url", "homepage", "companyWebsite"] 
 // are stripped before persistence. Phone is required and validated here.
 export const contactFormRequestSchema = insertContactMessageSchema.extend({
   formKey: z.enum(["contact_page", "consultation_modal"]),
+  // Stable across browser retries so the server can return the already-created
+  // lead instead of persisting and alerting twice after a lost response.
+  submissionId: z.string().uuid().optional(),
   firstName: z.string().trim().min(1),
   lastName: z.string().trim().min(1),
   email: z.string().trim().email(),

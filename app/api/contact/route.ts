@@ -73,11 +73,16 @@ export async function POST(request: NextRequest) {
 
     // Import lazily so builds and static routes do not establish a database connection.
     const { db } = await import("../../../server/db");
-    const leadId = randomUUID();
+    const leadId = submission.submissionId || randomUUID();
     const outboxId = randomUUID();
     const alertEnabled = readZernioConfig().enabled;
-    await db.transaction(async (tx) => {
-      await tx.insert(contactMessages).values({ ...validatedData, id: leadId });
+    const created = await db.transaction(async (tx) => {
+      const [inserted] = await tx
+        .insert(contactMessages)
+        .values({ ...validatedData, id: leadId })
+        .onConflictDoNothing({ target: contactMessages.id })
+        .returning({ id: contactMessages.id });
+      if (!inserted) return false;
       await tx.insert(webAlertOutbox).values({
         id: outboxId,
         dedupeKey: `healing-minds:${submission.formKey}:${leadId}`,
@@ -86,7 +91,17 @@ export async function POST(request: NextRequest) {
         leadId,
         status: alertEnabled ? "pending" : "disabled",
       });
+      return true;
     });
+
+    if (!created) {
+      return NextResponse.json({
+        success: true,
+        message: "Contact message already received",
+        id: leadId,
+        duplicate: true,
+      });
+    }
 
     try {
       await Promise.all([

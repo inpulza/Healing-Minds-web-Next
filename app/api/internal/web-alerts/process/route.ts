@@ -19,12 +19,19 @@ export async function GET(request: NextRequest) {
     store: createDrizzleWebAlertStore(db),
     config,
   });
+  const outcomes = results.reduce<Record<string, number>>((counts, result) => {
+    counts[result.status] = (counts[result.status] || 0) + 1;
+    return counts;
+  }, {});
+  if ((outcomes.failed || 0) > 0 || (outcomes.unknown || 0) > 0) {
+    console.error("Healing Minds web alert worker requires review", {
+      tenantId: "healing-minds",
+      outcomes,
+    });
+  }
   return NextResponse.json({
     success: true,
     processed: results.length,
-    outcomes: results.reduce<Record<string, number>>((counts, result) => {
-      counts[result.status] = (counts[result.status] || 0) + 1;
-      return counts;
-    }, {}),
+    outcomes,
   });
 }

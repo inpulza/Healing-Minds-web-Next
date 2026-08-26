@@ -38,6 +38,7 @@ async function mockPersistedLeadWithFailedZernio(
     submissions += 1;
     const payload = route.request().postDataJSON() as Record<string, unknown>;
     expect(payload.formKey).toBe(expectedFormKey);
+    expect(payload.submissionId).toEqual(expect.stringMatching(/^[0-9a-f-]{36}$/i));
     expect(payload.firstName).toBe("Jordan");
     expect(payload.lastName).toBe("Fixture");
     expect(payload.phone).toBe("+1 305 555 0134");

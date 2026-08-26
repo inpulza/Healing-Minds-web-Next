@@ -22,7 +22,7 @@ export interface PendingContactWebAlert {
 }
 
 export interface WebAlertStore {
-  acquire(id: string): Promise<boolean>;
+  acquire(id: string): Promise<number | null>;
   complete(id: string, input: WebAlertCompletion): Promise<void>;
   pending(limit: number): Promise<PendingContactWebAlert[]>;
 }
@@ -45,8 +45,8 @@ export function createDrizzleWebAlertStore(
           lt(webAlertOutbox.attempts, 5),
           or(eq(webAlertOutbox.attempts, 0), lt(webAlertOutbox.updatedAt, retryCutoff)),
         ))
-        .returning({ id: webAlertOutbox.id });
-      return Boolean(row);
+        .returning({ attempts: webAlertOutbox.attempts });
+      return row?.attempts ?? null;
     },
     async complete(id, input) {
       await db

@@ -218,7 +218,14 @@ export async function sendZernioTemplate(
     const body = await safeJson(response);
     if (!response.ok) {
       return {
-        status: response.status === 429 || response.status >= 500 ? "pending" : "failed",
+        // Create-conversation does not document an idempotency key. A 5xx may
+        // arrive after Meta accepted the message, so retrying it can duplicate
+        // the clinic alert. Only an explicit rate-limit rejection is retried.
+        status: response.status === 429
+          ? "pending"
+          : response.status >= 500
+            ? "unknown"
+            : "failed",
         errorCode: errorCode(body, response.status),
       };
     }
