@@ -45,6 +45,39 @@ export const contactMessages = pgTable("contact_messages", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const webAlertStatusEnum = pgEnum("web_alert_status", [
+  "pending",
+  "sent",
+  "failed",
+  "unknown",
+  "disabled",
+]);
+
+export const webAlertOutbox = pgTable(
+  "web_alert_outbox",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    dedupeKey: text("dedupe_key").notNull(),
+    tenantId: text("tenant_id").notNull(),
+    formKey: text("form_key").notNull(),
+    leadId: varchar("lead_id")
+      .notNull()
+      .references(() => contactMessages.id, { onDelete: "cascade" }),
+    status: webAlertStatusEnum("status").notNull().default("pending"),
+    attempts: integer("attempts").notNull().default(0),
+    zernioMessageId: text("zernio_message_id"),
+    lastErrorCode: text("last_error_code"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("uq_web_alert_outbox_dedupe_key").on(table.dedupeKey),
+    index("idx_web_alert_outbox_status_created").on(table.status, table.createdAt),
+    index("idx_web_alert_outbox_lead_id").on(table.leadId),
+    check("chk_web_alert_outbox_attempts", sql`${table.attempts} >= 0`),
+  ],
+);
+
 export const blogPostStatusEnum = pgEnum("blog_post_status", [
   "draft",
   "pending_review",
@@ -701,6 +734,7 @@ export const HONEYPOT_FIELDS = ["website", "url", "homepage", "companyWebsite"] 
 // the real contact fields plus anti-spam-only fields (honeypot + timing) that
 // are stripped before persistence. Phone is required and validated here.
 export const contactFormRequestSchema = insertContactMessageSchema.extend({
+  formKey: z.enum(["contact_page", "consultation_modal"]),
   firstName: z.string().trim().min(1),
   lastName: z.string().trim().min(1),
   email: z.string().trim().email(),
@@ -718,6 +752,7 @@ export type User = typeof users.$inferSelect;
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 export type ContactMessage = typeof contactMessages.$inferSelect;
 export type ContactFormRequest = z.infer<typeof contactFormRequestSchema>;
+export type WebAlertStatus = (typeof webAlertStatusEnum.enumValues)[number];
 export type BlogPostStatus = (typeof blogPostStatusEnum.enumValues)[number];
 export type BlogGenerationRunStatus = (typeof blogGenerationRunStatusEnum.enumValues)[number];
 export type InsertBlogAuthor = z.infer<typeof insertBlogAuthorSchema>;

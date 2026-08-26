@@ -126,7 +126,7 @@ test("reduced-motion mobile visitors receive every approved logo as a static acc
     "utf8",
   );
   const reducedMotionBranch = carousel.match(
-    /if \(prefersReducedMotion\) \{([\s\S]+?)\n  \}\n\n  const nextIndex/,
+    /if \(prefersReducedMotion\) \{([\s\S]+?)\r?\n  \}\r?\n\r?\n  const nextIndex/,
   )?.[1] ?? "";
 
   assert.match(reducedMotionBranch, /data-reduced-motion="static"/);

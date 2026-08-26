@@ -8,6 +8,8 @@ import {
 import { emailService } from "../../../server/services/email";
 import { checkRateLimit } from "../../../server/services/rate-limiter";
 import { evaluateContactSubmission } from "../../../server/services/spam-filter";
+import { dispatchContactWebAlert } from "../../../server/web-alerts/contact-alert";
+import { createDrizzleWebAlertStore } from "../../../server/web-alerts/store";
 
 export const runtime = "nodejs";
 
@@ -82,6 +84,25 @@ export async function POST(request: NextRequest) {
       ]);
     } catch (error) {
       console.error("Contact email delivery failed after durable persistence", error);
+    }
+
+    try {
+      await dispatchContactWebAlert({
+        leadId: contactMessage.id,
+        formKey: submission.formKey,
+        lead: {
+          firstName: submission.firstName,
+          lastName: submission.lastName,
+          phone: submission.phone,
+          message: submission.message,
+        },
+      }, {
+        store: createDrizzleWebAlertStore(db),
+      });
+    } catch {
+      // The WhatsApp alert is secondary. Never expose patient data or turn an
+      // already-persisted lead into a failed browser submission.
+      console.error("Contact WhatsApp alert failed after durable persistence");
     }
 
     return NextResponse.json({

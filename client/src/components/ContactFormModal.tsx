@@ -98,6 +98,7 @@ const ContactFormModal = ({ isOpen, onClose }: ContactFormModalProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          formKey: 'consultation_modal',
           ...formData,
           ...honeypot,
           formStartedAt: formStartedAtRef.current,
