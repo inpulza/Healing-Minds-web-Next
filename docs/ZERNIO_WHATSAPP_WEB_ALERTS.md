@@ -15,14 +15,15 @@ Los formularios administrativos de login y edición del blog no generan leads y 
 
 No se encontró un gateway central de alertas disponible dentro de la fuente de verdad de Healing Minds. Por la autorización expresa de este piloto, se usa temporalmente un adaptador directo de servidor a Zernio:
 
-1. `/api/contact` valida, filtra spam y guarda el lead en Neon.
+1. `/api/contact` valida, filtra spam y guarda el lead y su fila de outbox en una única transacción de Neon.
 2. El correo actual se conserva como operación secundaria existente.
-3. El adaptador crea una fila en `web_alert_outbox` con clave única `healing-minds:<formKey>:<leadId>`.
+3. La fila de `web_alert_outbox` usa la clave única `healing-minds:<formKey>:<leadId>` y ya existe antes de responder al navegador.
 4. Si el interruptor está apagado, la fila queda `disabled` y no existe ninguna llamada a Zernio.
 5. Si está encendido, consulta primero la plantilla en Zernio. Solo un contrato exacto y `APPROVED` permite intentar el envío.
-6. El resultado queda `sent`, `failed`, `pending` o `unknown`. Ningún fallo cambia el éxito del formulario ya persistido.
+6. Zernio se procesa después de construir la respuesta del formulario. Un cron protegido recupera filas `pending` tras fallos transitorios de preflight, con máximo cinco intentos y espera mínima de cinco minutos.
+7. El resultado queda `sent`, `failed`, `pending` o `unknown`. Los estados ambiguos `unknown` no se reintentan automáticamente. Ningún fallo cambia el éxito del formulario ya persistido.
 
-La outbox no guarda nombre, teléfono, email ni nota. Conserva únicamente identificadores técnicos, estado, intentos, código de error seguro e identificador de mensaje de Zernio. No hay reintento automático para estados ambiguos.
+La outbox no guarda nombre, teléfono, email ni nota. Conserva únicamente identificadores técnicos, estado, intentos, código de error seguro e identificador de mensaje de Zernio. El worker recupera los datos del lead desde la misma base solo durante el intento.
 
 Excepción temporal: retirar la credencial directa de Healing Minds y migrar el adaptador al gateway central antes de incorporar un tercer cliente o, como máximo, el 26 de noviembre de 2026. El evento y la outbox están encapsulados para que esa migración no cambie los formularios.
 
@@ -70,6 +71,7 @@ Crear por separado en `Production` y `Preview`, todas server-only y sin prefijos
 | `ZERNIO_RECIPIENT_E164` | WhatsApp interno confirmado de la clínica | Exclusivamente el número interno de prueba de Inpulza |
 | `ZERNIO_API_BASE_URL` | Opcional; por defecto `https://zernio.com/api` | Igual |
 | `ZERNIO_REQUEST_TIMEOUT_MS` | Opcional; por defecto `8000` | Igual |
+| `CRON_SECRET` | Secreto generado por Vercel para autenticar el worker de reintentos | Secreto independiente o gestionado por Vercel; nunca exponer valor |
 | `DATABASE_URL` | Ya requerido por el formulario y la outbox | Debe apuntar al esquema con la migración `0005` aplicada |
 
 El nombre, la categoría, el idioma y el texto de plantilla no son variables de entorno: son constantes revisables en servidor. Así no pueden desviarse entre Preview y Production.
@@ -90,7 +92,7 @@ El comando consulta `GET /v1/whatsapp/templates`, nunca imprime la API key ni el
 - idioma `en_US`;
 - texto exacto;
 - cuatro parámetros en orden `BODY:1`, `BODY:2`, `BODY:3`, `BODY:4`;
-- cero variables extra en header o botones.
+- un único componente `BODY`, sin header, footer, media, botones ni variables extra.
 
 El envío normal ejecuta el mismo preflight antes de cada alerta del piloto. Esto prioriza seguridad sobre una llamada adicional y puede migrarse después a un cache/gateway controlado.
 

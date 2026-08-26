@@ -3,7 +3,6 @@ import test from "node:test";
 import { contactFormRequestSchema } from "../shared/schema";
 import { dispatchContactWebAlert } from "../server/web-alerts/contact-alert";
 import type {
-  WebAlertClaim,
   WebAlertCompletion,
   WebAlertStore,
 } from "../server/web-alerts/store";
@@ -31,20 +30,20 @@ const lead = {
 };
 
 class FakeStore implements WebAlertStore {
-  readonly claims: WebAlertClaim[] = [];
   readonly completions: Array<{ id: string; input: WebAlertCompletion }> = [];
-  readonly keys = new Set<string>();
+  readonly acquired = new Set<string>();
 
-  async claim(input: WebAlertClaim): Promise<string | null> {
-    this.claims.push(input);
-    if (this.keys.has(input.dedupeKey)) return null;
-    this.keys.add(input.dedupeKey);
-    return `outbox-${this.keys.size}`;
+  async acquire(id: string): Promise<boolean> {
+    if (this.acquired.has(id)) return false;
+    this.acquired.add(id);
+    return true;
   }
 
   async complete(id: string, input: WebAlertCompletion): Promise<void> {
     this.completions.push({ id, input });
   }
+
+  async pending() { return []; }
 }
 
 function approvedTemplate(override: Record<string, unknown> = {}) {
@@ -93,11 +92,11 @@ test("the browser contract accepts only the two closed form keys", () => {
   assert.throws(() => contactFormRequestSchema.parse({ ...base, formKey: "attacker_template" }));
 });
 
-test("disabled alerts create a durable non-PII record and never call Zernio", async () => {
+test("disabled alerts never call Zernio", async () => {
   const store = new FakeStore();
   let calls = 0;
   const result = await dispatchContactWebAlert(
-    { leadId: "lead-disabled", formKey: "contact_page", lead },
+    { outboxId: "outbox-disabled", leadId: "lead-disabled", formKey: "contact_page", lead },
     {
       store,
       config: { ...enabledConfig, enabled: false, apiKey: "", accountId: "", recipientE164: "" },
@@ -106,21 +105,18 @@ test("disabled alerts create a durable non-PII record and never call Zernio", as
   );
   assert.equal(result.status, "disabled");
   assert.equal(calls, 0);
-  assert.deepEqual(store.claims[0], {
-    dedupeKey: "healing-minds:contact_page:lead-disabled",
-    tenantId: "healing-minds",
-    formKey: "contact_page",
-    leadId: "lead-disabled",
-    status: "disabled",
+  assert.deepEqual(store.completions[0], {
+    id: "outbox-disabled",
+    input: { status: "disabled" },
   });
-  assert.doesNotMatch(JSON.stringify(store.claims), /Maria|Perez|305|call after/i);
+  assert.doesNotMatch(JSON.stringify(store.completions), /Maria|Perez|305|call after/i);
 });
 
 test("an incomplete enabled configuration fails closed without a provider request", async () => {
   const store = new FakeStore();
   let calls = 0;
   const result = await dispatchContactWebAlert(
-    { leadId: "lead-config", formKey: "contact_page", lead },
+    { outboxId: "outbox-config", leadId: "lead-config", formKey: "contact_page", lead },
     {
       store,
       config: { ...enabledConfig, apiKey: "", recipientE164: "not-e164" },
@@ -145,7 +141,13 @@ test("preflight validates exact approval, language, category, body and all param
         { type: "HEADER", format: "TEXT", text: "Alert {{1}}" },
         { type: "BODY", text: HEALING_MINDS_TEMPLATE.body },
       ],
-    }, "preflight_parameter_mismatch"],
+    }, "preflight_component_mismatch"],
+    [{
+      components: [
+        { type: "BODY", text: HEALING_MINDS_TEMPLATE.body },
+        { type: "FOOTER", text: "Unreviewed footer" },
+      ],
+    }, "preflight_component_mismatch"],
   ] as const) {
     const fetcher = (async () => new Response(JSON.stringify({ templates: [approvedTemplate(override)] }), {
       status: 200,
@@ -164,7 +166,7 @@ test("the two forms map to fixed reasons and a fixed provider route", async () =
     const store = new FakeStore();
     const calls: Array<{ url: string; init?: RequestInit }> = [];
     const result = await dispatchContactWebAlert(
-      { leadId: `lead-${formKey}`, formKey, lead },
+      { outboxId: `outbox-${formKey}`, leadId: `lead-${formKey}`, formKey, lead },
       { store, config: enabledConfig, fetcher: successfulFetcher(calls) },
     );
     assert.equal(result.status, "sent");
@@ -179,7 +181,6 @@ test("the two forms map to fixed reasons and a fixed provider route", async () =
       templateParams: ["Maria Perez", "+1 305 555 0123", expectedReason, "Please call after 3 PM."],
     });
     assert.equal(store.completions[0].input.status, "sent");
-    assert.equal(store.completions[0].input.attempts, 1);
   }
 });
 
@@ -188,10 +189,10 @@ test("the real lead id is a durable idempotency key", async () => {
   const calls: Array<{ url: string; init?: RequestInit }> = [];
   const dependencies = { store, config: enabledConfig, fetcher: successfulFetcher(calls) };
   const first = await dispatchContactWebAlert(
-    { leadId: "same-lead", formKey: "contact_page", lead }, dependencies,
+    { outboxId: "same-outbox", leadId: "same-lead", formKey: "contact_page", lead }, dependencies,
   );
   const replay = await dispatchContactWebAlert(
-    { leadId: "same-lead", formKey: "contact_page", lead }, dependencies,
+    { outboxId: "same-outbox", leadId: "same-lead", formKey: "contact_page", lead }, dependencies,
   );
   assert.equal(first.status, "sent");
   assert.equal(replay.status, "duplicate");
@@ -210,7 +211,7 @@ test("provider failures are classified without throwing away the lead flow", asy
       return new Response(JSON.stringify({ code: `fixture_${providerStatus}` }), { status: providerStatus });
     }) as typeof fetch;
     const result = await dispatchContactWebAlert(
-      { leadId: `lead-${providerStatus}`, formKey: "contact_page", lead },
+      { outboxId: `outbox-${providerStatus}`, leadId: `lead-${providerStatus}`, formKey: "contact_page", lead },
       { store, config: enabledConfig, fetcher },
     );
     assert.equal(result.status, expected);
@@ -225,7 +226,7 @@ test("provider failures are classified without throwing away the lead flow", asy
     throw new TypeError("simulated connection reset");
   }) as typeof fetch;
   const result = await dispatchContactWebAlert(
-    { leadId: "lead-network", formKey: "contact_page", lead },
+    { outboxId: "outbox-network", leadId: "lead-network", formKey: "contact_page", lead },
     { store, config: enabledConfig, fetcher: ambiguousNetwork },
   );
   assert.equal(result.status, "unknown");

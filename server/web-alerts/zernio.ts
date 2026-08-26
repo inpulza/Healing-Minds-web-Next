@@ -168,6 +168,9 @@ export async function preflightZernioTemplate(
       return { status: "failed", errorCode: "preflight_category_mismatch" };
     }
     const components = Array.isArray(template.components) ? template.components : [];
+    if (components.length !== 1 || String((components[0] as JsonRecord | undefined)?.type || "").toUpperCase() !== "BODY") {
+      return { status: "failed", errorCode: "preflight_component_mismatch" };
+    }
     const bodyComponent = components.find((component) =>
       component && typeof component === "object"
       && String((component as JsonRecord).type || "").toUpperCase() === "BODY"
