@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { contactFormRequestSchema } from "../shared/schema";
+import { evaluateContactSubmission } from "../server/services/spam-filter";
 import { dispatchContactWebAlert } from "../server/web-alerts/contact-alert";
 import type {
   WebAlertCompletion,
@@ -104,6 +105,21 @@ test("the browser contract accepts only the two closed form keys", () => {
     submissionId: "not-a-uuid",
   }));
   assert.throws(() => contactFormRequestSchema.parse({ ...base, formKey: "attacker_template" }));
+});
+
+test("the real anti-spam gate accepts the synthetic browser payload used for Zernio QA", async () => {
+  const payload = contactFormRequestSchema.parse({
+    firstName: "Inpulza",
+    lastName: "Zernio Test",
+    email: "inpulza-zernio-test@example.com",
+    phone: "+1 305 555 0134",
+    preferredLanguage: "english",
+    message: "need appointment",
+    formStartedAt: Date.now() - 3_000,
+    formKey: "contact_page",
+  });
+
+  assert.deepEqual(await evaluateContactSubmission(payload), { spam: false });
 });
 
 test("disabled alerts never call Zernio", async () => {

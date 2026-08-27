@@ -741,7 +741,10 @@ export const contactFormRequestSchema = insertContactMessageSchema.extend({
   firstName: z.string().trim().min(1),
   lastName: z.string().trim().min(1),
   email: z.string().trim().email(),
-  phone: z.string().trim().min(1),
+  phone: z.string().trim().refine(
+    (value) => !/[a-zA-Z]/.test(value) && value.replace(/\D/g, "").length >= 7,
+    "Phone must contain at least 7 digits and no letters",
+  ),
   message: z.string().trim().min(1),
   formStartedAt: z.coerce.number().optional(),
   website: z.string().optional(),

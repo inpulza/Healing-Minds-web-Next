@@ -1,19 +1,10 @@
 import { HONEYPOT_FIELDS } from "@shared/schema";
-import { verifyDomainHasDns } from "./dns-check";
 
 // Minimum time (ms) a real human needs between opening the form and submitting.
 // Inside the 1.5s–2.5s band from the spec; anything faster is almost certainly a bot.
 const MIN_FILL_MS = 2000;
 
 const VOWELS = new Set(["a", "e", "i", "o", "u", "y"]);
-
-const RESERVED_DOMAINS = new Set([
-  "example.com",
-  "example.net",
-  "example.org",
-  "localhost",
-]);
-const RESERVED_TLDS = [".test", ".invalid", ".example", ".localhost"];
 
 export interface SpamVerdict {
   spam: boolean;
@@ -43,15 +34,6 @@ export function isTooFast(
   return elapsed < MIN_FILL_MS;
 }
 
-export function isReservedDomain(email: string): boolean {
-  const domain = email.split("@")[1]?.toLowerCase().trim();
-  if (!domain) return false;
-  if (RESERVED_DOMAINS.has(domain)) return true;
-  return RESERVED_TLDS.some(
-    (tld) => domain === tld.slice(1) || domain.endsWith(tld),
-  );
-}
-
 // Segmented spam emails like "k.es.t.re.lh.erb.far.m@gmail.com": many dotted
 // fragments of 1–2 chars in the local part. Real "john.doe" has few, longer parts.
 export function isSegmentedEmail(email: string): boolean {
@@ -62,18 +44,6 @@ export function isSegmentedEmail(email: string): boolean {
   const avgLen =
     segments.reduce((sum, s) => sum + s.length, 0) / segments.length;
   return avgLen <= 2;
-}
-
-// A phone is "fake/invalid" if it has letters, fewer than 7 digits, or falls in
-// the reserved North-American fictional range 555-0100 … 555-0199.
-export function isFakePhone(phone: string): boolean {
-  const raw = phone || "";
-  const digits = raw.replace(/\D/g, "");
-  if (digits.length < 7) return true;
-  if (/[a-zA-Z]/.test(raw)) return true;
-  const last7 = digits.slice(-7); // exchange (3) + subscriber (4)
-  if (last7.startsWith("5550") && last7[4] === "1") return true; // 555-0100..0199
-  return false;
 }
 
 // Scores a single token for "gibberish-ness". Multiple weak signals are
@@ -139,17 +109,14 @@ export function isGibberish(text: string): boolean {
   return badCount / longTokens.length >= 0.6;
 }
 
-interface EvaluateOptions {
-  skipDns?: boolean;
-}
-
 /**
  * Decide whether a contact submission should be silently filtered as spam.
- * High-confidence signals are checked first; the network DNS check runs last.
+ * Only behavioral/high-confidence spam signals are filtered here. Data-quality
+ * validation belongs to the request schema so a human submission is never
+ * silently discarded merely for using synthetic QA contact details.
  */
 export async function evaluateContactSubmission(
   payload: Record<string, unknown>,
-  options: EvaluateOptions = {},
 ): Promise<SpamVerdict> {
   if (hasHoneypot(payload)) return { spam: true, reason: "honeypot" };
 
@@ -160,11 +127,7 @@ export async function evaluateContactSubmission(
   if (isTooFast(formStartedAt)) return { spam: true, reason: "timing" };
 
   const email = String(payload.email ?? "");
-  if (isReservedDomain(email)) return { spam: true, reason: "reserved_domain" };
   if (isSegmentedEmail(email)) return { spam: true, reason: "segmented_email" };
-
-  if (isFakePhone(String(payload.phone ?? "")))
-    return { spam: true, reason: "fake_phone" };
 
   if (isGibberish(String(payload.message ?? "")))
     return { spam: true, reason: "gibberish_message" };
@@ -174,14 +137,6 @@ export async function evaluateContactSubmission(
     isGibberish(String(payload.lastName ?? ""))
   ) {
     return { spam: true, reason: "gibberish_name" };
-  }
-
-  if (!options.skipDns) {
-    const domain = email.split("@")[1]?.toLowerCase().trim();
-    if (domain) {
-      const hasDns = await verifyDomainHasDns(domain);
-      if (!hasDns) return { spam: true, reason: "no_dns" };
-    }
   }
 
   return { spam: false };

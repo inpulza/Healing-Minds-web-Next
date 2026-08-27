@@ -54,6 +54,9 @@ export async function POST(request: NextRequest) {
     const submission = contactFormRequestSchema.parse(rawBody);
     const verdict = await evaluateContactSubmission(submission);
     if (verdict.spam) {
+      console.warn("Contact submission filtered", {
+        reason: verdict.reason || "unknown",
+      });
       return NextResponse.json({ success: true, filtered: true }, { status: 202 });
     }
 
