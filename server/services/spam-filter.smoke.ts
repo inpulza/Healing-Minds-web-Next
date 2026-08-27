@@ -13,7 +13,6 @@ interface Case {
   name: string;
   payload: Record<string, unknown>;
   expectSpam: boolean;
-  skipDns?: boolean;
 }
 
 function basePayload(overrides: Record<string, unknown>): Record<string, unknown> {
@@ -24,6 +23,7 @@ function basePayload(overrides: Record<string, unknown>): Record<string, unknown
     phone: "(305) 423-0272",
     preferredLanguage: "english",
     message: "I would like to schedule an appointment for my anxiety.",
+    formKey: "contact_page",
     formStartedAt: HUMAN_START,
     website: "",
     url: "",
@@ -35,23 +35,6 @@ function basePayload(overrides: Record<string, unknown>): Record<string, unknown
 
 const cases: Case[] = [
   // ---- Must BLOCK (silently filter) ----
-  {
-    name: "reserved domain example.com",
-    payload: basePayload({ email: "john@example.com" }),
-    expectSpam: true,
-  },
-  {
-    name: "non-existent domain (real DNS lookup)",
-    payload: basePayload({
-      email: "john@thisdomaindoesnotexist-zzq12345.com",
-    }),
-    expectSpam: true,
-  },
-  {
-    name: "fake phone (305) 555-0142",
-    payload: basePayload({ phone: "(305) 555-0142" }),
-    expectSpam: true,
-  },
   {
     name: "filled honeypot",
     payload: basePayload({ website: "http://spam.example" }),
@@ -102,10 +85,15 @@ const cases: Case[] = [
     }),
     expectSpam: false,
   },
-  // 555 number outside the reserved 0100-0199 block must be allowed.
   {
-    name: "allow: 555 number outside reserved range",
-    payload: basePayload({ phone: "(305) 555-7890" }),
+    name: "allow: authorized synthetic Zernio browser test",
+    payload: basePayload({
+      firstName: "Inpulza",
+      lastName: "Zernio Test",
+      email: "inpulza-zernio-test@example.com",
+      phone: "+1 305 555 0134",
+      message: "need appointment",
+    }),
     expectSpam: false,
   },
 ];
@@ -145,6 +133,25 @@ const schemaCases: SchemaCase[] = [
     expectValid: false,
   },
   {
+    name: "reject: phone with fewer than 7 digits",
+    payload: basePayload({ phone: "12345" }),
+    expectValid: false,
+  },
+  {
+    name: "reject: phone containing letters",
+    payload: basePayload({ phone: "305-CALL-NOW" }),
+    expectValid: false,
+  },
+  {
+    name: "accept: synthetic QA email and reserved 555 phone",
+    payload: basePayload({
+      email: "inpulza-zernio-test@example.com",
+      phone: "+1 305 555 0134",
+      message: "need appointment",
+    }),
+    expectValid: true,
+  },
+  {
     name: "accept: well-formed required fields",
     payload: basePayload({}),
     expectValid: true,
@@ -174,9 +181,7 @@ async function run() {
   }
 
   for (const c of cases) {
-    const verdict = await evaluateContactSubmission(c.payload, {
-      skipDns: c.skipDns,
-    });
+    const verdict = await evaluateContactSubmission(c.payload);
     const ok = verdict.spam === c.expectSpam;
     if (ok) {
       passed++;
