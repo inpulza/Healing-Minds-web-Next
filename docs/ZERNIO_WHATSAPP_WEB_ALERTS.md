@@ -127,4 +127,5 @@ La migración `0005_durable_web_alert_outbox.sql` ya se aplicó de forma aditiva
 - [x] Outbox revisada sin datos personales.
 - [x] Jordan aprobó fusionar y activar Production.
 - [x] Regresión cubierta: el payload sintético `Inpulza Zernio Test`, teléfono `555`, correo `example.com` y nota `need appointment` atraviesa el antispam real.
+- [x] E2E opt-in desplegado completa Contact desktop y Consultation mobile contra el backend real de Preview, exige `200` no filtrado y limpia únicamente sus propios leads de verificación.
 - [ ] Observar durante 48 horas con `npm run zernio:status` y revisar cualquier `failed` o `unknown` antes de ampliar el piloto.
