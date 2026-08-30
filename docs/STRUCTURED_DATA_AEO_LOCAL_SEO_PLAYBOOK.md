@@ -85,7 +85,10 @@ FAQ schema must come from the same data rendered in HTML. Before marking a visib
 
 All FAQ answers must exist in initial HTML. They may be visually collapsed with HTML/CSS, but must not depend on JavaScript mounting.
 
-Google currently limits FAQ rich results mainly to authoritative government and health sites. Valid FAQ markup still does not guarantee display: https://developers.google.com/search/blog/2023/08/howto-faq-changes
+Google no longer displays FAQ rich results in Search as of May 7, 2026 and removed its FAQ rich-result documentation on June 15, 2026. `FAQPage` remains a valid Schema.org type for truthful FAQ content, but it is not a Google Search rich-result feature. Keep the markup only when it mirrors visible initial HTML and do not report it as a SERP enhancement:
+
+- https://developers.google.com/search/updates
+- https://schema.org/FAQPage
 
 ## 7. Crawler policy and AEO/GEO
 
