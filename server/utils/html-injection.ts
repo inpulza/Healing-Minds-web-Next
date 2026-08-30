@@ -2416,7 +2416,8 @@ function getBreadcrumbListSchema(baseUrl: string, path: string) {
 
 /**
  * Generate FAQPage schema for common questions about psychiatric services
- * This enables FAQ rich results in Google search with expandable Q&A sections
+ * This mirrors visible FAQ content for the legacy Express renderer. Google
+ * retired FAQ rich results in May 2026, so this is semantic markup only.
  */
 function getFAQPageSchema(baseUrl: string) {
   return {
@@ -2484,10 +2485,10 @@ function getFAQPageSchema(baseUrl: string) {
 }
 
 /**
- * Generate comprehensive MedicalOrganization schema optimized for Google Rich Results
- * Compatible with Google Business Profile and Local SEO requirements
- * Uses MedicalOrganization (broader than MedicalClinic) with LocalBusiness properties for maximum visibility
- * Includes AggregateRating for Rich Results star display in SERPs
+ * Generate the legacy Express medical/local business identity graph.
+ * Valid Schema.org markup supports entity clarity but does not guarantee a
+ * Google rich result, ranking, local panel, knowledge panel or review stars.
+ * Self-serving AggregateRating and Review markup is intentionally omitted.
  */
 function getMedicalBusinessSchema(baseUrl: string) {
   return {
