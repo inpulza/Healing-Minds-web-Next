@@ -67,6 +67,19 @@ export type BlogRedirectSnapshot = {
   updatedAt: Date;
 };
 
+// Only reclaim the redirect created when this very article was unpublished.
+// Manual redirects and redirects belonging to deleted/other articles need review.
+export function assertBlogRedirectCanBeReclaimed(
+  redirect: { isActive: boolean; sourcePostId: number | null; reason: string | null } | null | undefined,
+  postId: number,
+): void {
+  if (!redirect?.isActive || (redirect.sourcePostId === postId && redirect.reason === "unpublish")) return;
+  throw Object.assign(new Error("This URL has a manual redirect or belongs to another article. Ask an administrator to review the redirect before publishing; it has not been changed."), {
+    statusCode: 409,
+    code: "blog_redirect_reclaim_conflict",
+  });
+}
+
 export function blogRedirectSnapshotMatches(
   current: BlogRedirectSnapshot,
   expected: BlogRedirectSnapshot,

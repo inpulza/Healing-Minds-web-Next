@@ -49,6 +49,14 @@ test("Next owns authenticated blog CRUD and publication transitions", () => {
   assert.match(route, /deleteBlogPostWithRedirect/);
 });
 
+test("Next republishes with ownership and transactional redirect snapshot guards", () => {
+  assert.doesNotMatch(route, /Deactivate the article URL redirect before publishing/);
+  assert.match(route, /assertBlogRedirectCanBeReclaimed\(redirectSnapshot, existing.id\)/);
+  assert.match(route, /transitionGuard.redirectSnapshot = redirectSnapshot \?\? null/);
+  assert.match(route, /updateBlogPostStatusWithImageGuard\([\s\S]*?transitionGuard,/);
+  assert.match(blogStorage, /assertBlogRedirectCanBeReclaimed\(currentRedirect, id\)/);
+});
+
 test("Next owns the editor support and Vercel Blob image workflows", () => {
   for (const endpoint of [
     "stats",
