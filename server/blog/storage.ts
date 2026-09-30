@@ -29,6 +29,7 @@ import { isBlogLinkEnabled } from "./links/config";
 import {
   assertBlogPostSnapshotMatches,
   assertBlogRedirectPublishSnapshotMatches,
+  assertBlogRedirectCanBeReclaimed,
   planBlogPostImageObjectDeletion,
   type BlogRedirectSnapshot,
 } from "./lifecycle";
@@ -702,6 +703,8 @@ export async function updateBlogPostStatusWithImageGuard(
           targetPath: blogRedirects.targetPath,
           isActive: blogRedirects.isActive,
           updatedAt: blogRedirects.updatedAt,
+          sourcePostId: blogRedirects.sourcePostId,
+          reason: blogRedirects.reason,
         })
         .from(blogRedirects)
         .where(eq(blogRedirects.sourcePath, snapshotPath))
@@ -711,6 +714,7 @@ export async function updateBlogPostStatusWithImageGuard(
         currentRedirect,
         guard.redirectSnapshot,
       );
+      if (status === "published") assertBlogRedirectCanBeReclaimed(currentRedirect, id);
     }
     if (redirectInput) {
       await assertNoActiveRedirectAtTarget(tx, redirectInput.targetPath);

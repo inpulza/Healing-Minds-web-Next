@@ -4,6 +4,8 @@ import type { BlogGenerationRun } from "@shared/schema";
 import type { GuidedTopicTrustedContext } from "../../../../../server/blog/ai/topic-planner";
 import { decideGenerationRunCreationAction } from "../../../../../server/blog/generation/idempotency";
 import { getAdminSession, noStoreHeaders } from "../../../../../server/next-admin-auth";
+import { assertBlogRedirectCanBeReclaimed } from "../../../../../server/blog/lifecycle";
+import type { BlogPostStatusTransitionGuard } from "../../../../../server/blog/storage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -1054,11 +1056,17 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     if (payload.status === existing.status) return json({ success: false, message: "The article already has that status" }, 409);
 
     const currentPath = storage.getBlogPostPath(existing);
+    const transitionGuard: BlogPostStatusTransitionGuard = {
+      expectedStatus: existing.status,
+      expectedUpdatedAt: existing.updatedAt,
+    };
     if (payload.status === "published") {
       validation.assertPublishReady(existing);
-      if (await storage.getActiveBlogRedirect(currentPath)) {
-        return json({ success: false, message: "Deactivate the article URL redirect before publishing" }, 409);
-      }
+      const redirectSnapshot = await storage.getBlogRedirectBySourcePath(currentPath);
+      assertBlogRedirectCanBeReclaimed(redirectSnapshot, existing.id);
+      // Check even absence/inactive state under the transaction's URL lock:
+      // a concurrent redirect edit must not be silently overwritten.
+      transitionGuard.redirectSnapshot = redirectSnapshot ?? null;
     }
 
     let redirect: {
@@ -1089,7 +1097,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       id,
       payload.status,
       payload.status === "published" ? existing.publishedAt || new Date() : undefined,
-      { expectedStatus: existing.status, expectedUpdatedAt: existing.updatedAt },
+      transitionGuard,
       { redirect, deactivateRedirectPath: payload.status === "published" ? currentPath : null },
     );
     if (!transition) return json({ success: false, message: "Blog post not found" }, 404);

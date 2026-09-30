@@ -3040,6 +3040,11 @@ export default function BlogAdminPage() {
             </div>
           )}
 
+          {form?.id && form.status !== 'published' && (
+            <p className="text-xs text-slate-600">
+              Republishing automatically restores this article's URL if it was redirected when moved to draft. Other redirects are not changed.
+            </p>
+          )}
           <DialogFooter className="gap-2 sm:gap-2">
             {form?.id && (
               <>
